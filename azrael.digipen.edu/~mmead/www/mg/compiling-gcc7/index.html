@@ -1,0 +1,391 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to Building GCC 7 on Linux and Mac</title>
+
+</head>
+
+<style>
+pre.bconsole {
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 16px;
+  color: #FFFFFF;
+  background-color: #000000;
+  padding: 8px 8px 8px 8px; # top,right,bottom,left
+  margin-left: 20px;
+  border: #000000;
+  border-style: dashed;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+</style>
+<body>  
+
+<center><h1>
+Mead's Guide to Building GCC 7 on Linux and Mac<br>
+</h1>
+(Linux Mint 17/18 and Mac OS El Capitan 10.11)
+</center>
+
+<!--
+<ul>
+  <li><a href="#OVERVIEW">Overview</a></li>
+  <li><a href="#PREP">Preparation</a></li>
+  <li><a href="#INSTALL">Installation</a></li>
+  <li><a href="#MULTIPLE">Managing Versions</a></li>
+  <li><a href="#SUMMARY">Summary (tl;dr)</a></li>
+  <li><a href="#UPDATE">Update (Install v 7.x)</a></li>
+  <li><a href="#REFERENCES">References</a></li>
+</ul>
+
+If you just want the required commands without having to learn anything, go to the 
+<a href="#SUMMARY">summary</a>.
+-->
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="OVERVIEW">
+<p class="sectionheader">
+Overview
+</p>
+</a>
+Linux distributions generally come with a specific version of the GCC compilers and it
+takes some effort (usually, only just a little effort) to install newer versions of the compilers.
+This isn't usually a problem because many people upgrade their Linux distribution on a
+regular basis and, therefore, get the newer versions of the compilers.
+<p>
+However:
+<ol>
+<li>Not everyone wants to upgrade their entire system just to get the latest compilers.</li>
+<li>Sometimes a newer version of the compiler comes out way before a newer distribution
+is going to be released.</li>
+</ol>
+
+I have been part of both reasons stated above. There are basically 3 ways that you would
+get a compiler onto Linux:
+<ol>
+  <li>Install a Linux distribution and take the default compiler version that comes with it.</li>
+  <li>Manually install additional compiler versions from the official repositories.
+    (Linux makes it really easy to have multiple versions installed simultaneously.)</li>
+  <li>Get the source code to the compiler you want and build/install it yourself.</li>
+</ol>
+
+This document is going to show how to do method #3 above. To install additional versions
+via method #2, see my other guide: 
+<a href="../update-compilers/index.html">Mead's Guide to Upgrading GCC and Clang on Linux</a>.
+If your are running a recent version of Linux Mint, I recommend that you choose method #2
+as it is faster, easier, and more likely to be successful.
+<p>
+When I first set out to do this, it was because I wanted to install GCC 7.1 on an iMac
+running macOS 10.11 (El Capitan). It turns out that GCC isn't installed on the Mac. When
+you run <tt>gcc</tt> or <tt>g++</tt>, you are really running <tt>clang</tt> and <tt>clang++</tt>,
+as <tt>gcc</tt> and <tt>g++</tt> are just aliases for the Clang compilers. Once I had all
+of this working on the Mac, I realized that the exact same procedure could be done on
+Linux to get 7.1 built and installed there. Sweet!
+<p>
+<b>Disclaimer</b>: While I was searching on "how to install GCC on an iMac", I came across
+this <a href="https://solarianprogrammer.com/2017/05/21/compiling-gcc-macos/">link</a>
+which is the basis for this Guide. I basically took the information on that page and then
+wrote a bash script which will automate the entire process on both Mac and Linux.
+
+<blockquote>
+<p class="technote">
+<b>Note</b>: I am not an expert with macOS or with building compilers on macOS and Linux.
+I followed the steps from the link above and successfully installed GCC 7.1 on both
+platforms. It was relatively painless. There may be "better" ways to do this, and you
+may actually know them. However, this technique I'm showing worked quite nicely
+for me and I hope it works for you. If not, you can probably modify some of the steps
+to suit you better.
+</p>
+</blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="PREP">
+<p class="sectionheader">
+Preparation
+</p>
+</a>
+You might want to read the <a href="index.html#NOTES">Notes</a> at the bottom of this document
+before you begin.
+<p>
+You'll need to download the source code for the compiler that you want. Choose a mirror
+that's closest to you: <a href="https://gcc.gnu.org/mirrors.html">GCC mirror sites</a>.
+<p>
+In order to build the GCC compilers, you have to first build a few prerequisite libraries.
+Those libraries are:
+<a href="http://www.multiprecision.org/index.php?prog=mpc&page=download">mpc</a>,
+<a href="http://www.mpfr.org/mpfr-current/#download">mpfr</a>, 
+<a href="https://gmplib.org/">gmp</a>, and the
+<a href="ftp://gcc.gnu.org/pub/gcc/infrastructure/">Graphite loop optimizations</a>.
+<p>
+To make life easier, I've downloaded all of these dependencies and am including them in a
+zip file here: <a href="https://azrael.digipen.edu/~mmead/www/public/Files/gcc7.1-src.zip">gcc7.1-src.zip</a>.
+
+You may want to actually download the latest versions
+of these files from the links above, as the files I'm posting will be outdated at some point.
+Either way, the process will be identical. You will just substitute the later versions for
+the ones that I'm providing.
+
+<blockquote>
+<p class="technote">
+The reason that I'm providing these files is because, when
+I first began this process, a couple of the links were broken and I had difficulty finding
+a working download link. A few days later, those links magically worked again. I can't
+trust that the links won't get broken again, so I've made everything available in that
+zip file for convenience.
+</p>
+</blockquote>
+
+<p>
+It should also be obvious that, in order to build GCC, you must already have a working 
+compiler installed on your computer! Any recent version of GCC (Linux) or Clang (Mac)
+should be sufficient.
+<p>
+
+<b>Notes for building on Linux Mint</b>:
+<p>
+  If you have a fresh install of Linux Mint, you will need to install a couple of packages in order
+  to build everything. These commands should do the trick:
+<blockquote><pre>
+sudo apt-get update
+sudo apt-get install build-essential gcc-multilib
+</pre></blockquote>
+  These packages will give you a proper build environment, including 32-bit support, which
+  some of the libraries require.
+<p>
+<b>Notes for building on macOS</b>:
+<p>
+There is one step that has to be done first before compiling the source code on the Mac.
+You must open a terminal and run the following:
+
+<blockquote><pre>
+xcode-select --install
+</pre></blockquote>
+
+This will install some command-line tools that are required to build the source code.
+Once that is completed, you can now proceed to build and install the compilers.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="INSTALL">
+  <p class="sectionheader">
+Building and Installation
+</p></a>
+The first thing you should realize is that building and installing GCC 7.1 is not going
+to interfere with any existing compilers on your computer. You will be building the source
+code in a temporary directoring and installing the files to an alternate location that
+isn't used by any other programs.
+<p>
+<blockquote>
+<b>You will need about 7 GBs of space for all of the files that you are going to build.
+(There will end up being over 100,000 files.)</b>
+</blockquote>
+<p>
+
+ The location where the new files will be installed is here:
+
+<blockquote><pre>
+/usr/local/gcc-7.1
+</pre></blockquote>
+
+If you want to install it somewhere else, you can change the variable <tt>INSTALL_DIR</tt>
+in the script to another location. When the entire process has completed, the installation
+directory will contain these subdirectories:
+
+<blockquote><pre>
+bin
+include
+lib
+lib32
+lib64
+libexec
+share
+</pre></blockquote>
+
+The size of the installation is about on Linux is about 750 MB. The size on Mac is about 220 MB.
+<p>
+<b>Steps to build and install</b>:
+<ol>
+  <li>Get the archive of source files: <a href="https://azrael.digipen.edu/~mmead/www/public/Files/gcc7.1-src.zip">gcc7.1-src.zip</a> and put
+    it in an empty temporary directory (somewhere under your home directory).</li>
+    <p>
+  <li>Extract the archive in the temp directory:
+<blockquote><pre>
+unzip gcc7.1-src.zip
+</pre></blockquote>
+
+
+   You should see these files:
+
+<blockquote><pre>
+<a href="cleanup.sh.txt">cleanup.sh</a>
+gcc-7.1.0.tar.bz2
+gmp-6.1.2.tar.bz2
+<a href="install.sh.txt">install.sh</a>
+isl-0.16.1.tar.bz2
+<a href="main.cpp.txt">main.cpp</a>
+mpc-1.0.3.tar.gz
+mpfr-3.1.5.tar.bz2
+<a href="remove-all.sh.txt">remove-all.sh</a>
+</pre></blockquote>
+
+You may have to make the scripts executable by doing this:
+<blockquote><pre>
+chmod +x *.sh
+</pre></blockquote>
+
+</li>
+
+<li>Run the installation script:
+<blockquote><pre>
+./install.sh
+</pre></blockquote>
+
+This could take anywhere from 20 minutes to 4 hours, depending on the speed of your computer. These
+are the times that I got from my computers:
+<p>
+<ul>
+  <li>2007 iMac Core 2 Duo (2 threads, SSD) took 128 minutes to build.</li>
+  <li>2012 iMac i5 (4 threads, SSD) took 41 minutes to build.</li>
+  <li>Linux Mint computer with an i7 (8 threads, SSD) took 28 minutes to build.</li>
+</ul>
+<p>
+Those are the kinds of times you should expect. All of those computers had an SSD. If you are using
+a spinning hard disk, your times may be slightly longer. The largest factor in the speed of 
+building is the number of cores your CPU has.
+<p>
+I made the installation script automatically adjust to the
+number of cores you have, so a CPU with 2 threads will compile 2 files at once, and a CPU with 16
+threads will compile 16 files at once. That is the beauty of make!
+
+</li>
+</ol>
+
+<p>
+
+At the end of the build/install process, a sample C++ program will be compiled and run
+to verify that everything went well. The program will print out some numbers and stuff
+and you should see these lines at the end:
+
+<blockquote><pre class="bconsole">
+****************************************************************
+* If you see this text, your build and install was successful! *
+* If you see this text, your build and install was successful! *
+* If you see this text, your build and install was successful! *
+****************************************************************
+
+To use the new version, add this to your $PATH:
+
+  /usr/local/gcc-7.1/bin
+
+You should probably do this in your ~/.bashrc or ~/.bash_profile file.
+</pre></blockquote>
+
+The test program advises you to add the <tt>bin</tt> directory in the installation
+directory to your
+PATH environment variable. Once you've done that, the compiler is ready to use.
+<p>
+To use the new version, you have to type:
+
+<blockquote><pre>
+g++-7.1
+</pre></blockquote>
+
+If you just type <tt>g++</tt>, you'll get the old version that was already installed on your 
+computer.
+<p>
+Once you're sure that everything has been built and installed successfully, you can delete
+all of the files in your temporary directory as they are no longer needed.
+<p>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="NOTES">
+  <p class="sectionheader">
+Notes
+</p></a>
+
+<ul>
+  <li>I have only tested this with macOS El Capitan (version 10.11.x) and Linux Mint (versions 17.x and 18.x) and it
+    has worked flawlessly. This script should work with any recent version of macOS or Linux, but
+    it's up to you to make sure that you have the proper build tools installed. I am not familiar with
+    other Linux distributions, so I can't tell you how to set them up properly to build complicated
+    software (like compilers or operating systems.)
+
+     If you don't know how to properly set up your Linux system
+    then my recommendation is
+    to use Linux Mint. Why? It. Just. Works.<sup>&trade;</sup></li>
+<p>
+  <li>You should build everything somewhere within your home directory as a normal user.
+    In other words, don't build as <i>root</i>.</li>
+<p>
+  <li>However, you will need to be <i>root</i> to install the files. The script uses <b>sudo</b>
+    for the installation steps.</li>
+<p>
+  <li>The first time the script runs <b>sudo</b>, you will be prompted for your password. If you
+    run <b>sudo</b> again within 5 minutes (default timeout), you won't be prompted. Since compiling GCC itself
+    is likely to take over 30 minutes, you will be prompted again for your password. This means that
+    if you walk away during the long build, you may come back and find that the installation
+    of GCC has paused, waiting for you to enter your password.
+    If you want to make the timeout longer, check out this
+    <a href="http://osxdaily.com/2016/05/05/change-sudo-password-timeout/">link</a> or just
+    Google for "sudo timestamp_timeout".
+  </li>
+<p>
+  <li>There's a simple bash script called
+    <a href="cleanup.sh.txt">cleanup.sh</a> that will remove all of the temporary files (about 6 GBs)
+    from the temporary directory.</li>
+<p>
+  <li>There's also a simple bash script called
+    <a href="remove-all.sh.txt">remove-all.sh</a> that will remove all of the temporary files (about 6 GBs)
+    from the temporary directory AND all of the files that were installed in the installation
+    directory (<tt>/usr/local/gcc-7.1</tt>) I used these scripts as I was developing them, and had
+    to constantly delete everything and start again. Hey, that's what TESTING is all about!
+    You are TESTING your own code, right?
+
+  </li>
+<p>
+  <li>Feel free to modify the scripts as you see fit. The install script is somewhat documented and fairly
+    straight-forward.</li>
+</ul>
+
+
+
+</body>
+</html>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+

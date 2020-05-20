@@ -1,0 +1,326 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Please read this entire page before starting to write code. You'll be glad you did.
+<br><br>
+The purpose of this lab is for you to practice formatting output using <i>printf</i>.
+<b>This lab requires <i>about</i> 14 statements and should take less than 1 hour.</b>
+</p>
+
+
+<ol>
+
+<!--****************************************************************************-->
+<!--****************************************************************************-->
+<!--****************************************************************************-->
+<li>Write a program that prompts the user (using <i>scanf</i>) for 3 values and 
+	displays the output (using <i>printf</i>) of several trigonometric functions. 
+	An example looks like this:
+<p>
+	
+	
+<blockquote><pre>
+Enter 3 numbers between 0 and 9.999: <font color="red"><b>1 2 3</b></font>
+
+Number      sin      cos      tan      atan
+-------------------------------------------
+1.00000    0.841    0.540    1.557    0.785
+2.00000    0.909   -0.416   -2.185    1.107
+3.00000    0.141   -0.990   -0.143    1.249
+</pre></blockquote>
+
+In the example above, the user entered &nbsp;<font color="red"><b><tt>1 2 3</tt></b></font> at the prompt.
+<p>
+You'll need to pay close attention to the alignment and formatting. Also, you'll 
+need to include <tt>math.h</tt> for the math functions. To use the math functions, you simply
+provide the value you want to calculate. For example:
+
+<blockquote><pre>
+<b>float</b> input1 = 7.14f;
+printf(<font color="#9933CC">&quot;%f, %f\n&quot;</font>, sin(input1), tan(input1));
+</pre></blockquote>
+
+will print out:
+
+<blockquote><pre>
+0.755760, 1.154100	
+</pre></blockquote>
+
+The function prototypes are all the same. The input and output are doubles (but they
+will also accept float inputs).
+<blockquote><pre>
+<b>double</b> sin(<b>double</b> value);
+<b>double</b> cos(<b>double</b> value);
+<b>double</b> tan(<b>double</b> value);
+<b>double</b> atan(<b>double</b> value);
+</pre></blockquote>
+
+	
+You are to use these inputs to test your program: (copy and paste the big values from this
+web page rather than trying to type them.) 
+
+<center><blockquote>
+<p class="technote">
+For this assignment, you should use <b>float</b> as the type of variables for input.
+</p>
+</blockquote></center>
+
+<blockquote>
+<table border=1 cellspacing=1 cellpadding=1>
+<tr><th>Inputs #1</th><th>Inputs #2</th><th>Inputs #3</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+1 
+2 
+3	
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+3.14159265358979323846
+0.318309886183790671538
+0.785398163397448309616
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+0
+4.5
+9.0
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+You'll compile your program with this command (the name of the C file is <tt><b>numbers.c</b></tt>):
+<big><blockquote><pre>
+gcc -Wall -Wextra -Werror -ansi -pedantic numbers.c -o numbers
+</pre></blockquote></big>
+
+For those using gcc under Linux or Mac OS X (not Cygwin), you need to add an additional
+command line option:
+
+<big><blockquote><pre>
+gcc -Wall -Wextra -Werror -ansi -pedantic numbers.c -o numbers <b>-lm</b>
+</pre></blockquote></big>
+
+That's a lowercase <tt>L</tt>, not the number one, followed by a lowercase <tt>M</tt>.
+The <tt><b>l</b></tt> means "library" (for the linker) and the <tt><b>m</b></tt> means "math".
+If you forget this, you will get a lot of <i>undefined references</i> to the trigonometric
+functions (which are in the math library).
+<p>
+
+To help you automate your testing (so you don't have to keep typing the input) each
+time you run your program, you can use <b>input redirection</b>, which
+is similar to the output redirection you used above. The input redirection operator
+that is used by the command window is the less-than, <tt><b>&lt;</b></tt>, symbol.
+<p>
+You will first need to create a text file that contains the 3 numbers that you want to
+provide to the program. Name the first file <tt>input1.txt</tt>. Using a text editor
+(such as Notepad++ or Geany), enter the 3 numbers on the first line 
+<b>each separated by a space</b>, press the Enter key after the last number, 
+and then save the file. Do
+this for the other 2 tests, naming the files <tt>input2.txt</tt> and <tt>input3.txt</tt>.
+<p>
+You will now have 3 text files in your current directory that will contain these
+numbers:
+<p>
+<blockquote>
+<i>input1.txt</i> contains:
+<blockquote><pre>
+<big>1 2 3</big>
+</pre></blockquote>
+
+<i>input2.txt</i> contains:
+<blockquote><pre>
+<big>3.14159265358979323846 0.318309886183790671538 0.785398163397448309616</big>
+</pre></blockquote>
+
+<i>input3.txt</i> contains:
+<blockquote><pre>
+<big>0 4.5 9.0</big>
+</pre></blockquote>
+</blockquote>
+<p>
+
+Now, to run your program with the first set of numbers, you would do this:
+
+<big><blockquote><pre>
+numbers <b>&lt;</b> input1.txt <b>&gt;</b> myoutput1.txt
+</pre></blockquote></big>
+
+You won't see anything on the screen because, when the program ran, it read the
+numbers from the <tt><b>input1.txt</b></tt> file (instead of the keyboard) and it wrote
+the output to the <tt><b>myoutput1.txt</b></tt> file (instead of the screen).
+Repeat the process for the other 2 sets of numbers. Be sure to name your output
+files <tt><b>myoutput2.txt</b></tt> and <tt><b>myoutput3.txt</b></tt> so you don't overwrite
+each output file.
+
+
+<p>
+When you're ready to compare your outputs to the correct outputs, you'll use <tt>diff</tt>
+like this:
+
+<big><blockquote><pre>
+diff output1.txt myoutput1.txt
+</pre></blockquote></big>
+
+using the correct output files below: (Download these files, <b>do not</b> copy and paste the contents.)
+
+<p>
+<a href="output1.txt">Correct output #1</a> (<tt>output1.txt</tt>)<br>
+<a href="output2.txt">Correct output #2</a> (<tt>output2.txt</tt>)<br>
+<a href="output3.txt">Correct output #3</a> (<tt>output3.txt</tt>)<br>
+<p>
+
+You'll notice that these output files do not show the numbers that were read from
+the input files. <b>This is normal</b>.
+
+<p>
+The purpose of this assignment is for you to learn how to follow instructions <b>exactly</b>
+and to generate the <b>exact</b> output that is specified. Future labs won't be this trivial,
+nor will I hold your hand like this every time.
+<p>
+<b>Note for Linux and Mac users</b>: When running the program from the command line, you will
+need to precede the program name with a period and a forward slash, like this:
+
+<big><blockquote><pre>
+./numbers &lt; input1.txt &gt; myoutput1.txt
+</pre></blockquote></big>
+
+This is only required if you are running a program that is in your current 
+directory, which is how all of your labs and assignments will be run.
+(Note: You may also need to do this if you're running in a PowerShell on Windows.)
+
+<p>
+Finally, be sure that you are following the 
+<a class="pdf-icon" href="../../../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a>.
+<!--Failure to do so may earn you a 0 for the lab.-->
+
+</ol>
+
+<p class="SectionHeader">
+Notes About Redirection
+</p>
+
+This is what the output looks like when you run the program interactively
+(e.g. without redirection)
+
+<blockquote><pre>
+Enter 3 numbers between 0 and 9.999: <font color="red"><b>1 2 3 [user presses enter here]</b></font>
+
+Number      sin      cos      tan      atan
+-------------------------------------------
+1.00000    0.841    0.540    1.557    0.785
+2.00000    0.909   -0.416   -2.185    1.107
+3.00000    0.141   -0.990   -0.143    1.249
+</pre></blockquote>
+
+Notice that there is a blank line between the "Enter 3 numbers..." and the
+first line of the table. Where did this blank line come from?  It came from the
+user when they pressed the Enter key. To see how this happens, at the command
+prompt (e.g. C:\> on Windows) press the Enter key 3 times. You will see this:
+
+<blockquote><pre>
+C:\>
+C:\>
+C:\>
+C:\> [cursor is blinking here]
+</pre></blockquote>
+
+Each time you press the Enter key, a newline is entered and the cursor moves
+down to the next line. However, if you redirect the output to a file:
+
+<blockquote><pre>
+numbers > output.txt
+</pre></blockquote>
+
+and then type in the numbers:
+
+<blockquote><pre>
+<font color="red"><b>1 2 3</b></font>
+</pre></blockquote>
+
+and then view the file from the command line
+
+<blockquote><pre>
+type output.txt
+</pre></blockquote>
+
+you will see this:
+
+<blockquote><pre>
+Enter 3 numbers between 0 and 9.999:
+Number      sin      cos      tan      atan
+-------------------------------------------
+1.00000    0.841    0.540    1.557    0.785
+2.00000    0.909   -0.416   -2.185    1.107
+3.00000    0.141   -0.990   -0.143    1.249
+</pre></blockquote>
+
+Not only do you not see the <font color="red"><b>1 2 3</b></font> that the user
+typed in, but you don't get a blank line, either. This is because the numbers
+and the newline that the user typed (via the Enter key), were consumed by 
+the <i>scanf</i> function and were never sent to the screen.
+<p>
+That's why the output files that are posted on this web page do not have a
+blank line in them. They were generated by redirecting the output, which
+does not echo the newline to the screen.
+
+<p>
+<b>Note:</b> On Mac and Linux, don't use the <i>type</i> command, use the <i>cat</i>
+command instead:
+
+<blockquote><pre>
+cat output.txt
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+
+
+
+<br><br><br><br>
+
+<hr>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,106 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf */</font>
+<font color="990099">#include &lt;string.h&gt; /* strlen */</font>
+
+<font color="#003399"><i>/* Prototype for the dumper function */</i></font>
+<b>void</b> format(<b>const</b> <b>char</b>* inbuf, <b>char</b> *outbuf, <b>int</b> count, <b>int</b> start);
+<b>void</b> dump(<b>const</b> <b>char</b> *filename);
+
+<b>void</b> test_format(<b>void</b>)
+{
+  <b>int</b> i;
+
+  <b>char</b> *input = <font color="#9933CC">&quot;Violets are blue&quot;</font>;
+  <b>char</b> buffer[16];
+  <b>char</b> output[75];
+
+  format(input, output, strlen(input), 0);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 16);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 32);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  input = <font color="#9933CC">&quot;Roses are red&#92;n&quot;</font>;
+  format(input, output, strlen(input), 0);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 16);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 32);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  input = <font color="#9933CC">&quot;Green&#92;teggs&#92;n&quot;</font>;
+  format(input, output, strlen(input), 0);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 16);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 32);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  input = <font color="#9933CC">&quot;and&#92;nham&#92;n&quot;</font>;
+  format(input, output, strlen(input), 0);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 16);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  format(input, output, strlen(input), 32);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  <b>for</b> (i = 0; i &lt; 16; i++)
+    buffer[i] = i;
+
+  <b>for</b> (i = 0; i &lt; 16; i++)
+  {
+    format(buffer, output, i + 1, 16 &lt;&lt; i);
+    printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, output);
+  }
+}
+
+<b>void</b> test_dump(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Usage: %s filename&#92;n&quot;</font>, argv[0]);
+    <b>return</b>;
+  }
+
+  dump(argv[1]);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  test_format();
+
+  test_dump(argc, argv);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

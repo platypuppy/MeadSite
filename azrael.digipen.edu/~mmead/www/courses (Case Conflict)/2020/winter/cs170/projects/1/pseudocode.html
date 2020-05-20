@@ -1,0 +1,70 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>WarBoats Pseudocode</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>Pseudocode for TakeShot</h1>
+</center>
+
+<p class="SectionHeader">
+Psuedocode
+</p>
+
+<blockquote><pre>
+BEGIN FUNCTION
+
+  IF the shot is out of the ocean (grid) THEN
+    Return Illegal shot result
+  END
+
+  Read value at position of shot from grid
+
+  IF value is OK THEN
+    Increment misses
+    Set position to Blownup
+    Return Miss shot result
+  END
+
+  IF value is a Duplicate THEN
+    Increment duplicates
+    Return Duplicate shot result
+  END
+
+  /* If we make it here, then a boat must have been hit */
+
+  Increment hits for this boat
+  Update position to boat hit
+
+  IF number of hits for this boat is == BOAT_LENGTH THEN
+    Increment sunk
+    return Sunk shot result
+  END
+
+  Return Hit shot result
+
+END FUNCTION
+
+</pre></blockquote>
+
+<p>
+<hr width=90%>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

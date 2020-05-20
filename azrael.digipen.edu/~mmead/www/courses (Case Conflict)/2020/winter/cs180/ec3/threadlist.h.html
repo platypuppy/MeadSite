@@ -1,0 +1,46 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>cachelist.h</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdbool.h&gt; /* bool */</font>
+
+<font color="#003399"><i>/* Max length of labels, including NUL character */</i></font>
+<font color="990099">#define LABEL_SIZE 16</font>
+
+<font color="#003399"><i>/* Cache list node */</i></font>
+<b>typedef</b> <b>struct</b> tl_node
+{
+  <b>char</b> label[LABEL_SIZE];
+  <b>int</b> value;
+  <b>struct</b> tl_node* next;
+}tl_node;
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>void</b> tl_insert(<b>int</b> value, <b>const</b> <b>char</b> *label);
+<b>void</b> tl_insert_values(<b>int</b> *values, <b>int</b> count, <b>const</b> <b>char</b> *label);
+<b>void</b> tl_remove(<b>int</b> value);
+<b>void</b> tl_remove_values(<b>int</b> *values, <b>int</b> count);
+<b>void</b> tl_resetlist(<b>void</b>);
+tl_node * <b>const</b> *tl_getlist(<b>void</b>);
+<b>void</b> tl_uselocks(<b>bool</b> enable);
+<b>void</b> tl_destroy(tl_node *list);
+
+<font color="#003399"><i>/* Provided for you. DO NOT modify the code in threadlist.c */</i></font>
+<b>void</b> tl_dump(<b>const</b> tl_node *list);
+</code></pre>
+
+</body>
+</html>

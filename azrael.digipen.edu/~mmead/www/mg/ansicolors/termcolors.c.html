@@ -1,0 +1,52 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>termcolors.h</title>
+</head>
+
+<body>  
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>void</b> setcolors(<b>int</b> foreground, <b>int</b> background, <b>int</b> attribute)
+{
+  printf(<font color="#9933CC">&quot;&#92;033[%i;%i;%im&quot;</font>, attribute, foreground, background);  
+}
+
+<b>void</b> resetcolors(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;&#92;033[0m&quot;</font>);  
+}
+
+<b>void</b> showcolors(<b>void</b>)
+{
+  <b>int</b> attributes[] = {0, 1, 4, 5, 7, 8};
+  <b>int</b> fgcolors[]   = {30, 31, 32, 33, 34, 35, 36, 37, 90, 91, 92, 93, 94, 95, 96};
+  <b>int</b> bgcolors[]   = {40, 41, 42, 43, 44, 45, 46, 47, 100, 101, 102, 103, 104, 105, 106};
+
+  <b>int</b> attrsize = <b>sizeof</b>(attributes) / <b>sizeof</b>(*attributes);
+  <b>int</b> fgsize = <b>sizeof</b>(fgcolors) / <b>sizeof</b>(*fgcolors);
+  <b>int</b> bgsize = <b>sizeof</b>(bgcolors) / <b>sizeof</b>(*bgcolors);
+
+  <b>int</b> attr, fore, back;
+
+  <b>for</b> (attr = 0; attr &lt; attrsize; attr++)
+  {
+    <b>for</b> (fore = 0; fore &lt; fgsize; fore++)
+    {
+      <b>for</b> (back = 0; back &lt; bgsize; back++)
+      {
+        setcolors(fgcolors[fore], bgcolors[back], attributes[attr]);
+        printf(<font color="#9933CC">&quot;%i;%i;%i&quot;</font>, attributes[attr], fgcolors[fore], bgcolors[back]);
+        resetcolors();
+        printf(<font color="#9933CC">&quot; &quot;</font>);
+      }
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+    }
+    printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  }
+}
+</code></pre>
+
+</body>
+</html>

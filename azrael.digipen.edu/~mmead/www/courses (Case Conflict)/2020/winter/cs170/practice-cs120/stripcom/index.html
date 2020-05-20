@@ -1,0 +1,178 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>stripcom</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: rgb(255,255,220); 
+  border-style: solid;
+  border-color: teal;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 0px;
+  padding-bottom : 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}   
+
+
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(stripcom.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+  
+<li>For this practice assignment you will write a function that strips out all of the comments 
+  in a C source file. Here's an example:
+
+<p>
+This is the input file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/input1.txt">input1.txt</a>:
+
+<blockquote><pre><p class="Extra">/*************************************
+   A simple header comment
+*************************************/
+int main(void) /* help */
+{
+  /* a comment before   */
+  /* in front */ int a = 8/4; /* at end */
+  /* a comment after    */
+
+  return a;
+}
+</p></pre></blockquote>
+
+The file after running the program on it: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/output1.txt">output1.txt</a>
+
+<blockquote><pre><p class="Extra">
+int main(void) 
+{
+  
+   int a = 8/4; 
+  
+
+  return a;
+}
+</p></pre></blockquote>
+
+The border shows you that there is one blank line above the line containing <i>main</i>. There is also
+one blank line above the <i>int a</i> line and 2 blank lines below it.
+<p>
+
+This is the prototype for the function:
+
+<blockquote><pre>
+<b>void</b> stripcom(<b>const char</b> *filename);
+</pre></blockquote>
+
+and this is the command line to compile it:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c stripcom.c -o stripcom
+</pre></blockquote>
+
+Additional tests:
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/input2.txt">input2.txt</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/output2.txt">output2.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/input3.txt">input3.txt</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/output3.txt">output3.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/input4.txt">input4.txt</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/output4.txt">output4.txt</a></li>
+</ul>
+
+<p>
+  
+Here is a simple driver file: (<tt>main.c</tt>, <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/main.c.html">HTML</a>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/stripcom/main.c">Text</a>) You must specify the filename on the  command line like this:
+<blockquote><pre>
+stripcom foo.c
+</pre></blockquote>
+  <p>
+
+</ol>
+
+<p>
+  <hr width="95%">
+</p>
+
+Notes:
+
+<ul>
+<li>You only have to deal with C-style comments (i.e. <tt>/*  */</tt>), but you need
+  to handle both single-line and multi-line comments.</li>
+<p>
+<li>You can assume that the longest line in a file is 200 characters.</li>
+<p>
+<li>You need to handle comments within double-quotes. (It isn't a comment if it's in a string.)</li>
+<p>
+<li>You don't need to handle nested double-quotes like this:
+<blockquote><pre>
+printf("The word \"foo\" is in double-quotes");
+</pre></blockquote>
+However, you might want to take up that challenge after you've submitted this practice.
+
+
+<p>
+  <li>Open the file for input in text/translate mode (i.e. <tt>"rt"</tt>) and write
+    the output to <b>stdout</b>.
+  It is probably easiest to read one character at a time (<a href="http://www.cplusplus.com/reference/cstdio/fgetc/">fgetc</a>)
+  and write one character at a time.
+  <p>
+<li>You may want to look at the <a href="http://www.cplusplus.com/reference/cstdio/ungetc/">ungetc</a>
+  function. (You may need to "peek ahead" at the next character to see if the / should be printed or not.)</li>
+<p>
+<li>New lines that are inside of comments should not be printed out. This is important with multi-line
+  comments.
+<p>
+  <li>If you can't open the file, you are to print out a message like this:
+<blockquote><pre>
+Can't open filename
+</pre></blockquote>
+with <i>filename</i> replaced by the actual file you were trying to open.</li>
+<p>
+<li><b>Here's a hint on the algorithm used</b> - Use pointers to walk through the text. This means that your
+pointer will be in one of two states: the pointer is pointing into a comment or the pointer is NOT
+pointing into a comment. If you are in a comment, you simply discard the character. If you
+are NOT in a comment, you print the character.</li>
+<p>
+
+</ul>
+
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

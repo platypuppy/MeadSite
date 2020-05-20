@@ -1,0 +1,75 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>WarBoats.h</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef WARBOATS_H</font>
+<font color="990099">#define WARBOATS_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> WarBoats
+  {
+    <b>struct</b> Ocean; <font color="#003399"><i>//!&lt; Forward declaration for the Ocean </i></font>
+
+    <b>enum</b> Orientation { oHORIZONTAL, oVERTICAL };
+    <b>enum</b> ShotResult { srHIT, srMISS, srDUPLICATE, srSUNK, srILLEGAL };
+    <b>enum</b> DamageType { dtOK = 0, dtBLOWNUP = -1 };
+    <b>enum</b> BoatPlacement { bpACCEPTED, bpREJECTED };
+
+      <font color="#003399"><i>//! A coordinate in the Ocean</i></font>
+    <b>struct</b> Point
+    {
+      <b>int</b> x; <font color="#003399"><i>//!&lt; x-coordinate (column)</i></font>
+      <b>int</b> y; <font color="#003399"><i>//!&lt; y-coordinate (row)</i></font>
+    };
+
+      <font color="#003399"><i>//! A boat in the Ocean</i></font>
+    <b>struct</b> Boat
+    {
+      <b>int</b> hits;                 <font color="#003399"><i>//!&lt; Hits taken so far</i></font>
+      <b>int</b> ID;                   <font color="#003399"><i>//!&lt; Unique ID </i></font>
+      Orientation orientation;  <font color="#003399"><i>//!&lt; Horizontal/Vertical</i></font>
+      Point position;           <font color="#003399"><i>//!&lt; x-y coordinate (left-top)</i></font>
+    };
+
+      <font color="#003399"><i>//! Statistics of the &quot;game&quot;</i></font>
+    <b>struct</b> ShotStats
+    {
+      <b>int</b> hits;       <font color="#003399"><i>//!&lt; The number of boat hits</i></font>
+      <b>int</b> misses;     <font color="#003399"><i>//!&lt; The number of boat misses</i></font>
+      <b>int</b> duplicates; <font color="#003399"><i>//!&lt; The number of duplicate (misses/hits)</i></font>
+      <b>int</b> sunk;       <font color="#003399"><i>//!&lt; The number of boats sunk</i></font>
+    };
+
+      <font color="#003399"><i>// The interface</i></font>
+    Ocean *CreateOcean(<b>int</b> num_boats, <b>int</b> x_quadrants, <b>int</b> y_quadrants);
+    <b>void</b> DestroyOcean(Ocean *theOcean);
+    ShotResult TakeShot(Ocean &amp;ocean, <b>const</b> Point &amp;coordinate);
+    BoatPlacement PlaceBoat(Ocean &amp;ocean, <b>const</b> Boat&amp; boat);
+    ShotStats GetShotStats(<b>const</b> Ocean &amp;ocean);
+
+      <font color="#003399"><i>// Provided</i></font>
+    <b>void</b> DumpOcean(<b>const</b> Ocean &amp;ocean, <b>int</b> width = 4, <b>bool</b> extraline = <b>false</b>, 
+                   <b>bool</b> showboats = <b>true</b>);
+
+  } <font color="#003399"><i>// namespace WarBoats</i></font>
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="990099">#endif // WARBOATS_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,7 @@
+#/bin/bash
+
+rm mystress.txt
+for value in {1..500}
+do
+  ./randwalk 0 $value >> mystress.txt
+done

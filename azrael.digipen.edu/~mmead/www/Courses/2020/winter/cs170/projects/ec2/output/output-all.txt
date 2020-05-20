@@ -1,0 +1,400 @@
+-----------------------------------------------
+TestPush...
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Items in the stack: 10
+
+-----------------------------------------------
+TestPushPop...
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Items in the stack: 10
+Popping all items...
+Items in the stack: 0
+
+-----------------------------------------------
+TestPushPopEmpty...
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Items in the stack: 10
+Popping all items...
+Items in the stack: 0
+
+-----------------------------------------------
+TestPushTopPop...
+Items in the stack: 10
+Pop: 10 (size: 10) 9 8 7 6 5 4 3 2 1 
+Pop:  9 (size:  9) 8 7 6 5 4 3 2 1 
+Pop:  8 (size:  8) 7 6 5 4 3 2 1 
+Pop:  7 (size:  7) 6 5 4 3 2 1 
+Pop:  6 (size:  6) 5 4 3 2 1 
+Pop:  5 (size:  5) 4 3 2 1 
+Pop:  4 (size:  4) 3 2 1 
+Pop:  3 (size:  3) 2 1 
+Pop:  2 (size:  2) 1 
+Pop:  1 (size:  1) 
+Items in the stack: 0
+
+-----------------------------------------------
+TestSwap1...
+Items in stack1: ( 7) 7 6 5 4 3 2 1 
+Items in stack2: (10) 110 109 108 107 106 105 104 103 102 101 
+Swapped stacks:
+Items in stack1: (10) 110 109 108 107 106 105 104 103 102 101 
+Items in stack2: ( 7) 7 6 5 4 3 2 1 
+
+-----------------------------------------------
+TestCopyConstructor1...
+Items in stack1: (10) 10 9 8 7 6 5 4 3 2 1 
+Items in stack2: (10) 10 9 8 7 6 5 4 3 2 1 
+
+-----------------------------------------------
+TestAssignment1...
+Items in stack1: (10) 10 9 8 7 6 5 4 3 2 1 
+Items in stack2: (10) 10 9 8 7 6 5 4 3 2 1 
+Items in stack1: (10) 10 9 8 7 6 5 4 3 2 1 
+
+TestAssignment2...
+Before assignment:
+stack1: 10 9 8 7 6 5 4 3 2 1 
+stack2: 
+stack3: 
+After assignment:
+stack1: 10 9 8 7 6 5 4 3 2 1 
+stack2: 10 9 8 7 6 5 4 3 2 1 
+stack3: 10 9 8 7 6 5 4 3 2 1 
+
+-----------------------------------------------
+TestPushException...
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+5
+4
+3
+2
+1
+Items in the stack: 5
+
+-----------------------------------------------
+TestPopException...
+Exception thrown in TestPopException.
+Message: pop called on empty stack!
+Items in the stack: 0
+
+-----------------------------------------------
+TestClear...
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Items in the stack: 10
+
+Clearing the stack...
+Items in the stack: 0
+
+Push 5 more...
+5
+4
+3
+2
+1
+Items in the stack: 5
+
+-----------------------------------------------
+TestArray...
+9
+7
+5
+3
+1
+8
+6
+4
+2
+Items in the stack: 9
+
+-----------------------------------------------
+TestALot...
+[10] 80 82 50 63 16 39 57 21 61 67 
+[10] 928 507 471 771 194 965 465 377 344 645 
+Items in stack1: (3) 21 61 67 
+Items in stack2: (15) 39 16 63 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (7) 100 39 16 63 50 82 80 
+
+Items in stack1: (2) 61 67 
+Items in stack2: (14) 16 63 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (8) 100 100 39 16 63 50 82 80 
+
+Items in stack1: (1) 67 
+Items in stack2: (13) 63 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (7) 100 39 16 63 50 82 80 
+
+Items in stack1: (2) 100 67 
+Items in stack2: (14) 100 63 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (6) 39 16 63 50 82 80 
+
+Items in stack1: (1) 67 
+Items in stack2: (13) 63 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (5) 16 63 50 82 80 
+
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (4) 63 50 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (4) 63 50 82 80 
+
+Items in stack1: (1) 100 
+Items in stack2: (13) 100 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (3) 50 82 80 
+
+Items in stack1: (0) 
+Items in stack2: (14) 100 100 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (4) 100 50 82 80 
+
+Items in stack1: (1) 100 
+Items in stack2: (13) 100 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (3) 50 82 80 
+
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+Items in stack1: (1) 100 
+Items in stack2: (13) 100 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (3) 100 82 80 
+
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (12) 50 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (2) 82 80 
+
+Items in stack1: (1) 100 
+Items in stack2: (11) 82 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (1) 80 
+
+Items in stack1: (0) 
+Items in stack2: (10) 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (10) 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (10) 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (10) 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+Items in stack1: (1) 100 
+Items in stack2: (11) 100 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (1) 100 
+
+Items in stack1: (0) 
+Items in stack2: (10) 928 507 471 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (1) 100 
+Items in stack2: (9) 507 471 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+Items in stack1: (0) 
+Items in stack2: (8) 471 771 194 965 465 377 344 645 
+Items in stack3: (1) 100 
+
+Items in stack1: (1) 100 
+Items in stack2: (7) 771 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 194 965 465 377 344 645 
+Items in stack3: (0) 
+
+Items in stack1: (1) 100 
+Items in stack2: (5) 965 465 377 344 645 
+Items in stack3: (1) 100 
+
+Items in stack1: (0) 
+Items in stack2: (6) 100 965 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 100 965 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 100 965 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 100 965 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 100 965 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (6) 100 965 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+Items in stack1: (1) 100 
+Items in stack2: (5) 965 465 377 344 645 
+Items in stack3: (3) 100 100 100 
+
+Items in stack1: (0) 
+Items in stack2: (4) 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (4) 465 377 344 645 
+Items in stack3: (2) 100 100 
+
+Items in stack1: (1) 100 
+Items in stack2: (3) 377 344 645 
+Items in stack3: (1) 100 
+
+Items in stack1: (0) 
+Items in stack2: (2) 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (2) 344 645 
+Items in stack3: (0) 
+
+pop called on empty stack!
+Items in stack1: (0) 
+Items in stack2: (2) 344 645 
+Items in stack3: (0) 
+
+Items in stack1: (1) 100 
+Items in stack2: (1) 645 
+Items in stack3: (1) 100 
+
+Items in stack1: (0) 
+Items in stack2: (0) 
+Items in stack3: (0) 
+
+-----------------------------------------------
+TestSwapStress...
+Pushing 1000000 items...
+Swapping 100000 times...
+Popping all but 10 items...
+Items in stack1: (10) 4 4 3 3 2 2 1 1 0 0 
+Items in stack2: (10) 9 8 7 6 5 4 3 2 1 0 
+Items in stack3: (10) 18 16 14 12 10 8 6 4 2 0 
+

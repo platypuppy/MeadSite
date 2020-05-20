@@ -1,0 +1,9 @@
+digraph g {
+graph [rankdir = "LR"];
+node [fontsize = "12" shape = "record"];
+edge [arrowhead = "normal"];
+
+node1 [label = "<f1> 0 | <f2> 0xb66010 | <f3> 50 | <f4> START | <f5> NULL" shape=record];
+memory [label = "<f1> free}"];
+node1:f2->memory:f1;
+}

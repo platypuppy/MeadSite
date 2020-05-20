@@ -1,0 +1,220 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Synchronization-2</title>
+
+
+</head>
+
+<body>  
+
+<center><h1>
+Synchronization
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Problem
+</p>
+
+
+A POSIX example:
+<p>
+<b>Output</b> (program is called <b><tt>sem</tt></b>) The numbers in parentheses
+in the second column are the number of threads in the critical section.
+
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>sem 4 1</th><th>sem 8 3</th><th>sem 12 4</th><th>sem 12 8</th></tr>
+<tr valign="top">
+<td>
+<pre>
+ThreadId 0: acquired semaphore
+ThreadId 0: working...
+ThreadId 0: released semaphore
+ThreadId 1: acquired semaphore
+ThreadId 1: working...
+ThreadId 1: released semaphore
+ThreadId 2: acquired semaphore
+ThreadId 2: working...
+ThreadId 2: released semaphore
+ThreadId 3: acquired semaphore
+ThreadId 3: working...
+ThreadId 3: released semaphore
+</pre>
+</td>
+<td>
+<pre>
+<font color="blue"><b>ThreadId 0: acquired semaphore</b></font> (1)
+ThreadId 0: working...
+<font color="blue"><b>ThreadId 2: acquired semaphore</b></b></font> (2)
+ThreadId 2: working...
+<font color="blue"><b>ThreadId 1: acquired semaphore</b></font> (3)
+ThreadId 1: working...
+<font color="red"><b>ThreadId 0: released semaphore</b></font> (2)
+<font color="blue"><b>ThreadId 3: acquired semaphore</b></font> (3)
+ThreadId 3: working...
+<font color="blue"><b>ThreadId 4: acquired semaphore</b></font> <b>(4)</b>
+ThreadId 4: working...
+ThreadId 1: released semaphore (3)
+ThreadId 2: released semaphore (2)
+ThreadId 5: acquired semaphore (3)
+ThreadId 5: working...
+ThreadId 3: released semaphore (2)
+ThreadId 6: acquired semaphore (3)
+ThreadId 6: working...
+ThreadId 7: acquired semaphore <b>(4)</b>
+ThreadId 7: working...
+ThreadId 5: released semaphore (3)
+ThreadId 4: released semaphore (2)
+ThreadId 6: released semaphore (1)
+ThreadId 7: released semaphore (0)
+</pre>
+</td>
+<td>
+<pre>
+ThreadId 1: acquired semaphore
+ThreadId 1: working...
+ThreadId 3: acquired semaphore
+ThreadId 2: acquired semaphore
+ThreadId 2: working...
+ThreadId 3: working...
+ThreadId 0: acquired semaphore
+ThreadId 0: working...
+ThreadId 1: released semaphore
+ThreadId 2: released semaphore
+ThreadId 5: acquired semaphore
+ThreadId 5: working...
+ThreadId 4: acquired semaphore
+ThreadId 4: working...
+ThreadId 3: released semaphore
+ThreadId 6: acquired semaphore
+ThreadId 6: working...
+ThreadId 0: released semaphore
+ThreadId 7: acquired semaphore
+ThreadId 7: working...
+ThreadId 6: released semaphore
+ThreadId 8: acquired semaphore
+ThreadId 8: working...
+ThreadId 5: released semaphore
+ThreadId 9: acquired semaphore
+ThreadId 9: working...
+ThreadId 4: released semaphore
+ThreadId 10: acquired semaphore
+ThreadId 10: working...
+ThreadId 7: released semaphore
+ThreadId 11: acquired semaphore
+ThreadId 11: working...
+ThreadId 8: released semaphore
+ThreadId 9: released semaphore
+ThreadId 10: released semaphore
+ThreadId 11: released semaphore
+</pre>
+</td>
+<td><pre>
+ThreadId 0: acquired semaphore
+ThreadId 0: working...
+ThreadId 2: acquired semaphore
+ThreadId 2: working...
+ThreadId 3: acquired semaphore
+ThreadId 5: acquired semaphore
+ThreadId 5: working...
+ThreadId 4: acquired semaphore
+ThreadId 4: working...
+ThreadId 3: working...
+ThreadId 7: acquired semaphore
+ThreadId 7: working...
+ThreadId 6: acquired semaphore
+ThreadId 1: acquired semaphore
+ThreadId 1: working...
+ThreadId 6: working...
+ThreadId 0: released semaphore
+ThreadId 3: released semaphore
+ThreadId 5: released semaphore
+ThreadId 4: released semaphore
+ThreadId 7: released semaphore
+ThreadId 8: acquired semaphore
+ThreadId 8: working...
+ThreadId 11: acquired semaphore
+ThreadId 11: working...
+ThreadId 2: released semaphore
+ThreadId 10: acquired semaphore
+ThreadId 10: working...
+ThreadId 6: released semaphore
+ThreadId 9: acquired semaphore
+ThreadId 9: working...
+ThreadId 1: released semaphore
+ThreadId 8: released semaphore
+ThreadId 11: released semaphore
+ThreadId 10: released semaphore
+ThreadId 9: released semaphore
+</pre></td>
+</tr></table>
+</blockquote>
+
+The problem is in the thread function. The 3rd printf statement is <b>not</b> in the critical section:
+
+<!-- 
+The 3rd printf statement in the thread function is not in the critical secion.
+-->
+
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* sem.c                                             */</i></b></font>
+<b>void</b> *ThreadFn(<b>void</b> *p)
+{
+  <b>struct</b> ThreadParams *params = (<b>struct</b> ThreadParams *)p;
+  sem_t *semaphore = params-&gt;semaphore;
+  <b>int</b> tid = params-&gt;tid;
+  
+    <font color="#003399"><i>/* Acquire semaphore */</i></b></font>
+  <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/sem_wait.html">sem_wait</a>(semaphore); 
+  printf(<font color="#9933CC">&quot;ThreadId %i: acquired semaphore&#92;n&quot;</b></font>, tid);
+
+    <font color="#003399"><i>/* Pretend to do some work */</i></b></font>
+  printf(<font color="#9933CC">&quot;ThreadId %i: working...&#92;n&quot;</b></font>, tid);
+  sleep(1);
+  
+    <font color="#003399"><i>/* Release semaphore */</i></b></font>
+  <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/sem_post.html">sem_post</a>(semaphore); 
+  printf(<font color="black">&quot;ThreadId %i: released semaphore&#92;n&quot;</b></font>, tid);  <font color="black"><b><i> <big><big>&larr;</big></big> <big>This is not protected!</i></b></font></big>
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+The simple and obvious solution is to just put the print statement in the critical section:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* sem.c                                             */</i></b></font>
+<b>void</b> *ThreadFn(<b>void</b> *p)
+{
+  <b>struct</b> ThreadParams *params = (<b>struct</b> ThreadParams *)p;
+  sem_t *semaphore = params-&gt;semaphore;
+  <b>int</b> tid = params-&gt;tid;
+    
+  <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/sem_wait.html">sem_wait</a>(semaphore); <font color="#003399"><i>/* Acquire semaphore */</i></b></font>
+
+    printf(<font color="#9933CC">&quot;ThreadId %i: acquired semaphore&#92;n&quot;</b></font>, tid);
+
+      <font color="#003399"><i>/* Pretend to do some work */</i></b></font>
+    printf(<font color="#9933CC">&quot;ThreadId %i: working...&#92;n&quot;</b></font>, tid);
+    sleep(1);
+  
+    printf(<font color="#9933CC">&quot;ThreadId %i: released semaphore&#92;n&quot;</b></font>, tid);  <font color="black"><b><i> <big><big>&larr;</big></big> <big>Now this is protected.</i></b></font></big>
+    
+  <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/sem_post.html">sem_post</a>(semaphore); <font color="#003399"><i>/* Release semaphore */</i></b></font>
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+Why did the other runs succeed?
+
+<!--
+Luck.
+-->
+<br><br><br><br><br><br>
+

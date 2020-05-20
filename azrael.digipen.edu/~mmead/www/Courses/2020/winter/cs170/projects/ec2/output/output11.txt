@@ -1,0 +1,25 @@
+-----------------------------------------------
+TestClear...
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Items in the stack: 10
+
+Clearing the stack...
+Items in the stack: 0
+
+Push 5 more...
+5
+4
+3
+2
+1
+Items in the stack: 5
+

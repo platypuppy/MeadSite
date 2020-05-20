@@ -1,0 +1,12 @@
+digraph g {
+graph [rankdir = "LR"];
+node [fontsize = "12" shape = "record"];
+edge [arrowhead = "normal"];
+
+node1 [label = "<f1> 1 | <f2> 0xb66050 | <f3> 30 | <f4> one | <f5> 0xb66190" shape=record];
+node1:f5->node2:f1;
+node2 [label = "<f1> 0 | <f2> 0xb6606e | <f3> 270 | <f4> FREE | <f5> NULL" shape=record];
+memory [label = "<f1> allocated|<f2> free}"];
+node1:f2->memory:f1;
+node2:f2->memory:f2;
+}

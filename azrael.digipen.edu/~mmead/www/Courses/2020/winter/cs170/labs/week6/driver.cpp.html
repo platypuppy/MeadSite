@@ -1,0 +1,302 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.cpp</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+<font color="990099">#include &quot;List.h&quot;</font>
+
+<b>void</b> TestAdd()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestAdd ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  CS170::ListLab::List list2; 
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+    <font color="#003399"><i>// Create two lists</i></font>
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    list1.AddToEnd(numbers[i]);
+    list2.AddToFront(numbers[i]);
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+    std::cout &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestFind()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestFind ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         22, 23, 38, 94, 56, 34, 
+                         67, 56, 88, 19, 10, 59
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+    list1.AddToEnd(numbers[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Find an existing value</i></font>
+  <b>int</b> value = 56;
+  CS170::ListLab::Node *node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+  value = 22;
+  node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+  value = 59;
+  node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+    <font color="#003399"><i>// Find a non-existant value</i></font>
+  value = 123;
+  node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestDelete1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDelete1 ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         22, 23, 38, 94, 56, 34, 
+                         67, 56, 88, 19, 10, 59
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+    list1.AddToEnd(numbers[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(56);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 56 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(22);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 22 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(59);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 59 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(99);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 99 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  {
+    <b>const</b> <b>int</b> numbers[] = {
+                           23, 38, 94, 34, 
+                           67, 56, 88, 19, 10
+                          };
+    size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+    <b>for</b> (size_t i = 0; i &lt; size; i++)
+    {
+      list1.<b>Delete</b>(numbers[i]);
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: &quot;</font> &lt;&lt; numbers[i] &lt;&lt; <font color="#9933CC">&quot; (&quot;</font> &lt;&lt; std::setw(2) 
+                &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+      std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+    }
+    list1.<b>Delete</b>(99);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 99 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestDelete2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDelete2 ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> numbers1[] = {
+                         22, 23, 38, 94, 56, 34, 
+                         67, 56, 88, 19, 10, 59
+                        };
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  <b>for</b> (size_t i = 0; i &lt; size1; i++)
+    list1.AddToEnd(numbers1[i]);
+
+  CS170::ListLab::List list2;
+  <b>const</b> <b>int</b> numbers2[] = {
+                         94, 23, 56, 22, 56, 19, 
+                         67, 38, 34, 59
+                        };
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+  <b>for</b> (size_t i = 0; i &lt; size2; i++)
+    list2.AddToEnd(numbers2[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(list2);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 after deleting list2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestConcat()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestConcat ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  CS170::ListLab::List list2; 
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 21, 56, 38, 94, 23};
+  <b>const</b> <b>int</b> numbers2[] = {67, 56, 88, 19, 59, 10, 17};
+
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  <b>for</b> (size_t i = 0; i &lt; size1; i++)
+    list1.AddToEnd(numbers1[i]);
+
+  <b>for</b> (size_t i = 0; i &lt; size2; i++)
+    list2.AddToEnd(numbers2[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Adding both lists (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  list1.Concat(list2);
+
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestInsert1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestInsert1 ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    list1.AddToEnd(numbers[i]);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+    std::cout &lt;&lt; std::endl;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 91 at position 3&#92;n&quot;</font>;
+  list1.Insert(91, 3);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 92 at position 0&#92;n&quot;</font>;
+  list1.Insert(92, 0);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 93 at position 7&#92;n&quot;</font>;
+  list1.Insert(93, 7);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 94 at position 9&#92;n&quot;</font>;
+  list1.Insert(94, 9);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestInsert2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestInsert2 ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    list1.Insert(numbers[i]);
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes) &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting &quot;</font> &lt;&lt; std::setw(2) &lt;&lt; numbers[i] &lt;&lt; <font color="#9933CC">&quot;: &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  }
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  size_t test = 0;
+  size_t count;
+  <b>void</b> (*fp[])() = {
+                     TestAdd,     <font color="#003399"><i>/*  1 */</i></font>
+                     TestFind,    <font color="#003399"><i>/*  2 */</i></font>
+                     TestInsert1, <font color="#003399"><i>/*  3 */</i></font>
+                     TestInsert2, <font color="#003399"><i>/*  4 */</i></font>
+                     TestConcat,  <font color="#003399"><i>/*  5 */</i></font>
+                     TestDelete1, <font color="#003399"><i>/*  6 */</i></font>
+                     TestDelete2, <font color="#003399"><i>/*  7 */</i></font>
+                   };
+
+  count = <b>sizeof</b>(fp) / <b>sizeof</b>(*fp);
+
+  <b>if</b> (argc &gt; 1)
+    test = (size_t)std::atoi(argv[1]);
+
+  <b>if</b> (test &gt; count)
+    test = 0;
+
+  <b>if</b> (test)
+    fp[test - 1]();
+  <b>else</b>
+  {
+    <b>for</b> (size_t i = 0; i &lt; count; i++)
+      fp[i]();
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+
+</html>

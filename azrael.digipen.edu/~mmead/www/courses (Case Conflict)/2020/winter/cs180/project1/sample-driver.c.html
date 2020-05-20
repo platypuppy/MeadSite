@@ -1,0 +1,549 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>sample-driver.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;     // printf, sprintf, fflush</font>
+<font color="990099">#include &lt;stdlib.h&gt;    //  malloc, free, abort, atoi</font>
+<font color="990099">#include &lt;stdbool.h&gt;   // true, false               </font>
+<font color="990099">#include &lt;stdatomic.h&gt; // atomic_int</font>
+<font color="990099">#include &lt;unistd.h&gt;    // sysconf</font>
+<font color="990099">#include &lt;pthread.h&gt;   // thread create/join/exit</font>
+<font color="990099">#include &quot;cachelist.h&quot; // cachelist stuff           </font>
+<font color="990099">#include &quot;PRNG.h&quot;      // RandomInt, ut_srand       </font>
+
+<font color="990099">#define SHOW_RESULTS</font>
+<b>int</b> gSize = 10000;
+
+atomic_int aCount = 0;
+
+<b>void</b> *Increment(<b>void</b> *p)
+{
+  <b>int</b> i;
+  <b>int</b> loops = *(<b>int</b> *)p;
+  <b>for</b> (i = 0; i &lt; loops; i++)
+    ++aCount;
+
+  <b>return</b> NULL;
+}
+
+<b>void</b> c11(<b>void</b>)
+{
+  <font color="990099">#define N 2</font>
+  <b>int</b> i;
+  pthread_t thread_id[N];
+  <b>int</b> loops = 1000 * 1000 * 10;
+
+  <b>for</b> (i = 0; i &lt; N; i++)
+    pthread_create(thread_id + i, 0, Increment, &amp;loops);
+
+  <b>for</b> (i = 0; i &lt; N; i++)
+    pthread_join(thread_id[i], 0);
+
+<font color="990099">#ifdef SHOW_RESULTS</font>
+  printf(<font color="#9933CC">&quot;aCount = %i&#92;n&quot;</font>, aCount);
+<font color="990099">#endif</font>
+}
+
+<b>void</b> nprocs(<b>void</b>)
+{
+<font color="990099">#ifdef SHOW_RESULTS</font>
+  printf(<font color="#9933CC">&quot;Number of active processors: %li&#92;n&quot;</font>, sysconf(_SC_NPROCESSORS_ONLN));
+<font color="990099">#endif</font>
+}
+
+<b>int</b> f1(<b>int</b> * restrict p)
+{
+  <b>return</b> *p;
+}
+
+<b>void</b> SwapInt(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>int</b> count)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    <b>int</b> r = RandomInt(0, count - 1);
+    SwapInt(&amp;array[i], &amp;array[r]);
+  }
+}
+
+<b>void</b> PrintArray(<b>int</b> *array, <b>int</b> count)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test_add_front(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;----- test_add_front ----------------------------------------&#92;n&quot;</font>);
+  list = cl_add_front(list, 1, <font color="#9933CC">&quot;one&quot;</font>);
+  list = cl_add_front(list, 2, <font color="#9933CC">&quot;two&quot;</font>);
+  list = cl_add_front(list, 3, <font color="#9933CC">&quot;three&quot;</font>);
+  list = cl_add_front(list, 4, <font color="#9933CC">&quot;four&quot;</font>);
+  list = cl_add_front(list, 5, <font color="#9933CC">&quot;five&quot;</font>);
+  list = cl_add_front(list, 6, <font color="#9933CC">&quot;six&quot;</font>);
+  list = cl_add_front(list, 7, <font color="#9933CC">&quot;seven&quot;</font>);
+
+  cl_dump(list);
+  cl_destroy(list);
+}
+
+<b>void</b> test_add_end(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;----- test_add_end ----------------------------------------&#92;n&quot;</font>);
+  list = cl_add_end(list, 1, <font color="#9933CC">&quot;one&quot;</font>);
+  list = cl_add_end(list, 2, <font color="#9933CC">&quot;two&quot;</font>);
+  list = cl_add_end(list, 3, <font color="#9933CC">&quot;three&quot;</font>);
+  list = cl_add_end(list, 4, <font color="#9933CC">&quot;four&quot;</font>);
+  list = cl_add_end(list, 5, <font color="#9933CC">&quot;five&quot;</font>);
+  list = cl_add_end(list, 6, <font color="#9933CC">&quot;six&quot;</font>);
+  list = cl_add_end(list, 7, <font color="#9933CC">&quot;seven&quot;</font>);
+
+  cl_dump(list);
+  cl_destroy(list);
+}
+
+<b>void</b> test_remove1(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;----- test_remove1 ----------------------------------------&#92;n&quot;</font>);
+  list = cl_add_end(list, 1, <font color="#9933CC">&quot;one&quot;</font>);
+  list = cl_add_end(list, 2, <font color="#9933CC">&quot;two&quot;</font>);
+  list = cl_add_end(list, 3, <font color="#9933CC">&quot;three&quot;</font>);
+  list = cl_add_end(list, 4, <font color="#9933CC">&quot;four&quot;</font>);
+  list = cl_add_end(list, 5, <font color="#9933CC">&quot;five&quot;</font>);
+  list = cl_add_end(list, 6, <font color="#9933CC">&quot;six&quot;</font>);
+  list = cl_add_end(list, 7, <font color="#9933CC">&quot;seven&quot;</font>);
+  cl_dump(list);
+
+  list = cl_remove(list, 4);
+  cl_dump(list);
+
+  list = cl_remove(list, 5);
+  cl_dump(list);
+
+  list = cl_remove(list, 1);
+  cl_dump(list);
+
+  list = cl_remove(list, 7);
+  cl_dump(list);
+
+  cl_destroy(list);
+}
+
+
+<b>void</b> test_remove2(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;----- test_add_remove2 ----------------------------------------&#92;n&quot;</font>);
+  list = cl_add_end(list, 1, <font color="#9933CC">&quot;one&quot;</font>);
+  list = cl_add_end(list, 2, <font color="#9933CC">&quot;two&quot;</font>);
+  list = cl_add_end(list, 3, <font color="#9933CC">&quot;three&quot;</font>);
+  list = cl_add_end(list, 4, <font color="#9933CC">&quot;four&quot;</font>);
+  list = cl_add_end(list, 5, <font color="#9933CC">&quot;five&quot;</font>);
+  list = cl_add_end(list, 6, <font color="#9933CC">&quot;six&quot;</font>);
+  list = cl_add_end(list, 7, <font color="#9933CC">&quot;seven&quot;</font>);
+  cl_dump(list);
+
+  list = cl_remove(list, 99);
+  cl_dump(list);
+
+  list = cl_remove(list, 4);
+  cl_dump(list);
+
+  list = cl_remove(list, 5);
+  cl_dump(list);
+
+  list = cl_remove(list, 1);
+  cl_dump(list);
+
+  list = cl_remove(list, 7);
+  cl_dump(list);
+
+  list = cl_remove(list, 3);
+  cl_dump(list);
+
+  list = cl_remove(list, 6);
+  cl_dump(list);
+
+  list = cl_remove(list, 2);
+  cl_dump(list);
+
+  list = cl_remove(list, 1);
+  cl_dump(list);
+
+  cl_destroy(list);
+}
+
+<b>void</b> test_insert_before1(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;----- test_insert_before1 ----------------------------------------&#92;n&quot;</font>);
+  list = cl_add_end(list, 1, <font color="#9933CC">&quot;one&quot;</font>);
+  list = cl_add_end(list, 2, <font color="#9933CC">&quot;two&quot;</font>);
+  list = cl_add_end(list, 3, <font color="#9933CC">&quot;three&quot;</font>);
+  list = cl_add_end(list, 4, <font color="#9933CC">&quot;four&quot;</font>);
+  cl_dump(list);
+
+  list = cl_insert_before(list, 3, 101, <font color="#9933CC">&quot;fred&quot;</font>);
+  cl_dump(list);
+
+  list = cl_insert_before(list, 1, 102, <font color="#9933CC">&quot;barney&quot;</font>);
+  cl_dump(list);
+
+  list = cl_insert_before(list, 4, 103, <font color="#9933CC">&quot;wilma&quot;</font>);
+  cl_dump(list);
+
+  list = cl_insert_before(list, 102, 104, <font color="#9933CC">&quot;betty&quot;</font>);
+  cl_dump(list);
+
+  list = cl_insert_before(list, 1000, 105, <font color="#9933CC">&quot;dino&quot;</font>);
+  cl_dump(list);
+
+  cl_destroy(list);
+}
+
+<b>void</b> test_insert_after1(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;----- test_insert_after1 ----------------------------------------&#92;n&quot;</font>);
+  list = cl_add_end(list, 1, <font color="#9933CC">&quot;one&quot;</font>);
+  list = cl_add_end(list, 2, <font color="#9933CC">&quot;two&quot;</font>);
+  list = cl_add_end(list, 3, <font color="#9933CC">&quot;three&quot;</font>);
+  list = cl_add_end(list, 4, <font color="#9933CC">&quot;four&quot;</font>);
+  cl_dump(list);
+
+  cl_insert_after(list, 2, 101, <font color="#9933CC">&quot;fred&quot;</font>);
+  cl_dump(list);
+
+  cl_insert_after(list, 4, 102, <font color="#9933CC">&quot;barney&quot;</font>);
+  cl_dump(list);
+
+  cl_insert_after(list, 1, 103, <font color="#9933CC">&quot;wilma&quot;</font>);
+  cl_dump(list);
+
+  cl_insert_after(list, 102, 104, <font color="#9933CC">&quot;betty&quot;</font>);
+  cl_dump(list);
+
+  cl_insert_after(list, 1000, 105, <font color="#9933CC">&quot;dino&quot;</font>);
+  cl_dump(list);
+
+  cl_destroy(list);
+}
+
+<font color="990099">#define VERBOSEx</font>
+<b>void</b> test_stress1(<b>void</b>)
+{
+  cl_node *list = NULL;
+  <b>int</b> count = 0;
+  <b>int</b> a[2 * gSize * <b>sizeof</b>(<b>int</b>)];
+  <b>char</b> buf[LABEL_SIZE];
+
+  printf(<font color="#9933CC">&quot;----- test_stress1 ----------------------------------------&#92;n&quot;</font>);
+  <b>for</b> (<b>int</b> i = 0; i &lt; gSize; i++)
+  {
+    a[count++] = i + 1;
+    sprintf(buf, <font color="#9933CC">&quot;%08i&quot;</font>, a[i]);
+    list = cl_add_end(list, a[i], buf); 
+  }
+  <font color="990099">#ifdef VERBOSE</font>
+  cl_dump(list);
+  <font color="990099">#endif</font>
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; gSize; i++)
+  {
+    <b>int</b> r1 = RandomInt(0, 1);
+    <b>int</b> r2 = RandomInt(1, count);
+    a[count] = count + 1;
+    count++;
+    sprintf(buf, <font color="#9933CC">&quot;%08i&quot;</font>, count);
+
+    <b>if</b> (r1)
+      list = cl_insert_before(list, r2, count, buf);
+    <b>else</b>
+      cl_insert_after(list, r2, count, buf);
+
+    <font color="990099">#ifdef VERBOSE</font>
+    cl_dump(list);
+    printf(<font color="#9933CC">&quot;%s %i&quot;</font>, r1 ? <font color="#9933CC">&quot;before&quot;</font> : <font color="#9933CC">&quot;after&quot;</font>, r2);
+    <font color="990099">#endif</font>
+  }
+  <font color="990099">#ifdef VERBOSE</font>
+  cl_dump(list);
+  <font color="990099">#endif</font>
+
+  <font color="#003399"><i>//PrintArray(a, count);</i></font>
+  Shuffle(a, count);
+  <font color="#003399"><i>//PrintArray(a, count);</i></font>
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; 2 * gSize - 20; i++)
+  {
+    list = cl_remove(list, a[i]);
+    <font color="990099">#ifdef VERBOSE</font>
+    cl_dump(list);
+    <font color="990099">#endif</font>
+  }
+
+  cl_dump(list);
+  cl_destroy(list);
+
+  <font color="#003399"><i>//free(a);</i></font>
+}
+
+<b>void</b> test_find(<b>bool</b> cache)
+{
+  cl_node *list = NULL;
+  <b>int</b> total = 0; 
+  <b>const</b> <b>int</b> size = 10;
+  <b>int</b> compares;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list = cl_add_end(list, i, <font color="#9933CC">&quot;node&quot;</font>);
+
+  cl_dump(list);
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    list = cl_find(list, i, cache, &amp;compares);
+    printf(<font color="#9933CC">&quot;Comparisons to find %i: %i&#92;n&quot;</font>, i, compares);
+    total += compares;
+  }
+
+  list = cl_find(list, 6, cache, &amp;compares);
+  total += compares;
+  list = cl_find(list, 7, cache, &amp;compares);
+  total += compares;
+  list = cl_find(list, 6, cache, &amp;compares);
+  total += compares;
+  list = cl_find(list, 7, cache, &amp;compares);
+  total += compares;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+  {
+    list = cl_find(list, 6, cache, &amp;compares);
+    printf(<font color="#9933CC">&quot;Comparisons to find 6: %i&#92;n&quot;</font>, compares);
+    total += compares;
+  }
+
+  cl_dump(list);
+  printf(<font color="#9933CC">&quot;Total comparisons: %i&#92;n&quot;</font>, total);
+
+  cl_destroy(list);
+}
+
+<b>void</b> test_find1(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;----- test_find1 (no cache) ----------------------------------------&#92;n&quot;</font>);
+  test_find(<b>false</b>);
+}
+
+<b>void</b> test_find2(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;----- test_find2 (cache) ----------------------------------------&#92;n&quot;</font>);
+  test_find(<b>true</b>);
+}
+
+<b>int</b> COUNT = 3000000;
+<b>int</b> REPS = 100;
+
+<b>void</b> test_find_stress(<b>bool</b> cache)
+{
+  cl_node *list = NULL;
+  <b>long</b> total = 0;
+  <b>int</b> *array;
+
+  array = (<b>int</b> *)malloc(COUNT * <b>sizeof</b>(<b>int</b>));
+  <b>if</b> (!array)
+  {
+    printf(<font color="#9933CC">&quot;Failed to malloc array.&#92;n&quot;</font>);
+    abort();
+  }
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; COUNT; i++)
+    array[i] = i + 1;
+
+  Shuffle(array, COUNT);
+
+  printf(<font color="#9933CC">&quot;Adding... &quot;</font>);
+  fflush(stdout);
+  <b>for</b> (<b>int</b> i = 0; i &lt; COUNT; i++)
+    list = cl_add_front(list, array[i], <font color="#9933CC">&quot;node&quot;</font>);
+  printf(<font color="#9933CC">&quot;Done.&#92;n&quot;</font>);
+
+  <font color="#003399"><i>//cl_dump(list);</i></font>
+
+  printf(<font color="#9933CC">&quot;Finding... &quot;</font>);
+  fflush(stdout);
+  <b>for</b> (<b>int</b> j = 0; j &lt; REPS; j++)
+  {
+    <b>for</b> (<b>int</b> i = COUNT - 1; i &gt;= COUNT - 10; i--)
+    {
+      <b>int</b> compares;
+      list = cl_find(list, i, cache, &amp;compares);
+      <font color="#003399"><i>//cl_dump(list);</i></font>
+      <font color="#003399"><i>//printf(&quot;Comparisons to find %i: %i&#92;n&quot;, i, compares);</i></font>
+      total += compares;
+    }
+  }
+  printf(<font color="#9933CC">&quot;Done.&#92;n&quot;</font>);
+
+  <font color="#003399"><i>//cl_dump(list);</i></font>
+  printf(<font color="#9933CC">&quot;Total comparisons: %li&#92;n&quot;</font>, total);
+
+  free(array);
+  cl_destroy(list);
+}
+
+<b>void</b> test_find_stress1(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;----- test_find_stress1 (no cache) ----------------------------------------&#92;n&quot;</font>);
+  test_find_stress(<b>false</b>);
+}
+
+<b>void</b> test_find_stress2(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;----- test_find_stress2 (with cache) ----------------------------------------&#92;n&quot;</font>);
+  test_find_stress(<b>true</b>);
+}
+
+<b>int</b> QUIET = 0;
+
+<b>void</b> my_dump(<b>const</b> cl_node *list, <b>int</b> value1, <b>int</b> value2, <b>const</b> <b>char</b> *string)
+{
+  <b>if</b> (QUIET)
+    <b>return</b>;
+
+  printf(<font color="#9933CC">&quot;%s - value:%i, where:%i&#92;n&quot;</font>, string, value1, value2);
+  cl_dump(list);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test_a_lot(<b>void</b>)
+{
+  cl_node *list = NULL;
+  <b>int</b> size = 10;
+  <b>int</b> range = 20;
+
+  QUIET = 1; <font color="#003399"><i>// Set to 0 to see verbose output</i></font>
+
+  printf(<font color="#9933CC">&quot;----- test_a_lot ----------------------------------------&#92;n&quot;</font>);
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    <b>int</b> value;
+    <b>int</b> insert;
+
+    value = RandomInt(1, range);
+    list = cl_add_front(list, value, <font color="#9933CC">&quot;node&quot;</font>);
+    my_dump(list, value, -1, <font color="#9933CC">&quot;add_front&quot;</font>);
+
+    value =  RandomInt(1, range);
+    list = cl_add_end(list, value, <font color="#9933CC">&quot;node&quot;</font>);
+    my_dump(list, value, -1, <font color="#9933CC">&quot;add_end&quot;</font>);
+
+    value = RandomInt(1, range);
+    insert = RandomInt(1, range);
+    cl_insert_after(list, insert, value, <font color="#9933CC">&quot;node&quot;</font>);
+    my_dump(list, value, insert, <font color="#9933CC">&quot;insert_after&quot;</font>);
+
+    value = RandomInt(1, range);
+    insert = RandomInt(1, range);
+    list = cl_insert_before(list, insert, value, <font color="#9933CC">&quot;node&quot;</font>);
+    my_dump(list, value, insert, <font color="#9933CC">&quot;insert_before&quot;</font>);
+
+    value = RandomInt(1, range);
+    list = cl_remove(list, value);
+    my_dump(list, value, -1, <font color="#9933CC">&quot;remove&quot;</font>);
+  }
+  QUIET = 0;
+  cl_dump(list);
+
+  cl_destroy(list);
+}
+
+<b>void</b> simple(<b>void</b>)
+{
+  cl_node *list = NULL;
+
+  list = cl_add_end(list, 1, <font color="#9933CC">&quot;&quot;</font>);
+  list = cl_add_end(list, 2, <font color="#9933CC">&quot;&quot;</font>);
+  list = cl_add_end(list, 3, <font color="#9933CC">&quot;&quot;</font>);
+  list = cl_add_end(list, 4, <font color="#9933CC">&quot;&quot;</font>);
+  cl_dump(list);
+  cl_insert_after(list, 4, 5, <font color="#9933CC">&quot;&quot;</font>);
+  cl_dump(list);
+
+  cl_destroy(list);
+
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>void</b> (*fp[])(<b>void</b>) = {
+                        test_add_front,      <font color="#003399"><i>//  1</i></font>
+                        test_add_end,        <font color="#003399"><i>//  2</i></font>
+                        test_remove1,        <font color="#003399"><i>//  3</i></font>
+                        test_remove2,        <font color="#003399"><i>//  4</i></font>
+                        test_insert_before1, <font color="#003399"><i>//  5</i></font>
+                        test_insert_after1,  <font color="#003399"><i>//  6</i></font>
+                        test_find1,          <font color="#003399"><i>//  7</i></font>
+                        test_find2,          <font color="#003399"><i>//  8</i></font>
+                        test_find_stress1,   <font color="#003399"><i>//  9</i></font>
+                        test_find_stress2,   <font color="#003399"><i>// 10</i></font>
+                        test_stress1,        <font color="#003399"><i>// 11</i></font>
+                        test_a_lot,          <font color="#003399"><i>// 12</i></font>
+                       };
+
+  <b>unsigned</b> count = <b>sizeof</b>(fp) / <b>sizeof</b>(*fp);
+
+  ut_srand(1, 0);
+
+  <b>unsigned</b> test = 0;
+  <b>if</b> (argc &gt; 1)
+    test = atoi(argv[1]);
+
+  <b>if</b> (test &gt; count)
+    test = 0;
+
+  <b>if</b> (test)
+    fp[test - 1]();
+  <b>else</b>
+  {
+    <b>for</b> (<b>unsigned</b> i = 0; i &lt; count; i++)
+      fp[i]();
+  }
+
+  c11();
+  nprocs();
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

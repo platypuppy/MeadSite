@@ -1,0 +1,175 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>watchdog.cpp</title>
+
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt;   // cout, cerr, endl</font>
+<font color="990099">#include &lt;unistd.h&gt;   // usleep, fork, exec</font>
+<font color="990099">#include &lt;cstdlib&gt;    // exit</font>
+<font color="990099">#include &lt;cstdio&gt;     // sscanf, perror</font>
+<font color="990099">#include &lt;sys/wait.h&gt; // kill, waitpid, SIGKILL</font>
+<font color="990099">#include &lt;errno.h&gt;    // errno</font>
+<font color="990099">#include &lt;string.h&gt;   // strerror</font>
+
+<font color="#003399"><i>// How often to check the child's status (ms)</i></font>
+<b>const</b> <b>int</b> STEP = 5;
+
+<font color="#003399"><i>// ms is in milliseconds</i></font>
+<b>void</b> sleep_ms(<b>int</b> ms)
+{
+  usleep(ms * 1000); <font color="#003399"><i>// 0.001ms sleep</i></font>
+}
+
+<font color="#003399"><i>// debug</i></font>
+<b>void</b> print_args(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>for</b> (<b>int</b> i = 3; i &lt; argc; i++)
+    std::cerr &lt;&lt; argv[i] &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+}
+
+<font color="#003399"><i>//argv[1] - hard-timeout</i></font>
+<font color="#003399"><i>//argv[2] - soft-timeout</i></font>
+<font color="#003399"><i>//argv[3] - executable</i></font>
+<font color="#003399"><i>//argv[4] - args... to executable</i></font>
+<b>int</b> main(<b>int</b> argc, <b>char</b> ** argv)
+{
+  <b>if</b> (argc &lt; 3)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Usage: &quot;</font> &lt;&lt; argv[0] &lt;&lt; <font color="#9933CC">&quot; hard_timeout soft_timeout &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;exe_to_run args_for_exe ....&#92;n&quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;where &quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;  hard_timeout - How long to wait until terminating child.&#92;n&quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;  soft_timeout - How long to wait until child is now inefficient.&#92;n&quot;</font>;
+    <b>return</b> 1;
+  }
+
+  <b>int</b> hard_timeout; <font color="#003399"><i>// kill the program at this point</i></font>
+  <b>int</b> soft_timeout; <font color="#003399"><i>// allow the program to run after this point</i></font>
+
+  std::sscanf(argv[1], <font color="#9933CC">&quot;%d&quot;</font>, &amp;hard_timeout);
+  std::sscanf(argv[2], <font color="#9933CC">&quot;%d&quot;</font>, &amp;soft_timeout);
+
+    <font color="#003399"><i>// Program to exec</i></font>
+  <b>char</b> *exe = argv[3];
+
+  <b>int</b> status;       <font color="#003399"><i>// child's return code</i></font>
+  <b>int</b> duration = 0; <font color="#003399"><i>// how long the child has been running for</i></font>
+
+  pid_t pid = fork();
+
+    <font color="#003399"><i>// child</i></font>
+  <b>if</b> (pid == 0)
+  {
+    <b>int</b> execReturn = execvp(exe, argv + 3);
+    std::cerr &lt;&lt; <font color="#9933CC">&quot;Failure! execv error code = &quot;</font> &lt;&lt; execReturn &lt;&lt; std::endl;
+    perror(<font color="#9933CC">&quot;execvp&quot;</font>);
+    exit(1);
+  }
+
+    <font color="#003399"><i>// parent</i></font>
+  <b>int</b> result = 0; <font color="#003399"><i>// return code for OS</i></font>
+
+  <b>if</b> (pid &lt; 0) <font color="#003399"><i>// fork failed</i></font>
+  {
+    std::cerr &lt;&lt; <font color="#9933CC">&quot;Failed to fork&quot;</font> &lt;&lt; std::endl;
+    <b>return</b> 1;
+  }
+  <b>else</b>
+  {
+  <!--
+      <font color="#003399"><i>/*
+       http://man7.org/linux/man-pages/man2/waitpid.2.html
+       waitpid(): on success, returns the process ID of the child whose
+       state has changed; if WNOHANG was specified and one or more
+       child(ren) specified by pid exist, but have not yet changed state,
+       then 0 is returned.  On error, -1 is returned.
+
+        If w is pid_t (what waitpid returns), waitpid returns 0 and causes
+        other bizarre things to happen. It must be a long for 64-bit 
+        (or long long for 32-bit). I'm still not sure what's going on.
+      */</i></font>
+    -->    <font color="#003399"><i>// long long will allow this code to work with 32-bit and 64-bit systems</i></font>
+    <b>long</b> <b>long</b> waitval = waitpid(pid, &amp;status, WNOHANG);
+
+      <font color="#003399"><i>// Continue to wait until child finishes, or the wait time expires</i></font>
+    <b>while</b> ((duration &lt;= hard_timeout) &amp;&amp; !WIFEXITED(status))
+    {
+        <font color="#003399"><i>// The wait failed for some reason</i></font>
+      <b>if</b> (waitval == -1)
+      {
+        std::cerr &lt;&lt; <font color="#9933CC">&quot;!!!!! Something bad happened running &quot;</font>;
+        print_args(argc, argv);
+        std::cerr &lt;&lt; <font color="#9933CC">&quot; (&quot;</font> &lt;&lt; strerror(errno) &lt;&lt; <font color="#9933CC">&quot;) !!!!!&#92;n&quot;</font>;
+        <b>return</b> 2;
+      }
+      sleep_ms(STEP);  <font color="#003399"><i>// don't busy wait</i></font>
+      duration += STEP;
+      waitval = waitpid(pid, &amp;status, WNOHANG);
+    }
+
+      <font color="#003399"><i>// Child exited normally</i></font>
+    <b>if</b> (WIFEXITED(status))
+    {
+        <font color="#003399"><i>// Inefficient</i></font>
+      <b>if</b> (duration &gt; soft_timeout)
+      {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** Test took &quot;</font> &lt;&lt; duration &lt;&lt; <font color="#9933CC">&quot; ms. (Inefficient) **********&#92;n&quot;</font>;
+        result = 3;
+      }
+      <b>else</b> <font color="#003399"><i>// Efficient</i></font>
+      {
+        <font color="#003399"><i>//std::cout &lt;&lt; &quot;&#92;nTest completed within efficient time limit. (&quot; &lt;&lt; soft_timeout &lt;&lt; &quot; ms&quot;;</i></font>
+        <font color="#003399"><i>//std::cout &lt;&lt; &quot;, actual &quot; &lt;&lt; duration &lt;&lt; &quot; ms)&#92;n&quot;;</i></font>
+      }
+    }
+    <b>else</b> <font color="#003399"><i>// Child didn't finish, kill it</i></font>
+    {
+      <b>int</b> err;    <font color="#003399"><i>// kill success/fail</i></font>
+      result = 4; <font color="#003399"><i>// code indicating child took too long</i></font>
+
+      err = kill(pid, SIGKILL);
+      <b>if</b> (err)
+      {
+        std::cerr &lt;&lt; <font color="#9933CC">&quot;kill failed!&quot;</font> &lt;&lt; std::endl;
+        perror(<font color="#9933CC">&quot;kill&quot;</font>);
+        result = 5; <font color="#003399"><i>// kill failed</i></font>
+      }
+      std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** Test took too long to complete (over &quot;</font> &lt;&lt; hard_timeout &lt;&lt;  <font color="#9933CC">&quot;ms). **********&#92;n&quot;</font>;
+    }
+    <font color="#003399"><i>// At this point, the child has finished or has been terminated (hopefully)</i></font>
+  }
+
+  <b>return</b> result;
+}
+</code></pre>
+
+Simple tester app:
+
+<blockquote><pre><font color="990099">#include &lt;unistd.h&gt; // usleep</font>
+<font color="990099">#include &lt;stdlib.h&gt; // atoi</font>
+
+<b>void</b> sleep_ms(<b>int</b> ms) 
+{ 
+  usleep(ms * 1000); 
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> ms = 1000;
+
+  <b>if</b> (argc &gt; 1)
+    ms = atoi(argv[1]);
+
+  sleep_ms(ms);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+</body>
+</html>
+

@@ -1,0 +1,384 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Please read this entire page <i>before</i> starting to code. You should also 
+read it again <em>during</em> coding to see if you've missed something.
+You will use the function written in part 1 to help you implement the function
+in part 2.
+<br><br>
+Part 1 of this lab requires <b>about</b> 10 lines of code.
+<br>
+Part 2 of this lab requires <b>about</b> 12 lines of code.
+</p>
+
+<ol>
+	
+<!--*************************************************************************************-->  
+<!--*************************************************************************************-->  
+<!--*************************************************************************************-->  
+<li>Write a function that can determine if an integer is a prime number. The function should return
+  <tt>true</tt> (the integer 1), if the number is prime and <tt>false</tt> (the integer 0), if it 
+  is not prime. The prototype looks like this:
+	
+<blockquote><pre>
+<b>int</b> is_prime(<b>int</b> number);
+</pre></blockquote>
+
+For example, here is a list of all of the prime numbers between 2 and 100:
+<blockquote><pre>
+2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
+</pre></blockquote>
+
+<b>Hints</b>: (Please heed this advice unless you know what you're doing. Even then you should
+follow it!)
+<p>
+You will need to use the modulus operator: <tt><big>%</big></tt> &nbsp;&nbsp;&nbsp;Why? 
+Because a prime number is only equally divisible by itself and one. So, if you find another value 
+that divides your number equally, then it can't be prime, can it? 
+<p>
+By definition 1 is not prime and 2 
+is prime, so you can return <b>false</b> or <b>true</b> immediately for those numbers, respectively. Also, 
+another quick check to do is to see if the number is even. Even numbers (except 2) are not prime.
+If <tt>number % 2 == 0</tt>, then <tt>number</tt> is not prime and you can return <b>false</b>
+immediately.
+<p>
+You need to use a loop to try all of the odd numbers from 3 up to the given number divided by 2. 
+If any of those odd numbers can divide the given number evenly, 
+then the given number isn't prime. 
+If none of them divide it evenly, then the number is prime. Why stop at the number divided by 2? 
+Because the largest value that divides a number evenly is half the number.
+For example, if the number is 100, the largest value that will divide it evenly is 50. No number 
+larger than 50 will divide into it evenly (51, 52, 53, ... etc., are all too big).
+<p>
+Here is some output for the first 1000 primes: <a href="output-primes1000.txt">output-primes1000.txt</a>
+	(Download the output from the program, <b>DO NOT SAVE THE WEB PAGE</b>)
+<p>
+Don't forget that you may need to use the <tt>--strip-trailing-cr</tt> option with <tt><b>diff</b></tt>.
+
+<p>
+  <hr width="100%">
+<p>
+
+<!--*************************************************************************************-->	
+<!--*************************************************************************************-->  
+<!--*************************************************************************************-->  
+<li>There is a conjecture in mathematics (<a href="http://en.wikipedia.org/wiki/Goldbach_conjecture">Goldbach conjecture</a>) 
+  that every even number can be written as the sum of two prime numbers. It has never been proven true 
+  mathematically, but a counter-example has never been found either. Here are some examples of even 
+  numbers and the primes that sum to the value:
+	
+<blockquote><pre>
+  4 =  2 +   2
+  6 =  3 +   3
+  8 =  3 +   5
+ 10 =  3 +   7
+ 12 =  5 +   7	
+    .
+    .
+    . 
+122 = 13 + 109
+124 = 11 + 113
+126 = 13 + 113
+128 = 19 + 109 
+    .
+    .
+    .
+194 =  3 + 191
+196 =  3 + 193
+198 =  5 + 193
+200 =  3 + 197 
+ 
+etc...
+</pre></blockquote>
+
+You need to write a function named <i>conjecture</i> that will take a range (inclusive) of numbers and
+show that each even number within the range is the sum of two prime numbers. The prototype looks like this:
+
+<blockquote><pre>
+<b>void</b> conjecture(<b>int</b> low, <b>int</b> high);
+</pre></blockquote>
+
+The output is as above. The format string for the <i>printf</i> function is: <tt>"%3i = %3i + %3i\n"</tt>. 
+Be sure you use that so you can <b>diff</b> properly.
+<p>
+<b>Hint #1</b>: You will use 3 nested loops. One to loop over the range (low to high), a second loop 
+to find the first prime number, and the third loop will find the second prime number. You will need 
+to use the <i>is_prime</i> function you wrote above. 
+<p>
+If you want to find the pair of prime numbers that add up to X, you are essentially trying all of 
+the pairs of prime numbers from 2 up to the largest prime number less than X. So, you start with 
+the first prime number as 2, and the second prime number will be 2, 3, 5, 7, etc., until you
+find a pair that adds up to the even number, like this: 2 + 2, then 2 + 3, then 2 + 5, 
+then 2 + 7, 2 + 11, 2 + 13, 2 + 15, etc. 
+<p>
+If you don't find a pair that adds up to X with 2 as the first prime, you try 3 as the first prime. 
+You would try these: 3 + 3, 3 + 5, 3 + 7, 3 + 11, 3 + 13, etc. Notice the output below. Most even 
+numbers have several pairs of primes that add up to the number. You want the first pair, which 
+means the <b>first number in the pair is always less than or equal to 
+the second one. Always.</b>
+<p>
+For example, the even number 12 is the sum of the primes 5 and 7. If you had a nested loop using
+<i>i</i> and <i>j</i> as loop variables, you would try these combinations until you discovered that
+5 and 7 were the solution:
+<blockquote><pre>
+  i   j
+-------
+  2   2
+  2   3
+  2   4
+  2   5
+  2   6
+  2   7
+  2   8
+  2   9
+<font color="black"><b>  2  10</b></font>    &lt;--- 10 is not prime (increment <i>i</i>)
+  3   3
+  3   4
+  3   5
+  3   6
+  3   7
+  3   8
+<font color="black"><b>  3   9</b></font>    &lt;--- 9 is not prime (increment <i>i</i>)
+  5   5
+  5   6
+<font color="red"><b>  5   7</b></font>    &lt;--- both are prime (stop here and print)
+</pre></blockquote>
+
+The highlighted pairs show that, the two numbers add up to 12, but since the second number is not
+prime, it doesn't count. The first number is then incremented up to the next prime (3 in this case),
+and the <i>j</i> loop starts at the same value and continues. The last pair of primes is the solution
+for 12.
+<p>
+Note that you are not printing out the entire list of attempts, just the successful pairs. I'm just
+showing you how the nested loop progresses with each iteration of <i>i</i> and <i>j</i>.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<b>Hint #2</b>: You may want to use some <b><tt>break</tt></b> statements in your loops. Why? Because 
+as soon as you find a pair of prime numbers that add up to X, you want to stop looking (break out) 
+for other primes and move to the next even number. This is where the <b><tt>break</tt></b>
+statement comes in very handy. You could write logic without using <b><tt>break</tt></b>, but it
+will be more complicated and error prone.
+Refer to the textbook or the 
+<a href="../../../../../CS120/Iteration-1.html#MORELOOPING">online notes</a> that discussed 
+the <b><tt>break</tt></b> statement and the examples using the 
+<a href="../../../../../CS120/Iteration-1.html#NESTEDLOOPS"> <b><tt>break</tt></b> 
+  statement with nested loops</a>.
+
+<p>
+The output shown below is from the call: <tt>conjecture(2, 20);</tt>
+<p>
+Notice again how the first prime number is always less than (or equal) to the second prime number.
+As the numbers grow larger, the second prime number is much larger than the first one.
+
+<blockquote>
+<table border=1 cellspacing=1 cellpadding=15>
+<tr align="left" valign="bottom"><th>Correct</th>
+  <th><font color="red">Incorrect<br>(more than one)</font></th>
+  <th><font color="red">Incorrect<br>(more than one, duplicates)</font></th></tr>
+<tr valign="top">
+<td>
+<pre>
+  4 =   2 +   2
+  6 =   3 +   3
+  8 =   3 +   5
+ 10 =   3 +   7
+ 12 =   5 +   7
+ 14 =   3 +  11
+ 16 =   3 +  13
+ 18 =   5 +  13
+ 20 =   3 +  17
+</pre>
+</td>
+<td>
+<pre>
+  4 =   2 +   2
+  6 =   3 +   3
+  8 =   3 +   5
+ <font color="red">10 =   3 +   7</font>
+ <font color="red">10 =   5 +   5</font>
+ 12 =   5 +   7
+ 14 =   3 +  11
+ 14 =   7 +   7
+ 16 =   3 +  13
+ 16 =   5 +  11
+ 18 =   5 +  13
+ 18 =   7 +  11
+ 20 =   3 +  17
+ 20 =   7 +  13 
+</pre>
+</td>
+<td>
+<pre>
+  4 =   2 +   2
+  6 =   3 +   3
+  8 =   3 +   5
+  8 =   5 +   3
+ <font color="red">10 =   3 +   7</font>
+ 10 =   5 +   5
+ <font color="red">10 =   7 +   3</font>
+ 12 =   5 +   7
+ 12 =   7 +   5
+ 14 =   3 +  11
+ 14 =   7 +   7
+ 14 =  11 +   3
+ 16 =   3 +  13
+ 16 =   5 +  11
+ 16 =  11 +   5
+ 16 =  13 +   3
+ 18 =   5 +  13
+ 18 =   7 +  11
+ 18 =  11 +   7
+ 18 =  13 +   5
+ 20 =   3 +  17
+ 20 =   7 +  13
+ 20 =  13 +   7
+ 20 =  17 +   3 
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+Here is some output for the call <tt>conjecture(2, 2000)</tt>: <a href="output-conjecture2000.txt">output-conjecture2000.txt</a>
+	(Download the output from the program, <b>DO NOT SAVE THE WEB PAGE</b>)
+
+
+</ol>
+
+Here are the two files to start with. Put the code on the left in a file called <tt>main.c</tt> and put the
+code on the right into a file called <tt>primes1.c</tt>. (<b>Do yourself a favor and read what's in
+<tt>main.c</tt> so you get an understanding of what's going on.</b>)
+<blockquote><pre>
+</pre></blockquote>
+
+<table>
+<tr align="center">
+	<th><tt>main.c</tt></th>
+	<th><tt>primes1.c</tt></th>
+</tr>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<font color="#003399"><i>/* Prototypes implemented in primes1.c */</i></font>
+<b>int</b> is_prime(<b>int</b> n);
+<b>void</b> conjecture(<b>int</b> low, <b>int</b> high);
+
+<b>void</b> check_primes(<b>int</b> count)
+{
+  <b>int</b> primes = 0; <font color="#003399"><i>/* number of primes found */</i></font>
+  <b>int</b> i;          <font color="#003399"><i>/* loop counter           */</i></font>
+
+    <font color="#003399"><i>/* Check all values from 1 to count */</i></font>
+  <b>for</b> (i = 1; i &lt;= count; i++)
+  {
+      <font color="#003399"><i>/* If it's prime, count it and print it */</i></font>
+    <b>if</b> (is_prime(i))
+    {
+      primes++;
+      printf(<font color="#9933CC">&quot;#%3i: %3i is prime.\n&quot;</font>, primes, i);
+    }
+  }
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="#003399"><i>/* Uncomment the test you wish to run */</i></font>
+  
+  <font color="#003399"><i>/* check_primes(1000);  */</i></font>
+  <font color="#003399"><i>/* conjecture(2, 200); */</i></font>
+
+  <b>return</b> 0;
+}
+</code></pre>
+</td>
+<td>
+<pre class="sourcecode"><code><font color="#003399"><i>/* Add a proper <b>file header comment</b> */</i></font>
+<b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+
+  <font color="#003399"><i>/* For easier readability */</i></font>
+<b>#define</b> FALSE 0
+<b>#define</b> TRUE  1
+
+<font color="#003399"><i>/* Add a proper <b>function header comment</b> */</i></font>
+<b>int</b> is_prime(<b>int</b> number)
+{
+  <b>return</b> TRUE;
+}
+
+<font color="#003399"><i>/* Add a proper <b>function header comment</b> */</i></font>
+<b>void</b> conjecture(<b>int</b> low, <b>int</b> high)
+{
+}
+</code></pre>
+</td>
+</tr></table>
+<p>
+In <tt>main.c</tt>, you should comment out or remove the call to <tt>conjecture</tt> until you've completed
+the first part of the lab. Then, you can start working on <tt>conjecture</tt>.
+<p>
+The command line to build the program will be:
+
+<blockquote><pre>
+<big>gcc -Werror -Wall -Wextra -ansi -pedantic -O2 main.c primes1.c -o primes1</big>
+</pre></blockquote>
+
+<!--
+When creating stub functions, you may need this <b><i>temporarily</i></b>
+<blockquote><pre>
+-Wno-unused-parameter
+</pre></blockquote>
+-->
+
+Note that the only header file you are to include in your C file is <tt>stdio.h</tt> 
+(you won't need any others). Also, notice the first command-line switch 
+<b><tt>-Werror</tt></b>. This will treat warnings as errors so that you can't execute 
+a program that has warnings. (No executable file will be created.)
+<p>
+Don't forget that you may need to use the <tt>--strip-trailing-cr</tt> switch with <tt><b>diff</b></tt>.
+	
+<br>
+<br>
+<br>
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

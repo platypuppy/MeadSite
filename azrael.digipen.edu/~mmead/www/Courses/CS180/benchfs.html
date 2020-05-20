@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>athena fdisk -l</title>
+</head>
+
+<body>  
+
+<pre>
+#!/bin/bash
+
+DEVICE=/dev/sde1
+MOUNT=/mnt/eagle
+#FILES=/storage/iso/*.iso
+#FILES=/home/mmead/temp/dvd/xaa
+FILES=/home/mmead/temp/linux-3.2.34
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: fat32 ..."
+mkdosfs -F 32 -n "fat32" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### fat32 ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: ntfs ..."
+mkfs.ntfs -Q -v -L "ntfs" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### ntfs ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: ext2 ..."
+mkfs.ext2 -q -L "ext2" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### ext2 ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: ext3 ..."
+mkfs.ext3 -q -L "ext3" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### ext3 ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: ext4 ..."
+mkfs.ext4 -q -j -O extent -L "ext4" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### ext4 ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: reiserfs ..."
+mkfs.reiserfs -q -f --label "reiserfs" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### reiserfs ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: xfs ..."
+mkfs.xfs -q -f -L "xfs" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### xfs"
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: jfs ..."
+mkfs.jfs -q -L "jfs" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### jfs"
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: hfs+ ..."
+mkfs.hfsplus -v "hfsplus" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### hfs+ ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+umount $MOUNT
+echo ""
+echo ""
+echo "Creating filesystem: btrfs ..."
+mkfs.btrfs -L "btrfs" $DEVICE
+mount $DEVICE $MOUNT/
+echo "#################### btrfs ..."
+time rsync -a --stats $FILES $MOUNT/ | grep "bytes/sec"
+
+</pre>

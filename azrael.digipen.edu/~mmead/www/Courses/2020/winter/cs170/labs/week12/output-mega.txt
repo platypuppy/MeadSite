@@ -1,0 +1,363 @@
+
+********** TestPush **********
+Empty array:
+(size=0, capacity=0, allocs=0)
+push_back 5 integers:
+0  (size=1, capacity=1, allocs=1)
+0  1  (size=2, capacity=2, allocs=2)
+0  1  2  (size=3, capacity=4, allocs=3)
+0  1  2  3  (size=4, capacity=4, allocs=3)
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+push_front 5 integers:
+0  0  1  2  3  4  (size=6, capacity=8, allocs=4)
+1  0  0  1  2  3  4  (size=7, capacity=8, allocs=4)
+2  1  0  0  1  2  3  4  (size=8, capacity=8, allocs=4)
+3  2  1  0  0  1  2  3  4  (size=9, capacity=16, allocs=5)
+4  3  2  1  0  0  1  2  3  4  (size=10, capacity=16, allocs=5)
+pop_back until empty:
+3  2  1  0  0  1  2  3  4  (size=9, capacity=16, allocs=5)
+2  1  0  0  1  2  3  4  (size=8, capacity=16, allocs=5)
+1  0  0  1  2  3  4  (size=7, capacity=16, allocs=5)
+0  0  1  2  3  4  (size=6, capacity=16, allocs=5)
+0  1  2  3  4  (size=5, capacity=16, allocs=5)
+1  2  3  4  (size=4, capacity=16, allocs=5)
+2  3  4  (size=3, capacity=16, allocs=5)
+3  4  (size=2, capacity=16, allocs=5)
+4  (size=1, capacity=16, allocs=5)
+(size=0, capacity=16, allocs=5)
+
+********** TestPop **********
+Empty array:
+(size=0, capacity=0, allocs=0)
+push_back 5 integers:
+0  (size=1, capacity=1, allocs=1)
+0  1  (size=2, capacity=2, allocs=2)
+0  1  2  (size=3, capacity=4, allocs=3)
+0  1  2  3  (size=4, capacity=4, allocs=3)
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+push_front 5 integers:
+0  0  1  2  3  4  (size=6, capacity=8, allocs=4)
+1  0  0  1  2  3  4  (size=7, capacity=8, allocs=4)
+2  1  0  0  1  2  3  4  (size=8, capacity=8, allocs=4)
+3  2  1  0  0  1  2  3  4  (size=9, capacity=16, allocs=5)
+4  3  2  1  0  0  1  2  3  4  (size=10, capacity=16, allocs=5)
+pop_back/pop_front:
+3  2  1  0  0  1  2  3  (size=8, capacity=16, allocs=5)
+pop_back/front until empty:
+2  1  0  0  1  2  (size=6, capacity=16, allocs=5)
+1  0  0  1  (size=4, capacity=16, allocs=5)
+0  0  (size=2, capacity=16, allocs=5)
+(size=0, capacity=16, allocs=5)
+
+********** TestRemove **********
+Empty array:
+(size=0, capacity=0, allocs=0)
+push_back 5 integers:
+0  (size=1, capacity=1, allocs=1)
+0  1  (size=2, capacity=2, allocs=2)
+0  1  2  (size=3, capacity=4, allocs=3)
+0  1  2  3  (size=4, capacity=4, allocs=3)
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+remove(0), remove(3):
+1  2  4  (size=3, capacity=8, allocs=4)
+
+********** TestInsert **********
+Empty array:
+(size=0, capacity=0, allocs=0)
+push_back 5 integers:
+0  (size=1, capacity=1, allocs=1)
+0  1  (size=2, capacity=2, allocs=2)
+0  1  2  (size=3, capacity=4, allocs=3)
+0  1  2  3  (size=4, capacity=4, allocs=3)
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+insert(99, 3):
+0  1  2  99  3  4  (size=6, capacity=8, allocs=4)
+insert(98, 0):
+98  0  1  2  99  3  4  (size=7, capacity=8, allocs=4)
+insert(97, 6):
+98  0  1  2  99  3  97  4  (size=8, capacity=8, allocs=4)
+
+********** TestSubscripts **********
+push_back 10 even integers:
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+multiple each value by 3:
+0  6  12  18  24  30  36  42  48  54  (size=10, capacity=16, allocs=5)
+
+********** TestArray **********
+Construct from int array:
+2  4  6  6  8  10  6  12  -6  14  16  6  6  (size=13, capacity=13, allocs=1)
+
+********** TestSubscript1 **********
+Construct from int array:
+2  4  6  6  8  10  6  12  -6  14  16  6  6  (size=13, capacity=13, allocs=1)
+using subscript: a[6]
+a[6] = 6
+
+********** TestALot1 **********
+push_back 10 even integers:
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+clear:
+(size=0, capacity=0, allocs=5)
+push_back 10 odd integers:
+1  3  5  7  9  11  13  15  17  19  (size=10, capacity=16, allocs=10)
+empty/fill with 10 ints 3 times:
+0  1  2  3  4  5  6  7  8  9  (size=10, capacity=16, allocs=10)
+remove all but 3 integers:
+0  1  2  (size=3, capacity=16, allocs=10)
+shrink:
+0  1  2  (size=3, capacity=3, allocs=11)
+push_back 10 more integers:
+0  1  2  0  1  2  3  4  5  6  7  8  9  (size=13, capacity=24, allocs=14)
+clear:
+(size=0, capacity=0, allocs=14)
+
+********** TestCopy **********
+push_back 10 even integers:
+Copy: b(a), print a,b
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=10, allocs=1)
+Copy: c(b), print b,c
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=10, allocs=1)
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=10, allocs=1)
+
+********** TestAssign **********
+push_back 10 integers:
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+0  1  2  3  4  5  6  7  8  9  (size=10, capacity=16, allocs=5)
+Assign: b = a, print a,b
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+Assign: a = a, print a
+0  2  4  6  8  10  12  14  16  18  (size=10, capacity=16, allocs=5)
+
+********** TestAdd1 **********
+push_back 5 integers:
+0  (size=1, capacity=1, allocs=1)
+0  1  (size=2, capacity=2, allocs=2)
+0  1  2  (size=3, capacity=4, allocs=3)
+0  1  2  3  (size=4, capacity=4, allocs=3)
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+push_front 5 integers:
+0  (size=1, capacity=1, allocs=1)
+10  0  (size=2, capacity=2, allocs=2)
+20  10  0  (size=3, capacity=4, allocs=3)
+30  20  10  0  (size=4, capacity=4, allocs=3)
+40  30  20  10  0  (size=5, capacity=8, allocs=4)
+c = a + b:
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+40  30  20  10  0  (size=5, capacity=8, allocs=4)
+0  1  2  3  4  40  30  20  10  0  (size=10, capacity=10, allocs=1)
+clear a,b print c
+0  1  2  3  4  40  30  20  10  0  (size=10, capacity=10, allocs=1)
+
+********** TestAdd2 **********
+push_back 5 integers:
+0  (size=1, capacity=1, allocs=1)
+0  1  (size=2, capacity=2, allocs=2)
+0  1  2  (size=3, capacity=4, allocs=3)
+0  1  2  3  (size=4, capacity=4, allocs=3)
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+push_front 5 integers:
+0  (size=1, capacity=1, allocs=1)
+10  0  (size=2, capacity=2, allocs=2)
+20  10  0  (size=3, capacity=4, allocs=3)
+30  20  10  0  (size=4, capacity=4, allocs=3)
+40  30  20  10  0  (size=5, capacity=8, allocs=4)
+a += b:
+0  1  2  3  4  40  30  20  10  0  (size=10, capacity=16, allocs=5)
+40  30  20  10  0  (size=5, capacity=8, allocs=4)
+clear b print a
+0  1  2  3  4  40  30  20  10  0  (size=10, capacity=16, allocs=5)
+a += a:
+0  1  2  3  4  40  30  20  10  0  0  1  2  3  4  40  30  20  10  0  (size=20, capacity=32, allocs=6)
+
+********** TestSelectionSort1 **********
+push_back 10 random integers:
+14  9  8  17  14  17  1  12  17  5  (size=10, capacity=16, allocs=5)
+Sorted: compares = 45, swaps = 6
+1  5  8  9  12  14  14  17  17  17  (size=10, capacity=16, allocs=5)
+
+********** TestSelectionSort2 **********
+push_back 10 integers:
+0  1  2  3  4  5  6  7  8  9  (size=10, capacity=16, allocs=5)
+Sorted: compares = 45, swaps = 0
+0  1  2  3  4  5  6  7  8  9  (size=10, capacity=16, allocs=5)
+push_back 10 integers:
+10  9  8  7  6  5  4  3  2  1  (size=10, capacity=16, allocs=10)
+Sorted: compares = 45, swaps = 5
+1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=10)
+push_back 10 integers:
+5  5  5  5  5  5  5  5  5  5  (size=10, capacity=16, allocs=15)
+Sorted: compares = 45, swaps = 0
+5  5  5  5  5  5  5  5  5  5  (size=10, capacity=16, allocs=15)
+
+********** TestBSearch1 **********
+push_back 10 random integers:
+3336  5793  6029  4765  1154  4149  3736  4843  6348  8509  (size=10, capacity=16, allocs=5)
+1154  3336  3736  4149  4765  4843  5793  6029  6348  8509  (size=10, capacity=16, allocs=5)
+Index of 3336 is 1
+Index of 5793 is 6
+Index of 6029 is 7
+Index of 4765 is 4
+Index of 1154 is 0
+Index of 4149 is 3
+Index of 3736 is 2
+Index of 4843 is 5
+Index of 6348 is 8
+Index of 8509 is 9
+
+********** TestReverse1 **********
+push_back integers:
+1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+Reversed:
+10  9  8  7  6  5  4  3  2  1  (size=10, capacity=16, allocs=5)
+Remove last element:
+10  9  8  7  6  5  4  3  2  (size=9, capacity=16, allocs=5)
+Reversed:
+2  3  4  5  6  7  8  9  10  (size=9, capacity=16, allocs=5)
+
+********** TestReverse2 **********
+push_back integers:
+1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+Reversed:
+10  9  8  7  6  5  4  3  2  1  (size=10, capacity=16, allocs=5)
+Remove first element:
+9  8  7  6  5  4  3  2  1  (size=9, capacity=16, allocs=5)
+Reversed:
+1  2  3  4  5  6  7  8  9  (size=9, capacity=16, allocs=5)
+Remove last element:
+1  2  3  4  5  6  7  8  (size=8, capacity=16, allocs=5)
+Reversed:
+8  7  6  5  4  3  2  1  (size=8, capacity=16, allocs=5)
+Remove first element:
+7  6  5  4  3  2  1  (size=7, capacity=16, allocs=5)
+Reversed:
+1  2  3  4  5  6  7  (size=7, capacity=16, allocs=5)
+Remove last element:
+1  2  3  4  5  6  (size=6, capacity=16, allocs=5)
+Reversed:
+6  5  4  3  2  1  (size=6, capacity=16, allocs=5)
+Remove first element:
+5  4  3  2  1  (size=5, capacity=16, allocs=5)
+Reversed:
+1  2  3  4  5  (size=5, capacity=16, allocs=5)
+Remove last element:
+1  2  3  4  (size=4, capacity=16, allocs=5)
+Reversed:
+4  3  2  1  (size=4, capacity=16, allocs=5)
+Remove first element:
+3  2  1  (size=3, capacity=16, allocs=5)
+Reversed:
+1  2  3  (size=3, capacity=16, allocs=5)
+Remove last element:
+1  2  (size=2, capacity=16, allocs=5)
+Reversed:
+2  1  (size=2, capacity=16, allocs=5)
+Remove first element:
+1  (size=1, capacity=16, allocs=5)
+Reversed:
+1  (size=1, capacity=16, allocs=5)
+Remove last element:
+(size=0, capacity=16, allocs=5)
+Reversed:
+(size=0, capacity=16, allocs=5)
+
+********** TestSwap1 **********
+push_back integers:
+a: 1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+b: 10  20  30  40  50  (size=5, capacity=8, allocs=4)
+swapv a,b:
+a: 10  20  30  40  50  (size=5, capacity=8, allocs=4)
+b: 1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+swapv a,c:
+a: (size=0, capacity=0, allocs=0)
+c: 10  20  30  40  50  (size=5, capacity=8, allocs=4)
+swapv b,b:
+b: 1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+
+********** TestEqual1 **********
+push_back integers:
+a: 1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+b: 1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+a is equal to b
+remove last element of a:
+a: 1  2  3  4  5  6  7  8  9  (size=9, capacity=16, allocs=5)
+b: 1  2  3  4  5  6  7  8  9  10  (size=10, capacity=16, allocs=5)
+a is NOT equal to b
+remove last element of b:
+a: 1  2  3  4  5  6  7  8  9  (size=9, capacity=16, allocs=5)
+b: 1  2  3  4  5  6  7  8  9  (size=9, capacity=16, allocs=5)
+a is equal to b
+change last element of b to 100:
+a: 1  2  3  4  5  6  7  8  9  (size=9, capacity=16, allocs=5)
+b: 1  2  3  4  5  6  7  8  100  (size=9, capacity=16, allocs=5)
+a is NOT equal to b
+
+********** TestShrink1 **********
+push_back 8 integers:
+0  1  2  3  4  5  6  7  (size=8, capacity=8, allocs=4)
+shrink:
+0  1  2  3  4  5  6  7  (size=8, capacity=8, allocs=4)
+pop last 3:
+0  1  2  3  4  (size=5, capacity=8, allocs=4)
+shrink:
+0  1  2  3  4  (size=5, capacity=5, allocs=5)
+push_back one integer:
+0  1  2  3  4  100  (size=6, capacity=10, allocs=6)
+shrink:
+0  1  2  3  4  100  (size=6, capacity=6, allocs=7)
+shrink:
+0  1  2  3  4  100  (size=6, capacity=6, allocs=7)
+clear:
+(size=0, capacity=0, allocs=7)
+shrink:
+(size=0, capacity=0, allocs=7)
+
+********** TestSubscriptEx **********
+Construct from int array:
+2  4  6  6  8  10  6  12  -6  14  16  6  6  (size=13, capacity=13, allocs=1)
+2  4  6  6  8  10  6  12  -6  14  16  6  6  (size=13, capacity=13, allocs=1)
+accessing subscript on const vector: a[26]
+Bad subscript: 26
+accessing subscript on non-const vector: b[26]
+Bad subscript: 26
+
+********** TestInsertEx **********
+Construct from int array:
+2  4  6  6  8  10  6  12  -6  14  16  6  6  (size=13, capacity=13, allocs=1)
+insert integer at index 39:
+Bad subscript: 39
+
+********** TestBSearchStress **********
+Generating...
+Shuffling...
+Pushing back...
+Searching...
+Done...
+
+********** TestSelectionSortStress **********
+Sorted: compares = 49995000, swaps = 9987
+1  3  4  9  19  36  67  126  257  530  1049  2101  4137  8179  
+
+********** TestSwapStress **********
+Pushing back...
+Swapping...
+0  1  3  7  15  31  63  127  255  511  1023  2047  4095  8191  16383  32767  65535  131071  262143  524287  (size=1000000, capacity=1048576, allocs=21)
+0  3  9  21  45  93  189  381  765  1533  3069  6141  12285  24573  49149  98301  196605  393213  786429  1572861  (size=1000000, capacity=1048576, allocs=21)
+0  2  6  14  30  62  126  254  510  1022  2046  4094  8190  16382  32766  65534  131070  262142  524286  1048574  (size=1000000, capacity=1048576, allocs=21)
+Done...
+
+********** TestAssignStress1 **********
+Pushing back...
+Swapping...
+Done...
+
+********** TestAssignStress2 **********
+Pushing back...
+Swapping...
+Done...
+
+********** TestCrazy **********
+Sum before: 50005000
+ Sum after: 50005000
+4 5 7 7979 22 32 68 436 7458 578 9762 2120 2363 136 

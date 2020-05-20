@@ -1,0 +1,208 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS170 - Lab Assignment (Optional Extra Credit)</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+   
+.Warning
+{
+  margin-left: 0;
+  font-size : 12pt;
+  font-weight : bold;
+  background-color: #FFFF00; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+<body>  
+<center>
+<h1>CS170 - Lab Assignment (Optional Extra Credit)<p></h1>
+</center>
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+This is an optional extra credit lab/assignment that will demonstrate your
+ability to create a class using <i>composition</i> (a.k.a <i>aggregation</i>
+or <i>containment</i>). If you remember from the lectures, composition is when
+one class "contains" another class object. For example, the Student class could
+be thought of using composition because the String class was a member (first and
+last names) of the Student class. Most of the "work" done in the Student class
+was actually done (delegated) in the String class.
+
+<p>
+<hr width="100%">
+<p>
+
+
+<ol>
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<li>The class that you will implement is called <i>Stack</i> and it represents a stack. There are 
+  essentially two primary methods of a <i>Stack</i>: <i>push</i> and <i>pop</i>. You can think of
+  many card games that use a "stack" as a discard pile. You can either place one card on the top
+  of the others (push) or remove the top card (pop) from the pile (stack). You can't access anything 
+  but the top element.
+
+<p>
+If you were to write this class completely from scratch, it would require more work than if
+you had a "starting point". This starting point is some other kind of container (e.g. list, vector).
+
+<p class="technote">
+This is akin to how the Student class was first implemented "from scratch". The names were just pointers
+to dynamically allocated memory and the overwhelming amount of code was to maintain that data.
+When we switched to using the String class, the time and effort to implement the Student class
+was <i>drastically</i> reduced. That's why we're doing the same kind of thing here.
+</p>
+
+To implement a stack using a vector, the only operations that would be permitted are 
+<i>push_back</i> (push) and <i>pop_back</i> (pop). The reason you want to push/pop from the back
+is because it can be done in constant time. If you were to push/pop from the front, 
+although it would still function properly, 
+it would
+be a very expensive operation (e.g. shifting all of the other elements on every push/pop).
+<p>
+If you were to implement the Stack using a list (singly-linked), you would only allow
+<i>push_front</i> and <i>pop_front</i>. This, as with the vector, is for performance
+because these two operations can be done in constant time. If
+you were to push to the back, popping would be linear (even with a tail pointer). 
+Think about that. (We've discussed this in class already.)
+<p>
+We are going to implement the Stack class using composition with <tt>std::list</tt>.
+(Why didn't we just inherit from <tt>std::list</tt> instead of using composition?
+Think about it. You know the answer.)
+<p>
+This is the interface: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/Stack.h">Stack.h</a> (<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/Stack.h.html">HTML</a>)
+<p>
+Partial implementation: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/Stack.cpp">Stack.cpp</a> (<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/Stack.cpp.html">HTML</a>)
+<p>
+
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<p>
+<hr width="100%">
+<p>
+
+<li>Add a Doxygen file header comment to <tt><b>Stack.h</b></tt> and <tt><b>Stack.cpp</b></tt>. 
+  Make a bullet list of the  functions in the .cpp file. Create doxygen function header comments for 
+  each function. 
+  You already have Doxygen comments for all of the functions, so it's just a matter of adding 
+  the new one.
+
+<p>
+<hr width="100%">
+<p>
+
+Here's some test code in <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/driver.cpp">driver.cpp</a>. (<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/driver.cpp.html">HTML</a>)
+<p>
+Output from the tests.
+<blockquote>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output01.txt">TestPush</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output02.txt">TestPushPop</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output03.txt">TestPushPopEmpty</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output04.txt">TestPushTopPop</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output05.txt">TestSwap1</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output06.txt">TestCopyConstructor1</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output07.txt">TestAssignment1</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output08.txt">TestAssignment2</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output09.txt">TestPushException</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output10.txt">TestPopException</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output11.txt">TestClear</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output12.txt">TestArray</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output13.txt">TestALot</a>&nbsp;&nbsp;&nbsp;<br>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output14.txt">TestSwapStress</a>&nbsp;&nbsp;&nbsp;<br>
+
+<p>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/output/output-all.txt">All tests</a>&nbsp;&nbsp; 
+	
+</blockquote>
+
+Command lines: 
+<p>
+<blockquote><pre>
+<b>g++</b> -o stack -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Stack.cpp PRNG.cpp<br>
+</pre></blockquote>
+
+<!--
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp Stack.cpp PRNG.cpp
+-->
+<!--<b>clang++</b> -o clan -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Stack.cpp PRNG.cpp<br>-->
+
+Random number generator files (we've used them in previous assignments)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/PRNG.h.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/PRNG.h">Text</a>
+    <li> - Implementation (PRNG.cpp): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/PRNG.cpp.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/ec2/PRNG.cpp">Text</a>
+  </ul>
+
+<p>
+
+To run an individual test, provide the test number on the command line. For example, 
+to run test #3, do this:
+
+<blockquote><pre>
+stack 3
+</pre></blockquote>
+
+To run all tests, don't provide any number on the command line.
+<p>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore 
+the newlines between GNU's output and the other compilers. 
+<p>
+</blockquote>
+
+</ol>
+
+<b>Additional Notes:</b>
+<p>
+<ul>
+  <li>You can't include any other header files than what are already included (you don't need any).</li>
+  <li>You shouldn't have any memory bugs (leaks, overwrites, etc.) because all of that work is
+    done in the <tt>std::list</tt> class. That's why we're using composition!
+    That's also why this is a trivial task. (No pointers, no dynamic memory allocation,
+    nothing to go wrong!) </li>
+  <li>You'll notice there is no destructor, copy constructor, or assignment operator. Why?
+    You don't need any. The default ones that are generated by the compiler are adequate.
+    Why? Again, no pointers, no dynamic memory allocation. Those are why we need to
+    write our own versions of those functions.</li>
+  <li>With the exception of the <i>print</i> method, all methods require 4 or less
+    lines of code. That's why I say this is a trivial task.</li>
+</ul>
+
+<br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

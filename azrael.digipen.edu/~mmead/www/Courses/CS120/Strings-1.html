@@ -1,0 +1,763 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Strings</title>
+</head>
+
+<body>  
+<center><h1>Strings</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Literal Strings and Pointers
+</p>
+
+
+<ul>
+<li>Up until now, we have only used <I>literal strings</I>; characters surrounded by double quotes; we have used them with <tt>printf</tt>:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;Hello, world\n&quot;</font>);
+printf(<font color="#9933CC">&quot;The value of i is %i\n&quot;</font>, i);
+printf(<font color="#9933CC">&quot;The area is %f\n&quot;</font>, PI * radius * radius);
+</pre></blockquote>
+
+
+
+<li>We have not assigned a string to a variable, nor have we entered strings via <tt>scanf</tt>.</li>
+<li>C doesn't have a built-in string type, per se.</li>
+<li>Strings are simply arrays of <tt>char</tt> that include a NUL character as the last character.</li>
+<li>The last character in the string must be a NUL character, which is simply the value zero. (Don't confuse this with the NULL pointer, they are different)</li>
+<ul>
+  <li>If there is no NUL character at the end, it is not a string (it's just a character array).</li>
+</ul>
+<li>There are many library functions specifically designed to handle character arrays (strings) easily and efficiently</li>
+<li>Both C and C++ support these types of strings. </li>
+<li>They are commonly called NUL-terminated strings or C-style strings to distinguish them from the more recent <tt>std::string</tt> used in C++.</li>
+</ul>
+	
+<p class="technote">
+Strictly-speaking, it is not a good idea to use NULL for terminating strings. NULL is a macro that is defined as a pointer type. NUL may not be 
+defined, and if it is, it is likely to be an escaped zero: <tt>'\0'</tt>. However, you will see <tt>NULL</tt>, <tt>NUL</tt>, and <tt>null</tt> being used
+interchangeably when talking about null-terminated strings.
+See the <a href="http://www.faqs.org/faqs/C-faq/faq/">comp.lang.c FAQ</a>, specifically section 5.9.
+</p>
+There is a subtle difference between a string and an array of characters. This is
+how the first literal string above would be laid out in memory:
+
+<blockquote>
+<img src="Strings-HW-1.png">
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Literal strings are much like character arrays in that they can be used with
+pointers. In this example, <tt>p</tt> is a <i>char pointer</i> or <i>pointer to char</i>
+and it points to the <i>first element</i> in the string:
+
+<blockquote><pre>
+<b>char</b> *p = <font color="#9933CC">&quot;Hello, world\n&quot;</font>;
+</pre></blockquote>
+
+Visually:
+
+<blockquote>
+<img src="Strings-pointer-1.png">
+</blockquote>
+
+We can print the string just as if it was a literal string:
+
+<blockquote><pre>
+printf(p);
+</pre></blockquote>
+
+Using the <tt>%s</tt> format specifier to print strings:
+
+<blockquote><pre>
+<b>char</b> *ph = <font color="#9933CC">&quot;Hello&quot;</font>;
+<b>char</b> *pw = <font color="#9933CC">&quot;world&quot;</font>;
+printf(<font color="#9933CC">&quot;%s, %s\n&quot;</font>, ph, pw);
+</pre></blockquote>
+
+These three strings would look something like this (not necessarily adjacent in memory):
+
+<blockquote>
+<img src="Strings-ph-2.png">
+<img src="Strings-pw-2.png">
+<img src="Strings-format-string.png">
+</blockquote>
+
+The terminating NUL (zero) character is very important when treating the array as a string. It is
+what tells <i>printf</i> when to stop:
+
+<blockquote><pre>
+<b>char</b> *ph = <font color="#9933CC">&quot;Hello&quot;</font>;
+<b>char</b> w[] = {<font color="#9933CC">'H'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'o'</font>};
+
+printf(<font color="#9933CC">&quot;%s\n&quot;</font>, ph); <font color="#003399"><i>/* OK, a string      */</i></font>
+printf(<font color="#9933CC">&quot;%s\n&quot;</font>, w);  <font color="#003399"><i>/* Bad, not a string */</i></font>
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Hello
+Hello¦¦¦¦¦¦¦¦¦¦¦<@B
+</pre></blockquote>
+
+Another attempt:
+<blockquote><pre>
+  <font color="#003399"><i>/* Manually add the terminator to the array */</i></font>
+<b>char</b> w[] = {<font color="#9933CC">'H'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'o'</font>, 0};
+
+  <font color="#003399"><i>/* Ok, now it's a string */</i></font>
+printf(<font color="#9933CC">&quot;%s\n&quot;</font>, w);
+</pre></blockquote>
+
+
+We could print strings "the hard way", by printing one character at a time:
+<blockquote><pre>
+<b>char</b> *p = <font color="#9933CC">&quot;Hello, world\n&quot;</font>;
+<b>while</b> (*p != 0)
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, *p++);
+</pre></blockquote>
+
+After initilization:
+<blockquote>
+<img src="Strings-pointer-1.png">
+</blockquote>
+
+After the <tt><b>while</b></tt> loop:
+<blockquote>
+<img src="Strings-pointer-2.png">
+</blockquote>
+<p>
+
+
+Make sure that you fully understand the difference between the pointer and the value
+that the pointer is pointing to:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>char</b> *p = <font color="#9933CC">&quot;Hello, world\n&quot;</font>;
+
+  <font color="#003399"><i>/* This is the correct condition */</i></font>
+<b>while</b> (*p != 0)
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, *p++);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>char</b> *p = <font color="#9933CC">&quot;Hello, world\n&quot;</font>;
+
+  <font color="#003399"><i>/* INCORRECT */</i></font>
+<b>while</b> (p != 0) 
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, *p++);
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Output from the incorrect code: (using gcc)
+<blockquote><pre>
+Hello, world
+ %c Hello world %s, %s
+ %s
+ The value of i is %i
+                                                                                                       ?
+ a                                                                                                     @
+@          hA  x@  l@          xA  ¤@                          ¬@  ,@  E@  O@  è@  ?A  ?A  ?A  $A      0
+A           I a`y a¤%   a?~?aàS a&+     a,/     aZ1     aN5     a        I
+Y|    5 __main    F?_impure_ptr   ·?calloc    ï?cygwin_internal   ??dll_crt0__FP11per_process e?free  K?
+malloc    >?printf     ?realloc   O?GetModuleHandleA   @   @   @   @   @   @   @   @   @  cygwin1.dll ¶@
+  KERNEL32.dll
+118871 [main] a 1808 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+ 118871 [main] a 1808 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+ 119867 [main] a 1808 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+ 119867 [main] a 1808 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+ 810735 [main] a 1808 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+ 841004 [main] a 1808 _cygtls::handle_exceptions: Error while dumping state (probably corrupted stack)
+</pre></blockquote>
+
+<a href="MS-pointer-bug.html">The output before it crashed and burned</a> when using Microsoft's compiler.
+<p>
+<b>Note:</b> When using <i>printf</i> to print strings, only the first string is being interpreted.
+For example, this code:
+
+<blockquote><pre>
+<b>char</b> *p1 = <font color="#9933CC">&quot;%s%d&quot;</font>;
+printf(<font color="#9933CC">&quot;A string with %%: %s&#92;n&quot;</font>, p1);
+</pre></blockquote>
+
+will print this:
+
+<blockquote><pre>
+A string with %: %s%d
+</pre></blockquote>
+
+as none of the other arguments (<i>p1</i> in this case) will have their % symbols
+evaluated. They will just be printed verbatim.
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+String Variables and Initialization
+</p>
+
+
+Initialization with character arrays:
+
+<blockquote><pre>
+<b>char</b> s1[] = {<font color="#9933CC">'H'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'o'</font>};    <font color="#003399"><i>/* array of 5 chars */</i></font>
+<b>char</b> s2[] = {<font color="#9933CC">'H'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'o'</font>, 0}; <font color="#003399"><i>/* array of 6 chars */</i></font>
+</pre></blockquote>
+
+Initializing with strings:
+
+<blockquote><pre>
+<b>char</b> s3[] = <font color="#9933CC">&quot;Hello&quot;</font>; <font color="#003399"><i>/* array of 6 chars; 5 + terminator                           */</i></font>
+<b>char</b> *s4 = <font color="#9933CC">&quot;Hello&quot;</font>;  <font color="#003399"><i>/* pointer to a char; 6 chars in the "string"; 5 + terminator */</i></font>
+</pre></blockquote>
+
+What is <tt><b>sizeof</b> s1, s2, s3, s4</tt>? (Hint: What are the types?)
+
+<br><br><br>
+<blockquote>
+<img src="Strings-s1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="Strings-s2.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="Strings-s3.png"><br><br>
+<img src="Strings-s4.png">
+</blockquote>
+
+
+Initializing with fewer characters:
+
+<blockquote><pre>
+<b>char</b> s5[10] = {<font color="#9933CC">'H'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'o'</font>};    <font color="#003399"><i>/* array of 10 chars, 5 characters are 0 */</i></font>
+<b>char</b> s6[8] = <font color="#9933CC">&quot;Hello&quot;</font>;                       <font color="#003399"><i>/* array of 8 chars; 3 characters are 0  */</i></font>
+</pre></blockquote>
+
+<blockquote>
+<img src="Strings-s5.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="Strings-s6.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</blockquote>
+
+<!--
+  C Standard 6.5.7
+  Harbison and Steele - C A Reference Manual 5th Ed. page 108.
+-->
+
+
+<!--
+When you initialize a character array using a literal string, it is legal to have too many
+initializers. The extras are just discarded:
+-->
+
+<!--
+<blockquote><pre>
+<b>char</b> s7[] = <font color="#9933CC">&quot;Hallo&quot;</font>;      <font color="#003399"><i>/* array of 6 chars (NUL is included)           */</i></font>
+<b>char</b> s8[5] = <font color="#9933CC">&quot;Halloween&quot;</font>; <font color="#003399"><i>/* array of 5 chars: Hallo (no NUL at the end)  */</i></font>
+</pre></blockquote>
+
+Note that this <i>only</i> works with literal strings. If you initialize with individual characters
+and there are too many, it's still an error:
+
+<blockquote><pre>
+<b>char</b> s8[5] = {<font color="#9933CC">'H'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'o'</font>, <font color="#9933CC">'w'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'n'</font>, 0}; <font color="#003399"><i>/* warning: excess elements in array initializer */</i></font>
+</pre></blockquote>
+-->
+
+Given these declarations:
+<blockquote><pre>
+<b>char</b> s[5]; <font color="#003399"><i>/* array of 5 chars  */</i></font>
+<b>char</b> *p;   <font color="#003399"><i>/* pointer to a char */</i></font>
+</pre></blockquote>
+
+Use a loop to set each character and then print them out (assume <tt>i</tt> is an integer):
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Set each character to A - E */</i></font>
+<b>for</b> (i = 0; i &lt; 5; i++)
+  s[i] = i + <font color="#9933CC">'A'</font>;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Print out the characters: ABCDE */</i></font>
+  <font color="#003399"><i>/* Uses array notation             */</i></font>
+<b>for</b> (i = 0; i &lt; 5; i++)
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, s[i]);
+printf(<font color="#9933CC">&quot;\n&quot;</font>);
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+A different loop doing the same thing  (assume <tt>c</tt> is an integer):  
+<a href="../../docs/OperatorPrecedence.html#ASCIICHARS">ASCII chart</a>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Set each character to A - E */</i></font>
+<b>for</b> (c = <font color="#9933CC">'A'</font>; c &lt; <font color="#9933CC">'A'</font> + 5; c++)
+  s[c - <font color="#9933CC">'A'</font>] = c;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Print out the characters: ABCDE */</i></font>
+  <font color="#003399"><i>/* Uses pointer notation           */</i></font>
+<b>for</b> (i = 0; i &lt; 5; i++)
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, *(s + i));
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Do something similar with p:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Print out the character that p points to */</i></font>
+printf(<font color="#9933CC">&quot;%c&quot;</font>, p[0]);
+printf(<font color="#9933CC">&quot;%c&quot;</font>, *p);
+</pre></blockquote>
+
+You may get garbage, or it may crash:
+<blockquote><pre>
+     65 [main] a 2020 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+  22906 [main] a 2020 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+     65 [main] a 2020 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+  22906 [main] a 2020 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+ 686199 [main] a 2020 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+ 707734 [main] a 2020 _cygtls::handle_exceptions: Error while dumping state (probably corrupted stack)
+</pre></blockquote>
+
+Set p to point at something first:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Point p at s[0] */</i></font>
+p = s;
+</pre></blockquote>
+
+Now print out the value:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Print out the character that p points to */</i></font>
+printf(<font color="#9933CC">&quot;%c&quot;</font>, p[0]);
+printf(<font color="#9933CC">&quot;%c&quot;</font>, *p);
+</pre></blockquote>
+
+In a loop, print out all the characters that p points to: ABCDE. These are both the same:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>for</b> (i = 0; i &lt; 5; i++)
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, p[i]);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>for</b> (i = 0; i &lt; 5; i++)
+  printf(<font color="#9933CC">&quot;%c&quot;</font>, *(p + i));
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+String Input/Output 
+</p>
+
+There's a convenient function for printing strings:
+
+<blockquote><pre>
+<b>int</b> puts(<b>const char</b> *string);
+</pre></blockquote>
+
+<!--
+On success, puts returns a non-negative value (from the docs), EOF on failure
+-->
+
+The <tt>puts</tt> function will print a newline automatically. Examples:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Sample code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>const char</b> *p1 = <font color="#9933CC">&quot;Hello&quot;</font>;
+<b>char</b> p2[] = <font color="#9933CC">&quot;Hello&quot;</font>;
+
+puts(<font color="#9933CC">&quot;Hello&quot;</font>);  <font color="#003399"><i>/* literal string  */</i></font>
+puts(p1);       <font color="#003399"><i>/* string variable */</i></font>
+puts(p2);       <font color="#003399"><i>/* string variable */</i></font>
+puts(<font color="#9933CC">&quot;%s%i%d&quot;</font>); <font color="#003399"><i>/* literal string  */</i></font>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+Hello
+Hello
+Hello
+%s%i%d
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+There's also a convenient function for printing a single character:
+
+<blockquote><pre>
+<b>int</b> putchar(<b>int</b> c);
+</pre></blockquote>
+
+<!--
+On success, putchar returns the characcter written (from the docs), EOF on failure
+-->
+
+Example:
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Sample code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>char</b> c = <font color="#9933CC">'H'</font>;
+<b>char</b> *p = <font color="#9933CC">&quot;ello&quot;</font>;
+
+putchar(c);      <font color="#003399"><i>/* outputs one char, no newline */</i></font>
+<b>while</b> (*p)
+  putchar(*p++); <font color="#003399"><i>/* outputs one char, no newline */</i></font>
+
+putchar(<font color="#9933CC">'\n'</font>);   <font color="#003399"><i>/* print new line               */</i></font>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+Hello
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+For input, we can use this:
+
+<blockquote><pre>
+<b>int</b> gets(<b>char</b> *string);
+</pre></blockquote>
+
+<p>
+	
+Example:
+<blockquote><pre>
+<b>char</b> string[100]; <font color="#003399"><i>/* 99 chars + NUL terminator */</i></font>
+
+puts(<font color="#9933CC">&quot;Type something: &quot;</font>); <font color="#003399"><i>/* prompt the user */</i></font>
+gets(string);             <font color="#003399"><i>/* read the string */</i></font>
+puts(string);             <font color="#003399"><i>/* print it out    */</i></font>
+</pre></blockquote>
+
+Output (charcters in <font color="red"><b>red</font></b> are typed by the user):
+<blockquote><pre>
+<b>Type something:</b>
+<font color="red"><b>I am not a great fool, so I can clearly not choose the wine in front of you.</b></font>
+<b>I am not a great fool, so I can clearly not choose the wine in front of you.</b>
+</pre></blockquote>
+
+<ul>
+<li><tt>gets</tt> reads all characters until it encounters a newline character.
+<li>The newline is read, then discarded and replaced with a 0 (so it's terminated).
+<li>It is the programmer's (your!) responsibility to make sure that there is enough room to hold the input string.
+<li><tt>gets</tt> (and functions like it) is a very dangerous function and is likely responsible
+	for many bugs/viruses/security problems today.</li>
+<li>This function has been deprecated in C++ and removed from the newer C specification.</li>
+<li>A safer alternative is 
+<a href="http://www.cplusplus.com/reference/cstdio/fgets/">fgets</a>
+(which lets you specify the size of the buffer to read into).
+</ul>
+
+We can also read a single character:
+
+<blockquote><pre>
+<b>int</b> getchar(<b>void</b>);
+</pre></blockquote>
+
+
+Example:
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Sample code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> c = 0;
+
+<b>while</b> (c != <font color="#9933CC">'a'</font>)
+{
+  c = getchar(); <font color="#003399"><i>/* read in a character   */</i></font>
+  putchar(c);    <font color="#003399"><i>/* print out a character */</i></font>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="red"><b>This is a string</b></font> (newline)
+This is a (no newline)
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+Notice how the loop only printed part of the phrase that was typed in. The <tt>getchar</tt> function
+did not return until the user pressed the enter/return key. Then, the loop continued.
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p class="technote">
+In C, literal strings are defined as <tt><b>char</b> *</tt>. In C++, they are defined as
+<tt><b>const char</b> *</tt>. This will help prevent errors that may occur due to writing
+to the read-only string pool.
+</p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+String Functions
+</p>
+
+Although strings are not truly built into the language, there are many functions specifically for
+dealing with NUL-terminated strings. You will need to include this:
+<blockquote><pre>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/clibrary/cstring/">string.h</a>&gt;
+</pre></blockquote>
+
+Here are four of the more popular ones:
+<p>
+	
+<table style="text-align: left;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Function Prototype</td>
+      <td style="text-align: center; font-weight: bold;">Description</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; width: 50%;">size_t strlen(const char *string);</td>
+      <td>Returns the length of the string, which is the number of characters int the string. It does not include the terminating 0.</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">char *strcpy(char *destination, const char *source);</td>
+      <td>Copies the string pointed to by source into the string pointed to by destination. Destination must have enough space to hold
+the string from source. The return is destination.</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">char *strcat(char *destination, const char *source);</td>
+      <td>Concatenates (joins) two strings by appending the
+string in source to the end of the string in destination. Destination
+must have enough space to accomodate both strings. The return is destination.</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">int strcmp(const char *s1, const char *s2);</td>
+      <td>Compares two strings lexicographically (i.e.
+alphabetically). If string1 is less than string2, the return value is
+negative. If string1 is greater than string2, then the return value is
+positive. Otherwise the return is 0 (they are the same.) UPPERCASE is considered 
+different than lowercase.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+
+Sample implementations of <i>strlen</i>:
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+  <tr><td>
+<pre>
+size_t mystrlen1(<b>const</b> <b>char</b> *string)
+{
+  size_t len;
+
+  <b>for</b> (len = 0; *string != 0; string++)
+    len++;
+
+  <b>return</b> len;
+}
+</pre>
+</td><td>
+<pre>
+size_t mystrlen2(<b>const</b> <b>char</b> *string)
+{
+  size_t len = 0;
+
+  <b>while</b> (*string++)
+    len++;
+
+  <b>return</b> len;
+}
+</pre>
+</td></tr>
+<tr>
+<td>
+<pre>
+size_t mystrlen3(<b>const</b> <b>char</b> *string)
+{
+  <b>const</b> <b>char</b> *start = string;
+
+  <font color="#003399"><i>/* Leaves string pointing at NUL byte */</i></font>
+  <b>while</b> (*string)
+    string++;
+
+  <b>return</b> string - start;
+}
+</pre>
+</td><td>
+<pre>
+size_t mystrlen4(<b>const</b> <b>char</b> *string)
+{
+  <b>const</b> <b>char</b> *start = string;
+
+  <font color="#003399"><i>/* Leaves string pointing at one past the NUL byte */</i></font>
+  <b>while</b> (*string++)
+    ;
+
+  <b>return</b> string - start - 1;
+}
+</pre>
+</td></tr></table>
+
+</blockquote>	
+
+Most compilers/libraries will have a highly-optimized version of <i>strlen</i>,
+(and other string-related functions)
+possibly even written in assembly code, so you should never need to write your
+own. Here is <a href="https://github.com/lattera/glibc/blob/master/string/strlen.c">
+a version from glibc</a> (The GNU C Library). From my simple tests, it's about
+2.5 to 3 times faster than any of the ones shown above. Some of the optimizations
+may depend on the architecture of the CPU, e.g. 
+<a href="https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions">SSE</a> (Streaming SIMD Extensions)
+and vectorization, which is certainly well beyond the scope of this course.
+<p>
+
+<p class="technote">
+<b>Self check:</b> Using the above implementations of <i>mystrlen</i> as a guide, 
+write your own version of <i>mystrcpy</i> and <i>mystrcat</i>.
+</p>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+ 
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<center>
+<blockquote>	
+</blockquote>
+</center>
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

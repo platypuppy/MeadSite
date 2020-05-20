@@ -1,0 +1,36 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>scantext.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#define FILE_OK       -1 /* If the file was opened successfully         */</font>
+<font color="990099">#define FILE_ERR_OPEN -2 /* If the file was unable to be opened         */</font>
+<font color="990099">#define WORD_OK        1 /* If the word was found in the dictionary     */</font>
+<font color="990099">#define WORD_BAD       2 /* If the word was not found in the dictionary */</font>
+
+<font color="990099">#define LONGEST_WORD 50  /* This is the longest word you need to handle */</font>
+
+<b>struct</b> DICTIONARY_INFO
+{
+  <b>int</b> shortest; <font color="#003399"><i>/* Length of the shortest word       */</i></font>
+  <b>int</b> longest;  <font color="#003399"><i>/* Length of the longest word        */</i></font>
+  <b>int</b> count;    <font color="#003399"><i>/* Number of words in the dictionary */</i></font>
+};
+
+<font color="#003399"><i>/* Function prototypes */</i></font>
+<b>char</b> *mystrupr(<b>char</b> *string);
+<b>int</b> info(<b>const</b> <b>char</b> *dictionary, <b>struct</b> DICTIONARY_INFO *dinfo);
+<b>int</b> spell_check(<b>const</b> <b>char</b> *dictionary, <b>const</b> <b>char</b> *word);
+<b>int</b> word_lengths(<b>const</b> <b>char</b> *dictionary, <b>int</b> lengths[], <b>int</b> count);
+<b>int</b> words_starting_with(<b>const</b> <b>char</b> *dictionary, <b>char</b> letter);
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

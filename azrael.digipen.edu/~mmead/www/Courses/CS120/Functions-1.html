@@ -1,0 +1,1299 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Functions</title>
+</head>
+
+<style>
+.BlueBox
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+</style>
+
+<body>  
+<center><h1>Functions</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+It's All About Functions
+</p>
+
+Some of the first statements made during this course were these:
+
+<ul>
+<li>A C program is essentially a collection of one or more functions.
+<li>There must be a function named <tt><b>main</b></tt> and it must be in all lowercase.
+<li><tt><b>main</b></tt> is the program's starting point; it can call other functions by name
+<li>There must be <i>exactly</i> one function named <tt><b>main</b></tt> in every program.
+</ul>
+
+And the general form of a C program was shown. (The parts in <big><b>bold</b></big> are the subject of this topic)
+
+<blockquote><pre>
+include files
+
+<big><big><b>function declarations (prototypes)</b></big></big>
+
+data declarations (global)
+
+main function header
+{
+  data declarations (local)
+  statements
+}
+
+<big><big><b>other functions</b></big></big>
+</pre></blockquote>
+
+Although we've actually only written one function so far (<tt><b>main</b></tt>), we've used two
+others: <tt><b>scanf</b></tt> and <tt><b>printf</b></tt>. These functions are in the C standard library.
+<p>
+A function has the form:
+
+<blockquote><pre>
+return_type function_name(formal_parameters)
+{
+  function_body
+}
+</pre></blockquote>
+
+Explanations:
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: center;">Function part</td>
+      <td style="font-weight: bold; text-align: center;">Description</td>
+    </tr>
+    <tr>
+      <td>return_type</td>
+      <td>This describes the type of the data that the function
+will return. Almost all data types are allowed to be returned from a
+function. If a function returns data, then the function can be used in an expression, otherwise, it can't.
+(All functions return data unless they are marked as returning <b>void</b>.)</td>
+    </tr>
+    <tr>
+      <td>function_name</td>
+      <td>The name of the function. The name must follow the same
+<a href="Fundamentals-1.html#IDENTIFIERS">rules</a> that an identifier must follow.</td>
+    </tr>
+    <tr>
+      <td>formal_parameters</td>
+      <td>This is an optional comma-separated list of values that
+will be passed to the function. A function that takes 0 parameters will
+have the keyword <tt><b>void</b></tt> as the only item in the list.
+(Students that still think that <tt>function(<b>void</b>)</tt> is the same as <tt>function()</tt> are required
+<a href="http://faq.cprogramming.com/cgi-bin/smartfaq.cgi?answer=1044841143&id=1043284376">to read this</a> again.) <!--, as I'm not going to spend any more time on it.) -->
+<!--(Yes, I know that <a href="http://knking.com/books/c2/index.html">our textbook</a> interchanges them, but you shouldn't.)	-->
+
+</td>
+    </tr>
+    <tr>
+      <td>function_body</td>
+      <td>The body consists of all of the declarations and executable code for the
+function. If the function is defined to return a value, there must be at least one
+return statement in the body. (There can be multiple return statements.)</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Here's an example of a <i>user-defined</i> function:
+
+<blockquote><pre>
+<b>float</b> average(<b>float</b> a, <b>float</b> b)
+{
+  <b>return</b> (a + b) / 2;
+}
+</pre></blockquote>
+
+The function above meets the requirements:
+<ol>
+	<li>The function is named <i>average</i>. 
+	<li>It will return a value of type <tt><b>float</b></tt>. 
+	<li>It expects to be passed two values, both of type <tt><b>float</b></tt>. (Note that you can't do this for the parameters: <tt><b>float</b> a, b</tt>)
+</ol>
+
+<p>
+A complete program using our new function:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;
+
+<b>float</b> average(<b>float</b> a, <b>float</b> b)
+{
+  <b>return</b> (a + b) / 2;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> x;
+  <b>float</b> y;
+  <b>float</b> ave;
+  
+  x = 10; 
+  y = 20;
+  ave = average(x, y);
+  printf(<font color="#9933CC">&quot;Average of %g and %g is %g\n&quot;</font>, x, y, ave);
+
+  x = 7; 
+  y = 10;
+  ave = average(x, y);
+  printf(<font color="#9933CC">&quot;Average of %g and %g is %g\n&quot;</font>, x, y, ave);
+  
+  <b>return</b> 0;
+}</code></pre>
+
+The output:
+<blockquote><pre>
+Average of 10 and 20 is 15
+Average of 7 and 10 is 8.5
+</pre></blockquote>
+
+
+Both the return value and the parameters are optional:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* No return, no parameters */</i></font>
+<b>void</b> say_hello(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Hello!\n&quot;</font>);
+  <b>return</b>; <font color="#003399"><i>/* optional */</i></font>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* No return, one parameter */</i></font>
+<b>void</b> say_hello_alot(<b>int</b> count)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;Hello!\n&quot;</font>);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Return, no parameters */</i></font>
+<b>float</b> pi(<b>void</b>)
+{
+  <b>return</b> 3.14159F; 
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Calling the functions:
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> p;
+
+  say_hello();       <font color="#003399"><i>/* no arguments, needs parentheses */</i></font>
+  say_hello_alot(5); <font color="#003399"><i>/* one argument                    */</i></font>
+  p = pi();          <font color="#003399"><i>/* no arguments                    */</i></font>
+  p = pi;            <font color="#003399"><i>/* Error, parentheses are required */</i></font>
+
+  <b>return</b> 0;          <font color="#003399"><i>/*    not optional                 */</i></font>
+}
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Function Prototypes
+</p>
+
+
+Note the ordering of the two functions (<tt>main</tt> and <tt>average</tt>) in this program: (<tt><b>foo.c</b></tt>)
+
+<pre class="sourcecode"><code> 1. <b>#include</b> &lt;stdio.h&gt;
+ 2.
+ 3. <b>int</b> main(<b>void</b>)
+ 4. {
+ 5.   printf(<font color="#9933CC">&quot;ave = %.2f\n&quot;</font>, average(10, 20));
+ 6.   <b>return</b> 0;
+ 7. }
+ 8. 
+ 9. <b>float</b> average(<b>float</b> a, <b>float</b> b)
+10. {
+11.   <b>return</b> (a + b) / 2;
+12. }
+</code></pre>
+
+There are several problems that the compiler complains about and you probably don't have a clue what some of them mean:
+<blockquote><pre>
+foo.c: In function `main':
+foo.c:5: warning: implicit declaration of function `average'
+foo.c:5: warning: double format, different type arg (arg 2)
+foo.c: At top level:
+foo.c:10: error: conflicting types for 'average'
+foo.c:5: error: previous implicit declaration of 'average' was here
+</pre></blockquote>
+
+New compilers give more information about the problems:
+<blockquote><pre>
+warn.c: In function 'main':
+warn.c:5:3: warning: implicit declaration of function 'average' [-Wimplicit-function-declaration]
+   printf("ave = %.2f\n", average(10, 20));
+   ^
+warn.c:5:3: warning: format '%f' expects argument of type 'double', but argument 2 has type 'int' [-Wformat=]
+warn.c: At top level:
+warn.c:9:7: error: conflicting types for 'average'
+ float average(float a, float b)
+       ^
+warn.c:5:26: note: previous implicit declaration of 'average' was here
+   printf("ave = %.2f\n", average(10, 20));
+                          ^
+</pre></blockquote>
+
+Some compilers are even better at <a href="clang-warning-no-prototype.png">
+describing the problem</a>:
+<blockquote><pre>
+warn.c:5:26: warning: implicit declaration of function 'average' [-Wimplicit-function-declaration]
+  printf("ave = %.2f\n", average(10, 20));
+                         ^
+warn.c:5:26: warning: format specifies type 'double' but the argument has type 'int' [-Wformat]
+  printf("ave = %.2f\n", average(10, 20));
+                ~~~~     ^~~~~~~~~~~~~~~
+                %.2d
+warn.c:9:7: error: conflicting types for 'average'
+float average(float a, float b)
+      ^
+warn.c:5:26: note: previous implicit declaration is here
+  printf("ave = %.2f\n", average(10, 20));
+                         ^
+2 warnings and 1 error generated.
+</pre></blockquote>
+
+
+
+Some compilers treat this situation as a warning and not an error. Borland's compiler and GNU's gcc both
+treat it as a error, so you can't write code like the above. Sadly, Microsoft's compiler doesn't catch
+the error and when you run the above program, you get this:
+
+<blockquote><pre>
+ave = 796482944349676280000000000000000000000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000.00
+</pre></blockquote>
+
+Of course, this is random, and you may likely get different garbage each time you
+run it. (You'll probably get zero a lot since it's the most popular "garbage" value
+in memory.)
+<p>
+Removing the include file from this program yields a similar warning:
+
+<blockquote><pre>
+<font color="#003399"><i>/*#include &lt;stdio.h&gt;*/</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Hello!\n&quot;</font>);
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Warnings:
+<blockquote><pre>
+foo.c: In function `main':
+foo.c:6: warning: implicit declaration of function `printf'
+</pre></blockquote>
+
+
+Just like all other identifiers in C, we must tell the compiler about our functions
+<i>before</i> we use (call) them. We do this with a <i>function declaration</i>, also
+called a <i>function prototype</i>.
+<p>
+This program is now perfectly fine:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;<a href="stdio.h.html#FUNCTIONS">stdio.h</a>&gt; <font color="#003399"><i>/* For printf */</i></font>
+
+<font color="#003399"><i>/* Function <b>prototype</b>, notice the semicolon    */</i></font>
+<font color="#003399"><i>/* Prototypes do not have curly braces or body */</i></font>
+<b>float</b> average(<b>float</b> a, <b>float</b> b);
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="#003399"><i>/* Both </i><b>printf</b><i> and </i><b>average</b><i> are known to the compiler */</i></font>
+  printf(<font color="#9933CC">&quot;ave = %.2f\n&quot;</font>, average(10, 20));
+  <b>return</b> 0;
+}
+
+<font color="#003399"><i>/* Function <b>definition</b>, no semicolon    */</i></font>
+<font color="#003399"><i>/* Definition has curly braces and body */</i></font>
+<b>float</b> average(<b>float</b> a, <b>float</b> b)
+{
+  <b>return</b> (a + b) / 2;
+}
+</code></pre>
+
+A function prototype introduces the identifier to the compiler. (<i>Mr. Compiler, this is Mr. Identifier.</i>) It tells the compiler that:
+<ul>
+<li>the identifier is named <tt>average</tt>.
+<li>the identifier is a function.
+<li>the function requires two parameters.
+	<ul>
+		<li>The first parameter is a float.
+		<li>The second parameter is a float.
+	</ul>
+<li>the function returns a value which is also a float.
+</ul>
+
+Now that the compiler knows what <tt>average</tt> is, when it sees <tt>average</tt> later in the program, it
+will be able to make sure that it is used properly.
+
+<!--<b>#include</b> &lt;stdio.h&gt;-->
+<pre class="sourcecode"><code><font color="#003399"><i>/* Prototype */</i></font>
+<b>float</b> average(<b>float</b> a, <b>float</b> b);
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Define some variables */</i></font>
+  <b>int</b> i;
+  <b>float</b> f1, f2, f3, f4;
+  <b>double</b> d1, d2;
+
+    <font color="#003399"><i>/* Set some values */</i></font>
+  f1 = 3.14F;  f2 = 5.893F;  f3 = 8.5F;
+  d1 = 3.14;  d2 = 5.893;
+
+    <font color="#003399"><i>/* Call the function in various ways */</i></font>
+    <font color="#003399"><i>/* Nothing wrong with these calls    */</i></font>
+  f4 = average(f1, f2);
+  f4 = average(5.0F, 6.0F);
+  f4 = average(10, 20);
+  average(f1, f2);
+
+    <font color="#003399"><i>/* Potential problems when these execute */</i></font>
+  i = average(f1, f2);
+  f4 = average(d1, d2);
+  f4 = average(3.14, 9.1F);
+
+    <font color="#003399"><i>/* Fatal errors, compiler can't continue */</i></font>
+  f4 = average(f2);
+  f4 = average(f1, f2, f3);
+
+  <b>return</b> 0;
+}</code></pre>
+
+Detailed warning/error messages from the compiler:
+
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+  	<tr bgcolor="black" align="center"><th><font color="white">Function calls</font></th><th><font color="#00FF00">Ok</font>&nbsp;&nbsp;&nbsp;<font color="yellow">Warnings</font>&nbsp;&nbsp;&nbsp;<font color="red">Errors</font></th></tr>
+    <tr bgcolor="#00FF00">
+      <td width="330" style="font-family: monospace;"><small>f4 = average(f1, f2);<br>f4 = average(5.0F, 6.0F);<br>f4 = average(10, 20);<br>average(f1, f2);</td></small>
+      <td style="font-family: monospace;"><small>Ok<br>Ok<br>Ok<br>Ok. Most of the time, you can ignore return values from functions.</small></td>
+    </tr>
+    <tr bgcolor="yellow">
+      <td style="font-family: monospace;"><small>i = average(f1, f2);<br>f4 = average(d1, d2);<br>f4 = average(3.14, 9.1F);</small></td>
+      <td style="font-family: monospace;"><small>warning: conversion from 'float' to 'int', possible loss of data<br>
+warning: conversion from 'double' to 'float', possible loss of data<br>
+warning: conversion from 'double' to 'float', possible loss of data</small></td>
+    </tr>
+    <tr bgcolor="red">
+      <td style="font-family: monospace;"><small>f4 = average(f2);<br>f4 = average(f1, f2, f3);</small></td>
+      <td style="font-family: monospace;"><small>error: too few arguments to function `average'<br>
+error: too many arguments to function `average'</small></td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Not all compilers will warn about the potential loss of precision, but they will all emit errors for the last two. The warnings above
+are from Microsoft's C compiler, version 7.1. These errors below are from gcc. If you invoke gcc with an additional command line switch:
+
+<blockquote><pre>
+gcc <b>-Wconversion</b> foo.c
+</pre></blockquote>
+
+You will see lots of additional warnings, which are informative, but not dangerous in this case:
+
+<blockquote><pre>
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 1 of `average' as floating rather than integer due to prototype
+warning: passing arg 2 of `average' as floating rather than integer due to prototype
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+error: too few arguments to function `average'
+warning: passing arg 1 of `average' as `float' rather than `double' due to prototype
+warning: passing arg 2 of `average' as `float' rather than `double' due to prototype
+error: too many arguments to function `average'
+</pre></blockquote>
+
+<!--
+warning: passing arg 1 of `average' as floating rather than integer due to prototype
+warning: passing arg 2 of `average' as floating rather than integer due to prototype
+-->
+
+<p class="technote">
+<b>Quick check:</b> Does the following program <i>compile</i>?
+<p>
+	
+<pre class="sourcecode"><code><b>float</b> average(<b>float</b> a, <b>float</b> b);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> f1, f2, f3;
+  f2 = 3.14f;
+  f3 = 5.0f;
+
+  f1 = average(f2, f3);
+
+  <b>return</b> 0;
+}</code></pre>	
+	
+
+To help answer this question, refer to the <a href="Fundamentals-1.html#EDITCOMPILELOOP">diagram</a>. If you <i>compiled</i> this 
+program like this: (assume the name of the file is <tt>main.c</tt>)
+
+<blockquote><pre>
+gcc -c main.c
+</pre></blockquote>
+
+or even like this:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -c main.c
+</pre></blockquote>
+
+It will compile cleanly without any warnings or errors and you'll be left with an object file called <tt>main.o</tt>, which will be about 875 bytes
+in size.
+
+<blockquote><pre>
+E:\Data\Courses\Notes\CS120\Code\Functions>dir main.o
+ Volume in drive E has no label.
+ Volume Serial Number is 5852-DBD2
+
+ Directory of E:\Data\Courses\Notes\CS120\Code\Functions
+
+09/21/2017  08:54a                 <b>875 main.o</b>
+               1 File(s)            875 bytes
+               0 Dir(s)   6,154,678,272 bytes free
+</pre></blockquote>
+
+<p>
+Now, if you try to <i>link</i> the file: 
+
+<blockquote><pre>
+gcc main.o
+</pre></blockquote>
+
+You'll see this helpful error message:
+
+<blockquote><pre>
+main.o:main.c:(.text+0xb7): undefined reference to `_average'
+collect2: ld returned 1 exit status
+</pre></blockquote>
+
+The error message (from the linker) is saying to you:
+<blockquote>
+ <i>"Hey, you (Mr. Compiler) told me that this program needs to call a function called <tt>average</tt>, but I can't find it anywhere. I give up."</i>.
+</blockquote>
+
+Note that you would have received the same error had you attempted to <i>compile</i> <b>and</b> <i>link</i> with one command 
+(removing the <tt>-c</tt>, which means to compile but don't link):
+
+<blockquote><pre>
+gcc main.c
+</pre></blockquote>
+
+<blockquote>
+<center>
+<p class="BlueBox">
+Please make very sure that you understand the difference between compiling and linking. We will see many more situations
+where the code will compile properly, but not link.
+</p>
+</center>
+</blockquote>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Tracing Function Calls
+</p>
+
+What is the sequence of function calls made by the program below. Specify the function being called and its parameters. 
+
+<pre class="sourcecode"><code>
+<b>void</b> FnB(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;tied the room &quot;</font>);
+}
+
+<b>void</b> FnC(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;together\n&quot;</font>);
+}
+
+<b>void</b> FnA(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;That rug really &quot;</font>);
+  FnB();
+}
+
+<b>void</b> FnD(<b>void</b>)
+{
+  FnA();
+  FnC();
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  FnD();
+  <b>return</b> 0;
+}
+</code></pre>
+<p>
+	
+The sequence is this:
+
+<blockquote><pre>
+main(<b>void</b>);
+FnD(<b>void</b>);
+FnA(<b>void</b>);
+printf("That rug really ");
+FnB(<b>void</b>);
+printf("tied the room ");
+FnC(<b>void</b>);
+printf("together\n");
+</pre></blockquote>
+
+What is the output of the program?
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Pass By Value
+</p>
+
+In C, all function arguments are passed <i>by value</i>. In a nutshell, this means that any changes made to the 
+parameters in the body of the function will not affect the values at the call site. An example will clarify:
+<p>
+	
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=0>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+	
+<b>void</b> fn(<b>int</b> x)
+{
+  printf(<font color="#9933CC">&quot;In fn, before assignment, x is %i\n&quot;</font>, x);
+  
+  x = 10;
+  
+  printf(<font color="#9933CC">&quot;In fn, after assignment, x is %i\n&quot;</font>, x);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  i = 5;
+
+  printf(<font color="#9933CC">&quot;Before call: i is %i\n&quot;</font>, i); 
+  
+  fn(i); <font color="#003399"><i>/* call site */</i></font>
+  
+  printf(<font color="#9933CC">&quot;After call: i is %i\n&quot;</font>, i);
+  
+  <b>return</b> 0;
+}</code></pre>	
+</td>
+<td>
+<blockquote><pre>
+<b>Output:</b>
+Before call: i is 5
+In fn, before assignment, x is 5
+In fn, after assignment, x is 10
+After call: i is 5
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+	
+A <i>copy</i> of the value is passed to the function, so any changes made are made to the copy, not the original value. Visually, the
+process looks something like this:
+
+
+<blockquote>
+
+When <tt>main</tt> begins, <tt>i</tt> is undefined:
+<blockquote>
+<img src="Functions-byval-1.png">
+</blockquote>
+
+Next statement, <tt>i</tt> is assigned a value:
+<blockquote>
+<img src="Functions-byval-2.png">
+</blockquote>
+
+The function is called and a copy of the argument is made:
+<blockquote>
+<img src="Functions-byval-3.png">
+</blockquote>
+
+The parameter, <tt>x</tt>, is assigned a value:
+<blockquote>
+<img src="Functions-byval-4.png">
+</blockquote>
+
+The function returns back to <tt>main</tt> and the original value is preserved:
+<blockquote>
+<img src="Functions-byval-5.png">
+</blockquote>
+
+</blockquote>
+
+Revisiting an example. We can use the parameter (modify it) without worrying that we will be changing
+something in another part of the program:
+<p>
+	
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th><tt>for</tt> loop</th><th><tt>while</tt> loop (no extra variable)</th><th><tt>while</tt> loop (more compact)</tr>
+<tr><td>&nbsp;</td></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> say_hello_alot(<b>int</b> count)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;Hello!\n&quot;</font>);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> say_hello_alot(<b>int</b> count)
+{
+  <b>while</b> (count)
+  {
+    printf(<font color="#9933CC">&quot;Hello!\n&quot;</font>);
+    count--;
+  }
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> say_hello_alot(<b>int</b> count)
+{
+  <b>while</b> (count--)
+    printf(<font color="#9933CC">&quot;Hello!\n&quot;</font>);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Functions and Scope
+</p>
+
+What happens when we have a variable named <tt>A</tt> in two different functions? Does the compiler or
+program get confused?
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> fn1(<b>void</b>)
+{
+  <b>int</b> A;
+  <font color="#003399"><i>/* statements */</i></font>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> fn2(<b>void</b>)
+{
+  <b>int</b> A;
+  <font color="#003399"><i>/* statements */</i></font>
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Declaring/defining variables inside of a function makes them <i>local</i> to that function. No other function
+can see them or access them.
+<p>
+Example:
+
+<blockquote>
+<p>
+<table border=1 cellspacing=0 cellpadding=0>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<font color="#003399"><i>/* Function prototypes */</i></font>
+<b>int</b> add3(<b>int</b> i, <b>int</b> j, <b>int</b> k);
+<b>int</b> mult3(<b>int</b> p, <b>int</b> q, <b>int</b> r);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a = 2;
+  <b>int</b> b = 3;
+  <b>int</b> c = 4;
+  <b>int</b> d;
+  <b>int</b> e;
+
+  d = add3(a, b, c);
+  e = mult3(a, b, c);
+}
+
+<b>int</b> add3(<b>int</b> x, <b>int</b> y, <b>int</b> z)
+{
+  <b>int</b> a = x + y + z;
+  <b>return</b> a;
+}
+
+<b>int</b> mult3(<b>int</b> a, <b>int</b> b, <b>int</b> c)
+{
+  <b>int</b> x = a * b * c;
+  <b>return</b> x;
+}
+</pre></blockquote>
+</td>		
+<td>	
+
+<table border=0 cellspacing=10 cellpadding=20>
+<tr valign="top">
+<td>
+<img src="Functions-locals-main.png">
+</td>
+<td>
+<img src="Functions-locals-add.png">
+</td>
+<td>
+<img src="Functions-locals-mult.png">
+</td>
+</tr></table>
+</td>
+
+</tr></table>
+</blockquote>
+
+<p>
+
+<blockquote>
+<p class="technote">
+Technically, curly braces define a scope. This means that any time you have a pair of curly braces, a new
+scope is created. So, yes, this means that compound statements within loops (<tt><b>for</b></tt>, <tt><b>while</b></tt>, etc.)
+and conditionals (<tt><b>if</b></tt>, etc.) are in a different scope than the statements outside of the curly braces. More
+on scopes later...
+<b>Also, it is very important that you understand the difference between formal parameters and
+  actual parameters (arguments) and the difference between parameter names in the function prototype
+  vs. the names in the function definition.</b>
+  <br><br><font color="blue"><b>However, it is a convention that the names of the
+  parameters in the prototype match the names in the definition. We will adhere to that.</b></font>
+</p>
+</blockquote>	
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+The <tt>return</tt> Statement
+</p>
+
+We've already seen the <tt>return</tt> statement many times so far. It is used when we want
+to leave (i.e. <i>return</i> from) a function. 
+<p>
+The general form is:
+
+<blockquote><pre>
+<b>return</b> <i>expression</i> <b>;</b>
+</pre></blockquote>
+
+<ul>
+<li>If the function is defined to return <tt><b>void</b></tt>, then <i>expression</i> is not provided. 
+<li>If the function is defined to return some value, then the type of <i>expression</i> must match (or be compatible with)
+	the type specified.
+<li>A function can have several <tt>return</tt> statements. These functions all do the same thing:s
+
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> compare1(<b>int</b> a, <b>int</b> b)
+{
+  <b>int</b> value;
+  
+  <b>if</b> (a &gt; b)
+    value = 1;
+  <b>else</b> <b>if</b> (a &lt; b)
+    value = -1;
+  <b>else</b>
+    value = 0;
+
+  <b>return</b> value;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> compare2(<b>int</b> a, <b>int</b> b)
+{
+  <b>if</b> (a &gt; b)
+    <b>return</b> 1;
+  <b>else</b> <b>if</b> (a &lt; b)
+    <b>return</b> -1;
+  <b>else</b>
+    <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> compare3(<b>int</b> a, <b>int</b> b)
+{
+  <b>if</b> (a &gt; b)
+    <b>return</b> 1;
+  
+  <b>if</b> (a &lt; b)
+    <b>return</b> -1;
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+</ul>
+
+These functions both have illegal <tt>return</tt> statements:
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> f1(<b>int</b> a, <b>int</b> b)
+{
+  <font color="#003399"><i>/* statements */</i></font>
+
+  <font color="#003399"><i>/* Illegal, must return an int */</i></font>
+  <b>return</b>;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> f2(<b>int</b> a, <b>int</b> b)
+{
+  <font color="#003399"><i>/* statements */</i></font>
+
+  <font color="#003399"><i>/* Illegal, can't return anything */</i></font>
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+These are the errors:
+
+<blockquote><pre>
+In function `f1': warning: `return' with no value, in function returning non-void
+In function `f2': warning: `return' with a value, in function returning void
+</pre></blockquote>
+
+Sadly, these are both just warnings, and the first one always produces undefined behavior.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Divide and Conquer
+</p>
+
+The main point of using functions is to break the program into smaller, more manageable pieces. The
+technique is called <i>Divide and Conquer</i> and can be visualized like this:
+
+
+<p>
+<center>
+<blockquote>	
+<img src="DivideConquer-1.png">
+</blockquote>
+</center>
+<p>
+
+The idea is that it will be easier to work individually on smaller parts of the whole problem, rather than
+try to solve the entire problem at once.
+<p>
+As Bjarne Stroustrup (The Father of C++) says:
+<blockquote>
+<p class="technote">
+<i>"The number of errors in code correlates strongly with the amount of code and
+the complexity of the code. Both problems can be addressed by using more
+ and shorter functions. Using a function to do a specific task often saves us 
+ from writing a specific piece of code in the middle of other code; making it 
+ a function forces us to name the activity and document its dependencies."</i>
+</p>
+</blockquote>
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+More on Scope
+</p>
+
+The <i>scope</i> or <i>visibility</i> of an identifier is what determines in which parts of the program
+the identifier can be seen. 
+
+<ul>
+<li>We've seen function scope, where variables declared at the top of the function can be 
+	seen anywhere within the function.
+<li>This is a form of <i>block scope</i>, and is delimited by the curly braces.
+<li>An identifier with block scope is visible from its point of declaration to the
+end of the block that encloses the declaration.
+<li>Block scope is delimited by curly braces (e.g. in functions, compound statements, etc.)
+</ul>
+
+<p>
+This contrived example shows three different scopes. (The curly braces for each scope are highlighted.)
+
+<p>
+<table border=0 cellpadding=5 cellspacing=5>
+<tr><th>All statements are legal</th><th>Some statements are illegal</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f1(<b>int</b> param) <font color="#003399"><i>/* scope of param starts here */</i></font>
+<font size=+3 color="red"><b>{</b></font>
+    <b>int</b> a; <font color="#003399"><i>/* scope of a starts here */</i></font>
+    <b>int</b> b; <font color="#003399"><i>/* scope of b starts here */</i></font>
+    <b>int</b> c; <font color="#003399"><i>/* scope of c starts here */</i></font>
+
+    <font color="#003399"><i>/* do something with a, b, and c */</i></font>
+
+    <b>while</b> (a &lt; 10)
+    <font size=+3 color="#00FF00"><b>{</b></font>
+        <b>int</b> x; <font color="#003399"><i>/* scope of x starts here */</i></font>
+        <b>int</b> y; <font color="#003399"><i>/* scope of y starts here */</i></font>
+
+        <b>if</b> (b == 5)
+        <font size=+3 color="blue"><b>{</b></font>
+            <b>int</b> p; <font color="#003399"><i>/* scope of p starts here */</i></font>
+            <b>int</b> q; <font color="#003399"><i>/* scope of q starts here */</i></font>
+
+            p = a;         <font color="#003399"><i>/* Ok, both in scope */</i></font>
+            q = x + param; <font color="#003399"><i>/* Ok, all in scope  */</i></font>
+
+        <font size=+3 color="blue"><b>}</b></font> <font color="#003399"><i>/* scope of p and q ends here */</i></font>
+
+        x = a; <font color="#003399"><i>/* Ok, both in scope      */</i></font>
+        y = b; <font color="#003399"><i>/* Ok, both in scope      */</i></font>
+
+    <font size=+3 color="#00FF00"><b>}</b></font> <font color="#003399"><i>/* scope of x and y ends here   */</i></font>
+
+<font size=+3 color="red"><b>}</b></font> <font color="#003399"><i>/* scope for a, b, c, and param ends here */</i></font>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> f2(<b>int</b> param) <font color="#003399"><i>/* scope of param starts here */</i></font>
+<font size=+3 color="red"><b>{</b></font>
+    <b>int</b> a; <font color="#003399"><i>/* scope of a starts here */</i></font>
+    <b>int</b> b; <font color="#003399"><i>/* scope of b starts here */</i></font>
+    <b>int</b> c; <font color="#003399"><i>/* scope of c starts here */</i></font>
+
+    <font color="#003399"><i>/* do something with a, b, and c */</i></font>
+
+    <b>while</b> (a &lt; 10)
+    <font size=+3 color="#00FF00"><b>{</b></font>
+        <b>int</b> x; <font color="#003399"><i>/* scope of x starts here */</i></font>
+        <b>int</b> y; <font color="#003399"><i>/* scope of y starts here */</i></font>
+
+        <b>if</b> (b == 5)
+        <font size=+3 color="blue"><b>{</b></font>
+            <b>int</b> p; <font color="#003399"><i>/* scope of p starts here */</i></font>
+            <b>int</b> q; <font color="#003399"><i>/* scope of q starts here */</i></font>
+
+        <font size=+3 color="blue"><b>}</b></font> <font color="#003399"><i>/* scope of p and q ends here  */</i></font>
+
+        x = p; <font color="#003399"><i><b>/* Error, p not in scope  */</b></i></font>
+        y = q; <font color="#003399"><i><b>/* Error, q not in scope  */</b></i></font>
+
+    <font size=+3 color="#00FF00"><b>}</b></font> <font color="#003399"><i>/* scope of x and y ends here    */</i></font>
+
+    a = x; <font color="#003399"><i><b>/* Error, x not in scope  */</b></i></font>
+    b = p; <font color="#003399"><i><b>/* Error, p not in scope  */</b></i></font>
+
+<font size=+3 color="red"><b>}</b></font> <font color="#003399"><i>/* scope for a, b, c, and param ends here */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+
+Notes about variables in block scope: (a.k.a. local variables)
+<ul>
+<li>Variables that are not initialized by the programmer have undefined values.</li>
+<li>Variables declared within a block have <i>automatic storage</i>.</li> 
+<li>This means that the memory required to hold the variable is allocated when the declaration/definition 
+	statement is encountered and is released (deallocated) when the variable goes out of scope (i.e. at the end of its block).</li>
+<li>Since memory is being allocated automatically for local variables, the declarations are also <i>definitions</i>.
+	(This is in stark contrast to function declarations.)</li>
+<li>You can not <i>define</i> a variable more than once (same name) in a block scope.</li>
+<li>With proper formatting, it's easier to see the different scopes:
+	
+<table cellspacing=10 cellpadding=5 border=0>
+<tr>
+<th>Indenting and whitespace makes it easy to see</th><th width=20></th><th>Bad formatting makes it hard to see</th><th width=20></th><th>Even worse</th>
+</tr>
+<tr>
+<td>
+<pre>
+<b>void</b> f3(<b>int</b> param) <font color="#003399"><i>/* Scope of <b>param</b> starts here */</i></font>
+{
+  <b>int</b> a;     <font color="#003399"><i>/* Scope of <b>a</b> starts here                     */</i></font>
+  <b>int</b> param; <font color="#003399"><i>/* Error: <b>param</b> already defined in this scope */</i></font>
+  <b>int</b> a;     <font color="#003399"><i>/* Error: <b>a</b> already defined in this scope     */</i></font>
+
+  <b>while</b> (a &lt; 10)
+  {
+    <b>int</b> a;     <font color="#003399"><i>/* Ok, different scope, different <b>a</b>       */</i></font>
+    <b>int</b> param; <font color="#003399"><i>/* Ok, different scope, different <b>param</b>   */</i></font>
+    <b>int</b> a;     <font color="#003399"><i>/* Error: <b>a</b> already defined in this scope */</i></font>
+
+    <b>if</b> (b == 2)
+    {
+      <b>int</b> a;     <font color="#003399"><i>/* Ok, different scope, different <b>a</b>       */</i></font>
+      <b>int</b> param; <font color="#003399"><i>/* Ok, different scope, different <b>param</b>   */</i></font> 
+
+    } <font color="#003399"><i>/* Scope of third <b>a</b> and <b>param</b> ends here  */</i></font>
+
+  } <font color="#003399"><i>/* Scope of second <b>a</b> and <b>param</b> ends here   */</i></font>
+
+} <font color="#003399"><i>/* Scope of first <b>a</b> and <b>param</b> ends here */</i></font>
+</pre>
+</td>
+
+<td>
+</td>
+<td>
+<pre>
+<b>void</b> f3(<b>int</b> param) <font color="#003399"><i>/* Scope of param starts here */</i></font>
+{
+<b>int</b> a;     <font color="#003399"><i>/* Scope of <b>a</b> starts here                     */</i></font>
+<b>int</b> param; <font color="#003399"><i>/* Error: <b>param</b> already defined in this scope */</i></font>
+<b>int</b> a;     <font color="#003399"><i>/* Error: <b>a</b> already defined in this scope     */</i></font>
+<b>while</b> (a &lt; 10)
+{
+<b>int</b> a;     <font color="#003399"><i>/* Ok, different scope, different <b>a</b>       */</i></font>
+<b>int</b> param; <font color="#003399"><i>/* Ok, different scope, different <b>param</b>   */</i></font>
+<b>int</b> a;     <font color="#003399"><i>/* Error: <b>a</b> already defined in this scope */</i></font>
+<b>if</b> (b == 2)
+{
+<b>int</b> a;     <font color="#003399"><i>/* Ok, different scope, different <b>a</b>       */</i></font>
+<b>int</b> param; <font color="#003399"><i>/* Ok, different scope, different <b>param</b>   */</i></font> 
+} <font color="#003399"><i>/* Scope of third <b>a</b> and <b>param</b> ends here  */</i></font>
+} <font color="#003399"><i>/* Scope of second <b>a</b> and <b>param</b> ends here   */</i></font>
+} <font color="#003399"><i>/* Scope of first <b>a</b> and <b>param</b> ends here */</i></font>
+</pre>
+</td>
+
+<td>
+</td>
+<td>
+<pre>
+<b>void</b> f3(<b>int</b> param){ <font color="#003399"><i>/* Scope of param starts here */</i></font>
+<b>int</b> a;     <font color="#003399"><i>/* Scope of <b>a</b> starts here                     */</i></font>
+<b>int</b> param; <font color="#003399"><i>/* Error: <b>param</b> already defined in this scope */</i></font>
+<b>int</b> a;     <font color="#003399"><i>/* Error: <b>a</b> already defined in this scope     */</i></font>
+<b>while</b> (a &lt; 10){
+<b>int</b> a;     <font color="#003399"><i>/* Ok, different scope, different <b>a</b>       */</i></font>
+<b>int</b> param; <font color="#003399"><i>/* Ok, different scope, different <b>param</b>   */</i></font>
+<b>int</b> a;     <font color="#003399"><i>/* Error: <b>a</b> already defined in this scope */</i></font>
+<b>if</b> (b == 2){
+<b>int</b> a;     <font color="#003399"><i>/* Ok, different scope, different <b>a</b>       */</i></font>
+<b>int</b> param; <font color="#003399"><i>/* Ok, different scope, different <b>param</b>   */</i></font> 
+} <font color="#003399"><i>/* Scope of third <b>a</b> and <b>param</b> ends here  */</i></font>
+} <font color="#003399"><i>/* Scope of second <b>a</b> and <b>param</b> ends here   */</i></font>
+} <font color="#003399"><i>/* Scope of first <b>a</b> and <b>param</b> ends here */</i></font>
+</pre>
+</td>
+
+</tr>
+</table>
+</p>
+
+</ul>
+		
+
+
+<p>
+	
+	
+
+Notes about global variables:
+
+<ul>
+<li>Global variables are sometimes called <i>external variables</i> because they are external to all functions.
+<li>Unlike local variables, global variables are initialized to a specific value.
+<li>Their initial value is zero for their specific type (e.g. 0 for int, 0.0F for float, etc.)
+<li>The memory used to store global variables lasts for the entire life of the program.
+<li>Global variables do not live on the stack with local variables.
+	
+<blockquote><pre>
+<b>int</b> a; <font color="#003399"><i>/* The scope for <b>a</b> starts here.                     */</i></font>
+       <font color="#003399"><i>/* Memory for <b>a</b> is allocated before program starts. */</i></font>
+       <font color="#003399"><i>/* The value of <b>a</b> is 0. Global variable.            */</i></font>
+
+<b>void</b> f2(<b>int</b> param)
+{
+  <b>int</b> b; <font color="#003399"><i>/* Memory for <b>b</b> is allocated when the function starts. */</i></font>
+         <font color="#003399"><i>/* The value of <b>b</b> is undefined. (Local variable)       */</i></font>
+    
+  b = param; <font color="#003399"><i>/* Ok, <b>param</b> is in scope. */</i></font>
+  b = a;     <font color="#003399"><i>/* Ok, <b>a</b> is in scope.     */</i></font>
+
+} <font color="#003399"><i>/* Memory for <b>b</b> is deallocated here. */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> x; <font color="#003399"><i>/* Memory for <b>x</b> is allocated when main starts.  */</i></font>
+         <font color="#003399"><i>/* The value of <b>x</b> is undefined. Local variable. */</i></font>
+
+  x = 10; <font color="#003399"><i>/* The value of <b>x</b> is now 10.                   */</i></font>
+
+  f2(x);  <font color="#003399"><i>/* Memory for the copy of x is allocated when f2 is called.     */</i></font>
+          <font color="#003399"><i>/* Memory for the copy of x is deallocate when function returns.*/</i></font>
+
+  <b>return</b> 0;
+}
+
+<font color="#003399"><i>/* The scope for global <b>a</b> ends at the end of the file.         */</i></font>
+<font color="#003399"><i>/* Memory for global <b>a</b> is deallocated after program completes. */</i></font>
+</pre></blockquote>
+
+<big><center>
+<p class="technote">
+<b>Global variables are an advanced feature in C and are not to be used in ANY code
+in CS120. EVER.</b>
+</p>
+</center></big>
+</ul>
+
+
+</body>
+</html>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<center>
+<blockquote>	
+</blockquote>
+</center>
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

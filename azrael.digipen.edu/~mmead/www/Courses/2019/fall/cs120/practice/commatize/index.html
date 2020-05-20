@@ -1,0 +1,240 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>commatize</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+   
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(commatize.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+In order for this practice to work on Windows, we have to use a slight extension to the C language.
+Actually, it's not an extension, per se, it's that we can't use the <tt><b>-ansi</b></tt> compiler
+option. That's because we are going to use the data type <tt><b>long long</b></tt> and we need
+to use <i>printf</i> to print those. Remember that a <tt><b>long</b></tt> in Windows is 32-bits, but
+a <tt><b>long</b></tt> most everywhere else is 64-bits.
+ The code you write does NOT need to worry about this. It's the
+driver that is going to print out the numbers. Consult the driver to see what's going on. This is
+the ONLY time in CS120 that a conditional define (e.g. <tt><b>#ifdef</b></tt>) is used.
+</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>For this practice assignment, you will write a function that converts a long integer to a string.
+  You've seen this before, but there are a couple of differences. First, this time, you're converting
+  a <i>long</i> integer to a string. The range of a long integer is -9223372036854775808 to
+  9223372036854775807. The second difference is that you are going to put commas in the appropriate
+  places. So, these numbers with commas are -9,223,372,036,854,775,808 and 9,223,372,036,854,775,807.
+  <p>
+  This function will definitely be one that you'll want to put in your toolbox for future
+  use because humans require commas in numbers. Don't believe me? Quick, what is 100000000? 
+  Time's up! You had to count the zeros, didn't you? Ok, what is this: 10,000,000,000? Much easier!
+  <p>
+  The prototype for the function looks like this:
+<blockquote><pre>
+<b>char</b> *commatize(<b>long long</b> number);
+</pre></blockquote>
+
+  Here is a driver file: <a href="main.c.html">HTML</a>&nbsp;&nbsp;
+  <a href="main.c">Text</a>
+<p>
+The name of your implementation file should be <tt>commatize.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -pedantic main.c commatize.c -o commatize
+</pre></blockquote>
+<p>
+<a href="output-sample.txt">output-sample.txt</a> for you to diff with.
+
+<p>
+<font color="blue">Approximate number of lines of code: 20.</font>
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ol>
+  <li>You cannot include any header files. (You don't need them.)</li>
+  <p>
+  <li>You are returning a pointer to a character (i.e. a NUL-terminated string; an array of characters).
+   However, where is this array allocated? You've got a choice to make:</li>
+   <p>
+    <ol type=A>
+      <li>It's a local array in the <tt>commatize</tt> function. However, bad things are going 
+        to happen to the array when the function returns. In fact, the compiler will
+   issue a warning if you return a pointer to an element of an array in the function:
+<blockquote><pre>
+error: function returns address of local variable [-Werror=return-local-addr]  
+</pre></blockquote> 
+<p>
+</li>
+    <li>You can require the user to pass in an array and then put the commatized string into
+      that. Sometimes that's not a bad idea, but it requires the user to make sure that the
+      array is large enough. Not a big deal, but let's think of something better.</li>
+      <p>
+    <li>You can dynamically allocate the array in the function and return a pointer to that.
+      However, now you have to hope that the user is going to remember to free the array.
+      Bad Idea&trade;. Just take a look at the driver. The user is calling it dozens of times
+      and never frees anything. (The user isn't aware of needing to do that.)
+    </li>
+    <p>
+    <li><b>Our solution:</b> Mark the array with the <b><tt>static</tt></b> keyword. 
+      Here's a partial <tt>commatize.c</tt> file that demonstrates:
+<blockquote><pre>
+<font color="#003399"><i>/* This is the largest commatized string for a long int */</i></font>  
+<font color="990099">#define MAXLEN 27</font>
+
+<b>char</b> *commatize(<b>long long</b> number)
+{
+  <b>static</b> <b>char</b> buffer[MAXLEN]; 
+
+  <font color="#003399"><i>/* Put the rest of the function here */</i></font>
+
+}
+</blockquote>
+
+This array will out-live the function itself. It is actually not stored on the stack, but in 
+another area of memory that will still exist when this function returns. Not only does it live 
+outside of the function, but it retains its value between function calls! Yes, each time you 
+call the function, the previous values of this array are preserved. 
+<p>
+Static variables inside 
+functions are automatically initialized to 0 when your program is first loaded into memory. Any
+other values you assign will persist between function calls. This is why it is safe to return a 
+pointer to this memory as it does exist outside of the function. 
+<p>
+One caveat of this technique is that, if you are going to call the function multiple times, you
+must either use (e.g. print out) the string immediately, or copy it into another buffer. This is
+because each call of the function will overwrite the previous values. There is only one copy of
+the array, afterall. 
+<p>
+Finally, realize that this use of the <b><tt>static</tt></b> keyword is unrelated to the use
+when used <i>outside</i> of functions. Also, it is unrelated to the word <i>static</i> that 
+we use to distinquish between a dynamically (programmer) allocated array and a static
+(compiler) allocated array. Yeah, the static word has been overloaded too much and is confusing.
+(C++ has better ways of doing similar things.)
+<p>
+See Section 10.1 and 18.2 in the textbook for more information.
+
+</ol>
+<li>There are several ways to convert the long integer to a string with commas. 
+  Here is one way that works very well: Build the string
+  in reverse. For example, if you were to <i>commatize</i> the number 12345, you would build
+  the string like this in 5 steps:
+<blockquote>
+<ol>
+  <li><tt>5</tt></li>
+  <li><tt>45</tt></li>
+  <li><tt>345</tt></li>
+  <li><tt>2,345</tt></li>
+  <li><tt>12,345</tt></li>
+</ol>
+</blockquote>
+You would then return a pointer to the leading <tt>1</tt>. Assuming that the size of the array is
+27 (as described above), the original array looks like this (using X to mark NUL characters):
+<big><blockquote><pre>
+XXXXXXXXXXXXXXXXXXXXXXXXXXX
+                          ^
+</big></pre></blockquote>
+The caret (<tt>^</tt>) is a "pointer" to the current location in the buffer, and you point at the
+last character, which will always be a NUL character. (It must be for this to be a NUL-terminated
+string).
+<p>
+
+The array would change 5 times (according to the example above):
+<big><blockquote><pre>
+XXXXXXXXXXXXXXXXXXXXXXXXX5X
+                         ^
+XXXXXXXXXXXXXXXXXXXXXXXX45X
+                        ^
+XXXXXXXXXXXXXXXXXXXXXXX345X
+                       ^
+XXXXXXXXXXXXXXXXXXXXX2,345X
+                     ^
+XXXXXXXXXXXXXXXXXXXX12,345X
+                    ^
+</big></pre></blockquote>
+Each time you place
+another character (digit or comma) in the buffer, you decrement the pointer first, and then place
+the character (digit or comma) where the pointer is pointing. When the loop is done (you do need
+a loop, preferably a <tt><b>while</b></tt> loop), you simply return the pointer to the user, as
+it is pointing at the beginning of the string. <i>"Easy, peasy, lemon squeezy."</i>
+</li>
+<p>
+The only real challenge left is getting the logic correct for where/when to put a comma in the string.
+I'm sure if you look closely at it, you'll figure out the pattern for when the comma is written.
+</ol>
+
+<p>
+<p class="Extra">For students that would like an additional challenge: (Do not submit this.) </p>
+<ol>
+  <li>Allow the function to accept a delimiter other than a comma. For example, some other 
+    locales use a period or a space. Examples:
+<blockquote><pre>
+1,234,567,890
+1.234.567.890
+1 234 567 890
+</pre></blockquote>
+
+
+  </li>
+  <li>Allow the function to specify how many digits in each group (e.g. 2, 3, 4, etc.) Look
+    <a href="https://en.wikipedia.org/wiki/Decimal_mark">here</a> to see how crazy this can get!  
+    Yes, it's non-trivial to support all customs and be glad that you don't have to!</li>
+</ol>
+
+
+
+
+
+    <p>
+</ol>
+
+<p>
+  <hr width="100%">
+<p>
+<br><br><br><br>
+
+
+
+</body>
+</html>
+<b><tt></tt></b>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<b><tt></tt></b>

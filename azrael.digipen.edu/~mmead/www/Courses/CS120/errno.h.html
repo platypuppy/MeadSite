@@ -1,0 +1,133 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Input/Output Functions in C</title>
+</head>
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/***
+*errno.h - system wide error numbers (set by system calls)
+*
+*       Copyright (c) 1985-1997, Microsoft Corporation. All rights reserved.
+*
+*Purpose:
+*       This file #defines the system-wide error numbers (set by
+*       system calls).  Conforms to the XENIX standard.  Extended
+*       for compatibility with Uniforum standard.
+*       [System V]
+*
+*       [Public]
+*
+****/</i></font>
+
+<b>#if</b>     _MSC_VER &gt; 1000
+<b>#pragma</b> once
+<b>#endif</b>
+
+<b>#ifndef</b> _INC_ERRNO
+<b>#define</b> _INC_ERRNO
+
+<b>#if</b>     !#defined(_WIN32) &amp;&amp; !#defined(_MAC)
+<b>#error</b> ERROR: Only Mac or Win32 targets supported!
+<b>#endif</b>
+
+
+<b>#ifdef</b>  __cplusplus
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> {
+<b>#endif</b>
+
+
+
+<font color="#003399"><i>/* Define _CRTIMP */</i></font>
+
+<b>#ifndef</b> _CRTIMP
+<b>#ifdef</b>  _DLL
+<b>#define</b> _CRTIMP <b>__declspec</b>(dllimport)
+<b>#else</b>   <font color="#003399"><i>/* ndef _DLL */</i></font>
+<b>#define</b> _CRTIMP
+<b>#endif</b>  <font color="#003399"><i>/* _DLL */</i></font>
+<b>#endif</b>  <font color="#003399"><i>/* _CRTIMP */</i></font>
+
+
+<font color="#003399"><i>/* Define __cdecl for non-Microsoft compilers */</i></font>
+
+<b>#if</b>     ( !#defined(_MSC_VER) &amp;&amp; !#defined(<b>__cdecl</b>) )
+<b>#define</b> <b>__cdecl</b>
+<b>#endif</b>
+
+<font color="#003399"><i>/* Define _CRTAPI1 (for compatibility with the NT SDK) */</i></font>
+
+<b>#ifndef</b> _CRTAPI1
+<b>#if</b>	_MSC_VER &gt;= 800 &amp;&amp; _M_IX86 &gt;= 300
+<b>#define</b> _CRTAPI1 <b>__cdecl</b>
+<b>#else</b>
+<b>#define</b> _CRTAPI1
+<b>#endif</b>
+<b>#endif</b>
+
+
+<font color="#003399"><i>/* declare reference to errno */</i></font>
+
+<b>#if</b>     (#defined(_MT) || #defined(_DLL)) &amp;&amp; !#defined(_MAC)
+_CRTIMP <b>extern</b> <b>int</b> * <b>__cdecl</b> _errno(<b>void</b>);
+<b>#define</b> errno   (*_errno())
+<b>#else</b>   <font color="#003399"><i>/* ndef _MT &amp;&amp; ndef _DLL */</i></font>
+_CRTIMP <b>extern</b> <b>int</b> errno;
+<b>#endif</b>  <font color="#003399"><i>/* _MT || _DLL */</i></font>
+
+<font color="#003399"><i>/* Error Codes */</i></font>
+
+<b>#define</b> EPERM           1
+<b>#define</b> ENOENT          2
+<b>#define</b> ESRCH           3
+<b>#define</b> EINTR           4
+<b>#define</b> EIO             5
+<b>#define</b> ENXIO           6
+<b>#define</b> E2BIG           7
+<b>#define</b> ENOEXEC         8
+<b>#define</b> EBADF           9
+<b>#define</b> ECHILD          10
+<b>#define</b> EAGAIN          11
+<b>#define</b> ENOMEM          12
+<b>#define</b> EACCES          13
+<b>#define</b> EFAULT          14
+<b>#define</b> EBUSY           16
+<b>#define</b> EEXIST          17
+<b>#define</b> EXDEV           18
+<b>#define</b> ENODEV          19
+<b>#define</b> ENOTDIR         20
+<b>#define</b> EISDIR          21
+<b>#define</b> EINVAL          22
+<b>#define</b> ENFILE          23
+<b>#define</b> EMFILE          24
+<b>#define</b> ENOTTY          25
+<b>#define</b> EFBIG           27
+<b>#define</b> ENOSPC          28
+<b>#define</b> ESPIPE          29
+<b>#define</b> EROFS           30
+<b>#define</b> EMLINK          31
+<b>#define</b> EPIPE           32
+<b>#define</b> EDOM            33
+<b>#define</b> ERANGE          34
+<b>#define</b> EDEADLK         36
+<b>#define</b> ENAMETOOLONG    38
+<b>#define</b> ENOLCK          39
+<b>#define</b> ENOSYS          40
+<b>#define</b> ENOTEMPTY       41
+<b>#define</b> EILSEQ          42
+
+<font color="#003399"><i>/*
+ * Support EDEADLOCK for compatibiity with older MS-C versions.
+ */</i></font>
+<b>#define</b> EDEADLOCK       EDEADLK
+
+<b>#ifdef</b>  __cplusplus
+}
+<b>#endif</b>
+
+<b>#endif</b>  <font color="#003399"><i>/* _INC_ERRNO */</i></font>
+
+</code></pre>
+
+</body></html>

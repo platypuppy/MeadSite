@@ -1,0 +1,152 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c</title>
+
+</head>
+<body>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<tt><b>main.c</b></tt>:
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf         */</font>
+<font color="990099">#include &lt;string.h&gt; /* strcat, strcpy */</font>
+<font color="990099">#include &lt;dlfcn.h&gt;  /* dl stuff       */</font>
+<font color="990099">#include &lt;stdint.h&gt; /* intptr_t       */</font>
+
+<font color="#003399"><i>/* conveniences for casting */</i></font>
+<b>typedef</b> <b>void</b> (*PRINTME)(<b>const</b> <b>char</b> *);
+<b>typedef</b> <b>int</b> (*ADD)(<b>int</b>, <b>int</b>);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *soname = <font color="#9933CC">&quot;hello&quot;</font>;   <font color="#003399"><i>/* base name of a .dll or .so */</i></font>
+  <b>const</b> <b>char</b> *fname1 = <font color="#9933CC">&quot;printme&quot;</font>; <font color="#003399"><i>/* function to call (text)    */</i></font>
+  <b>const</b> <b>char</b> *fname2 = <font color="#9933CC">&quot;add&quot;</font>;     <font color="#003399"><i>/* function to call (text)    */</i></font>
+
+  PRINTME printme; <font color="#003399"><i>/* void printme(const char *) */</i></font>
+  ADD add;         <font color="#003399"><i>/* int add(int, int)          */</i></font>
+  <b>void</b> *lib;       <font color="#003399"><i>/* library handle            */</i></font>
+  <b>char</b> *error;     <font color="#003399"><i>/* dl functions may fail     */</i></font>
+  <b>int</b> result;      <font color="#003399"><i>/* result of the addition    */</i></font>
+
+  <b>char</b> buffer[100]; <font color="#003399"><i>/* used to build the filename */</i></font>
+
+    <font color="#003399"><i>/* decorate the filename: hello ==&gt; ./libhello.so */</i></font>
+  strcpy(buffer, <font color="#9933CC">&quot;./lib&quot;</font>);
+  strcat(buffer, soname);
+  strcat(buffer, <font color="#9933CC">&quot;.so&quot;</font>);
+
+    <font color="#003399"><i>/* load the shared library */</i></font>
+  lib = <a href="http://linux.die.net/man/3/dlopen">dlopen</a>(buffer, RTLD_LAZY);
+  error = dlerror();
+  <b>if</b> (error)
+  {
+    printf(<font color="#9933CC">&quot;Error: %s\n&quot;</font>, error);
+    <b>return</b> 1;
+  }
+
+    <font color="#003399"><i>/* get add funtion and call it */</i></font>
+  add = (ADD)(intptr_t)dlsym(lib, fname2);
+  error = dlerror();
+  <b>if</b> (error)
+    printf(<font color="#9933CC">&quot;Error: %s\n&quot;</font>, error);
+  <b>else</b>
+  {
+    result = add(10, 20);
+    printf(<font color="#9933CC">&quot;The sum is: %i\n&quot;</font>, result);
+  }
+
+    <font color="#003399"><i>/* get printme function and call it */</i></font>
+  printme = (PRINTME)(intptr_t)dlsym(lib, fname1);
+  error = dlerror();
+  <b>if</b> (error)
+    printf(<font color="#9933CC">&quot;Error: %s\n&quot;</font>, error);
+  <b>else</b>
+    printme(<font color="#9933CC">&quot;Print this!&quot;</font>);
+
+    <font color="#003399"><i>/* library no longer needed */</i></font>
+  dlclose(lib);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Output:
+<blockquote><pre>
+The sum is: 30
+Hello from library: Print this!
+</pre></blockquote>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

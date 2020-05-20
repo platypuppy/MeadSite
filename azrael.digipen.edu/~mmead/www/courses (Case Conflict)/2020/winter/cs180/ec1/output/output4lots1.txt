@@ -1,0 +1,31 @@
+#m=======================================================
+
+cc=++
+cflags=/w/w///w
+exe="
+outdir=/
+objs=@[outdir]"@[outdir]"@[outdir]"
+erase=
+
+#targets======================================================
+
+@[outdir]@[exe];@[objs]
+	@[cc]@[objs]/@[outdir]@[exe]
+
+@[outdir]";"""
+	@[cc]@[cflags]/"/"
+
+@[outdir]";""
+	@[cc]@[cflags]/"/"
+
+@[outdir]";"
+	@[cc]@[cflags]/"/"
+
+;
+	@[erase]@[objs]@[outdir]@[exe]
+
+;
+	@[make]
+	@[make]
+
+

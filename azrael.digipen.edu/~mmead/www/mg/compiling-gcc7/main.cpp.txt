@@ -1,0 +1,111 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <typeinfo>
+
+enum class TrafficLight : char { Red, Yellow, Green};
+enum class ColorSpace;
+
+enum class ColorSpace { Red, Green, Blue};
+
+TrafficLight tl = TrafficLight::Red;
+ColorSpace cs = ColorSpace::Red;
+
+class Foo
+{
+  public:
+    int a = 5;
+    char *p = nullptr;
+    std::string s = std::string("Hello");
+    int Func(void) noexcept {return 42;};
+};
+
+// C++11
+constexpr int square(int x)
+{
+  return x * x;
+}
+
+// C++14  N3652 non-trivial constexpr function
+constexpr int cube(int x)
+{
+  auto i = x;
+  i *= i;
+  i *= i;
+  return i;
+}
+
+// C++14 N3638
+auto foobar(int x)
+{
+  if (x % 2)
+    return x * 3;
+  else
+    return x * 2;
+}
+
+template<class T> using Vec = std::vector<T>;
+
+int main()
+{
+  std::cout << "\n\nNow testing some C++11/14 features...\n\n";
+  std::cout << "In function: " << __func__ << std::endl;
+
+  Vec<long long> v {1LL, 2LL, 3LL, 4LL, 5LL};
+  for (auto i : v)
+    std::cout << i << " ";
+  std::cout << std::endl;
+
+  int array[square(3)] {1, 2, 3};
+  for (auto &i : array)
+    i *= 2;
+  for (auto i : array)
+    std::cout << i << " ";
+  std::cout << std::endl << std::endl;
+
+    // C++14 stuff
+  auto one_billion = 1'000'000'000; // N3781
+  auto bin_nine = 0b00001001;       // N3472
+  
+  std::cout << one_billion << std::endl;
+  std::cout << bin_nine << std::endl;
+  
+  auto x = foobar(10);
+  std::cout << "x = foobar(10), x = " << x << std::endl;
+  std::cout << "type of x is " << typeid(x).name() << std::endl;
+
+    // N3652
+  int array2[cube(2)] {1, 2, 3};
+  for (auto &i : array2)
+    i *= 3;
+  for (auto i : array2)
+    std::cout << i << " ";
+  std::cout << std::endl << std::endl;
+  
+    // C++ 14 N3653 example adapted from 
+    // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3653.html
+  struct S { int a; const char* b; int c; int d = b[a]; };
+  S ss = { 1, "ABCD" };
+  std::cout << "ss.a = " << ss.a << ", ss.b = " << ss.b << ", ss.c = ";
+  std::cout << ss.c << ", ss.d = " << ss.d << std::endl;
+
+    // N3648 
+  auto lam = [b = bin_nine]{std::cout << b << std::endl;};
+  lam();  
+
+  std::cout << "\n\n";
+  
+  std::cout << "****************************************************************\n";
+  auto l = []{std::cout << "* If you see this text, your build and install was successful! *\n"; };
+  l(); l(); l();
+  std::cout << "****************************************************************\n";
+
+  std::cout << std::endl;
+  std::cout << "To use the new version, add this to your $PATH:\n\n";
+  std::cout << "  /usr/local/gcc-7.1/bin\n\n";
+  std::cout << "You should probably do this in your ~/.bashrc or ~/.bash_profile file.\n\n";
+
+  return 0;
+}
+
+

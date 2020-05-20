@@ -1,0 +1,138 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>athena fdisk -l</title>
+</head>
+
+<body>  
+
+<pre>
+smartctl 5.41 2011-06-09 r3365 [x86_64-linux-3.2.0-23-generic] (local build)
+Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net
+
+Usage: smartctl [options] device
+
+============================================ SHOW INFORMATION OPTIONS =====
+
+  -h, --help, --usage
+         Display this help and exit
+
+  -V, --version, --copyright, --license
+         Print license, copyright, and version information and exit
+
+  -i, --info                                                       
+         Show identity information for device
+
+  -a, --all                                                        
+         Show all SMART information for device
+
+  -x, --xall
+         Show all information for device
+
+  --scan
+         Scan for devices
+
+  --scan-open
+         Scan for devices and try to open each device
+
+================================== SMARTCTL RUN-TIME BEHAVIOR OPTIONS =====
+
+  -q TYPE, --quietmode=TYPE                                           (ATA)
+         Set smartctl quiet mode to one of: errorsonly, silent, noserial
+
+  -d TYPE, --device=TYPE
+         Specify device type to one of: ata, scsi, sat[,N][+TYPE], usbcypress[,X], usbjmicron[,x][,N], usbsunplus, marvell, areca,N, 3ware,N, hpt,L/M/N, megaraid,N, cciss,N, auto, test
+
+  -T TYPE, --tolerance=TYPE                                           (ATA)
+         Tolerance: normal, conservative, permissive, verypermissive
+
+  -b TYPE, --badsum=TYPE                                              (ATA)
+         Set action on bad checksum to one of: warn, exit, ignore
+
+  -r TYPE, --report=TYPE
+         Report transactions (see man page)
+
+  -n MODE, --nocheck=MODE                                             (ATA)
+         No check if: never, sleep, standby, idle (see man page)
+
+============================== DEVICE FEATURE ENABLE/DISABLE COMMANDS =====
+
+  -s VALUE, --smart=VALUE
+        Enable/disable SMART on device (on/off)
+
+  -o VALUE, --offlineauto=VALUE                                       (ATA)
+        Enable/disable automatic offline testing on device (on/off)
+
+  -S VALUE, --saveauto=VALUE                                          (ATA)
+        Enable/disable Attribute autosave on device (on/off)
+
+======================================= READ AND DISPLAY DATA OPTIONS =====
+
+  -H, --health
+        Show device SMART health status
+
+  -c, --capabilities                                                  (ATA)
+        Show device SMART capabilities
+
+  -A, --attributes
+        Show device SMART vendor-specific Attributes and values
+
+  -f FORMAT, --format=FORMAT                                          (ATA)
+        Set output format for attributes to one of: old, brief
+
+  -l TYPE, --log=TYPE
+        Show device log. TYPE: error, selftest, selective, directory[,g|s],
+                               background, sasphy[,reset], sataphy[,reset],
+                               scttemp[sts,hist], scterc[,N,M],
+                               gplog,N[,RANGE], smartlog,N[,RANGE],
+                               xerror[,N][,error], xselftest[,N][,selftest]
+
+  -v N,OPTION , --vendorattribute=N,OPTION                            (ATA)
+        Set display OPTION for vendor Attribute N (see man page)
+
+  -F TYPE, --firmwarebug=TYPE                                         (ATA)
+        Use firmware bug workaround: none, samsung, samsung2,
+                                     samsung3, swapid
+
+  -P TYPE, --presets=TYPE                                             (ATA)
+        Drive-specific presets: use, ignore, show, showall
+
+  -B [+]FILE, --drivedb=[+]FILE                                       (ATA)
+        Read and replace [add] drive database from FILE
+        [default is +/etc/smart_drivedb.h
+         and then    /usr/share/smartmontools/drivedb.h]
+
+============================================ DEVICE SELF-TEST OPTIONS =====
+
+  -t TEST, --test=TEST
+        Run test. TEST: offline short long conveyance vendor,N select,M-N
+                        pending,N afterselect,[on|off] scttempint,N[,p]
+
+  -C, --captive
+        Do test in captive mode (along with -t)
+
+  -X, --abort
+        Abort any non-captive test on device
+
+=================================================== SMARTCTL EXAMPLES =====
+
+  smartctl --all /dev/hda                    (Prints all SMART information)
+
+  smartctl --smart=on --offlineauto=on --saveauto=on /dev/hda
+                                              (Enables SMART on first disk)
+
+  smartctl --test=long /dev/hda          (Executes extended disk self-test)
+
+  smartctl --attributes --log=selftest --quietmode=errorsonly /dev/hda
+                                      (Prints Self-Test & Attribute errors)
+  smartctl --all --device=3ware,2 /dev/sda
+  smartctl --all --device=3ware,2 /dev/twe0
+  smartctl --all --device=3ware,2 /dev/twa0
+  smartctl --all --device=3ware,2 /dev/twl0
+          (Prints all SMART info for 3rd ATA disk on 3ware RAID controller)
+  smartctl --all --device=hpt,1/1/3 /dev/sda
+          (Prints all SMART info for the SATA disk attached to the 3rd PMPort
+           of the 1st channel on the 1st HighPoint RAID controller)
+  smartctl --all --device=areca,3 /dev/sg2
+          (Prints all SMART info for 3rd ATA disk on Areca RAID controller)
+</pre>

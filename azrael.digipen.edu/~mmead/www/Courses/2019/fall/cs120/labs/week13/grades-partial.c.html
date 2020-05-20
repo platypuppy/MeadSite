@@ -1,0 +1,75 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>grades-partial.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* fopen, fgets, fclose */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi                 */</font>
+<font color="990099">#include &lt;string.h&gt; /* strstr, strchr       */</font>
+
+<font color="#003399"><i>/* Change these for each course */</i></font>
+<font color="990099">#define LAB_WEIGHT      .15</font>
+<font color="990099">#define HOMEWORK_WEIGHT .20</font>
+<font color="990099">#define MIDTERM_WEIGHT  .20</font>
+<font color="990099">#define FINAL_WEIGHT    .45</font>
+<font color="990099">#define MAX_LABS        15</font>
+<font color="990099">#define MAX_PHW         15</font>
+
+<font color="#003399"><i>/* This will help you keep track of each lab, assignment, etc.  */</i></font>
+<font color="#003399"><i>/* You should make an array of these for labs and assignments.  */</i></font>
+<b>struct</b> GRADE
+{
+  <b>int</b> score;
+  <b>int</b> max;
+};
+
+<font color="#003399"><i>/* 
+ * Since all helper functions will need access to this data, I'm
+ * going to make them available. You don't have to do it this way,
+ * it's just a suggestion. If you'd rather pass all of the data
+ * to all of the functions, you can. But, if you use these you
+ * CANNOT remove the <b>static</b> keywords. If you don't use them, you
+ * can just remove all of them from this file.
+ */</i></font>
+<b>static</b> <b>struct</b> GRADE labz[MAX_LABS];    <font color="#003399"><i>/* Handle up to MAX_LABS */</i></font>
+<b>static</b> <b>struct</b> GRADE homework[MAX_PHW]; <font color="#003399"><i>/* Handle up to MAX_PHW  */</i></font>
+<b>static</b> <b>struct</b> GRADE midterm;
+<b>static</b> <b>struct</b> GRADE final;
+
+<b>static</b> <b>struct</b> GRADE lab_totals;
+<b>static</b> <b>struct</b> GRADE homework_totals;
+
+<b>static</b> <b>int</b> num_labs;
+<b>static</b> <b>int</b> num_homeworks;
+
+<font color="#003399"><i>/* Helper functions here */</i></font>
+
+
+<b>struct</b> GRADE parse_line(<b>const</b> <b>char</b> *line)
+{
+  <b>struct</b> GRADE grade;
+
+  <font color="#003399"><i>/* More code here */</i></font>
+
+  <b>return</b> grade;
+}
+
+<b>double</b> calculate_grade(<b>const</b> <b>char</b> *filename)
+{
+  <b>double</b> total = 0.0;
+
+  <font color="#003399"><i>/* More code here */</i></font>
+
+  <b>return</b> total;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

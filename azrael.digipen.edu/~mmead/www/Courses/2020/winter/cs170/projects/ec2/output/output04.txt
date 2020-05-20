@@ -1,0 +1,15 @@
+-----------------------------------------------
+TestPushTopPop...
+Items in the stack: 10
+Pop: 10 (size: 10) 9 8 7 6 5 4 3 2 1 
+Pop:  9 (size:  9) 8 7 6 5 4 3 2 1 
+Pop:  8 (size:  8) 7 6 5 4 3 2 1 
+Pop:  7 (size:  7) 6 5 4 3 2 1 
+Pop:  6 (size:  6) 5 4 3 2 1 
+Pop:  5 (size:  5) 4 3 2 1 
+Pop:  4 (size:  4) 3 2 1 
+Pop:  3 (size:  3) 2 1 
+Pop:  2 (size:  2) 1 
+Pop:  1 (size:  1) 
+Items in the stack: 0
+

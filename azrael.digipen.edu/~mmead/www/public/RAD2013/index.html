@@ -1,0 +1,715 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Summer RAD Sessions 2013</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Summer RAD Sessions</h1>
+<h3>(May - June 2013)</h3>
+Designing and Building Graphical User Interfaces for Tools Development and Other Projects
+</center>
+
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Background Information
+</p>
+
+<!--
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td xwidth="20%">
+<a href="https://faculty.digipen.edu/~mmead/www/public/Files/BCB-Journals.zip">BCB&nbsp;Journal&nbsp;1997-2010</a>
+</td>
+<td>
+ It's about 170 MB. Includes
+	the magazine (.pdf or web pages) and source code to all articles. I don't want to leave this "public" for too long. 
+	 If you are interested in these and don't	download them from here, you'll have to visit the website and download 
+	 each individual issue. (That's more than 300	separate file downloads.)
+</td>
+</tr></table>
+<hr width="90%">
+-->
+
+<p>
+
+Just as no one would think of creating a modern, sophisticated game without the appropriate software development 
+kits (SDK) for sound, graphics, input, physics, etc., most experienced software professionals tend to use development 
+tools to create sophisticated desktop applications. It doesn't make any sense to waste time creating a framework 
+for user interface components because several ready-to-use frameworks already exist for numerous languages and 
+environments. 
+<p>
+For C++ on the Windows platform, the state-of-the-art in user interface development comes from a 
+company called <a href="http://www.embarcadero.com/">Embarcadero</a> (originally CodeGear, which was part of Borland) and the tool is called RAD Studio. (RAD is an acronym for <font color="blue"><b>R</b></font>apid 
+<font color="blue"><b>A</b></font>pplication <font color="blue"><b>D</b></font>evelopment.) RAD Studio primarily supports two programming languages: C++ and Delphi. (Delphi is a powerful 
+object-oriented Pascal language that rivals C++ and C# in its power and ease of use.) Fortunately, there is a free version of the tool, albeit, a little bit old now called Turbo C++.
+It has most of the functionality of the professional tool, but is a few years older now, so it doesn't support some things 
+(e.g. Windows 7 themes, touch interfaces) as easily as the commercial version. The latest version now can be used to easily develop
+for Windows, Mac OS X, and iOS (iPhone apps), and soon, Linux and Android.
+<p>
+The free Turbo versions of RAD Studio only support a single language. The C++ version is called Turbo C++. 
+For the most part, the free version is very similar to the commercial version and includes a full-blown, 
+modern and powerful IDE. There are only very slight limitations with the free version of the IDE.
+<p>
+The subset of RAD Studio supporting C++ is called C++ Builder. Read about it at
+<a href="http://en.wikipedia.org/wiki/C%2B%2BBuilder">C++ Builder on Wikipedia</a>.
+
+<p>
+<hr width="90%">
+<p>  
+
+<table border=0 cellpadding=5 cellspacing=5 valign="top">
+<tr valign="top">
+<td width="80">
+<li><b>Who</b>
+</td>
+<td>
+Prof. Mead will be giving the talks to interested students. The pre-requisites for this class are:
+<ol>
+  <li>CS 180, CS 225 and CS 280 as there's lots of inheritance in the framework and I want serious students with a good amount of 
+  	programming skills (and I'm not going to explain these concepts during the class). There's also some
+  	inter-process communication and threading.
+  <li>The ability to meet twice a week for about 90 minutes (this is somewhat flexible)
+  <li>The desire to learn to design user interfaces and to develop professional looking GUI applications. 
+  	(This is a must, as I'm only doing this for students that are interested and, as always,
+  	I will put my own time into it for my students.)
+</ol>
+</td>
+</tr>
+<tr valign="top">
+<td>  
+<li><b>What</b>
+</td>
+<td>
+I will be presenting a series of demonstrations on building GUI applications in Windows using 
+<a href="http://www.turboexplorer.com/cpp">Turbo C++ Explorer</a>, a <b>R</b>apid <b>A</b>pplication
+<b>D</b>evelopment tool from <a href="http://www.embarcadero.com/">Embarcadero</a>. (Embarcadero bought CodeGear which was the developer tools division of Borland Software.)
+Turbo C++ is a lighter version of Embarcadero's flagship <a href="http://www.Embarcadero.com/products/rad-studio">RAD Studio</a>. RAD Studio contains support for
+three programming languages: C++, Delphi, and Delphi.NET. (It used to support C#, as well.) 
+<p class="technote">
+Digipen has an older version of RAD Studio (2010, but newer than Turbo C++) installed on the computers in Einstein, I believe. Almost everything that I will
+cover can be done with pretty much any version. So if those are all you have access to, you should be fine. Turbo C++ is installed on all Digipen computers.
+</p>
+</td>
+</tr>
+<tr valign="top">
+<td>
+<li><b>When</b>
+</td>
+<td>
+Mondays at 1:45 pm, Wednesdays at 2:00 pm. The session will last about 90 minutes and will go (tentatively) from 
+Monday, May 13 through Wednesday, June 19. 
+</td>
+</tr>
+<tr valign="top">
+<td>
+<li><b>Where</b>
+</td>
+<td>
+Einstein
+</td>
+</tr>
+<tr valign="top">
+<td>
+<li><b>Why</b>
+</td>
+<td>
+Why not? Actually, there are many reasons but the common reason that students want to learn this tool is because it will
+allow them to quickly develop powerful and professional GUI tools for their projects. I used to give a small, 2 hour session
+on a similar tool several years ago. You can read about that session's purpose <a href="../../BorlandCBuilder.html">here</a>. Keep
+in mind that a lot of the information in that post is outdated. However, the theory behind the session is still pretty relevant
+to the lecture series I'm proposing this summer. 
+</td>
+</tr>
+</table>
+
+<!--
+<p>
+<hr width="90%">
+<p>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FILES">
+<p class="SectionHeader">
+Files and References
+</p>
+</a>
+
+You most likely won't be able to download the files you need to install Turbo C++ as they no longer distribute it. However, you can download a local copy here:
+	<ol>
+		<li><a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/Turbo2006.iso">Turbo C++ 2006</a>. 
+			This is a CD image (about 650 MB) that should contain everything	you need. (MD5: <tt>a13fd595f7367e22d05be3e8bcf9b58c</tt>)
+	
+	<p>		
+	You'll need a free key to use to IDE. 
+	(If you are just using the command line compiler, you don't need a key.)
+	You won't be able to get one online, so use this one: <a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/reg740.txt">reg740.txt</a>. 
+	Follow the directions in that file. 
+  	
+	<!--
+  <li><a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/prereqs.zip">Pre-requisites</a> You may need to install
+    these files first. (~240 MB)
+  <li><a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/TurboC++_EN.exe">IDE Installer</a> This will install the
+    development environment. (~400 MB)
+   -->
+<p>
+If you think you want to just go straight to the latest version, you can get a 30-day 
+<a href="https://downloads.embarcadero.com/free/rad_studio">free trial of RAD Studio XE 4</a> from their webiste. Be warned, though, that once you
+experience a <b><i>true Visual C++ rapid application development tool</i></b>, you'll never be able to use anything else!
+
+
+<blockquote>
+<p class="technote">
+It doesn't really matter too much which version you use as long as you use one of them. Like all software implementation (read: programming) classes, you're
+only really going to understand the details if you actually practice. You are more than welcome to just sit in the sessions and watch along, but, if 
+you really want to learn how to develop applications, you will need to work with all of the examples that I post. (And there will be many.)
+</blockquote>
+
+<li><a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/Introduction-to-cppbuilder-whitepaper.pdf">
+An Introduction to Embarcadero&reg; C++Builder&reg; 2010</a>
+	This PDF is a pretty good overview of what the tool is all about. It's a little old, but still very relevant. (About 100 pages, 7 MB)
+	<p>
+
+<li><a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/C++Builder2009_GetStart.pdf">Getting Started with C++ Builder 2009</a> From an older version, 
+	but still has lots of relevant information. Gives a nice tour of the IDE and <i>shouldn't</i> be too different from the newer versions.
+	(72 pages, 7 MB)
+<p>
+<li><a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/CPB2010.pdf">C++ Builder 2010 Professional Getting Started</a>
+	This might contain some intesting examples. (83 pages, 2 MB)
+	
+
+</ol>
+
+<p>
+<hr width="90%">
+<p>
+
+These documents are provided with Turbo C++:
+<p>
+<table cellspacing=10>
+<tr valign="top">
+<td width="200" align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/Help.pdf">Help Guide</a>
+</td>
+<td>
+This document contains information on building applications in C++, C#, and Delphi and can be found on your 
+computer in the <b>Help</b> folder in the installation directory. (2,439 pages)
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/Reference.pdf">Reference Guide</a>
+</td>
+<td>
+This document is mainly a language reference for C++ and Delphi. You may be interested in the C++ extensions that support
+the Turbo RAD environment. This can be found on your computer in the <b>Help</b> folder in the installation directory. (899 pages)
+</td>
+</tr>
+
+</tr></table>
+<p>
+
+These PDF documents will give you a good background on using the tool. They were written for an older version of the IDE
+called <i>Borland C++ Builder 6</i>. Most of the information is relevant to the new Turbo C++ tool. However, some of the
+screen shots will look different, since the new IDE has changed somewhat from the older one.
+<p>
+<table cellspacing=10  valign="top">
+<tr valign="top">
+<td width="200" align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/BCB-QuickStart.pdf">Quick Start</a>
+</td>
+<td>
+Like the title says, this is the place to start. Even though it's for an older version, 
+it is still a good introduction. (100 pages)
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/BCB-DevelopersGuide.pdf">Developer's Guide #1</a>
+</td>
+<td>
+This guide is the official developer's guide that was distributed from Borland. (1,284 pages)
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/C++Builder6_SampleFiles.pdf">Developer's Guide #2</a>
+</td>
+<td>
+This document contains two chapters from a book called <i>"C++ Builder 6 Developer's Guide"</i>. Both chapters
+are about the Visual Component Library (VCL), so they are still relevant today. (117 pages)
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/ObjectPascalLanguageGuide.pdf">Object Pascal Reference</a>
+</td>
+<td>
+This book was also distributed with the original software. It's basically a description of the Object Pascal language. 
+May come in useful for some people. (256 pages)
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/borland_c_plus_plus_in_14days.pdf">Teach Yourself Borland C++Builder in 14 Days</a>
+</td>
+<td>
+This is another older book, but much of it is still relevant today. The screen shots may be from an
+earlier version of the IDE, but the content about components is probably still accurate.
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="../Files/BCB6VCLposter.pdf">BCB VCL Poster</a>
+</td>
+<td>
+This is the poster of the hierarchy of the VCL. Again, it's from an older version, but it gives
+you a good idea of how rich the library is. (This is actually from about 7 years ago.)
+</td>
+</tr>
+
+<tr valign="top">
+<td align="right">
+<a href="https://faculty.digipen.edu/~mmead/www/public/Files/cbuilder-1997-2013.zip">C++ Builder Website</a></td>
+<td>
+ Back issues from 1997 to 2013. 
+</td>
+</tr>
+
+<!--
+file:///home/mmead/data/Courses/Notes/RAD/BCB-Journals/
+-->
+
+</table>
+<p>
+	
+
+
+<a href="http://delphi.wikia.com/wiki/Delphi_Videos">Nick Hodge's Demos</a> He used to be a product manager at Codegear and
+has made 30 (Flash) videos demonstrating how to use the Turbo development tools. (He's also the guy who 
+helped me get Digipen the unlimited license key for the software.) 
+Most of the videos discuss the Delphi programming
+language, and you may or may not be interested in those. A good one to watch first is the 
+<a href="http://blogs.embarcadero.com/nickhodges/2006/08/15/26688">Intro to the IDE</a> 
+	This gives an overview of the major parts of the IDE. There are also a few videos that demonstrate how to create a text editor.
+	(It's very similar to the demonstration I gave.) One thing to note about these videos is that Nick is using Turbo Delphi. The IDE
+	is identical to Turbo C++, but the language is different. You should still be able to follow the presentations without much
+	difficulty.
+<p>
+
+There used to be a great site called BCBDEV.com, which closed down a few years ago. However, the entire website (mostly code examples and FAQs) can 
+be downloaded <a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/bcbDevFaqs.zip">from this zip file</a>.  (There's an archive <a href="http://web.archive.org/web/20040201231408/http://bcbdev.com/faqs.htm">here</a>)
+It's a good thing to have and to browse through. There are topics and links on
+using <a href="../Files/borland_and_microsoft_dll.pdf">Visual C++ DLLs</a> with Borland's tools, <a href="http://dn.codegear.com/article/10528">OpenGL</a>, etc. The articles are older and refer to C++ Builder, 
+but I suspect that most, if not all, of the information will still be relevant to the current tools. 
+
+<ul>
+<li><a href="http://docwiki.embarcadero.com/RADStudio/en/Tutorial:_Using_the_IDE_for_Delphi_and_C++Builder">RAD Studio Tutorial</a> This tutorial shows how to use the RAD Studio IDE to create applications.
+<li><a href="http://graphics32.org/wiki/">Graphics32</a> Rapid Graphics Redefined
+<li><a href="http://jvcl.delphi-jedi.org/">JEDI VCL</a> JEDI Visual Component Library
+<li><a href="http://sourceforge.net/projects/jcl/">JCL</a> JEDI Code Library
+<li><a href="http://www.delphi-gems.com/">Soft-Gems</a> Some of the coolest free-ware components ever		
+<li><a href="http://dn.codegear.com/article/37455">Compatible Components</a> from CodeGear's website
+<li><a href="http://www.turboexplorer.com/article/33659">The Turbo Editions FAQ</a>
+<li><a href="http://www.codegear.com/products/radstudio/feature-matrix/">RAD Studio Feature Matrix</a>
+<li><a href="http://www.metagraphics.com/metawindow/faq/mwfaq030.htm">OMF vs COFF Object File Formats</a>What's the difference between OMF and COFF object module libraries and what should I use when linking my program?
+</ul>
+
+Here's a little good reading to get you started. It's a little old, but still points out how many
+big companies (including Microsoft) just can't design a user interface to save their lives!
+
+<ul>
+<li><a href="http://interfacehallofshame.eu/www.iarchitect.com/shame.htm">Interface Hall of Shame</a>
+<li><a href="http://interfacehallofshame.eu/www.iarchitect.com/mfame.htm">Interface Hall of Fame</a>
+</ul>
+
+Additional links:
+<ul>
+<li><a href="http://www.raize.com/Home.asp">Raize Components</a> This is one example of a 3rd-party, commercial component vendor.
+<li><a href="http://www.theregister.co.uk/2009/06/12/embarcadero_codegear_tools_future/">Ex-Borland's Delphi owner re-ignites cross-platform dream</a>
+Cross-platform C++ Builder?
+<li><a href="http://edn.embarcadero.com/article/30139">Interview with Bruce Eckel</a> Bruce is a big C++/Java/Python programmer and author. This
+	is an interesting read (from 2003). He talks about some of Borland's products.
+<li><a href="http://bcbjournal.org/">BCB Journal</a> This was big back in the day when C++ Builder came from Borland. The magazine was very "thin"
+	maybe 25 pages, but it had no advertisements and was pure information. It was very much like the 
+	<a href="http://www.microsoft.com/msj/">MSJ</a>
+	(Microsoft Systems Journal) from the late 80's and early 90's.
+	It's now web-based only. The archives go back to 1997 and most of the
+	topics are still relevant and the examples still work. (That's a sign of a well-designed product.)
+
+
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/Files/Examples-6.0.zip">Sample projects</a> These are from Borland C++ Builder 6.0 but most of them should still work. There's probably over 100 projects.
+
+	
+
+<li>You can find the academic versions at <a href="http://www.techxtend.com/ppi_us/default.aspx">TechXtend</a> There are other places,
+but this one seems to work the best for academic purchases.
+<ul>
+<li><a href="http://www.techxtend.com/ppi_us/Product.aspx?skupart=CGI%2037">C++ Builder</a> The updated and professional version of Turbo C++.
+<li><a href="http://www.techxtend.com/ppi_us/Product.aspx?skupart=CGI%2015">RAD Studio</a> The same as above but it includes Delphi as well. Strangely,
+	it is the same price as the C++ Builder-only version, even though you get all of the Delphi stuff with it. 
+<li><a href="http://www.techxtend.com/PPI_US/EducationaElgbRqmts.aspx">Academic Eligibility Requirements</a> You need to meet these requirements
+	to purchase the software. (Every student Digipen should qualify.)
+</ul>
+
+</ul>
+<!--
+http://www.campustech.com/item/Borland/jem_import/76431137
+http://www.ccvsoftware.com/itemDetail.asp?ItmNo=76431137 
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p class="SectionHeader">
+Planned Topics
+</p>
+These are in no particular order, but I hope to cover everything at some point. 
+Of course, these are subject to change, and I will be updating this as the lectures progress
+to try and give you a sense of what we'll be covering.
+<p>
+
+<table border="1" cellspacing="0" cellpadding="5">
+<tr>
+	<th>Basics</th><th>IDE</th><th>Components</th><th>Miscellaneous</th>
+</tr>
+
+<tr>
+	<td>Component Properties and Events</td>
+	<td>Desktops (workspaces)</td>
+	<td>Action lists (Abstract code from interface)</td>
+	<td>User interface design</td>
+</tr>
+
+<tr>
+	<td>private, protected, public, and __published components and events</td>
+	<td>Component palette and common category</td>
+	<td>Menus</td>
+	<td>Saving program state (e.g. INI files)</td>
+</tr>
+
+<tr>
+	<td>Relationship between the form/components and the code</td>
+	<td>Form designer</td>
+	<td>Header control (lists) for sorting</td>
+	<td>Drag and drop</td>
+</tr>
+
+<tr>
+	<td>How the IDE manages your code</td>
+	<td>Object Inspector</td>
+	<td>Hints</td>
+	<td>Debugging</td>
+</tr>
+
+<tr>
+	<td>Programming with the Visual Component Library (VCL)</td>
+	<td>Structure window</td>
+	<td>Canvas, Frames, TreeView, HeaderView, Timers</td>
+	<td>Status bars</td>
+</tr>
+
+<tr>
+	<td>Design-time vs. Run-time component creation</td>
+	<td>Built-in source control (ala subversion)</td>
+	<td>Toolbars (dockable, floating)</td>
+	<td>Command line compiling</td>
+</tr>
+
+<tr>
+	<td>Visual components (e.g. TButton class) vs. non-visual (TAction class)</td>
+	<td>Text forms vs. binary forms</td>
+	<td>Dialogs (for choosing files, fonts, printers, colors, etc.)</td>
+	<td>CodeGuard</td>
+</tr>
+
+<tr>
+	<td>Form creation (automatic vs. manual)</td>
+	<td>Source repositories (code sharing)</td>
+	<td>The Indy components (networking)</td>
+	<td>Component creation</td>
+</tr>
+
+<tr>
+	<td>Parent vs. Owner</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>Component templates</td>
+</tr>
+
+<tr>
+	<td>Containers vs. non-containers</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>Using 3rd party components (there are 1,000s of add-ons, many are free)</td>
+</tr>
+
+<tr>
+	<td>Component positioning, anchors, alignment, and resizing</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>Owner draw (custom fonts/colors/images in basic components like TList, TStatusBar, etc.)</td>
+</tr>
+
+<tr>
+	<td>Multi-threaded applications</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+
+<tr>
+	<td>Using the Windows clipboard</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+
+<tr>
+	<td>Drag and drop between windows and applications</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+
+<tr>
+	<td>OLE (Object Linking and Embedding) Automation</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+
+<tr>
+	<td>GDI drawing</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+
+<tr>
+	<td>Applications with multiple windows</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p class="SectionHeader">
+Weekly Sessions
+</p>
+
+<p class="technote">
+These projects were originally developed with the free Turbo C++ version, and most worked with the latest
+version of RAD Studio (XE 3 at the time). I have updated (almost) all of the projects to XE 3 and included
+download links for them. You have the choice of downloading the Turbo C++ version or the XE 3 version. A few
+projects could not be upgrade (older components) and a couple of projects only work with the newer versions
+(they use 3rd party components.) I haven't tested with XE 4, but I'm pretty sure that the changes from XE 3
+to XE 4 were very minor.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><td>
+<a href="1/session1.html">Session 1</a></td><td>Monday, May 13, 2013</td><td>Overview of the Turbo C++ IDE, building from the command line, simple Windows application</td>
+</tr>
+
+<tr><td>
+<a href="2/session2.html">Session 2</a></td><td>Wednesday, May 15, 2013</td><td>Actions, menus, toolbars, image lists, file dialogs</td>
+</tr>
+
+<tr><td>
+<a href="3/session3.html">Session 3</a></td><td>Monday, May 20, 2013</td><td>Basic component overview: Page component (tabs), checkboxes, radio buttons, groups, spin-edits, sliders.</td>
+</tr>
+
+<tr><td>
+<a href="4/session4.html">Session 4</a></td><td>Wednesday, May 22, 2013</td><td>Creating a tile-based editor for a platform game.</td>
+</tr>
+
+<tr><td>
+</td><td>Monday, May 27, 2013</td><td><b>Memorial Day. No class.</b></td>
+</tr>
+
+<tr><td>
+<a href="5/session5.html">Session 5</a></td><td>Wednesday, May 29 2013</td><td>Drag and drop (WM_DROPFILES), right-mouse support, multiple forms.</td>
+</tr>
+
+
+<tr><td>
+<a href="6/session6.html">Session 6</a></td><td>Monday, June 3, 2013</td><td>Persisting values between application runs. 
+(.ini files, TMemIniFile, properties, Undo, MessageDlg)</td>
+</tr>
+
+<tr><td>
+<a href="7/session7.html">Session 7</a></td><td>Wednesday, June 5, 2013</td><td>List views (TListView), intra-program drag and drop</td>
+</tr>
+
+<tr><td>
+<a href="8/session8.html">Session 8</a></td><td>Monday, June 10, 2013</td><td>Tree views (TTreeView, TTreeNode), drag and drop, filesystem traversals (tree algorithms)</td>
+</tr>
+
+<tr><td>
+<a href="9/session9.html">Session 9</a></td><td>Wednesday, June 12, 2013</td><td>TThread class, thread priorities, TListView class, file system search, ShellExecute, Windows clipboard</td>
+</tr>
+
+<tr><td>
+<a href="10/session10.html">Session 10</a></td><td>Monday, June 17, 2013</td><td>Customizing behavior with OwnerDraw styles. Detecting multiple instances of an application and communicating between them (IPC), DLLs.</td>
+</tr>
+
+<tr><td>
+<a href="11/session11.html">Session 11</a></td><td>Wednesday, June 19,, 2013</td><td>TToolBar, TCoolBar, TMediaPlayer, TScrollBox, TMaskedEdit</td>
+</tr>
+
+
+</table>
+</blockquote>
+
+<b>Miscellaneous Sessions (that didn't really happen this time):</b>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+
+<tr><td>
+<a href="12/session12.html">Session 12</a></td><td></td><td>OLE Automation (<a href="http://en.wikipedia.org/wiki/Component_Object_Model">COM</a>)
+This uses Word 2000, so it may not compile and run without it, but I'm keeping it here anyway.
+</td>
+</tr>
+
+<tr><td>
+<a href="13/session13.html">Session 13</a></td><td></td><td>TCP/IP networking using the Indy Components. (Chat client/server) </td>
+</tr>
+
+</table>
+</blockquote>
+
+
+<!--
+
+<tr><td>
+<a href="">Session 10</a></td><td>Wednesday, 2013</td><td>OLE Automation, GDI, TWebBrowser, TFrame, IDE stuff: Component Templates, Object Repository</td>
+</tr>
+
+<tr><td>
+<a href="">Session 11</a></td><td>Monday, 2013</td><td>TToolBar, TCoolBar, TMediaPlayer, TScrollBox, TMaskedEdit</td>
+</tr>
+-->	
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Additional Information: Project Settings
+</p>
+<p>
+By default, C++ Builder builds applications to use runtime libraries (RTL) and packages. This keeps the size of the executables
+smaller, but requires the users to have additional files installed on their computers. (Not generally a good idea in Windows.)
+
+Since most people don't have 
+C++ Builder installed on their computers, they won't be able to run the executables without these additional dependencies.
+The preferred way to build applications is statically, so that all necessary components and libraries are included in
+the executable. It will make the executable larger, but that's no longer an issue these days. To build static executables,
+you have to change two settings in the project options. From the menu in the IDE, go to <b>Project | Options...</b> or
+press Ctrl-Shift-F11 to open the Project Options dialog box. You may want to collapse the "C++ Compiler (bcc32)" options, as
+it takes up all of the dialog box's list space.
+<p>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Disable "Use dynamic RTL" under the Linker options</th><th>Disable "Build with runtime packages" under the Packages option</th></tr>
+<tr valign="top">
+<td>
+<img src="misc/ProjectOptions-Linker-Linking.png">
+</td>
+<td>
+<img src="misc/ProjectOptions-Packages.png">
+</td>
+</tr></table>
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>File size when using the RTL and packages</th><th>File size without the RTL and packages</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="misc/Filesize-before.png">
+</td>
+<td>
+<img src="misc/Filesize-after.png">
+</td>
+</tr></table>
+
+<p>
+Yes, it's larger, but it will work on any computer now. 
+<p>
+	
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Disable "Dynamic RTL" in the C++ Linker options in RAD Studio 2010<br>
+ (The XE versions probably look similar)</th></tr>
+<tr valign="top">
+<td>
+<img src="misc/ProjectOptions-Linker-Linking-2010.png">
+</td>
+</tr></table>
+
+
+<!--
+<div id=empty style="visibility: hidden">
+</div>
+-->
+
+<blockquote>
+</blockquote>
+	
+<blockquote>
+</blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

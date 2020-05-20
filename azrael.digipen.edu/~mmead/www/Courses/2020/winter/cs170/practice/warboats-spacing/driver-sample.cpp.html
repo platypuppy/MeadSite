@@ -1,0 +1,396 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-sample.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+
+<font color="990099">#include &quot;WarBoats.h&quot;</font>
+<font color="990099">#include &quot;Ocean.h&quot;</font>
+<font color="990099">#include &quot;PRNG.h&quot;</font>
+
+static <b>bool</b> forceSpacing = <b>false</b>;
+
+<b>void</b> Dump(<b>const</b> CS170::WarBoats::Ocean &amp;ocean, <b>int</b> field_width = 4, 
+          <b>bool</b> extraline = <b>false</b>, <b>bool</b> showboats = <b>true</b>)
+{
+    <font color="#003399"><i>// Get the size of the ocean</i></font>
+  <b>int</b> width = ocean.GetDimensions().x;
+  <b>int</b> height = ocean.GetDimensions().y;
+
+  <b>using</b> CS170::WarBoats::HIT_OFFSET;
+
+  <b>for</b> (<b>int</b> y = 0; y &lt; height; y++)
+  {
+    <b>for</b> (<b>int</b> x = 0; x &lt; width; x++)
+    {
+      <b>int</b> value = ocean.GetGrid()[y * width + x];
+      <b>if</b> ( (value &gt; 0) &amp;&amp; (value &lt; HIT_OFFSET) &amp;&amp; (showboats == <b>false</b>) )
+        value = 0;
+      std::cout &lt;&lt; std::setw(field_width) &lt;&lt; value;
+    }
+    std::cout &lt;&lt; std::endl;
+    <b>if</b> (extraline)
+      std::cout &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> PrintShotResult(<b>const</b> CS170::WarBoats::ShotResult &amp;sr)
+{
+  <b>const</b> <b>char</b> *strings[] = {<font color="#9933CC">&quot;HIT&quot;</font>, <font color="#9933CC">&quot;MISS&quot;</font>, <font color="#9933CC">&quot;DUPLICATE&quot;</font>, <font color="#9933CC">&quot;SUNK&quot;</font>, <font color="#9933CC">&quot;ILLEGAL&quot;</font>};
+  std::cout &lt;&lt; strings[<b>static_cast</b>&lt;<b>int</b>&gt;(sr)] &lt;&lt; std::endl;
+  <font color="#003399"><i>//if (sr == CS170::WarBoats::srSUNK)</i></font>
+  <font color="#003399"><i>//  std::cout &lt;&lt; &quot;*************************************************&#92;n&quot;;</i></font>
+}
+
+<b>void</b> PrintStats(<b>const</b> CS170::WarBoats::Ocean &amp;ocean)
+{
+  CS170::WarBoats::ShotStats stats = ocean.GetShotStats();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;      Hits: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.hits &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;    Misses: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.misses &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.duplicates &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Boats Sunk: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.sunk &lt;&lt; std::endl;
+}
+
+<b>void</b> TakeAShot(CS170::WarBoats::Ocean &amp;ocean, <b>const</b> CS170::WarBoats::Point&amp; pt)
+{
+  CS170::WarBoats::ShotResult sr;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shot: &quot;</font> &lt;&lt; pt.x &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; pt.y &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  sr = ocean.TakeShot(pt);
+  PrintShotResult(sr);
+  PrintStats(ocean);
+  Dump(ocean);
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> simple_test()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+    <font color="#003399"><i>// Setup the ocean</i></font>
+  <b>int</b> num_boats = 50;
+  <b>int</b> xsize = 10;
+  <b>int</b> ysize = 10;
+  CS170::WarBoats::Ocean ocean(num_boats, xsize, ysize, forceSpacing);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The empty board&quot;</font> &lt;&lt; std::endl;
+  <font color="#003399"><i>//std::cout &lt;&lt; ocean;</i></font>
+  Dump(ocean);
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Boat boat;
+  CS170::WarBoats::Point location;
+  CS170::WarBoats::BoatPlacement bp;
+
+    <font color="#003399"><i>// Boat #1</i></font>
+  boat.ID = 1;
+  location.x = 1;
+  location.y = 3;
+  boat.length = 4;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #2</i></font>
+  boat.ID = 2;
+  location.x = 6;
+  location.y = 1;
+  boat.length = 4;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #3, touches</i></font>
+  boat.ID = 3;
+  location.x = 0;
+  location.y = 4;
+  boat.length = 4;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #4, touches</i></font>
+  boat.ID = 4;
+  location.x = 0;
+  location.y = 0;
+  boat.length = 4;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #5, touches</i></font>
+  boat.ID = 5;
+  location.x = 4;
+  location.y = 4;
+  boat.length = 2;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #6, touches</i></font>
+  boat.ID = 6;
+  location.x = 4;
+  location.y = 0;
+  boat.length = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #7, touches</i></font>
+  boat.ID = 7;
+  location.x = 7;
+  location.y = 0;
+  boat.length = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #8, touches</i></font>
+  boat.ID = 8;
+  location.x = 5;
+  location.y = 5;
+  boat.length = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #9, touches</i></font>
+  boat.ID = 9;
+  location.x = 7;
+  location.y = 4;
+  boat.length = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+
+  Dump(ocean);
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test_placement(<b>int</b> num_boats, <b>int</b> xsize, <b>int</b> ysize,  
+                    <b>bool</b> show_attempts = <b>false</b>, <b>bool</b> diagonals = <b>false</b>, 
+                    <b>bool</b> play = <b>false</b>)
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+  CS170::WarBoats::Ocean ocean(num_boats, xsize, ysize, forceSpacing);
+
+    <font color="#003399"><i>// Place the boats randomly in the ocean</i></font>
+  <b>int</b> boats_placed = 0;
+  <b>int</b> attempts = 0;
+  <b>while</b> (boats_placed &lt; num_boats)
+  {
+    CS170::WarBoats::Boat boat;
+
+    <font color="#003399"><i>//boat.hits = 0;</i></font>
+    boat.ID = boats_placed + 1;
+    CS170::WarBoats::BoatPlacement bp;
+    <b>do</b>
+    {
+      <b>int</b> orientation;
+
+        <font color="#003399"><i>// include diagonals?</i></font>
+      <b>if</b> (diagonals)
+        orientation = CS170::Utils::Random(0, 3);
+      <b>else</b>
+        orientation = CS170::Utils::Random(0, 1);
+
+        <font color="#003399"><i>// Pick a random orientation</i></font>
+      boat.orientation = CS170::WarBoats::Orientation(orientation);
+
+        <font color="#003399"><i>// Pick a random location</i></font>
+      CS170::WarBoats::Point location;
+      location.x = CS170::Utils::Random(0, xsize - 1);
+      location.y = CS170::Utils::Random(0, ysize - 1);
+      boat.position = location;
+
+        <font color="#003399"><i>// Place the boat</i></font>
+      boat.length = CS170::Utils::Random(3, 7);
+      bp = ocean.PlaceBoat(boat);
+
+      attempts++;
+      <b>if</b> (show_attempts)
+      {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;Attempt &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; attempts &lt;&lt; <font color="#9933CC">&quot;: len is &quot;</font>
+                  &lt;&lt; boat.length &lt;&lt; <font color="#9933CC">&quot;, x,y is &quot;</font> &lt;&lt; location.x &lt;&lt; <font color="#9933CC">&quot;,&quot;</font>
+                  &lt;&lt; location.y &lt;&lt; <font color="#9933CC">&quot;, orientation is &quot;</font> &lt;&lt; boat.orientation;
+
+        <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+          std::cout &lt;&lt; <font color="#9933CC">&quot; REJECTED&quot;</font> &lt;&lt; std::endl;
+        <b>else</b>
+          std::cout &lt;&lt; <font color="#9933CC">&quot; ACCEPTED&quot;</font> &lt;&lt; std::endl;
+      }      
+
+
+    }<b>while</b> (bp == CS170::WarBoats::bpREJECTED);
+    boats_placed++;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Boats placed:&#92;n&quot;</font>;
+  Dump(ocean);
+  std::cout &lt;&lt; std::endl;
+
+  <b>if</b> (!play)
+    <b>return</b>;
+
+    <font color="#003399"><i>// Try to sink the boats with random shots</i></font>
+  <b>while</b> (num_boats &gt; 0)
+  {
+    CS170::WarBoats::ShotResult sr;
+    <b>do</b>
+    {
+      CS170::WarBoats::Point coordinate;
+      coordinate.x = CS170::Utils::Random(0, xsize - 1);
+      coordinate.y = CS170::Utils::Random(0, ysize - 1);
+
+      sr = ocean.TakeShot(coordinate);
+    } <b>while</b> (sr == CS170::WarBoats::srDUPLICATE);
+
+      <font color="#003399"><i>// Sunk a boat</i></font>
+    <b>if</b> (sr == CS170::WarBoats::srSUNK)
+      num_boats--;
+
+<font color="990099">#if 0</font>
+    {
+      PrintShotResult(sr);
+      PrintStats(ocean);
+      Dump(ocean, 4, <b>false</b>);
+      std::cout &lt;&lt; std::endl;
+    }
+<font color="990099">#endif</font>
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Final board:&#92;n&quot;</font>;
+  PrintStats(ocean);
+  Dump(ocean, 4, <b>false</b>);
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test1()
+{
+  forceSpacing = <b>false</b>;
+  simple_test();
+  forceSpacing = <b>true</b>;
+  simple_test();
+}
+
+<font color="#003399"><i>/*
+void test_placement(int num_boats, int xsize, int ysize,  
+bool show_attempts = false, bool diagonals = false,  bool play = false)
+*/</i></font>
+
+<font color="#003399"><i>// no attempts shown, no diagonals, no game played</i></font>
+<b>void</b> test2()
+{
+  test_placement(50, 30, 30, <b>false</b>, <b>false</b>, <b>false</b>); 
+}
+
+<font color="#003399"><i>// attempts shown, no diagonals, no game played</i></font>
+<b>void</b> test3()
+{
+  test_placement(50, 30, 30, <b>true</b>, <b>false</b>, <b>false</b>); 
+}
+
+<font color="#003399"><i>// no attempts shown, diagonals, no game played</i></font>
+<b>void</b> test4()
+{
+  test_placement(50, 30, 30, <b>false</b>, <b>true</b>, <b>false</b>); 
+}
+
+<font color="#003399"><i>// attempts shown, diagonals, no game played</i></font>
+<b>void</b> test5()
+{
+  test_placement(50, 30, 30, <b>true</b>, <b>true</b>, <b>false</b>); 
+}
+
+<font color="#003399"><i>// no attempts, no diagonals, game played</i></font>
+<b>void</b> test6()
+{
+  test_placement(50, 30, 30, <b>false</b>, <b>false</b>, <b>true</b>); 
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> test_num = 0;
+
+  <b>if</b> (argc &gt; 1)
+    test_num = std::atoi(argv[1]);
+
+  <b>if</b> (argc &gt; 2)
+  {
+    <b>int</b> value = std::atoi(argv[2]);
+    <b>if</b> (value)
+      forceSpacing = <b>true</b>;
+    <b>else</b>
+      forceSpacing = <b>false</b>;
+  }
+
+  <b>typedef</b> <b>void</b> (*TestFn)(<b>void</b>);
+
+  TestFn Tests[] = {test1, test2, test3, test4, test5, test6};
+
+  <b>int</b> num = <b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests);
+  <b>if</b> (test_num &lt; 1 || test_num &gt; num)
+  {
+    <b>for</b> (<b>int</b> i = 0; i &lt; num; i++)
+      Tests[i]();
+  }
+  <b>else</b> <b>if</b> (test_num &gt;= 0 &amp;&amp; test_num &lt;= num)
+  {
+    Tests[test_num - 1]();
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

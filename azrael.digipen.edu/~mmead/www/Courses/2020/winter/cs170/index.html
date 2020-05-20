@@ -1,0 +1,1182 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/styles.css">
+<title>CS 170 Winter 2020</title>
+</head>
+
+<body>  
+
+<center><h1>CS 170 - High-Level Programming II</h1>
+
+<center>
+<blockquote>
+<i>"My definition of an expert in any field is a person who knows enough about
+what's really going on to be scared."</i> -- P.J. Plauger 
+</blockquote>
+</center>
+	
+<a href="../../../../courses/2020/winter/cs170/index.html">
+http://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/index.html</a>
+</center>
+<p>
+
+<table>
+<tr>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40> 
+</td>
+<td>
+<p class="technote">
+<font size=+2>
+<b>Reminder:</b> These notes will be taken down permanently on Friday, April 24, 2020. If you want to save a copy
+for yourself, please download them before that time. 
+</font>
+</p>
+</td>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40> 
+</td>
+</tr></table>
+<p>
+<!--
+-->
+
+<!--
+<center>
+<img src="../../../../images/spinal_tap_amps.png">
+</center>
+<p>
+-->
+
+
+<blockquote>
+<!--
+"There is no doubt that learning the fundamentals of a programming language is not as 
+much fun as writing programs. However, <i>not</i> knowing the fundamentals makes writing
+programs a lot less fun." -- Kenneth A. Reek
+-->
+</blockquote>
+
+<p>
+<!--
+<p class="technote">
+</p>
+-->
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Information
+</p>
+
+</td></tr></table>
+</blockquote>
+
+
+<p>
+<blockquote>
+<p class="technote">
+If you have any questions about any assignment, please post the questions in the 
+<a href="https://distance.digipen.edu/2020-spring/mod/forum/view.php?id=18484">CS170 Forum</a> on the 
+<a href="https://distance.digipen.edu/2020-spring/course/view.php?id=1609">CS170 Moodle website</a>. 
+There are many people that can answer your question. If you
+just send your question to me in an email, it may be a while until (or if) I get back to you. Also,
+if you have a question about the assignment, it's very likely that many other students have the same
+question and they will benefit from the posted answers. 
+</blockquote>
+
+
+<ul>
+
+<!--	
+<li><a href="TutoringScheduleColor-Spring2012.pdf">Tutor Schedule</a> This is a schedule for the 
+	<a href="../../../../docs/Digipen-Second-Floor.pdf">Academic Support Center (ASC)</a>.
+-->
+<!--
+<li><a href="http://academicalliance.digipen.edu/msdnaa/">MSDN Academic Alliance</a> Information about downloading Microsoft software
+	for use on your home computer.
+-->
+
+	<p>
+<li><a class="pdf-icon" href="cs170-winter2020-syllabus.pdf">Syllabus</a>
+<li><a class="pdf-icon" href="../faculty-office-hour-form-winter2020.pdf">Office hours</a>
+(<a class="pdf-icon" href="../../../../docs/office-location.pdf">office location<a>)</li>
+<!--
+<li><a class="pdf-icon" href="../important-dates-2017-2018.pdf">Important dates</a> for this semester
+-->
+<li><a class="pdf-icon" href="../../../../docs/FreshmanAttendancePolicy.pdf">Digipen attendance policy</a></li>
+<li><a class="pdf-icon" href="../important-dates-2020.pdf">Important dates</a> for this semester</li>
+<li><a class="pdf-icon" href="../ASC-schedule-winter-2020.latest.pdf">Academic Support Center Schedule</a>
+(The source documents can be found <a href="https://faculty.digipen.edu/~jwang/Spring%202020%20Tutoring/">here</a>.)</li>
+<li><a href="https://inside.digipen.edu/main/ITFAQ:Wireless_Access">Wireless access</a> at Digipen.</li>
+<!--
+<li><a href="http://academicalliance.digipen.edu/msdnaa/">MSDN Academic Alliance</a> Information about downloading Microsoft software
+	for use on your home computer.</li>
+-->
+
+<li><a href="https://www.oreilly.com/library/view/temporary-access/">Digipen's online library</a> - This is where you can access
+	Safari Books Online, which contains 1,000s of technical books covering many topics.
+</li>
+
+<li><a href="https://azrael.digipen.edu/~mmead/www/Files/cs120-fall2019.zip">
+	Mead's CS120 website</a> This is only here temporarily.</li>
+
+<li><a href="WhatYouShouldKnow-from-cs120.html">What we learned in CS120</a> These are some of the topics that we've covered last semester.</li>
+<p>
+<li><a href="https://faculty.digipen.edu/~dvolper/acm/">ACM Information</a> from Prof. Volper's site.
+	We are planning on a possible third division at Digipen aimed more at freshman and sophomores.</li>
+<!--	
+		<li>For those wanting to get up to speed on the Clang compiler on Windows, you can
+		visit Johannes Peter's blog where he explains how to get Clang running on Windows: 
+	<a href="http://blog.johannesmp.com/2015/09/01/installing-clang-on-windows-pt1/">Installing Clang on Windows</a>.
+	Johannes is a Digipen Junior (maybe Senior) and is pretty fluent in Windows, Mac, and Linux.
+	</ul>
+<p>
+<li>Information for becoming a Universal Note Taker for this course:
+<ul>
+<li><a href="../Universal_Note_Taker_Application_final_Dec_2015.pdf">Application</a></li>
+<li><a href="../Universal_Note_Taker_Contract_Form_Final_Dec_2015.pdf">Contract</a></li>
+</ul>
+-->
+
+<p>
+	
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<b>Mead Approved<sup>&trade;</sup> Books</b>
+<p>
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.amazon.com/dp/0321623215">
+  <img src="../../../../images/cpp-standard-library2-josuttis.jpg" width="100" height="134" align="left" hspace="10" xclass="book-border">
+</a>
+<a href="https://www.amazon.com/dp/0321623215">The C++ Standard Library: A Tutorial and Reference (2nd Edition)</a>:
+
+The C++ standard library provides a set of common classes and interfaces that greatly 
+extend the core C++ language. The library, however, is not self-explanatory. To make
+full use of its components–and to benefit from their power–you need a resource that
+does far more than list the classes and their functions.
+<p>
+<i>The C++ Standard Library: A Tutorial and Reference, Second Edition</i>, describes
+this library as now incorporated into the new ANSI/ISO C++ language standard (C++11).
+The book provides comprehensive documentation of each library component, including
+an introduction to its purpose and design; clearly written explanations of complex
+concepts; the practical programming details needed for effective use; traps and
+pitfalls; the exact signature and definition of the most important classes and
+functions; and numerous examples of working code.
+The book focuses in particular
+on the Standard Template Library (STL), examining
+<font color="blue"><b>containers, iterators, function objects, and STL algorithms.</b></font>
+<p>
+		Available for free from <a href="https://dragonsden.digipen.edu/">Digipen's online books</a> 
+			from Safari Books Online via Library Services 
+
+<a href="https://proquestcombo.safaribooksonline.com/book/programming/cplusplus/9780132978286">here</a>
+		
+<p>
+
+</td></tr></table>
+
+	</ul>
+</td>
+</tr></table>
+<!--	
+-->
+
+</ul>
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+References
+</p>
+<!--
+<ul>
+<li><a href="http://academicalliance.digipen.edu/msdnaa/">MSDN Academic Alliance</a> Information about downloading Microsoft software
+	for use on your home computer.
+<ul>
+	<b>NOTICE: Microsoft Office (Word, Excel, etc.) is NOT available from the MSDNAA</b>
+</ul>
+</ul>
+-->
+<p>
+
+<!--
+<li><a href="https://inside.digipen.edu/main/ITFAQ:Wireless_Access">Wireless access</a> at Digipen. <p>
+-->
+
+Online Safari References:
+<ul>
+
+<li><a href="https://proquestcombo.safaribooksonline.com/book/programming/cplusplus/9780321776402">
+	C++ Primer Plus</a> This is the CS170 textbook on Safari</li>
+
+<li><a href="https://proquestcombo.safaribooksonline.com/book/programming/cplusplus/9780321563842">
+	The C++ Programming Language, 4th Edition</a> This is the book written by Bjarne Stroustrup.</li>
+
+<li><a href="https://proquestcombo.safaribooksonline.com/book/software-engineering-and-development/0596006101">
+Managing Projects with GNU Make, 3rd Edition</a> This is the <tt>make</tt> bible.
+
+<li><a href="https://proquestcombo.safaribooksonline.com/book/programming/cplusplus/9780132978286">
+	The C++ Standard Library: A Tutorial and Reference, 2nd Edition</a> This is one the best
+	books written on this topic. A must have for any serious C++ programmer.
+
+</ul>
+<p>
+
+Other References:
+<ul>
+<li><a href="../../../../docs/doxygen/index.html">Code documentation</a> This is really old, and just
+	to show some examples.
+<li><a class="pdf-icon" href="../../../../docs/CodeQuality.pdf">Code Quality Guidelines</a>
+<!--<li><a href="../../../../docs/StudentHomeworkChecklist-CS170.pdf">Checklist</a>-->
+<li><a href="../../../../docs/Deliverables.html">Delivering code</a> The Doxygen stuff will be required later
+	in the course.	
+
+<!--
+<li><a href="../../../../videos/VS-Warnings/">Modifying Visual Studio Warnings</a> in the IDE to detect 
+	potentially unsafe and non-portable code.
+<li><a href="../../../../docs/CompilingWarningLevel4.html">Compiling MSVC++ 6.0 projects</a> at warning level 4 (without all of the
+irrelevent messages)
+-->
+	
+	
+<!--
+<li><a href="../../../../docs/CompilingWarningLevel4.html">Compiling MSVC++ projects</a> at warning level 4 (without all of the
+irrelevant messages) Mostly applies to version 6.0, but is a good example of how to deal with warnings from others' (Microsoft's) code.
+<li><a href="../../../../docs/DiffAndPatch.pdf">Comparing and Merging Files with GNU diff and patch</a>
+A PDF document containing more detailed information about this family of utilities.
+-->
+<li><a href="../../../../docs/OperatorPrecedence-CPP.html">Operator precedence chart for C++</a> with a simple ASCII chart
+and common printf formatting characters.
+<li><a href="../../../../docs/ASCII-binary-hex-chart.html">Character representations</a> ASCII, binary, octal, decimal, and hexadecimal
+<li><a href="http://asciiset.com/">ASCII table</a> On the web
+
+
+<li><a href="http://www.faqs.org/faqs/C-faq/faq/">comp.lang.c FAQ</a> Answers to Frequently Asked Questions (FAQ List)
+
+<!--
+<li><a href="http://accu.org/index.php/book_reviews">Book Reviews</a> from the Association of
+C and C++ Users. The books are reviewed by experienced C/C++ programmers. 
+Currently, they have reviewed 151 books on beginning C/C++ and 84 books on advanced C/C++.
+-->
+
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/">JTC1/SC22/WG21 - C++ </a> The official home of the international standardization working group for the programming language C++.
+<li><a href="https://isocpp.org/faq">C++ FAQ</a> Tons of Frequently Asked Questions about C++.
+
+<li><a href="http://en.cppreference.com/w/">cppreference.com</a> - A nice place to get information on C++. You can even download the entire website for off-line browsing.</li>
+
+<li>Documentation:
+<ul>
+<li><a href="http://www.gnu.org/software/make/manual/make.html">make utility</a> 
+<li><a href="http://gcc.gnu.org/onlinedocs/">GCC compilers</a>
+<ul>
+	<li><a href="http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/C-Dialect-Options.html">ansi</a> This turns off certain features of GCC that are incompatible with ISO C90
+	<li><a href="http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/Warning-Options.html">pedantic</a> Issue all the warnings demanded by strict ISO C
+</ul>
+<li><a href="http://www.gnu.org/manual/manual.html">GNU Documentation Online</a> Includes documentation
+for other GNU tools cvs, gdb, etc.
+<li><a class="pdf-icon" href="../../../../docs/IntroToGCC.pdf">An Introduction to GCC</a> This is a PDF document
+that shows how to use the command line compiler. (It doesn't teach C/C++).
+<li><a class="pdf-icon" href="../../../../docs/gcc-manpage.pdf">The man page for the gcc/g++ compiler</a> I created this PDF using the command-line tools. 
+
+<!--
+<li><a href="../../../../docs/BCC32-CompilerOptions-Functional.pdf">Borland Compiler Options</a> (PDF) This lists them by functionality.
+<li><a href="../../../../docs/BCC32-CompilerOptions-Alphabetical.pdf">Borland Compiler Options</a> (PDF) This lists them alphabetically.
+-->
+</ul>
+
+<li>STL References
+<ul>
+	<li><a href="http://www.josuttis.com/libbook/">The C++ Standard Library - A Tutorial and Reference</a>
+		An excellent book for learning and using the STL. There is also an 
+		<a href="http://www.cppstdlib.com/">updated 2nd edition</a> of the book for newer C++ features.</li>
+	<li><a href="http://www.aristeia.com/books_frames.html">Scott Meyers' books</a> Especially <i>Effective STL</i>
+</ul>
+
+<li><a href="https://www.tiobe.com/tiobe-index/">Programming languages</a> ranked by popularity.<a></li>
+
+<li><a href="https://faculty.digipen.edu/~mmead/www/online-spring2020/cs170/">Online lectures</a></li>
+
+
+
+
+<p>
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Required Software (free)
+</p>
+All of the software that is required for this course is installed on all of the computers at Digipen.
+However, for those of you that wish to also work on your own computers (recommended), these are the
+things you will need to install and configure on your own computer.
+<p>
+<ul>
+<li><b>Windows 32-bit/64-bit C++ compiler (MinGW)</b> This is the compiler that we will be using for all of the
+	work in CS170. There are detailed instructions on downloading, installing, and configuring
+	the software <a href="../../../../public/mingw/index.html">here</a>.
+	<p>
+		<blockquote>
+	<font color="blue">
+	This is the same compiler that you installed for CS120, so if you installed it for CS120, you
+	don't have to do anything.</font>
+	</blockquote>
+	<!--Note that this will also install a C++ compiler, which you will need next semester in CS170.-->
+<p>
+
+
+<li><b>Cygwin Utilities</b> - Download the <a href="https://azrael.digipen.edu/~mmead/www/public/Files/preinstalls/cygwin64-2016-preinstalled.zip">Cygwin64 programs</a> 
+and put them on your computer. There's a document 
+<a class="pdf-icon" href="../../../../public/Files/preinstalls/readme-2017-cygwin-install.pdf">readme-2017-cygwin-install.pdf</a>
+that explains what to do. This is also the same set that you installed for CS120.
+<p class="technote">
+The zip file contains many command-line utilities that you will use throughout your time at Digipen.
+The zip file is about 530 MB and extracts to about 1.5 GB.
+Creates a folder named <tt>cygwin64</tt> on the C: drive.
+</p>
+<!--
+ There is also a PDF there that explains what to do: 
+<a href="http://azrael.digipen.edu/~mmead/www/public/Files/preinstalls/readme-2014-RTIS-image.pdf">readme-2014-RTIS-image.pdf</a>.
+<p class="technote">
+Note that you only need the Cygwin64 files. You don't need any of the other files (e.g. Clang, MinGW, etc.) that are posted on
+that site. You're welcome to download them and try them, but I won't give you any support on those. You will need 
+some of those programs in CS170 next semester.
+-->
+</li>
+Don't forget to add <tt>C:\cygwin64\bin</tt> directory to your PATH. 
+	<a href="http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx">
+	Windows 7</a>.
+	 If you're new to computers or Windows, there's a nicer GUI (Graphical User Interface) program
+	called <a href="http://eveditor.com">Windows Environment Variables Editor</a> that makes it easier to
+	manipulate the PATH.</li>
+
+<ul>
+	<li>Understanding the <a href="https://en.wikipedia.org/wiki/PATH_(variable)">PATH variable</a> from wikipedia.</li>
+	<li><a href="http://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/">
+		Editing the PATH variable</a> on Windows 7, 8, and 10.</li>
+	<li>Once you've got Cygwin installed and in your PATH, you can type this to see a better view of
+		your PATH from the command line:
+<blockquote><pre>path | tr ; "\n"</pre></blockquote>
+		This will list all of the directories in the PATH with each on a separate line. That is:
+<blockquote>
+<table cellspacing=0 cellpadding=5 border=1>
+<tr><th>Token</th><th>Meaning</th><tr>
+<tr><td align="center"><tt>path</tt></td><td>Displays the PATH as one long line</td></tr>
+<tr><td align="center"><tt>|</tt></td><td>A vertical bar (pipe symbol), usually on the key with the backslash (\)</td></tr>
+<tr><td align="center"><tt>tr</tt></td><td>The translate command</td></tr>
+<tr><td align="center"><tt>;</tt></td><td>A semi-colon (usually to the right of the letter 'L' on the keyboard). On Linux and 
+Mac OS X, use a colon instead.</td></tr>
+<tr><td align="center"><tt>"\n"</tt></td><td>A double quote, backslash, lowercase letter 'N', double quote</td></tr>
+</table>
+</blockquote>
+
+</ul>
+<li><b>C++ compiler for non-Windows users:</b>
+<p class="technote">
+Version 8.1.0 is what is installed with MinGW on the computers at Digipen.
+For non-Windows users, if you can't get version 8.1.0,  
+any 8.x.x version will probably be fine. We won't be using any of the advanced features of 
+C/C++ that are in 8.x, but you do want to have the closest version possible so that you will 
+get the same errors and warnings that 8.1 emits. 
+<br><br>
+For Mac people, you may have to install it (using <a href="https://brew.sh/">homebrew</a>)
+ as the default compiler for C and C++ on Mac is Clang. If you are new to software development,
+ you may need to seek help from other Mac users. (I'm not a Mac user, although I pretend sometimes!)
+<!--
+For Mac people, you can follow this link to 
+<a href="../../../../mg/compiling-gcc7/index.html">building GCC 7.1 on macOS</a>.
+I've only tested this with macOS 10.11 (El Capitan). You can also use this link to install
+on Linux, but it is easier to use the link below.
+-->
+
+<br><br>
+For Linux people, I recommend Linux Mint. The latest version comes with version 7.x, but
+it can easily be upgraded. 
+Here's some information on 
+<a href="../../../../mg/update-compilers/index.html#UPDATE2">installing multiple versions</a>.
+<!--
+-->
+
+ However, any distribution that allows you
+to use version 8.x of the compiler should work.
+<!--
+<br><br>
+Note that these installations will also install a C++ compiler, which you will need next semester in CS170.
+-->
+</p>
+
+<!--
+<li>Microsoft C++ compiler <font color="red">(Not used for grading purposes)</font>
+	<p>
+	If you'd like to use Microsoft's compiler to help you debug, you are free to do so.
+	I am not going to specify which version of the compiler to use, nor am I going to explain
+	how to use Visual Studio (or anything related to Windows). You should at least use a recent
+	version, such as VS 2015 or VS 2017.
+	Using this compiler is strictly for your own benefit as I won't be compiling anything with
+	Microsoft's compiler.
+-->
+	<!--
+	You can pretty much use any recent version of this compiler (Visual Studio 2015 and later). 
+	I'm not sure which compiler is the default at Digipen. 
+	you must first type <tt><b>setvc14</b></tt> to enable the command line tools for this version. 
+	If you want the 32-bit compiler, you need to type <tt><b>setvc14-32</b></tt>.
+	You need to do 	this everytime that you open a command window. As long as you don't close the window, 
+	the command line tools will be enabled. <b>This compiler is only necessary for you to use the
+	memory debugger</b> (<a href="http://www.drmemory.org/">Dr. Memory</a>) <b>on Windows.</b>
+	<p>
+	If you are having problems configuring your personal computer to use Microsoft's compiler from the 
+	command line look <a href="../../../../docs/CommandLineConfigs.html">at this page</a>. It's for previous
+			versions of VS, but it should get you started. You can Google for more information or visit the
+			Academic Support Center for more help. If you installed VS to the default directory on the C:
+			drive, you can grab the batch file named <tt><b>setvc14-32.bat</b></tt> and 
+			<tt><b>setvc14-64.bat</b></tt> from one of the computers in Edison. The file are in the
+			C:\utils directory (along with a bunch of others). These batch files will enable their
+			respective compiler environments when working on the command line. You need to put them in
+			a directory that is in your PATH. 
+		-->
+	<!--
+	-->
+<p>
+<li><a href="http://www.drmemory.org/">Dr. Memory</a> A tool to catch memory leaks and other memory-related bugs. 
+	Works on Linux, Mac, and Windows. However, for Linux and Mac users, I recommend 
+	<a href="http://www.valgrind.org/">Valgrind</a>. It is easier
+to use and is pretty much built-in.</li>
+<blockquote>
+	<li><a href="../../../../docs/mem.leaks.cpp">mem.leaks.cpp</a> Sample program to test out the memory debuggers. Here's a simpler one: <a href="../../../../docs/mem.bugs.cpp">mem.bugs.cpp</a>.
+	</li>
+	<li><a href="../../../../docs/drmem2.2.0.txt">Command line switches</a> for Dr. Memory v. 2.2.0</li>
+	<li><a href="http://drmemory.org/docs/">Documentation</a>, especially 
+		<a href="http://drmemory.org/docs/page_prep.html">how to build</a> your 
+		program with each compiler</a>.</li>
+	<li>A <a class="pdf-icon" href="../../../../docs/drmem-CGO11.pdf">technical document</a> from the authors of the tool.
+		It gets a little technical, but interesting for those that might want to write their own memory
+		debugger at some point in the (distant!) future.</li>
+	<li>If you get an error message in Windows 10 saying something like 
+		"Running on an unsupported operating system", following the instructions in
+		the error message. Summarized here:
+		<p>
+
+Put this in the bin directory (32-bit) of Dr. Memory (probably&nbsp;C:\Program&nbsp;Files&nbsp;(x86)\Dr.&nbsp;Memory\bin)
+<br>
+<a href="http://drmemory.org/syscalls_wow64.txt">http://drmemory.org/syscalls_wow64.txt</a>
+<p>
+Put this in the bin64 directory (64-bit) of Dr. Memory (probably&nbsp;C:\Program&nbsp;Files&nbsp;(x86)\Dr.&nbsp;Memory\bin64)
+<br>
+<a href="http://drmemory.org/syscalls_x64.txt">http://drmemory.org/syscalls_x64.txt</a>
+<p>
+
+		Details can be found 
+		<a href="https://github.com/DynamoRIO/drmemory/issues/1976">here</a>.</li>
+
+If you need more help with Dr. Memory that was demonstrated in class, look
+<a href="../../../../mg/memdebug/index.html">here</a>.
+
+<li>There are some known issues with Dr. Memory not working well with Windows 10 (what's new?). 
+	If you are having problems with Windows 10, you might want to try to install the
+	Windows Subsystem for Linux (WSL) and then use Valgrind to detect memory errors.
+	I wrote a brief tutorial <a href="../../../../public/wsl/index.html">here</a>.
+
+</blockquote>
+<p>
+<li><a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a> - is a free, cross-platform, 
+	automated documentation generator. You <b>MUST</b> use version 1.8.15, which is what is installed
+	at Digipen. Failure to use that version may result in a failing grade in this course. 
+	You can find this version in the <a href="https://sourceforge.net/projects/doxygen/files/rel-1.8.15/">
+	1.8.15 downloads section</a>.
+	Windows users should download it here:
+	<a href="https://sourceforge.net/projects/doxygen/files/rel-1.8.15/doxygen-1.8.15-setup.exe/download">
+		Doxygen 1.8.15</a>
+
+	You will want to override a setting in the configuration file using the command line like this below.
+	This will help find more problems with your documentation.
+<p>
+<blockquote>
+Linux/Mac/Cygwin/makefiles
+<blockquote><pre>
+( cat Doxyfile ; echo "EXTRACT_ALL=YES" ) | doxygen -
+( cat Doxyfile ; echo "EXTRACT_ALL=NO" ) | doxygen -
+</pre></blockquote>
+
+Windows (no makefile)
+<blockquote><pre>
+( type Doxyfile &amp; echo EXTRACT_ALL=YES ) | doxygen.exe -
+( type Doxyfile &amp; echo EXTRACT_ALL=NO ) | doxygen.exe -
+</pre></blockquote>
+
+</blockquote>
+<p>
+<li><a href="http://eveditor.com/">EVEditor</a> This may make it a little easier for students
+	to modify the PATH (and other environment variables) on their own computers.</li>
+<p>
+
+<li><a href="https://azrael.digipen.edu/~mmead/www/Files/Mead.zip">Mead Installer</a>
+You can use this installer to install Dr. Memory and Doxygen
+</li>
+
+<!--
+<li>Download the necessary files to create a Compiled Help File (CHM)
+			from <a href="../../../../Files/htmlhelp.zip">here</a>. The archive contains two files:
+			<tt>hhc.exe</tt> and <tt>itcc.dll</tt>. Just put those files your PATH somewhere.</li>
+-->
+<p>
+</ul>
+<hr width="95%">
+<p>
+<b>Other useful stuff:</b>
+<ul>
+<li>(Mostly) Free Text Editors
+<ul>
+<li><a href="http://notepad-plus.sourceforge.net/uk/site.htm">Notepad++</a>
+	is a free source code editor (and Notepad replacement), which supports several programming languages, running under the MS Windows environment.
+	It also works very well on Linux under Wine.
+<li><a href="http://www.sublimetext.com/">Sublime</a>
+	is a really nice source code editor (not free), which supports several programming languages, and is cross-platform (Windows, Mac, Linux).
+<li><a href="https://www.geany.org/">Geany</a> A full-blown cross-platform (Windows, Mac, Linux) programmer's editor.
+<li><a href="http://www.jedit.org/">jEdit</a>
+	is a mature programmer's text editor with hundreds (counting the time developing plugins) of person-years of development behind it.
+	Written in Java so it runs on Windows, Linux, and Mac at least.
+	<!--
+<li><a href="http://www.editpadlite.com/index.html">EditPad Lite</a>
+	is a general-purpose text editor, designed to be small and compact, yet offer all the functionality you expect from a basic text editor.
+	Windows-only.
+<li><a href="http://www.crimsoneditor.com">Crimson Editor</a>
+	is a simple source code editor for Windows.
+	'-->
+</ul>
+
+<li><a href="http://www.catb.org/jargon/">The Jargon File</a> Want to know where
+<a href="http://www.catb.org/jargon/html/F/foo.html">foo</a> came from or thousands of other computer-related terms? How about
+<a href="http://www.catb.org/jargon/html/B/bogosity.html">bogosity</a>,
+<a href="http://www.catb.org/jargon/html/C/crufty.html">crufty</a>,
+<a href="http://www.catb.org/jargon/html/F/FUD.html">FUD</a>,
+<a href="http://www.catb.org/jargon/html/N/nyetwork.html">nyetwork</a>,
+<a href="http://www.catb.org/jargon/html/R/RTFM.html">RTFM</a>,
+<a href="http://www.catb.org/jargon/html/V/Vulcan-nerve-pinch.html">Vulcan nerve pinch</a>, or
+<a href="http://www.catb.org/jargon/html/W/Wintendo.html">Wintendo</a>?
+
+<li>Elements of Style (It's an old book, so you can <a href="http://www.bestwebbuys.com/books/compare/isbn/1558512918">find it really cheap</a> on
+	the Internet somewhere.)
+	<ul>
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c01.pdf">Chapter 1</a> - Style and Program Organization
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c02.pdf">Chapter 2</a> - File Basics, Comments, and Program Headings
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c03.pdf">Chapter 3</a> - Variable Names
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c04.pdf">Chapter 4</a> - Statement Formatting
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c05.pdf">Chapter 5</a> - Statement Details
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c06.pdf">Chapter 6</a> - Preprocessor
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c07.pdf">Chapter 7</a> - Directory Organization and Makefile Style
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c08.pdf">Chapter 8</a> - User-Friendly Programming
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c09.pdf">Chapter 9</a> - Rules
+	</ul>
+	
+
+<p>
+
+<li>The <a href="../../../../Files/tablen.exe">tablen program</a> (for Windows). Detects tabs and long lines in files. You <b>MUST</b> run this on <b>EVERY</b> programming
+assignment. Here's a binary version <a href="../../../../Files/tablen.html">for Linux</a>. (The Windows version also seems to work fine under Linux with Wine). 
+Here is a binary version <a href="../../../../Files/tablen-mac.html">for Mac OS X</a>.
+<li>The <a href="../../../../Files/dumpit.exe">dumpit program</a> (for Windows). Dumps files in hexadecimal. Here's a binary version <a href="../../../../Files/dumpit.html">for Linux</a>. 
+Here is a binary version <a href="../../../../Files/dumpit-mac.html">for Mac OS X</a>.</li>
+<p>
+
+
+<li><a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide from CS120</a> When in doubt, follow the 
+	guide.
+<ul>
+	<li><a class="pdf-icon" href="../../../../docs/CS120StyleGuide-addendum.pdf">Style Guide Addendum</a></li>
+	<li>Note that the file header and function header comments will be using Doxygen-style comments.</li>
+
+</ul>
+
+<!--
+<li><a href="WhatYouShouldKnow.html">What you should know</a> These are some of the topics that we've covered so far this semester.
+-->
+<p>
+	
+</ul>
+</ul>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Notes
+</p>
+<ul>
+<p>
+<li><a href="../../../../docs/GradingTags.html">Understanding the marks</a> on your programming assignments. 
+
+<li><a href="../../../CS170/make-1.html">make examples</a> These are just some notes from the <i>make</i> lecture.</li>
+<li><a href="../../../CS170/doxygen-1.html">Doxygen examples</a> These are just some notes from the <i>Doxygen</i> lecture.</li>
+
+<li><a href="../../../CS170/Differences-CtoCPP.html">Moving from C to C++</a> Points out some of the more	obvious differences.
+<li><a href="../../../CS170/IntroToNew.html">Dynamic Memory Allocation in C++</a> Using <tt><b>new</b></tt> and <tt><b>delete</b></tt> to allocate and free memory
+<li><a href="../../../CS170/Namespaces-1.html">Namespaces</a> Introduction to program organization in C++.
+<li><a href="../../../CS170/Functions-2.html">Functions</a> Part 2. References, default parameters, overloading
+<li><a href="../../../CS170/IO-Intro-1.html">Simple I/O</a> Overview of formatted output
+<li><a href="../../../CS170/Classes-1.html">Classes</a> Structures vs. classes, encapsulation, accessibility
+<li><a href="../../../CS170/Classes-2.html">More Classes</a> Operator overloading, conversions, friend functions, member initialization
+<li><a href="../../../CS170/Classes-3.html">Even More Classes</a> More operator overloading, default methods, copy constructors, assignment
+<li><a href="../../../CS170/Classes-4.html">Yet More Classes</a> Aggregation/containment
+<li><a href="../../../CS170/FunctionTemplates.html">Function Templates</a> Type deduction, overloads, specializations
+<li><a href="../../../CS170/ClassTemplates.html">Class Templates</a> Type and non-type parameters, default/multiple parameters
+<li><a href="../../../CS170/Strings-STL-1.html">The <tt>string</tt> Class and other STL Components</a> (<tt>std::string</tt>, STL vectors, iterators, algorithms, etc.)
+<li><a href="../../../CS170/Exceptions-Intro.html">Exceptions</a> try, throw, catch, exception classes
+<li><a href="../../../CS170/File-IO-Intro-1.html">File input/output</a> <tt>ifstream, ofstream</tt>
+<li><a href="../../../CS170/Inheritance-1.html">Inheritance</a> Part 1. Object-orientation, base classes, derived classes</li>
+<li><a href="../../../CS170/STL-1.html">More STL 1</a> More containers and iterators
+<li><a href="../../../CS170/STL-2-all.html">More STL 2</a> More Algorithms and Function Objects
+<li><a href="../../../CS170/Inheritance-2.html">More Inheritance</a> Polymorphism, virtual functions, abstract base classes
+	<p>
+Additional Topics:		
+<li><a href="../../../CS170/MixingCandCPP.html">Mixing C and C++</a> in the same project.
+<li><a href="../../../../mg/const/index.html">Mead's Guide to <font color="black"><b><tt>const</tt></b></font></a> Everything you ever wanted to know about <b>const</b>. (Well, almost everything...)
+<li><a href="../../../../mg/moderncpp/index.html">Mead's Guide to Modern C++</a> This guide demonstrates several of the new features from the C++11, C++14, and C++17 standards.</li>
+<li><a href="../../../../mg/lambdas/index.html">Mead's Guide to Lambda Expressions</a> 
+	a.k.a anonymous functions (in C++11/14). This is a little advanced, but some students may want to check it out after the semester ends.</li>	
+
+<li><a href="../../../../mg/references/cpp-ref.html">Mead's C++ References</a> This is my
+	list of resources for those wishing to further improve their C++ skills.
+<p>
+</ul>
+
+	<!--
+This will NOT be on the midterm:
+<ul>
+<li><a href="../../../CS170/Classes-4.html">Yet More Classes</a> Aggregation/containment
+	Sample report files: <a href="../../../../docs/sample-report-good.txt">Good</a>
+	<a href="../../../../docs/sample-report-bad.txt">Not good</a>
+-->
+
+<!--
+<li><a href="../../../../docs/grading-codes.html">Understanding the marks</a> on your programming assignments. 
+	Sample report files: <a href="../../../../docs/sample-report-good.txt">Good</a>
+	<a href="../../../../docs/sample-report-bad.txt">Not good</a>
+-->
+
+
+<!--
+
+<p>
+<li><b>These topics will NOT be on the final exam:</b>:
+<ul>
+<li><a href="../../../../mg/moderncpp/index.html">Mead's Guide to Modern C++</a> This guide demonstrates several of the new features from the C++11 and C++14 standards.</li>
+-->
+
+<!--
+<p>
+<li><a href="../../../CS170/MixingCandCPP.html">Mixing C and C++</a> in the same project.
+</ul>
+
+<li><a href="../../../../mg/lambdas/index.html">Mead's Guide to Lambda Expressions</a> 
+	a.k.a anonymous functions (in C++11/14). This is a little advanced, but some students may want to check it out after the semester ends.</li>	
+<li><a href="../../../../mg/const/index.html">Mead's Guide to <font color="black"><b><tt>const</tt></b></font></a> Everything you ever wanted to know about <b>const</b>. (Well, almost everything...)
+
+<li><a href="../../../../mg/references/cpp-ref.html">Mead's C++ References</a> This is my
+	list of resources for those wishing to further improve their C++ skills.
+<p>
+-->
+
+
+<!--
+<li><a href="../../../CS170/ComplexDeclarations-1.html">Complex declarations</a> Pointers, arrays, and functions. (Only the first 2 parts will be on the final exam.)
+-->
+
+<!--
+-->
+
+</ul>
+<p>
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Homework Assignments
+</p>
+<ul>
+<li>Make sure that you know how to compile projects from the command line with the compilers
+	listed above. These compilers are installed on the machines at Digipen. They are also free 
+	to download, so if you want to install them on your own computers, you can.	
+	<p>
+	Please remember that 
+	all programs <b>absolutely, positively, MUST compile cleanly</b> with <tt><b>g++</b></tt>.
+
+	If the <tt><b>g++</b></tt> compiler gives a warning or error, you'll get an automatic 0 on the assignment.
+	(Note, however, that since we're using a submission server that will compile and link your code,
+	you won't be able to submit anything with warnings or errors.)
+<p>
+Sample command lines for compiling/linking source file <tt><b>source.cpp</b></tt> into <tt><b>hw1.exe</b></tt>:
+	
+	<blockquote>
+		GNU g++: 
+<blockquote><pre>
+  <big><b>g++</b> -o hw1 source.cpp -Wall -Werror -Wextra -ansi -pedantic -O</big>  
+</pre></blockquote>
+</blockquote>
+
+
+<!--
+	<blockquote>
+		Microsoft:
+<blockquote><pre>
+  <big><b>cl</b> /W4 /EHa /Za /Fehw1.exe /D_CRT_SECURE_NO_DEPRECATE source.cpp</big>
+</pre></blockquote>
+</blockquote>
+
+
+	<blockquote>
+		Clang++: 
+<blockquote><pre>
+  <big><b>clang++</b> -o hw1 source.cpp -Wall -Werror -Wextra -ansi -pedantic -O2</big>  
+</pre></blockquote>
+If you're working on Windows and Clang fails to link, add the <tt><b>-c</b></tt> option to compile only:
+<blockquote><pre>
+  <big>clang++ <b>-c</b> -o hw1 source.cpp -Wall -Werror -Wextra -ansi -pedantic -O2</big>  
+</pre></blockquote>
+-->
+
+</blockquote>
+
+
+<li>Problems from the textbook and other readings:
+<p>	
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><th>Assignments, Problems and Reading (Nothing to hand in)</th><th width="15%">Due Date</th></tr>
+
+
+<tr><td>Read chapters one and two in the textbook and skim over chapter 3 as it's very similar to C. 
+	You can skim over anything that is related to C++ 11 features. I'll be discussing some of those 
+	features later in the semester.
+	<p>
+		Make sure you can compile with the compilers above.<br>
+		Read the <a class="pdf-icon" href="../../../../docs/CodeQuality.pdf">Code Quality Guidelines</a>.<br>
+		Read the <a href="../../../../docs/Deliverables.html">Delivering code</a> document.<br>
+
+		
+	</td><td>Saturday, January 11, 2020</td></tr>
+
+
+<tr><td>Read Chapters 1 and 2 from <a href="http://www.gnu.org/software/make/manual/make.html">The make Manual</a>.
+	Try to create a very simple makefile and test it. Advanced students can read more, if you're inclined.
+	<p>
+	Also, take any two of your CS120 assignments/labs (e.g. spellcheck/dumpit) and create a makefile for it. 
+	This will show you if you understand the presentation I gave on using <tt><b>make</b></tt> and will
+	prepare you for future labs. 
+	<p>
+	Read these sections from the <a href="http://www.doxygen.nl/manual/index.html">Doxygen help</a>
+	: <a href="http://www.doxygen.nl/manual/starting.html">Getting started</a>,
+	<a href="http://www.doxygen.nl/manual/starting.html">Documenting the code</a>, and 
+	<a href="http://www.doxygen.nl/manual/lists.html">Lists</a>. You
+	should also skim these sections (for reference and information): 
+	<a href="http://www.doxygen.nl/manual/config.html">Configuration</a> and 
+	<a href="http://www.doxygen.nl/manual/commands.html">Special Commands</a>.
+<p>
+	Take an assignment/lab (e.g. spellcheck) and convert the CS120-style comments
+	(file header comment and function header comments) to Doxygen-style comments
+	and run Doxygen on it.
+	Here is a <a href="Doxyfile-1.8.15.txt">Doxygen template</a> for you to start with.
+	Rename it to just Doxyfile.
+
+
+
+	</td><td>Monday, January 13, 2020</td></tr>
+<!--
+-->
+
+<tr><td>
+<a href="../../../CS170/Differences-CtoCPP.html">Moving from C to C++</a> Points out some of the more	obvious differences.
+<p>
+<a href="../../../CS170/IntroToNew.html">Dynamic Memory Allocation in C++</a> Using <tt><b>new</b></tt> and <tt><b>delete</b></tt> to allocate and free memory.
+
+	</td><td>Wednesday, January 15, 2020</td></tr>
+
+
+<tr><td>
+Review these notes: <a href="../../../CS120/LinkedLists-Intro1.html">Introduction to linked-lists</a>
+
+	</td><td>Monday, January 27, 2020</td></tr>
+
+
+
+
+
+<!--
+<tr><td>In the Doxygen help file, read all of these chapters: Getting Started, 
+	Documenting the Code (only the C/C++ parts) and Lists. Those that want to use the GUI instead
+	of the command line can read about the Doxywizard usage.
+	<br>Browse through these two chapters to get an idea of what Doxygen can do: 
+	Configuration and Special Commands
+<br>
+	Also, take one of your CS120 assignments (e.g. spellcheck) and Doxygenize it. This will show you if
+	you understand how to use Doxygen before being required to submit code that uses it.
+	This should only take a few minutes since you should already have comments for everything. You just
+	need to insert the proper Doxygen tags.
+</td><td>Monday, January 15, 2018
+</td></tr>
+
+<tr><td>Browse through the <a href="http://llvm.org/docs/CodingStandards.html">LLVM (Clang) coding standards</a>.
+	If you think that the CS 120 Style Guide is something arbitrary and antiquated that Mead invented,
+	think again. This is Real World<sup>&trade;</sup> stuff that you are learning at Digipen.
+	This will help you look good to a potential employer in an interview (or at least you won't 
+	embarrass me!) Some of the topics we haven't talked about yet, but most of it should sound familiar
+	to you. Note: We are not following this guide. It's just meant as an example of what a real company
+	writing real software wants everyone to follow.
+	</td><td>Monday, January 22, 2018</td></tr>
+-->
+
+
+<tr><td>Chapter 9 - Questions: #2, #3, #4</td><td>Monday, February 3, 2020</td></tr>
+<tr><td><a href="study/cs170-winter2020-study-quiz1.pdf">Study Quiz #1</a></td><td>&nbsp;</td></tr>
+<tr><td>Chapter 8 - Questions: #2, #3, #4, #5 (#6 in 5th edition). Programming: #2</td><td>Wednesday, February 5, 2020</td></tr>
+<tr><td><a href="study/cs170-winter2020-study-quiz2.pdf">Study Quiz #2</a></td><td>&nbsp;</td></tr>
+<!--
+-->
+
+<!--
+<tr><td>Read this Dr. Memory documentation:
+	<a href="http://drmemory.org/docs/page_install.html">Installing Dr. Memory</a>,
+	<a href="http://drmemory.org/docs/page_prep.html">Preparing your code</a>,
+	<a href="http://drmemory.org/docs/page_types.html">Error types</a>,
+	and briefly look at <a href="http://drmemory.org/docs/page_options.html">Runtime options</a>.
+
+</td><td>Monday, February 4, 2019</td></tr>
+-->
+
+<tr><td>Chapter 10 - Questions: #1-6, #8, #10.</td><td>Monday, February 10, 2020</td></tr>
+<tr><td>Chapter 11 - Questions: #1-7.</td><td>Monday, February 17, 2020</td></tr>
+
+<tr><td><a href="study/cs170-winter2020-study-quiz3.pdf">Study Quiz #3</a></td><td>&nbsp;</td></tr>
+
+
+<tr><td>Chapter 12 - Questions: #1-5.</td><td>Monday, February 21, 2020</td></tr>
+<tr><td><a href="study/cs170-winter2020-study-quiz4.pdf">Study Quiz #4</a></td><td>&nbsp;</td></tr>
+<tr><td>Read Chapter 16, pages 951-968, 978-991</td><td>Friday, March 6, 2020</td></tr>
+<tr><td><a href="study/cs170-winter2020-study-quiz5.pdf">Study Quiz #5</a></td><td>&nbsp;</td></tr>
+<tr><td><a href="study/cs170-winter2020-study-quiz6.pdf">Study Quiz #6</a></td><td>&nbsp;</td></tr>
+<tr><td>Chapter 13 - Questions: #1-12.</td><td>Wednesday, April 1, 2020</td></tr>
+<tr><td><a href="study/cs170-winter2020-study-quiz7.pdf">Study Quiz #7</a></td><td>&nbsp;</td></tr>
+
+<!--
+<tr><td><a href="study/cs170-winter2019-study-quiz8.pdf">Study Quiz #8</a></td><td>&nbsp;</td></tr>
+-->
+
+<!--
+-->
+
+</table>
+<p>
+
+<li><h2>Programming Assignments</h2></li>
+<ul>
+	<li><a href="https://pontus.digipen.edu/cgi-bin/submission.cgi">Assignment Submission Page</a>
+		- Submit all programming assignments from this page. 
+		Here is a <a href="Doxyfile-1.8.15.txt">Doxygen template</a> to use for the labs and assignments. 
+	You must edit this file for each lab/assignment so that it contains the relevant information
+	(e.g. filenames, assignment/lab name/numbers).</li>
+<li>You can reach the Returned Folders using a browser from <a href="https://inside.digipen.edu/den/">here</a>.</li>
+<li>Here is a <a href="cs170-winter2020-grades-student.ods">spreadsheet</a> to help you calculate your
+	grade in CS170. It works pretty much that way it did in CS120.
+	Just change the numbers in <font color="red"><b>red</b></font> in the "Your score"
+	column to reflect your own scores.
+	<ul>
+		<li><a href="cs170-winter2020-grades-student-no-final.ods">Updated version</a> that doesn't include the final exam.</li>
+	</ul>
+<li><a href="../../../../docs/GradingTags.html">Report File and Grading Tags</a> 
+	This page explains what the report file (<tt>report.txt</tt>) contains and also what the tags at the top of
+the graded .cpp file mean. Not all of the tags are used. Some will be used in the coming semesters.
+</blockquote>
+<p>
+<li><a href="projects/1/index.html">Programming Assignment #1</a> - Due Thursday, February 6, 2020 at 11:59 pm</li>
+<li><a href="projects/2/index.html">Programming Assignment #2</a> - Due Thursday, February 13, 2020 at 10:00 pm</li>
+<li><a href="projects/3/index.html">Programming Assignment #3</a> - Due Thursday, February 27, 2020 at 10:00 pm</li>
+<li><a href="projects/4/index.html">Programming Assignment #4</a> - Due Thursday, March 12, 2020 at 10:00 pm</li>
+<li><a href="projects/5/index.html">Programming Assignment #5</a> - Due Thursday, March 26, 2020 at 10:00 pm</li>
+<blockquote>
+<li><a href="labs/week8/index.html#LISTLAB">Assignment ListLab</a> - Due Thursday, March 5, at 10:00 pm (This is from the List labs.)</li>
+</blockquote>
+
+<blockquote>
+<li><a href="projects/ec1/index.html">Extra Credit Programming Assignment</a> - Due Sunday, March 22, 2020 at 10:00 pm</li>
+</blockquote>
+
+<li><a href="projects/6/index.html">Programming Assignment #6</a> - Due Thursday, April 9, 2020 at 10:00 pm</li>
+
+<p>
+<b>Optional Extra Credit Lab/Assignment:</b>
+<li><a href="labs/ec-function-templates/index.html">Extra Credit Lab/Assignment #1</a> - Due Sunday, April 17, 2020 at 10:00 pm (<b><tt>labEC_functions</tt></b>)</li>
+
+
+</ul>
+
+<!--
+
+
+
+
+<p>
+
+<!--
+<li><a href="Project8/index.html">Programming Assignment #8</a> - Due Thursday, 
+<p>Programming ideas for after the semester:
+<li><a href="Project9/index.html">Programming Assignment #9</a>
+<li>Programming Assignment #10</a> - Modify assignments #5 and #7 to use exception handling for bad subscripts and
+out of memory errors. You'll need to modify the driver to handle the exceptions.
+-->
+<li><h2>Labs and Practices</h2>	</li>
+
+<ul>
+<li><a href="labs/labdata.html">Data</a> for the labs</li>
+<li><a href="practice/practicedata.html">Data</a> for the CS170 practice assignments. (For TA'ing and other recommendations)</li>
+<li><a href="practice-cs120/practicedata.html">Data</a> for the CS120 practice assignments. 
+(For TA'ing and other recommendations)</li>
+<!--
+-->
+	<p>
+<p>
+<li>What's the difference between <a href="practice-labs-assignments.html">
+	Practice, Labs, and Assignments?</a></li>
+		
+</ul>
+
+<p>
+	
+<!--
+<a href="cs170-how-to-calculate-your-grade.html">How to Calculate your grade</a>
+-->
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Additional Reading Assignments (required)
+
+<ul>
+
+<!--	
+<li><a href="http://www-128.ibm.com/developerworks/aix/library/au-toughgame/?ca=dgr-lnxw01PointersC">Pointers and memory leaks in C</a>
+When working with C, are you tired of spending time debugging problems with pointers and memory leaks? If so, then this article is for you.
+-->
+
+<li><a href="http://www.gotw.ca/publications/advice97.htm">
+Write What You Know, and Know What You Write</a> Advice From the C++ Experts:
+My best advice? Don't get fancy. Treat a new C++ feature like you would treat a loaded automatic weapon in a crowded room: never use it just 
+because it looks nifty. Wait until you understand the consequences, don't get cute, write what you know, and know what you write. The article is a little out-dated, but most of the advice is still excellent, 
+especially for new programmers that like to use language features that they don't really understand yet.
+<p>
+<li><a href="http://www.joelonsoftware.com/articles/ThePerilsofJavaSchools.html">The Perils of JavaSchools</a>
+Think that DigiPen is asking too much in the programming courses? It could be worse. 
+"When I was a kid, I learned to program on punched cards. If you made a mistake, you didn't have any of these 
+modern features like a backspace key to correct it. You threw away the card and started over."
+	
+<!--
+		
+<li><a href="../../../../docs/CodeQuality.pdf">Code Quality Guidelines</a>
+
+<li><a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>
+When I interview people, I'm trying to find someone to add to <i>my</i> team. Someone who is going to bring something to the table.
+Someone who is going to help me get the product shipped on time and on budget, not someone who is a liability to the project.
+Basically, someone who is <i>Smart and Gets Things Done.</i> This article is from the point of view of the interviewer, and may
+give you some insight into what they are looking at while you are sitting there in front of them.
+-->
+	
+<!--
+
+<li><a href="http://www.gamedev.net/reference/programming/features/orgfiles/">Organizing Code Files in C and C++"</a>
+While many simple programs fit into a single C or CPP source file, any serious project is going to need splitting up into several source files 
+in order to be manageable. However, many beginning programmers may not realize what the point of this is - especially since some may have tried it 
+themselves and run into so many problems that they decided it wasn't worth the effort.	
+
+-->
+
+<!--
+<li><a href="http://www.joelonsoftware.com/articles/fog0000000073.html">The Guerrilla Guide to Interviewing</a>
+When I interview people, I'm trying to find someone to add to <i>my</i> team. Someone who is going to bring something to the table.
+Someone who is going to help me get the product shipped on time and on budget, not someone who is a liability to the project.
+Basically, someone who is <i>Smart and Gets Things Done.</i> This article is from the point of view of the interviewer, and may
+give you some insight into what they are looking at while you are sitting there in front of them.
+
+<li><a href="../../../../docs/JSF-AV-rules.pdf">JOINT STRIKE FIGHTER AIR VEHICLE C++ CODING STANDARDS</a> You thought you 
+	had it rough with the CS120 Coding Style. Take a look at this Real World<sup>&reg;</sup> document and be thankful. (You don't have
+	to read this whole thing, just look at it and count your blessings.)
+
+<li><a href="http://www.technewsworld.com/rsstory/62579.html">Catch That Memory Bug Before It Catches You</a>
+Memory bugs, essentially a mistake in the management of heap memory, are caused by a 
+number of factors and can occur in any program that is being written, enhanced or maintained. The fact that memory 
+bugs can be introduced at any time is part of what makes memory debugging a challenging task.	
+-->
+</ul>
+
+<!--
+<li>The difference between the amateur and the <a href="../../../../docs/professional.html">professional</a> programmer.
+<li>If programming is so hard, <a href="../../../../docs/JoysAndWoes.html">why do we do it?</a>. 
+(If this paper doesn't describe you or the work you want to do in life, then you are in the wrong place.)
+-->
+<!--
+<li>The Beatles' <a href="../../../../docs/BeatlesC.html">Homage to C</a>. 
+-->
+<!--
+<li>Elements of Style (It's an old book, so you can <a href="http://www.bestwebbuys.com/books/compare/isbn/1558512918">find it really cheap</a> on
+	the Internet somewhere.)
+	<ul>
+		<li><a href="../../../../docs/eos/ElementsOfStyle-c01.pdf">Chapter 1</a> - Style and Program Organization
+		<li><a href="../../../../docs/eos/ElementsOfStyle-c02.pdf">Chapter 2</a> - File Basics, Comments, and Program Headings
+		<li><a href="../../../../docs/eos/ElementsOfStyle-c03.pdf">Chapter 3</a> - Variable Names
+		<li><a href="../../../../docs/eos/ElementsOfStyle-c04.pdf">Chapter 4</a> - Statement Formatting
+			<ul>
+			<a href="http://beranger.org/index.php?article=1358">A small teaser</a> about indenting and braces. (BTW, ANSI with 2 space tabs is the <b>One True Way</b>&trade;.)
+		</ul>
+	</ul>
+-->
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p class="SectionHeader">
+Interesting reading (optional)
+</p>
+
+
+<ul>
+<a href="../../../../docs/java-cpp.gif">Java vs. C++</a> The smart money is on C++.
+Here is <a href="../../../../docs/java-cpp2.gif">another one</a>.
+<p>
+<li><a href="http://www.dwheeler.com/essays/fixing-unix-linux-filenames.html">The Art of Naming Files</a>
+In a well-designed system, simple things should be simple, and the "obvious easy" way to do simple 
+common tasks should be the correct way. I call this goal "no sharp edges" - to use an analogy, if 
+you're designing a wrench, don't put razor blades on the handles.	
+<p>
+<!--
+<li><a href="http://www.codeguru.com/cpp/misc/print.php/c18357/An-Interview-with-C-Creator-Bjarne-Stroustrup.htm">An Interview with C++ Creator Bjarne Stroustrup</a>
+	It's a little advanced for CS170, but some of you might find it interesting.
+-->
+<p>
+<li>Want to work at Google? Check out <a href="https://google.github.io/styleguide/cppguide.html">Google's C++ Style Guide</a> to give
+	you an idea of how Google does it. Remember, it's not so much the exact style that counts in the Real World<sup>&trade;</sup>, 
+	it's that you adopt a style and be consistent.
+
+<p>
+<!--
+
+<b>Various Compiler's C++11 support:</b>
+<li><a href="http://clang.llvm.org/cxx_status.html">Clang</a>
+	C++14, C++11 and C++98 Support in Clang
+
+
+<li><a href="http://gcc.gnu.org/projects/cxx0x.html">GCC</a>
+	C++0x/C++11 Support in GCC (<a href="https://gcc.gnu.org/projects/cxx1y.html">
+	C++1y/C++14</a> support)
+
+<li><a href="http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx">Microsoft</a>
+	Support For C++11 Features (Modern C++)
+<br><br>
+-->
+
+<!--
+(sample code <a href="sample11.cpp">here</a>)
+-->
+
+<!--
+<li><a href="http://www.joelonsoftware.com/articles/ThePerilsofJavaSchools.html">The Perils of JavaSchools</a>
+Think that DigiPen is asking too much in the programming courses? It could be worse. 
+"When I was a kid, I learned to program on punched cards. If you made a mistake, you didn't have any of these 
+modern features like a backspace key to correct it. You threw away the card and started over."
+-->
+<p>
+<!--
+<b>Various Compiler's C++11 support: (sample code <a href="sample11.cpp">here</a>)</b>
+<li><a href="http://blogs.embarcadero.com/davidi/2012/12/23/42211">bcc32/bcc64</a>
+	C++Builder 32 and 64 bit compilers
+<li><a href="http://docwiki.embarcadero.com/RADStudio/XE3/en/C%2B%2B11_Features_(BCC64)">bcc64</a>
+	C++11 Features (BCC64)
+-->
+
+<!--
+<li><a href="http://clang.llvm.org/cxx_status.html">Clang</a>
+	C++14, C++11 and C++98 Support in Clang
+
+
+<li><a href="http://gcc.gnu.org/projects/cxx0x.html">GCC</a>
+	C++0x/C++11 Support in GCC (<a href="https://gcc.gnu.org/projects/cxx1y.html">
+	C++1y/C++14</a> support)
+
+<li><a href="http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx">Microsoft</a>
+	Support For C++11 Features (Modern C++)
+<br><br>
+-->
+
+<!--
+<li><a href="http://channel9.msdn.com/Events/GoingNative/GoingNative-2012/Clang-Defending-C-from-Murphy-s-Million-Monkeys">Clang</a>
+-->
+
+
+<!--
+	
+<li><a href="http://www.cuj.com/documents/s=8906/cujexp0311sutter/sutter.htm">Inline Redux</a>
+When is inlining performed? (How much do you <i>really</i> know about inlining? This is somewhat advanced.)
+
+<li><a href="http://www.informit.com/articles/article.aspx?p=1324982">Bjarne Stroustrup and Herb Sutter 
+on the Future of C++: Part 1</a>
+Welcome to OnSoftware—conversations with thought leaders in software development. In this session, 
+Ted Neward, Bjarne Stroustrup, and Herb Sutter discuss the forthcoming features in C++0x. Learn 
+about Bjarne and Herb's favorite new features.
+-->
+
+
+
+<!--
+
+
+<li><a href="http://www.shacknews.com/extras/2007/032907_alexstjohn1_1.x">Alex St John Interview</a>
+Either people love Microsoft, or they hate them, and that's about how most people feel about one of "the Empire's" former 
+influential evangelists, Alex St John. Credited with successes such as initiating the development of the Direct X API in order to 
+move gaming from DOS to Windows, throwing wild parties for game developers, and working hard to get himself fired.
+
+<li><a href="http://www.joelonsoftware.com/articles/ThePerilsofJavaSchools.html">The Perils of JavaSchools</a>
+Think that DigiPen is asking too much in the programming courses? It could be worse. 
+"When I was a kid, I learned to program on punched cards. If you made a mistake, you didn't have any of these 
+modern features like a backspace key to correct it. You threw away the card and started over."
+
+
+<li><a href="http://developers.slashdot.org/developers/08/01/08/0348239.shtml">Computer Science Education: Where Are the Software Engineers of Tomorrow?</a>
+This is a slashdot article (so you have to be prepared for a certain kind of "conversation"), but it references a real article that
+has been a topic of much debate in recent years.
+
+<li><a href="http://www.tiobe.com/tpci.htm">TIOBE Programming Community Index for January 2008</a> TIOBE declares Python as programming language of 2007!
+	
+<li><a href="http://www.codinghorror.com/blog/archives/000916.html">The Magpie Developer</a>
+	I've often thought that software developers were akin to Magpies: birds who are notorious for stealing shiny items to decorate their complex 
+	nests. Like Magpies, software developers are unusually smart and curious creatures, almost by definition. But <b>we are too easily distracted by shiny new toys and playthings</b>.
+
+<li><a href="http://www.informit.com/articles/printerfriendly.aspx?p=686170">C Language Issues for Application Security</a>
+	This chapter explores subtle details of the C programming language that could adversely affect an application's security and robustness. 
+	Specifically, it covers the storage details of primitive types, arithmetic overflow and underflow conditions, type conversion issues, 
+	such as the default type promotions, signed/unsigned conversions and comparisons, sign extension, and truncation. You also look at some 
+	interesting nuances of C involving unexpected results from certain operators and other commonly unappreciated behaviors.
+
+<li><a href="../../../../docs/Chistory.html">The Development of the C Language</a>
+
+<p>
+-->
+</ul>
+<br><br>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

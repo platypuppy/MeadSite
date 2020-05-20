@@ -1,0 +1,4037 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to Modern C++</title>
+
+<style type="text/css">
+blockquote.std { color: #000000; background-color: #FFFFFF;
+                 border: 0px solid #D1D1D1;
+                 padding-left: 0.5em; padding-right: 0.5em; }
+blockquote.stddel { text-decoration: line-through;
+                    color: #000000; background-color: #FFA0A0;
+                    border: 1px solid #ECD7EC;
+                    padding-left: 0.5em; padding-right: 0.5em; }
+
+blockquote.stdins { color: #000000; background-color: #A0FFA0;
+                    border: 1px solid #B3EBB3; padding: 0.5em; }
+
+blockquote.stdrepl { color: #000000; background-color: #FFFFA0;
+                    border: 1px solid #EBEBB3; padding: 0.5em; }
+
+
+mmghide { background-color:#FFFFFF; text-decoration: none; }
+#hidedel:checked ~ * mmghide, #hidedel:checked ~ * mmghide * { display:none; visibility:hidden }
+
+tab { padding-left: 4em; }
+tab3 { padding-left: 3em; }
+</style>
+
+</head>
+<body>  
+
+<!--
+
+ins { background-color:#A0FFA0; text-decoration: none }
+
+
+blockquote.std { color: #000000; background-color: #F1F1F1;
+                 border: 1px solid #D1D1D1;
+                 padding-left: 0.5em; padding-right: 0.5em; }
+
+del { background-color:#FFA0A0; text-decoration: line-through; }
+using for template aliases, typedef
+
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0619r0.html#3.2
+default member functions: creating a dtor, assign op prevents copy ctor and other stuff
+
+explicit conversion functions (like conversion constructors)
+
+deleted methods and default methods, = delete, = default
+final methods?
+
+
+<p></p>
+
+<input type="checkbox" id="hidedel">Hide text</input>
+<blockquote class="std">
+<mmghide>In closing, I will defer again to the experts. In this case, Herb Sutter:</mmghide>
+</blockquote>
+
+
+-->
+
+<center><h1>
+Mead's Guide to Modern C++
+</h1>
+Last update: May 15, 2019 at 11:09:30
+</center>
+
+<p><hr width="95%"></p>
+
+
+List of topics (in no real order):
+<p>
+
+<ol>
+<li><a href="index.html#OVERVIEW">Overview</li>
+<li><a href="index.html#RIGHT_ANGLE_BRACKETS">Right Angle Brackets</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html">N1757)</li>
+<li><a href="index.html#REGISTER">Deprecated <tt>register</tt> keyword</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0001r1.html">P0001R1)</li>
+<li><a href="index.html#BIN_LITERALS">Binary Literals</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3472.pdf">N3472)</li>
+<li><a href="index.html#QUOTE_SEPARATOR">Single-Quotation-Mark As a Digit Separator</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3781.pdf">N3781)</li>
+<li><a href="index.html#EXPLICIT_CONV_OPS">Explicit Conversion Operators</li>
+<li><a href="index.html#UNIFORM_INIT">Uniform Initialization</li>
+<li><a href="index.html#INIT_LISTS"> Initializer Lists</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm">N2672</a>)</li>
+<li><a href="index.html#RANGE_FOR">Range-Based For Loops</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2930.html">N2930</a>)</li>
+<li><a href="index.html#NULLPTR">nullptr</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2431.pdf">N2431)</li>
+<li><a href="index.html#TYPED_ENUMS"> Strongly Typed Enums</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf">N2347)</li>
+<li><a href="index.html#AUTO_DEDUCT">auto Deductions</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1984.pdf">N1984)</li>
+<li><a href="index.html#FORWARD_ENUMS">Forward Declarations Of Enums</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2764.pdf">N2764)</li>
+<li><a href="index.html#RAW_LITERALS">Raw and Unicode String Literals</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2442.htm">N2442)</li>
+<li><a href="index.html#NON_STATIC_MEMBER_INIT">Non-static Data Member Initializers</a> (<a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2756.htm">N2756)</li>
+<li><a href="index.html#TRAILING_RETURN">Trailing Return Types</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf">N3276)</li>
+<li><a href="index.html#__FUNC__">__func__ Predefined Identifier</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2340.htm">N2340)</li>
+<li><a href="index.html#DELEGATE_CTORS">Delegating Constructors</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1986.pdf">N1986)</li>
+<li><a href="index.html#NOEXCEPT">noexcept</li>
+<li><a href="index.html#GENERAL_CONSTEXPR">Generalized constexpr</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2235.pdf">N2235)</li>
+<li><a href="index.html#TEMPLATE_ALIAS">Template Aliases</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2258.pdf">N2258)</li>
+<li><a href="index.html#LAMBDAS">Lambdas</a> (<a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2927.pdf">N2927)</li>
+<li><a href="index.html#LONGLONG">Long Long data type</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1811.pdf">N1811)</li>
+<li><a href="index.html#DEFDEL">Defaulted and Deleted functions</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2346.htm">N2346)</li>
+<li><a href="index.html#STDARRAY">std::array</a></li>
+<!--
+<li><a href="#INHERIT_CTORS">Inheriting Constructors</a> (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2540.htm">N2540)</li>
+-->
+<li><a href="index.html#REFERENCES">References</li>
+</ol>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="OVERVIEW">
+<p class="sectionheader">
+Overview
+</p>
+</A>
+
+Because there were so many additions and changes to the C++ language and the libraries,
+it is virtually impossible to cover everything in one document. (Short of the 1000+ pages
+of the standard.) This document is just going to give you an introduction to many of these
+enhancements. Some explanations will be fairly short, and others will be longer. 
+If you really want to know everything about everything, there
+are links to additional information on each topic. Be warned, though, that some of the documents
+are quite lengthy and complex and require quite a bit of C++ programming experience.
+<p>
+The topics presented should be understandable by anyone that has programmed in C++ for a few months.
+I am not going to cover topics that I consider "advanced" such as move semantics, rvalue references,
+universal references, perfect forwarding, variadic templates, or template type deduction
+vs. auto type deduction.
+I'm also not covering the additions
+to the STL (e.g. concurrency, regular expressions, smart pointers).
+<p>
+I present the topics in no particular order. However, some may need to be looked at before
+others, as they may have some dependencies.
+<p>
+To build these examples, you may need to tell the compiler which "standard" to use.
+Most of the examples only require a C++11-compliant compiler, but some of them
+use features from C++14.
+At the time of this writing, to specify C++11:
+
+<blockquote><pre>
+g++ <b>-std=c++11</b> foo.cpp
+clang++ <b>-std=c++11</b> foo.cpp
+</pre></blockquote>
+
+for C++14:
+
+<blockquote><pre>
+g++ <b>-std=c++14</b> foo.cpp
+clang++ <b>-std=c++14</b> foo.cpp
+</pre></blockquote>
+
+To enable C++17, a.k.a C++1z, you would do this:
+
+<blockquote><pre>
+g++ <b>-std=c++17</b> foo.cpp
+g++ <b>-std=c++1z</b> foo.cpp
+clang++ <b>-std=c++1z</b> foo.cpp
+</pre></blockquote>
+
+Notice that <i>g++</i> will accept either <tt>c++17</tt> or <tt>c++1z</tt>. At the time of this
+writing, Clang only accepts <tt>c++1z</tt>. Also, these <tt>-std=</tt> options <i>replace</i>
+the <tt>-ansi</tt> option. You can't use both of them.
+<p>
+This is the list of included files to compile all of the examples:
+
+<blockquote><pre>
+<b>#include</b> <font color="990099">&lt;iostream&gt;</font>
+<b>#include</b> <font color="990099">&lt;vector&gt;</font>
+<b>#include</b> <font color="990099">&lt;list&gt;</font>
+<b>#include</b> <font color="990099">&lt;deque&gt;</font>
+<b>#include</b> <font color="990099">&lt;set&gt;</font>
+<b>#include</b> <font color="990099">&lt;string&gt;</font>
+<b>#include</b> <font color="990099">&lt;typeinfo&gt;</font>
+<b>#include</b> <font color="990099">&lt;initializer_list&gt;</font>
+<b>#include</b> <font color="990099">&lt;algorithm&gt;</font>
+<b>#include</b> <font color="990099">&lt;bitset&gt;</font>
+</pre></blockquote>
+Also, you must have this at the top of the file to make the examples compile:
+
+<blockquote><pre>
+<b>using</b> <b>namespace</b> std;
+</pre></blockquote>
+
+
+Finally, if you're really interested in learning this stuff, you must actually 
+<i>use</i> it. Reading about the new features is all fine and good, but you're not
+going to get proficient by simply reading about them. All of the code examples
+should compile and run (unless they are purposely showing improper use), 
+so you can copy and paste them into your sandbox and play
+with them to answer all of your questions
+like <i>"Can I do this?"</i> and <i>"What happens if I do that?"</i> 
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="RIGHT_ANGLE_BRACKETS">
+<p class="sectionheader">
+Right Angle Brackets (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html">N1757</a>)
+</p>
+</A>
+This is probably the lowest of the low-hanging fruit to be picked! Consider the problem:
+
+<blockquote><pre>
+vector&lt;list&lt;<b>int</b>&gt;&gt; vl;  <font color="#003399"><i>// Error in C++03 because &gt;&gt; is the extraction operator!</i></font>
+vector&lt;list&lt;<b>int</b>&gt; &gt; vl; <font color="#003399"><i>// This was the &quot;fix&quot; in C++03</i></font>
+</pre></blockquote>
+
+For years, C++ programmers have been typing that "work-around". Now, they don't have to. That's
+about it for this one, but if you want to read more about the history, go
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html">here</a>.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="REGISTER">
+<p class="sectionheader">
+Deprecated <tt>register</tt> keyword (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0001r1.html">P0001R1</a>)
+</p>
+</A>
+This is (another) attempt to reclaim an existing keyword (much like the <i>auto</i> keyword).
+For years, the <i>register</i> keyword has only been a hint or suggestion to the compiler,
+and most compilers ignore it. A C++11 compliant compiler might emit a warning for this code:
+
+<blockquote><pre>
+<b>register</b> <b>int</b> i = 10; <font color="#003399"><i>// deprecated in C++11</i></font>
+</pre></blockquote>
+
+The warning from clang (using <tt>-std=c++11</tt>):
+<!-- g++ is silent -->
+
+<blockquote><pre>
+warning: 'register' storage class specifier is deprecated and incompatible with C++17 [-Wdeprecated-register]
+  register int i = 10;
+  ^~~~~~~~~
+1 warning generated.
+</pre></blockquote>
+
+Now, in C++17, the keyword has been removed and the code above generates an error. Compiling
+with clang and <tt>-std=c++17</tt>:
+
+<blockquote><pre>
+error: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+  register int i = 10;
+  ^~~~~~~~~
+1 error generated.
+</pre></blockquote>
+
+Note that, in C++17, the keyword has been removed, but you can't use it for an identifier
+because it is still reserved for future use:
+
+<blockquote><pre>
+<b>int</b> register = 10; <font color="#003399"><i>// use register as a variable name</i></font>
+</pre></blockquote>
+
+Error message from clang and <tt>-std=c++17</tt>:
+
+<blockquote><pre>
+error: expected unqualified-id
+  int register = 10;
+               ^
+</pre></blockquote>
+
+This should not present a problem for most newer code, since programmers have been
+warned for years about the <i>register</i> keyword being ignored. I generally only see new
+programmers use it because it gives them a false sense that their code will somehow run faster
+by using the keyword. Compilers are <i>much</i> smarter than programmers when it comes
+to optimizing the source code.
+<p>
+I wrote a discussion about some of the storage classes in C 
+<a href="../../courses/CS120/Visibility.html#STORAGE_CLASSES">here</a>.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="BIN_LITERALS">
+<p class="sectionheader">
+Binary Literals (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3472.pdf">N3472</a>)
+</p>
+</A>
+
+This feature may seem very insignificant, and may well be. But, if you find yourself doing
+a lot of bit-twiddling, this is a great addition to the language. We always had the ability
+to write integral literals as decimal, octal, and hexadecimal. Now, we have binary:
+
+<blockquote><pre>
+  <font color="#003399"><i>// All values are equivalent, decimal 17</i></font>
+<b>int</b> i1 = 17;      <font color="#003399"><i>// decimal</i></font>
+<b>int</b> i2 = 021;     <font color="#003399"><i>// octal (leading zero)</i></font>
+<b>int</b> i3 = 0x11;    <font color="#003399"><i>// hexadecimal (leading 0x or OX)</i></font>
+<b>int</b> i4 = 0b10001; <font color="#003399"><i>// C++14 binary (leading Ob or OB)</i></font>
+
+  <font color="#003399"><i>// All lines output 17 (decimal)</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;i1 is &quot;</font> &lt;&lt; i1 &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;i2 is &quot;</font> &lt;&lt; i2 &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;i3 is &quot;</font> &lt;&lt; i3 &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;i4 is &quot;</font> &lt;&lt; i4 &lt;&lt; endl;
+
+  <font color="#003399"><i>// Overriding the default decimal base</i></font>
+cout &lt;&lt; oct &lt;&lt; showbase &lt;&lt; i1 &lt;&lt; endl; <font color="#003399"><i>// 021</i></font>
+cout &lt;&lt; hex &lt;&lt; showbase &lt;&lt; i1 &lt;&lt; endl; <font color="#003399"><i>// 0x11</i></font>
+
+  <font color="#003399"><i>// Unfortunately, there currently is no built-in way to print in binary</i></font>
+cout &lt;&lt; <font color="red"><b>bin</b></font> &lt;&lt; showbase &lt;&lt; i1 &lt;&lt; endl; <font color="#003399"><i>// The bin manipulator doesn't exist!!</i></font>
+</pre></blockquote>
+
+For now, you'll have to resort to some other way to get <i>std::ostream</i> to display values
+in binary.
+<p>
+For an easy way to print an integer in binary, you can use a 
+<a href="http://www.cplusplus.com/reference/bitset/bitset/"><i>std::bitset</i></a>.
+This is a templated class that takes a non-type (value) template parameter that represents the number
+of bits. The class overloads <i>operator&lt;&lt;</i> to display the ones and zeros:
+
+<blockquote><pre>
+cout &lt;&lt; bitset&lt;5&gt;(i1) &lt;&lt; endl;  <font color="#003399"><i>// output: 10001</i></font>
+cout &lt;&lt; bitset&lt;8&gt;(i1) &lt;&lt; endl;  <font color="#003399"><i>// output: 00010001</i></font>
+cout &lt;&lt; bitset&lt;16&gt;(i1) &lt;&lt; endl; <font color="#003399"><i>// output: 0000000000010001</i></font>
+cout &lt;&lt; bitset&lt;32&gt;(i1) &lt;&lt; endl; <font color="#003399"><i>// output: 00000000000000000000000000010001</i></font>
+</pre></blockquote>
+
+You need to include the proper header file:
+
+<blockquote><pre>
+<b>#include</b> <font color="990099">&lt;bitset&gt;</font>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="QUOTE_SEPARATOR">
+<p class="sectionheader">
+Single-Quotation-Mark As a Digit Separator (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3781.pdf">N3781</a>)
+</p>
+
+Quick, what's the value of <i>a</i> below?
+
+<blockquote><pre>
+<b>long long</b> a = 10000000000; <font color="#003399"><i>// Hold on, let me count the zeros...</i></font>
+</pre></blockquote>
+
+Ok, what's the value of <i>b</i> below?
+
+<blockquote><pre>
+<b>long long</b> b = 10,000,000,000; <font color="#003399"><i>// Easy! 10 billion</i></font>
+</pre></blockquote>
+
+Those little marks (commas) make it trivially easy to know the exact value of the data. Unfortunately,
+the comma is already used as an operator so we can't use it here. But, we can use the single-quote
+character:
+
+<blockquote><pre>
+<b>long long</b> b = 10'000'000'000; <font color="#003399"><i>// Still easy to read</i></font>
+</pre></blockquote>
+
+The single-quotes are just for humans (programmers). The compiler strips them out. This means that
+the groupings and positions are arbitary. These all mean the exact same thing:
+
+<blockquote><pre>
+<b>long long</b> b;
+b = 10000000000; 
+b = 10'000'000'000; 
+b = 100'0000'0000;
+b = 1'0000'000000;
+b = 100'00'00'00'00;
+b = 1'0'0'0'0'0'0'0'0'0'0;
+</pre></blockquote>
+
+One reason for the arbitrary nature of the groupings is that each culture has its own way of
+grouping numbers. Also, cultures may use different symbols for delimiting the groups. Some
+cultures use a comma, or a dot, or a space. The <i>C++ culture</i> chose to use the single
+quotation character.
+<p>
+This delimiter will work with any number base:
+
+
+<blockquote><pre>
+<b>int</b> i1 = 1'234'789;   <font color="#003399"><i>// decimal</i></font>
+<b>int</b> i2 = 01'234'567;  <font color="#003399"><i>// octal</i></font>
+<b>int</b> i3 = 0x1'abc'def; <font color="#003399"><i>// hexadecimal</i></font>
+<b>int</b> i4 = 0b1'000'101; <font color="#003399"><i>// binary</i></font>
+</pre></blockquote>
+
+as well as with floating-point types:
+
+<blockquote><pre>
+<b>float</b> f = 3.14'999'999F;          <font color="#003399"><i>// float</i></font>
+<b>double</b> d1 = 1'234.7'200'009;      <font color="#003399"><i>// double</i></font>
+<b>double</b> d2 = 1.234'567e+123;       <font color="#003399"><i>// double (e-notation)</i></font>
+<b>double</b> d3 = 1.2'3'4'5'6'7e+1'2'3; <font color="#003399"><i>// crazy!!</i></font>
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>This feature was added in C++14, so the compiler needs to be more compliant than
+    just C++11.</li>
+  <li>Although it looks like you can put quotes anywhere, there are rules to follow.</li>
+  <ul>
+    <li>You can't have two adjacent quotes.</li>
+    <li>You can't have a quote next to a decimal point.</li>
+    <li>You can't have a quote next to the <i>e</i>.</li>
+    <li>You can't have a quote next to the <i>x</i> or <i>b</i> in hex/binary representations.</li>
+  </ul>
+  <li>In other words, the single quotes must be placed <i>between</i> two digits.</li>
+  <li>IMHO, this is one of those seemingly-trivial things that should have been part of the language
+    decades ago.</li>
+  <li>To see how different cultures use different delimiters, check
+    <a href="https://en.wikipedia.org/wiki/Decimal_mark">this</a> out.</li>
+</ul>
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="EXPLICIT_CONV_OPS">
+<p class="sectionheader">
+Explict Conversion Operators (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2437.pdf">N2437</a>)
+</p>
+</A>
+
+First, a quick review of conversion constructors.
+<p>
+C++ has had conversion constructors forever. A conversion constructor is essentially a one-argument
+constructor. This constructor, then, converts the argument into an object of the class' type. Hence,
+the term, <i>conversion constructor</i>. Quick example:
+<p>
+
+<blockquote><pre>
+<b>class</b> Foo3
+{
+  <b>public</b>:
+    <font color="#003399"><i>// Conversion constructor</i></font>
+    Foo3(<b>int</b> x) : x_(x)
+    {
+    }
+  <b>private</b>:
+    <b>int</b> x_;
+};
+</pre></blockquote>
+
+With the conversion constructor available, the compiler with automatically and silently convert
+an integer to a <i>Foo3</i> object whenever it is necessary:
+<blockquote><pre>
+<b>void</b> fn1(<b>const</b> Foo3&amp; f)
+{
+  <font color="#003399"><i>// Do something with f</i></font>
+}
+
+Foo3 f(42); <font color="#003399"><i>// Construct a Foo3 object from an integer (conversion constructor)</i></font>
+f = 43;     <font color="#003399"><i>// The conversion constructor is called implicitly</i></font>
+fn1(45);    <font color="#003399"><i>// The conversion constructor is called implicitly</i></font>
+</pre></blockquote>
+
+In the code above, the assignment operator expects a <i>Foo3</i> object, but the programmer has given it
+an integer. The compiler makes a call to the conversion constructor to perform the conversion before
+it is passed to the assignment operator. A similar thing occurs when calling function <i>fn1</i> with
+an integer when it expects a <i>Foo3</i> object.
+<p>
+To prevent these automatic and silent conversions, you simply mark the conversion constructor as
+<i>explicit</i>:
+
+<blockquote><pre>
+<font color="#003399"><i>// Explicit conversion constructor</i></font>
+<font color="blue"><b>explicit</b></font> Foo3(<b>int</b> x) : x_(x)
+{
+}
+</pre></blockquote>
+
+Now the code above will emit these errors:
+
+<blockquote><pre>
+error: no viable overloaded '='
+  f = 43;     // The conversion constructor is called implicitly
+  ~ ^ ~~
+note: candidate function (the implicit copy assignment operator) not viable: no known conversion from 'int' to 'const Foo3' for 1st argument
+class Foo3
+      ^
+error: no matching function for call to 'fn1'
+  fn1(43);    // The conversion constructor is called implicitly
+  ^~~
+note: candidate function not viable: no known conversion from 'int' to 'const Foo3' for 1st argument
+void fn1(const Foo3& f)
+     ^
+2 errors generated.
+</pre></blockquote>
+
+Marking the conversion constructor <i>explicit</i> means that the programmer must explicitly cast
+the integers:
+
+<blockquote><pre>
+f = Foo3(43);  <font color="#003399"><i>// OK, explicit cast</i></font>
+fn1(Foo3(43)); <font color="#003399"><i>// OK, explicit cast</i></font>
+</pre></blockquote>
+
+Conversion constructors are used to convert some other type (e.g. <i>int</i>) into the object's type
+(e.g. <i>Foo3</i>). What if we want to go in the other direction: converting the object's type
+into some other type? 
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+Foo3 f(42); <font color="#003399"><i>// Construct a Foo3 object from an integer</i></font>
+
+<b>int</b> i = f;                   <font color="#003399"><i>// Error: Can't assign a Foo3 to an integer</i></font>
+<b>int</b> j = (<b>int</b>)f;              <font color="#003399"><i>// Error: Still can't do it (compiler doesn't know how)</i></font>
+<b>int</b> k = <b>int</b>(f);              <font color="#003399"><i>// Nope</i></font>
+<b>int</b> n = <b>static_cast</b>&lt;<b>int</b>&gt;(f); <font color="#003399"><i>// Nope</i></font>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+That's where <i>conversion operators</i> come in. They tell the compiler how to convert (cast) the object
+into some other type.
+<p>
+Adding a conversion operator to the <i>Foo3</i> class:
+
+<blockquote><pre>
+<b>class</b> Foo3
+{
+  <b>public</b>:
+    <font color="#003399"><i>// Conversion constructor</i></font>
+    <b>explicit</b> Foo3(<b>int</b> x) : x_(x)
+    {
+    }
+
+    <font color="#003399"><i>// Conversion operator</i></font>
+    <font color="blue"><b>operator</b> <b>int</b>() <b>const</b>
+    {
+      <b>return</b> x_;
+    }</font>
+
+  <b>private</b>:
+    <b>int</b> x_;
+};
+</pre></blockquote>
+
+Now the above conversions to integer work as expected. C++11 has added the ability to mark these
+conversion operators as <i>explicit</i>, much like conversion constructors:
+
+<blockquote><pre>
+<font color="#003399"><i>// Conversion operator</i></font>
+<font color="blue"><b>explicit</b></font> <b>operator</b> <b>int</b>() <b>const</b>
+{
+  <b>return</b> x_;
+}
+</pre></blockquote>
+
+This will once again fail:
+
+<blockquote><pre>
+<b>int</b> i = f; <font color="#003399"><i>// Error: Can't implicitly convert a Foo3 to integer</i></font>
+</pre></blockquote>
+
+However, these will all work fine:
+<blockquote><pre>
+<b>int</b> j = (<b>int</b>)f;              <font color="#003399"><i>// OK, explicit C-style cast</i></font>
+<b>int</b> k = <b>int</b>(f);              <font color="#003399"><i>// OK, explicit C++-style cast</i></font>
+<b>int</b> n = <b>static_cast</b>&lt;<b>int</b>&gt;(f); <font color="#003399"><i>// OK, explicit C++ named cast</i></font>
+</pre></blockquote>
+
+You can convert to any type, as long as you provide the appropriate conversion operator. This function
+expects a string:
+
+<blockquote><pre>
+<b>void</b> prints(<b>const</b> string&amp; str)
+{
+  cout &lt;&lt; str &lt;&lt; endl;
+}
+
+Foo3 f(42); <font color="#003399"><i>// Construct a Foo3 object from an integer</i></font>
+prints(f);  <font color="#003399"><i>// Error: No conversion from Foo3 to string</i></font>
+</pre></blockquote>
+
+Add another conversion operator to <i>Foo3</i>:
+
+<blockquote><pre>
+<font color="#003399"><i>// You can mark this <b>explicit</b>, if necessary</i></font>
+<b>operator</b> std::string() <b>const</b>
+{
+  <b>return</b> std::to_string(x_); <font color="#003399"><i>// to_string is new in C++11</i></font>
+}
+</pre></blockquote>
+
+<blockquote><pre>
+Foo3 f(42); <font color="#003399"><i>// Construct a Foo3 object from an integer</i></font>
+prints(f);  <font color="#003399"><i>// OK, now prints 42</i></font>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+Notes:
+<ul>
+  <li>Having the compiler automatically and silently convert between types is a double-edged sword.</li>
+    <ol>
+      <li>It makes it convenient for the programmer.</li>
+      <li>However, it can perform unintended conversions.</li>
+    </ol>
+  <li>Marking the conversion operators <i>explicit</i> doesn't prevent conversions, it just requires
+    the programmer to be explicit about it. 
+</ul>
+
+See more at <a href="http://www.stroustrup.com/C++11FAQ.html#explicit-convertion">Stroustup's FAQ</a>
+regarding explicit conversion operators.
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="UNIFORM_INIT">
+<p class="sectionheader">
+Uniform Initialization (<a href="http://www.stroustrup.com/C++11FAQ.html#uniform-init">uniform-init</a> a.k.a. Brace Initialization)
+</p>
+</A>
+
+<p class="technote">
+This is actually part of 
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm">Initializer Lists (N2672)</a>
+described below, but I wanted to demonstrate the simplest uses before the more complicated ones.
+</p>
+
+Initializing data in C++ is pretty straight-forward, and there are only a few rules that 
+you have to remember. 
+<ol>
+  <li>Simple built-in scalar types:
+<blockquote><pre>
+<b>int</b> a = 1; <font color="#003399"><i>// Copy initialization (&quot;assignment&quot; operator)</i></font>
+<b>int</b> b(3);  <font color="#003399"><i>// Direct initialization (parentheses)</i></font>
+</pre></blockquote>
+</li>
+
+  <li>Arrays:
+<blockquote><pre>
+  <font color="#003399"><i>// Use &quot;assignment&quot; operator and braces to initialize the arrays</i></font>
+<b>int</b> array1[] = {1, 2, 3};                       
+<b>const</b> <b>char</b> *array2[] = {<font color="#9933CC">&quot;one&quot;</font>, <font color="#9933CC">&quot;two&quot;</font>, <font color="#9933CC">&quot;three&quot;</font>};
+</pre></blockquote>
+</li>
+  <li>Structs (POD types):
+<blockquote><pre>
+<b>struct</b> Point
+{
+  <b>double</b> x;
+  <b>double</b> y;
+};
+
+  <font color="#003399"><i>// Use &quot;assignment&quot; operator and braces to initialize the struct</i></font>
+Point p = {1.0, 2.0};
+</pre></blockquote>
+</li>
+
+<li>Classes or structs (with private members)
+<blockquote><pre>
+<b>class</b> Foo
+{
+  <b>public</b>: 
+    Foo(<b>int</b> v1, <b>int</b> v2) : a_(v1) <font color="#003399"><i>// This is initialization (member initializer list)</i></font>
+    {
+      b_ = v2; <font color="#003399"><i>// This is assignment</i></font>
+    }
+  <b>private</b>:
+    <b>int</b> a_;
+    <b>int</b> b_;
+};
+
+Foo f(1, 2); <font color="#003399"><i>// a_ will be initialized by the constructor</i></font>
+</pre></blockquote>
+
+</ol>
+
+These ways of initialization have worked fairly well for years, but they are inconsistent. Also,
+there are things that still cannot be initialized (e.g. arrays that are members of a class).
+Well, now things have changed. C++11 adds yet-another way to initialize things:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Simple initialization</i></font>
+<b>double</b> d1 = 3.14;   <font color="#003399"><i>// C++98 (copy initialization)</i></font>
+<b>double</b> d2 = {3.14}; <font color="#003399"><i>// C++98 (brace initialization, was almost never used)</i></font>
+<b>double</b> d3(3.14);    <font color="#003399"><i>// C++98 (direct initialization)</i></font>
+<b>double</b> d4{3.14};    <font color="#003399"><i>// C++11 (brace initialization)</i></font>
+</pre></blockquote>
+
+This means that you can be consistent and use braces for all of your initializations. Using
+braces causes the compiler to ensure no loss of data (which is expected):
+
+<blockquote><pre>
+<b>int</b> i1 = 3.14;   <font color="#003399"><i>// Clang warns, g++ is silent (even with -Wall, need -Wconversion)</i></font>
+<b>int</b> i2(3.14);    <font color="#003399"><i>// Clang warns, g++ is silent (even with -Wall, need -Wconversion)</i></font>
+<b>int</b> i3{3.14};    <font color="#003399"><i>// Clang error, g++ error</i></font>
+<b>int</b> i4 = {3.14}; <font color="#003399"><i>// Clang error, g++ error (new behavior)</i></font>
+</pre></blockquote>
+
+However, you might be surprised by this:
+
+<blockquote><pre>
+<b>int</b> i5 = 1;    <font color="#003399"><i>// OK</i></font>
+<b>double</b> d5 = 2; <font color="#003399"><i>// OK</i></font>
+<b>double</b> d6{1};  <font color="#003399"><i>// OK, literal is known at compile-time</i></font>
+<b>double</b> d7{i5}; <font color="#003399"><i>// Clang error, g++ warning,</i></font>
+<b>int</b> i6{d5};    <font color="#003399"><i>// Clang error, g++ warning,</i></font>
+</pre></blockquote>
+
+Setting data to the "default" value:
+
+<blockquote><pre>
+<b>int</b> ii1;         <font color="#003399"><i>// Undefined (assume local inside of a function)</i></font>
+<b>int</b> ii2();       <font color="#003399"><i>// Function prototype! a.k.a "<a href="https://en.wikipedia.org/wiki/Most_vexing_parse">the most vexing parse</a>" (Clang warns)</i></font>
+<b>int</b> ii3{};       <font color="#003399"><i>// 0 (New)</i></font>
+<b>int</b> ii4 = {};    <font color="#003399"><i>// 0</i></font>
+<b>int</b> ii5 = <b>int</b>(); <font color="#003399"><i>// 0</i></font>
+<b>int</b> ii6 = <b>int</b>{}; <font color="#003399"><i>// 0 (New)</i></font>
+</pre></blockquote>
+
+Ok, so which one should you use? All things being equal, I will defer to the man himself
+(Bjarne Stroustrup):
+
+<blockquote>
+<p class="technote">
+  <i>"Prefer the {}-initializer syntax for declarations with a <b>named</b> type."</i>
+</p>
+</blockquote>
+
+There are times when you will use one of the other forms, but those are more advanced situations.
+<p>
+There is a nice consequence of this new syntax. It's called <i>aggregate initialization</i> and it
+allows you to initialize an aggregate data structure (array or POD structure) using default initialization.
+<p>
+Recall that we could always do this:
+<blockquote><pre>
+<b>struct</b> Point
+{
+  <b>double</b> x;
+  <b>double</b> y;
+};
+
+Point p = {1.0, 2.0}; <font color="#003399"><i>// Use &quot;assignment&quot; operator and braces to <b>initialize</b> the struct</i></font>
+</pre></blockquote>
+
+Now, we can drop the &quot;assignment&quot; operator like this:
+
+<blockquote><pre>
+Point p {1.0, 2.0}; <font color="#003399"><i>// Use braces to initialize the struct</i></font>
+</pre></blockquote>
+
+We can now take it one step further and default-initialize all of the members with empty braces:
+
+<blockquote><pre>
+Point p {}; <font color="#003399"><i>// x and y are both 0.0</i></font>
+</pre></blockquote>
+
+Realize, however, if we just do this (without the braces)
+
+<blockquote><pre>
+Point p; <font color="#003399"><i>// x and y are both undefined</i></font>
+</pre></blockquote>
+
+the values of x and y are left undefined (as before).
+<p>
+The aggregate data type must either be an array or a class, struct, union that meets these criteria:
+<ul>
+  <li>No user-defined non-default constructor</li>
+  <li>No private or protected non-static data members</li>
+  <li>No virtual functions</li>
+  <li>No virtual, private, or protected base classes</li>
+</ul>
+
+We typically call these data structures POD (Plain Old Data) structures because they generally
+contain only data. Here's another simple example:
+
+<blockquote><pre>
+<b>struct</b> S1
+{
+  <b>public</b>: 
+    <b>void</b> print()
+    {
+      cout &lt;&lt; <font color="#9933CC">&quot;s is &quot;</font> &lt;&lt; s &lt;&lt; <font color="#9933CC">&quot;, i is &quot;</font> &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot;, d is &quot;</font> &lt;&lt; d &lt;&lt; endl;      
+    }
+      <font color="#003399"><i>// All are public</i></font>
+    string s;
+    <b>int</b> i;
+    <b>double</b> d;
+};
+
+S1 s1;                  <font color="#003399"><i>// Undefined values for built-in types int and double (string is initialized to "")</i></font>
+S1 s2 = {<font color="#9933CC">&quot;&quot;</font>, 10, 3.14}; <font color="#003399"><i>// Initialize all members (public)</i></font>
+S1 s3 = {};             <font color="#003399"><i>// All members default-initialized {&quot;&quot;, 0, 0.0}</i></font>
+S1 s4 {<font color="#9933CC">&quot;&quot;</font>, 10, 3.14};   <font color="#003399"><i>// (C++11) Using uniform-initialization</i></font>
+S1 s5 {};               <font color="#003399"><i>// (C++11) Using uniform-initialization {&quot;&quot;, 0, 0.0}</i></font>
+
+s1.print(); <font color="#003399"><i>// s is , i is 166494208, d is 3.11218e-317</i></font>
+s2.print(); <font color="#003399"><i>// s is , i is 10, d is 3.14</i></font>
+s3.print(); <font color="#003399"><i>// s is , i is 0, d is 0</i></font>
+s4.print(); <font color="#003399"><i>// s is , i is 10, d is 3.14</i></font>
+s5.print(); <font color="#003399"><i>// s is , i is 0, d is 0</i></font>
+</pre></blockquote>
+
+Now, make the data members private:
+
+<blockquote><pre>
+<b>struct</b> S2
+{
+  <b>public</b>:
+    <b>void</b> print()
+    {
+      cout &lt;&lt; <font color="#9933CC">&quot;s is &quot;</font> &lt;&lt; s &lt;&lt; <font color="#9933CC">&quot;, i is &quot;</font> &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot;, d is &quot;</font> &lt;&lt; d &lt;&lt; endl;      
+    }
+  <font color="blue"><b>private</b></font>:
+    string s;
+    <b>int</b> i;
+    <b>double</b> d;
+};
+
+S2 s6;      <font color="#003399"><i>// Undefined values for built-in types int and double</i></font>
+S2 s8 = {}; <font color="#003399"><i>// All members default-initialized {&quot;&quot;, 0, 0.0}</i></font>
+S2 s10 {};  <font color="#003399"><i>// (C++11) all members default-initialized {&quot;&quot;, 0, 0.0}</i></font>
+
+S2 s11 = {<font color="#9933CC">&quot;&quot;</font>, 10, 3.14}; <font color="#003399"><i>// This is still illegal (private)</i></font>
+
+s6.print();  <font color="#003399"><i>// s is , i is 166494208, d is 3.11218e-317</i></font>
+s8.print();  <font color="#003399"><i>// s is , i is 0, d is 0</i></font>
+s10.print(); <font color="#003399"><i>// s is , i is 0, d is 0</i></font>
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Technically, <i>S2</i> is not a POD because it has private data. However, now using uniform-initialization,
+you can default-initialize them without a constructor. This may seem like a small advantage, and it 
+probably is. The one other thing that is potentially more useful is that, since C++17, PODs can inherit
+from certain base classes (not shown here). This was not possible before C++11. 
+</p>
+</blockquote>
+
+<p>
+Links:
+<ul>
+  <li><a href="https://herbsutter.com/2013/05/09/gotw-1-solution/">Variable Initialization</a>
+  The difference between default initialization, direct initialization, copy initialization, and list initialization.
+  Also, the difference between using ( ) and using { } for initialization. </li>
+  <li><a href="http://www.stroustrup.com/C++11FAQ.html#uniform-init">Uniform initialization syntax and semantics</a>
+    at Stroustrup's site.</li>
+  <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0017r0.html">
+    Extension to aggregate initialization</a> This was added to C++17.</li>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="INIT_LISTS">
+<p class="sectionheader">
+Initializer Lists (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm">N2672</a>)
+</p>
+</A>
+
+Initializer lists are one of the most important new features (IMHO) in C++. They are somewhat
+related to the uniform intialization, but they have some caveats. 
+Let's start simple with something
+that has been missing from C++ since the beginning: Member array initialization.
+
+<h2>Member Array Initialization</h2>
+
+This is how we would "initialize" an array previously:
+
+<blockquote><pre>
+<b>class</b> Foo2
+{
+  <b>public</b>:
+    Foo2()
+    {
+        <font color="#003399"><i>// C++98/03 can't initialize a member array. Must use a loop and &quot;assign&quot; values.</i></font>
+      <b>for</b> (<b>int</b> i = 0; i &lt; 3; i++)
+        array_[i] = i + 1;
+    }
+  <b>private</b>:
+    <b>int</b> array_[3]; <font color="#003399"><i>// How to initialize?</i></font>
+};
+</pre></blockquote>
+
+Now, C++11 adds the ability to initialize a member array using the member initializer list
+and braces:
+
+<blockquote><pre>
+<b>class</b> Foo2
+{
+  <b>public</b>:
+    Foo2() : array_{1, 2, 3} <font color="#003399"><i>// member array initialization (MUST use braces)</i></font>
+    {
+      <font color="#003399"><i>// empty body</i></font>
+    }
+  <b>private</b>:
+    <b>int</b> array_[3];
+};
+</pre></blockquote>
+
+Be sure not to include parentheses in the member initializer list:
+
+<blockquote><pre>
+Foo2() : array_( {1, 2, 3} ) <font color="#003399"><i>// Incorrect</i></font>
+</pre></blockquote>
+
+C++11 also allows you to initialize the array directly in the class:
+
+<blockquote><pre>
+<b>class</b> Foo2
+{
+  <b>public</b>:
+    Foo2()
+    {
+      <font color="#003399"><i>// empty body</i></font>
+    }
+  <b>private</b>:
+    <b>int</b> array_[3] = {1, 2, 3}; <font color="#003399"><i>// member array initialization (equal sign is optional)</i></font>
+};
+</pre></blockquote>
+
+You must still specify the size, even though there is an initializer list. 
+This is the error from Clang without it:
+
+<blockquote><pre>
+error: array bound cannot be deduced from an in-class initializer
+    int array_[] = {1, 2, 3}; // member array initialization (equal sign is optional)
+                 ^
+</pre></blockquote>
+
+This is what GNU g++ says:
+
+<blockquote><pre>
+error: too many initializers for 'int [0]'
+     int array_[] = {1, 2, 3}; // member array initialization (equal sign is optional)
+                            ^
+</pre></blockquote>
+
+Another welcome addition is the ability to initialize a standard container with this syntax. Previously, like
+arrays, there was no easy way of initializing a vector. You had to do something like this:
+
+
+<blockquote><pre>
+  <font color="#003399"><i>// size and capacity is 0</i></font>
+vector&lt;<b>int</b>&gt; v0;
+
+  <font color="#003399"><i>// Add elements</i></font>
+v0.push_back(1);
+v0.push_back(2);
+v0.push_back(3);
+v0.push_back(4);
+v0.push_back(5);
+
+  <font color="#003399"><i>// Size is 5, capacity is implementation-dependent (it's 8 with clang)</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;size: &quot;</font> &lt;&lt; v0.size() &lt;&lt; <font color="#9933CC">&quot;, capacity: &quot;</font> &lt;&lt; v0.capacity() &lt;&lt; endl;
+
+  <font color="#003399"><i>// Initialize vector with initializer list syntax</i></font>
+vector&lt;<b>int</b>&gt; v1{1, 2, 3, 4, 5};
+
+  <font color="#003399"><i>// Size and capacity are both 5</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;size: &quot;</font> &lt;&lt; v1.size() &lt;&lt; <font color="#9933CC">&quot;, capacity: &quot;</font> &lt;&lt; v1.capacity() &lt;&lt; endl;
+</pre></blockquote>
+
+<!--
+  It works with parentheses, too
+  vector<int> v1 ({1, 2, 3, 4, 5});
+-->
+Lists and other containers also work:
+
+
+<blockquote><pre>
+list&lt;<b>int</b>&gt; list1 {5, 4, 3, 2, 1};
+deque&lt;<b>int</b>&gt; deque1 {3, 4, 5, 1, 2};
+set&lt;<b>int</b>&gt; set1 {5, 4, 3, 2, 1};
+</pre></blockquote>
+
+Iterating over the containers to display the contents of the list, set, and deque, respectively:
+
+<blockquote><pre>
+5  4  3  2  1  
+3  4  5  1  2  
+1  2  3  4  5  
+</pre></blockquote>
+
+<p>
+<hr width="95%">
+<p>
+
+<b>Functions taking initializer lists</b>
+<p>
+
+A couple of functions to use:
+
+<blockquote><pre>
+<font color="#003399"><i>// Function taking a vector</i></font>
+<b>void</b> fn1(<b>const</b> std::vector&lt;<b>int</b>&gt;&amp; v)
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;vector: &quot;</font>;
+  print5(v);
+}
+
+<font color="#003399"><i>// Function taking an initializer_list</i></font>
+<b>void</b> fn2(<b>const</b> std::initializer_list&lt;<b>int</b>&gt;&amp; lst)
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;init list: &quot;</font>;
+  print5(lst);
+}
+</pre></blockquote>
+
+Calling the functions:
+
+<blockquote><pre>
+fn1({1, 2, 3});               <font color="#003399"><i>// conversion constructor for vector</i></font>
+fn1(vector&lt;<b>int</b>&gt;{1, 2, 3, 4}); <font color="#003399"><i>// pass vector (temporary)</i></font>
+fn2({1, 2, 3, 4, 5});         <font color="#003399"><i>// pass initializer_list</i></font>
+fn1(1, 2, 3, 4, 5);           <font color="#003399"><i>// Error</i></font>
+fn2(1, 2, 3, 4, 5);           <font color="#003399"><i>// Error</i></font>
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+vector: 1  2  3  
+vector: 1  2  3  4  
+init list: 1  2  3  4  5  
+</pre></blockquote>
+
+Errors from Clang:
+<blockquote><pre>
+cpp14.cpp:357:3: error: no matching function for call to 'fn1'
+  fn1(1, 2, 3);
+  ^~~
+cpp14.cpp:244:6: note: candidate function not viable: requires single argument 'v', 
+                 but 3 arguments were provided
+void fn1(const std::vector<int>& v)
+     ^
+cpp14.cpp:358:3: error: no matching function for call to 'fn2'
+  fn2(1, 2, 3);
+  ^~~
+cpp14.cpp:250:6: note: candidate function not viable: requires single argument 'lst', 
+                       but 3 arguments were provided
+void fn2(const std::initializer_list<int>& lst)
+     ^
+</pre></blockquote>
+
+
+Notes:
+<ul>
+  <li>Since there is a (conversion) constructor for the <i>vector</i> class that takes
+    an <i>initializer_list</i>, the first call will work by implicitly constructing a vector.</li>
+  <li>The second call explicitly constructs an anonymous vector object from the
+    initializer_list and then passes that.</li>
+  <li>The third call exactly matches the function that takes an initializer_list.</li>
+  <li>You could have overloaded <tt>fn1</tt> instead of creating a second function with
+    a different name. Beware, of course, that overloading can lead to ambiguities.</li>
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+<hr width="95%">
+<p>
+
+How would we add support for initializer lists to, say, our own Vector class? 
+<ol>
+  <li>First, we would have to include the header file that supports initializer lists (in <tt>Vector.h</tt>):
+
+<blockquote><pre>
+<b>#include</b> &lt;initializer_list&gt;
+</pre></blockquote></li>
+<p>
+<li>And then add a new constructor to the header file:
+
+<blockquote><pre>
+Vector(<b>const</b> std::initializer_list&lt;<b>int</b>&gt;&amp; list);
+</pre></blockquote>
+</li>
+<p>
+  <li>Then in the .cpp file we would implement it:
+
+<blockquote><pre>
+Vector::Vector(<b>const</b> std::initializer_list&lt;<b>int</b>&gt;&amp; list) 
+   : array_(0), size_(0), capacity_(0)
+{
+    <font color="#003399"><i>// Get the number of elements in the intializer list</i></font>
+  size_t size = list.size();
+
+    <font color="#003399"><i>// The initializer list could be empty</i></font>
+  <b>if</b> (size)
+  {
+      <font color="#003399"><i>// Just grow the internal array once (optimization)</i></font>
+    grow(size);
+
+      <font color="#003399"><i>// Iterate over the initializer list, pushing each element to the back</i></font>
+    std::initializer_list&lt;<b>int</b>&gt;::const_iterator it = list.begin();
+    <b>while</b> (it != list.end())
+      push_back(*it++);
+  }
+}
+</pre></blockquote>
+</li>
+<p>
+  <li>And then test it out with some driver code:
+
+<blockquote><pre>
+Vector v {1, 2, 3, 4, 5};
+Print(v);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+1  2  3  4  5  (size=5, capacity=5, allocs=1)
+</pre></blockquote>
+</li>
+</ol>
+
+<p>
+Links:
+<ul>
+  <li><a href="https://herbsutter.com/2013/05/09/gotw-1-solution/">Variable Initialization</a>
+  The difference between default initialization, direct initialization, copy initialization, and list initialization.
+  Also, the difference between using ( ) and using { } for initialization.
+  If you are going to use braces and initializer lists, <b>this is a must read.</b>
+</li>
+  <li><a href="http://www.stroustrup.com/C++11FAQ.html#init-list">Initializer lists</a> at Stroustrup's site.</li>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="RANGE_FOR">
+<p class="sectionheader">
+Range-Based For Loops (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2930.html">N2930</a>)
+</p>
+</A>
+
+Range-based for loops are another welcomed addition. They work a lot like similar constructs
+in other languages. However, they are not to be confused with the <i>for_each</i>
+generic algorithm:
+
+<blockquote><pre>
+<b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Op&gt; Op <font color=blue>for_each</font>(InputIt first, InputIt last, Op op);
+</pre></blockquote>
+
+Examples will clarify. This is how we've used for loops with arrays since the beginning:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Initialize int array (20 bytes)</i></font>
+<b>int</b> a[] = {1, 2, 3, 4, 5};
+
+  <font color="#003399"><i>// Print out each element: 1 2 3 4 5</i></font>
+<b>int</b> size = <b>sizeof</b>(a) / <b>sizeof</b>(*a);
+<b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  cout &lt;&lt; a[i] &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+cout &lt;&lt; endl;
+</pre></blockquote>
+
+Now, with range-based for loops:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Using a range-based for: 1 2 3 4 5</i></font>
+<b>for</b> (<b>int</b> i : a)
+  cout &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+cout &lt;&lt; endl;
+</pre></blockquote>
+
+If we want to modify each element of the array, we need to use references:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Multiply each element by 10 (reference)</i></font>
+<b>for</b> (<b>int</b>&amp; i : a)
+  i *= 10;
+
+  <font color="#003399"><i>// Display: 10 20 30 40 50</i></font>
+<b>for</b> (<b>int</b> i : a)
+  cout &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+cout &lt;&lt; endl;
+</pre></blockquote>
+
+You can also use <b>const</b> with the references:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Assume some array of large objects</i></font>
+<b>const</b> BigObject BigObjectArray[] = {. . .};
+
+  <font color="#003399"><i>// Don't want to copy large objects, but don't want to modify either</i></font>
+<b>for</b> (<b>const</b> BigObject&amp; b : BigObjectArray)
+  ProcessBigObject(b);
+</pre></blockquote>
+
+Of course, as you'd expect, the standard containers work equally well. Using a <i>std::list</i> here,
+just to mix it up a bit. The first loop example is how it was done before C++11:
+
+
+<blockquote><pre>
+list&lt;<b>int</b>&gt; lst {1, 2, 3, 4, 5}; <font color="#003399"><i>// Using C++11 initializer lists</i></font>
+
+  <font color="#003399"><i>// Using C++98/03 iterators with for loop: 1 2 3 4 5</i></font>
+<b>for</b> (list&lt;<b>int</b>&gt;::iterator it = lst.begin(); it != lst.end(); ++it)
+  cout &lt;&lt; *it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+cout &lt;&lt; endl;
+</pre></blockquote>
+
+You can use the newly re-purposed <i><b>auto</b></i> keyword for the iterator. The compiler
+knows the type that <i>lst.begin()</i> returns, so it can deduce the type for <i>it</i>:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Using auto with iterators and for loop: 1 2 3 4 5</i></font>
+<b>for</b> (<b>auto</b> it = lst.begin(); it != lst.end(); ++it)
+  cout &lt;&lt; *it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+cout &lt;&lt; endl;
+</pre></blockquote>
+
+Using the new range-based for loops, the loop is made even more compact:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Using range-based for loop: 1 2 3 4 5</i></font>
+<b>for</b> (<b>int</b> i : lst)
+  cout &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+cout &lt;&lt; endl;
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>Range-based for loops require that the type being iterated over understands the concept
+    of a <i>range</i>
+  <li>Basically, any type that supports <i>begin()</i>, <i>end()</i>, and <i>operator++</i> will
+    work.</li>
+  <li>Built-in arrays now have corresponding global <i>begin()</i> and <i>end()</i> functions
+    that will allow them to behave just like the standard containers (e.g. <i>begin(array)</i>)</li>
+
+<p>
+<li><b>Limitations:</b></li>
+<ul>
+  <li>Only works with <b>for</b>, not <b>while</b> or <b>do...while</b>.</li>
+  <li>You must process the entire range (i.e. can't skip elements). For example,
+    you can't do this (easily):
+
+
+<blockquote><pre>
+  <font color="#003399"><i>// Print every other element:</i></font>
+<b>for</b> (<b>int</b> i = 0; i &lt; len; <font color="blue"><b>i += 2</b></font>)
+  cout &lt;&lt; a[i] &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+</pre></blockquote>
+(There is discussion in the C++ standards committee that is considering this for a future version.)
+<p>
+
+  </li>
+  <li>Range-based for loops have limited use with static arrays and can't be used at all with
+    dynamic arrays.</li>
+  <li>This means you can't use it with pointers:
+<blockquote><pre>
+<b>void</b> fn(<b>int</b> *array)
+{
+    <font color="#003399"><i>// Won't work, array is a pointer</i></font>
+  <b>for</b> (<b>int</b> i : array)
+    cout &lt;&lt; i;
+}
+
+error: invalid range expression of type 'int *'; no viable 'begin' function available
+  for (int i : array)
+             ^ ~~~~~
+</pre></blockquote>
+
+<li>Because of these limitations, this technique is rarely used with static arrays.
+  (Built-in static arrays are also less used these days.) </li>
+<li>This technique was primarily invented for use with STL containers.</li>
+
+</ul>
+<p>
+
+  <li><i>std::initializer_list</i> will also work.</li>
+  <li><a href="http://www.stroustrup.com/C++11FAQ.html#for">Range-for</a> at Stroustrup's site.</li>
+</ul>
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="NULLPTR">
+<p class="sectionheader">
+nullptr (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2431.pdf">N2431</a>)
+</p>
+</A>
+
+A new keyword, <b>nullptr</b> has been created to deal with, well, NULL pointers. The type
+of <b>nullptr</b> is <i>std::nullptr_t</i>. Historically, there have been some problems when
+mixing <i>NULL</i>, due to the fact that the actual value is implementation-dependent. 
+It is usually defined in C++ to be 0, but is defined in C to be a void pointer:
+
+<blockquote><pre>
+<b>#define</b> NULL ((<b>void</b> *)0) <font color="#003399"><i>// C</i></font>
+<b>#define</b> NULL 0           <font color="#003399"><i>// C++98</i></font>
+</pre></blockquote>
+
+For the most part, this wasn't a huge problem, but it did lead to some ambiguities at times.
+Given these overloaded functions:
+
+<blockquote><pre>
+<b>void</b> foo(<b>int</b>)
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;foo(int)&quot;</font> &lt;&lt; endl;
+}
+
+<b>void</b> foo(<b>int</b> *)
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;foo(int *)&quot;</font> &lt;&lt; endl;
+}
+</pre></blockquote>
+
+this code is fine:
+
+<blockquote><pre>
+foo(0);       <font color="#003399"><i>// foo(int)</i></font>
+foo(<b>nullptr</b>); <font color="#003399"><i>// foo(int*), C++11</i></font>
+foo((<b>int</b>*)0); <font color="#003399"><i>// foo(int*)</i></font>
+</pre></blockquote>
+
+but this is ambiguous:
+
+<blockquote><pre>
+foo(NULL); <font color="#003399"><i>// possibly ambiguous, depending on how NULL is defined</i></font>
+</pre></blockquote>
+
+Clang says:
+
+<blockquote><pre>
+error: call to 'foo' is ambiguous
+  foo(NULL); // possibly ambiguous, depending on how NULL is defined
+  ^~~
+note: candidate function
+void foo(int)
+     ^
+candidate function
+void foo(int *)
+     ^
+1 error generated.
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>The <b>nullptr</b> can be used to compare to any pointer type.</li>
+  <li>It can also be converted to <b>bool</b>, so this still works:
+
+<blockquote><pre>
+<b>char</b> *p = <b>nullptr</b>;
+. . .
+<b>if</b> (p)
+  . . .
+</pre></blockquote>
+<li>This can also help prevent ambiguities in template functions where the
+  template parameter <b>T</b> may treat a 0 as an integer,  instead of a null pointer.</li>
+<li>See <a href="http://en.cppreference.com/w/cpp/types/nullptr_t">this</a> for an example
+  of ambiguity with overloaded functions taking pointers.</li>
+
+<li><a href="http://www.stroustrup.com/C++11FAQ.html#nullptr">nullptr -- a null pointer literal</a> at Stroustrup's site.</li>
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="TYPED_ENUMS">
+<p class="sectionheader">
+Strongly Typed Enums (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf">N2347</a>)
+</p>
+</A>
+
+OK, so what kinds of problems exist with enumerations that require changes to the language? There
+are several, and I'm going to discuss a few of them.
+<p>
+There are actually 3 things that have changed with respect to enumerations in C++11. In no
+particular order:
+
+<ol>
+  <li>Create a new kind of <b>enum</b> that is strongly typed: <b>enum class</b></li>
+  <li>Allow the programmer to choose the underlying type (i.e. <b>sizeof</b>) used to represent the <b>enum</b>.</li>
+  <li>Allow access to the <b>enum</b> via the scope resolution operator.</li>
+</ol>
+
+Let's start with how enumerations were handled before C++11. Take this simple enumeration:
+
+<blockquote><pre>
+<b>enum</b> ColorSpace {Red, Green, Blue};     <font color="#003399"><i>// Represent graphics colors</i></font>
+</pre></blockquote>
+
+and use it:
+<blockquote><pre>
+ColorSpace cs = Green; <font color="#003399"><i>// Set color to green (integer 1)</i></font>
+</pre></blockquote>
+
+In C++, enumerations are their own distinct type, so this is illegal:
+
+<blockquote><pre>
+cs = 1; <font color="#003399"><i>// ERROR: no conversion <b>from</b> integer</i></font>
+</pre></blockquote>
+
+However, this is fine:
+
+<blockquote><pre>
+<b>int</b> i = Green; <font color="#003399"><i>// OK, implicit conversion <b>to</b> integer, C++03 only</i></font>
+</pre></blockquote>
+
+OK, so far, so good. This is the pre-C++11 behavior. But, we also have this problem:
+
+<blockquote><pre>
+<b>enum</b> ColorSpace {Red, Green, Blue};     <font color="#003399"><i>// Represent graphics colors</i></font>
+<b>enum</b> TrafficLight {Red, Yellow, Green}; <font color="#003399"><i>// Represent traffic signals</i></font>
+</pre></blockquote>
+
+Clang says this:
+
+<blockquote><pre>
+error: redefinition of enumerator 'Red'
+  enum ColorSpace {Red, Green, Blue};     // Represent graphics colors
+                   ^
+note: previous definition is here
+  enum TrafficLight {Red, Yellow, Green}; // Represent traffic signals
+                     ^
+error: redefinition of enumerator 'Green'
+  enum ColorSpace {Red, Green, Blue};     // Represent graphics colors
+                        ^
+note: previous definition is here
+  enum TrafficLight {Red, Yellow, Green}; // Represent traffic signals
+                                  ^
+</pre></blockquote>
+
+This has led programmers to do things like this:
+
+<blockquote><pre>
+<b>enum</b> ColorSpace {csRed, csGreen, csBlue};     <font color="#003399"><i>// Represent graphics colors</i></font>
+<b>enum</b> TrafficLight {tlRed, tlYellow, tlGreen}; <font color="#003399"><i>// Represent traffic signals</i></font>
+</pre></blockquote>
+
+There is no longer any ambiguity:
+<blockquote><pre>
+ColorSpace color = csGreen;   <font color="#003399"><i>// OK </i></font>
+TrafficLight light = tlGreen; <font color="#003399"><i>// OK</i></font>
+</pre></blockquote>
+
+Of course, there are other solutions (e.g. namespaces, static members of a class).
+<p>
+Then there is the issue with this:
+
+<blockquote><pre>
+<b>sizeof</b>(ColorSpace)
+</pre></blockquote>
+
+This is compiler-dependent. The only thing the compiler guarantees is that the underlying type
+used to represent the enumerations is large enough to hold the value of the largest element.
+<p>
+Fortunately, C++11 solves these shortcomings with a feature call <i>enumeration classes</i>:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Elements are no longer ambiguous</i></font>
+<b>enum</b> <font color="blue"><b>class</b></font> ColorSpace {Red, Green, Blue};     <font color="#003399"><i>// Represent graphics colors</i></font>
+<b>enum</b> <font color="blue"><b>class</b></font> TrafficLight {Red, Yellow, Green}; <font color="#003399"><i>// Represent traffic signals</i></font>
+
+  <font color="#003399"><i>// Clear, unambiguous, self-documenting</i></font>
+ColorSpace cs = ColorSpace::Green;
+TrafficLight tl = TrafficLight::Green;
+</pre></blockquote>
+
+However, this is no longer supported:
+
+<blockquote><pre>
+<b>int</b> i = Color::Green; <font color="#003399"><i>// No conversion to <b>int</b> in C++11</i></font>
+</pre></blockquote>
+
+These are also referred to as <i>scoped enumerations</i> because you access them with the scope resolution operator.
+Also, the size of the underlying type is guaranteed to be integer (unless you specifically request a 
+different type).
+<p>
+If you leave off the <b>class</b>, you can still use the scope resolution operator. This was an 
+enhancement made to the original <b>enum</b> specification:
+
+<blockquote><pre>
+<b>enum</b> TrafficLight {Red, Yellow, Green}; <font color="#003399"><i>// Represent traffic signals</i></font>
+
+TrafficLight tl = TrafficLight::Green; <font color="#003399"><i>// Optional qualifier (recommended)</i></font>
+TrafficLight tl2 = Green;              <font color="#003399"><i>// Same as TrafficLight::Green</i></font>
+</pre></blockquote>
+
+However, I would avoid the old-style enumerations, as that can lead to ambiguities. 
+Get into the habit of using the qualified names and you'll never have a problem.
+<p>
+C++11 also lets you choose the representation of the enumeration:
+
+<blockquote><pre>
+<b>enum</b> <b>class</b> TrafficLight : <font color="blue"><b>char</b></font> {Red, Yellow, Green};  <font color="#003399"><i>// Represent traffic signals</i></font>
+<b>enum</b> <b>class</b> ColorSpace : <font color="blue"><b>short</b></font> {Red, Green, Blue};     <font color="#003399"><i>// Represent graphics colors</i></font>
+<b>enum</b> <b>class</b> Twister : <font color="blue"><b>long</b></font> {Red, Green, Blue, Yellow}; <font color="#003399"><i>// Represent the game colors</i></font>
+<b>enum</b> <b>class</b> Checkers {Red, Black};                     <font color="#003399"><i>// Represent the game colors</i></font>
+
+  <font color="#003399"><i>// Sizes shown are using the <a href="https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models">LP64 data model</a></i></font>  
+cout &lt;&lt; <b>sizeof</b>(TrafficLight) &lt;&lt; endl; <font color="#003399"><i>// 1</i></font>
+cout &lt;&lt; <b>sizeof</b>(ColorSpace) &lt;&lt; endl;   <font color="#003399"><i>// 2</i></font>
+cout &lt;&lt; <b>sizeof</b>(Twister) &lt;&lt; endl;      <font color="#003399"><i>// 8</i></font>
+cout &lt;&lt; <b>sizeof</b>(Checkers) &lt;&lt; endl;     <font color="#003399"><i>// 4 (default type is int)</i></font>
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>When you have a choice, use the <i>scoped enumerations</i> (enum classes) to avoid any
+    ambiguities.</li>
+  <li>You can use both the <b>class</b> keyword and the underlying type, in any combination:
+<p>
+<ol>
+<li>No class, no type (default, C++03):
+<blockquote><pre>
+  <font color="#003399"><i>// Existing behavior, underlying type is compiler-dependent</i></font>
+<b>enum</b> Color {Red, Yellow, Green};
+
+cout &lt;&lt; <b>sizeof</b>(Color) &lt;&lt; endl; <font color="#003399"><i>// 4 (defaults to int)</i></font>
+cout &lt;&lt; Color::Green &lt;&lt; endl;  <font color="#003399"><i>// 2 (may be qualified, new in C++11)</i></font>
+cout &lt;&lt; Green &lt;&lt; endl;         <font color="#003399"><i>// 2 (may be unqualified)</i></font>
+</pre></blockquote>
+
+</ol>
+
+<p>
+<li>The rest are new in C++11:</li>
+<p>
+  
+<ol start="2">
+
+<li>No class, with type:
+<blockquote><pre>
+  <font color="#003399"><i>// Specify underlying type</i></font>
+<b>enum</b> Color : <b>char</b> {Red, Yellow, Green};
+
+cout &lt;&lt; <b>sizeof</b>(Color) &lt;&lt; endl; <font color="#003399"><i>// 1</i></font>
+cout &lt;&lt; Color::Green &lt;&lt; endl;  <font color="#003399"><i>// 2 (may be qualified)</i></font>
+cout &lt;&lt; Green &lt;&lt; endl;         <font color="#003399"><i>// 2 (may be unqualified)</i></font>
+</pre></blockquote>
+
+
+<li>With class, no type (default):
+<blockquote><pre>
+  <font color="#003399"><i>// Enumeration class (distinct type)</i></font>
+<b>enum</b> <b>class</b> Color {Red, Yellow, Green};
+
+cout &lt;&lt; <b>sizeof</b>(Color) &lt;&lt; endl;     <font color="#003399"><i>// 4 (defaults to int)</i></font>
+cout &lt;&lt; <b>int</b>(Color::Green) &lt;&lt; endl; <font color="#003399"><i>// 2 (Must be qualified, must cast, no operator&lt;&lt; for Color)</i></font>
+<font color="red">cout &lt;&lt; Green &lt;&lt; endl;             <i>// Illegal, must be qualified</i></font>
+</pre></blockquote>
+
+
+<li>With class and type:
+<blockquote><pre>
+  <font color="#003399"><i>// Enumeration class (distinct type), specifying underlying type</i></font>
+<b>enum</b> <b>class</b> Color : <b>long</b> {Red, Yellow, Green};
+
+cout &lt;&lt; <b>sizeof</b>(Color) &lt;&lt; endl;     <font color="#003399"><i>// 8</i></font>
+cout &lt;&lt; <b>int</b>(Color::Green) &lt;&lt; endl; <font color="#003399"><i>// 2 (Must be qualified, must cast, no operator&lt;&lt; for Color)</i></font>
+<font color="red">cout &lt;&lt; Green &lt;&lt; endl;             <i>// Illegal, must be qualified</i></font>
+</pre></blockquote>
+
+</ol>
+</li>
+
+
+
+  <li>You should probably let the compiler choose the underlying representation, unless you have
+    a good reason to override it (e.g. large arrays of enums and memory is very constrained.)</li>
+  <li><a href="http://www.stroustrup.com/C++11FAQ.html#enum">enum class -- scoped and strongly typed enums</a>
+    at Stroustrup's site.</li>
+</ul>
+
+<a name="FORWARD_ENUMS">
+Another thing relating to enumerations that was introduced in C++11 is forward declaration of
+enumerations (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2764.pdf">N2764</a>).
+</a>
+
+<blockquote><pre>
+<b>enum</b> <b>class</b> ColorSpace : <b>short</b>; <font color="#003399"><i>// Represent graphics colors (forward declaration)</i></font>
+
+<font color="#003399"><i>// Other code ...</i></font>
+
+<b>enum</b> <b>class</b> ColorSpace : <b>short</b> {Red, Green, Blue}; <font color="#003399"><i>// Actual definition is here</i></font>
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>Obviously, the forward declaration must match that definition (i.e. underlying type) or it's an 
+    error.</li>
+  <li>Use when the compiler needs to know the size of the underlying type (for memory layout),
+    but doesn't need to know the actual names or values of the members.</li>
+  <li>Only works with scoped enumerations (i.e. <i>enum class</i>).</li>
+  <li>Read all of the gory details about it <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2764.pdf">here</a>.</li>
+</ul>
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="AUTO_DEDUCT">
+<p class="sectionheader">
+auto Deductions (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1984.pdf">N1984</a>)
+</p>
+</A>
+
+Just as the compiler can (usually) deduce the types of parameters to templated functions, the
+compiler can now deduce the type of a variable based on it's initializer. It uses the
+deprecated <i>auto</i> keyword:
+
+<blockquote><pre>
+<b>auto</b> i = 10;    <font color="#003399"><i>// int</i></font>
+<b>auto</b> d = 10.0;  <font color="#003399"><i>// double</i></font>
+<b>auto</b> f = 10.0F; <font color="#003399"><i>// float</i></font>
+</pre></blockquote>
+
+
+<blockquote><pre>
+cout &lt;&lt; <b>typeid</b>(i).name() &lt;&lt; endl; <font color="#003399"><i>// i</i></font>
+cout &lt;&lt; <b>typeid</b>(d).name() &lt;&lt; endl; <font color="#003399"><i>// d</i></font>
+cout &lt;&lt; <b>typeid</b>(f).name() &lt;&lt; endl; <font color="#003399"><i>// f</i></font>
+</pre></blockquote>
+
+You can also include <i>qualifiers</i>:
+
+<blockquote><pre>
+<b>const</b> <b>auto</b> ii = 10;    <font color="#003399"><i>// const int</i></font>
+<b>auto</b>&amp; ri = ii;         <font color="#003399"><i>// int&amp;</i></font>
+<b>const</b> <b>auto</b>&amp; cri = ii; <font color="#003399"><i>// const int&amp;</i></font>
+</pre></blockquote>
+
+Be careful when using <i>auto</i>:
+<blockquote><pre>
+<b>auto</b> i1 = 1;   <font color="#003399"><i>// int, as expected</i></font>
+<b>auto</b> i2 = {1}; <font color="#003399"><i>// initializer_list&lt;int&gt;, probably not what you want</i></font>
+<b>auto</b> i3 {1};   <font color="#003399"><i>// int, before C++14 is was initializer_list&lt;int&gt;</i></font>
+<b>auto</b> i4(1);    <font color="#003399"><i>// int</i></font>
+
+cout &lt;&lt; <b>typeid</b>(i1).name() &lt;&lt; endl; <font color="#003399"><i>// i</i></font>
+cout &lt;&lt; <b>typeid</b>(i2).name() &lt;&lt; endl; <font color="#003399"><i>// St16initializer_listIiE</i></font>
+cout &lt;&lt; <b>typeid</b>(i3).name() &lt;&lt; endl; <font color="#003399"><i>// i</i></font>
+cout &lt;&lt; <b>typeid</b>(i4).name() &lt;&lt; endl; <font color="#003399"><i>// i</i></font>
+</pre></blockquote>
+
+More examples:
+
+<blockquote><pre>
+vector&lt;<b>int</b>&gt; v1;
+
+<b>auto</b> x1 = v1.crbegin();
+cout &lt;&lt; <b>typeid</b>(x1).name() &lt;&lt; endl;
+
+vector&lt;<b>int</b>&gt;::const_reverse_iterator x2 = v1.crbegin();
+cout &lt;&lt; <b>typeid</b>(x2).name() &lt;&lt; endl;
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+St16reverse_iteratorIN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEEE
+St16reverse_iteratorIN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEEE
+</pre></blockquote>
+
+Using <i>auto</i>:
+
+<blockquote><pre>
+  <font color="#003399"><i>// vector&lt;int&gt;</i></font>
+<b>auto</b> v2(v1);
+cout &lt;&lt; <font color="#9933CC">&quot;   auto v2(v1) is &quot;</font> &lt;&lt; <b>typeid</b>(v2).name() &lt;&lt; endl;
+
+  <font color="#003399"><i>// vector&lt;int&gt;</i></font>
+<b>auto</b> v3 = v1;
+cout &lt;&lt; <font color="#9933CC">&quot;  auto v3 = v1 is &quot;</font> &lt;&lt; <b>typeid</b>(v3).name() &lt;&lt; endl;
+
+  <font color="#003399"><i>// vector&lt;int&gt;</i></font>  
+<b>auto</b> v4{v1};
+cout &lt;&lt; <font color="#9933CC">&quot;   auto v4{v1} is &quot;</font> &lt;&lt; <b>typeid</b>(v4).name() &lt;&lt; endl;
+
+  <font color="#003399"><i>// initializer_list&lt;vector&lt;int&gt;&gt;</i></font>
+<b>auto</b> v5 = {v1};
+cout &lt;&lt; <font color="#9933CC">&quot;auto v5 = {v1} is &quot;</font> &lt;&lt; <b>typeid</b>(v5).name() &lt;&lt; endl;
+
+  <font color="#003399"><i>// vector&lt;int&gt; (no <b>auto</b>)</i></font>
+vector&lt;<b>int</b>&gt; v6 = {v1};
+cout &lt;&lt; <font color="#9933CC">&quot;     v6 = {v1} is &quot;</font> &lt;&lt; <b>typeid</b>(v6).name() &lt;&lt; endl;
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+   auto v2(v1) is St6vectorIiSaIiEE
+  auto v3 = v1 is St6vectorIiSaIiEE
+   auto v4{v1} is St6vectorIiSaIiEE
+auto v5 = {v1} is St16initializer_listISt6vectorIiSaIiEEE
+     v6 = {v1} is St6vectorIiSaIiEE
+</pre></blockquote>
+
+The <i>"classic"</i> example for using <i>auto</i> is with iterators in loops. Here's the <tt>print5</tt>
+function using explicitly typed variables:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> print5a(<b>const</b> T&amp; container)
+{
+  <b>for</b> (<b>typename</b> T::const_iterator iter = container.begin(); iter != container.end(); ++iter)
+    std::cout &lt;&lt; *iter &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Using <i>auto</i>:
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> print5b(<b>const</b> T&amp; container)
+{
+  <b>for</b> (<b>auto</b> iter = container.begin(); iter != container.end(); ++iter)
+    std::cout &lt;&lt; *iter &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Using <i>auto</i> and range-based for loops:
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> print5(<b>const</b> T&amp; container)
+{
+  <b>for</b> (<b>auto</b> e : container)
+    std::cout &lt;&lt; e &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+When declaring multiple variables with the <i>auto</i> keyword, they all must be the same
+type:
+
+<blockquote><pre>
+<b>auto</b> i = 5, j = 7, *pi = &amp;i; <font color="#003399"><i>// OK</i></font>
+<font color="red"><b>auto</b> k = 100, d = 3.1415;    <i>// error: inconsistent deduction for auto</i></font>
+
+vector&lt;<b>int</b>&gt; v1 {1, 2, 3};
+<b>for</b> (<b>auto</b> iter = v1.begin(), end = v1.end(); iter != end; ++iter)
+  cout &lt;&lt; *iter &lt;&lt; endl;
+</pre></blockquote>
+
+
+Notes:
+<ul>
+  <li>Before C++11, the <i>auto</i> keyword was used as a storage specifier. However, it really
+    went unused for decades so is unlikely to prove problematic with existing code.</li>
+  <li>As with template deduction, the compiler has detailed and sometimes complex rules as to
+  how <i>auto</i> will be applied. You should only use it when you are sure as to what the compiler
+  is going to decide the type should be.
+  <li>The <i>auto</i> keyword is really meant for long and difficult types (think templates and lambda functions). 
+    Although
+    it works for all types, it has little benefit with simple types (e.g. <i>int</i>, <i>double</i>, etc.).</li>
+  <li>Using the <i>auto</i> keyword out of laziness actually requires the programmer to do more work.
+    What does <i>SomeFunc</i> return?
+
+  <blockquote><pre>
+<b>auto</b> x = SomeFunc(); <font color="#003399"><i>// You must read the documentation or header file.</i></font>
+</pre></blockquote>
+
+  It's abuses like this that cause extra work for programmers (and TAs!).
+
+  <li>As Herb Sutter says <i>"Treat a new C++ feature like you would treat a loaded automatic weapon
+    in a crowded room: never use it just because it looks nifty. Wait until you understand the 
+    consequences."</i></li>
+  <li>More info on multiple auto Declarations (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1737.pdf">N1737</a>).
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<!--
+<p class="sectionheader">
+Multiple auto Declarations (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1737.pdf">N1737</a>)
+</p>
+-->
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="RAW_LITERALS">
+<p class="sectionheader">
+Raw and Unicode String Literals (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2442.htm">N2442</a>)
+</p>
+</A>
+
+Here is some sample code from the link above that shows the motivation for raw strings:
+
+<blockquote>
+<p class="technote">
+<tt>
+&nbsp;&nbsp;&nbsp;&nbsp;"('(?:[^\\\\']|\\\\.)*'|\"(?:[^<span style="background-color: #FFFF00">\\\\\</span>"]|\\\\.)*\")|"
+</tt>
+<br><br>
+Are the high-lighted five backslashes correct or not? Even experts become easily confused. 
+Here is the same line as a raw string literal:
+<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>R"(('(?:[^\\']|\\.)*'|"(?:[^\\"]|\\.)*")|)"</tt>
+</p>
+</blockquote>
+
+Anytime that you need to deal with strings that include characters like backslashes and
+double-quotes, you end up having to <i>escape</i> them (with the backslash character). This
+makes the string difficult to parse (for a human). Certain types of text processing requires
+these "special" characters (e.g. HTML, XML, regular expressions, etc.) Having a more
+convenient way to code those strings without all of the escaping, is desirable.
+<p>
+This is a mistake that <i>every</i> Windows programmer has made and had to deal with:
+
+<blockquote><pre>
+std::string text_editor(<font color="#9933CC">&quot;c:&#92;windows&#92;system32&#92;notepad.exe&quot;</font>);
+</pre></blockquote>
+
+Errors from Clang:
+
+<blockquote><pre>
+error: unknown escape sequence '\w' [-Werror,-Wunknown-escape-sequence]
+  std::string text_editor("c:\windows\system32\notepad.exe");
+                             ^~
+error: unknown escape sequence '\s' [-Werror,-Wunknown-escape-sequence]
+  std::string text_editor("c:\windows\system32\notepad.exe");
+                                     ^~
+2 errors generated.
+</pre></blockquote>
+
+The programmer forgot to escape the backslashes (directory delimiters):
+Because the backslashes are used to delimit subdirectories, the compiler thinks that there
+are 3 escape sequences: <tt>\w</tt>, <tt>\s</tt>, and <tt>\n</tt>. Of course, <tt>\n</tt>
+is a valid escape sequence, but it's unlikely that the text_editor intended to have a newline
+as part of it. I have seen this exact problem confuse new C/C++ programmers several times.
+<p>
+This is the proper way:
+
+<blockquote><pre>
+std::string text_editor(<font color="#9933CC">&quot;c:&#92;&#92;windows&#92;&#92;system32&#92&#92;notepad.exe&quot;</font>);
+</pre></blockquote>
+
+
+
+Using <i>raw strings</i> makes it much simpler:
+
+<blockquote><pre>
+std::string text_editor(R<font color="#9933CC">&quot;(c:&#92;windows&#92;system32&#92;notepad.exe)&quot;</font>);
+</pre></blockquote>
+
+Raw strings are pretty simple. They just tell
+the compiler to use the strings without any interpretation of the escape sequences.
+<p>
+To construct a raw string:
+<ol>
+  <li>A raw string must start with <tt>R"</tt> (capital 'R' only, not lowercase 'r') and a double-quote character.</li>
+  <li>The <tt>R"</tt> is then followed by a PREFIX which consists of 0 to 16 characters. Most characters are allowed.</li>
+  <li>The (optional) PREFIX must be followed by a left parenthesis.</li>
+  <li>After the left parenthesis, the actual characters of the string will follow and no interpretation
+    is done, i.e. backslashes do not escape anything and double-quotes do not terminate the raw string but are
+    part of it.</li>
+  <li>The raw string is terminated by a right parenthesis followed by the same PREFIX that was specified in #2.</li>
+  <li>Finally, a double-quote character terminates the entire sequence.</li>
+</ol>
+
+Examples will clarify. The text in <font color="blue"><b>blue</b></font> is the actual raw string. The normal text
+on either side are the delimiters that mark the begin and end of the raw text.
+
+<big>
+<blockquote><pre>
+<b>const char</b> *s1 = R"(<font color="blue"><b>hello</b></font>)";     <font color="#003399"><i>// hello</i></font>
+<b>const char</b> *s2 = R"(<font color="blue"><b>he"ll"o</b></font>)";   <font color="#003399"><i>// he"ll"o</i></font>
+<b>const char</b> *s3 = R"(<font color="blue"><b>hel)lo</b></font>)";    <font color="#003399"><i>// hel)lo</i></font>
+<b>const char</b> *s4 = R"(<font color="blue"><b>h\tello\n</b></font>)"; <font color="#003399"><i>// h\tello\n</i></font>
+<b>const char</b> *s5 = R"(<font color="blue"><b>R"(</b></font>)";       <font color="#003399"><i>// R"(</i></font>
+<b>const char</b> *s6 = R"(<font color="blue"><b>R"(</b></font>)")";     <font color="#003399"><i>// ERROR</i></font>
+</pre></blockquote>
+</big>
+
+Output:
+<blockquote><pre>
+hello
+he"ll"o
+hel)lo
+h\tello\n
+R"(
+</pre></blockquote>
+
+This is the error from Clang for the last one:
+<blockquote><pre>
+cpp14.cpp:562:29: error: missing terminating '"' character [-Werror,-Winvalid-pp-token]
+  const char *s6 = R"(R"()")";     // ERROR
+                            ^
+cpp14.cpp:562:28: error: expected ';' at end of declaration
+  const char *s6 = R"(R"()")";     // ERROR
+                           ^
+                           ;
+2 errors generated.
+</pre></blockquote>
+
+What we are trying to do is to print this string:
+<blockquote><pre>
+R"()"
+</pre></blockquote>
+
+But the sequence <tt>)"</tt> is what is terminating the raw string:
+<blockquote><pre>
+R"(R")")"
+     ^^
+</pre></blockquote>
+
+
+ If you need to include characters
+in the raw string that have the same sequence as the delimiter, you need to change the delimiter into
+something unique. That's why the PREFIX is 0 to 16 characters. If there are no conflicts, you don't need
+the PREFIX (hence, the optional wording). In this case, we have a conflict so we need to resolve it
+by creating a PREFIX.
+<p>
+Any character (or set of characters) will do:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+<big><b>const char</b> *s7 = R"x(<font color="blue"><b>R"()"</b></font>)x";   <font color="#003399"><i>// R"()"</i></font></big>
+</pre></blockquote>
+
+The PREFIX is just the character <tt>x</tt> and is enough to prevent any conflicts. It doesn't matter
+what character(s) you use, as long as they are not part of the PREFIX.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="NON_STATIC_MEMBER_INIT">
+<p class="sectionheader">
+Non-static Data Member Initializers (<a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2756.htm">N2756</a>)
+</p>
+</A>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Before C++11, you could only initialize static, constant integral members in the class definition.
+All other members were required to be initialized in a constructor. For base classes, members that
+are user-defined types, constants, and reference, the initialization must take place in the
+<i>member initializer list</i>. For all other types, you could assign to them in the body of
+the constructor, although they could still be initialized in the initializer list.
+<p>
+With C++11 and later, you can now initialize members directly in the class definition. This is
+a welcomed addition that other languages (such as Java and D) have had already. The concept
+is easy to understand, so let's look at an example.
+
+<blockquote><pre>
+<font color="#003399"><i>// Global function</i></font>
+<b>int</b> getnumber()
+{
+  <b>return</b> 42;
+}
+
+<b>class</b> A
+{
+  <b>public</b>:
+    A() : b{7, 8, 9} <font color="#003399"><i>// initialized by member initializer list</i></font>
+    {
+        <font color="#003399"><i>// Assignment, not initialization (OK, c is non-const)</i></font>
+      <b>for</b> (<b>int</b> i = 0; i &lt; 3; i++)
+        c[i] = i;
+    }
+
+    A(<b>int</b> x) : i(x), b{x, x, x}
+    {
+      <font color="#003399"><i>// c is left uninitialized</i></font>
+    }
+
+    <b>void</b> print()
+    {
+      cout &lt;&lt; i &lt;&lt; endl;
+      cout &lt;&lt; j &lt;&lt; endl;
+      cout &lt;&lt; k &lt;&lt; endl;
+      cout &lt;&lt; d &lt;&lt; endl;
+      <b>for</b> (<b>auto</b> it : v)
+        cout &lt;&lt; it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+      cout &lt;&lt; endl;
+      <b>for</b> (<b>auto</b> it : a)
+        cout &lt;&lt; it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+      cout &lt;&lt; endl;
+      <b>for</b> (<b>auto</b> it : b)
+        cout &lt;&lt; it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+      cout &lt;&lt; endl;
+      <b>for</b> (<b>auto</b> it : c)
+        cout &lt;&lt; it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+      cout &lt;&lt; endl;
+    }
+
+  <b>private</b>:
+    <b>int</b> i = 5;             <font color="#003399"><i>// Member initialization</i></font>
+    <b>int</b> i2 {6};            <font color="#003399"><i>// Member initialization (New in C++11)</i></font>
+    <b>int</b> i3 = {7};          <font color="#003399"><i>// Member initialization</i></font>
+    <font color="red"><b>int</b> i4(8);             <i>// This syntax won't work here. <sup>*</sup>See note below</i></font>
+
+    <b>int</b> j = getnumber();   <font color="#003399"><i>// Member initialization (calls member function)</i></font>
+    <b>int</b> k = ::getnumber(); <font color="#003399"><i>// Member initialization (calls global function)</i></font>
+    <b>double</b> d = 3.14;       <font color="#003399"><i>// Member initialization</i></font>
+
+    vector&lt;<b>int</b>&gt; v{1, 2, 3};   <font color="#003399"><i>// Member initialization (vector constructor)</i></font>
+
+    <b>const</b> <b>int</b> a[3] {0, 0, 0}; <font color="#003399"><i>// <b>const</b> can be initialized here</i></font>
+    <b>const</b> <b>int</b> b[3];           <font color="#003399"><i>//   or using the member initializer list in the constructor</i></font>
+    <b>int</b> c[3];                 <font color="#003399"><i>// Non-const can be assigned in the constructor</i></font>
+
+    <font color="#003399"><i>// private member function</i></font>
+    <b>int</b> getnumber()
+    {
+      <b>return</b> 32;
+    }
+};
+</pre></blockquote>
+
+There aren't too many rules about what can be initialized in the class definition, but you
+can read more about it.
+<ul>
+<li><font color="red"><sup>*</sup>According to Stroustrup's <i>The C++ Programming Language, 4th Edition</i>, section 17.4.4</font> - 
+  "For pretty obscure technical
+  reasons related to parsing and name lookup, the {} and = initializer notations can be used for
+  in-class member initializers, but the () cannot."</font></li>
+<li>The benefit of this is more obvious when you have multiple constructors that all need
+  to initialize the private members.</li>
+<li><a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2008/n2756.htm">N2756</a> Non-static data member initializers</li>
+<li><a href="http://www.stroustrup.com/C++11FAQ.html#member-init">In-class member initializers</a> from 
+Stroustrup's web site.</li>
+</ul>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="TRAILING_RETURN">
+<p class="sectionheader">
+Trailing Return Types (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf">N3276</a>)
+</p>
+</A>
+
+<p class="technote">
+I'm going to introduce some new syntax using trivial examples. However, these techniques should
+never be used for trivial functions, as they cause more problems than they solve. Actually, they
+don't solve anything, they just create problems. But, before I show you the advanced reasons for
+using these techniques, I want you to understand what's going on.
+</p>
+
+In C++03, the programmer had to specify the return type for a function as the first part of the function header:
+
+<blockquote><pre>
+<font color="blue"><b>int</b></font> Add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+This is all fine and good. C++11 allows you to specify the return type at the end of the
+function header instead of the beginning:
+
+<blockquote><pre>
+<font color="blue"><b>auto</b></font> Add(<b>int</b> a, <b>int</b> b) <font color="blue"><b>-&gt; <b>int</b></b></font>
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+At first glance, you may be thinking that this isn't doing anything helpful. In this <i>trivial</i>
+example, you're correct. It was meant for much more complicated things (as you'll soon see). Also,
+some languages actually specify their return types at the end, and, IMHO, I find those functions
+easier to read. Some examples:
+
+<blockquote><pre>
+foo(<b>int</b>, <b>int</b>, <b>int</b>) -&gt; <b>long</b>;
+foo(<b>const</b> <b>char</b> *) -&gt; std::string;
+</pre></blockquote>
+
+The first one is a function that takes 3 integers as input and returns a long integer. The second
+function takes a constant character pointer and returns a std::string. It's really just a matter
+of preference as there is really no benefit to either.
+<p>
+The primary reason for this was to help deduce returns from templated functions:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T, <b>typename</b> U&gt;
+<b>auto</b> Add(T a, U b) -&gt; <b>decltype</b>(a + b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+Call the function:
+<blockquote><pre>
+<b>int</b> i1 = 5, i2 = 6;
+<b>double</b> d1 = 2.72, d2 = 3.14;
+
+cout &lt;&lt; Add(i1, i2) &lt;&lt; endl; <font color="#003399"><i>// return type is int</i></font>
+cout &lt;&lt; Add(d1, d2) &lt;&lt; endl; <font color="#003399"><i>// return type is double</i></font>
+cout &lt;&lt; Add(i1, d2) &lt;&lt; endl; <font color="#003399"><i>// return type is double</i></font>
+</pre></blockquote>
+
+Notice the new keyword <i>decltype</i> at the end. This tells the compiler to "figure out" what the
+return type will be based on the two template parameters. Also, it must come at the end of the
+function header and not the beginning:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T, <b>typename</b> U&gt;
+<b>decltype</b>(a + b) Add(T a, U b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+Error from Clang:
+
+<blockquote><pre>
+error: use of undeclared identifier 'a'
+decltype(a + b) Add(T a, U b) ->
+         ^
+error: use of undeclared identifier 'b'
+decltype(a + b) Add(T a, U b) ->
+             ^
+</pre></blockquote>
+
+This is simply because the compiler hasn't seen <i>a</i> or <i>b</i> yet. This is why it's at
+the end.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+C++14 has taken this one step further and automatically deduces the return type, so you
+don't even need to specify it at the end:
+
+<blockquote><pre>
+<b>auto</b> Add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+And with the templated function above:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T, <b>typename</b> U&gt;
+<b>auto</b> Add(T a, U b)
+{
+  <b>return</b> a + b; <font color="#003399"><i>// The compiler figures out the return type</i></font>
+}
+</pre></blockquote>
+
+Realize that if there are multiple return calls, they all must be the same type:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T, <b>typename</b> U&gt;
+<b>auto</b> max(T a, U b)
+{
+  <b>if</b> (a &gt; b)
+    <b>return</b> a;
+  <b>else</b>
+    <b>return</b> b; <font color="#003399"><i>// a and b can be different types</i></font>
+}
+
+cout &lt;&lt; max(1, 2.0) &lt;&lt; endl; <font color="#003399"><i>// Call max with different types</i></font>
+</pre></blockquote>
+
+Error from Clang:
+<blockquote><pre>
+error: 'auto' in return type deduced as 'double' here but deduced as 'int' in earlier return statement
+    return b;
+    ^
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>The primary motivation for this was to help template functions deduce different return
+    types. (It just happens to work with non-template functions, as well.)</li>
+  <li>Another motivation was for lambda expressions, where deducing the return types
+    can be quite complex.</li>
+  <li>Using <i>auto</i> for functions that have a <b>fixed</b> return type, introduces problems:</li>
+  <ul>
+    <li>Putting the prototype in a header is meaningless:</li>
+
+<blockquote><pre>
+<b>auto</b> SomeFunc(); <font color="#003399"><i>// Not enough information for the compiler.</i></font>
+</pre></blockquote>
+<li>It's useless to a programmer as well as there isn't enough information. Now the programmer
+  is forced to find the documentation and read it. Good luck with that! (The source code
+  may not even be available, either.)</li>
+<li>Speaking of documentation, automatic documentation generators (e.g. Doxygen) won't be able to 
+  figure out the return type either, so even if there were documentation, it wouldn't have that
+  information.</li>
+
+<!--
+  The reason Doxygen can't figure it out is because it isn't as sophisticated as a full-blown
+  C++ compiler (parser).
+-->  
+<li>Should I go on?</li>
+</ul>
+<li>Bottom line: If you're writing template functions with templated return types or writing
+  lambda functions, you can use it. Otherwise, don't. Just. Don't.</li>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="__FUNC__">
+<p class="sectionheader">
+<tt>__func__</tt> Predefined Identifier (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2340.htm">N2340</a>)
+</p>
+Before C++11, many compilers used a non-standard way of identifying the name of the function during
+compilation:
+
+<blockquote><pre>
+<b>void</b> SomeFunction()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;Function name is: &quot;</font> &lt;&lt; __FUNCTION__ &lt;&lt; endl; <font color="#003399"><i>// Old non-standard extension</i></font>
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Function name is: SomeFunction
+</pre></blockquote>
+
+C++11 has standardized it with <tt>__func__</tt>:
+
+<blockquote><pre>
+cout &lt;&lt; <font color="#9933CC">&quot;In function: &quot;</font> &lt;&lt; __func__ &lt;&lt; endl; <font color="#003399"><i>// The name of the function</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;    in file: &quot;</font> &lt;&lt; __FILE__ &lt;&lt; endl; <font color="#003399"><i>// The name of the C++ file</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;    at line: &quot;</font> &lt;&lt; __LINE__ &lt;&lt; endl; <font color="#003399"><i>// The current line number</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;         on: &quot;</font> &lt;&lt; __DATE__ &lt;&lt; endl; <font color="#003399"><i>// The current date</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;         at: &quot;</font> &lt;&lt; __TIME__ &lt;&lt; endl; <font color="#003399"><i>// The current time</i></font>
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+In function: f13
+    in file: cpp14.cpp
+    at line: 991
+         on: Apr 16 2018
+         at: 14:01:20
+</pre></blockquote>
+
+The test function is named <tt>f13</tt>.
+<p>
+It is unfortunate that all of the other similar
+techniques use all uppercase names. This is due to the fact that <tt>__func__</tt> is implemented
+by the compiler and the others are expanded by the pre-processor. To "prove" this, I just compiled
+the code with the <tt>-E</tt> option (show the pre-processed code):
+
+<blockquote><pre>
+cout &lt;&lt; <font color="#9933CC">&quot;In function: &quot;</font> &lt;&lt; __func__ &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;    in file: &quot;</font> &lt;&lt; <font color="#9933CC">&quot;cpp14.cpp&quot;</font> &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;    at line: &quot;</font> &lt;&lt; 991 &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;         on: &quot;</font> &lt;&lt; <font color="#9933CC">&quot;Apr 16 2018&quot;</font> &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;         at: &quot;</font> &lt;&lt; <font color="#9933CC">&quot;14:03:40&quot;</font> &lt;&lt; endl;
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+
+
+The purpose of <tt>__func__</tt> is to help with diagnostic messages at runtime. You can easily build
+up an informative error message with the aid of these features:
+
+<blockquote><pre>
+cout &lt;&lt; <font color="#9933CC">&quot;An out-of-range error has occurred in file &quot;</font> &lt;&lt; __FILE__
+     &lt;&lt; <font color="#9933CC">&quot; at line &quot;</font> &lt;&lt; __LINE__
+     &lt;&lt; <font color="#9933CC">&quot; (in function &quot;</font> &lt;&lt; __func__ &lt;&lt; <font color="#9933CC">&quot;).&#92;n&quot;</font>
+     &lt;&lt; <font color="#9933CC">&quot;The software was last compiled on &quot;</font> &lt;&lt; __DATE__
+     &lt;&lt; <font color="#9933CC">&quot; at &quot;</font> &lt;&lt; __TIME__ &lt;&lt; <font color="#9933CC">&quot;.&#92;n&quot;</font>;
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+An out-of-range error has occurred in file cpp14.cpp at line 997 (in function f13).
+The software was last compiled on Apr 16 2018 at 14:05:14.
+
+</pre></blockquote>
+
+<!--
+cout &lt;&lt; <b>typeid</b>(__func__).name() &lt;&lt; endl; <font color="#003399"><i>// char const[4] (from MS)</i></font>
+cout &lt;&lt; <b>typeid</b>(__FILE__).name() &lt;&lt; endl; <font color="#003399"><i>// char const[10] (from MS)</i></font>
+cout &lt;&lt; <b>typeid</b>(__LINE__).name() &lt;&lt; endl; <font color="#003399"><i>// int (from MS)</i></font>
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>No name decorating (mangling) is done on the names.</li>
+  <li>Overloaded functions and templated functions just print out the function name.
+    There is no way to disambiguate them.</li>
+  <li>Lambdas expand to:
+<blockquote><pre>
+<b>operator</b>()
+</pre></blockquote>
+which makes sense (if you understand lambda expressions).</li>
+</ul>
+
+<a href="https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html">Standard Predefined Macros</a>
+This page lists some of the other macros that are available.
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="DELEGATE_CTORS">
+<p class="sectionheader">
+Delegating Constructors (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1986.pdf">N1986</a>)
+</p>
+
+<i>Delegating constructors</i> is a fancy way of saying that one constructor can call another constructor.
+In this scenario, I'm not talking about a derived class constructor calling a base class constructor.
+That has been around since the beginning. I'm talking about one constructor of a class calling another
+constructor <i>of the same class</i>.
+Until this feature came around in C++11, this was not allowed by the language. C++ programmers have done
+all sorts of things to get around this situation (as other languages, such as Java and D, already have this
+capability.)
+<p>
+Constructors are generally the place to initialize members of the class. It's not uncommon to
+have more than one constructor, so this "initialization code" needed to be duplicated in
+several places. Or, better yet, this "duplicated" code was factored out into a separate 
+<i>init(...)</i> method that was then called from each constructor:
+
+
+<blockquote><pre>
+<b>class</b> C1
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Default constructor</i></font>
+    C1() 
+    {
+      init(); <font color="#003399"><i>// Do other setup code...</i></font>
+    }
+
+      <font color="#003399"><i>// Single-argument conversion constructor</i></font>
+    C1(<b>double</b> x) : d_(x)
+    {
+      init(); <font color="#003399"><i>// Do other setup code...</i></font>
+    }
+
+      <font color="#003399"><i>// Non-default constructor</i></font>
+    C1(<b>int</b> a, <b>int</b> b, <b>int</b> c, <b>double</b> d) : a_(a), b_(b), c_(c), d_(d)
+    {
+      init(); <font color="#003399"><i>// Do other setup code...</i></font>
+    }
+
+  <b>private</b>:
+    <b>int</b> a_, b_, c_;
+    <b>double</b> d_;
+
+    <b>void</b> init()
+    {
+       <font color="#003399"><i>// Do a lot of setup stuff</i></font>
+    }
+};
+</pre></blockquote>
+
+Although we have factored out the common "initialization" code, it's not really initialization
+because that <b>must</b> take place in the constructor's member initializer list, not another method (even if you name it
+<i>init</i>!)
+<p>
+With delegating constructors, we can just call the "main" constructor that will do all of the
+initialization:
+
+<blockquote><pre>
+<b>class</b> C2
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Default constructor</i></font>
+    C2() : C2(0, 0, 0, 0.0) <font color="#003399"><i>// delegate to other constructor</i></font>
+    {
+    }
+
+      <font color="#003399"><i>// Single-argument conversion constructor</i></font>
+    C2(<b>double</b> x) : C2(0, 0, 0, x) <font color="#003399"><i>// delegate to other constructor</i></font>
+    {
+    }
+
+      <font color="#003399"><i>// Non-default constructor</i></font>
+    C2(<b>int</b> a, <b>int</b> b, <b>int</b> c, <b>double</b> d) : a_(a), b_(b), c_(c), d_(d) <font color="#003399"><i>// maybe more initialization here...</i></font>
+    {
+      <font color="#003399"><i>// Do a lot of setup stuff</i></font>
+    }
+
+  <b>private</b>:
+    <b>int</b> a_, b_, c_;
+    <b>double</b> d_;
+};
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>If you call another constructor (delegate), that's all you can do. You can't do any other
+    initialization:
+
+<blockquote><pre>
+C2() : C2(0, 0, 0, 0.0), a_(0) // Can't do both
+{
+}
+</pre></blockquote>
+
+Error from Clang:
+<blockquote><pre>
+error: an initializer for a delegating constructor must appear alone
+    C2() : C2(0, 0, 0, 0.0), a_(0) // Can't do both
+           ^~~~~~~~~~~~~~~~  ~~~~~
+1 error generated.
+</pre></blockquote>
+
+<li>In this small example there may be little to be gained by using a delegate constructor. You
+  have to imagine that the class (and corresponding constructors) is more complex than this simple,
+  contrived example pretends to be. However, the points made should be clear.</li>
+
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="NOEXCEPT">
+<p class="sectionheader">
+noexcept (<a href="index.html"></a>)
+</p>
+
+Previous versions of C++ have had <i>exception specifications</i>. This was a mechanism
+that allowed the programmer to "tag" functions with the types of exceptions that might
+be thrown. For example, this <i>lookup</i> function can potentially throw an exception
+if the index is out of range:
+
+<blockquote><pre>
+<b>int</b> lookup(<b>const</b> vector&lt;<b>int</b>&gt;&amp; v, <b>int</b> index) <font color="blue"><b>throw</b>(std::out_of_range)</font>
+{
+  <b>return</b> v.at(index); <font color="#003399"><i>// This method does range checking</i></font>
+}
+</pre></blockquote>
+
+The code at the end:
+
+<blockquote><pre>
+<b>throw</b> (std::out_of_range)
+</pre></blockquote>
+
+is the exception specification and informs the programmer what may be thrown from the function. It
+also tells the compiler to prevent any other exceptions from being thrown. If any exception, other
+than <tt>std::out_of_range</tt> is thrown, the entire program is terminated.
+<p>This is sample code that calls the function above:
+
+<blockquote><pre>
+vector&lt;<b>int</b>&gt; v {10, 20, 30};
+<b>try</b>
+{
+  cout &lt;&lt; lookup(v, 2) &lt;&lt; endl; <font color="#003399"><i>// Prints 30</i></font>
+  cout &lt;&lt; lookup(v, 5) &lt;&lt; endl; <font color="#003399"><i>// Throws a std::out_of_range exception</i></font>
+}
+<b>catch</b> (<b>const</b> std::out_of_range&amp; ex)
+{
+  cout &lt;&lt; ex.what() &lt;&lt; endl; <font color="#003399"><i>// Display details about the exception</i></font>
+}
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+30
+vector::_M_range_check: __n (which is 5) >= this->size() (which is 3)
+</pre></blockquote>
+
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+There are 3 varieties of exception specifications:
+
+<blockquote><pre>
+<font color="#003399"><i>// foo1 will throw no exceptions</i></font>
+<b>int</b> foo1() <b>throw</b>();
+
+<font color="#003399"><i>// foo2 will only throw std::out_of_range or std:bad_alloc</i></font>
+<b>int</b> foo2() <b>throw</b> (std::out_of_range, std::bad_alloc);
+
+<font color="#003399"><i>// foo3 may thrown any exception</i></font>
+<b>int</b> foo3();
+</pre></blockquote>
+
+<ol>
+  <li><i>foo1</i> - An empty exception specification may not throw any exception.</li>
+  <li><i>foo2</i> - A non-empty exception specification may only throw the exceptions listed.</li>
+  <li><i>foo3</i> - A missing exception specification may throw any exception.</li>
+</ol>
+
+For various reasons, exception specifications never worked out as intended and have been deprecated 
+for several years. Now, with C++11, there is a replacement. As it turns out, the important information
+that the compiler wants to know is if the function throws an exception or not. The compiler doesn't
+care about which exception is thrown. The new technique reflects this change:
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+<font color="#003399"><i>// Function will not throw an exception</i></font>
+<b>void</b> foobar1() <b>noexcept</b>(<b>true</b>)
+{
+  <font color="#003399"><i>// do something safe</i></font>
+}
+
+<font color="#003399"><i>// Function may throw an exception</i></font>
+<b>void</b> foobar2() <b>noexcept</b>(<b>false</b>)
+{
+  <font color="#003399"><i>// do something possibly unsafe</i></font>
+}
+
+<font color="#003399"><i>// foobar3 may throw an exception only if foobar2 may throw an exception</i></font>
+<b>void</b> foobar3() <b>noexcept</b>(<b>noexcept</b>(foobar2()))  
+{
+  foobar2(); <font color="#003399"><i>// call possibly unsafe function</i></font>
+}
+
+<font color="#003399"><i>// foobar4 will not throw an exception (protects unsafe call to foobar2)</i></font>
+<b>void</b> foobar4() <b>noexcept</b>(<b>true</b>)  
+{
+  <b>try</b>
+  {
+    foobar2(); <font color="#003399"><i>// call possibly unsafe function</i></font>
+  }
+  <b>catch</b> (...<font color="#003399"><i>/* whatever foobar2 throws */</i></font>)
+  {
+    <font color="#003399"><i>// do something with the exception</i></font>
+  }
+
+  <font color="#003399"><i>// safely continue excecuting...</i></font>
+}
+</pre></blockquote>
+
+Examples showing a <i>noexcept expression</i>:
+<blockquote><pre>
+cout &lt;&lt; boolalpha;
+cout &lt;&lt; <font color="#9933CC">&quot;  noexcept(true)? &quot;</font> &lt;&lt; <b>noexcept</b>(<b>true</b>) &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot; noexcept(false)? &quot;</font> &lt;&lt; <b>noexcept</b>(<b>false</b>) &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;foobar1 noexcept? &quot;</font> &lt;&lt; <b>noexcept</b>(foobar1()) &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;foobar2 noexcept? &quot;</font> &lt;&lt; <b>noexcept</b>(foobar2()) &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;foobar3 noexcept? &quot;</font> &lt;&lt; <b>noexcept</b>(foobar3()) &lt;&lt; endl;
+cout &lt;&lt; <font color="#9933CC">&quot;foobar4 noexcept? &quot;</font> &lt;&lt; <b>noexcept</b>(foobar4()) &lt;&lt; endl;
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+  noexcept(true)? true
+ noexcept(false)? true
+foobar1 noexcept? true
+foobar2 noexcept? false
+foobar3 noexcept? false
+foobar4 noexcept? true
+</pre></blockquote>
+
+When declaring a function to be <i>noexcept</i>, these both mean the same thing:
+
+<blockquote><pre>
+<b>void</b> foobar() <b>noexcept</b>(<b>true</b>) <font color="#003399"><i>// explicit</i></font>
+<b>void</b> foobar() <b>noexcept</b>       <font color="#003399"><i>// implicit</i></font>
+</pre></blockquote>
+
+On a side note, it's a little unfortunate that the terminology kind of reverses the definition of
+<i>on/true/enabled</i> with <i>off/false/disabled</i>. By setting <i>noexcept</i> to true, you are disabling the
+ability to throw exceptions. It has always seemed strange to me when you "turn something off" by
+answering in the affirmative:
+
+<blockquote>
+Q: <i>"Do you want me to not turn the lights off?"</i><br>
+A: <i>Yes, please do not turn them off.</i>
+</blockquote>
+
+Most English speakers will ask in the affirmative:
+<blockquote>
+Q: <i>"Do you want me to turn the lights off?"</i><br>
+A: <i>No, please do not turn them off.</i>
+</blockquote>
+
+This would mean we would have <i>except(true)</i> to allow exceptions and <i>except(false)</i>
+to not allow them. Anyhoo...
+<p>
+<b>Notes:</b>
+<ul>
+  <li>Destructors are now noexcept by default unless a member or base class
+    has a destructor marked as <tt><b>noexcept(false)</b></tt>.</li>
+  <li>C++11 (and later) refers to the old style <tt><b>throw(...)</b></tt> as
+    <i>dynamic exception specifications</i> and the newer one as just
+    <i>exception specifications</i>.</li>
+  <li>If you are using certain STL containers and you want the significant increase in performance
+    via move constructor/assignment, you must mark those methods as <i>noexcept</i> or copying
+    will be done instead. According to the <a href="https://clang.llvm.org/extra/clang-tidy/checks/performance-noexcept-move-constructor.html">clang documentation</a>:
+<ul>
+  <li>
+    "Move constructors of all the types used with STL containers, for example,
+    need to be declared <b><i>noexcept</i></b>. Otherwise STL will choose copy constructors
+    instead. The same is valid for move assignment operations."
+  </li>
+</ul>
+
+  </li>
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="GENERAL_CONSTEXPR">
+<p class="sectionheader">
+Generalized constexpr (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2235.pdf">N2235</a>)
+</p>
+</A>
+
+C++11 introduces a new way of dealing with constant expressions. You can now explicitly mark
+a symbol with the <b><tt>constexpr</tt></b> keyword. This is more powerful than simply using
+<b><tt>const</tt></b> alone. Using just <b><tt>const</tt></b> means that the expression is
+constant and won't change, but it doesn't mean that the value is known at compile-time:
+
+
+<blockquote><pre>
+<b>const</b> <b>int</b> i = getvalue1(); <font color="#003399"><i>// Sets i at runtime. Must be initialized because it's const</i></font>
+<b>int</b> array[i];              <font color="#003399"><i>// Illegal, i isn't known at compile time. </i></font>
+</pre></blockquote>
+
+In the code above, <i>getvalue1()</i> is just some arbitrary function that will return an integer when
+called. However, the value returned isn't known to the compiler and can't be used to set the size
+of the array. With the <b><tt>constexpr</tt></b> keyword, things change.
+<p>
+Here are 4 functions for the examples below:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=5>
+
+<tr valign="top">
+<td>
+<pre>
+<b>constexpr</b> <b>int</b> ipower(<b>int</b> base, <b>int</b> exponent)
+{
+  <b>int</b> p = 1;
+  
+  <b>for</b> (<b>int</b> i = 0; i &lt; exponent; i++)
+    p *= base;
+
+  <b>return</b> p;
+}
+</pre>
+</td>
+<td width="30"></td>
+<td> 
+<pre>
+<b>constexpr</b> <b>int</b> squared(<b>int</b> x)
+{
+  <b>return</b> x * x;
+}
+</pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+<pre>
+<b>int</b> getvalue1()
+{
+  <b>return</b> 10;
+}
+</pre>
+</td>
+<td width="30"></td>
+<td>
+<pre>
+<b>constexpr</b> <b>int</b> getvalue2()
+{
+  <b>return</b> 20;
+}
+</pre>
+</td>
+</tr>
+
+</table>
+</blockquote>
+
+Code that calls the above functions:
+
+<blockquote><pre>
+<font color="red"><b>int</b> a1[getvalue1()];            <i>// Illegal, getvalue1() isn't known at compile-time</i></font>
+<b>int</b> a2[getvalue2()];            <i>// OK, constant expression</i></font>
+
+<b>const</b> <b>int</b> v1 = getvalue1();     <i>// OK, but v1 isn't known at compile-time (not constexpr)</i></font>
+<font color="red"><b>int</b> a3[v1];                     <i>// Illegal</i></font>
+
+<b>const</b> <b>int</b> v2 = getvalue2();     <i>// OK, but v2 is not constexpr</i></font>
+<font color="red"><b>int</b> a4[v2];                     <i>// Illegal</i></font>
+
+<font color="red">constexpr <b>int</b> v3 = getvalue1(); <i>// Illegal, can't initialize v3 with non-constexpr</i></font>
+
+<b>constexpr</b> <b>int</b> v4 = getvalue2(); <i>// OK</i></font>
+<b>int</b> a5[v4];                     <i>// OK</i></font>
+
+<b>int</b> a6[squared(5)];             <i>// OK</i></font>
+cout &lt;&lt; <b>sizeof</b>(a6) &lt;&lt; endl;     <i>// prints 100 (25 * 4)</i></font>
+
+<font color="red"><b>int</b> a7[squared(getvalue1())];   <i>// Illegal, getvalue1 is not <b>constexpr</b></i></font>
+<b>int</b> a8[squared(getvalue2())];   <i>// OK</i></font>
+cout &lt;&lt; <b>sizeof</b>(a8) &lt;&lt; endl;     <i>// prints 1600 (400 * 4)</i></font>
+
+<b>int</b> a9[ipower(2, 3)];            <i>// OK</i></font>
+cout &lt;&lt; <b>sizeof</b>(a9) &lt;&lt; endl;     <i>// prints 32 (8 * 4)</i></font>
+</pre></blockquote>
+
+<b>Notes:</b>
+<ul>
+  <li>Functions that are specified as <i>constexpr</i> must be seen by the compiler and will be
+    inlined at the call.</li>
+  <ul>
+    <li>This means that <i>constexpr</i> functions are usually implemented in header files.
+      (They are implicitly inlined).</li>
+    </ul>
+  <li>Member functions (including constructors and trivial destructors, with some restrictions) can
+    be <i>constexpr</i>.</li>
+
+<!--
+the body of the constructors must be empty, and the dtor must be auto-generated by the compiler.
+No user-defined dtor.
+-->
+
+  <li>The original C++11 specifications for <i>constexpr</i> required functions to contain exactly one
+    line:
+<blockquote><pre>
+<b>return</b> <i>some-expression</i>;
+</pre></blockquote>
+But C++14 allows the function to be more complex. How complex? The standard says something along
+the lines of "The functions must be sufficiently simple...". This implies that if the functions
+themselves call other functions, those functions must also be declared <i>constexpr</i>.
+  </li>
+  <li>Declaring an object as <i>constexpr</i> implies <i>const</i>
+<blockquote><pre>
+<b>constexpr</b> <b>int</b> v4 = getvalue2(); <font color="#003399"><i>// OK</i></font>
+v4 = 5;                         <font color="#003399"><i>// Illegal, v4 is implicitly <b>const</b></i></font> 
+</pre></blockquote>
+
+  </li>
+  <li>Some other compile-time constant expressions required by the compiler include:
+    <ul>
+      <li>array bounds</li>
+      <li>expressions in case-statements</li>
+      <li>initialization of enumerators in enumeration definitions</li>
+      <li>values specified for non-type template parameters</li>
+    </ul>
+
+
+
+  </li>
+  <p>
+  <li>There is a lot more to know about <i>constexpr</i> and you can read more about it here: 
+<a href="http://www.stroustrup.com/C++11FAQ.html#constexpr">Stroustrup's C++11FAQ</a>
+and
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2235.pdf">Generalized Constant Expressions</a>
+  </li>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="TEMPLATE_ALIAS">
+<p class="sectionheader">
+Template Aliases (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2258.pdf">N2258</a>)
+</p>
+</A>
+
+In C++03, if you want to define an alias for a type, you used <i>typedef</i>:
+
+<blockquote><pre>
+<b>typedef</b> <b>unsigned</b> <b>char</b> BYTE;
+<b>typedef</b> <b>short</b> <b>int</b> FAST_INT;
+<b>typedef</b> <b>float</b> CURRENCY;
+<b>typedef</b> <b>unsigned</b> <b>char</b> * PCHAR;
+</pre></blockquote>
+
+Using them:
+
+<blockquote><pre>
+BYTE next, previous;    <font color="#003399"><i>// For scanning bytes in memory</i></font>
+CURRENCY tax, discount; <font color="#003399"><i>// To calculate total price</i></font>
+PCHAR inbuf, outbuf;    <font color="#003399"><i>// To manipulate strings</i></font>
+</pre></blockquote>
+
+The equivalent with the <i>using</i> keyword (new in C++11):
+<blockquote><pre>
+<b>using</b> BYTE = <b>unsigned</b> <b>char</b>;
+<b>using</b> FAST_INT = <b>short</b> <b>int</b>;
+<b>using</b> CURRENCY = <b>float</b>;
+<b>using</b> PCHAR = <b>unsigned</b> <b>char</b> *;
+</pre></blockquote>
+
+We can use <i>typedef</i> with the STL containers:
+<blockquote><pre>
+<b>typedef</b> vector&lt;<b>int</b>&gt; MyVectorI;    <font color="#003399"><i>// MyVectorI is an alias for vector of int</i></font>
+<b>typedef</b> vector&lt;string&gt; MyVectorS; <font color="#003399"><i>// MyVectorS is an alias for vector of string</i></font>
+<b>typedef</b> vector&lt;<b>double</b>&gt; MyVectorD; <font color="#003399"><i>// MyVectorD is an alias for vector of double</i></font>
+</pre></blockquote>
+
+Usage:
+<blockquote><pre>
+MyVectorI mvi; <font color="#003399"><i>// vector of int</i></font>
+MyVectorS mvs; <font color="#003399"><i>// vector of string</i></font>
+MyVectorD mvd; <font color="#003399"><i>// vector of double</i></font>
+</pre></blockquote>
+
+
+At this point there is <b>absolutely no difference in behavior between <i>typedef</i> and <i>using</i></b>.
+However, when it comes to templates, there is a problem with <i>typedef</i>:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>typedef</b> vector&lt;T&gt; MyVectorOfT;
+</pre></blockquote>
+
+Error from Clang:
+<blockquote><pre>
+error: a typedef cannot be a template
+typedef vector<T> MyVectorOfT;
+                  ^
+1 error generated.
+</pre></blockquote>
+
+This is where the new behavior of <i>using</i> comes in:
+
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>using</b> MyVector = vector&lt;T&gt;; <font color="#003399"><i>// MyVector is an alias for a vector anything</i></font>
+</pre></blockquote>
+
+Usage:
+<blockquote><pre>
+MyVector&lt;<b>int</b>&gt; vi2;    <font color="#003399"><i>// vector of int</i></font>
+MyVector&lt;string&gt; vs2; <font color="#003399"><i>// vector of string</i></font>
+MyVector&lt;<b>double</b>&gt; vd2; <font color="#003399"><i>// vector of double</i></font>
+</pre></blockquote>
+
+At this point, there is not much to be gained. But as the types get more complicated:
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>using</b> MyVectorT = vector&lt;list&lt;T&gt;&gt;; <font color="#003399"><i>// MyVectorT is an alias for a vector of list of anything</i></font>
+
+MyVectorT&lt;<b>int</b>&gt; vli;    <font color="#003399"><i>// vector of list of int</i></font>
+MyVectorT&lt;string&gt; vls; <font color="#003399"><i>// vector of list string</i></font>
+MyVectorT&lt;<b>double</b>&gt; vli; <font color="#003399"><i>// vector of list of double</i></font>
+</pre></blockquote>
+
+Or this:
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T, <b>typename</b> Alloc = std::allocator&lt;T&gt;&gt;
+<b>using</b> MyIter = <b>typename</b> vector&lt;list&lt;T, Alloc&gt;&gt;::iterator;
+
+MyIter&lt;string&gt; it1;       <font color="#003399"><i>// An iterator on a vector of lists of string and the default allocator</i></font>
+MyIter&lt;Foo, MyAlloc&gt; it2; <font color="#003399"><i>// An iterator on a vector of lists of Foo and custom allocator</i></font>
+</pre></blockquote>
+
+Yes, that's a little contrived. However, in real code, you are likely to have instances where the types
+are complicated and tedious to write out, especially when you start using templates.
+<p>
+Notes:
+<ul>
+  <li><a href="http://www.stroustrup.com/C++11FAQ.html#template-alias">template alias</a> at
+    Stroustrup's site.</li>
+  </ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="LAMBDAS">
+<p class="sectionheader">
+Lambdas (<a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2009/n2927.pdf">N2927</a>)
+</p>
+</A>
+
+I've already written a substantial guide on lambdas
+<a href="../lambdas/index.html">here</a>.
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="LONGLONG">
+<p class="sectionheader">
+Long Long Data Type (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1811.pdf">N1811</a>)
+</p>
+</A>
+
+Until C++11, the <i>long long</i> type has been a non-standard extension to compilers. Almost
+all compilers have supported the type, but now it is officially part of the C++ standard. The
+standard guarantees that a <i>long long</i> is at least 64-bits. This may seem redundant
+because the <i>long</i> data type is already 64-bits for most systems.
+<p>
+There are two situations where I think this type will be useful:
+<ol>
+  <li>The <i>long long</i> type allows implementations to use more than 64-bits,
+    possibly 128-bits, for an integral type.</li>
+  <li>It allows Microsoft's code to work with the rest of the world. Microsoft's Windows
+    OS is currently the only popular 64-bit system that still uses 32-bits for long integers. Programmers
+    on Windows should use <i>long long</i> if they want a 64-bit data type.
+    (<a href="https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models">64-bit data
+      models</a> shows the sizes of data types on common systems.)
+  </li>
+</ol>
+
+The table below shows the differences from Microsoft's systems and most others.
+Microsoft's types are in the shaded region:
+
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: center;">Type</td>
+      <td style="font-weight: bold; text-align: center;">Bytes</td>
+      <td style="font-weight: bold; text-align: center;">Also called</td>
+      <td style="font-weight: bold; text-align: center;">Range of values<br> (Binary)</td>
+      <td style="font-weight: bold; text-align: center;">Range of values<br> (Decimal)</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed long int</td>
+      <td style="text-align: center;">8</td>
+      <td style="font-family: monospace;">long<br>long int<br>signed long</td>
+      <td style="text-align: center; font-family: monospace;"><big>-2<sup>63</sup> to 2<sup>63</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-9,223,372,036,854,775,808 to<br> 9,223,372,036,854,775,807</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned long int</td>
+      <td style="text-align: center;">8</td>
+      <td style="font-family: monospace;">unsigned long</td>
+      <td style="text-align: center; font-family: monospace;"><big>0&nbsp;to 2<sup>64</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 18,446,744,073,709,551,615</td>
+    </tr>
+    <tr bgcolor="#dddddd">
+      <td style="font-family: monospace;">signed long int</td>
+      <td style="text-align: center;">4</td>
+      <td style="font-family: monospace;">long<br>long int<br>signed long</td>
+      <td style="text-align: center; font-family: monospace;"><big>-2<sup>31</sup> to 2<sup>31</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-2,147,483,648 to<br> 2,147,483,647</td>
+    </tr>
+    <tr bgcolor="#dddddd">
+      <td style="font-family: monospace;">unsigned long int</td>
+      <td style="text-align: center;">4</td>
+      <td style="font-family: monospace;">unsigned long</td>
+      <td style="text-align: center; font-family: monospace;"><big>0&nbsp;to 2<sup>32</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 4,294,967,295</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+The <i>long long</i> type is signed, and as you would expect, there is an unsigned version
+as well: <i>unsigned long long</i>. For literals, there are also new suffixes:
+
+<blockquote><pre>
+<b>long</b> <b>long</b> ll = 12345LL;            <font color="#003399"><i>// LL for (signed) long long</i></font>
+<b>unsigned</b> <b>long</b> <b>long</b> ull = 12345ULL; <font color="#003399"><i>// ULL for unsigned long long</i></font>
+</pre></blockquote>
+
+The extraction operator (&gt;&gt;) and insertion operator (&lt;&lt;) have been overloaded for the
+new types:
+
+<blockquote><pre>
+cin &gt;&gt; ll;
+cin &gt;&gt; ull;
+
+cout &lt;&lt; ll &lt;&lt; endl;
+cout &lt;&lt; ull &lt;&lt; endl;
+</pre></blockquote>
+
+For <i>printf</i> and <i>scanf</i>:
+
+<blockquote><pre>
+scanf(<font color="#9933CC">&quot;%lli&quot;</font>, &amp;ll);    <font color="#003399"><i>// Can also use %lld</i></font>
+scanf(<font color="#9933CC">&quot;%llu&quot;</font>, &amp;ull);
+
+printf(<font color="#9933CC">&quot;%lli&#92;n&quot;</font>, ll);  <font color="#003399"><i>// Can also use %lld</i></font>
+printf(<font color="#9933CC">&quot;%llu&#92;n&quot;</font>, ull);
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="DEFDEL">
+<p class="sectionheader">
+Default and Deleted Functions (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2346.htm">N2346</a>)
+</p>
+</A>
+These two topics, default functions and deleted functions, are somewhat related. And, since most
+of the literature on C++11 groups them into one, I'm going to do the same.
+<p>
+<b>Default Functions</b>:
+<p>
+
+In C++, when you create a class, by default you get these member functions for free:
+<ol>
+  <li>A default constructor (that does nothing)</li>
+  <li>A destructor (that does nothing)</li>
+  <li>A copy constructor (that does memberwise copy)</li>
+  <li>A copy assignment operator (that does memberwise assignment)</li>
+</ol>
+
+If necessary, the compiler will generate these methods for you. For trivial classes, the
+compiler-generated methods are adequate. For example, class <i>Foo4</i> is trivial:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    <b>friend</b> ostream&amp; <b>operator</b>&lt;&lt;(ostream&amp; os, <b>const</b> Foo4&amp; rhs);
+  <b>private</b>:
+    <b>int</b> a = rand() % 10;
+    <b>int</b> b = rand() % 10;
+};
+
+ostream&amp; <b>operator</b>&lt;&lt;(ostream&amp; os, <b>const</b> Foo4&amp; rhs)
+{
+  os &lt;&lt; rhs.a &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; rhs.b;
+  <b>return</b> os;
+}
+</pre></blockquote>
+
+The <i>operator&lt;&lt;</i> function is just for convenience and doesn't really add anything
+important to this discussion.
+
+<blockquote><pre>
+<b>void</b> f23()
+{
+  Foo4 f1;     <font color="#003399"><i>// default constructor (compiler-generated)</i></font>
+  Foo4 f2;     <font color="#003399"><i>// default constructor (compiler-generated)</i></font>
+  Foo4 f3(f1); <font color="#003399"><i>// copy constructor (compiler-generated)</i></font>
+
+  cout &lt;&lt; <font color="#9933CC">&quot;f1: &quot;</font> &lt;&lt; f1 &lt;&lt; endl; <font color="#003399"><i>// f1: 3, 6</i></font>
+  cout &lt;&lt; <font color="#9933CC">&quot;f2: &quot;</font> &lt;&lt; f2 &lt;&lt; endl; <font color="#003399"><i>// f2: 7, 5</i></font>
+  cout &lt;&lt; <font color="#9933CC">&quot;f3: &quot;</font> &lt;&lt; f3 &lt;&lt; endl; <font color="#003399"><i>// f3: 3, 6</i></font>
+
+  f1 = f2;     <font color="#003399"><i>// copy assignment (compiler-generated)</i></font>
+  cout &lt;&lt; <font color="#9933CC">&quot;f1: &quot;</font> &lt;&lt; f1 &lt;&lt; endl; <font color="#003399"><i>// f1: 7, 5</i></font>
+
+} <font color="#003399"><i>// destructor (compiler-generated) called for f1, f2, f3</i></font>
+</pre></blockquote>
+
+If the compiler-generated methods are not adequate, then you will have to implement them
+yourself. If you implement one of these methods, then the compiler will not generate one,
+which makes sense. However, if you implement a constructor (any constructor other than
+the copy constructor), then the compiler will not generate the default constructor:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    Foo4(<b>int</b> i, <b>int</b> j) : a(i), b(j) {} <font color="#003399"><i>// non-default constructor</i></font>
+    <b>friend</b> ostream&amp; <b>operator</b>&lt;&lt;(ostream&amp; os, <b>const</b> Foo4&amp; rhs);
+  <b>private</b>:
+    <b>int</b> a = rand() % 10;
+    <b>int</b> b = rand() % 10;
+};
+</pre></blockquote>
+
+Now this, which was previously fine, gives an error:
+
+<blockquote><pre>
+Foo4 f1;     <font color="#003399"><i>// default constructor</i></font>
+</pre></blockquote>
+
+Error:
+<blockquote><pre>
+error: no matching constructor for initialization of 'Foo4'
+  Foo4 f1;     // default constructor
+</pre></blockquote>
+
+With the programmer-implemented constructor, we must provide 2 integers to the constructor:
+
+<blockquote><pre>
+Foo4 f4(1, 2); <font color="#003399"><i>// non-default constructor</i></font>
+cout &lt;&lt; <font color="#9933CC">&quot;f4: &quot;</font> &lt;&lt; f4 &lt;&lt; endl; <font color="#003399"><i>// f4: 1, 2</i></font>
+</pre></blockquote>
+
+But, what if we still want the default constructor? In the olden days (read: C++98/03), you had to implement
+it yourself:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    Foo4() {} <font color="#003399"><i>// default constructor (programmer-implemented, does nothing)</i></font>
+    Foo4(<b>int</b> i, <b>int</b> j) : a(i), b(j) {}
+    ...
+};
+</pre></blockquote>
+
+Now, the code that generated errors for this missing default constructor is working again. 
+<p>
+With C++11, you can just instruct the compiler to generate the default constructor instead of the
+programmer. You do this by appending <i>= default</i> to the default constructor's declaration:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    Foo4() = <b>default</b>; <font color="#003399"><i>// compiler will generate this</i></font>
+    Foo4(<b>int</b> i, <b>int</b> j) : a(i), b(j) {}
+    ...
+};
+</pre></blockquote>
+
+<p>
+Another place where you might want to use this technique is with <i>virtual destructors</i>.
+By default, compiler-generated destructors are not virtual. If you're planning on using
+your class as a base class, you will likely need your destructor to be virtual, even
+if your destructor does nothing at all. In pre-C++11 days, the programmer would have to
+implement an empty destructor so that it could be marked virtual:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    <b>virtual</b> ~Foo4() {} <font color="#003399"><i>// empty destructor to get virtual behavior</i></font>
+    ...
+};
+</pre></blockquote>
+
+With C++11, you can use the <i>default</i> keyword to have the compiler generate the destructor as virtual:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    <b>virtual</b> ~Foo4() = <b>default</b> <font color="#003399"><i>// compiler will generate the virtual destructor</i></font>
+    ...
+};
+</pre></blockquote>
+
+You may be thinking that it really wasn't that much effort to implement the empty default 
+constructor/destructor yourself, and you'd be correct. However, whenever the compiler generates methods
+for you, it has an opportunity to optimize them, meaning, at runtime, the compiler-generated
+methods may not even be called, saving some time.
+<p>
+<b>Deleted Functions</b>
+<p>
+With the discussion of default functions above, the point was to force the compiler to generate some
+methods that otherwise would not have been generated. But, what if we want the opposite behavior?
+Meaning, you don't want the compiler to generate certain functions for you? With classes, the function
+that comes to mind is the copy constructor.
+<p>
+Most of the time, you need to be able to make copies of objects. However, there are situations where
+you don't want to allow the user to make copies. In old C++, the way that the programmer made sure
+that no copies were made was to declare the copy constructor in the <b>private</b> section of the
+class:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    ...
+  <b>private</b>:
+    Foo4(<b>const</b> Foo4&amp; rhs); <font color="#003399"><i>// copy constructor, do not implement!</i></font>
+    <b>int</b> a = rand() % 10;
+    <b>int</b> b = rand() % 10;
+};
+</pre></blockquote>
+
+Now this code will fail to compile:
+
+<blockquote><pre>
+Foo4 f3(f1); <font color="#003399"><i>// call copy constructor</i></font>
+</pre></blockquote>
+
+with this error:
+
+<blockquote><pre>
+error: calling a private constructor of class 'Foo4'
+  Foo4 f3(f1); // copy constructor (compiler-generated)
+       ^
+</pre></blockquote>
+
+Like with the <i>= default</i>, there is now <i>= delete</i> which prevents the compiler from
+generating unwanted functions:
+
+<blockquote><pre>
+<b>class</b> Foo4
+{
+  <b>public</b>:
+    Foo4(<b>const</b> Foo4&amp; rhs) = <b>delete</b>; <font color="#003399"><i>// copy constructor won't be generated</i></font>
+    ...
+};
+</pre></blockquote>
+
+If you try to call a deleted function, you'll get an error similar to this:
+
+<blockquote><pre>
+error: call to deleted constructor of 'Foo4'
+  Foo4 f3(f1); // copy constructor (compiler-generated)
+       ^  ~~
+note: 'Foo4' has been explicitly marked deleted here
+    Foo4(const Foo4&) = delete;
+    ^
+</pre></blockquote>
+
+I won't go into the (advanced) reasons why you might not want to allow copies, but there is one popular class
+(possibly <i>the most popular</i>) that disallows copying. That class is <i>basic_ios</i>, which
+is a base class for <i>ostream</i> which is the type of <i>cout</i>. This means that you can't make
+a copy of <i>cout</i>. Beginning programmers may have fallen into this trap when they learn
+how to overload operator &lt;&lt; to print out their data:
+
+<blockquote><pre>
+<b>friend</b> ostream&amp; <b>operator</b>&lt;&lt;(ostream os, <b>const</b> Foo4&amp; rhs);
+</pre></blockquote>
+
+The problem with the code above is that <i>ostream</i> is passed by value, which means that a copy
+will be made. But, because the copy constructor has been marked as deleted,
+this will generate an error similar to this:
+
+<blockquote><pre>
+error: call to deleted constructor of 'ostream' (aka 'basic_ostream<char>')
+  cout &lt;&lt; "f1: " &lt;&lt; f1 &lt;&lt; endl; // f1: 3, 6
+  ^~~~~~~~~~~~~~
+</pre></blockquote>
+
+I won't go into all of the reasons why you'd want to choose to mark a method as deleted instead
+of just declaring it in the private section, but here's one: The private function can still
+be called by the class itself. Of course, without an implementation you will get a linker error.
+Ideally, you would like to get a compiler error instead, as it's generally easier to figure out
+what the problem is than it is with linker errors. A large project may not be linked very often,
+but code changes are compiled constantly. By using <i>= delete</i> you will get a compiler error from
+any code that tries to call it.
+<p>
+Preventing copies has been a popular reason to put the copy constructor declaration in the private
+section, and now you can just mark it as deleted. But, <i>= delete</i> doesn't need to be used
+in a class. Any function can be marked deleted. At first glance, that seems absurd. If you don't 
+want a user to call a certain non-member function, then don't create it!
+<p>
+However, consider this function:
+
+<blockquote><pre>
+<b>bool</b> isEven(<b>long</b> value)
+{
+  <b>if</b> (value % 2)
+    <b>return</b> <b>false</b>;
+  <b>else</b>
+    <b>return</b> <b>true</b>;
+}
+</pre></blockquote>
+
+And a few uses:
+<blockquote><pre>
+<b>long</b> j = 8;
+<b>float</b> f = 8.0F;
+<b>double</b> d = 8.0;
+cout &lt;&lt; boolalpha &lt;&lt;  isEven(j) &lt;&lt; endl; <font color="#003399"><i>// long, OK (true)</i></font>
+cout &lt;&lt; boolalpha &lt;&lt;  isEven(f) &lt;&lt; endl; <font color="#003399"><i>// float to long, OK (true)</i></font>
+cout &lt;&lt; boolalpha &lt;&lt;  isEven(d) &lt;&lt; endl; <font color="#003399"><i>// double to long, (true)</i></font>
+</pre></blockquote>
+
+Because the compiler performs implicit conversions, all of these calls can succeed. But, suppose you
+don't want to allow this. Marking the overloaded declarations as deleted will do the trick:
+
+<blockquote><pre>
+<b>bool</b> isEven(<b>float</b>) = <b>delete</b>;  <font color="#003399"><i>// declaration only</i></font>
+<b>bool</b> isEven(<b>double</b>) = <b>delete</b>; <font color="#003399"><i>// declaration only</i></font>
+</pre></blockquote>
+
+Now, passing a <i>float</i> or <i>double</i> will generate these errors:
+
+<blockquote><pre>
+ error: use of deleted function 'bool isEven(float)'
+   cout << boolalpha <<  isEven(f) << endl; // float to long, OK
+                                 ^
+note: declared here
+ bool isEven(float) = delete;
+      ^
+ error: use of deleted function 'bool isEven(double)'
+   cout << boolalpha <<  isEven(d) << endl; // double to long, OK
+                                 ^
+note: declared here
+ bool isEven(double) = delete;
+      ^
+</pre></blockquote>
+
+Another place you might use this technique is with function templates. If you want to prevent the compiler
+from generating a certain version of the template, you can create a specialization for that type and
+mark it as deleted.
+<p>
+Information from <a href="http://www.stroustrup.com/C++11FAQ.html#default">Stroustrup's site</a>.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="STDARRAY">
+<p class="sectionheader">
+std::array
+</p>
+</A>
+Yeah, I know I said that I wasn't going to cover additions/changes to the STL, but I've
+changed my mind. There has been a new container added to the STL. It's the 
+<a href="https://en.cppreference.com/w/cpp/container/array">std::array</a>. 
+This class is basically a thin wrapper around the built-in
+C-style static arrays you've been using since forever. We'll see shortly why you should use
+this as a replacement to the built-in arrays. 
+<p>
+First, let's compare the syntax of <i>std::array</i> with the built-in static array. You can
+also assume that I have a function that can print a static array and another function that
+can print out a <i>std::array</i>. I'll show you how to implement those later.
+<p>
+To use <i>std::array</i>, you must include this:
+
+<blockquote><pre>
+<font color="000000"><b>#include</b> &lt;array&gt;</font>
+</pre></blockquote>
+
+Since <i>std::array</i> is a templated class requiring two parameters, you must provide both.
+The first template parameter is a type (e.g. <b>int</b>, <b>double</b>, Foo, etc.) The second
+template parameter is an integral value, which will be used as the size of the array (e.g. 3, 5, 100, etc.)
+So, to create a <i>std::array</i> of 5 doubles, you would do this:
+
+<blockquote><pre>
+array&lt;<b>double</b>, 5&gt; ar; <font color="#003399"><i>// ar represents a static array of 5 doubles, e.g. <b>double</b> ar[5];</i></font>
+</pre></blockquote>
+
+<p>
+
+Just like with built-in arrays, without proper initialization, we get undefined values:
+<blockquote><pre>
+array&lt;<b>int</b>, 3&gt; a1; <font color="#003399"><i>// undefined values: 32615, 1876, 3</i></font>
+<b>int</b> s1[3];        <font color="#003399"><i>// undefined values: -891498544, 32767, 6299136</i></font>
+</pre></blockquote>
+
+Default initialization:
+<blockquote><pre>
+array&lt;<b>int</b>, 3&gt; a2{}; <font color="#003399"><i>// default initialized to 0 (default constructor)</i></font>
+<b>int</b> s2[3] = {};     <font color="#003399"><i>// default initialized to 0 (Not legal in C, use {0})</i></font>
+</pre></blockquote>
+
+Using explicit initializers:
+<blockquote><pre>
+array&lt;<b>int</b>, 3&gt; a3{1, 2, 3}; <font color="#003399"><i>// OK</i></font>
+<b>int</b> s3[3] = {1, 2, 3};     <font color="#003399"><i>// OK</i></font>
+</pre></blockquote>
+
+Like built-in arrays, if you provide <i>too many</i> initializers, it's an error:
+<blockquote><pre>
+array&lt;<b>int</b>, 3&gt; a4{1, 2, 3, 4}; <font color="#003399"><i>// ERROR: too many initializers</i></font>
+<b>int</b> s4[3] = {1, 2, 3, 4};     <font color="#003399"><i>// ERROR: too many initializers</i></font>
+</pre></blockquote>
+
+With built-in arrays, if you provide initializers, you can omit the size. You can't do that with
+<i>std::array</i>:
+<blockquote><pre>
+array&lt;<b>int</b>&gt; a5{1, 2, 3, 4}; <font color="#003399"><i>// ERROR: no size specified (compiler won't help here) </i></font>
+<b>int</b> s5[] = {1, 2, 3, 4};   <font color="#003399"><i>// OK: compiler sets size to 4 from initializers</i></font>
+</pre></blockquote>
+
+
+Error from g++:
+<blockquote><pre>
+In function 'void f1()':
+error: wrong number of template arguments (1, should be 2)
+   array<int> a5{1, 2, 3, 4}; // ERROR: no size specified
+            ^
+</pre></blockquote>
+
+Like built-in arrays, if you provide <i>too few</i> initializers, the compiler will set the remaining elements
+to 0:
+<blockquote><pre>
+array&lt;<b>int</b>, 3&gt; a4{1, 2}; <font color="#003399"><i>// Too few initializers, rest are 0</i></font>
+<b>int</b> s4[3] = {1, 2};     <font color="#003399"><i>// Too few initializers, rest are 0</i></font>
+</pre></blockquote>
+
+<p>
+<hr width="95%">
+<p>
+
+Ok, so now that we've got all of the syntax out of the way you're probably saying, 
+<i>"So what?!? This doesn't give us anything more than what the built-in arrays give us."</i> And you
+would be right. In fact, built-in arrays actually give us <i>more</i> than what we have now because
+we can't do this with <i>std::array</i>:
+
+<blockquote><pre>
+<b>int</b> s5[] = {1, 2, 3, 4}; <font color="#003399"><i>// The compiler will figure out the size. Can't do this with std::array</i></font>
+</pre></blockquote>
+
+So, the first <i>improvement</i> we have over built-in arrays is that a <i>std::array</i> knows its size.
+This means that we can query the array at any time in the program to find out the size. This is especially
+useful when we pass the <i>std::array</i> to a function. With built-in arrays, we can only pass a pointer
+to the first element to the function. We have to pass a second parameter (the size) to the function and
+this can be a source of bugs if the incorrect size is passed.
+
+ We don't
+have to do this with <i>std::array</i>.
+<p>
+Here's the classic function to print any array of integers:
+
+<blockquote><pre>
+<b>void</b> print(<b>const</b> <b>int</b> *arr, <b>int</b> size)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    std::cout &lt;&lt; arr[i] &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+To print a <i>std::array</i> of 3 integers, the function would look like this:
+
+<blockquote><pre>
+<b>void</b> print3ints1(<b>const</b> std::array&lt;<b>int</b>, 3&gt;&amp; arr)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; 3; i++)
+    std::cout &lt;&lt; arr[i] &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Since <i>std::array</i> is an STL container, it has a <i>size()</i> method, so we can use that:
+<blockquote><pre>
+<b>void</b> print3ints2(<b>const</b> std::array&lt;<b>int</b>, 3&gt;&amp; arr)
+{
+  <b>for</b> (size_t i = 0; i &lt; <font color="blue"><b>arr.size()</b></font>; i++)
+    std::cout &lt;&lt; arr[i] &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Since it has a <i>size()</i> method, we can use the <i>range-based for</i> instead:
+<blockquote><pre>
+<b>void</b> print3ints3(<b>const</b> std::array&lt;<b>int</b>, 3&gt;&amp; arr)
+{
+  <b>for</b> (<b>int</b> i : arr)
+    std::cout &lt;&lt; i &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Of course, this isn't going to help us print any of these:
+
+<blockquote><pre>
+array&lt;<b>int</b>, 2&gt; a7{1, 2};             <font color="#003399"><i>// array of 2 ints</i></font>
+array&lt;<b>double</b>, 3&gt; a8{1.1, 2.2, 3.3}; <font color="#003399"><i>// array of 3 doubles</i></font>
+</pre></blockquote>
+
+We would need something like these:
+
+<blockquote><pre>
+<b>void</b> print2ints(<b>const</b> std::array&lt;<b>int</b>, 2&gt;&amp; arr)
+{
+  <b>for</b> (<b>int</b> i : arr)
+    std::cout &lt;&lt; i &lt;&lt; std::endl;
+}
+
+<b>void</b> print4doubles(<b>const</b> std::array&lt;<b>double</b>, 4&gt;&amp; arr)
+{
+  <b>for</b> (<b>double</b> d : arr)
+    std::cout &lt;&lt; d &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+
+Nor will it print an array of Foo objects, or <i>std::string</i>, or whatever else we need. Of course,
+the obvious solution is to templatize the function:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T, size_t size&gt;
+<b>void</b> print(<b>const</b> std::array&lt;T, size&gt;&amp; arr)
+{
+  <b>for</b> (<b>const</b> T&amp; t : arr)
+    std::cout &lt;&lt; t &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Now, we can print a <i>std::array</i> of any type and any size, as long as output operator
+has been overloaded for type <i>T</i>.
+
+<blockquote><pre>
+</pre></blockquote>
+
+Some of the benefits of using a <i>std::array</i> over a built-in array:
+<ul>
+  <li><i>The std::array knows its size</i> - With built-in arrays, we always had to store the size
+    in some other variable and pass it as a separate argument to a function (and hope that the value
+    is accurate).
+    Since <i>std::array</i> is a class, its size is known to each object. 
+     Just call the <i>size()</i> method. (The size may not even be stored in the object!)</li>
+
+<!--
+  This is because the size is a template parameter and that parameter is then "hard-coded" into
+  the size() function: e.g. int size() { return N;}  // template "value" param is N.
+-->
+
+  <li><i>Bounds checking</i> - Because it knows its size, bounds checking can be performed when using
+    the subscript operator (which, of course, is supported).</li>
+  <li>Has <i>begin()</i> and <i>end()</i> members to work well with the standard algorithms (e.g. sort)</li>
+  <li>You can <i>assign</i> one <i>std::array</i> to another. With a built-in array, assignment is illegal.
+  You must perform 
+    some kind of looping to copy one element at a time.</li>
+  <li>You can <i>return</i> a <i>std::array</i> from a function. With a built-in array, you can only return
+    a pointer to the first element.</li>
+  <li>A <i>std::array</i> doesn't decay into a pointer like built-in arrays do, which is a well-known
+    source of confusion, especially with novice programmers.
+    (However, if you need it, you can get the pointer with something like this: <tt>&amp;array[0]</tt>).</li>
+  <li>Keep in mind that there is no overhead at all when using a <i>std::array</i> in
+    place of a built-in array, so you are not incurring any performance penalty.</li>
+</ul>
+
+How does <i>std::array</i> compare with <i>std::vector</i>? 
+<ul>
+  <li>The size of the <i>std::array</i> is known at compile time, so there is zero runtime
+    overhead to create one. <i>std::vector</i>, on the other hand, must be dynamically allocated
+    at runtime, which may incur a significant overhead.</li>
+  <li>A <i>std::vector</i> has additional members which require more memory.
+    A <i>std::array</i> contains only the static array itself.</li>
+  <li>A <i>std::vector</i> can grow and shrink at runtime to accommodate more/less elements.
+    The size of a <i>std::array</i> is fixed and can't grow or shrink.</li>
+  <li>A <i>std::array</i> requires the type being stored to have a default constructor.
+    A <i>std::vector</i> does not.</li>
+  <li>Because the size of a <i>std::array</i> must be known at compile time, it's less flexible
+    than a <i>std::vector</i> (but more efficient).</li>
+</ul>  
+
+How to choose between <i>std::array</i> and <i>std::vector</i>:
+<ul>
+  <li>If you know the size (number of elements) that will be stored at compile time and
+    that number will not change at runtime, use a <i>std::array</i>.</li>
+  <li>If you don't know the number of elements at compile time, or the number will change
+    at runtime, use a <i>std::vector</i>.</li>
+</ul>
+
+More information about <a href="https://en.cppreference.com/w/cpp/container/array">std::array</a>.
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+<a name="INHERIT_CTORS">
+<p class="sectionheader">
+Inheriting Constructors (<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2540.htm">N2540</a>)
+</p>
+-->
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="REFERENCES">
+<p class="sectionheader">
+References
+</p>
+</a>
+
+This was just an introduction to some of the new features of the C++ language.
+If you want to learn more, here are a few places to start:
+
+<p>
+<b>Compiler support for Modern C++:</b>
+<ul>
+<li><a href="http://clang.llvm.org/cxx_status.html">Clang's support for</a>
+  C++98, C++11, C++14, and C++1z.</li>
+
+
+<li>GCC's support for <a href="https://gcc.gnu.org/projects/cxx-status.html#cxx11">C++11</a>
+  ,<a href="https://gcc.gnu.org/projects/cxx-status.html#cxx14">C++14</a>,
+  and <a href="https://gcc.gnu.org/projects/cxx-status.html#cxx17">C++1z</a>.</li>
+
+<!--
+<li>Microsoft's support for <a href="http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx">Modern C++</a>.</li>
+-->
+<li>Microsoft's support for <a href="https://docs.microsoft.com/en-us/cpp/overview/visual-cpp-language-conformance">Modern C++</a>.</li>
+
+<li><a href="https://en.cppreference.com/w/cpp/compiler_support">Additional compiler support</a> for all
+  modern versions.</li>
+
+</ul>
+
+<b>Books:</b>
+<p>
+<ul>
+
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+	<li>This is a quick-start book for experienced C++ programmers. It's only about 180 pages, so
+    it really is just a brief overview. However, if you know C++, it's a good place to start.
+    However, when I got this book a couple of years ago, there were a lot of typos in it, which could
+    confuse new programmers.
+
+<table cellpadding=5 cellspacing=0 border=0>
+<tr valign="top">
+<td>
+<a href="https://www.amazon.com/Tour-C-Depth/dp/0321958314"><img src="tour-of-cpp.jpg" width="100" height="134"></a>
+</td>
+<td>
+		<td valign="top">
+	<a href="https://www.amazon.com/Tour-C-Depth/dp/0321958314">A Tour of C++</a>:
+
+The C++11 standard allows programmers to express ideas more clearly, simply, and directly, and 
+to write faster, more efficient code. Bjarne Stroustrup, the designer and original implementer
+of C++, thoroughly covers the details of this language and its use in his definitive reference,
+<i>The C++ Programming Language, Fourth Edition</i>.
+</td>
+</tr></table>
+
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<p>
+  <li>Written by Scott Meyers, this is a detailed-oriented book on some of the new (and difficult to understand) features
+    in C++.  Scott is very likely one of the most knowlegable C++ developers
+    around and his books are always highly-rated. A must read for anyone that really wants all of
+    the gory details.
+
+<table cellpadding=5 cellspacing=0 border=0>
+<tr valign="top">
+<td>
+<a href="https://www.amazon.com/Effective-Modern-Specific-Ways-Improve/dp/1491903996"><img src="effective-modern-cpp.jpg" width="100" height="134"></a>
+</td>
+<td>
+    <td valign="top">
+  <a href="https://www.amazon.com/Effective-Modern-Specific-Ways-Improve/dp/1491903996">Effective Modern C++</a>:
+
+Coming to grips with C++11 and C++14 is more than a matter of familiarizing yourself with 
+the features they introduce (e.g., auto type declarations, move semantics, lambda expressions, 
+and concurrency support). The challenge is learning to use those features effectively&mdash;so 
+that your software is correct, efficient, maintainable, and portable. That's where this 
+practical book comes in. It describes how to write truly great software using C++11 
+and C++14, i.e. using modern C++.
+</td>
+</tr></table>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+
+
+<p>
+  <li>Also written by Scott Meyers, this is a PDF of the new features of C++.
+    They are probably best when you are reading them while
+    Scott is speaking. But, they are very well written, and you can easily follow the examples without
+    Scott being there. Because it's a PDF only (electronic), it is still being updated.
+
+<table cellpadding=5 cellspacing=0 border=0>
+<tr valign="top">
+<td>
+<a href="https://www.artima.com/shop/overview_of_the_new_cpp"><img src="cpp11Cover240x185.gif" width="100" height="134"></a>
+</td>
+<td>
+    <td valign="top">
+  <a href="https://www.artima.com/shop/overview_of_the_new_cpp">Overview of the New C++ (C++11/14)</a>:
+
+This PDF document consists of Scott Meyers' extensively annotated presentation materials for 
+his training course on C++11 and C++14. This intensively technical seminar introduces the most
+ important new features in C++11 and C++14 and explains how to get the most out of them.
+<p>
+All of Scott Meyers' books can be found at his <a href="http://www.aristeia.com/books.html">website</a>.
+
+</td>
+</tr></table>
+<p>
+
+<!--
+-->
+
+<blockquote>
+</blockquote>
+
+</ul>
+<b>Other resources</b>
+<ul>
+
+<li><a href="http://www.stroustrup.com/C++11FAQ.html">C++11FAQ</a> at Stroustrup's site.</li>
+<p>
+
+<p>
+<li>In closing, I will defer again to the experts. In this case, Herb Sutter:
+<blockquote>
+<p class="technote">
+<a href="http://www.gotw.ca/publications/advice97.htm">
+Write What You Know, and Know What You Write</a> Advice From the C++ Experts: 
+<i>My best advice? Don't get fancy. Treat a new C++ feature like you would treat a loaded automatic weapon in a crowded room: never use it just 
+because it looks nifty. Wait until you understand the consequences, don't get cute, write what you know, and know what you write.</i>
+<br><br>
+The article is a little out-dated, but most of the advice is still excellent, 
+especially for new programmers that like to use language features that they don't really understand yet.
+</p>
+</blockquote>
+
+<!--
+ins { background-color:#A0FFA0; text-decoration: none }
+del { background-color:#FFA0A0; text-decoration: line-through; }
+#hidedel:checked ~ * del, #hidedel:checked ~ * del * { display:none; visibility:hidden }
+
+
+-->
+
+
+
+</ul>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

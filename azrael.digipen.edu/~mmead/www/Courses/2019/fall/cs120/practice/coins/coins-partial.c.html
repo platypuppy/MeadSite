@@ -1,0 +1,40 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>coins-partial.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+<b>void</b> print_coins(<b>int</b> halves, <b>int</b> quarters, <b>int</b> dimes, <b>int</b> nickels, <b>int</b> pennies)
+{
+  <b>int</b> sum = halves * 50 + quarters * 25 + dimes * 10 + nickels * 5 + pennies;
+
+  printf(<font color="#9933CC">&quot;You can make $%.2f with &quot;</font>, sum / 100.0);
+  <b>if</b> (halves)
+    printf(<font color="#9933CC">&quot;%i hal%s  &quot;</font>, halves, (halves &gt; 1) ? <font color="#9933CC">&quot;ves&quot;</font> : <font color="#9933CC">&quot;f&quot;</font>);
+  <b>if</b> (quarters)
+    printf(<font color="#9933CC">&quot;%i quarter%s  &quot;</font>, quarters, (quarters &gt; 1) ? <font color="#9933CC">&quot;s&quot;</font> : <font color="#9933CC">&quot;&quot;</font>);
+  <b>if</b> (dimes)
+    printf(<font color="#9933CC">&quot;%i dime%s  &quot;</font>, dimes, (dimes &gt; 1) ? <font color="#9933CC">&quot;s&quot;</font> : <font color="#9933CC">&quot;&quot;</font>);
+  <b>if</b> (nickels)
+    printf(<font color="#9933CC">&quot;%i nickel%s  &quot;</font>, nickels, (nickels &gt; 1) ? <font color="#9933CC">&quot;s&quot;</font> : <font color="#9933CC">&quot;&quot;</font>);
+  <b>if</b> (pennies)
+    printf(<font color="#9933CC">&quot;%i penn%s  &quot;</font>, pennies, (pennies &gt; 1) ? <font color="#9933CC">&quot;ies&quot;</font> : <font color="#9933CC">&quot;y&quot;</font>);
+ 
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> calculate_coins(<b>int</b> value, <b>int</b> num_coins)
+{
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

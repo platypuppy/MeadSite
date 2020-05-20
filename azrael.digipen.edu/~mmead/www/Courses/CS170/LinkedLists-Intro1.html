@@ -1,0 +1,719 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../css/styles.css">
+<title>Introduction to Linked Lists</title>
+</head>
+
+<body>  
+<center><h1>Introduction to Linked Lists</h1></center>
+
+<!--
+<blockquote><i>
+"C programmers think memory management is too important to be left to the computer. 
+Lisp programmers think memory management is too important to be left to the user."
+</i> -- from Ellis and Stroustrup's <b>The Annotated C++ Reference Manual</b>
+</blockquote>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Array Behavior
+</p>
+
+Arrays are simple, popular, and built-in to the C/C++ language and they have certain characteristics,
+both good and bad.
+<p>
+
+The Good:
+<ul>
+<li>Built-in to the language.
+<li>Easy to create at compile time or runtime.
+<li>Accessing any element in the array is trivial (just use an index).
+<li>Easy to "clean up". (Static arrays, just forget about it. Dynamic, use <tt><b>delete[]</b></tt>.)
+</ul>
+
+The Bad:
+<ul>
+<li>You need to know size ahead of time (both static and dynamic arrays).
+<li>You must allocate a fixed amount of space (can't resize an array).
+<li>Inserting and deleting anywhere but at the end requires a lot of work.
+</ul>
+
+The Ugly:
+<ul>
+<li>No bounds checking, allowing you to overwrite memory. (Most students are painfully aware of this by now.)
+<li>The <i>unusual</i> pointer-array relationship
+<!--<a href="http://cm.bell-labs.com/cm/cs/who/dmr/chist.html">here</a>. (Look in the <i>Critique</i>-->
+<a href="../../docs/Chistory.html">here</a>. (Look in the <i>Critique</i>
+section or search on "historical accidents or mistakes")
+</ul>
+<a name="ARRAYPROBLEM">
+Example of the limitation of arrays: Reading integers from a file into an array.
+</a>
+<p>
+This is our algorithm:
+<p>
+<ol>
+<li>Allocate an array to hold the numbers
+<li>Open a file for reading
+<li>While there are more numbers in the file
+<ol>
+<li>Read in a number
+<li>Add it to the end of the array
+</ol>
+<li>Close the file
+</ol>
+
+
+<p>
+
+<pre class="sourcecode"><code><font color="#003399"><i>// Prints each value in the integer array</i></font>
+<b>void</b> print_array(<b>int</b> array[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%i   &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> numbers[30]; <font color="#003399"><i>// Holds at most 30 integers</i></font>
+  <b>int</b> count = 0;
+
+    <font color="#003399"><i>// Open text file of numbers for reading</i></font>
+  FILE *fp = fopen(<font color="#9933CC">&quot;numbers.txt&quot;</font>, <font color="#9933CC">&quot;rt&quot;</font>);
+
+    <font color="#003399"><i>// Process the entire file</i></font>
+  <b>while</b> (!feof(fp))
+  {
+    <b>int</b> number;
+
+      <font color="#003399"><i>// Read next integer from the file</i></font>
+    <b>if</b> (fscanf(fp, <font color="#9933CC">&quot;%i&quot;</font>, &amp;number) == 0)
+      <b>break</b>;
+
+      <font color="#003399"><i>// Add the number to the end of the array</i></font>
+    numbers[count++] = number;
+  }
+
+    <font color="#003399"><i>// Close the file</i></font>
+  fclose(fp);
+
+    <font color="#003399"><i>// Print the array</i></font>
+  print_array(numbers, count);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Of course, if there are more than 30 numbers, we are going to overwrite the end of the array.
+<p>
+Possible "fixes":
+<ul>
+<li>Don't read in more than 30 numbers. 
+<li>Set the size of the array to more than 30 (and hope it's big enough or waste a lot of space)
+<li>Allocate the array at runtime. (Still need a size.) Choices:
+<ol>
+<li>Put the size in the file. (Maybe the first line contains the number of integers.) 
+Allocate the array when the size is known.
+<li>When the array is full, allocate another, bigger array, and copy old values
+into it. This may need to be done many times.
+</ol>
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Linked Lists
+</p>
+
+We'd like to overcome the limitations of arrays. One way is to use a <i>linked list</i>.
+So, what is a Linked List?
+
+<ul>
+<li>A <i>dynamic</i> collection of elements called <i>nodes</i>.
+<li>A node is a <b>struct</b> or <b>class</b> in C++.
+<li>A node has two main portions
+<ul>
+<li>data portion -- same type (size) of information in all nodes
+<li>pointer portion -- a pointer to the next node in the list
+</ul>
+<li>The data portion can be as simple as an <b>int</b> or very complex. (It's user-defined.)
+<li>The linked list is accessed through an external pointer called the 
+<i>head</i> which points to the first node in the list.
+<li>The last pointer in the list points to 0 (NULL), marking the end of the list. (Think of it as a "NULL-terminated" list)
+<li>An example of a node structure (for a singly linked list) that contains an integer as it's data:
+
+<blockquote><pre>
+<b>struct</b> Node
+{
+  <b>int</b> number;  <font color="#003399"><i>// data portion</i></font>
+  Node *next;  <font color="#003399"><i>// pointer portion</i></font>
+};
+</pre></blockquote>
+	
+<li>Example showing data as an integer, each node is 8 bytes (assume 32-bit pointers):
+<blockquote>
+<img src="LinkedLists-Ex-0a.png">
+</blockquote>	
+<br>
+Example showing arbitrary addresses:
+<blockquote>
+<img src="LinkedLists-Ex-0b.png">
+</blockquote>	
+	
+<li>If the list is empty, head points to 0.
+<li>If each node in the list has only one pointer (called a "next" pointer), the list is 
+called a <i>singly linked list</i>
+<li>Some lists have nodes with two pointers (called "next" and "previous"). This type of linked list is known
+as a <i>doubly linked list</i>.
+</ul>
+
+
+Notice that the structure above is sort of <i>recursive</i>. In other words, we're defining 
+the structure by including a reference to itself in the definition. (Actually, there's only
+a pointer to a structure of the same type.)
+<p>
+When the compiler encounters a structure member, it  must know the size of the member. Since the size
+of all pointers is known at compile time, the code above is completely sane and legal. (Also, the 
+compiler already knows what a <tt>Node</tt> is.)
+<p>
+This example code:
+
+<blockquote><pre>
+  <font color="#003399"><i>// #1 Declare 3 structs</i></font>
+Node A, B, C;
+
+  <font color="#003399"><i>// #2 Set the 'data' portions of the nodes</i></font>
+A.number = 10;
+B.number = 20;
+C.number = 30;
+
+  <font color="#003399"><i>// #3 Connect (link) the nodes together</i></font>
+A.next = &amp;B;   <font color="#003399"><i>// A's next points to B</i></font>
+B.next = &amp;C;   <font color="#003399"><i>// B's next points to C</i></font>
+C.next = 0;    <font color="#003399"><i>// Nothing follows C</i></font>
+</pre></blockquote>
+
+could be visualized as this:
+
+<p>
+After #1
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-1.gif">
+</blockquote>
+
+After #2
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-2.gif">
+</blockquote>
+
+After #3
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-3.gif">
+</blockquote>
+
+With arbitrary addresses
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-3a.gif">
+</blockquote>
+
+The "problem" with this approach, is that we are declaring (and naming) all of the nodes at
+compile time. If we wanted to read a list of 30 integers from a file, we'd need to declare
+30 <tt>Node</tt> structs. We're worse off than with arrays.
+<p>
+Notice from the diagram that naming struct <tt>B</tt> and <tt>C</tt> is redundant. Also remember
+that we don't "name" our individual elements of an array. We refer to them by supplying a subscript
+on the array name:
+
+<blockquote><pre>
+<b>int</b> numbers[30]; <font color="#003399"><i>// 30 "anonymous" elements</i></font>
+numbers[5] = 0;  <font color="#003399"><i>// We don't have a "name" for the 6th element</i></font>
+</pre></blockquote>
+
+This principle of "anonymous" elements will apply to linked lists as well:
+<ul>
+<li>To access an element of an array, we simply use the name of the array (essentially a pointer
+to the first element) and an index (offset from the beginning).
+<li>To access an element of a linked list, we use a pointer to the <b>first</b> node and then
+<i>walk</i> the list to find a particular node.
+</ul>
+
+For example, with named nodes (as in the example above) we can print out the data of each
+node very simply:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;%i\n&quot;</font>, A.number); <font color="#003399"><i>// 10</i></font>
+printf(<font color="#9933CC">&quot;%i\n&quot;</font>, B.number); <font color="#003399"><i>// 20</i></font>
+printf(<font color="#9933CC">&quot;%i\n&quot;</font>, C.number); <font color="#003399"><i>// 30</i></font>
+</pre></blockquote>
+
+With unnamed nodes (i.e. access to the first node only):
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;%i\n&quot;</font>, A.number);             <font color="#003399"><i>// 10</i></font>
+printf(<font color="#9933CC">&quot;%i\n&quot;</font>, A.next-&gt;number);       <font color="#003399"><i>// 20</i></font>
+printf(<font color="#9933CC">&quot;%i\n&quot;</font>, A.next-&gt;next-&gt;number); <font color="#003399"><i>// 30</i></font>
+</pre></blockquote>
+
+Or, the more common method of using a loop to <i>"walk"</i> the list:
+
+<blockquote><pre>
+Node *pNode = &amp;A; <font color="#003399"><i>// Point to first node</i></font>
+<b>while</b> (pNode) 
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, pNode-&gt;number); <font color="#003399"><i>// Print data</i></font>
+  pNode = pNode-&gt;next;           <font color="#003399"><i>// &quot;Follow&quot; the next pointer</i></font>
+}
+</pre></blockquote>
+
+Visually:
+
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-4.gif">
+</blockquote>
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-5.gif">
+</blockquote>
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-6.gif">
+</blockquote>
+<p>
+<blockquote>
+<img src="LinkedLists-ABC-7.gif">
+</blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="PROBLEM_REVISITED">
+<p class="SectionHeader">Problem Revisited
+</p>
+</a>
+
+Let's revisit the <a href="LinkedLists-Intro1.html#ARRAYPROBLEM">original problem</a> of reading an unknown number of integers from a file:
+<p>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Array</th><th>Linked list</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<ol><li><font color="blue"><b>Allocate an array to hold the numbers</b></font>
+<li>Open a file for reading
+<li>While there are more numbers in the file
+<ol type="A">
+<li>Read in a number
+  
+<li>Add it to the end of the array
+</ol>
+<li>Close the file
+</ol>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<ol>
+<li>Open a file for reading
+<li>While there are more numbers in the file
+<ol type="A">
+<li>Read in a number
+<li><font color="blue"><b>Allocate a node to hold the number</b></font>
+<li>Add the node to the end of the list
+</ol>
+<li>Close the file
+</ol>
+</pre></blockquote>
+</td>
+</tr></table>
+	
+<p>
+
+
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  Node *pList = 0; <font color="#003399"><i>// empty list</i></font>
+  
+    <font color="#003399"><i>// 1. Open a file for reading</i></font>
+  FILE *fp = fopen(<font color="#9933CC">&quot;numbers.txt&quot;</font>, <font color="#9933CC">&quot;rt&quot;</font>);
+  
+    <font color="#003399"><i>// 2. While there are more numbers in the file</i></font>
+  <b>while</b> (!feof(fp))
+  {
+    Node *pNode;
+    <b>int</b> number;
+
+      <font color="#003399"><i>// A. Read next integer from the file</i></font>
+    <b>if</b> (fscanf(fp, <font color="#9933CC">&quot;%i&quot;</font>, &amp;number) == 0)
+      <b>break</b>;
+
+      <font color="#003399"><i>// B. Allocate a new node struct (same for all nodes)</i></font>
+    pNode = <b>new</b> Node;
+    pNode-&gt;number = number; <font color="#003399"><i>// Set the number</i></font>
+    pNode-&gt;next = 0;        <font color="#003399"><i>// Set next (no next yet)</i></font>
+
+      <font color="#003399"><i>// C. Add the new node to the end of the list</i></font>
+      <font color="#003399"><i>// If the list is NULL (empty), this is the first</i></font>
+      <font color="#003399"><i>// node we are adding to the list. </i></font>
+    <b>if</b> (pList == 0)
+      pList = pNode;
+    <b>else</b>
+    {
+        <font color="#003399"><i>// Find the end of the list</i></font>
+      Node *temp = pList;
+      <b>while</b> (temp-&gt;next)
+        temp = temp-&gt;next;
+
+      temp-&gt;next = pNode; <font color="#003399"><i>// Put new node at the end</i></font>
+    }
+  }
+    <font color="#003399"><i>// 3. Close the file</i></font>
+  fclose(fp);
+  print_list(pList);  <font color="#003399"><i>// Display the list</i></font>
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+Make sure you can follow what each line of code is doing. <b>You should definitely draw diagrams
+until you are very comfortable with linked lists.</b> (Which won't be until after you graduate, and even then you should still draw diagrams!) 
+<p>
+Note these two sections especially:
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Creating a new node for each element of data (number in the file):
+<p>
+
+<blockquote><pre>
+  <font color="#003399"><i>// Allocate a new node struct (same for all nodes)</i></font>
+pNode = <b>new</b> Node;
+pNode-&gt;number = number; <font color="#003399"><i>// Set the number</i></font>
+pNode-&gt;next = 0;        <font color="#003399"><i>// Set next (no next yet)</i></font>
+</pre></blockquote>
+
+Adding the new node to the end of the list:
+<p>
+
+<blockquote><pre>
+  <font color="#003399"><i>// If the list is NULL (empty), this is the first</i></font>
+  <font color="#003399"><i>// node we are adding to the list. </i></font>
+<b>if</b> (pList == 0)
+  pList = pNode;
+<b>else</b>
+{
+    <font color="#003399"><i>// Find the end of the list</i></font>
+  Node *temp = pList;
+  <b>while</b> (temp-&gt;next)
+    temp = temp-&gt;next;
+
+  temp-&gt;next = pNode; <font color="#003399"><i>// Put new node at the end</i></font>
+}
+</pre></blockquote>
+<p>
+
+
+Also note the <tt>print_list</tt> function used above:
+<p>
+
+<blockquote><pre>
+<b>void</b> print_list(Node *list)
+{
+  <b>while</b> (list)
+  {
+    printf(<font color="#9933CC">&quot;%i   &quot;</font>, list-&gt;number);
+    list = list-&gt;next;
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+
+A few points to make so far:
+<ul>
+<li>The code is certainly more complex than arrays, although not hard to understand.
+<li>The number of nodes in a linked list is only dependent on the amount of memory in the computer. 
+(This code can handle small lists or large lists.)
+<li>We are only allocating what we need. (Arrays can waste space.)
+<li>There is a 4-byte (size of a pointer on 32-bit computers) overhead for each node.
+<li>The time it takes to add a node to the end of the linked list takes longer
+as the list grows.
+<li>We must also remember to deallocate (delete) each node in the list when we are finished. 
+(We haven't done that in the example yet.)
+</ul>
+
+<blockquote>
+<p class="technote">
+Also note that this very simple example does not do any error handling, especially the condition
+where <tt><b>new</b></tt> fails. In Real World&trade; code, you would need to have code that 
+handles the case when <tt><b>new</b></tt> fails and deal with it accordingly.
+</p>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Adding Nodes
+</p>
+
+Let's address the last two points now. First, this one:
+<i>"The time it takes to add a node to the end of the linked list takes longer
+as the list grows."</i>
+<p>
+This is simply because we are adding to the end and we don't have any immediate (random) access
+to the end. We only have immediate access to the first node; all of the other nodes must be accessed
+from the first one. If the list is long, this can take a while.
+<p>
+Solution #1: Maintain a pointer to the last node (tail).
+<p>
+
+We add a variable to track the tail:
+<p>
+
+<blockquote><pre>
+Node *pList = 0; <font color="#003399"><i>// empty list</i></font>
+Node *pTail = 0; <font color="#003399"><i>// no tail yet</i></font>
+</pre></blockquote>
+
+
+<p>
+<blockquote>
+<img src="LinkedLists-Ex-1.gif">
+</blockquote>
+<p>
+<blockquote>
+<img src="LinkedLists-Ex-2.gif">
+</blockquote>
+<p>
+<blockquote>
+<img src="LinkedLists-Ex-3.gif">
+</blockquote>
+<p>
+<blockquote>
+<img src="LinkedLists-Ex-4.gif">
+</blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+<p>
+Solution #2: Insert at the head of the list instead of the tail. This is simpler yet. 
+This has the "feature" that the items in the list will be <i>reversed</i>. <!--(Think of a stack.)-->
+
+<p>
+<blockquote>
+<img src="LinkedLists-Ex-5.gif">
+</blockquote>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Freeing Nodes
+</p>
+
+Up until now, we haven't deleted any of the nodes. Since we called <tt><b>new</b></tt> for these
+nodes, we have to call <tt><b>delete</b></tt> when we're through. This is straight-forward using another
+while loop:
+<p>
+
+<blockquote><pre>
+<b>while</b> (pList)
+{
+  Node *temp = pList-&gt;next;
+  <b>delete</b> pList;
+  pList = temp;
+}
+</pre></blockquote>
+
+<a href="LinkedLists-Free.html">Diagrams</a> for deleting the nodes.
+<p>
+
+Notes thus far:
+<ul>
+<li>When we traverse (walk) a linked list, we always start from the beginning (head). 
+<li>We cannot "jump" to a particular node because we don't have random access (like arrays).
+<li>Note that we cannot walk backwards through a singly linked list because we have no way to get 
+from a node to the previous node. 
+<li>If you only need to move in one direction, a singly linked list might be enough.
+<li>If you require bi-directional traversals, you will want to use a <i>doubly linked list</i>, which
+	allows traversals in both directions.
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Creating Functions
+</p>
+The code that was shown thus far manipulates all of the nodes in the list directly. What this means
+is that the lists were not "passed" to another function to do the work. In real code, you would
+create functions to do things such as <i>AddToEnd</i>, <i>AddToFront</i>, <i>DeleteFront</i>,
+<i>FindItem</i>, etc. The reason to do this is simple: we want to be able to re-use the functionality
+so that we can perform these operations on any list.
+<p>
+However, there is a slight caveat. Something that we've discussed many times before but still confuses
+many new programmers: Passing a pointer to a function. Remember these points about passing parameters
+to functions:
+<ul>
+<li>If we want a function to change <i>our</i> data, we must pass a pointer to <i>our</i> data.
+<li>Passing by value will cause the function to change the <i>copy</i> of the data.
+<li>For example, if I want a function to change an integer, I would pass a pointer to the integer 
+	(e.g. the <a href="Functions-2.html#SWAP">swap function</a>).
+<li>But, what if I want the function to change a pointer? If we just pass the pointer by value (a copy), then the
+	function will change the copy, meaning the copy will point to something else, but the original pointer will be unchanged.
+<li>If we want a function to <i>change</i> our pointer, we have to do the same thing: pass a pointer to the pointer.
+</ul>
+With linked lists, we may want a function to add a new node to the front of a list. The way we do this is to
+point the new node's next pointer at the first node in the list, and then have the head pointer point at
+the new node. This is trivial and we saw it above in this page.
+<p>
+This means that, instead of passing the <tt><b>head</b></tt> node to the function, we need to pass a <tt><b>pointer to the head node</b></tt>
+to the function. This will allow the function to change what the <tt><b>head pointer</b></tt> will point at.
+<p>
+So, a function to add a node to the head of a list would be prototyped something like this (assuming a linked list of integers):
+
+
+<blockquote><pre>
+  <font color="#003399"><i>// Adds a node to the front of the list</i></font>
+<b>void</b> AddToFront(Node **ppList, Node *pNode);
+</pre></blockquote>
+
+<ol>
+<li><b><tt>ppList</tt></b> - a pointer to the head pointer (i.e. the address of the head pointer)
+<li><b><tt>pNode</tt></b> - a pointer to the new node that will be inserted at the front of the list
+</ol>
+
+So, a possible implementation of the function may look like this:
+
+<blockquote><pre>
+<b>void</b> AddToFront(Node **ppList, Node *pNode)
+{
+    <font color="#003399"><i>// The new node's next pointer will point at the first node</i></font>
+  pNode-&gt;next = *ppList;   
+  
+    <font color="#003399"><i>// Now, the head pointer points at the new node, which is now at the front.</i></font>
+    <font color="#003399"><i>// Notice that we are dereferencing the pointer to modify the original head pointer.</i></font>
+    <font color="#003399"><i>// The client passed in the <b>address</b> of the head pointer so we could change it.</i></font>
+  *ppList = pNode;         
+}
+</pre></blockquote>
+
+As a rule of thumb, any function that might change what the head pointer is pointing at must take a pointer to a pointer
+to a node. If not, then the function will only change a copy of the head pointer, which, as everyone knows, will have no
+effect on the original head pointer. You would need to use a similar technique for a function that added to the end of a list 
+as well. To help understand this concept, draw a diagram and see how passing pointers to pointers produces the desired results.
+<p>
+
+<blockquote>
+<p class="info">
+There is nothing fancy or weird or exotic about passing pointers to pointers. The only way a function can change the original data
+is if it receives a pointer to the data. If the data happens to be a pointer itself, then a pointer to the pointer must
+be passed in order to change it. This is why some of the linked list functions must pass pointers to pointers to nodes.
+
+</p>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Doubly Linked Lists
+</p>
+
+
+A <i>doubly linked list</i> is a list that has two pointers. In addition to the <i>next</i> 
+pointer, it has a <i>previous</i> pointer. This allows you to traverse the list in both directions.
+<p>
+An example node structure for a doubly linked list:
+
+<blockquote><pre>
+<b>struct</b> Node
+{
+  <b>int</b> number;        <font color="#003399"><i>// data portion</i></font>
+  <b>struct</b> Node *next; <font color="#003399"><i>// node after this one</i></font>
+  <b>struct</b> Node *prev; <font color="#003399"><i>// node before this one</i></font>
+};
+</pre></blockquote>
+
+<p>
+<blockquote><pre>
+<img src="LinkedLists-Double-1.gif">
+</pre></blockquote>
+<p>
+
+Compared with singly linked lists, double linked lists:
+<ul>
+<li>require an extra pointer for each node.
+<li>require slightly more work at runtime to "hook-up" the extra pointer.
+<li>are more flexible by allowing traversals in both directions.
+<li>can be simpler to implement because nodes can access their next <i>and</i> previous node.
+</ul>
+
+The implementations for functions to manipulate doubly linked lists would be similar to
+the singly linked lists functions, with the additional code for dealing with the
+previous pointer. 
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+To summarize, linked lists:
+<ul>
+<li>are an alternate data structure for storing related data.
+<li>are more complex in structure and more complex in accessing than arrays.
+<li>require the programmer to deal with the complexity. (They are not built into the language.)
+<li>require more overhead than arrays.
+<li>can grow and shrink in size at runtime.
+<li>allow very efficient use of memory since you only allocate what you need (and delete when you're done.)
+<li>are very efficient for inserting and deleting items at any point in the list.
+</ul>
+
+
+<p>
+Why not do away with arrays and use linked lists for all lists?
+<p>
+
+
+</body>
+</html>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>

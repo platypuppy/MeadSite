@@ -1,0 +1,66 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf */</font>
+<font color="990099">#include &lt;string.h&gt; /* strlen */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi   */</font>
+
+<b>int</b> is_anagram(<b>const</b> <b>char</b> word1[], <b>const</b> <b>char</b> word2[], <b>int</b> size);
+
+<b>char</b> *words[] = {<font color="#9933CC">&quot;rat&quot;</font>, <font color="#9933CC">&quot;tar&quot;</font>,
+                 <font color="#9933CC">&quot;trap&quot;</font>, <font color="#9933CC">&quot;part&quot;</font>,
+                 <font color="#9933CC">&quot;baker&quot;</font>, <font color="#9933CC">&quot;break&quot;</font>,
+                 <font color="#9933CC">&quot;eager&quot;</font>, <font color="#9933CC">&quot;agree&quot;</font>,
+                 <font color="#9933CC">&quot;nicest&quot;</font>, <font color="#9933CC">&quot;insect&quot;</font>,
+                 <font color="#9933CC">&quot;promise&quot;</font>, <font color="#9933CC">&quot;imposer&quot;</font>,
+                 <font color="#9933CC">&quot;mattress&quot;</font>, <font color="#9933CC">&quot;smartest&quot;</font>,
+                 <font color="#9933CC">&quot;present&quot;</font>, <font color="#9933CC">&quot;serpent&quot;</font>,
+                 <font color="#9933CC">&quot;senator&quot;</font>, <font color="#9933CC">&quot;treason&quot;</font>,
+                 <font color="#9933CC">&quot;weather&quot;</font>, <font color="#9933CC">&quot;wreathe&quot;</font>,
+                 <font color="#9933CC">&quot;roasting&quot;</font>, <font color="#9933CC">&quot;organist&quot;</font>,
+                 <font color="#9933CC">&quot;worried&quot;</font>, <font color="#9933CC">&quot;wordier&quot;</font>,
+                 <font color="#9933CC">&quot;reversed&quot;</font>, <font color="#9933CC">&quot;reserved&quot;</font>
+                };
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> size = <b>sizeof</b>(words) / <b>sizeof</b>(*words);
+  
+  <b>for</b> (i = 1; i &lt; size; i += 2)
+  {
+    <b>int</b> result;
+    <b>char</b> *word1 = words[i - 1];
+    <b>char</b> *word2 = words[i];
+
+    <font color="#003399"><i>/*printf(&quot;%s, %s&#92;n&quot;, word1, word2);*/</i></font>
+
+    result = is_anagram(word1, word2, strlen(word1));
+    <b>if</b> (result)
+      printf(<font color="#9933CC">&quot;%s is an anagram of %s&#92;n&quot;</font>, word1, word2);
+    <b>else</b>
+      printf(<font color="#9933CC">&quot;%s is NOT an anagram of %s&#92;n&quot;</font>, word1, word2);
+  }
+
+  <b>for</b> (i = 1; i &lt; size; i += 2)
+  {
+    <b>int</b> result;
+    <b>char</b> *word1 = words[i - 1] + 1;
+    <b>char</b> *word2 = words[i] + 1;
+
+    result = is_anagram(word1, word2, strlen(word1));
+    <b>if</b> (result)
+      printf(<font color="#9933CC">&quot;%s is an anagram of %s&#92;n&quot;</font>, word1, word2);
+    <b>else</b>
+      printf(<font color="#9933CC">&quot;%s is NOT an anagram of %s&#92;n&quot;</font>, word1, word2);
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

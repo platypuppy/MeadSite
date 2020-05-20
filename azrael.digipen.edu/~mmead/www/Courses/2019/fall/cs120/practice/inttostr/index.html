@@ -1,0 +1,180 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>inttostr</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(inttostr.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Before writing any code, you should write down the steps (<b>in English</b> or your native language) 
+you need to take to solve these problems. This is your <i>pseudocode</i>.
+Once you have your pseudocode written, you can convert it into C code. If you can't write 
+down the steps in English, you certainly can't write
+it in C.
+</p>
+
+The function you'll be writing for this practice deals with NUL-terminated C-style strings.
+The only header file you can include is <tt>string.h</tt>,
+and you'll only need the <tt>strlen</tt> function.
+
+<p>
+<hr width="90%">
+<p>
+
+<p>
+The function you will write converts an integer into a string. The name of the 
+  function is <tt>inttostr</tt>
+	(integer to string) and the prototype is:
+	
+<blockquote><pre>
+<b>void</b> inttostr(<b>int</b> number, <b>char</b> string[]);
+</pre></blockquote>
+
+The <tt>string</tt> you are given is large enough to contain the largest integer (10 digits), including 
+the negative sign and NUL terminator. 
+<p>
+<b>Hint</b>: Work on the positive numbers first before trying to deal with the negative numbers. 
+You will use the mod operator, <tt>%</tt>, and the division operator, <tt>/</tt>, in a loop to 
+extract the digits from the integer. (You've already seen this in other practices.)
+
+For example, to extract the two digits from the integer
+<tt>42</tt>:
+
+<blockquote><pre>
+42 / 10 ==> 4
+42 % 10 ==> 2
+</pre></blockquote>
+
+For larger numbers, use modulo and division with larger powers of 10: 100, 1000, etc.
+<p>
+<!--
+(You've already done this in a 
+<a href="../week5/index.html">previous lab</a>.)
+-->
+Once you have the digit, convert it to a character (e.g. <tt>4 + '0' == '4'</tt>)
+and put the character in the proper position in the string. 
+Consult an <a href="../../../../../../docs/ASCII-binary-hex-chart.html">ASCII table</a> to see why this works.
+<p>
+You may find it easier to build the string backwards (in reverse), and when you've finished 
+building the string, just reverse it in place.
+<!--
+(You already know how to reverse an array, 
+as you did it in a <a href="../../projects/2/index.html">previous homework assignment</a>.)
+-->
+<p>
+<font color="blue">Approximate number of lines of code: 15.</font>
+
+</ol>
+<p>
+<hr width="90%">
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<b>Files:</b>
+<p>
+The function goes in a C file named <tt>inttostr.c</tt>. The command line to build the program is:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c inttostr.c -o inttostr
+</pre></blockquote>
+
+This is a partial <tt>inttostr.c</tt> with functions to get you started.
+
+<table border=0 cellpadding=10 cellspacing=10>
+<tr><td>
+<pre class="sourcecode"><code><b>#include</b> &lt;string.h&gt; <font color="#003399"><i>/* strlen */</i></font>
+
+<b>void</b> inttostr(<b>int</b> number, <b>char</b> string[])
+{
+
+}
+</code></pre>
+</td>
+</tr></table>
+
+Here is <tt>main.c</tt>: &nbsp;&nbsp;<a href="main.c.html">HTML</a> &nbsp;&nbsp;&nbsp;<a href="main.c">Text</a>
+<p>
+<a href="output-sample.txt">Output for all of the sample tests<a/><br> 
+<p>
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ul>
+  <li>You have already done a few exercises which required you to extract individual digits from a number.
+    This is trivial and you should not have any problems with this part of the algorithm.</li>
+  <p>
+  <li>The only library function you will need is <tt>strlen</tt>. This is the prototype for <tt>strlen</tt>:
+<blockquote><pre>
+size_t strlen(const char *string);
+</pre></blockquote>
+<tt>strlen</tt> returns the length of the string, which is the number of characters in the string. 
+It does not include the terminating NUL byte in the count. The type <tt>size_t</tt> is basically
+an unsigned integer type that you can use, if needed.
+<p>
+  <li>Before writing C code, write down the steps that are required for you to implement the solution.
+    This is especially true if you don't have a lot of experience writing C code. If you just
+    start "hacking" code, you may find you're wasting a lot of time.</li>
+    <p>
+</ul>
+<p>
+<p class="Extra">For students that would like an additional challenge: (Do not submit this.)</p>
+<ol>
+  <li>Write a function called <tt>floattostr</tt> converts a floating point number
+    into a string. For example, the <tt><b>float</b></tt> value <tt>3.14159</tt>
+    will be converted to this string:
+
+<blockquote><pre>
+"3.14159"
+</pre></blockquote>
+	
+</ol>		
+<br>
+<br>
+<br>
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,3 @@
+TestFreeEmptyPages2();
+Stress(true);
+cout << endl;

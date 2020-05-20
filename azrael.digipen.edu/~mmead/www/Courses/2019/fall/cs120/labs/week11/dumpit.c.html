@@ -1,0 +1,126 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>dumpit.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* &lt;put function names here&gt; */</font>
+<font color="990099">#include &lt;string.h&gt; /* &lt;put function names here&gt; */</font>
+
+<font color="#003399"><i>/* Longest formatted line is 75 characters */</i></font>
+<b>#define</b> MAXLEN 75
+
+<font color="#003399"><i>/* Example: (This example has Unix end-of-line character: 0x0A)
+ *
+ *  If inbuf contains the first 16 characters from the poem.txt file and outbuf
+ *  is an empty array large enough to hold the formatted string, this is how 
+ *  you would call the format function:
+ *   
+ *     format(inbuf, outbuf, 16, 0);
+ *  
+ *  and this is what outbuf would contain when it returned:
+ *  
+ * 000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+ *
+ *
+ *  The second 16 bytes would be formatted like this:
+ *
+ *     format(inbuf, outbuf, 16, 16);
+ *
+ *  and outbuf would look like this:
+ *
+ * 000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+ *
+ */</i></font>
+ 
+<font color="#003399"><i>/*******************************************************************************
+   Function: format
+
+Description: Given an array of characters, format the characters as a line of
+             hexadecimal numbers, including file offset and ASCII letters. Only
+             the printable ASCII characters are displayed. Non-printable 
+             characters are displayed as a period. The file offset is shown
+             as a hexadecimal number.
+
+     Inputs:  inbuf - The array of characters to format.
+             outbuf - The formatted array, including offset and ASCII letters. 
+              count - The number of characters in the input array.
+             offset - The value of the 6-digit offset.
+
+    Outputs: None. However, the outbuf parameter has been modified for the
+             client.
+*******************************************************************************/</i></font>
+<b>void</b> format(<b>const</b> <b>char</b>* inbuf, <b>char</b> *outbuf, <b>int</b> count, <b>int</b> offset)
+{
+  <b>int</b> i;  <font color="#003399"><i>/* loop variable */</i></font>
+  
+    <font color="#003399"><i>/* e.g. 000010 */</i></font>
+  sprintf(outbuf, <font color="#9933CC">&quot;%06X&quot;</font>, offset);
+
+   <font color="#003399"><i>/* e.g. 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56 */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <font color="#003399"><i>/* Format each byte as a hex number using sprintf              */</i></font>  
+    <font color="#003399"><i>/* Add the hex number to the end of buffer using strcat        */</i></font>  
+
+    <font color="#003399"><i>/* Don't forget the extra space between the 8th and 9th number */</i></font>  
+  }
+
+  <font color="#003399"><i>/* If you didn't get 16 characters, you have to add extra spaces */</i></font>  
+
+  <font color="#003399"><i>/* Using another loop, append the ASCII representation of the characters */</i></font>  
+
+}
+
+<font color="#003399"><i>/*******************************************************************************
+   Function: dump
+
+Description: Given a filename, read in the bytes and print their hexadecimal
+             values to the screen. If the character is printable, print the
+             character as well.
+             
+     Inputs: filename - The name of the file to dump in hex.
+
+    Outputs: N/A
+*******************************************************************************/</i></font>
+<b>void</b> dump(<b>const</b> <b>char</b> *filename)
+{
+    <font color="#003399"><i>/* Variable declarations */</i></font>
+
+    <font color="#003399"><i>/* Open the file for read/binary, &quot;rb&quot;  (Text mode will not work) */</i></font>
+    <font color="#003399"><i>/* If the file couldn't be opened, print error message and return */</i></font>
+
+    <font color="#003399"><i>/* Print the filename to the screen followed by a colon */</i></font>
+    <font color="#003399"><i>/* Print the first header line (offsets in hexadecimal) */</i></font>
+    <font color="#003399"><i>/* Print the second header line (dashes)                */</i></font>
+
+    <font color="#003399"><i>/* For all bytes in the file */</i></font>
+  <b>while</b> (<font color="#003399"><i>/* some condition */</i></font>)
+  {
+    <font color="#003399"><i>/* Read in bytes (16 at a time) using fread     */</i></font>
+    <font color="#003399"><i>/* Format bytes using the format function above */</i></font>
+    <font color="#003399"><i>/* Print formatted string using printf or puts  */</i></font>
+  }
+
+    <font color="#003399"><i>/* Close the file */</i></font>
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,50 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>coins-partial.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi   */</font>
+
+<b>void</b> calculate_coins(<b>int</b>, <b>int</b>);
+
+<b>void</b> usage(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Usage: coins &lt;amount&gt; &lt;number_of_coins&gt;&#92;n&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;where: 1 &lt;= amount &lt;= 2000&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;       1 &lt;= number_of_coins &lt;= 40&#92;n&quot;</font>);
+  exit(1);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> value, coins;
+
+  <b>if</b> (argc &lt; 3)
+    usage();
+
+    <font color="#003399"><i>/* get/convert cmdline args */</i></font>
+  value = atoi(argv[1]);
+  coins = atoi(argv[2]);
+
+    <font color="#003399"><i>/* Validate */</i></font>
+  <b>if</b> (value &lt; 1 || value &gt; 2000)
+    usage();
+  <b>if</b> (coins &lt; 1 || coins &gt; 40)
+    usage();
+
+  calculate_coins(value, coins);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

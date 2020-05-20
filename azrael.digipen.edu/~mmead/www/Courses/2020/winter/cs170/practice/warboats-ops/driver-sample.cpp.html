@@ -1,0 +1,719 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-sample.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+
+<font color="990099">#include &quot;WarBoats.h&quot;</font>
+<font color="990099">#include &quot;Ocean.h&quot;</font>
+<font color="990099">#include &quot;PRNG.h&quot;</font>
+
+<b>using</b> <b>namespace</b> CS170::WarBoats;
+<b>using</b> CS170::Utils::Random;
+
+
+<b>void</b> PrintShotResult(<b>const</b> CS170::WarBoats::ShotResult &amp;sr)
+{
+  <b>const</b> <b>char</b> *strings[] = {<font color="#9933CC">&quot;HIT&quot;</font>, <font color="#9933CC">&quot;MISS&quot;</font>, <font color="#9933CC">&quot;DUPLICATE&quot;</font>, <font color="#9933CC">&quot;SUNK&quot;</font>, <font color="#9933CC">&quot;ILLEGAL&quot;</font>};
+  std::cout &lt;&lt; strings[<b>static_cast</b>&lt;<b>int</b>&gt;(sr)] &lt;&lt; std::endl;
+}
+
+<b>void</b> PrintStats(<b>const</b> CS170::WarBoats::Ocean &amp;ocean)
+{
+  CS170::WarBoats::ShotStats stats = ocean.GetShotStats();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;      Hits: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.hits &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;    Misses: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.misses &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.duplicates &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Boats Sunk: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.sunk &lt;&lt; std::endl;
+}
+
+<b>void</b> TakeAShot(CS170::WarBoats::Ocean &amp;ocean, <b>const</b> CS170::WarBoats::Point&amp; pt)
+{
+  CS170::WarBoats::ShotResult sr;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shot: &quot;</font> &lt;&lt; pt.x &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; pt.y &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  sr = ocean.TakeShot(pt);
+  PrintShotResult(sr);
+  PrintStats(ocean);
+  std::cout &lt;&lt; ocean;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test0()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+    <font color="#003399"><i>// Setup the ocean</i></font>
+  <b>int</b> num_boats = 3;
+  <b>int</b> xsize = 8;
+  <b>int</b> ysize = 8;
+  CS170::WarBoats::Ocean ocean(num_boats, xsize, ysize);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The empty board&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; ocean;
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Boat boat;
+  CS170::WarBoats::Point location;
+  CS170::WarBoats::BoatPlacement bp;
+
+    <font color="#003399"><i>// Boat #1</i></font>
+  boat.ID = 1;
+  location.x = 1;
+  location.y = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #2</i></font>
+  boat.ID = 2;
+  location.x = 5;
+  location.y = 1;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Boat #3</i></font>
+  boat.ID = 3;
+  location.x = 0;
+  location.y = 5;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 4;
+  location.x = 10;
+  location.y = 5;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 4;
+  location.x = 2;
+  location.y = 0;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+      <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 4;
+  location.x = 5;
+  location.y = 6;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  bp = ocean.PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The board with &quot;</font> &lt;&lt; num_boats &lt;&lt; <font color="#9933CC">&quot; boats&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; ocean;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test1()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+    <font color="#003399"><i>// Setup the ocean</i></font>
+  <b>int</b> num_boats = 3;
+  <b>int</b> xsize = 8;
+  <b>int</b> ysize = 8;
+  CS170::WarBoats::Ocean ocean(num_boats, xsize, ysize);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The empty board&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; ocean;
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Boat boat;
+  CS170::WarBoats::Point location;
+
+    <font color="#003399"><i>// Boat #1</i></font>
+  boat.ID = 1;
+  location.x = 1;
+  location.y = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  ocean.PlaceBoat(boat);
+
+    <font color="#003399"><i>// Boat #2</i></font>
+  boat.ID = 2;
+  location.x = 5;
+  location.y = 1;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  ocean.PlaceBoat(boat);
+
+    <font color="#003399"><i>// Boat #3</i></font>
+  boat.ID = 3;
+  location.x = 0;
+  location.y = 5;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  ocean.PlaceBoat(boat);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The board with &quot;</font> &lt;&lt; num_boats &lt;&lt; <font color="#9933CC">&quot; boats&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; ocean;
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Point coordinate;
+
+    <font color="#003399"><i>// Illegal coordinate</i></font>
+  coordinate.x = 10;
+  coordinate.y = 5;
+  TakeAShot(ocean, coordinate);
+
+    <font color="#003399"><i>// HIT</i></font>
+  coordinate.x = 1;
+  coordinate.y = 3;
+  TakeAShot(ocean, coordinate);
+
+    <font color="#003399"><i>// MISS</i></font>
+  coordinate.x = 5;
+  coordinate.y = 7;
+  TakeAShot(ocean, coordinate);
+
+    <font color="#003399"><i>// DUPLICATE</i></font>
+  coordinate.x = 1;
+  coordinate.y = 3;
+  TakeAShot(ocean, coordinate);
+
+    <font color="#003399"><i>// HIT</i></font>
+  coordinate.x = 2;
+  coordinate.y = 3;
+  TakeAShot(ocean, coordinate);
+
+    <font color="#003399"><i>// HIT</i></font>
+  coordinate.x = 3;
+  coordinate.y = 3;
+  TakeAShot(ocean, coordinate);
+
+    <font color="#003399"><i>// SUNK</i></font>
+  coordinate.x = 4;
+  coordinate.y = 3;
+  TakeAShot(ocean, coordinate);
+}
+
+<b>void</b> test2()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+    <font color="#003399"><i>// Setup the ocean (check 100, 30x30)</i></font>
+  <b>int</b> num_boats = 5;
+  <b>int</b> xsize = 10;
+  <b>int</b> ysize = 10;
+
+    <font color="#003399"><i>// Use a pointer to an ocean and dynamically create it</i></font>
+  CS170::WarBoats::Ocean *ocean;
+  ocean = <b>new</b> CS170::WarBoats::Ocean(num_boats, xsize, ysize);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The empty board&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; *ocean;
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Boat boat;
+  CS170::WarBoats::Point location;
+
+    <font color="#003399"><i>// Boat #1</i></font>
+  boat.ID = 1;
+  location.x = 1;
+  location.y = 3;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  ocean-&gt;PlaceBoat(boat);
+
+    <font color="#003399"><i>// Boat #2</i></font>
+  boat.ID = 2;
+  location.x = 5;
+  location.y = 1;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  ocean-&gt;PlaceBoat(boat);
+
+    <font color="#003399"><i>// Boat #3</i></font>
+  boat.ID = 3;
+  location.x = 0;
+  location.y = 5;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  ocean-&gt;PlaceBoat(boat);
+
+    <font color="#003399"><i>// Boat #4</i></font>
+  boat.ID = 4;
+  location.x = 3;
+  location.y = 8;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oHORIZONTAL;
+  ocean-&gt;PlaceBoat(boat);
+
+    <font color="#003399"><i>// Boat #5</i></font>
+  boat.ID = 5;
+  location.x = 9;
+  location.y = 6;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  ocean-&gt;PlaceBoat(boat);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The board with &quot;</font> &lt;&lt; num_boats &lt;&lt; <font color="#9933CC">&quot; boats&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; *ocean;
+  std::cout &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Try to sink the boats with random shots</i></font>
+  <b>int</b> shots = 0;
+  <b>while</b> (num_boats &gt; 0)
+  {
+    CS170::WarBoats::ShotResult sr;
+    <b>do</b>
+    {
+      CS170::WarBoats::Point coordinate;
+      coordinate.x = CS170::Utils::Random(0, xsize - 1);
+      coordinate.y = CS170::Utils::Random(0, ysize - 1);
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Shot #&quot;</font>
+                &lt;&lt; ++shots
+                &lt;&lt; <font color="#9933CC">&quot; at coordinate &quot;</font>
+                &lt;&lt; coordinate.x
+                &lt;&lt; <font color="#9933CC">&quot;, &quot;</font>
+                &lt;&lt; coordinate.y
+                &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+
+      sr = ocean-&gt;TakeShot(coordinate);
+      PrintShotResult(sr);
+    } <b>while</b> (sr == CS170::WarBoats::srDUPLICATE);
+
+      <font color="#003399"><i>// Sunk a boat</i></font>
+    <b>if</b> (sr == CS170::WarBoats::srSUNK)
+      num_boats--;
+
+    <font color="#003399"><i>//if (sr == CS170::WarBoats::srSUNK)</i></font>
+    {
+      <font color="#003399"><i>//PrintShotResult(sr);</i></font>
+      PrintStats(*ocean);
+      std::cout &lt;&lt; *ocean;
+      std::cout &lt;&lt; std::endl;
+    }
+  }
+
+  <font color="#003399"><i>// Must delete the ocean &quot;manually&quot;</i></font>
+  <b>delete</b> ocean;
+}
+
+<b>void</b> test3()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+    <font color="#003399"><i>// Setup the ocean</i></font>
+  <b>int</b> num_boats = 1;
+  <b>int</b> xsize = 5;
+  <b>int</b> ysize = 5;
+
+  CS170::WarBoats::Ocean *ocean;
+  ocean = <b>new</b> CS170::WarBoats::Ocean(num_boats, xsize, ysize);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The empty board&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; *ocean;
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Boat boat;
+  CS170::WarBoats::Point location;
+  CS170::WarBoats::BoatPlacement bp;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = -1;
+  location.y = 0;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = -10;
+  location.y = 0;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = 0;
+  location.y = -1;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = 0;
+  location.y = -10;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = 6;
+  location.y = 0;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = 100;
+  location.y = 0;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+      <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = 0;
+  location.y = 6;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Illegal placement</i></font>
+  boat.ID = 1;
+  location.x = 0;
+  location.y = 100;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Legal placement</i></font>
+  boat.ID = 1;
+  location.x = 0;
+  location.y = 0;
+  boat.position = location;
+  boat.orientation = CS170::WarBoats::oVERTICAL;
+  bp = ocean-&gt;PlaceBoat(boat);
+  <b>if</b> (bp == CS170::WarBoats::bpREJECTED)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is rejected.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Boat placement is accepted.&quot;</font> &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The board with &quot;</font> &lt;&lt; num_boats &lt;&lt; <font color="#9933CC">&quot; boats&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; *ocean;
+  std::cout &lt;&lt; std::endl;
+
+  CS170::WarBoats::Point coordinate;
+
+    <font color="#003399"><i>// Illegal coordinate</i></font>
+  coordinate.x = -1;
+  coordinate.y = 0;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = -100;
+  coordinate.y = 0;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = 0;
+  coordinate.y = -1;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = 0;
+  coordinate.y = -100;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = 6;
+  coordinate.y = 0;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = 60;
+  coordinate.y = 0;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = 0;
+  coordinate.y = 6;
+  TakeAShot(*ocean, coordinate);
+
+  coordinate.x = 0;
+  coordinate.y = 60;
+  TakeAShot(*ocean, coordinate);
+
+  <b>delete</b> ocean;
+}
+
+CS170::WarBoats::Ocean RandomOcean(<b>int</b> xsize, <b>int</b> ysize, <b>int</b> num_boats)
+{
+  CS170::WarBoats::Ocean ocean(num_boats, xsize, ysize);
+
+    <font color="#003399"><i>// Place the boats randomly in the ocean</i></font>
+  <b>int</b> boats_placed = 0;
+  <b>while</b> (boats_placed &lt; num_boats)
+  {
+    CS170::WarBoats::Boat boat;        <font color="#003399"><i>// random boat attributes</i></font>
+    CS170::WarBoats::BoatPlacement bp; <font color="#003399"><i>// accepted or rejected </i></font>
+    boat.ID = boats_placed + 1;        <font color="#003399"><i>// IDs are 1-based</i></font>
+
+      <font color="#003399"><i>// Keep placing a random boat until it is accepted</i></font>
+    <b>do</b>
+    {
+        <font color="#003399"><i>// Pick a random orientation</i></font>
+      boat.orientation = CS170::Utils::Random(0, 1)
+                                 ? CS170::WarBoats::oHORIZONTAL
+                                 : CS170::WarBoats::oVERTICAL;
+
+        <font color="#003399"><i>// Pick a random location (all valid)</i></font>
+      CS170::WarBoats::Point location;
+      location.x = CS170::Utils::Random(0, xsize - 1);
+      location.y = CS170::Utils::Random(0, ysize - 1);
+      boat.position = location;
+
+        <font color="#003399"><i>// Place the boat</i></font>
+      bp = ocean.PlaceBoat(boat);
+
+    }<b>while</b> (bp == CS170::WarBoats::bpREJECTED); <font color="#003399"><i>// place until accepted</i></font>
+
+    boats_placed++;
+  }
+
+  <b>return</b> ocean;
+}
+
+<b>void</b> RandomShots(CS170::WarBoats::Ocean&amp; ocean, <b>int</b> num_shots)
+{
+    <b>int</b> num_boats = ocean.GetNumBoats();
+    CS170::WarBoats::Point size = ocean.GetDimensions();
+
+    <font color="#003399"><i>// Try to sink the boats with random shots</i></font>
+  <b>while</b> (num_boats &gt; 0 &amp;&amp; num_shots &gt; 0)
+  {
+    CS170::WarBoats::ShotResult sr;
+    <b>do</b>
+    {
+      CS170::WarBoats::Point coordinate;
+      coordinate.x = CS170::Utils::Random(0, size.x - 1);
+      coordinate.y = CS170::Utils::Random(0, size.y- 1);
+      sr = ocean.TakeShot(coordinate);
+    }
+    <b>while</b> (sr == CS170::WarBoats::srDUPLICATE);
+
+      <font color="#003399"><i>// Sunk a boat</i></font>
+    <b>if</b> (sr == CS170::WarBoats::srSUNK)
+      num_boats--;
+
+      <font color="#003399"><i>// Stop once the number of shots has been reached</i></font>
+    num_shots--;
+  }
+}
+
+<b>void</b> CompareOceans(<b>const</b> Ocean&amp; lhs, <b>const</b> Ocean&amp; rhs)
+{
+  <b>if</b> (lhs == rhs)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;The oceans are the same.&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;The oceans are NOT the same.&quot;</font> &lt;&lt; std::endl;
+}
+
+<font color="#003399"><i>// copy constructors</i></font>
+<b>void</b> test4()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+  Ocean ocean1 = RandomOcean(20, 12, 10);
+  RandomShots(ocean1, 50);
+  Ocean copy1(ocean1); <font color="#003399"><i>// copy constructor</i></font>
+
+  RandomShots(ocean1, 50);
+  Ocean copy2(ocean1); <font color="#003399"><i>// copy constructor</i></font>
+
+  std::cout &lt;&lt; ocean1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy2 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(ocean1, copy2); <font color="#003399"><i>// the same</i></font>
+  std::cout &lt;&lt; copy1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(ocean1, copy1); <font color="#003399"><i>// NOT the same</i></font>
+
+  Ocean ocean2 = RandomOcean(12, 20, 5);
+  CompareOceans(ocean2, ocean1); <font color="#003399"><i>// NOT the same</i></font>
+
+  Ocean ocean3 = RandomOcean(10, 10, 3);
+  RandomShots(ocean3, 20);
+  Ocean copy3(ocean3); <font color="#003399"><i>// copy constructor</i></font>
+  CompareOceans(ocean3, copy3); <font color="#003399"><i>// the same</i></font>
+
+  RandomShots(copy3, 1);
+  std::cout &lt;&lt; ocean3 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy3 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(ocean3, copy3); <font color="#003399"><i>// NOT the same</i></font>
+}
+
+<font color="#003399"><i>// default constructors, copy assignment</i></font>
+<b>void</b> test5()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+  Ocean ocean1 = RandomOcean(20, 12, 10);
+  RandomShots(ocean1, 50);
+
+  Ocean copy1;    <font color="#003399"><i>// default constructor</i></font>
+  copy1 = ocean1; <font color="#003399"><i>// copy assignment</i></font>
+
+  RandomShots(ocean1, 50);
+
+  Ocean copy2;    <font color="#003399"><i>// default constructor</i></font>
+  copy2 = ocean1; <font color="#003399"><i>// copy assignment</i></font>
+
+  std::cout &lt;&lt; ocean1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy2 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(ocean1, copy2); <font color="#003399"><i>// the same</i></font>
+  std::cout &lt;&lt; copy1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(ocean1, copy1); <font color="#003399"><i>// NOT the same</i></font>
+
+  Ocean ocean2 = RandomOcean(12, 20, 5);
+  CompareOceans(ocean2, ocean1); <font color="#003399"><i>// NOT the same</i></font>
+
+  Ocean ocean3 = RandomOcean(10, 10, 3);
+  RandomShots(ocean3, 20);
+  
+  Ocean copy3;    <font color="#003399"><i>// default constructor</i></font>
+  copy3 = ocean3; <font color="#003399"><i>// copy assignment</i></font>
+
+  CompareOceans(ocean3, copy3); <font color="#003399"><i>// the same</i></font>
+
+  RandomShots(copy3, 1);
+  std::cout &lt;&lt; ocean3 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy3 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(ocean3, copy3); <font color="#003399"><i>// NOT the same</i></font>
+
+  copy2 = copy2; <font color="#003399"><i>// copy assignment</i></font>
+  CompareOceans(copy2, copy2); <font color="#003399"><i>// the same</i></font>
+
+  copy2 = copy1 = ocean1;
+  CompareOceans(copy1, copy2);  <font color="#003399"><i>// the same</i></font>
+  CompareOceans(copy2, ocean1); <font color="#003399"><i>// the same</i></font>
+}
+
+<b>int</b> gSeed = 0;
+
+<b>void</b> test6()
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(gSeed, gSeed + gSeed);
+
+  <b>int</b> width = Random(10, 30);
+  <b>int</b> height = Random(10, 30);
+  <b>int</b> boats = Random(1, width * height / 10);
+  Ocean ocean1 = RandomOcean(width, height, boats);
+
+  Ocean copy1(ocean1);
+  Ocean copy2;
+  copy2 = copy1;
+
+  CompareOceans(ocean1, copy1);
+  std::cout &lt;&lt; ocean1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  CompareOceans(copy1, copy2);
+  std::cout &lt;&lt; copy1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy2 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+
+  RandomShots(ocean1, width * height / 4);
+  CompareOceans(ocean1, copy1);
+  std::cout &lt;&lt; ocean1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; copy1 &lt;&lt; <font color="#9933CC">&quot;-----------------------------------&quot;</font> &lt;&lt; std::endl;
+}
+
+
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> test_num = -1;
+  <b>if</b> (argc &gt; 1)
+    test_num = std::atoi(argv[1]);
+
+  <b>if</b> (argc &gt; 2)
+    gSeed = std::atoi(argv[2]);
+
+  <b>typedef</b> <b>void</b> (*TestFn)(<b>void</b>);
+
+    <font color="#003399"><i>// test0 - test3 are from before</i></font>
+  TestFn Tests[] = {test0, test1, test2, test3, test4, test5, test6};
+
+  <b>int</b> num = <b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests);
+  <b>if</b> (test_num &lt; 0 || test_num &gt; num)
+  {
+    <b>for</b> (<b>int</b> i = 0; i &lt; num; i++)
+      Tests[i]();
+  }
+  <b>else</b> <b>if</b> (test_num &gt;= 0 &amp;&amp; test_num &lt;= num)
+  {
+    Tests[test_num]();
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

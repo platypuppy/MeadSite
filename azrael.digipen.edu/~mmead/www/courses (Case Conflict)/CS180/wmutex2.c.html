@@ -1,0 +1,103 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>wmutex.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* wmutex2.c */</i></font>
+<b>#include</b> &lt;windows.h&gt;
+<b>#include</b> &lt;stdio.h&gt;
+
+<b>unsigned</b> <b>int</b> Count;
+
+<b>struct</b> ThreadParams
+{
+  HANDLE mutex;
+  <b>int</b> tid;
+};
+
+DWORD WINAPI ThreadFn(LPVOID p)
+{
+  <b>int</b> i;
+  <b>struct</b> ThreadParams *params = (<b>struct</b> ThreadParams *)p;
+  HANDLE mutex = params-&gt;mutex;
+  
+  <b>for</b> (i = 0; i &lt; 1000 * 1000; i++)
+  {
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms687032(v=vs.85).aspx">WaitForSingleObject</a>(mutex, INFINITE);
+      Count++;
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms685066(v=vs.85).aspx">ReleaseMutex</a>(mutex);
+  }
+  
+  <b>return</b> <b>TRUE</b>;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> i;
+  HANDLE *threads;
+  <b>struct</b> ThreadParams* params;  
+  DWORD ThreadID;
+  HANDLE mutex;
+  <b>int</b> num_threads = 12;
+
+    <font color="#003399"><i>/* The user can specify the number of threads */</i></font>  
+  <b>if</b> (argc &gt; 1)
+    num_threads = atoi(argv[1]);
+
+    <font color="#003399"><i>/* Allocate memory for threads and parameters */</i></font>    
+  threads = malloc(num_threads * <b>sizeof</b>(HANDLE));
+  params = malloc(num_threads * <b>sizeof</b>(<b>struct</b> ThreadParams));
+  
+    <font color="#003399"><i>/* Create mutex */</i></font>  
+  mutex = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682411(v=vs.85).aspx">CreateMutex</a>(NULL, <b>FALSE</b>, NULL);
+  <b>if</b> (mutex == NULL) 
+  {
+    printf(<font color="#9933CC">&quot;Error creating mutex: %d\n&quot;</font>, GetLastError());
+    <b>return</b> -1;
+  }
+
+    <font color="#003399"><i>/* Create the threads */</i></font>
+  <b>for</b>(i = 0; i &lt; num_threads; i++)
+  {
+    params[i].mutex = mutex;
+    params[i].tid = i;
+    
+    threads[i] = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682453(v=vs.85).aspx">CreateThread</a>(NULL, 0, ThreadFn, &amp;params[i], 0, &amp;ThreadID); 
+    <b>if</b>(threads[i] == NULL)
+    {
+      printf(<font color="#9933CC">&quot;Error creating thread: %d\n&quot;</font>, GetLastError());
+      <b>return</b> -1;
+    }
+  }
+
+    <font color="#003399"><i>/* Wait for each thread */</i></font>
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms687025(v=vs.85).aspx">WaitForMultipleObjects</a>(num_threads, threads, <b>TRUE</b>, INFINITE);
+  
+    <font color="#003399"><i>/* Release thread handles */</i></font>
+  <b>for</b>(i = 0; i &lt; num_threads; i++)
+    CloseHandle(threads[i]);
+
+    <font color="#003399"><i>/* Release mutex */</i></font>
+  CloseHandle(mutex);
+  
+  printf(<font color="#9933CC">&quot;Value of Count is %u\n&quot;</font>, Count);
+  
+    <font color="#003399"><i>/* Clean up memory */</i></font>
+  free(threads);
+  free(params);
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

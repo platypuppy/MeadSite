@@ -1,0 +1,402 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Practice Lab</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   #background : url("https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/notebook.jpg");
+   }
+
+pre.console {
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 16px;
+  color: #000000;
+  background-color: #ffffdd;
+  padding: 8px 8px 8px 8px; # top,right,bottom,left
+  margin-left: 20px;
+  border: #000000;
+  border-style: dashed;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+pre.bconsole {
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 16px;
+  color: #FFFFFF;
+  background-color: #000000;
+  padding: 8px 8px 8px 8px; # top,right,bottom,left
+  margin-left: 20px;
+  border: #000000;
+  border-style: dashed;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Lab</h1>
+(dumpit)
+</center>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+The original freshman dumpit is <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/cs120/index.html">here</a>.
+<p>
+
+This practice lab has you working more with command line options via <tt>getopt</tt>. You will
+  enhance your <tt>dumpit</tt> program that you wrote previously to support several command
+  line options and new behavior.
+  <p>
+  The help screen that will be displayed when you run
+  the program with the <tt>--help</tt> or <tt>-h</tt> option:</li>
+<p>
+<blockquote><pre class="console">
+<b>./dumpit --help</b>
+Usage: dumpit [options] [file1 file2 ...] 
+
+Options:
+ -wX  --width=X  How wide the output is (default is 16 chars).
+ -c   --color    Use colorized output.
+ -v   --version  Display the version and quit.
+ -h   --help     Display this information.
+
+If no input files are specified, read from stdin.
+
+</pre></blockquote>  
+<p>
+
+Example: The file is named <tt>poem.txt</tt> and contains these 4 lines, each terminated
+with a newline:
+
+<blockquote><pre>
+Roses are red.
+Violets are blue.
+Some poems rhyme.
+But not this one.
+</pre></blockquote>
+
+The current behavior of the program:
+<blockquote><pre class="console">
+<b>./dumpit poem.txt</b>
+
+poem.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+000020 0A 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D   .Some poems rhym
+000030 65 2E 0A 42 75 74 20 6E  6F 74 20 74 68 69 73 20   e..But not this 
+000040 6F 6E 65 2E 0A                                     one..
+
+</pre></blockquote>
+
+In addition to supporting command line options, there are 4 new
+capabilities of the <tt>dumpit</tt> program:
+<p>
+<ol>
+  <li>The user can specify how many columns to display. The original program only displayed 16 columns.
+    <p>
+12 columns:
+
+<blockquote><pre class="console">
+<b>./dumpit -w12 poem.txt</b>
+
+poem.txt:
+       00 01 02 03 04 05  06 07 08 09 0A 0B
+----------------------------------------------------------
+000000 52 6F 73 65 73 20  61 72 65 20 72 65   Roses are re
+00000C 64 2E 0A 56 69 6F  6C 65 74 73 20 61   d..Violets a
+000018 72 65 20 62 6C 75  65 2E 0A 53 6F 6D   re blue..Som
+000024 65 20 70 6F 65 6D  73 20 72 68 79 6D   e poems rhym
+000030 65 2E 0A 42 75 74  20 6E 6F 74 20 74   e..But not t
+00003C 68 69 73 20 6F 6E  65 2E 0A            his one..
+
+</pre></blockquote>
+
+24 columns:
+<blockquote><pre class="console">
+<b>./dumpit --width=24 poem.txt</b>
+
+poem.txt:
+       00 01 02 03 04 05 06 07 08 09 0A 0B  0C 0D 0E 0F 10 11 12 13 14 15 16 17
+----------------------------------------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72 65 20 72 65  64 2E 0A 56 69 6F 6C 65 74 73 20 61   Roses are red..Violets a
+000018 72 65 20 62 6C 75 65 2E 0A 53 6F 6D  65 20 70 6F 65 6D 73 20 72 68 79 6D   re blue..Some poems rhym
+000030 65 2E 0A 42 75 74 20 6E 6F 74 20 74  68 69 73 20 6F 6E 65 2E 0A            e..But not this one..
+
+</pre></blockquote>
+
+<li>Multiple filenames can be specified on the command line: (including wild cards like *)
+<blockquote><pre class="console">
+<b>./dumpit poem.txt hello.c</b>
+
+poem.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+000020 0A 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D   .Some poems rhym
+000030 65 2E 0A 42 75 74 20 6E  6F 74 20 74 68 69 73 20   e..But not this 
+000040 6F 6E 65 2E 0A                                     one..
+
+
+hello.c:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 23 69 6E 63 6C 75 64 65  20 3C 73 74 64 69 6F 2E   #include &lt;stdio.
+000010 68 3E 0A 0A 69 6E 74 20  6D 61 69 6E 28 76 6F 69   h&gt;..int main(voi
+000020 64 29 0A 7B 0A 09 70 72  69 6E 74 66 28 22 48 65   d).{..printf("He
+000030 6C 6C 6F 2C 20 77 6F 72  6C 64 21 5C 6E 22 29 3B   llo, world!\n");
+000040 0A 09 72 65 74 75 72 6E  20 30 3B 0A 7D 0A         ..return 0;.}.
+
+</pre></blockquote>
+
+
+  <li>If no filenames are provided, the program will read from <i>stdin</i>:
+<p>
+
+Using pipes:
+<blockquote><pre class="console">
+<b>cat poem.txt | ./dumpit</b>
+
+stdin:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+000020 0A 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D   .Some poems rhym
+000030 65 2E 0A 42 75 74 20 6E  6F 74 20 74 68 69 73 20   e..But not this 
+000040 6F 6E 65 2E 0A                                     one..
+
+</pre></blockquote>
+
+Using redirection:
+<blockquote><pre class="console">
+<b>./dumpit < poem.txt</b>
+
+stdin:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+000020 0A 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D   .Some poems rhym
+000030 65 2E 0A 42 75 74 20 6E  6F 74 20 74 68 69 73 20   e..But not this 
+000040 6F 6E 65 2E 0A                                     one..
+
+</pre></blockquote>
+
+Notice that the program displays <tt>stdin</tt> as the filename.</li>
+<p>
+  <li>The output can be colorized using ANSI escape sequences:</li>
+<blockquote><pre class="bconsole">
+<b>./dumpit -c poem.txt</b>
+
+<span style="color:white;background-color:magenta">poem.txt:</span>
+<span style="color:yellow">       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F</span>
+--------------------------------------------------------------------------
+<span style="color:red">000000</span> <span style="color:#5555FF">52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56</span>   <span style="color:gray">Roses are red..V</span>
+<span style="color:red">000010</span> <span style="color:#5555FF">69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E</span>   <span style="color:gray">iolets are blue.</span>
+<span style="color:red">000020</span> <span style="color:#5555FF">0A 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D</span>   <span style="color:gray">.Some poems rhym</span>
+<span style="color:red">000030</span> <span style="color:#5555FF">65 2E 0A 42 75 74 20 6E  6F 74 20 74 68 69 73 20</span>   <span style="color:gray">e..But not this </span>
+<span style="color:red">000040</span> <span style="color:#5555FF">6F 6E 65 2E 0A                                  </span>   <span style="color:gray">one..           </span>
+
+</pre></blockquote></li>
+
+You can choose which colors to use and when.
+</ol>
+
+If any file specified doesn't exist, you'll just print a simple message and move on to the next
+file (if multiple files are given):
+<p>
+One file:
+<blockquote><pre class="console">
+<b>./dumpit bogusfile.xyz</b>
+Can't open bogusfile.xyz for read.
+
+</pre></blockquote>
+
+Multiple files:
+<blockquote><pre class="console">
+<b>./dumpit poem.txt bogusfile.xyz hello.c</b>
+poem.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+000020 0A 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D   .Some poems rhym
+000030 65 2E 0A 42 75 74 20 6E  6F 74 20 74 68 69 73 20   e..But not this 
+000040 6F 6E 65 2E 0A                                     one..
+
+Can't open bogusfile.xyz for read.
+
+
+hello.c:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 23 69 6E 63 6C 75 64 65  20 3C 73 74 64 69 6F 2E   #include &lt;stdio.
+000010 68 3E 0A 0A 69 6E 74 20  6D 61 69 6E 28 76 6F 69   h&gt;..int main(voi
+000020 64 29 0A 7B 0A 09 70 72  69 6E 74 66 28 22 48 65   d).{..printf("He
+000030 6C 6C 6F 2C 20 77 6F 72  6C 64 21 5C 6E 22 29 3B   llo, world!\n");
+000040 0A 09 72 65 74 75 72 6E  20 30 3B 0A 7D 0A         ..return 0;.}.
+
+</pre></blockquote>
+
+
+Displaying the version:
+<blockquote><pre class="console">
+<b>./dumpit --version</b>
+dumpit version 1.0
+</pre></blockquote>
+
+
+<p>
+  <hr width="95%">
+</p>
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+Notes:
+<p>
+<ol>
+<li>You will have to create a <tt>main.c</tt> file to support the program. Don't put all of the code into
+<tt>dumpit.c</tt>. In fact, all of the command line processing should be done in <tt>main.c</tt>,
+and the rest should be done in <tt>dumpit.c</tt>. You will have to modify your <tt>dumpit.c</tt> file
+to support the new features (width and color).
+<p>
+<li>I will not be automating the testing the optional colorizing of the output. There are far too many ways that
+  you may do this and automating the testing would prove difficult unless I gave everyone the exact
+  code to do it. I don't want to do that, as I want you to learn how. I've given you a framework
+  that you can use to build the functions that you need. Programmers at this level should be able to do this
+easily.</li>
+<p>
+<li>The submission server will provide 
+  <a href="../../../../../../mg/ansicolors/termcolors.h.html">termcolors.h</a> and <tt>libtermcolors.a</tt> 
+  (which is just the compiled 
+  <a href="../../../../../../mg/ansicolors/termcolors.c.html">termcolors.c</a> in a static library). 
+  This is if you want to do colored output. Since your are only submitting your <tt>dumpit.c</tt> and 
+<tt>main.c</tt>, if you add more helper functions for coloring, you must put them in 
+<tt>dumpit.c</tt>. As I said, I won't be automating the color testing, but I fully expect you to do the 
+coloring. I don't want you to have to remove the code just to submit to the server.
+Refer to my <a href="../../../../../../mg/ansicolors/index.html">ANSI colors tutorial</a> for
+a refresher on how to build the library.</li>
+<p>
+</ol>
+
+<p>
+  <hr width="95%">
+</p>
+
+Additional files and information.
+<p>
+Command line to compile the program:
+<blockquote><pre>
+clang -O -g -Wall -Wextra -ansi -pedantic -Werror main.c dumpit.c -o dumpit libtermcolors.a
+</pre></blockquote>
+
+To run the program, type this at the command line:
+<blockquote><pre>
+./dumpit <font color="red"><b>[options]</b></font> <font color="blue"><b>[file1 file2 ...]</b></font>
+</pre></blockquote>
+<p>
+
+
+Test input files:
+<p>
+  <ul>
+    <li>Text file input: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/decl-lin.txt">decl-lin.txt</a></li>
+    <li>Binary file input: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/icon1.bmp">icon1.bmp</a></li>
+    <li>Bigger binary file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/dude.jpg">dude.jpg</a></li>
+    <li>Another binary file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/mead-cod2.jpg">mead-cod2.jpg</a></li>
+  </ul>
+
+Outputs: (Each was run with a width of 12, 16, and 32)
+<ul>
+  <li>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/decl-lin.w12.txt">decl-lin.w12.txt</a>&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/decl-lin.w16.txt">decl-lin.w16.txt</a>&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/decl-lin.w32.txt">decl-lin.w32.txt</a>&nbsp;&nbsp;
+  </li>
+  <li>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/icon1.bmp.w12.txt">icon1.bmp.w12.txt</a>&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/icon1.bmp.w16.txt">icon1.bmp.w16.txt</a>&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/icon1.bmp.w32.txt">icon1.bmp.w32.txt</a>&nbsp;&nbsp;
+  </li>
+  <li>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/dude.jpg.w12.txt">dude.jpg.w12.txt</a>&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/dude.jpg.w16.txt">dude.jpg.w16.txt</a>&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/dude.jpg.w32.txt">dude.jpg.w32.txt</a>&nbsp;&nbsp;
+  </li>
+</ul>
+All at the same time: (<b>./dumpit decl-lin.txt icon1.bmp dude.jpg</b>)
+<ul>
+  <li>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/all.w16.txt">all.w16.txt</a>&nbsp;&nbsp;
+  </li>
+</ul>
+
+More output: (Each was run with a width of 1, 9, 12, 28, and 48)
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/mead-cod2.w1.txt">mead-cod2.w1.txt</a>&nbsp;&nbsp;
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/mead-cod2.w9.txt">mead-cod2.w9.txt</a>&nbsp;&nbsp;
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/mead-cod2.w12.txt">mead-cod2.w12.txt</a>&nbsp;&nbsp;
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/mead-cod2.w28.txt">mead-cod2.w28.txt</a>&nbsp;&nbsp;
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/mead-cod2.w48.txt">mead-cod2.w48.txt</a>&nbsp;&nbsp;
+</ul>
+
+All output in a single zip file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/practice/dumpit/all-output.zip">all-output.zip</a>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<br><br><br><br>
+
+  
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,500 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS180 Extra Credit Lab #1</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+
+pre.console {
+	#font-family: Courier, "Courier New", mono;
+	#font-size: 16px;
+	color: #000000;
+	background-color: #ffffdd;
+	padding: 8px 16px 8px 8px;
+	margin-left: 20px;
+	border: #000000;
+	border-style: dashed;
+	border-width: 1px;
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+</style>
+
+<body>  
+<center>
+<h1>CS180 Extra Credit Lab #1</h1>
+(<a href="index.html#EC">extra credit is at the bottom</a>)
+</center>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Original Information
+</p>
+
+<ul>
+<li><a href="cs180-programming-assignment-filter.pdf">Handout</a> You <b>MUST</b> read this before
+asking any questions on the forums.</li>
+<p>
+<li>Help display:</li>
+<p>
+<pre class="console">
+<b>./filter --help</b>
+Usage: filter [options] [file1 file2 ...] 
+
+Options:
+ -b  --remove-blank-lines  removes empty lines.
+ -d  --delete=X            deletes all occurrences of char X.
+ -h  --help                display this information.
+ -l  --tolower             convert all characters to lower case.
+ -n  --line-numbers        prepend line numbers to each line.
+ -r  --replace=XY          replace all char X with char Y.
+ -u  --toupper             convert all characters to upper case.
+ -x  --expand-tabs[=X]     convert tabs to X spaces (default is 8).
+
+</pre>	
+<p>
+
+<li>Filters:
+<table border=1 cellpadding=2 cellspacing=0>
+	<tr><th>Option</th><th>Description</th></tr>
+	<tr><td><tt>-b, --remove&#8209;blank&#8209;lines</tt></td><td>Removes all empty lines. An empty line is a line that contains nothing but a newline.</td></tr>
+	<tr><td><tt>-d, --delete=X</tt></td><td>Given a character, delete all occurrences of it. (Requires an argument)</td></tr>
+	<tr><td><tt>-h, --help</tt></td><td>Displays information about the options. See below for an example.</td></tr>
+	<tr><td><tt>-l, --tolower</tt></td><td>Converts all characters to lower case. (Short option is lower case 'L')</td></tr>
+	<tr><td><tt>-r, --replace=XY</tt></td><td>Replaces all occurrences of character X with character Y. (Requires an argument). </td></tr>
+	<tr><td><tt>-n, --line&#8209;numbers</tt></td><td>Prepends a line number to each line.</td></tr>
+	<tr><td><tt>-u, --toupper</tt></td><td>Converts all characters to upper case.</td></tr>
+	<tr><td><tt>-x, --expand&#8209;tabs[=X]</tt></td><td>Replaces all tabs with X spaces. (Optional argument, default is 8)</td></tr>
+</table>
+<p>
+
+<p class="technote">
+<b>IMPORTANT</b>: There are two distinct parts to this assignment and they are unrelated. 
+The first part is the command line parsing. This requires the use of the <i>getopt</i> API. 
+The second part does the actual "filtering" of the input. You should first work on the command
+line parsing. After you have successfully parsed out <b>ALL</b> of the various command line
+options, you can begin working on the filtering.
+</p>
+
+<li><a href="filter-skeleton.c.html">filter.c</a> (<a href="filter-skeleton.c">Text</a>) This is a skeleton 
+	to get you started. You'll need to modify it
+	and document it, of course.
+<p>
+	<li>Command lines to compile the program:
+<blockquote><pre>
+clang -O -g -Wall -Wextra -std=c11 -pedantic filter.c -o filter
+  gcc -O -g -Wall -Wextra -std=c11 -pedantic filter.c -o filter
+</pre></blockquote>
+
+<li>To run the program, type this at the command line:
+<blockquote><pre>
+./filter <font color="red"><b>[options]</b></font> <font color="blue"><b>[file1 file2 ...]</b></font>
+</pre></blockquote>
+
+<p>
+
+To detect memory errors and leaks, run it under valgrind like this:
+<blockquote><pre>
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./filter <font color="blue"><b>[options and files]</b></font>
+
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./filter <font color="blue"><b>[options]</b></font> < inputfile
+</pre></blockquote>
+
+<p>
+<li>Sample input (<a href="input1.txt">input1.txt</a>) and outputs. All 3 lines do the same thing:<p>
+ <blockquote><pre>
+./filter input1.txt <font color="red"><b>[options]</b></font>
+cat input1.txt | ./filter <font color="red"><b>[options]</b></font>
+./filter <font color="red"><b>[options]</b></font> &lt; input1.txt
+</pre></blockquote>
+
+<ol>
+<li><a href="output/output1h.txt">--help</a><br>
+<li><a href="output/output1l.txt">--tolower</a><br>
+<li><a href="output/output1u.txt">--toupper</a><br>
+<li><a href="output/output1rCx.txt">--replace=Cx</a><br>
+<li><a href="output/output1d$.txt">--delete=$</a><br>
+<li><a href="output/output1b.txt">--remove-blank-lines</a><br>
+<li><a href="output/output1n.txt">--line-numbers</a><br>
+<li><a href="output/output1x2.txt">--expand-tabs=2</a><br>
+<li><a href="output/output1dCx2br.txt">--expand-tabs=2 --remove-blank-lines --delete=C --replace=$%</a><br>
+
+</ol>
+
+<p>
+<li>Another sample with 2 input files (<a href="input1.txt">input1.txt</a> and <a href="decl.txt">decl.txt</a>)
+and outputs:</li><p>
+ <blockquote><pre>
+./filter input1.txt decl.txt <font color="red"><b>[options]</b></font>
+</pre></blockquote>
+<ol>
+<li><a href="output/output2l.txt">--tolower</a><br>
+<li><a href="output/output2u.txt">--toupper</a><br>
+<li><a href="output/output2reX.txt">--replace=eX</a><br>
+<li><a href="output/output2de.txt">--delete=e</a><br>
+<li><a href="output/output2b.txt">--remove-blank-lines</a><br>
+<li><a href="output/output2n.txt">--line-numbers</a><br>
+<li><a href="output/output2x4.txt">--expand-tabs=4</a><br>
+<li><a href="output/output2ux2rCXn.txt">--toupper --expand-tabs=2 --replace=CX --line-numbers</a><br>
+</ol>        
+<p>
+<li>Make sure that you can handle all of the above command lines with the single-character short options
+	as well.</li>
+<li>As a reminder, if you encounter any errors (unknown option, missing argument, invalid filename, etc.) 
+	you will simply display the
+	help text (equivalent to <tt>./filter --help</tt>) and then exit the program immediately.</li>
+<li>More tests using the same input files from above. These are bash scripts to run. Just redirect the 
+	output into a file to diff with.</li>
+<ul>
+	<li><a href="go1.html">go1</a>&nbsp;&nbsp;&nbsp;<a href="output/output1-all.txt">output</a></li>
+	<li><a href="go1s.html">go1s</a>&nbsp;&nbsp;&nbsp;<a href="output/output1s-all.txt">output</a></li>
+	<li><a href="go2.html">go2</a>&nbsp;&nbsp;&nbsp;<a href="output/output2-all.txt">output</a></li>
+	<li><a href="go3.html">go3</a>&nbsp;&nbsp;&nbsp;<a href="output/output3-all.txt">output</a>
+		<b>This one is important!</b> This one tests your ability to read from <b>stdin</b>.
+		Too many students fail to read the directions and receive an F on this assignment for not 
+		being able to handle reading from <b>stdin</b>. You must handle both cases, reading from
+		files and reading from <b>stdin</b>. Failing either of these cases will cause you to fail
+		the assignment.</li>
+		<p>
+	<li><a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/ec1/stress.zip">Stress test</a> - This is a zip file because of the size of the files. There 
+		are 50 text files (named <tt>test1</tt> to <tt>test50</tt>) that 
+	you will filter with this command: 
+	<blockquote><pre>
+<big>./filter test* -n -l -r=_</big>
+</pre></blockquote>
+The command processes all files that start with
+	the name <tt>test</tt>, numbers the lines, converts characters
+to lowercase, and replaces the equal signs with underscores. The output (<tt>output-stress.txt</tt>) is 
+about 4 MB in size. This stress test does <b>NOT</b> test most of the options so you must test with
+the others, as well.</li>
+</ul>
+
+<li>Finally:
+<p class="technote">
+<b>Read the entire handout before starting this assignment.</b> The main reasons that students do poorly
+on assignments in my courses is because they fail to read the documentation (handout and website) 
+before starting, or they fail to ask questions when something is unclear in the documentation.
+If you have questions about the assignment, please ask in class or on the forums.
+</p>
+
+<li>Don't forget to put your name on the cover sheet of the PDF. You have to
+modify the <tt>PROJECT_NAME</tt> name line in the configuration file.</li>
+<p>
+
+<li>For a refresher on file I/O in C, you can refer to the CS120 notes 
+	<a href="../../../../CS120/FileIO-1.html">here</a>.
+
+<p>
+<hr width="100%">
+<p>
+
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<li><b>Pseudocode for a simple filter to print line numbers. You should try to implement this simple 
+	filter yourself before starting on the "real" assignment. BTW, this is the <i>nl</i> filter
+in Linux.</tt></b></li>
+<p>
+<blockquote><pre>
+FILE *infile
+
+initialize counters;
+
+IF filename given on command line
+  infile = open file for read/text
+  (Handle errors)
+ELSE
+  infile = stdin;
+END IF
+	
+WHILE not end of file
+  read a character
+  inc char_counter
+  IF this is the first char read or
+    the previous character is a newline
+    print line number
+    inc line_counter
+  END IF
+  print the character that was read
+  set prev char to character read
+END WHILE
+
+IF not reading from stdin
+  close file
+END IF
+</pre></blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<li><b>Using <a href="http://man7.org/linux/man-pages/man1/script.1.html"><tt>script</tt></b></a></li>
+<p>
+You need to capture your shell session that shows compiling and running the program, 
+using <b>diff</b> to make sure your output is correct and running with valgrind and 
+then running Doxygen. After you've finished coding and testing everything and are 
+sure everything is correct, use the <b>script</b> command to make a text file of 
+your session. From the bash shell in the directory you've setup to test with, run these 
+commands. Make sure you're using the Doxyfile that I posted.
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+clang --version
+gcc --version
+clang -O -g -Wall -Wextra -std=c11 -pedantic filter.c -o filter
+gcc -O -g -Wall -Wextra -std=c11 -pedantic filter.c -o filter
+./filter &lt; input1.txt --toupper | tee output.txt
+./filter input1.txt --toupper | tee output.txt
+diff output.txt output1u.txt
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./filter input1.txt --line-numbers > /dev/null
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> was 
+created with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first name 
+and last name. This is how you get your name in the typescript file. Consult the man pages if you want 
+more information on <b>script</b>.
+</ul>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<a name="EC">
+<p class="SectionHeader">
+Extra Credit Information
+</p>
+</a>
+
+All of these new features are in addition to the regular features listed above. Hint: Don't modify your
+original filter assignment. Keep it as-is. Instead, make a copy of it and modify the copy as
+ <tt>filter-ec.c</tt>. You can earn up to 50 points of extra credit. Also, because this is <b>extra credit</b>,
+ very little (if any) partial credit will be given.
+<p>
+
+<ul>
+<li><a href="cs180-programming-assignment-filter-with-ec.pdf">Extra Credit Handout</a>
+The last two pages cover the extra credit features.</li>
+<p>
+<li>Help display has changed slightly to accommodate the <font color="blue"><b>new options</b></font>:</li>
+<p>
+<pre class="console">
+<b>./filter --help</b>
+Usage: filter [options] [file1 file2 ...] 
+
+Options:
+ -b  --remove-blank-lines  removes empty lines.
+ -d  --delete=X<font color="blue"><b>[...]</b></font>       deletes all occurrences of char X.
+ -h  --help                display this information.
+ -l  --tolower             convert all characters to lower case.
+ -n  --line-numbers<font color="blue"><b>[=Xs]</b></font>   prepend line numbers to each line. <font color="blue"><b>X is
+                           an integer specifying to number every X lines.
+                           A trailing 's' means to skip blank lines.</b></font>
+ -r  --replace=XY<font color="blue"><b>[...]</b></font>     replace all char X with char Y.
+ -u  --toupper             convert all characters to upper case.
+ -x  --expand-tabs[=X]     convert tabs to X spaces (default is 8).
+
+</pre>	
+<p>
+
+<li>Updated filters details:
+<table border=1 cellpadding=2 cellspacing=0>
+	<tr><th>Option</th><th>Description</th></tr>
+	<tr><td><tt>-d, --delete=X[...]</tt></td><td><b>(Required argument)</b> Given a character, delete all occurrences of it. 
+		There may be several characters provided (e.g. <tt>-dABC</tt>) or the option may appear multiple times
+		(e.g. <tt>-dA -dB -dC</tt>).
+	</td></tr>
+	<tr><td><tt>-r, --replace=XY[...]</tt></td><td><b>(Required argument)</b> Replaces 
+    all occurrences of character X with character Y. There may be several pairs of
+    characters provided (e.g. <tt>-rAXBYCZ</tt>) or the option may appear	multiple
+    times (e.g. <tt>-rAX -rBY -rCZ</tt>). The characters to replace must come in
+    pairs, so there must be an even	number of characters given with each option.
+    It is an error if this isn't true and you should exit the program with
+    an appropriate message.
+	</td></tr>
+	<tr><td><tt>-n[Xs], --line&#8209;numbers[=Xs]</tt></td><td><b>(Optional argument)</b>
+    Prepends a line number to each line. You can also specify the <i>interval</i>
+    in which to print line numbers. For example, to number every 10th line, you
+		would do this: <tt>-n10</tt>. If no number is provided (optional), you will 
+    number every line. If a trailing 's' is provided (lowercase S without quotes),
+    then you will skip blank lines when numbering.
+
+	</td></tr>
+</table>
+<p>
+
+<li>This is the new order of operations:
+<p>
+<ol>
+  <li>Delete blank lines</li>
+  <li>Delete characters</li>
+  <li>Replace characters</li>
+  <li>Upper case</li>
+  <li>Lower case</li>
+</ol>
+</li>
+<p>
+
+<li>Command lines to compile the program:
+<blockquote><pre>
+clang -O -g -Wall -Wextra -std=c11 -pedantic filter-ec.c -o filter-ec
+  gcc -O -g -Wall -Wextra -std=c11 -pedantic filter-ec.c -o filter-ec
+</pre></blockquote>
+</li>
+
+<li>Samples using <a href="input1.txt">input1.txt</a> (e.g. <tt>./filter-ec --tolower input1.txt</tt>):
+	<p>
+	<ol>
+		<li><tt>&nbsp;input1.txt --line-numbers=2</tt>&nbsp;&nbsp;(<a href="output/output4n2.txt">output4n2.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --line-numbers=2s</tt>&nbsp;&nbsp;(<a href="output/output4n2s.txt">output4n2s.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --line-numbers=5</tt>&nbsp;&nbsp;(<a href="output/output4n5.txt">output4n5.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --line-numbers=5s</tt>&nbsp;&nbsp;(<a href="output/output4n5s.txt">output4n5s.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --line-numbers=2s --remove-blank-lines</tt>&nbsp;&nbsp;(<a href="output/output4n2sb.txt">output4n2sb.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt -n10</tt>&nbsp;&nbsp;(<a href="output/output4n10.txt">output4n10.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt -n10s</tt>&nbsp;&nbsp;(<a href="output/output4n10s.txt">output4n10s.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt -n20</tt>&nbsp;&nbsp;(<a href="output/output4n20.txt">output4n20.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt -n100</tt>&nbsp;&nbsp;(<a href="output/output4n100.txt">output4n100.txt</a>)</li>
+
+		<p>
+		<li><tt>&nbsp;input1.txt --delete=AEIOU</tt>&nbsp;&nbsp;(<a href="output/output4dAEIOU.txt">output4dAEIOU.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --delete=AEIOU --delete=aeiou</tt>&nbsp;&nbsp;(<a href="output/output4dAEIOUdaeiou.txt">output4dAEIOUdaeiou.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --delete=A -dE -dI -dO -dU -daeiou</tt>&nbsp;&nbsp;(<a href="output/output4dAdEdIdOdUdaeiou.txt">output4dAdEdIdOdUdaeiou.txt</a>)</li>
+		<p>
+		<li><tt>&nbsp;input1.txt --replace=OoUuTtDdIiRr</tt>&nbsp;&nbsp;(<a href="output/output4rOoUuTtDdIiRr.txt">output4rOoUuTtDdIiRr.txt</a>)</li>
+		<li><tt>&nbsp;input1.txt --replace='([)]-/."$@:;'</tt>&nbsp;&nbsp;(<a href="output/output4rpunct.txt">output4rpunct.txt</a>)</li>
+		<p>
+		<li><tt>&nbsp;input1.txt -r'([)]-/."$@:;' -d"abcdefghijklmnopqrstuvwxyz " --tolower</tt>&nbsp;&nbsp;(<a href="output/output4lots1.txt">output4lots1.txt</a>)</li>
+		<p>
+  </ol>
+
+<li>Samples using both <a href="input1.txt">input1.txt</a> and <a href="decl.txt">decl.txt</a>
+      (e.g. <tt>./filter-ec input1.txt decl.txt --tolower</tt>):
+  <p>
+  <ol>
+    <li><tt>&nbsp;input1.txt decl.txt -r'([)]$@' -n -b -da -de -diou</tt>&nbsp;&nbsp;(<a href="output/output4both1.txt">output4both1.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt decl.txt -r'([)]$@' -n3 -da -de -diou</tt>&nbsp;&nbsp;(<a href="output/output4both2.txt">output4both2.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt decl.txt -r'([)]$@' -n3s -da -de -diou</tt>&nbsp;&nbsp;(<a href="output/output4both3.txt">output4both3.txt</a>)</li>
+    <li><tt>&nbsp;input1.txt decl.txt -r'([)]$@' -n3s -da -de -diou -b</tt>&nbsp;&nbsp;(<a href="output/output4both4.txt">output4both4.txt</a>)</li>
+  </ol>
+<p>
+<li>Sample using redirection with <a href="input1.txt">input1.txt</a> (e.g. <tt>./filter-ec --tolower < input1.txt</tt>)
+    <p>
+  <ol>
+    <li><tt>&nbsp;-r'([)]-/."$@:;' -d"abcdefghijklmnopqrstuvwxyz " --tolower &lt; input1.txt</tt>&nbsp;&nbsp;(<a href="output/output4lots1.txt">output4lots1.txt</a>)</li>
+  </ol>
+<p>
+<li>Sample help:
+<p>
+  <ol>
+    <li><tt>&nbsp;--help</tt>&nbsp;&nbsp;(<a href="output/output4help.txt">output4help.txt</a>)</li>
+  </ol>
+
+
+<p>
+  <li>These should all do the same thing:
+    <p>
+    <ol>
+      <li><tt>&nbsp;&nbsp;./filter-ec input1.txt -daeiou &gt; out1.txt</tt></li>
+      <li><tt>&nbsp;&nbsp;./filter-ec input1.txt -da -de -di -do -du &gt; out2.txt</tt></li>
+      <li><tt>&nbsp;&nbsp;cat input1.txt | ./filter-ec -da | ./filter-ec -de | ./filter-ec -di | ./filter-ec -do | ./filter-ec -du &gt; out3.txt</tt></li>
+    </ol>
+<p>
+    You can use <i>diff3</i> to compare all 3 files at once:
+<blockquote><pre>
+<b>diff3</b> out1.txt out2.txt out3.txt  
+</pre></blockquote>
+<p>
+
+This is the <a href="output/output4diff3.txt">output</a>
+
+<hr width="95%">
+<p>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<li><b>Using <a href="http://man7.org/linux/man-pages/man1/script.1.html"><tt>script</tt></b></a></li>
+<p>
+You need to capture your shell session that shows compiling and running the program, 
+using <b>diff</b> to make sure your output is correct and running with valgrind and 
+then running Doxygen. After you've finished coding and testing everything and are 
+sure everything is correct, use the <b>script</b> command to make a text file of 
+your session. From the bash shell in the directory you've setup to test with, run these 
+commands. Make sure you're using the Doxyfile that I posted.
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+clang --version
+gcc --version
+clang -O -g -Wall -Wextra -std=c11 -pedantic filter-ec.c -o filter-ec
+gcc -O -g -Wall -Wextra -std=c11 -pedantic filter-ec.c -o filter-ec
+./filter-ec &lt; input1.txt --delete=A -dE -dI -dO -dU -daeiou | tee output.txt
+./filter-ec input1.txt -r'([)]-/."$@:;' -d"abcdefghijklmnopqrstuvwxyz " --tolower | tee output.txt
+diff output.txt output4lots1.txt
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./filter-ec input1.txt --delete=A -dE -dI -dO -dU -daeiou > /dev/null
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> was 
+created with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first name 
+and last name. This is how you get your name in the typescript file. Consult the man pages if you want 
+more information on <b>script</b>.
+</ul>
+
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br><br><br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

@@ -1,0 +1,416 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #6</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 6</h1>
+Persisting values between application runs. 
+<br>
+(.ini files, TMemIniFile, properties, MessageDlg, Undo)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #6
+</p>
+
+Continuing from the last session, I've added a very useful feature that most applications support: 
+The ability to remember settings between invocations. It was actually there last time, but I extended 
+it and refactored it a bit.
+
+Plainly put, this means that, if you make changes
+to some of the settings in the program and then exit, the next time you run the program, those settings
+are the same. You won't "lose" the settings when you quit the program. This is done by saving the current
+settings to a file. 
+<p>
+This mechanism has been around since the beginning of Windows and the files are called 
+INI files (pronounced: eye-en-eye or innee). These files have a 
+<a href="http://en.wikipedia.org/wiki/INI_file">simple and well-known format</a> and should be used as an
+alternative to the failed-experiment known as the "Windows registry". (Contrary to what the article says.) 
+Follow the previous link for a refresher on the structure of these files.
+
+<p>
+
+
+<p>
+<blockquote>
+</blockquote>
+<p>
+
+Topics explored this session:
+<ol>
+
+<li><b>Using properties to access private data</b> Properties have been around in RAD Studio-related products since the early 1990's. They
+have recently gained wide popularity with C#. (Incidentally, the person that architected C# is the same person that architected Delphi. Delphi is the tool
+after which both C# and Turbo C++ are designed. The person's name is <a href="http://en.wikipedia.org/wiki/Anders_Hejlsberg">Anders Hejlsberg</a>.)
+Properties give the user a cleaner syntax for reading/writing data of an object. Here's a sample:
+
+<blockquote>
+<p>
+In the header file:
+<blockquote><pre>
+<b>private</b>:
+  <b>bool</b> FGridEnabled;      
+  <b>short</b> FDefaultRowCount; 
+  <b>void</b> SetDefaultRowCount(<b>short</b> RowCount); <font color="#003399"><i>// To set FDefaultRowCount</i></font>
+
+<b>public</b>:
+  <b>__property</b> <b>bool</b> GridEnabled = {read=FGridEnabled, write=FGridEnabled};
+  <b>__property</b> <b>short</b> DefaultRowCount = {read=FDefaultRowCount, write=SetDefaultRowCount};
+</pre></blockquote>
+
+In the implementation file:
+<blockquote><pre>
+<b>void</b> TfrmConfig::SetDefaultRowCount(<b>short</b> RowCount)
+{
+    <font color="#003399"><i>// Constrain the new value</i></font>
+  <b>short</b> minrows = std::min(RowCount, MAX_ROW_COUNT);
+  FDefaultRowCount = std::max(minrows, MIN_ROW_COUNT);
+}
+</pre></blockquote>
+
+</blockquote>
+
+
+
+
+<li><b>Creating a class that holds the application's configuration.</b> We created a class based on TForm called <i>TfrmConfig</i> that
+contains all of the user's settings. (These are also called "Preferences" in other applications.) This class also has a UI so that
+the user can modify these settings. This class is responsible for displaying a window for the user to change the settings. It will
+also persist these settings to a file before the program ends. The class will read the saved settings from disk when the application
+starts. See the source code for the details. We will add more to the configuration
+dialog as the application progresses.
+
+
+<blockquote>
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>The "General" page</th><th></th><th>The "Programs" page</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="peditor3/config1.png">
+</td>
+<td width="10"></td>
+<td>
+<img border=0 src="peditor3/config2.png">
+</td>
+</tr></table>
+<p>
+</blockquote>
+
+The bulk of the work is done in these two methods:
+<blockquote><pre>
+  <font color="#003399"><i>// Copy the values from the UI components to the private member fields.</i></font>	
+  <font color="#003399"><i>// This is called after the user makes changes and clicks the "OK" button.</i></font>	
+<b>void</b> TfrmConfig::DialogToFields(<b>void</b>)
+{
+  GameExecutable = edtGameExecutable-&gt;Text;
+  GridEnabled = chkGridEnabled-&gt;Checked;
+  DefaultRowCount = (<b>short</b>) StrToInt(edtRows-&gt;Text);
+  DefaultColCount = (<b>short</b>) StrToInt(edtColumns-&gt;Text);
+}
+
+  <font color="#003399"><i>// Copy the values of the private member fields to the UI components.</i></font> 
+  <font color="#003399"><i>// This is done when the UI is shown to the user. It can also be called</i></font> 
+  <font color="#003399"><i>// after the user has made changes, but then clicks the "Cancel" button.</i></font> 
+<b>void</b> TfrmConfig::FieldsToDialog(<b>void</b>)
+{
+  edtGameExecutable-&gt;Text = GameExecutable;
+  chkGridEnabled-&gt;Checked = GridEnabled;
+  spnRows-&gt;Position = DefaultRowCount;
+  spnColumns-&gt;Position = DefaultColCount;
+
+}
+</pre></blockquote>
+
+
+
+<li><b>Persisting the settings to a file</b> This will be done using the <i>TMemIniFile</i> component. This works like <i>TIniFile</i>, except that it
+is buffered in memory, which may give it performance boost. These components are non-visual components. See the documentation for TIniFile for details.
+<p>
+The bulk of the work is done in these methods in the configuration class:
+
+<blockquote><pre>
+<font color="#003399"><i>// Read the saved settings from the .ini file.</i></font>
+<b>void</b> TfrmConfig::LoadSettings(<b>void</b>)
+{
+    <font color="#003399"><i>// TMemIniFile is a buffered ini file</i></font>
+  AnsiString filename = ExtractFilePath(ParamStr(0)) + FConfigFilename;
+  TMemIniFile *inifile = <b>new</b> TMemIniFile(filename);
+  
+  GameExecutable = inifile-&gt;ReadString(<font color="#9933CC">&quot;Programs&quot;</font>, <font color="#9933CC">&quot;GameExecutable&quot;</font>, <font color="#9933CC">&quot;&quot;</font>);
+  GridEnabled = inifile-&gt;ReadBool(<font color="#9933CC">&quot;General&quot;</font>, <font color="#9933CC">&quot;GridEnabled&quot;</font>, 0);
+  DefaultRowCount = (<b>short</b>)inifile-&gt;ReadInteger(<font color="#9933CC">&quot;General&quot;</font>, <font color="#9933CC">&quot;DefaultRowCount&quot;</font>, DEFAULT_ROW_COUNT);
+  
+  FieldsToDialog();
+  <b>delete</b> inifile;
+}
+
+<font color="#003399"><i>// Write the current settings to the .ini file.</i></font>
+<b>void</b> TfrmConfig::SaveSettings(<b>void</b>)
+{
+    <font color="#003399"><i>// TMemIniFile is a buffered ini file</i></font>
+  AnsiString filename = ExtractFilePath(ParamStr(0)) + FConfigFilename;
+  TMemIniFile *inifile = <b>new</b> TMemIniFile(filename);
+  
+  inifile-&gt;WriteString(<font color="#9933CC">&quot;Programs&quot;</font>, <font color="#9933CC">&quot;ExecutableFile&quot;</font>, GameExecutable);
+  inifile-&gt;WriteBool(<font color="#9933CC">&quot;General&quot;</font>, <font color="#9933CC">&quot;GridEnabled&quot;</font>, GridEnabled);
+  inifile-&gt;WriteInteger(<font color="#9933CC">&quot;General&quot;</font>, <font color="#9933CC">&quot;DefaultRowCount&quot;</font>, DefaultRowCount);
+  inifile-&gt;UpdateFile(); <font color="#003399"><i>// Flush the buffer to disk before deleting!!!</i></font>
+  
+  <b>delete</b> inifile;
+}
+</pre></blockquote>
+
+<li><b>Miscellaneous additions to the application</b>.
+	<p>
+<ol>
+<li>Undo - The user can undo changes made to the map. This can be done via the menu "Edit | Undo", a toolbar button, and a hotkey, Ctrl-Z.
+	The relevant code can be found in the methods <i>PushUndo</i> and <i>PopUndo</i>.
+
+<li>Creating a message dialog by calling the function <i>MessageDlg</i>. This gives you more control over the layout of the error messages.
+	You can see an example in <i>SetGameExecutable</i>:
+
+<blockquote><pre>
+<b>void</b> TfrmConfig::SetGameExecutable(<b>const</b> AnsiString &amp;exe)
+{
+    <font color="#003399"><i>// Make sure that the file is valid</i></font>
+  <b>if</b> (FileExists(exe))
+    FGameExecutable = exe;
+  <b>else</b> <font color="#003399"><i>// otherwise, display an error message</i></font>
+  {
+    TMsgDlgButtons btns;
+    btns &lt;&lt; mbOK &lt;&lt; mbCancel &lt;&lt; mbHelp;
+    MessageDlg(exe + <font color="#9933CC">&quot; is not a valid filename.&quot;</font>, mtError, btns, 0);
+  }
+}
+</pre></blockquote>
+
+Trying to set the name of the executable to <tt>E:\foobar\nonexistentfile.foobar</tt>:
+<blockquote><pre>
+<img src="peditor3/MessageDlg-1.png">
+</pre></blockquote>
+
+See the online help for <i>MessageDlg</i> and how to use it:
+<blockquote><pre>
+<img src="peditor3/MessageDlg-2.png">
+</pre></blockquote>
+
+<blockquote><pre>
+<b>const</b> <b>char</b> *m = <font color="#9933CC">&quot;You can put\n\nnewlines in\nthe &quot;</font>
+                <font color="#9933CC">&quot;message\n\n\nas well as\ttabs\ttabs\ttabs\n&quot;</font>
+                <font color="#9933CC">&quot;\n\nBut I wouldn't recommend a lot of buttons.&quot;</font>;
+
+TMsgDlgButtons btns;
+btns &lt;&lt; mbOK &lt;&lt; mbYes &lt;&lt; mbCancel
+     &lt;&lt; mbAbort &lt;&lt; mbNo &lt;&lt; mbRetry
+     &lt;&lt; mbIgnore &lt;&lt; mbYesToAll &lt;&lt; mbNoToAll;
+
+MessageDlg(m, mtWarning, btns, 0);
+</pre></blockquote>
+
+</ol>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Here's the current UI:
+
+<blockquote><pre>
+<img src="peditor3/peditor3-1.png">
+</pre></blockquote>
+	
+<P>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor3/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor3/MainForm.cpp.html">MainForm.cpp</a> - The implementation of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor3/ConfigForm.h.html">ConfigForm.h</a> - The definition of the configuration form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor3/ConfigForm.cpp.html">ConfigForm.cpp</a> - The implementation of the configuration form.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor3/peditor3.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor3/peditor3-XE3.zip">(XE 3)</a> - Includes the images to build the application. The archive includes a folder named Debug_Build
+	that contains some sample data files (Exported?.txt) and the CS230 platform game executable.
+  <b>See the note at the bottom about building XE 3</b>
+</ul>
+
+</blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+<li><b>Stand-alone TIniFile demo</b> Here's another project that shows the use of .ini files to load and save application configuration settings. It's simpler than the one above
+in that it only deals with saving/loading the values. It uses TIniFile instead of TMemIniFile and it doesn't use properties or worry about 
+the user "canceling" the dialog box after making changes. It also doesn't use exception handling when reading/writing the .ini files. 
+See the source code for details.
+<p>
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>The application</th><th></th><th>The .ini file contents</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="inifiles1/IniFiles1.png">
+</td>
+<td width=20></td>
+<td>
+<pre>
+[General]
+Width=365
+Height=285
+Top=173
+Left=787
+Title=This is the title
+Description=This is the description
+[Level]
+Map=4
+Spectre=1
+Arachnotron=1
+Mancubus=1
+SpectreCount=10
+ArachnotronCount=15
+MancubusCount=7
+</pre>
+</td>
+</tr></table>
+<p>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/inifiles1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/inifiles1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/inifiles1/IniFiles1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/inifiles1/IniFiles1-XE3.zip">(XE 3)</a> -  to build it yourself. 	
+</ul>
+
+<p>
+<hr width="90%">
+<p> 
+
+<li><b>The "Completed" PlatForm Editor</b> The final addition to the editor also required me to modify
+the CS230 Platform Game. The changes allow the game to be conifigured via a configuration file, rather
+than hard-coded into the source code. When the game starts up, it reads its configuration file (CS230.cfg),
+which is an .INI-style file like the one used in the platform editor. There really wasn't anything new
+to learn, as everything has already been presented. This is what things look like:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>UI for configuring the game</th><th>An example config file</th></tr>
+<tr valign="top">
+<td>
+<img src="peditor4/CS230-config.png">
+</td>
+<td>
+<blockquote><pre>
+[Platform]
+Gravity=-40
+Jump_Velocity=15
+Move_Velocity_Hero=10
+Move_Velocity_Enemy=2
+Enemy_Idle_Time=0
+Multi_Jump=1
+Hero_Lives=5
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor4/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor4/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor4/peditor4.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/6/peditor4/peditor4-XE3.zip">(XE 3)</a> -  to build it yourself. Note
+  that you will need the update CS230 game executable (included in the .zip file) to work with this 
+  version of the editor.
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p class="technote">
+<b>Note about XE 3:</b> 
+<br>
+For reasons I can't explain yet, when building version 3 or 4 (PEditor3/PEditor4)
+of the Platform Editor, the build fails with linker errors. The errors are related to using <tt>std::stack</tt>
+in the code. There is a "work-around" that will get it to link. 
+<br><br>
+The work-around is to build with the RTL (Run Time Library). You enable this in the C++ Linker options:
+Ctrl+Shift+F11, choose C++ Linker, and set Link with Dynamic RTL to true.
+<br><br>
+It's possible that no one else will have this problem. It may be limited to my computer, maybe 
+because of a configuration problem when it was installed or something.
+
+</p>
+
+</ol>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+<ol>
+<li>Implement a Redo capability (it's already in the latest version). Hint: Use two stacks and move the data between them. 
+  Make sure you have a tool bar button, menu item, and hotkey (Ctrl-Y). 
+<li>Fix the bug. Bug? Well, not a bug, per se, but incorrect behavior. Here's the problem:
+	<ol>
+	<li>Start the application
+	<li>Maximize the window
+	<li>Quit the application
+	<li>Start the application again
+</ol>
+	When the app starts again, it has been sized to the maximum, yet it isn't maximized. You can see the that the icon
+	in the upper right shows that it is not. (Hint: To solve this, if the window size is the size of the entire screen,
+   maximize the window.)</li>
+<li>Add some polish to the UI. Some menu items still need icons and the icon for Undo and Redo are the same.
+  Maybe an arrow that points in the opposite direction?</li>
+<li>Maybe take your own CS 230 platform game and see if you can integrate it with the editor?</li>
+
+
+</ol>
+	
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

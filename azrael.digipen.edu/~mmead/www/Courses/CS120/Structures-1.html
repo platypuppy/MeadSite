@@ -1,0 +1,1356 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Structures</title>
+</head>
+
+<body>
+<center><h1>Structures</h1></center>
+
+
+<blockquote>
+<i>
+
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Structures
+</p>
+
+A structure is similar to an array in that it is an <i>aggregate</i> data structure:
+<ul>
+  <li>A structure is composed of multiple elements or parts.</li>
+  <ul>
+    <li>The elements (or <i>members</i>) are <i>heterogenous.</i></li>
+  </ul>
+  <li>It differs from an array in that each element can be of a different type.</li>
+  <ul>
+    <li>Arrays are <i>homogeneous</i> structures where all elements are of the same type.</li>
+  </ul>
+  <li>A structure is known as a <b>U</b>ser-<b>D</b>efined <b>T</b>ype (UDT), because you are 
+    creating a new type in the C language.</li>
+  <li>Structures are very useful when several pieces of information are related in some way.</li>
+  <ul>
+    <li>student record (name, age, address, phone number, etc.)</li>
+    <li>3D point (x, y, and z coordinates)</li>
+    <li>game object (color, size, position, velocity, etc.)</li>
+  </ul>
+</ul>
+<p>
+
+The general syntax of a <b><tt>struct</tt></b>:
+<blockquote><pre>
+<b>struct</b> <i>tag { members } variable-list</i>;
+</pre></blockquote>
+
+
+Or formatted appropriately:
+<blockquote><pre>
+<b>struct</b> <i>tag</i>
+{
+  <i>member1</i>
+  <i>member2</i>
+  <i> ...</i>
+  <i>memberN</i>
+} <i>variable-list</i>;
+</pre></blockquote>
+
+Notes:
+<ul>
+	<li>The <i>tag</i> or <i>variable-list</i> are optional (you need at least one of them).</li>
+	<li>The structure definition must have at least one member, or else the behavior is undefined (may generate a compiler warning or error).</li>
+	<li>The definition must end with a semicolon.</li>
+</ul>
+<p>
+
+Create a structure <b>type</b> named <b>TIME</b>, (no space is allocated at this point):
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Structure</th><th>Layout</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Structures-TIME-1.png">
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<ul>
+<li>By including the optional <i>tag</i>, we are giving the structure a name.
+<li>Giving the structure a name allows us to create TIME variables later on.
+<li>This structure definition acts like a <i>template</i>, in that it will be used to create <tt>TIME</tt> objects at a later time.
+(Think of this structure as you would a built-in type like <tt><b>int</b></tt> or <tt><b>double</b></tt>.)
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+This example creates two variables of type <tt><b>struct</b> TIME</tt>, (space is allocated). Compare to an array:
+
+<blockquote><pre>
+<b>struct</b> TIME t1, t2; <font color="#003399"><i>/* You must include the <b>struct</b> keyword */</i></font>
+<b>int</b> t3[3];          <font color="#003399"><i>/* An array of 3 integers              */</i></font>
+</pre></blockquote>
+
+Visually: (the structures and array are uninitialized)
+<blockquote>
+<img src="Structures-TIME-t1.png">
+<p>
+<img src="Structures-TIME-t2.png">
+<p>
+<img src="Structures-array-1.png">
+</blockquote>
+
+What do you think <tt><b>sizeof</b>(<b>struct</b> TIME)</tt> is?
+<p>
+
+Assigning values to the fields: (<a href="../../docs/OperatorPrecedence.html">Operator precedence chart</a>)
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Set the fields of t1 */</i></font>
+t1.hours = 8;
+t1.minutes = 15;
+t1.seconds = 0;
+
+
+<img src="Structures-TIME-t1-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Set the fields of t2 */</i></font>
+t2.hours = 11;
+t2.minutes = 59;
+t2.seconds = 59;
+
+
+<img src="Structures-TIME-t2-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Set the elements of t3 */</i></font>
+t3[0] = 8;
+t3[1] = 15;
+t3[2] = 0;
+
+
+<img src="Structures-array-2.png">
+</pre></blockquote>
+</td>
+</tr></table>
+
+<ul>
+<li>Accessing members of a structure is a common operation.</li>
+<li>Array elements are accessed anonymously using offsets from the address of the array.</li>
+<li>Structure members are accessed <i>by name</i> using the structure member operator, which is the period (a.k.a. decimal point).</li>
+<ul>
+  <li>Internally, the member name is converted to an offset by the compiler.</li>
+</ul>
+<li>The structure member operator has a higher <a href="../../docs/OperatorPrecedence.html">precedence</a> than most operators.</li>
+<li>Unlike arrays, a structure can be assigned to another structure:
+<blockquote><pre>
+  <font color="#003399"><i>/* Print out the times */</i></font>
+printf(<font color="#9933CC">&quot;Time 1 is %02i:%02i:%02i\n&quot;</font>, t1.hours, t1.minutes, t1.seconds);
+printf(<font color="#9933CC">&quot;Time 2 is %02i:%02i:%02i\n&quot;</font>, t2.hours, t2.minutes, t2.seconds);
+
+  <font color="#003399"><i>/* Assign all fields from t2 to t1 (Legal for structures, illegal for arrays) */</i></font>
+t1 = t2;
+
+  <font color="#003399"><i>/* Print out the times again */</i></font>
+printf(<font color="#9933CC">&quot;Time 1 is %02i:%02i:%02i\n&quot;</font>, t1.hours, t1.minutes, t1.seconds);
+printf(<font color="#9933CC">&quot;Time 2 is %02i:%02i:%02i\n&quot;</font>, t2.hours, t2.minutes, t2.seconds);
+
+<b>Output:</b>
+Time 1 is 08:15:00
+Time 2 is 11:59:59
+Time 1 is 11:59:59
+Time 2 is 11:59:59
+</pre></blockquote>
+
+<li>Note that you cannot print an entire structure with a single <tt>printf</tt> format specifier.
+  (You must print each member individually.)</li>
+<li>A structure is sometimes called a <i>User-Defined Type</i> or <i>UDT</i> because the programmer
+  has just <i>defined</i> or "invented" a new type.</li>
+
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Initializing Structures
+</p>
+
+Structures are initialized much like arrays:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Structure definition</th><th>Initializing <tt>TIME</tt> variables</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>struct</b> TIME t1 = {10, 15, 0}; <font color="#003399"><i>/* 10:15:00 */</i></font>
+<b>struct</b> TIME t2 = {10, 15};    <font color="#003399"><i>/* 10:15:00 */</i></font>
+<b>struct</b> TIME t3 = {10};        <font color="#003399"><i>/* 10:00:00 */</i></font>
+<b>struct</b> TIME t4 = {0};         <font color="#003399"><i>/* 00:00:00 */</i></font>
+
+<b>struct</b> TIME t5 = {};          <font color="#003399"><i>/* Illegal  */</i></font>
+<b>struct</b> TIME t6 = { , , 5};    <font color="#003399"><i>/* Illegal  */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Another example:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Structure definition</th><th>Initializing <tt>STUDENT</tt> variables</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>struct</b> STUDENT
+{
+  <b>char</b> first_name[20];
+  <b>char</b> last_name[20];
+  <b>int</b> age;
+  <b>float</b> GPA;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* <b>Initialization</b> statement */</i></font>
+<b>struct</b> STUDENT s1 = {<font color="#9933CC">&quot;Johnny&quot;</font>, <font color="#9933CC">&quot;Appleseed&quot;</font>, 20, 3.75F};
+
+  <font color="#003399"><i>/* Equivalent <b>assignment</b> statements */</i></font>
+strcpy(s1.first_name, <font color="#9933CC">&quot;Johnny&quot;</font>);
+strcpy(s1.last_name, <font color="#9933CC">&quot;Appleseed&quot;</font>);
+s1.age = 20;
+s1.GPA = 3.75F;
+
+  <font color="#003399"><i>/* Don't try and do this (you can't use assignment with arrays) */</i></font>
+s1.first_name = <font color="#9933CC">&quot;Johnny&quot;</font>;   <font color="#003399"><i>/* Illegal */</i></font>
+s1.last_name = <font color="#9933CC">&quot;Appleseed&quot;</font>; <font color="#003399"><i>/* Illegal */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Review of array initialization vs. assignment:
+<blockquote><pre>
+<b>char</b> string[20]; <font color="#003399"><i>/* Array of 20 characters, uninitialized */</i></font>
+
+string = <font color="#9933CC">&quot;Johnny&quot;</font>;        <font color="#003399"><i>/* Illegal, &quot;pointer&quot; is const  */</i></font>
+strcpy(string, <font color="#9933CC">&quot;Johnny&quot;</font>); <font color="#003399"><i>/* Proper assignment            */</i></font>
+</pre></blockquote>
+
+
+More examples:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Structure definition</th><th>Initializing <tt>STUDENT</tt> variables</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>struct</b> STUDENT
+{
+  <b>char</b> first_name[20];
+  <b>char</b> last_name[20];
+  <b>int</b> age;
+  <b>float</b> GPA;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Initialize all fields */</i></font>
+<b>struct</b> STUDENT s2 = {<font color="#9933CC">&quot;Tom&quot;</font>, <font color="#9933CC">&quot;Sawyer&quot;</font>, 15, 1.30F};
+
+  <font color="#003399"><i>/* Set age and GPA to 0  */</i></font>
+<b>struct</b> STUDENT s3 = {<font color="#9933CC">&quot;Huckleberry&quot;</font>, <font color="#9933CC">&quot;Finn&quot;</font>};
+
+<b>struct</b> STUDENT s4 = {<font color="#9933CC">&quot;&quot;</font>};  <font color="#003399"><i>/* Initialize everything to 0 */</i></font>
+<b>struct</b> STUDENT s5 = {{0}}; <font color="#003399"><i>/* Initialize everything to 0 */</i></font>
+
+  <font color="#003399"><i>/* Initializing arrays */</i></font>
+<b>char</b> first_name[20] = 0;  <font color="#003399"><i>/* Illegal, need curly braces       */</i></font>
+<b>char</b> first_name[20] = {}; <font color="#003399"><i>/* Illegal, need at least one value */</i></font>
+<b>char</b> last_name[20] = "";  <font color="#003399"><i>/* Ok, all elements are 0           */</i></font>
+<b>char</b> last_name[20] = {0}; <font color="#003399"><i>/* Ok, all elements are 0           */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Slightly different structure:
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Structure definition</th><th>Initializing <tt>STUDENT2</tt> variables</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>struct</b> STUDENT2
+{
+  <b>char</b> *first_name;
+  <b>char</b> *last_name;
+  <b>int</b> age;
+  <b>float</b> GPA;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* <b>Initialization</b> statement */</i></font>
+<b>struct</b> STUDENT2 s1 = {<font color="#9933CC">&quot;Johnny&quot;</font>, <font color="#9933CC">&quot;Appleseed&quot;</font>, 20, 3.75F};
+
+  <font color="#003399"><i>/* Equivalent <b>assignment</b> statements */</i></font>
+s1.first_name = <font color="#9933CC">&quot;Johnny&quot;</font>;
+s1.last_name = <font color="#9933CC">&quot;Appleseed&quot;</font>;
+s1.age = 20;
+s1.GPA = 3.75F;
+
+strcpy(s1.first_name, <font color="#9933CC">&quot;Johnny&quot;</font>);   <font color="#003399"><i>/* BAD IDEA */</i></font>
+strcpy(s1.last_name, <font color="#9933CC">&quot;Appleseed&quot;</font>); <font color="#003399"><i>/* BAD IDEA */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+More review of pointers vs. arrays and initialization vs. assignment:
+<blockquote><pre>
+<b>char</b> s1[20] = <font color="#9933CC">&quot;CS120&quot;</font>; <font color="#003399"><i>/* sizeof(s1)?, strlen(s1)? */</i></font>
+<b>char</b> s2[20];           <font color="#003399"><i>/* sizeof(s2)?, strlen(s2)? */</i></font>
+
+<b>char</b> *p1 = <font color="#9933CC">&quot;CS120&quot;</font>;    <font color="#003399"><i>/* sizeof(p1)?, strlen(p1)? */</i></font>
+<b>char</b> *p2;              <font color="#003399"><i>/* sizeof(p2)?, strlen(p2)? */</i></font>
+
+s2 = <font color="#9933CC">&quot;CS120&quot;</font>;          <font color="#003399"><i>/* Illegal                  */</i></font>
+strcpy(s2, <font color="#9933CC">&quot;CS120&quot;</font>);   <font color="#003399"><i>/* OK                       */</i></font>
+
+p2 = <font color="#9933CC">&quot;CS120&quot;</font>;          <font color="#003399"><i>/* OK                       */</i></font>
+strcpy(p2, <font color="#9933CC">&quot;CS120&quot;</font>);   <font color="#003399"><i>/* Legal, but very bad      */</i></font>
+</pre></blockquote>
+
+
+<p class="technote">
+There is a caveat when initializing a structure with fewer initializers than there are fields in
+the <tt><b>struct</b></tt>. The GNU compiler will give you warnings with the <tt>-Wextra</tt> switch:
+</p>
+
+<blockquote><pre>
+ 1.  <b>struct</b> TIME
+ 2.  {
+ 3.    <b>int</b> hours;
+ 4.    <b>int</b> minutes;
+ 5.    <b>int</b> seconds;
+ 6.  };
+ 7.
+ 8.  <b>struct</b> TIME t1 = {10, 15, 0}; <font color="#003399"><i>/* 10:15:00, no warning */</i></font>
+ 9.  <b>struct</b> TIME t2 = {10, 15};    <font color="#003399"><i>/* 10:15:00, warning    */</i></font>
+10.  <b>struct</b> TIME t3 = {10};        <font color="#003399"><i>/* 10:00:00, warning    */</i></font>
+11.  <b>struct</b> TIME t4 = {0};         <font color="#003399"><i>/* 00:00:00, no warning */</i></font>
+</pre></blockquote>
+
+
+<b>Warnings:</b>
+<blockquote><pre>
+main2.c:9: warning: missing initializer
+main2.c:9: warning: (near initialization for `t2.seconds')
+main2.c:10: warning: missing initializer
+main2.c:10: warning: (near initialization for `t3.minutes')
+</pre></blockquote>
+
+<!--
+With the version of the <tt>gcc</tt> compiler we are using at Digipen (version 3.4.4), there is no way to suppress
+those warnings.
+-->
+Starting with version 4.0.4, this can be suppressed with <tt>-Wno-missing-field-initializers</tt>. However,
+do not use this command line switch for assignments or labs unless instructed to do so.
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Structures as Parameters
+</p>
+
+Structures can be passed to functions just like any other value. However, they are different than
+arrays in that they are <i>passed by value</i>, meaning that the entire structure is <i>copied</i> onto the stack. This is actually a very big difference,
+and, as you can imagine, it can be a very expensive operation.
+<p>
+
+Given this structure:
+
+<blockquote><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;   <font color="#003399"><i>/* 4 bytes */</i></font>
+  <b>int</b> minutes; <font color="#003399"><i>/* 4 bytes */</i></font>
+  <b>int</b> seconds; <font color="#003399"><i>/* 4 bytes */</i></font>
+};
+</pre></blockquote>
+
+Passing a TIME structure to a function:
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Function to print a TIME</th><th>Calling the function</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> print_time(<b>struct</b> TIME t)
+{
+  printf(<font color="#9933CC">&quot;The time is %02i:%02i:%02i\n&quot;</font>,
+         t.hours, t.minutes, t.seconds);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+    <font color="#003399"><i>/* Create time of 10:30:15 */</i></font>
+  <b>struct</b> TIME t = {10, 30, 15};
+
+    <font color="#003399"><i>/* Pass by value and print */</i></font>
+  print_time(t);
+}
+
+<b>Output</b>:
+The time is 10:30:15
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+
+A more expensive example:
+<blockquote><pre>
+<b>struct</b> STUDENT
+{
+  <b>char</b> first_name[20]; <font color="#003399"><i>/* 20 bytes */</i></font>
+  <b>char</b> last_name[20];  <font color="#003399"><i>/* 20 bytes */</i></font>
+  <b>int</b> age;             <font color="#003399"><i>/*  4 bytes */</i></font>
+  <b>float</b> GPA;           <font color="#003399"><i>/*  4 bytes */</i></font>
+};
+</pre></blockquote>
+
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Function to print a STUDENT</th><th>Calling the function</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> print_student(<b>struct</b> STUDENT s)
+{
+  printf(<font color="#9933CC">&quot;Name: %s %s\n&quot;</font>, s.first_name, s.last_name);
+  printf(<font color="#9933CC">&quot; Age: %i\n&quot;</font>, s.age);
+  printf(<font color="#9933CC">&quot; GPA: %.2f\n&quot;</font>, s.GPA);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>struct</b> STUDENT s1 = {<font color="#9933CC">&quot;Johnny&quot;</font>,
+                        <font color="#9933CC">&quot;Appleseed&quot;</font>,
+                        20,
+                        3.75F
+                      };
+
+  print_student(s1);
+}
+
+<b>Output:</b>
+Name: Johnny Appleseed
+ Age: 20
+ GPA: 3.75
+</pre></blockquote>
+</td>
+</tr></table>
+
+We'll see next that passing a pointer to a structure is the proper way to do it.
+
+<!--
+Since the default method for passing structures to functions is pass-by-value, we should modify
+the function so that it's more efficient. We do that by simply passing a pointer to the structure instead.
+
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Calling the function</th><th>Function to print a STUDENT (more efficient)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f12(<b>void</b>)
+{
+  <b>struct</b> STUDENT s1 = {<font color="#9933CC">&quot;Johnny&quot;</font>,
+                        <font color="#9933CC">&quot;Appleseed&quot;</font>,
+                        20,
+                        3.75F
+                      };
+  print_student2(&amp;s1);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Be sure to mark it <b>const</b> if you're not changing anything. */</i></font>
+<b>void</b> print_student2(<b>const</b> <b>struct</b> STUDENT *s)
+{
+  printf(<font color="#9933CC">&quot;Name: %s %s\n&quot;</font>, s-&gt;first_name, s-&gt;last_name);
+  printf(<font color="#9933CC">&quot; Age: %i\n&quot;</font>, s-&gt;age);
+  printf(<font color="#9933CC">&quot; GPA: %.2f\n&quot;</font>, s-&gt;GPA);
+}
+
+<b>Output:</b>
+Name: Johnny Appleseed
+ Age: 20
+ GPA: 3.75
+</pre></blockquote>
+</td>
+</tr></table>
+-->
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Structures as Members
+</p>
+
+Structures can contain almost any data type, including other structures. Sometimes these are called
+<i>nested</i> structures. These types of structures are very common and used in almost all 
+non-trivial programs.
+
+<blockquote><pre>
+<b>#define</b> MAX_PATH 12
+</pre></blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td valign=top><pre>
+<b>struct</b> DATE
+{
+  <b>int</b> month;
+  <b>int</b> day;
+  <b>int</b> year;
+};
+</pre></td>
+<td width=40></td>
+<td valign=top><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+};
+</pre></td>
+<td width=40></td>
+<td valign=top><pre>
+<b>struct</b> DATETIME
+{
+  <b>struct</b> DATE date;
+  <b>struct</b> TIME time;
+};
+</pre></td>
+<td width=40></td>
+<td valign=top><pre>
+<b>struct</b> FILEINFO
+{
+  <b>int</b> length;
+  <b>char</b> name[MAX_PATH];
+  <b>struct</b> DATETIME dt;
+};
+</pre></td>
+</tr>
+</table>
+</blockquote>
+
+
+Given this code:
+<blockquote><pre>
+<b>struct</b> FILEINFO fi;
+</pre></blockquote>
+
+We can visualize the struct in memory like this:
+<blockquote><pre>
+<img src="Structures-1.gif">
+</pre></blockquote>
+
+Now highlighting the two fields of the DATETIME struct:
+<blockquote><pre>
+<img src="Structures-2.gif">
+</pre></blockquote>
+
+Now highlighting the fields of the DATE and TIME structs:
+<blockquote><pre>
+<img src="Structures-3.gif">
+</pre></blockquote>
+
+Example:
+
+<blockquote><pre>
+<b>void</b> f1(<b>void</b>)
+{
+  <b>struct</b> FILEINFO fi;   <font color="#003399"><i>/* Create FILEINFO struct on stack */</i></font>
+
+    <font color="#003399"><i>/* Set date to 7/4/2021 */</i></font>
+  fi.dt.date.day = 4;
+  fi.dt.date.month = 7;
+  fi.dt.date.year = 2021;
+
+    <font color="#003399"><i>/* Set time to 9:30 am */</i></font>
+  fi.dt.time.hours = 9;
+  fi.dt.time.minutes = 30;
+  fi.dt.time.seconds = 0;
+
+  fi.length = 1024;           <font color="#003399"><i>/* Set length */</i></font>
+  strcpy(fi.name, <font color="#9933CC">&quot;foo.txt&quot;</font>); <font color="#003399"><i>/* Set name   */</i></font>
+}
+</pre></blockquote>
+
+
+An example using initialization:
+<blockquote><pre>
+                  <font color="#003399"><i>/* length    name          date         time       */</i></font>
+                  <font color="#003399"><i>/* length    name       m  d    y     h  m   s     */</i></font>
+<b>struct</b> FILEINFO fi = {1024, <font color="#9933CC">&quot;foo.txt&quot;</font>, { {7, 4, 2021}, {9, 30, 0} } };
+</pre></blockquote>
+
+
+A very fast way to set everything to 0:
+<blockquote><pre>
+<b>struct</b> FILEINFO fi = {0};
+</pre></blockquote>
+
+
+Same operations using a pointer to the structure:
+
+<blockquote><pre>
+<b>void</b> f2(<b>void</b>)
+{
+  <b>struct</b> FILEINFO fi;         <font color="#003399"><i>/* Create FILEINFO struct on stack */</i></font>
+  <b>struct</b> FILEINFO *pfi = &amp;fi; <font color="#003399"><i>/* Pointer to a FILEINFO struct    */</i></font>
+
+    <font color="#003399"><i>/* Set date to 7/4/2021 */</i></font>
+  (*pfi).dt.date.day = 4;
+  (*pfi).dt.date.month = 7;
+  (*pfi).dt.date.year = 2021;
+
+    <font color="#003399"><i>/* Set time to 9:30 am */</i></font>
+  (*pfi).dt.time.hours = 9;
+  (*pfi).dt.time.minutes = 30;
+  (*pfi).dt.time.seconds = 0;
+
+  (*pfi).length = 1024;           <font color="#003399"><i>/* Set length */</i></font>
+  strcpy((*pfi).name, <font color="#9933CC">&quot;foo.txt&quot;</font>); <font color="#003399"><i>/* Set name   */</i></font>
+}
+</pre></blockquote>
+
+Due to the order of <a href="../../docs/OperatorPrecedence.html">precedence</a>, we need the parentheses above. Otherwise:
+<p>
+
+Accessing a member of a pointer:
+
+<blockquote><pre>
+  <font color="#003399"><i>/*  error: request for member 'length' in something not a structure or union */</i></font>
+pfi.length = 1024;
+</pre></blockquote>
+
+<!--
+Accessing a member of a pointer and then attempting to dereference an integer:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* error C2231: '.length' : left operand points to 'struct', use '-&gt;' */</i></font>
+  <font color="#003399"><i>/* error C2100: illegal indirection                                   */</i></font>
+*pfi.length = 1024;
+</pre></blockquote>
+-->
+
+Closer look:
+
+<blockquote><pre>
+Expression     Description
+------------------------------------------------------------------
+pfi            A pointer to a FILEINFO struct
+*pfi           A FILEINFO struct
+(*pfi).        Accessing a member of a FILEINFO struct
+pfi->          Accessing a member of a FILEINFO struct (shorthand)
+</pre></blockquote>
+
+The <i>structure pointer operator</i> (or informally the <i>arrow operator</i>) is another programmer convenience along the same
+vein as the subscript operator and is high on the <a href="../../docs/OperatorPrecedence.html">precedence chart</a>.
+It performs the indirection "behind the scenes" so:
+
+<blockquote><pre>
+(*pfi).  <i>is the same as</i>   pfi->
+</pre></blockquote>
+
+That's why using the structure pointer operator on a structure is illegal; we're trying to dereference something
+(a structure) that isn't a pointer. And that's a no-no.
+
+Same example using the structure pointer operator:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Set date to 7/4/2021 */</i></font>
+pfi-&gt;dt.date.month = 7;
+pfi-&gt;dt.date.day = 4;
+pfi-&gt;dt.date.year = 2021;
+
+  <font color="#003399"><i>/* Set time to 9:30 am */</i></font>
+pfi-&gt;dt.time.hours = 9;
+pfi-&gt;dt.time.minutes = 30;
+pfi-&gt;dt.time.seconds = 0;
+
+pfi-&gt;length = 1024;           <font color="#003399"><i>/* Set length */</i></font>
+strcpy(pfi-&gt;name, <font color="#9933CC">&quot;foo.txt&quot;</font>); <font color="#003399"><i>/* Set name   */</i></font>
+</pre></blockquote>
+
+
+<h2>Arrays vs. Structures vs. Built-in Types</h2>
+
+<p>
+Unlike arrays, which prohibit most aggregate operations, it is possible in some cases to manipulate structures as a whole.
+<p>
+
+<blockquote>
+<table border="1" cellpadding=8 cellspacing=0>
+<tr><th>Operation</th><th>Arrays</th><th>Structures</th><th>Built-in types (e.g. <tt>int</tt>)</tr>
+<tr><td>Arithmetic</td><td>No</td><td>No</td><td align="center">Yes</td></tr>
+<tr><td>Assignment</td><td>No</td><td>Yes</td><td align="center">Yes</td></tr>
+<tr><td>Comparison</td><td>No</td><td>No</td><td align="center">Yes</td></tr>
+<tr><td>Input/Output (e.g. printf)</td><td>No (except strings)</td><td>No</td><td align="center">Yes</td></tr>
+<tr><td>Parameter passing</td><td>By address only</td><td>By address or value</td><td align="center">Yes</td></tr>
+<tr><td>Return from function</td><td>No</td><td bgcolor="lightgray">Yes</td><td align="center">Yes</td></tr>
+</table>
+</blockquote>
+
+Also, unlike arrays, structure members are not guaranteed to be contiguous in memory, so using 
+pointer arithmetic within the structure is not safe to do.
+
+<blockquote>
+<p class="technote">
+According to the chart above, it is possible to return a structure from a function. What this allows
+us to do is to return <i>multiple values</i> from a function. We will still only be returning a
+single object, but that single object (a <b><tt>struct</tt></b>) may contain any number of members
+and each member may be a different type with a different value. This can be a very convenient way of returning multiple 
+values/types from a function instead of returning them through pointers.
+</p>
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Structures as Parameters (revisited)
+</p>
+
+Since the default method for passing structures to functions is pass-by-value, we should modify
+the function so that it's more efficient. We do that by simply passing the structure by address instead.
+
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Function to print a STUDENT (more efficient)</th><th>Calling the function</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> print_student2(<b>struct</b> STUDENT *s)
+{
+  printf(<font color="#9933CC">&quot;Name: %s %s\n&quot;</font>, s-&gt;first_name, s-&gt;last_name);
+  printf(<font color="#9933CC">&quot; Age: %i\n&quot;</font>, s-&gt;age);
+  printf(<font color="#9933CC">&quot; GPA: %.2f\n&quot;</font>, s-&gt;GPA);
+}
+
+<b>Output:</b>
+Name: Johnny Appleseed
+ Age: 20
+ GPA: 3.75
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> f12(<b>void</b>)
+{
+  <b>struct</b> STUDENT s1 = {<font color="#9933CC">&quot;Johnny&quot;</font>,
+                        <font color="#9933CC">&quot;Appleseed&quot;</font>,
+                        20,
+                        3.75F
+                      };
+  print_student2(&amp;s1);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+Note:
+<ul>
+<li>In practice, you will rarely pass a structure (by value) to a function, unless it is quite small. You will almost always pass a pointer instead.</li>
+<li>Passing structures to functions by value can be very expensive. Unfortunately, compilers won't warn you when you do so.
+<li>Be sure to remember to use the <tt><b>const</b></tt> keyword if your function does not modify the 
+  structure that was passed in. So, the proper way to write the above function is like this:
+
+<blockquote><pre>
+<b>void</b> print_student2(<font color="blue"><b>const</b></font> <b>struct</b> STUDENT *s)
+</pre></blockquote>
+
+This guarantees that the function won't be changing things that it's not supposed to be changing.
+<b>This is also the most common way of passing structures to functions.</b>
+</ul>
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Summary of <tt>struct</tt> Syntax
+</p>
+Refer to the <a href="DataTypes-1.html#TYPEDEF">notes on <tt>typedef</tt></a>.
+<p>
+
+The general form:
+<blockquote><pre>
+<b>struct</b> <i>tag { members } variable-list</i>;
+</pre></blockquote>
+
+with proper formatting:
+
+<blockquote><pre>
+<b>struct</b> <i>tag</i>
+{
+  <i>member1</i>
+  <i>member2</i>
+  <i> ...</i>
+  <i>memberN</i>
+} <i>variable-list</i>;
+</pre></blockquote>
+
+
+Create a structure named <b>TIME</b>, (no space is allocated):
+
+<blockquote><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+};
+</pre></blockquote>
+
+Create two variables of type <b>struct</b> TIME, (space is allocated):
+
+<blockquote><pre>
+<b>struct</b> TIME t1, t2; <font color="#003399"><i>/* The <b>struct</b> keyword is required */</i></font>
+</pre></blockquote>
+
+without the <b><tt>struct</tt></b> keyword, gcc will complain:
+
+<blockquote><pre>
+error: unknown type name 'TIME'
+ TIME t1, t2;
+ ^
+</pre></blockquote>
+
+The Clang C compiler gives a better message:
+
+<blockquote><pre>
+error: must use 'struct' tag to refer to type 'TIME'
+TIME t1, t2;
+^
+struct 
+1 error generated.
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p class="technote">
+You must include the <tt><b>struct</b></tt> keyword when creating <tt><b>struct</b></tt> variables in C.
+That's because the type is "<tt><b>struct</b>&nbsp;TIME</tt>", not simply "<tt>TIME</tt>".
+In C++, the use of the <tt><b>struct</b></tt> keyword is optional when creating variables.
+</p>
+
+
+<hr width=95%>
+<p>
+We can do both (define the structure and variables) in one step:
+
+<blockquote><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+}t1, t2;            <font color="#003399"><i>/* This allocates space            */</i></font>
+
+<b>struct</b> TIME t3, t4; <font color="#003399"><i>/* Create more TIME variables here */</i></font>
+</pre></blockquote>
+
+
+<hr width=95%>
+<p>
+Leaving off the tag creates an anonymous structure:
+
+<blockquote><pre>
+<b>struct</b>     <font color="#003399"><i>/* No name given to this struct */</i></font>
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+}t1, t2;  <font color="#003399"><i>/* We won't be able to create others later */</i></font>
+</pre></blockquote>
+
+This has little use in most code.
+
+<!--
+<hr width=95%>
+<p>
+Create a new type with the <b><tt>typedef</tt></b> keyword:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b>  <font color="#003399"><i>/* use typedef keyword to create a new type */</i></font>
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+}TIME;            <font color="#003399"><i>/* TIME is a type, not a variable    */</i></font>
+
+TIME t1, t2;      <font color="#003399"><i>/* Don't need the struct keyword now */</i></font>
+</pre></blockquote>
+-->
+
+<hr width=95%>
+<p>
+Using a <b><tt>typedef</tt></b> to create an alias:
+
+<blockquote><pre>
+<b>struct</b> TIME
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+};
+</pre></blockquote>
+
+
+<blockquote><pre>
+<b>typedef struct</b> TIME Time; <font color="#003399"><i>/* Now, 'Time' is a new type, same as '<b>struct</b> TIME' */</i></font>
+</pre></blockquote>
+
+With <b><tt>typedef</tt></b> we don't need the <tt>struct</tt> keyword:
+
+<blockquote><pre>
+Time t1, t2;        <font color="#003399"><i>/* Create two 'Time' variables        */</i></font>
+<b>struct</b> TIME t3, t4; <font color="#003399"><i>/* Create two 'struct TIME' variables */</i></font>
+</pre></blockquote>
+
+All of the variables are the same (compatible) type, so this works:
+
+<blockquote><pre>
+t1 = t3; <font color="#003399"><i>/* OK */</i></font>
+t2 = t4; <font color="#003399"><i>/* OK */</i></font>
+</pre></blockquote>
+
+
+We can create the <b><tt>typedef</tt></b> when we define the <b><tt>struct</tt></b>:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> TIME <font color="#003399"><i>/* tag name     */</i></font>
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+}Time;             <font color="#003399"><i>/* typedef name */</i></font>
+
+Time t1, t2;         <font color="#003399"><i>/* use <b>typedef</b> name                   */</i></font>
+<b>struct</b> TIME t3, t4;  <font color="#003399"><i>/* use tag name, needs <b>struct</b> keyword */</i></font>
+</pre></blockquote>
+
+<hr width=95%>
+<p>
+
+The <i>tag</i> name and <b>typedef</b> name can be the same:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> TIME <font color="#003399"><i>/* tag name            */</i></font>
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+}TIME;              <font color="#003399"><i>/* <b>typedef</b> same as tag */</i></font>
+
+TIME t1, t2;        <font color="#003399"><i>/* use <b>typedef</b> name                     */</i></font>
+<b>struct</b> TIME t3, t4; <font color="#003399"><i>/* use tag name, needs <b>struct</b> keyword   */</i></font>
+
+TIME times[10];     <font color="#003399"><i>/* an array of 10 TIME structs          */</i></font>
+TIME *pt;           <font color="#003399"><i>/* a pointer to a TIME struct           */</i></font>
+TIME foo(TIME *p);  <font color="#003399"><i>/* function takes a TIME struct pointer */</i></font>
+                    <font color="#003399"><i>/*   and returns a TIME struct          */</i></font>
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Usually, when a <tt><b>typedef</b></tt> is created, the <tt><b>struct</b></tt> keyword is not
+used anymore, simply because it requires extra work (typing) and is unnecessary.
+</p>
+</blockquote>
+
+When using <tt><b>typedef</b></tt>, watch out for this:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> <font color="#003399"><i>/* No tag! */</i></font>
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+}TIME;          <font color="#003399"><i>/* <b>typedef</b> (no tag) */</i></font>
+
+TIME t1;          <font color="#003399"><i>/* use <b>typedef</b> name           */</i></font>
+<b>struct</b> TIME t2;  <font color="#003399"><i>/* This doesn't work anymore. */</i></font>
+</pre></blockquote>
+
+Depending on where you define <tt>t1</tt> and <tt>t2</tt>, you'll get errors saying something about
+an "incomplete type".
+<p>
+gcc:
+<blockquote><pre>
+error: storage size of 't1' isn't known
+ struct TIME t1;
+             ^          
+error: 't1' has an incomplete type
+  t1 = t2; 
+  ^
+</pre></blockquote>
+
+Clang:
+<blockquote><pre>
+error: variable has incomplete type 'struct TIME'
+struct TIME t1;
+            ^
+error: incomplete type 'struct TIME' is not assignable
+        t1 = t2;
+        ~~ ^
+error: tentative definition has type 'struct TIME' that is never completed
+struct TIME t1;
+            ^
+note: forward declaration of 'struct TIME'
+struct TIME t1;
+       ^
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Self-referencing and mutually-dependent structures
+</p>
+
+
+Before any data type can be used to create a variable, the size of the type must be known to the compiler:
+
+<blockquote><pre>
+<b>struct</b> NODE
+{
+  <b>int</b> value;
+  <b>struct</b> NODE next;  <font color="#003399"><i>/* illegal */</i></font>
+};
+</pre></blockquote>
+
+Since the compiler hasn't fully "seen" the NODE struct, it can't be used anywhere, even inside itself. However,
+this works:
+
+<blockquote><pre>
+<b>struct</b> NODE
+{
+  <b>int</b> value;
+  <b>struct</b> NODE *next; <font color="#003399"><i>/* OK */</i></font>
+};
+</pre></blockquote>
+
+Since all pointers are of the same size, the compiler will accept this. The compiler doesn't fully know
+what's in a NODE struct (and doesn't need to know yet), but it knows the size of a pointer to it.
+<p>
+
+Using a forward declaration and typedef:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> tagNODE NODE; <font color="#003399"><i>/* Forward declaration */</i></font>
+
+<b>struct</b> tagNODE
+{
+  <b>int</b> value;
+  NODE *next; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+};
+</pre></blockquote>
+
+or (tag and typedef are the same)
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> NODE NODE; <font color="#003399"><i>/* Forward declaration */</i></font>
+
+<b>struct</b> NODE
+{
+  <b>int</b> value;
+  NODE *next; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+};
+</pre></blockquote>
+<p>
+<hr width="95%">
+<p>
+Two structures that are mutually dependent on each other won't pose any problems. In the
+source file, one of the definitions must come <i>after</i> the other. The use of the <b><tt>struct</tt></b> keyword
+gives the compiler enough information:
+
+<!--
+With C compilers, this is generally
+not a problem since the struct keyword is required:
+-->
+
+<blockquote><pre>
+<b>struct</b> A
+{
+  <b>int</b> value;
+  <b>struct</b> B *b; <font color="#003399"><i>/* <b>B</b> is a struct, defined later */</i></font>
+};
+
+<b>struct</b> B
+{
+  <b>int</b> value;
+  <b>struct</b> A *a; <font color="#003399"><i>/* <b>A</b> is a struct */</i></font>
+};
+</pre></blockquote>
+
+
+More examples with <tt><b>typedef</b></tt>. First, without <tt><b>typedef</b></tt>:
+
+<!--
+<tt><b></b></tt>
+-->
+
+<blockquote><pre>
+<b>struct</b> A
+{
+  <b>struct</b> A *pa; <font color="#003399"><i>/* Need struct keyword, type is 'struct A' */</i></font>
+  <b>struct</b> B *pb; <font color="#003399"><i>/* Need struct keyword, type is 'struct B' */</i></font>
+};
+
+<b>struct</b> B
+{
+  <b>struct</b> A *pa; <font color="#003399"><i>/* Need struct keyword, type is 'struct A' */</i></font>
+  <b>struct</b> B *pb; <font color="#003399"><i>/* Need struct keyword, type is 'struct B' */</i></font>
+};
+
+<b>struct</b> A a; <font color="#003399"><i>/* Need struct keyword */</i></font>
+<b>struct</b> B b; <font color="#003399"><i>/* Need struct keyword */</i></font>
+
+</pre></blockquote>
+
+with <tt><b>typedef</b></tt>:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b>
+{
+  <b>struct</b> A *pa; <font color="#003399"><i>/* Need struct keyword, haven't seen <b>typedef</b> for A yet */</i></font>
+  <b>struct</b> B *pb; <font color="#003399"><i>/* Need struct keyword, haven't seen <b>typedef</b> for B yet */</i></font>
+}A;
+
+<b>typedef</b> <b>struct</b>
+{
+  A *pa;        <font color="#003399"><i>/* Don't need struct keyword because of <b>typedef</b> above  */</i></font>
+  <b>struct</b> B *pb; <font color="#003399"><i>/* Need struct keyword, haven't seen <b>typedef</b> for B yet */</i></font>
+}B;
+
+A a; <font color="#003399"><i>/* OK because of typedef */</i></font>
+B b; <font color="#003399"><i>/* OK because of tyepdef */</i></font>
+</pre></blockquote>
+
+with <tt><b>typedef</b></tt> and forward declarations:
+
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> A A; <font color="#003399"><i>/* Forward declaration, compiler knows what the symbol A is */</i></font>
+<b>typedef</b> <b>struct</b> B B; <font color="#003399"><i>/* Forward declaration, compiler knows what the symbol B is */</i></font>
+
+<b>struct</b> A
+{
+  A *pa; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+  B *pb; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+};
+
+<b>struct</b> B
+{
+  A *pa; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+  B *pb; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+};
+
+A a; <font color="#003399"><i>/* OK, typedef */</i></font>
+B b; <font color="#003399"><i>/* OK, typedef */</i></font>
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>For self-referencing or mutually-dependent structures, you must use pointers to the structs within the structure.</li>
+  <li>Forward declarations just give the compiler a clue about the name. There is no information about what
+    is in the structures.</lI>
+  <li>Since all pointers are the same size, the compiler doesn't need to know what's in the structures until
+    it either needs to know the size, or until some code references a member of a structure.</li>
+</ul>
+
+Some developers prefer to have distinct names between the tags and the typedefs:
+
+<blockquote><pre>
+<b>typedef</b> <b>struct</b> tagA A; <font color="#003399"><i>/* Forward declaration */</i></font>
+<b>typedef</b> <b>struct</b> tagB B; <font color="#003399"><i>/* Forward declaration */</i></font>
+
+<b>struct</b> tagA
+{
+  A *pa; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+  B *pb; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+};
+
+<b>struct</b> tagB
+{
+  A *fp; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+  B *pb; <font color="#003399"><i>/* Don't need struct keyword because of forward declaration above */</i></font>
+};
+
+A a; <font color="#003399"><i>/* OK, typedef */</i></font>
+B b; <font color="#003399"><i>/* OK, typedef */</i></font>
+</pre></blockquote>
+
+This allows one to distinguish between the tag and the typedef:
+
+<blockquote><pre>
+A a1;           <font color="#003399"><i>/* OK, typedef         */</i></font>
+<b>struct</b> tagA a2; <font color="#003399"><i>/* Need struct keyword */</i></font>
+</pre></blockquote>
+
+The choice is a matter of preference. Since most programmers never use the <b><tt>struct</tt></b> keyword
+after they create the <b><tt>typedef</tt></b>, it really doesn't make any difference if you have a
+distinct name for the tag.
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

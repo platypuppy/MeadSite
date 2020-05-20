@@ -1,0 +1,32 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+<b>void</b> proper(<b>const</b> <b>char</b> *filename);
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+    <font color="#003399"><i>/* Must get a filename on the command line */</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Usage: %s filename&#92;n&quot;</font>, argv[0]);
+    <b>return</b> -1;
+  }
+
+  proper(argv[1]);
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

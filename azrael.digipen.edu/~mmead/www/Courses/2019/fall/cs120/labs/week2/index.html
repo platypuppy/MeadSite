@@ -1,0 +1,148 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment</h1>
+</center>
+<p>
+	
+<p>
+<hr width="90%">
+<p>
+
+<big>
+<p class="technote">
+<b>Remember:</b> The major point of this lab assignment is for you to learn how to 
+submit your homework correctly. You should follow all of the directions <i>exactly</i> 
+as specified in the handouts. The syllabus that was handed out during the first day of 
+class also contains important information on how to submit your homework. 
+If you are still unsure of how to do something, you should ask for help.
+The best place to start is on the 
+<a href="https://distance.digipen.edu/2019-fall/mod/forum/view.php?id=11164">Moodle Forums</a>.
+<!--
+either 
+on the forums in Moodle, from a tutor, or from another student.
+-->
+</p>
+</big>
+
+<h2>Information</h2>
+
+<blockquote>
+<p class="technote">
+<b>Always</b> read the entire web page and <a href="cs120-lab-marathon.pdf">Handout</a> 
+before starting. You'll be glad you did.
+</p>
+</blockquote>
+
+
+<ul>
+<li><a href="cs120-lab-marathon.pdf">Handout</a> 
+  <p>
+<li><a href="../../../../../CS120/Fundamentals-1.html#MARATHON">marathon.c</a> from the first week.
+  Make sure when you paste this you get the lines in the correct spot. 
+  (See <a href="../../../../../CS120/Fundamentals-1.html#MARATHONLINES">this code</a>)
+	<ul>
+  <p>
+		<li><a href="output-master.txt">expected output</a>
+			You <b>MUST</b> download this file. DO NOT, under any circumstances, copy and paste
+			output files from the web browser.</li>
+	</ul>
+  <p>
+<li><a href="../../../../../../docs/StudentHomeworkChecklist-CS120.pdf">Checklist</a>
+  <p>
+<li><a href="cs120-lab-marathon-sq.pdf">Supplemental Questions</a> This is a document
+	that asks you to make changes to the <tt>marathon.c</tt> program and observe the results.
+	<b>DO NOT SUBMIT THIS FILE</b>.
+  Editable document is <a href="cs120-lab-marathon-sq.odt">here</a>.
+	Or, you may find it easier to work with this <a href="supplemental-questions-marathon.txt">
+	text version</a> of the PDF file above. This will allow you to copy and paste the
+	warnings/errors from the command line instead of having to type everything (incorrectly!)
+	by hand.
+	<p>
+<li>Command line for compiling this lab assignment:
+<blockquote><pre>
+<big>gcc -Wall -Wextra -Werror -ansi -pedantic marathon.c -o marathon</big>
+</pre></blockquote>
+
+<li>Running your program and capturing the output to a file:
+<blockquote><pre>
+marathon &gt; output.txt
+</pre></blockquote>
+
+
+<li>Comparing your output with the expected output:
+<blockquote><pre>
+diff output-master.txt output.txt --strip-trailing-cr
+</pre></blockquote>
+
+The <tt>--strip-trailing-cr</tt> option above is usually only needed if you are using Windows.
+Mac and Linux systems shouldn't need it. (It doesn't hurt, if you use it, though.)
+
+<!--
+<li>Command line for creating a .zip file for submission: (replace <tt><b>YOURLOGIN</b></tt> with your real Digipen login) 
+<blockquote><pre>
+  <big>zip cs120_<b>YOURLOGIN</b>_1.zip marathon.c 
+</pre></blockquote>
+Your login is not your numeric
+	student ID. It is the name you type when you login to a computer and also your email name. For most freshmen, this is usually
+	your first name followed by a period and then your last name (e.g. A student with the name Nigel Tufnel would have a login of <tt>nigel.tufnel</tt>). It may be some variation
+	of that as well.
+-->	
+</ul>		
+
+
+
+</ul>
+
+<h2>Other criteria</h2>
+<ul>
+<li>Before submitting your code, you must include your student information at the top of every 
+	file you create. Below is an <b>EXAMPLE</b> of the information that is required for each 
+	C file you create. Again, the easiest thing to do is to copy and paste the text
+	(including the lines with the asterisks) into your program and <b>modify it</b>. Make sure you
+	pay attention to the formatting <i>exactly</i>. Notice how the columns line up and that
+	the description is indented 2 spaces under the heading.
+		
+<blockquote><pre>
+/******************************************************************************
+filename    foo.c
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS120
+section     D
+lab week    2
+due date    12/25/2025
+
+Brief Description:
+  This program calculates the distance to the moon using only a compass
+  and a straight-edge. 
+  
+******************************************************************************/
+</pre></blockquote>
+
+</ul>
+
+<p>
+<hr width=90%>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

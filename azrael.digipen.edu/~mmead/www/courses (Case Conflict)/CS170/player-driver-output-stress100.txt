@@ -1,0 +1,383 @@
+Team 1:
+I'm a Soldier named Soldier1-00 [42,7,5]
+I'm a Soldier named Soldier1-01 [32,5,8]
+I'm a Pyro named Pyro1-02 [69,7,12]
+I'm a Pyro named Pyro1-03 [52,9,12]
+I'm a Pyro named Pyro1-04 [68,9,10]
+I'm a Soldier named Soldier1-05 [37,4,5]
+I'm a Pyro named Pyro1-06 [80,8,10]
+I'm a Scout named Scout1-07 [27,3,6]
+I'm a Scout named Scout1-08 [25,2,4]
+I'm a Soldier named Soldier1-09 [35,7,9]
+I'm a Scout named Scout1-10 [29,4,6]
+I'm a Pyro named Pyro1-11 [61,6,12]
+I'm a Pyro named Pyro1-12 [54,6,11]
+I'm a Soldier named Soldier1-13 [40,5,8]
+I'm a Scout named Scout1-14 [29,2,4]
+I'm a Scout named Scout1-15 [28,2,4]
+I'm a Soldier named Soldier1-16 [50,7,8]
+I'm a Pyro named Pyro1-17 [59,5,11]
+I'm a Soldier named Soldier1-18 [34,4,5]
+I'm a Pyro named Pyro1-19 [85,5,12]
+I'm a Pyro named Pyro1-20 [84,7,11]
+I'm a Scout named Scout1-21 [30,5,3]
+I'm a Scout named Scout1-22 [30,4,4]
+I'm a Soldier named Soldier1-23 [49,7,8]
+I'm a Soldier named Soldier1-24 [36,6,9]
+I'm a Scout named Scout1-25 [24,1,5]
+I'm a Soldier named Soldier1-26 [34,6,8]
+I'm a Scout named Scout1-27 [28,2,3]
+I'm a Pyro named Pyro1-28 [66,9,12]
+I'm a Pyro named Pyro1-29 [56,6,11]
+I'm a Pyro named Pyro1-30 [57,9,11]
+I'm a Soldier named Soldier1-31 [44,5,8]
+I'm a Pyro named Pyro1-32 [75,6,11]
+I'm a Soldier named Soldier1-33 [42,3,5]
+I'm a Scout named Scout1-34 [28,1,6]
+I'm a Pyro named Pyro1-35 [71,6,12]
+I'm a Soldier named Soldier1-36 [43,4,9]
+I'm a Soldier named Soldier1-37 [48,5,5]
+I'm a Soldier named Soldier1-38 [30,7,9]
+I'm a Scout named Scout1-39 [28,1,7]
+I'm a Scout named Scout1-40 [25,1,4]
+I'm a Soldier named Soldier1-41 [45,5,6]
+I'm a Scout named Scout1-42 [22,3,4]
+I'm a Scout named Scout1-43 [22,4,7]
+I'm a Pyro named Pyro1-44 [77,6,10]
+I'm a Soldier named Soldier1-45 [42,6,9]
+I'm a Scout named Scout1-46 [27,4,6]
+I'm a Pyro named Pyro1-47 [57,5,10]
+I'm a Pyro named Pyro1-48 [74,8,11]
+I'm a Scout named Scout1-49 [23,5,4]
+I'm a Scout named Scout1-50 [25,1,7]
+I'm a Scout named Scout1-51 [22,5,6]
+I'm a Scout named Scout1-52 [25,1,4]
+I'm a Scout named Scout1-53 [28,4,7]
+I'm a Pyro named Pyro1-54 [73,9,12]
+I'm a Scout named Scout1-55 [21,3,7]
+I'm a Pyro named Pyro1-56 [81,7,10]
+I'm a Pyro named Pyro1-57 [73,6,10]
+I'm a Soldier named Soldier1-58 [46,4,8]
+I'm a Pyro named Pyro1-59 [57,9,10]
+I'm a Pyro named Pyro1-60 [88,6,12]
+I'm a Soldier named Soldier1-61 [39,4,9]
+I'm a Soldier named Soldier1-62 [40,3,9]
+I'm a Pyro named Pyro1-63 [68,7,12]
+I'm a Scout named Scout1-64 [22,1,4]
+I'm a Scout named Scout1-65 [20,1,7]
+I'm a Soldier named Soldier1-66 [49,3,6]
+I'm a Scout named Scout1-67 [30,3,6]
+I'm a Pyro named Pyro1-68 [80,5,10]
+I'm a Scout named Scout1-69 [25,2,6]
+I'm a Soldier named Soldier1-70 [31,4,6]
+I'm a Scout named Scout1-71 [20,1,3]
+I'm a Soldier named Soldier1-72 [40,5,10]
+I'm a Pyro named Pyro1-73 [87,9,11]
+I'm a Soldier named Soldier1-74 [39,7,9]
+I'm a Scout named Scout1-75 [28,5,5]
+I'm a Pyro named Pyro1-76 [82,6,12]
+I'm a Scout named Scout1-77 [30,3,7]
+I'm a Scout named Scout1-78 [28,5,4]
+I'm a Soldier named Soldier1-79 [38,5,5]
+I'm a Pyro named Pyro1-80 [51,6,11]
+I'm a Pyro named Pyro1-81 [81,8,11]
+I'm a Scout named Scout1-82 [22,5,7]
+I'm a Soldier named Soldier1-83 [31,5,5]
+I'm a Pyro named Pyro1-84 [65,5,10]
+I'm a Pyro named Pyro1-85 [88,6,12]
+I'm a Soldier named Soldier1-86 [40,3,9]
+I'm a Soldier named Soldier1-87 [42,6,5]
+I'm a Soldier named Soldier1-88 [41,6,10]
+I'm a Pyro named Pyro1-89 [78,8,10]
+I'm a Scout named Scout1-90 [29,1,4]
+I'm a Soldier named Soldier1-91 [35,4,10]
+I'm a Scout named Scout1-92 [24,4,7]
+I'm a Soldier named Soldier1-93 [30,6,6]
+I'm a Pyro named Pyro1-94 [81,6,10]
+I'm a Pyro named Pyro1-95 [57,6,10]
+I'm a Soldier named Soldier1-96 [46,5,9]
+I'm a Soldier named Soldier1-97 [43,7,7]
+I'm a Soldier named Soldier1-98 [30,6,9]
+I'm a Soldier named Soldier1-99 [50,4,7]
+Team 2:
+I'm a Soldier named Soldier2-00 [45,3,9]
+I'm a Soldier named Soldier2-01 [42,7,8]
+I'm a Scout named Scout2-02 [20,5,3]
+I'm a Pyro named Pyro2-03 [82,9,12]
+I'm a Scout named Scout2-04 [24,4,5]
+I'm a Scout named Scout2-05 [26,5,5]
+I'm a Soldier named Soldier2-06 [34,5,6]
+I'm a Scout named Scout2-07 [30,3,4]
+I'm a Scout named Scout2-08 [25,4,4]
+I'm a Scout named Scout2-09 [30,2,6]
+I'm a Scout named Scout2-10 [28,5,3]
+I'm a Pyro named Pyro2-11 [53,8,11]
+I'm a Pyro named Pyro2-12 [81,7,10]
+I'm a Pyro named Pyro2-13 [60,8,11]
+I'm a Soldier named Soldier2-14 [37,5,9]
+I'm a Scout named Scout2-15 [22,4,4]
+I'm a Soldier named Soldier2-16 [49,3,6]
+I'm a Soldier named Soldier2-17 [48,7,10]
+I'm a Pyro named Pyro2-18 [79,5,11]
+I'm a Pyro named Pyro2-19 [78,5,12]
+I'm a Scout named Scout2-20 [27,5,6]
+I'm a Soldier named Soldier2-21 [32,7,8]
+I'm a Pyro named Pyro2-22 [62,9,11]
+I'm a Scout named Scout2-23 [22,1,3]
+I'm a Scout named Scout2-24 [25,1,7]
+I'm a Scout named Scout2-25 [28,5,3]
+I'm a Soldier named Soldier2-26 [44,5,6]
+I'm a Scout named Scout2-27 [27,5,6]
+I'm a Soldier named Soldier2-28 [36,7,8]
+I'm a Scout named Scout2-29 [28,1,3]
+I'm a Soldier named Soldier2-30 [32,7,5]
+I'm a Scout named Scout2-31 [21,5,7]
+I'm a Soldier named Soldier2-32 [41,3,10]
+I'm a Soldier named Soldier2-33 [47,4,5]
+I'm a Soldier named Soldier2-34 [47,7,5]
+I'm a Scout named Scout2-35 [23,2,6]
+I'm a Pyro named Pyro2-36 [75,9,12]
+I'm a Soldier named Soldier2-37 [35,3,8]
+I'm a Scout named Scout2-38 [27,4,7]
+I'm a Pyro named Pyro2-39 [69,5,11]
+I'm a Pyro named Pyro2-40 [66,8,12]
+I'm a Pyro named Pyro2-41 [63,8,11]
+I'm a Pyro named Pyro2-42 [79,6,10]
+I'm a Scout named Scout2-43 [22,2,7]
+I'm a Scout named Scout2-44 [28,3,3]
+I'm a Soldier named Soldier2-45 [38,4,7]
+I'm a Scout named Scout2-46 [29,4,3]
+I'm a Pyro named Pyro2-47 [54,9,12]
+I'm a Scout named Scout2-48 [21,3,4]
+I'm a Pyro named Pyro2-49 [83,6,12]
+I'm a Soldier named Soldier2-50 [46,7,10]
+I'm a Scout named Scout2-51 [24,2,4]
+I'm a Scout named Scout2-52 [30,4,7]
+I'm a Soldier named Soldier2-53 [42,5,5]
+I'm a Soldier named Soldier2-54 [44,5,9]
+I'm a Scout named Scout2-55 [29,2,7]
+I'm a Scout named Scout2-56 [25,2,4]
+I'm a Soldier named Soldier2-57 [32,3,10]
+I'm a Soldier named Soldier2-58 [43,3,10]
+I'm a Soldier named Soldier2-59 [35,5,10]
+I'm a Soldier named Soldier2-60 [47,3,9]
+I'm a Soldier named Soldier2-61 [46,5,7]
+I'm a Scout named Scout2-62 [21,3,6]
+I'm a Pyro named Pyro2-63 [54,9,11]
+I'm a Scout named Scout2-64 [23,5,7]
+I'm a Soldier named Soldier2-65 [34,7,10]
+I'm a Soldier named Soldier2-66 [46,7,8]
+I'm a Scout named Scout2-67 [30,4,3]
+I'm a Pyro named Pyro2-68 [76,6,10]
+I'm a Scout named Scout2-69 [25,2,5]
+I'm a Scout named Scout2-70 [28,4,5]
+I'm a Scout named Scout2-71 [29,1,3]
+I'm a Scout named Scout2-72 [27,2,5]
+I'm a Scout named Scout2-73 [23,3,3]
+I'm a Pyro named Pyro2-74 [90,8,12]
+I'm a Scout named Scout2-75 [30,5,7]
+I'm a Scout named Scout2-76 [27,3,7]
+I'm a Soldier named Soldier2-77 [47,6,6]
+I'm a Pyro named Pyro2-78 [71,9,10]
+I'm a Pyro named Pyro2-79 [63,8,10]
+I'm a Soldier named Soldier2-80 [45,7,9]
+I'm a Pyro named Pyro2-81 [51,6,11]
+I'm a Pyro named Pyro2-82 [70,5,10]
+I'm a Pyro named Pyro2-83 [76,7,12]
+I'm a Scout named Scout2-84 [24,4,7]
+I'm a Pyro named Pyro2-85 [82,6,12]
+I'm a Soldier named Soldier2-86 [32,3,6]
+I'm a Scout named Scout2-87 [23,4,3]
+I'm a Soldier named Soldier2-88 [45,4,8]
+I'm a Scout named Scout2-89 [26,1,7]
+I'm a Soldier named Soldier2-90 [45,5,8]
+I'm a Pyro named Pyro2-91 [63,5,10]
+I'm a Soldier named Soldier2-92 [45,3,6]
+I'm a Scout named Scout2-93 [24,4,7]
+I'm a Soldier named Soldier2-94 [41,3,10]
+I'm a Scout named Scout2-95 [24,1,3]
+I'm a Pyro named Pyro2-96 [58,5,12]
+I'm a Scout named Scout2-97 [21,2,5]
+I'm a Pyro named Pyro2-98 [70,9,12]
+I'm a Scout named Scout2-99 [20,2,6]
+
+Scout2-70 was killed by Soldier1-31
+Scout2-99 was killed by Pyro1-76
+Scout2-25 was killed by Scout1-75
+Scout2-73 was killed by Pyro1-44
+Scout1-25 was killed by Pyro2-79
+Scout2-44 was killed by Pyro1-85
+Scout2-62 was killed by Pyro1-56
+Scout1-67 was killed by Pyro2-22
+Scout1-08 was killed by Scout2-97
+Scout2-20 was killed by Pyro1-81
+Scout2-48 was killed by Soldier1-23
+Scout1-42 was killed by Scout2-89
+Scout1-77 was killed by Scout2-35
+Scout2-72 was killed by Pyro1-44
+Soldier1-79 was killed by Pyro2-03
+Scout1-15 was killed by Soldier2-17
+Scout1-55 was killed by Scout2-93
+Pyro2-63 was killed by Pyro1-03
+Scout1-90 was killed by Pyro2-42
+Scout2-76 was killed by Scout1-78
+Scout2-31 was killed by Scout1-39
+Scout2-02 was killed by Scout1-53
+Soldier2-65 was killed by Soldier1-24
+Soldier1-98 was killed by Scout2-55
+Scout1-50 was killed by Pyro2-11
+Soldier1-00 was killed by Pyro2-78
+Soldier1-93 was killed by Soldier2-50
+Soldier1-87 was killed by Soldier2-01
+Scout2-46 was killed by Pyro1-60
+Scout2-95 was killed by Pyro1-32
+Soldier2-77 was killed by Pyro1-76
+Soldier1-88 was killed by Soldier2-01
+Scout1-64 was killed by Pyro2-78
+Scout1-43 was killed by Pyro2-79
+Scout1-51 was killed by Pyro2-83
+Soldier1-01 was killed by Soldier2-94
+Scout2-56 was killed by Soldier1-70
+Soldier1-24 was killed by Pyro2-68
+Scout2-51 was killed by Pyro1-81
+Scout2-07 was killed by Pyro1-03
+Scout2-35 was killed by Scout1-22
+Scout2-27 was killed by Soldier1-74
+Scout2-97 was killed by Scout1-69
+Scout2-43 was killed by Pyro1-04
+Pyro1-57 was killed by Soldier2-06
+Soldier2-28 was killed by Scout1-34
+Scout2-05 was killed by Pyro1-48
+Soldier2-30 was killed by Pyro1-28
+Scout1-27 was killed by Soldier2-01
+Scout1-39 was killed by Pyro2-39
+Scout1-40 was killed by Pyro2-42
+Soldier2-60 was killed by Pyro1-04
+Scout1-34 was killed by Soldier2-94
+Scout1-71 was killed by Pyro2-68
+Scout1-65 was killed by Pyro2-79
+Soldier1-72 was killed by Scout2-10
+Soldier2-45 was killed by Pyro1-06
+Scout2-87 was killed by Pyro1-81
+Scout2-67 was killed by Scout1-92
+Scout2-93 was killed by Soldier1-91
+Scout2-89 was killed by Soldier1-74
+Scout2-15 was killed by Pyro1-32
+Scout2-69 was killed by Pyro1-12
+Soldier2-86 was killed by Soldier1-18
+Scout2-08 was killed by Pyro1-12
+Soldier1-23 was killed by Soldier2-17
+Scout2-29 was killed by Pyro1-11
+Scout2-71 was killed by Pyro1-63
+Scout1-92 was killed by Scout2-04
+Pyro2-13 was killed by Pyro1-19
+Scout2-75 was killed by Pyro1-81
+Soldier2-26 was killed by Soldier1-74
+Soldier2-59 was killed by Pyro1-02
+Soldier1-31 was killed by Pyro2-83
+Soldier2-21 was killed by Pyro1-63
+Scout1-69 was killed by Soldier2-32
+Soldier1-97 was killed by Soldier2-90
+Pyro1-12 was killed by Soldier2-57
+Scout1-52 was killed by Soldier2-01
+Soldier1-45 was killed by Pyro2-47
+Pyro1-03 was killed by Soldier2-00
+Scout1-10 was killed by Pyro2-03
+Scout1-22 was killed by Soldier2-01
+Scout2-23 was killed by Scout1-82
+Soldier2-01 was killed by Pyro1-35
+Scout2-10 was killed by Soldier1-38
+Soldier2-37 was killed by Pyro1-02
+Pyro2-79 was killed by Pyro1-68
+Soldier2-14 was killed by Soldier1-38
+Soldier2-54 was killed by Pyro1-28
+Soldier1-83 was killed by Pyro2-98
+Scout1-21 was killed by Soldier2-17
+Soldier2-33 was killed by Soldier1-38
+Soldier1-18 was killed by Soldier2-50
+Soldier2-58 was killed by Pyro1-47
+Scout1-07 was killed by Pyro2-40
+Soldier1-16 was killed by Scout2-38
+Soldier2-88 was killed by Soldier1-99
+Soldier1-86 was killed by Pyro2-40
+Scout1-82 was killed by Scout2-52
+Soldier2-61 was killed by Pyro1-20
+Soldier1-62 was killed by Pyro2-83
+Pyro1-59 was killed by Scout2-52
+Soldier2-16 was killed by Pyro1-30
+Scout2-24 was killed by Pyro1-06
+Scout1-46 was killed by Soldier2-57
+Pyro1-11 was killed by Soldier2-00
+Pyro2-11 was killed by Pyro1-54
+Scout2-52 was killed by Pyro1-44
+Soldier2-80 was killed by Pyro1-84
+Pyro2-47 was killed by Pyro1-35
+Soldier2-50 was killed by Pyro1-30
+Pyro2-18 was killed by Pyro1-81
+Soldier2-17 was killed by Pyro1-29
+Scout1-49 was killed by Pyro2-68
+Pyro1-80 was killed by Pyro2-19
+Scout2-64 was killed by Soldier1-91
+Soldier2-94 was killed by Pyro1-35
+Soldier2-32 was killed by Soldier1-74
+Scout2-84 was killed by Pyro1-95
+Soldier2-57 was killed by Pyro1-56
+Soldier2-00 was killed by Soldier1-13
+Soldier2-90 was killed by Pyro1-47
+Soldier1-41 was killed by Pyro2-39
+Soldier2-06 was killed by Pyro1-63
+Soldier2-53 was killed by Scout1-14
+Pyro2-36 was killed by Pyro1-30
+Soldier1-05 was killed by Pyro2-19
+Scout2-09 was killed by Pyro1-44
+Pyro2-98 was killed by Pyro1-30
+Pyro2-83 was killed by Pyro1-68
+Pyro2-40 was killed by Pyro1-20
+Soldier1-74 was killed by Pyro2-41
+Scout2-55 was killed by Pyro1-48
+Pyro2-96 was killed by Pyro1-54
+Soldier1-91 was killed by Pyro2-22
+Scout2-38 was killed by Pyro1-06
+Soldier2-66 was killed by Pyro1-60
+Pyro2-81 was killed by Scout1-14
+Pyro2-41 was killed by Soldier1-70
+Pyro1-44 was killed by Pyro2-91
+Pyro2-74 was killed by Pyro1-29
+Pyro2-91 was killed by Pyro1-95
+Soldier1-38 was killed by Pyro2-68
+Pyro2-82 was killed by Soldier1-66
+Scout2-04 was killed by Pyro1-60
+Soldier1-09 was killed by Pyro2-42
+Pyro2-22 was killed by Pyro1-68
+Soldier1-33 was killed by Pyro2-12
+Scout1-75 was killed by Pyro2-39
+Soldier1-99 was killed by Pyro2-68
+Pyro1-54 was killed by Pyro2-19
+Pyro1-56 was killed by Soldier2-34
+Soldier2-92 was killed by Pyro1-48
+Scout1-53 was killed by Pyro2-03
+Pyro2-49 was killed by Pyro1-30
+Soldier1-70 was killed by Pyro2-19
+Soldier2-34 was killed by Pyro1-85
+Scout1-14 was killed by Pyro2-68
+Pyro2-39 was killed by Pyro1-60
+Pyro1-81 was killed by Pyro2-68
+Pyro2-42 was killed by Pyro1-60
+Pyro2-68 was killed by Pyro1-20
+Soldier1-26 was killed by Pyro2-03
+Pyro1-29 was killed by Pyro2-12
+Pyro2-85 was killed by Pyro1-73
+Pyro1-60 was killed by Pyro2-19
+Scout1-78 was killed by Pyro2-03
+Pyro1-04 was killed by Pyro2-19
+Pyro1-30 was killed by Pyro2-78
+Soldier1-66 was killed by Pyro2-78
+Pyro2-19 was killed by Pyro1-17
+Pyro1-84 was killed by Pyro2-78
+Pyro2-12 was killed by Pyro1-17
+Pyro1-02 was killed by Pyro2-78
+Pyro2-78 was killed by Soldier1-37
+Pyro2-03 was killed by Pyro1-94
+Team 1 wins!
+Team 1: Soldier1-00[-8]  Soldier1-01[0]  Pyro1-02[0]  Pyro1-03[-6]  Pyro1-04[-8]  Soldier1-05[-9]  Pyro1-06[19]  Scout1-07[-11]  Scout1-08[0]  Soldier1-09[-2]  Scout1-10[-11]  Pyro1-11[-4]  Pyro1-12[-4]  Soldier1-13[4]  Scout1-14[-1]  Scout1-15[-5]  Soldier1-16[0]  Pyro1-17[15]  Soldier1-18[-6]  Pyro1-19[12]  Pyro1-20[31]  Scout1-21[0]  Scout1-22[-6]  Soldier1-23[-2]  Soldier1-24[-1]  Scout1-25[-4]  Soldier1-26[-3]  Scout1-27[-3]  Pyro1-28[18]  Pyro1-29[-2]  Pyro1-30[-7]  Soldier1-31[0]  Pyro1-32[54]  Soldier1-33[0]  Scout1-34[-9]  Pyro1-35[39]  Soldier1-36[7]  Soldier1-37[23]  Soldier1-38[-5]  Scout1-39[0]  Scout1-40[-9]  Soldier1-41[-2]  Scout1-42[-1]  Scout1-43[-7]  Pyro1-44[-4]  Soldier1-45[-7]  Scout1-46[-1]  Pyro1-47[15]  Pyro1-48[31]  Scout1-49[-1]  Scout1-50[-10]  Scout1-51[-7]  Scout1-52[-6]  Scout1-53[-9]  Pyro1-54[-3]  Scout1-55[-6]  Pyro1-56[-2]  Pyro1-57[-3]  Soldier1-58[10]  Pyro1-59[-1]  Pyro1-60[-7]  Soldier1-61[4]  Soldier1-62[-6]  Pyro1-63[18]  Scout1-64[-7]  Scout1-65[-2]  Soldier1-66[-1]  Scout1-67[-3]  Pyro1-68[16]  Scout1-69[-1]  Soldier1-70[-8]  Scout1-71[-8]  Soldier1-72[0]  Pyro1-73[25]  Soldier1-74[-5]  Scout1-75[-9]  Pyro1-76[24]  Scout1-77[-1]  Scout1-78[-11]  Soldier1-79[-3]  Pyro1-80[-9]  Pyro1-81[-3]  Scout1-82[-2]  Soldier1-83[-10]  Pyro1-84[0]  Pyro1-85[1]  Soldier1-86[0]  Soldier1-87[-3]  Soldier1-88[-6]  Pyro1-89[38]  Scout1-90[-3]  Soldier1-91[0]  Scout1-92[-3]  Soldier1-93[-3]  Pyro1-94[13]  Pyro1-95[30]  Soldier1-96[43]  Soldier1-97[-1]  Soldier1-98[-3]  Soldier1-99[-6]  
+Team 2: Soldier2-00[-3]  Soldier2-01[-3]  Scout2-02[-6]  Pyro2-03[0]  Scout2-04[-5]  Scout2-05[-10]  Soldier2-06[-1]  Scout2-07[-6]  Scout2-08[-8]  Scout2-09[-7]  Scout2-10[-6]  Pyro2-11[-1]  Pyro2-12[-2]  Pyro2-13[-7]  Soldier2-14[0]  Scout2-15[-5]  Soldier2-16[-7]  Soldier2-17[-7]  Pyro2-18[-7]  Pyro2-19[-6]  Scout2-20[-1]  Soldier2-21[-2]  Pyro2-22[-1]  Scout2-23[-2]  Scout2-24[-7]  Scout2-25[-1]  Soldier2-26[-6]  Scout2-27[-7]  Soldier2-28[-1]  Scout2-29[-4]  Soldier2-30[-2]  Scout2-31[-5]  Soldier2-32[0]  Soldier2-33[-6]  Soldier2-34[-6]  Scout2-35[-1]  Pyro2-36[-2]  Soldier2-37[-1]  Scout2-38[-8]  Pyro2-39[-1]  Pyro2-40[-2]  Pyro2-41[-2]  Pyro2-42[-3]  Scout2-43[-5]  Scout2-44[0]  Soldier2-45[-6]  Scout2-46[-1]  Pyro2-47[-9]  Scout2-48[-1]  Pyro2-49[-8]  Soldier2-50[-6]  Scout2-51[-5]  Scout2-52[-3]  Soldier2-53[-1]  Soldier2-54[-4]  Scout2-55[-6]  Scout2-56[-1]  Soldier2-57[-5]  Soldier2-58[-3]  Soldier2-59[-1]  Soldier2-60[0]  Soldier2-61[-10]  Scout2-62[-1]  Pyro2-63[-2]  Scout2-64[-1]  Soldier2-65[-1]  Soldier2-66[-6]  Scout2-67[0]  Pyro2-68[-5]  Scout2-69[-3]  Scout2-70[-1]  Scout2-71[0]  Scout2-72[-4]  Scout2-73[-1]  Pyro2-74[-4]  Scout2-75[-6]  Scout2-76[-2]  Soldier2-77[-7]  Pyro2-78[-3]  Pyro2-79[-5]  Soldier2-80[-9]  Pyro2-81[-3]  Pyro2-82[-3]  Pyro2-83[-8]  Scout2-84[-1]  Pyro2-85[-4]  Soldier2-86[-2]  Scout2-87[-8]  Soldier2-88[-3]  Scout2-89[-4]  Soldier2-90[0]  Pyro2-91[-4]  Soldier2-92[-1]  Scout2-93[-2]  Soldier2-94[-5]  Scout2-95[-3]  Pyro2-96[-1]  Scout2-97[0]  Pyro2-98[-8]  Scout2-99[-4]  

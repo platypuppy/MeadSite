@@ -1,0 +1,233 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>STL Algorithms: Implementation</title>
+</head>
+
+<body>  
+
+Sample implementations
+<p>
+
+<table cellpadding=0>
+<tr valign="top">
+<td>
+<a href="STLAlgorithmsImplementation.html#COPY">copy</a><br>
+<a href="STLAlgorithmsImplementation.html#COUNT">count</a> (non-compliant)<br>
+<a href="STLAlgorithmsImplementation.html#COUNT2">count</a> (compliant)<br>
+<a href="STLAlgorithmsImplementation.html#COUNT_IF">count_if</a> (non-compliant)<br>
+<a href="STLAlgorithmsImplementation.html#COUNT_IF2">count_if</a> (compliant)<br>
+<a href="STLAlgorithmsImplementation.html#FIND">find</a><br>
+</td>
+<td width=50>
+&nbsp;
+</td>
+<td>
+<a href="STLAlgorithmsImplementation.html#FOR_EACH">for_each</a><br>
+<a href="STLAlgorithmsImplementation.html#GENERATE">generate</a><br>
+<a href="STLAlgorithmsImplementation.html#REPLACE">replace</a><br>
+<a href="STLAlgorithmsImplementation.html#REMOVE_COPY">remove_copy</a><br>
+<a href="STLAlgorithmsImplementation.html#REMOVE_COPY_IF">remove_copy_if</a><br>
+<a href="STLAlgorithmsImplementation.html#TRANSFORM">transform</a><br>
+</td>
+</tr></table>
+
+<p>
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Digipen
+{
+<b>#ifdef</b> COMPLIANT
+<a name="COUNT2"></a>
+  <b>template</b>&lt;<b>typename</b> Input, <b>typename</b> T&gt; 
+  <b>typename</b> iterator_traits&lt;Input&gt;::difference_type 
+  count(Input first, Input last, <b>const</b> T&amp; val)
+  {
+    <b>typename</b> iterator_traits&lt;Input&gt;::difference_type result = 0;
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (*first == val)
+        ++result;
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+<a name="COUNT_IF2"></a>
+  <b>template</b>&lt;<b>typename</b> Input, <b>typename</b> Pred&gt; 
+  <b>typename</b> iterator_traits&lt;Input&gt;::difference_type 
+  count_if(Input first, Input last, Pred pred)
+  {
+    <b>typename</b> iterator_traits&lt;Input&gt;::difference_type result = 0;
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (pred(*first))
+        ++result;
+     ++first;
+    }
+    <b>return</b> result;
+  }
+<b>#else</b>
+
+<a name="COUNT"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> T&gt; 
+  <b>int</b> count(InputIt first, InputIt last, <b>const</b> T&amp; val)
+  {
+    <b>int</b> result = 0;
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (*first == val)
+        ++result;
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+<a name="COUNT_IF"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Pred&gt; 
+  <b>int</b> count_if(InputIt first, InputIt last, Pred pred)
+  {
+    <b>int</b> result = 0;
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (pred(*first))
+        ++result;
+      ++first;
+    }
+    <b>return</b> result;
+  }
+<b>#endif</b>
+
+<a name="FIND"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> T&gt; 
+  InputIt find(InputIt first, InputIt last, <b>const</b> T&amp; val)
+  {
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (*first == val)
+        <b>return</b> first;
+      ++first;
+    }
+    <b>return</b> first;
+  }
+
+<a name="REPLACE"></a>
+  <b>template</b>&lt;<b>typename</b> ForwardIt, <b>typename</b> T&gt; 
+  <b>void</b> replace(ForwardIt first, ForwardIt last, <b>const</b> T&amp; val, <b>const</b> T&amp; new_val)
+  {
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (*first == val)
+        *first = new_val;
+      ++first;
+    }
+  }
+
+<a name="COPY"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt&gt; 
+  OutputIt copy(InputIt first, InputIt last, OutputIt result)
+  {
+    <b>while</b> (first != last) 
+    {
+      *result = *first;
+      ++result;
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+<a name="COPY_IF"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt, <b>typename</b> Pred&gt; 
+  OutputIt copy_if(InputIt first, InputIt last, OutputIt result, Pred pred)
+  {
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (pred(*first))
+      {
+        *result = *first;
+        ++result;
+      }
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+<a name="FOR_EACH"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Op&gt; 
+  Op for_each(InputIt first, InputIt last, Op op)
+  {
+    <b>while</b> (first != last)
+    {
+      op(*first);
+      ++first;
+    }
+    <b>return</b> op;
+  }
+
+<a name="TRANSFORM"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt, <b>typename</b> Op&gt; 
+  OutputIt transform(InputIt first, InputIt last, OutputIt result, Op op)
+  {
+    <b>while</b> (first != last) 
+    {
+      *result = op(*first);
+      ++result;
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+<a name="GENERATE"></a>
+  <b>template</b>&lt;<b>typename</b> ForwardIt, <b>typename</b> Gen&gt; 
+  <b>void</b> generate(ForwardIt first, ForwardIt last, Gen gen)
+  {
+    <b>while</b> (first != last) 
+    {
+      *first = gen();
+      ++first;
+    }
+  }
+
+<a name="REMOVE_COPY"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt, <b>typename</b> T&gt; 
+  OutputIt remove_copy(InputIt first, InputIt last, OutputIt result, <b>const</b> T&amp; val)
+  {
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (!(*first == val))
+      {
+        *result = *first;
+        ++result;
+      }
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+<a name="REMOVE_COPY_IF"></a>
+  <b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt, <b>typename</b> Pred&gt; 
+  OutputIt remove_copy_if(InputIt first, InputIt last, OutputIt result, Pred pred)
+  {
+    <b>while</b> (first != last) 
+    {
+      <b>if</b> (!pred(*first))
+      {
+        *result = *first;
+        ++result;
+      }
+      ++first;
+    }
+    <b>return</b> result;
+  }
+
+}</code></pre>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+

@@ -1,0 +1,123 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #12</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 12</h1>
+(Automation)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #12
+</p>
+
+<ol>
+
+<li><b>Automation</b>
+<p>
+This sessions shows how automation works by "controlling" Microsoft Word from 
+an application. The demo simply opens up a Word document and saves it under a different name. The code
+is pretty self-explanatory. I never got the Excel example to run correctly, so there's nothing on that
+page currently.
+
+<p class="technote">
+To really understand what is going on you need to understand <a href="http://en.wikipedia.org/wiki/Object_Linking_and_Embedding">
+Object Linking and Embedding (OLE)</a>, <a href="http://en.wikipedia.org/wiki/OLE_Automation">OLE Automation</a>
+and The <a href="http://en.wikipedia.org/wiki/Component_Object_Model">Component Object Model (COM)</a>.
+They are very complex technologies with a steep learning curve. Fortunately, Turbo C++ and
+RAD Studio have created a very nice environment in which to handle all of the tedious complexities.
+You will never want to program these technologies "by hand" again!
+</p>
+
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/12/automation1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/12/automation1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/12/automation1/Automation1.zip">(Turbo C++ only)</a> <font color="red">(See notes about XE 3 at the bottom
+	of the page)</font> - to build it yourself. The .zip file
+	includes a /docs folder with some Microsoft Word documents to play with.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/12/automation1/auto2000.chm">Help File</a> This is a Windows help file from Microsoft. It shows
+	several examples. Unfortunately, all of the examples are in Visual Basic, as that was the main reason
+	for automation. This file was originally downloaded from <a href="http://support.microsoft.com/kb/260410">here</a>.
+</ul>
+
+
+<blockquote>
+<p>
+<img border=0 src="automation1/Automation1.png">
+<p>
+</blockquote>
+
+<b>Note:</b> I'm not sure why yet, but this project doesn't work with the latest IDE. I get an Internal Compiler Error. I think it
+has something to do with the version of the automation objects that I'm using. It does work with Turbo C++ 2006, though, so you can still
+experiment with it, if you want. I also believe this only works with Microsoft Word 2000, since the API is
+different between versions. Since it's pretty old, it probably has limited use today, but the code to perform
+the automation would be similar.
+<br><br>
+Finally, this project wasn't a theoretical one just for demonstration purposes. In 2006, when I switched over
+to Linux full-time, I had hundreds of Word documents from previous years. I didn't want to lose them, nor
+did I want to manually convert each one to a format that I could handle in Linux (with OpenOffice, at the
+time.) So, I wrote this project to "automate" (hence the term <i>automation</i>) the conversion process.
+I actually wrote it in Delphi, as it was probably the most powerful native Windows language ever created. I just
+"ported" it to C++ for this session.
+<br><br>
+So, just exactly what was I converting? I was converting many older version of Word documents into the
+Word 2000 version, which could be handled in OpenOffice just fine. The process simply opens a Word document
+and then saves it as a newer version. I could have done nearly anything with the automation, such as changing
+fonts, or adding/removing text, styles, tables, etc. I just wanted the version upgraded.  OpenOffice wasn't able to handle some
+of the older Word formats, so this solved that problem nicely!
+<br><br>
+ I was able to compile most of this project with RAD Studio XE 3, but a few lines didn't compile. It's likely
+ due to the old version of Word and/or Windows 7. I don't own any other version of Word (and it's unlikely I ever will) 
+ so I won't be able to update this.
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

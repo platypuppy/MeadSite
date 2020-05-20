@@ -1,0 +1,160 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Data sizes</title>
+
+<style>
+</style>
+
+
+</head>
+
+
+
+<body>  
+<center><h1>64-bit Differences</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Sample Code
+</p>
+
+<b><tt>sizes.c</tt></b>
+<p>
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf   */</font>
+<font color="990099">#include &lt;<a href="stdint.h.html">stdint.h</a>&gt; /* <a href="stdint.h.html#INTPTRT">intptr_t</a> */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i = 123;       <font color="#003399"><i>/* sizeof(int) depends on architecture */</i></font>
+  <b>int</b> *p1 = &amp;i;      <font color="#003399"><i>/* works on all architectures          */</i></font>
+  
+  intptr_t j = 456;  <font color="#003399"><i>/* intptr_t is a pointer-sized int */</i></font>
+  intptr_t *p2 = &amp;j; <font color="#003399"><i>/* works on all architectures      */</i></font>
+  
+  i = (<b>int</b>)p1;       <font color="#003399"><i>/* Probably works on 32-bit, <b>may not</b> on 64-bit  */</i></font>
+  j = (intptr_t)p2;  <font color="#003399"><i>/* Will work on either architecture             */</i></font>
+
+  printf(<font color="#9933CC">&quot;sizeof(char)        : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>char</b>));
+  printf(<font color="#9933CC">&quot;sizeof(short)       : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>short</b>));
+  printf(<font color="#9933CC">&quot;sizeof(int)         : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>int</b>));
+  printf(<font color="#9933CC">&quot;sizeof(long)        : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>long</b>));
+  printf(<font color="#9933CC">&quot;sizeof(long long)   : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>long</b> <b>long</b>));<font color="#003399"><i> /* C99 */</i></font>
+  printf(<font color="#9933CC">&quot;sizeof(float)       : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>float</b>));
+  printf(<font color="#9933CC">&quot;sizeof(double)      : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>double</b>));
+  printf(<font color="#9933CC">&quot;sizeof(long double) : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>long</b> <b>double</b>));
+  printf(<font color="#9933CC">&quot;sizeof(void*)       : %lu&#92;n&quot;</font>, <b>sizeof</b>(<b>void</b>*));
+  printf(<font color="#9933CC">&quot;sizeof(size_t)      : %lu&#92;n&quot;</font>, <b>sizeof</b>(size_t));
+  printf(<font color="#9933CC">&quot;sizeof(intptr_t)    : %lu&#92;n&quot;</font>, <b>sizeof</b>(intptr_t));
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+
+<b>Outputs:</b>
+<p>
+
+
+32-bit Microsoft/GCC/Cygwin
+<blockquote><pre>
+sizeof(char)        : 1
+sizeof(short)       : 2
+sizeof(int)         : 4
+sizeof(long)        : 4
+sizeof(long long)   : 8
+sizeof(float)       : 4
+sizeof(double)      : 8
+sizeof(long double) : 12
+sizeof(void*)       : 4
+sizeof(size_t)      : 4
+sizeof(intptr_t)    : 4
+</pre></blockquote>
+
+32-bit Clang
+<blockquote><pre>
+sizeof(char)        : 1
+sizeof(short)       : 2
+sizeof(int)         : 4
+sizeof(long)        : 4
+sizeof(long long)   : 8
+sizeof(float)       : 4
+sizeof(double)      : 8
+sizeof(long double) : 16
+sizeof(void*)       : 4
+sizeof(size_t)      : 4
+sizeof(intptr_t)    : 4
+</pre></blockquote>
+
+64-bit Microsoft (LLP64)
+<blockquote><pre>
+sizeof(char)        : 1
+sizeof(short)       : 2
+sizeof(int)         : 4
+sizeof(long)        : 4
+sizeof(long long)   : 8
+sizeof(float)       : 4
+sizeof(double)      : 8
+sizeof(long double) : 8
+sizeof(void*)       : 8
+sizeof(size_t)      : 8
+sizeof(intptr_t)    : 8
+</pre></blockquote>
+
+64-bit MinGW (LLP64)
+<blockquote><pre>
+sizeof(char)        : 1
+sizeof(short)       : 2
+sizeof(int)         : 4
+sizeof(long)        : 4
+sizeof(long long)   : 8
+sizeof(float)       : 4
+sizeof(double)      : 8
+sizeof(long double) : 16
+sizeof(void*)       : 8
+sizeof(size_t)      : 8
+sizeof(intptr_t)    : 8
+</pre></blockquote>
+
+64-bit Clang/GCC (Linux/Mac LP64)
+<blockquote><pre>
+sizeof(char)        : 1
+sizeof(short)       : 2
+sizeof(int)         : 4
+sizeof(long)        : 8
+sizeof(long long)   : 8
+sizeof(float)       : 4
+sizeof(double)      : 8
+sizeof(long double) : 16
+sizeof(void*)       : 8
+sizeof(size_t)      : 8
+sizeof(intptr_t)    : 8
+</pre></blockquote>
+
+<b>Warning:</b>
+<blockquote><pre>
+sizes.c:12:7: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast] 
+</pre></blockquote>
+  
+
+</body>
+</html>
+
+<tt><b></b></tt>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

@@ -1,0 +1,80 @@
+Team 1:
+I'm a Scout named Moe [20,1,5]
+I'm a Soldier named Larry [30,2,3]
+I'm a Pyro named Curly [40,3,2]
+Team 2:
+I'm a Scout named Fred [20,1,5]
+I'm a Soldier named Barney [30,2,3]
+I'm a Pyro named Wilma [40,3,2]
+
+Wilma is attacking Curly (health=37)
+Fred is attacking Moe (health=19)
+Wilma is attacking Curly (health=35)
+Barney is attacking Moe (health=17)
+Barney is attacking Curly (health=33)
+Fred is attacking Moe (health=12)
+Fred is attacking Curly (health=28)
+Wilma is attacking Larry (health=27)
+Fred is attacking Larry (health=26)
+Fred is attacking Curly (health=27)
+Moe is attacking Fred (health=19)
+Larry is attacking Barney (health=27)
+Moe is attacking Barney (health=22)
+Larry is attacking Barney (health=20)
+Moe is attacking Wilma (health=35)
+Moe is attacking Barney (health=15)
+Barney is attacking Curly (health=24)
+Curly is attacking Barney (health=13)
+Barney is attacking Curly (health=21)
+Barney is attacking Moe (health=10)
+Larry is attacking Fred (health=17)
+Barney is attacking Larry (health=23)
+Wilma is attacking Larry (health=20)
+Larry is attacking Wilma (health=32)
+Larry is attacking Barney (health=11)
+Barney is attacking Larry (health=17)
+Fred is attacking Moe (health=5)
+Fred is attacking Larry (health=16)
+Larry is attacking Barney (health=8)
+Wilma is attacking Curly (health=18)
+Wilma is attacking Moe (health=3)
+Fred is attacking Larry (health=11)
+Moe is attacking Barney (health=7)
+Barney is attacking Curly (health=16)
+Moe is attacking Fred (health=12)
+Moe is attacking Barney (health=2)
+Curly is attacking Barney (health=0)
+Barney was killed by Curly
+Moe is attacking Wilma (health=27)
+Larry is attacking Fred (health=9)
+Moe is attacking Fred (health=4)
+Larry is attacking Wilma (health=24)
+Curly is attacking Wilma (health=22)
+Curly is attacking Wilma (health=20)
+Curly is attacking Wilma (health=18)
+Wilma is attacking Moe (health=0)
+Moe was killed by Wilma
+Curly is attacking Wilma (health=16)
+Fred is attacking Larry (health=6)
+Curly is attacking Wilma (health=13)
+Larry is attacking Wilma (health=10)
+Fred is attacking Larry (health=1)
+Wilma is attacking Curly (health=13)
+Wilma is attacking Curly (health=11)
+Wilma is attacking Curly (health=9)
+Larry is attacking Wilma (health=7)
+Wilma is attacking Curly (health=6)
+Curly is attacking Wilma (health=5)
+Fred is attacking Larry (health=-4)
+Larry was killed by Fred
+Wilma is attacking Curly (health=4)
+Curly is attacking Fred (health=1)
+Curly is attacking Wilma (health=2)
+Wilma is attacking Curly (health=2)
+Curly is attacking Wilma (health=-1)
+Wilma was killed by Curly
+Fred is attacking Curly (health=-3)
+Curly was killed by Fred
+Team 2 wins!
+Team 1: Moe[0]  Larry[-4]  Curly[-3]  
+Team 2: Fred[1]  Barney[0]  Wilma[-1]  

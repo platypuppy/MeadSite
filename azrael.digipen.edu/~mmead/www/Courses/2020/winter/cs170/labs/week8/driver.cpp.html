@@ -1,0 +1,175 @@
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi, rand</font>
+<font color="990099">#include &quot;List.h&quot;</font>
+<font color="990099">#include &quot;PRNG.h&quot;</font>
+
+<b>int</b> RandomInt(<b>unsigned</b> low, <b>unsigned</b> high)
+{
+  <b>return</b> <b>static_cast</b>&lt;<b>int</b>&gt;(CS170::Utils::rand() % (high - low + 1) + low);
+}
+
+<b>void</b> Swap(<b>int</b> &amp;a, <b>int</b> &amp;b)
+{
+  <b>int</b> temp = a;
+  a = b;
+  b = temp;
+}
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>unsigned</b> count)
+{
+  <b>for</b> (<b>unsigned</b> <b>int</b> i = 0; i &lt; count; i++)
+  {
+    <b>int</b> r = RandomInt(i, count - 1);
+    Swap(array[i], array[r]);
+  }
+}
+
+<b>void</b> TestInsert2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestInsert2 ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    list1.Insert(numbers[i]);
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes) &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting &quot;</font> &lt;&lt; std::setw(2) &lt;&lt; numbers[i] &lt;&lt; <font color="#9933CC">&quot;: &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestDuplicates(<b>const</b> <b>int</b> numbers1[], <b>int</b> size1)
+{
+  CS170::ListLab::List list1;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; size1; i++)
+    list1.Insert(numbers1[i]);
+ 
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates removed: &quot;</font>;
+  std::cout &lt;&lt; list1.RemoveDuplicates() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestDuplicates1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates1 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 12, 24, 12, 12, 27, 34, 12, 12, 88, 27, 59, 12, 27, 12};
+  <b>int</b> size1 = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1));
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates2 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 12, 12, 12, 12, 12, 12, 12};
+  <b>int</b> size1 = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1));
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates3(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates3 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 17, 5, 10, 4, 11, 9, 8};
+  <b>int</b> size1 = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1));
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates4(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates4 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {5};
+  <b>int</b> size1 = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1));
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates5(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates5 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {5, 1};
+  <b>int</b> size1 = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1));
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates6(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates6 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {5, 1};
+
+  TestDuplicates(numbers1, 0);
+}
+
+<b>void</b> TestDuplicates7(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates7 ********************&#92;n&quot;</font>;
+
+  CS170::ListLab::List list1;
+  <b>const</b> <b>int</b> size = 10000;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list1.Insert(RandomInt(1, 9));
+ 
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &#92;n&quot;</font>;
+  <font color="#003399"><i>//std::cout &lt;&lt; list1 &lt;&lt; std::endl;</i></font>
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates removed: &quot;</font>;
+  std::cout &lt;&lt; list1.RemoveDuplicates() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <font color="#003399"><i>//TestInsert2(); </i></font>
+
+  size_t test_num = 0;
+  <b>if</b> (argc &gt; 1)
+    test_num = <b>static_cast</b>&lt;size_t&gt;(std::atoi(argv[1]));
+
+  <b>typedef</b> <b>void</b> (*Test)(<b>void</b>);
+  Test Tests[] = {
+                    TestDuplicates1, <font color="#003399"><i>// Test 1</i></font>
+                    TestDuplicates2, <font color="#003399"><i>// Test 2</i></font>
+                    TestDuplicates3, <font color="#003399"><i>// Test 3</i></font>
+                    TestDuplicates4, <font color="#003399"><i>// Test 4</i></font>
+                    TestDuplicates5, <font color="#003399"><i>// Test 5</i></font>
+                    TestDuplicates6, <font color="#003399"><i>// Test 6</i></font>
+                    TestDuplicates7, <font color="#003399"><i>// Test 7</i></font>
+                 };
+
+  size_t num = <b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests);
+  <b>if</b> (test_num == 0)
+  {
+    <b>for</b> (size_t i = 0; i &lt; num; i++)
+      Tests[i]();
+  }
+  <b>else</b> <b>if</b> (test_num &gt; 0 &amp;&amp; test_num &lt;= num)
+    Tests[test_num - 1]();
+  
+  <b>return</b> 0;
+}
+</code></pre>
+

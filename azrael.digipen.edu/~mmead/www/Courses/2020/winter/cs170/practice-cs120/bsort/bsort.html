@@ -1,0 +1,194 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Bubble Sort</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+</head>
+
+<body>  
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="BUBBLE">
+Bubble Sort (Exchange sort)
+</a>
+</p>
+
+The bubble sort algorithm is a very simple algorithm to understand and to implement. It works great
+on small lists but is very inefficient on large lists. 
+<p>
+
+A bubble sort works by comparing adjacent items and exchanging them if they are out of order. The meaning of
+"out of order" depends on how you want the items sorted: smallest to largest, or largest to smallest.
+<p>
+For example, suppose we have this list of numbers that we want to order from smallest to largest:
+
+<blockquote><pre>
+<big>7  4  1  3  8  6  9  5  2</big>
+</pre></blockquote>
+
+The final list should look like this:
+
+<blockquote><pre>
+<big>1  2  3  4  5  6  7  8  9</big>
+</pre></blockquote>
+
+Using the bubble sort algorithm, we simply compare two items at a time, swapping them if the left
+one is larger than the right one. (We want them ordered from small to large). Starting with the first
+two items:
+
+<blockquote><pre>
+<big><b>7  4</b>  1  3  8  6  9  5  2</big>
+<big>^  ^</big>
+</pre></blockquote>
+
+7 is larger than 4, so we swap them:
+
+<blockquote><pre>
+<big>4  7  1  3  8  6  9  5  2</big>
+<big>^  ^</big>
+</pre></blockquote>
+
+Next, we compare items 2 and 3 and find that 7 &gt; 1
+
+<blockquote><pre>
+<big>4  <b>7  1</b>  3  8  6  9  5  2</big>
+<big>   ^  ^</big>
+</pre></blockquote>
+
+so we swap them:
+
+<blockquote><pre>
+<big>4  1  7  3  8  6  9  5  2</big>
+<big>   ^  ^</big>
+</pre></blockquote>
+
+You can see that 7 &gt; 3 as well:
+
+<blockquote><pre>
+<big>4  1  <b>7  3</b>  8  6  9  5  2</big>
+<big>      ^  ^</big>
+</pre></blockquote>
+
+so we swap them:
+
+<blockquote><pre>
+<big>4  1  3  7  8  6  9  5  2</big>
+<big>      ^  ^</big>
+</pre></blockquote>
+
+Now, we compare items 4 and 5. 7 is not greater than 8, so we don't swap. 
+<blockquote><pre>
+<big>4  1  3  <b>7  8</b>  6  9  5  2</big>
+<big>         ^  ^</big>
+</pre></blockquote>
+
+
+We simply move to the next two items, which are items 5 and 6:
+
+<blockquote><pre>
+<big>4  1  3  7  <b>8  6</b>  9  5  2</big>
+<big>            ^  ^</big>
+</pre></blockquote>
+
+8 &gt; 6, so we swap:
+
+<blockquote><pre>
+<big>4  1  3  7  6  8  9  5  2</big>
+<big>            ^  ^</big>
+</pre></blockquote>
+
+
+Continuing in this way we will compare 8 and 9 (no swap), 9 and 5 (swap), and then 9 and 2 (swap).
+The list now looks like this:
+
+<blockquote><pre>
+<big>4  1  3  7  6  8  5  2  9</big>
+</pre></blockquote>
+
+More importantly, after this pass through the list, the value <b>9</b> is now in its proper position.
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+If we print out the list after each iteration of the outer loop we will see this (assume that
+<i>i</i> is the outer loop variable):
+<p>
+This was the starting array:
+
+<blockquote><pre>
+<big>7  4  1  3  8  6  9  5  2</big>
+</pre></blockquote>
+
+And this is the array after each iteration of <i>i</i>:
+
+<font color="#003399"><i></i></font>
+
+<blockquote><pre><big>
+4  1  3  7  6  8  5  2  9       <font color="blue"><i>i == 0</i></font>
+1  3  4  6  7  5  2  8  9       <font color="blue"><i>i == 1</i></font>
+1  3  4  6  5  2  7  8  9       <font color="blue"><i>i == 2</i></font>
+1  3  4  5  2  6  7  8  9       <font color="blue"><i>i == 3</i></font>
+1  3  4  2  5  6  7  8  9       <font color="blue"><i>i == 4</i></font>
+1  3  2  4  5  6  7  8  9       <font color="blue"><i>i == 5</i></font>
+1  2  3  4  5  6  7  8  9       <font color="blue"><i>i == 6</i></font>
+1  2  3  4  5  6  7  8  9       <font color="blue"><i>i == 7</i></font>
+1  2  3  4  5  6  7  8  9       <font color="blue"><i>i == 8</i></font>
+</big></pre></blockquote>
+
+You'll notice that the list was actually sorted after the 7th (i == 6) iteration, so we have
+a few unecessary iterations. You could add a little code to break out of the loop early, if
+you detect that the list is sorted. All you have to do is keep track of how many swaps you
+did for each iteration of the outer loop. If the number of swaps is 0, that means that all
+of the items are in their proper position.
+<p>
+This very small <i>optimization</i> can have a dramatic impact on efficiency when the lists are
+already sorted or almost sorted.
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

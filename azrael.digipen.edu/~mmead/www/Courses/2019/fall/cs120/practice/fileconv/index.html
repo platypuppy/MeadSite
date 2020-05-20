@@ -1,0 +1,218 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>fileconv</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(fileconv.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>For this practice assignment, you will write two functions. The first function will convert a
+  Windows-style text file to a Unix-style text file, and the second will convert a Unix-style text file to a 
+  Windows-style text file. The only difference between the two text file formats is how the end-of-line
+  (EOL) is stored. Windows uses two characters: a carriage return (CR, ASCII 0x0D) followed by a
+  line feed (LF, ASCII 0x0A). Unix-like operatings systems (e.g. Linux, Mac OS X, iOS, Android, etc.)
+  use only a single LF character. 
+  <p>
+  <p class="technote">
+  <b>Historical footnote:</b> Prior to the release of Mac OS X (circa 2000), the Mac used neither of
+  these schemes. Instead, it used a single carriage return (CR, ASCII Ox0D).
+  </p>
+  Given a text file that contains these 4 lines of text:
+<blockquote><pre>
+Roses are red.
+Violets are blue.
+Some poems rhyme.
+But not this one.
+</pre></blockquote>
+
+Looking at the ASCII bytes in hexadecimal:
+<p>
+Windows with CR-LF (<tt>0D 0A</tt>):
+<blockquote><pre>
+roses-CRLF.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E <font color="blue">0D 0A</font>   Roses are red...
+000010 56 69 6F 6C 65 74 73 20  61 72 65 20 62 6C 75 65   Violets are blue
+000020 2E <font color="blue">0D 0A</font> 53 6F 6D 65 20  70 6F 65 6D 73 20 72 68   ...Some poems rh
+000030 79 6D 65 2E <font color="blue">0D 0A</font> 42 75  74 20 6E 6F 74 20 74 68   yme...But not th
+000040 69 73 20 6F 6E 65 2E <font color="blue">0D  0A</font>                        is one...
+</pre></blockquote>
+
+Unix with LF only (<tt>0A</tt>):
+<blockquote><pre>
+roses-LF.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E <font color="blue">0A</font> 56   Roses are red..V
+000010 69 6F 6C 65 74 73 20 61  72 65 20 62 6C 75 65 2E   iolets are blue.
+000020 <font color="blue">0A</font> 53 6F 6D 65 20 70 6F  65 6D 73 20 72 68 79 6D   .Some poems rhym
+000030 65 2E <font color="blue">0A</font> 42 75 74 20 6E  6F 74 20 74 68 69 73 20   e..But not this 
+000040 6F 6E 65 2E <font color="blue">0A</font>                                     one..
+</pre></blockquote>
+
+
+
+
+  The prototypes for the functions look like this:
+<blockquote><pre>
+<b>enum</b> FILE_ERR win2unix(<b>const</b> <b>char</b> *finput, <b>const</b> <b>char</b> *foutput);
+<b>enum</b> FILE_ERR unix2win(<b>const</b> <b>char</b> *finput, <b>const</b> <b>char</b> *foutput);
+</pre></blockquote>
+
+Here is a header file that you should use (<a href="fileconv.h">fileconv.h</a>):
+<pre class="sourcecode"><code><font color="990099">#define CR 0x0D /* Carriage Return */</font>
+<font color="990099">#define LF 0x0A /* Line Feed       */</font>
+
+<font color="#003399"><i>/* Possible file errors */</i></font>
+<b>enum</b> FILE_ERR {feNONE, feINPUT, feOUTPUT};
+
+<b>enum</b> FILE_ERR win2unix(<b>const</b> <b>char</b> *finput, <b>const</b> <b>char</b> *foutput);
+<b>enum</b> FILE_ERR unix2win(<b>const</b> <b>char</b> *finput, <b>const</b> <b>char</b> *foutput);
+</code></pre>
+
+  Here is a driver file: (<tt>main.c</tt>, <a href="main.c.html">HTML</a>
+    <a href="main.c">Text</a>) You must specify the file names on the command line, along
+    with the target format:
+<blockquote><pre>
+fileconv unix some_winfile.txt some_unixfile.txt
+</pre></blockquote>
+This will convert the Windows file <tt>some_winfile.txt</tt> to a Unix file 
+named <tt>some_unixfile.txt</tt></a>
+  <p>
+If you don't provide 3 arguments to the program, it will display this message:
+<blockquote><pre>
+Usage:  fileconv target input_file output_file
+
+where:  target is either win or unix (the resulting format)
+        input_file is the file to convert
+        output_file is the newly converted file
+
+Example: (Converts a Windows text file to a Unix text file)
+  fileconv unix file-with-CRLF.txt file-with-LF.txt
+</pre></blockquote>
+<p>
+The name of your implementation file should be <tt>fileconv.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c fileconv.c -o fileconv
+</pre></blockquote>
+
+<p>
+<font color="blue">Approximate number of lines of code for each function: 15.</font>
+
+</ol>
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ol>
+  <li><b>Hint:</b> You need to open both files in binary mode. Otherwise, the EOL characters
+    will be translated and <b>you don't want that</b>.</li>
+    <p>
+  <li>Just read in one character at a time 
+    (using <a href="http://www.cplusplus.com/reference/cstdio/fgetc/">fgetc</a>) 
+    and write one character 
+    (using <a href="http://www.cplusplus.com/reference/cstdio/fputc/">fputc</a>).
+
+    <!--
+    (using <a href="http://www.cplusplus.com/reference/cstdio/fputc/">fputc</a>,
+    <a href="http://www.cplusplus.com/reference/cstdio/putc/">putc</a>, or 
+    <a href="http://www.cplusplus.com/reference/cstdio/putchar/">putchar</a>). 
+  -->
+    Any other way will just complicate things for you.</li>
+    <p>
+  <li>The return value of the functions are as such:
+    <ul>
+      <li><tt>feNONE</tt> - No errors; the file was successfully converted.</li>
+      <li><tt>feINPUT</tt> - You could not open the input file for reading.</li>
+      <li><tt>feOUTPUT</tt> - You could not open the output file for writing.</li>
+      <!--
+    -->
+    </ul>      
+    <p>
+    We are going to assume that, if you can open the file, then you can do the conversion.
+    It is possible to get a read error during the conversion, but you don't have to
+    handle that at this point.
+    <p>
+  <li>You may notice that the code for functions will be almost identical. You may make a 
+    helper function that does all of the work of both functions and just call this function
+    from the two functions (win2unix and unix2win) you must create. 
+    You may want to make two separate functions first to make sure you can do it, then combine them. 
+    It's up to you.</li>
+    <p>
+  <li>You don't have to worry about being given binary files instead of text files. Also, you
+    don't have to worry about being given invalid text files. What this means is, if you're
+    given a Windows text file and are told to convert to Windows, your code may convert it
+    incorrectly. For this simple practice, just assume you are given the correct text files to
+    convert.
+  </li>
+  <p>
+  <li>Here are some files to test your code with. The filenames tell you which kind of line endings
+  are used. They will likely all look the same in the browser. You will have to download them to
+  your computer to preserve the line endings.
+  <blockquote>
+    <ul>
+      <li><a href="roses-LF.txt">roses-LF.txt</a></li>
+      <li><a href="roses-CRLF.txt">roses-CRLF.txt</a></li>
+      <p>
+      <li><a href="decl-LF.txt">decl-LF.txt</a></li>
+      <li><a href="decl-CRLF.txt">decl-CRLF.txt</a></li>
+  </blockquote>
+</li>
+<p>
+  <li>There are a couple of Unix utilities (available in Cygwin) called <tt><b>dos2unix</b></tt> and
+    <tt><b>unix2dos</b></tt> which convert files from Windows to Unix and Unix to Windows, 
+    respectively. (These were around when DOS was the primary operating system from Microsoft, hence
+    the name <tt><b>dos2unix</b></tt>.) You can use these to test any files. Your output should
+    match the output from these programs. For example, to convert a Windows (DOS) file to Unix:
+<blockquote><pre>
+dos2unix <b>-n</b> input.txt output.txt
+</pre></blockquote>
+<b>Be sure you have the <tt><b>-n</b></tt> or you'll overwrite your original files!</b> 
+The <tt><b>unix2dos</b></tt> program works similarly. Type:
+<blockquote><pre>
+man dos2unix
+</pre></blockquote>
+To get detailed information on how to use the two programs.
+<p>
+ <li>When using <b>diff</b> on your output, <b>DO NOT use <tt>--strip-trailing-cr</tt></b>. This time,
+ you <b>REALLY</b> want to see different line endings between Windows and Unix files. (You don't want
+ to ignore those differences.)
+
+</ol>
+
+<p>
+  <hr width="95%">
+<p>
+
+<br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

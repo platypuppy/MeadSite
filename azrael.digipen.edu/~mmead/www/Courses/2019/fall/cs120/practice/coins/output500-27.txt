@@ -1,0 +1,71 @@
+You can make $5.00 with 16 quarters  9 dimes  2 nickels  
+You can make $5.00 with 17 quarters  5 dimes  5 nickels  
+You can make $5.00 with 18 quarters  1 dime  8 nickels  
+You can make $5.00 with 19 quarters  1 dime  2 nickels  5 pennies  
+You can make $5.00 with 1 half  13 quarters  12 dimes  1 nickel  
+You can make $5.00 with 1 half  14 quarters  8 dimes  4 nickels  
+You can make $5.00 with 1 half  15 quarters  4 dimes  7 nickels  
+You can make $5.00 with 1 half  16 quarters  10 nickels  
+You can make $5.00 with 1 half  16 quarters  4 dimes  1 nickel  5 pennies  
+You can make $5.00 with 1 half  17 quarters  4 nickels  5 pennies  
+You can make $5.00 with 2 halves  10 quarters  15 dimes  
+You can make $5.00 with 2 halves  11 quarters  11 dimes  3 nickels  
+You can make $5.00 with 2 halves  12 quarters  7 dimes  6 nickels  
+You can make $5.00 with 2 halves  13 quarters  3 dimes  9 nickels  
+You can make $5.00 with 2 halves  13 quarters  7 dimes  5 pennies  
+You can make $5.00 with 2 halves  14 quarters  3 dimes  3 nickels  5 pennies  
+You can make $5.00 with 3 halves  8 quarters  14 dimes  2 nickels  
+You can make $5.00 with 3 halves  9 quarters  10 dimes  5 nickels  
+You can make $5.00 with 3 halves  10 quarters  6 dimes  8 nickels  
+You can make $5.00 with 3 halves  11 quarters  2 dimes  11 nickels  
+You can make $5.00 with 3 halves  11 quarters  6 dimes  2 nickels  5 pennies  
+You can make $5.00 with 3 halves  12 quarters  2 dimes  5 nickels  5 pennies  
+You can make $5.00 with 4 halves  5 quarters  17 dimes  1 nickel  
+You can make $5.00 with 4 halves  6 quarters  13 dimes  4 nickels  
+You can make $5.00 with 4 halves  7 quarters  9 dimes  7 nickels  
+You can make $5.00 with 4 halves  8 quarters  5 dimes  10 nickels  
+You can make $5.00 with 4 halves  8 quarters  9 dimes  1 nickel  5 pennies  
+You can make $5.00 with 4 halves  9 quarters  1 dime  13 nickels  
+You can make $5.00 with 4 halves  9 quarters  5 dimes  4 nickels  5 pennies  
+You can make $5.00 with 4 halves  10 quarters  1 dime  7 nickels  5 pennies  
+You can make $5.00 with 4 halves  11 quarters  1 dime  1 nickel  10 pennies  
+You can make $5.00 with 5 halves  2 quarters  20 dimes  
+You can make $5.00 with 5 halves  3 quarters  16 dimes  3 nickels  
+You can make $5.00 with 5 halves  4 quarters  12 dimes  6 nickels  
+You can make $5.00 with 5 halves  5 quarters  8 dimes  9 nickels  
+You can make $5.00 with 5 halves  5 quarters  12 dimes  5 pennies  
+You can make $5.00 with 5 halves  6 quarters  4 dimes  12 nickels  
+You can make $5.00 with 5 halves  6 quarters  8 dimes  3 nickels  5 pennies  
+You can make $5.00 with 5 halves  7 quarters  15 nickels  
+You can make $5.00 with 5 halves  7 quarters  4 dimes  6 nickels  5 pennies  
+You can make $5.00 with 5 halves  8 quarters  9 nickels  5 pennies  
+You can make $5.00 with 5 halves  8 quarters  4 dimes  10 pennies  
+You can make $5.00 with 5 halves  9 quarters  3 nickels  10 pennies  
+You can make $5.00 with 6 halves  19 dimes  2 nickels  
+You can make $5.00 with 6 halves  1 quarter  15 dimes  5 nickels  
+You can make $5.00 with 6 halves  2 quarters  11 dimes  8 nickels  
+You can make $5.00 with 6 halves  3 quarters  7 dimes  11 nickels  
+You can make $5.00 with 6 halves  3 quarters  11 dimes  2 nickels  5 pennies  
+You can make $5.00 with 6 halves  4 quarters  3 dimes  14 nickels  
+You can make $5.00 with 6 halves  4 quarters  7 dimes  5 nickels  5 pennies  
+You can make $5.00 with 6 halves  5 quarters  3 dimes  8 nickels  5 pennies  
+You can make $5.00 with 6 halves  6 quarters  3 dimes  2 nickels  10 pennies  
+You can make $5.00 with 7 halves  10 dimes  10 nickels  
+You can make $5.00 with 7 halves  14 dimes  1 nickel  5 pennies  
+You can make $5.00 with 7 halves  1 quarter  6 dimes  13 nickels  
+You can make $5.00 with 7 halves  1 quarter  10 dimes  4 nickels  5 pennies  
+You can make $5.00 with 7 halves  2 quarters  2 dimes  16 nickels  
+You can make $5.00 with 7 halves  2 quarters  6 dimes  7 nickels  5 pennies  
+You can make $5.00 with 7 halves  3 quarters  2 dimes  10 nickels  5 pennies  
+You can make $5.00 with 7 halves  3 quarters  6 dimes  1 nickel  10 pennies  
+You can make $5.00 with 7 halves  4 quarters  2 dimes  4 nickels  10 pennies  
+You can make $5.00 with 8 halves  1 dime  18 nickels  
+You can make $5.00 with 8 halves  5 dimes  9 nickels  5 pennies  
+You can make $5.00 with 8 halves  9 dimes  10 pennies  
+You can make $5.00 with 8 halves  1 quarter  1 dime  12 nickels  5 pennies  
+You can make $5.00 with 8 halves  1 quarter  5 dimes  3 nickels  10 pennies  
+You can make $5.00 with 8 halves  2 quarters  1 dime  6 nickels  10 pennies  
+You can make $5.00 with 8 halves  3 quarters  1 dime  15 pennies  
+You can make $5.00 with 9 halves  8 nickels  10 pennies  
+You can make $5.00 with 9 halves  1 quarter  2 nickels  15 pennies  
+There are 70 possible ways to make $5.00 from 27 coins.

@@ -1,0 +1,159 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>lock_test.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;   /* printf                  */</font>
+<font color="990099">#include &lt;stdlib.h&gt;  /* atoi                    */</font>
+<font color="990099">#include &lt;pthread.h&gt; /* thread create/join/exit */</font>
+
+<b>int</b> Loops;
+<b>int</b> Count;
+<b>int</b> turn;
+<b>int</b> ready[2] = {0, 0};
+<b>int</b> lock;
+
+<b>typedef</b> <b>void</b> (*LockFn)(<b>int</b>);
+
+LockFn LOCK;
+LockFn UNLOCK;
+
+<b>void</b> Lock0(<b>int</b> me)
+{
+}
+
+<b>void</b> Unlock0(<b>int</b> me)
+{
+}
+
+<b>void</b> Lock1(<b>int</b> me)
+{
+  <b>while</b> (lock == 1)
+    <b>continue</b>;
+    
+  lock = 1;
+}
+
+<b>void</b> Unlock1(<b>int</b> me)
+{
+  lock = 0;
+}
+
+<b>void</b> Lock2(<b>int</b> me)
+{
+  <b>while</b> (turn != me)
+    <b>continue</b>;
+}
+
+<b>void</b> Unlock2(<b>int</b> me)
+{
+  turn = 1 - me;
+}
+
+<b>void</b> Lock3(<b>int</b> me)
+{
+  ready[me] = 1;
+  <b>while</b> (ready[1 - me])
+    <b>continue</b>;
+}
+
+<b>void</b> Unlock3(<b>int</b> me)
+{
+  ready[me] = 0;
+}
+
+<b>void</b> Lock4(<b>int</b> me)
+{
+  <b>int</b> you = 1 - me;
+  turn = you;
+  ready[me] = 1;
+  <b>while</b> (ready[you] &amp;&amp; (turn == (you)))
+    <b>continue</b>;
+}
+
+<b>void</b> Unlock4(<b>int</b> me)
+{
+  ready[me] = 0;
+}
+
+<b>void</b> Lock5(<b>int</b> me)
+{
+  <b>int</b> you = 1 - me;
+  turn = you;
+  ready[me] = 1;
+  __sync_synchronize();
+  <b>while</b> (ready[you] &amp;&amp; (turn == you))
+    <b>continue</b>;
+}
+
+<b>void</b> Unlock5(<b>int</b> me)
+{
+  ready[me] = 0;
+}
+
+<b>void</b> *Increment(<b>void</b> *p)
+{
+  <b>int</b> i, id = *(<b>int</b> *)p;
+  
+  <b>for</b> (i = 0; i &lt; Loops; i++)
+  {
+    LOCK(id);
+      Count++;
+    UNLOCK(id);
+  }
+  <b>return</b> 0;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  pthread_t thread_id0, thread_id1;
+  <b>int</b> id0 = 0, id1 = 1;
+  
+  LockFn locks[] = {Lock0, Lock1, Lock2, Lock3, Lock4, Lock5};
+  LockFn unlocks[] = {Unlock0, Unlock1, Unlock2, Unlock3, Unlock4, Unlock5};
+  
+  LOCK = locks[0];
+  UNLOCK = unlocks[0];
+  
+  <b>if</b> (argc &lt; 3)
+  {
+    printf(<font color="#9933CC">&quot;Usage: %s &lt;LOCK_FN&gt; &lt;ITERATIONS&gt;\n&quot;</font>, argv[0]);
+    printf(<font color="#9933CC">&quot;\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;where: LOCK_FN is the lock function to test:\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;         0 - No locking at all\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;         1 - Uses a single global lock variable, no mutual exclusion.\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;         2 - Taking turns, no shared memory, mutual exclusion but non-bounded waiting.\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;         3 - Yielding to other thread. Causes a race condition and will likely hang.\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;         4 - Peterson's Solution. Fails on modern architectures.\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;         5 - Peterson's Solution with a memory barrier. Works but the barrier isn't implemented in all systems.\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;       ITERATIONS is the number of times each thread will increment the shared variable x 1,000,000\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;Example:  lock_test 5 10 \n&quot;</font>);
+    printf(<font color="#9933CC">&quot;          runs Lock5/Unlock5 test with 10,000,000 iterations.\n&quot;</font>);
+    <b>return</b> -1;
+  }
+  
+  LOCK = locks[atoi(argv[1])];
+  UNLOCK = unlocks[atoi(argv[1])];
+  Loops = 1000 * 1000 * atoi(argv[2]);
+  
+  pthread_create(&amp;thread_id0, 0, Increment, &amp;id0);
+  pthread_create(&amp;thread_id1, 0, Increment, &amp;id1);
+    
+  pthread_join(thread_id0, 0);
+  pthread_join(thread_id1, 0);
+    
+  printf(<font color="#9933CC">&quot;------------------\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Count = %i\n&quot;</font>, Count);
+  
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+</body>
+</html>

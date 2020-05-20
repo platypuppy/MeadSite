@@ -1,0 +1,24 @@
+
+
+#include <stdio.h> 
+
+
+
+int main(void)
+{
+  int miles = 26;    
+  int yards = 385;   
+  double kilometers; 
+
+  
+  int a = 8/4; 
+  
+
+    
+  kilometers = (miles + (double)yards / 1760) * 1.609;
+
+    
+  printf("A marathon /*is*/ %f kilometers\n", kilometers);
+
+  return 0;
+}

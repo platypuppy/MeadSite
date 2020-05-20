@@ -1,0 +1,54 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="#003399"><i>/*
+See this:
+https://sourceforge.net/p/mingw-w64/wiki2/gnu%20printf/
+*/</i></font>
+
+<font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+<font color="#003399"><i>/*-9,223,372,036,854,775,808*/</i></font>
+<b>char</b> *commatize(<b>long</b> <b>long</b> number);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>long</b> <b>long</b> nums[] = {
+                 0, 1, 12, 123, 1234, 12345, 123456, 1234567, 12345678,
+                 123456789, 1234567890, 12345678901, 123456789012,
+                 1234567890123, 12345678901234, 123456789012345,
+                 1234567890123456, 12345678901234567, 123456789012345678,
+                 1234567890123456789, 9223372036854775807,
+                 -0, -1, -12, -123, -1234, -12345, -123456, -1234567, -12345678,
+                 -123456789, -1234567890, -12345678901, -123456789012,
+                 -1234567890123, -12345678901234, -123456789012345,
+                 -1234567890123456, -12345678901234567, -123456789012345678,
+                 -1234567890123456789, -9223372036854775807
+                };
+
+  <b>int</b> size = <b>sizeof</b>(nums) / <b>sizeof</b>(*nums);
+  <b>int</b> i;
+
+  <b>for</b> (i = 0; i &lt; size; i++)
+      <font color="#003399"><i>/* Need this to print 64-bit ints on Windows with MinGW */</i></font>
+    <font color="990099">#ifdef __MINGW64__</font>
+      __mingw_printf(<font color="#9933CC">&quot;%20lli|%26s|&#92;n&quot;</font>, nums[i], commatize(nums[i]));
+    <font color="990099">#else</font>
+      printf(<font color="#9933CC">&quot;%20lli|%26s|&#92;n&quot;</font>, nums[i], commatize(nums[i]));
+    <font color="990099">#endif</font>
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

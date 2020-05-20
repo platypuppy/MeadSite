@@ -1,0 +1,140 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Freeing Linked Lists</title>
+</head>
+
+<body>  
+<center><h1>Freeing Linked Lists</h1></center>
+
+Using this code to walk the list and free each node along the way:
+<p>
+
+<blockquote><pre>
+<b>while</b> (pList)
+{
+  <b>struct</b> NODE *temp = pList-&gt;next;
+  free(pList);
+  pList = temp;
+}
+</pre></blockquote>
+
+First iteration:
+
+<p>
+<blockquote><pre>
+temp = pList-&gt;next;
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-1.gif">
+</blockquote>
+</blockquote>
+<p>
+
+<p>
+<blockquote><pre>
+free(pList);
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-2.gif">
+</blockquote>
+</blockquote>
+<p>
+
+<p>
+<blockquote><pre>
+pList = temp;
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-3.gif">
+</blockquote>
+</blockquote>
+<p>
+
+Second iteration:
+
+<p>
+<blockquote><pre>
+temp = pList-&gt;next;
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-4.gif">
+</blockquote>
+</blockquote>
+<p>
+
+<p>
+<blockquote><pre>
+free(pList);
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-5.gif">
+</blockquote>
+</blockquote>
+<p>
+
+<p>
+<blockquote><pre>
+pList = temp;
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-6.gif">
+</blockquote>
+</blockquote>
+<p>
+
+Third iteration:
+
+<p>
+<blockquote><pre>
+temp = pList-&gt;next;
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-6a.gif">
+</blockquote>
+</blockquote>
+<p>
+
+<p>
+<blockquote><pre>
+free(pList);
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-7.gif">
+</blockquote>
+</blockquote>
+<p>
+
+<p>
+<blockquote><pre>
+pList = temp;
+</pre>
+<p>
+<blockquote>
+<img src="LinkedLists-Free-8.gif">
+</blockquote>
+</blockquote>
+<p>
+
+End of while loop.
+
+
+
+
+</body>
+</html>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>

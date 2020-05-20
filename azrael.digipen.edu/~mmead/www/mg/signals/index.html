@@ -1,0 +1,1166 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to Signals - An Introduction</title>
+
+</head>
+
+<body>  
+
+<center><h1>
+Mead's Guide to Signals on Linux (and Unix-like Systems)
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Overview
+</p>
+
+<b>Question:</b> What is a signal?
+<p>
+<b>Answer:</b> Simply put, it's a way in which a process can be notified of an event. Usually,
+one process notifies (signals) another process, although a process can signal itself. We can
+say that one process <i>sends a signal</i> to another process or say that one process 
+<i>signals</i> another process. They mean the same thing.
+<p>
+<hr width="95%">
+<p>
+
+We've all seen these notifications before. In a desktop environment, if some event has occurred
+that the user should be aware of, a message may appear on the screen. Usually, this is in the lower
+right corner of the desktop. A notification may happen because a file has finished downloading, 
+a user has appeared on Skype, or maybe a security update is available for installation.
+<p>
+There are many kinds of signals that can be sent to a process. If you've ever run a program
+from the command line, you may have used a signal to terminate it. Maybe you are writing 
+a program and you accidentally cause an infinite loop. The way you terminate it is by pressing
+<tt>Ctrl-C</tt>. This key combination is actually sending a signal (<tt>SIGINT</tt>, meaning <i>interrupt</i>) 
+to the runaway process. The default behavior when a process receives a <tt>SIGINT</tt> 
+signal is to terminate.
+<p>
+To see a list of all signals, type <tt>kill -l</tt> at the command line. (That's a lowercase 'L')
+
+<blockquote><pre>
+ 1) SIGHUP         2) SIGINT         3) SIGQUIT        4) SIGILL         5) SIGTRAP
+ 6) SIGABRT        7) SIGBUS         8) SIGFPE         9) SIGKILL       10) SIGUSR1
+11) SIGSEGV       12) SIGUSR2       13) SIGPIPE       14) SIGALRM       15) SIGTERM
+16) SIGSTKFLT     17) SIGCHLD       18) SIGCONT       19) SIGSTOP       20) SIGTSTP
+21) SIGTTIN       22) SIGTTOU       23) SIGURG        24) SIGXCPU       25) SIGXFSZ
+26) SIGVTALRM     27) SIGPROF       28) SIGWINCH      29) SIGIO         30) SIGPWR
+31) SIGSYS        34) SIGRTMIN      35) SIGRTMIN+1    36) SIGRTMIN+2    37) SIGRTMIN+3
+38) SIGRTMIN+4    39) SIGRTMIN+5    40) SIGRTMIN+6    41) SIGRTMIN+7    42) SIGRTMIN+8
+43) SIGRTMIN+9    44) SIGRTMIN+10   45) SIGRTMIN+11   46) SIGRTMIN+12   47) SIGRTMIN+13
+48) SIGRTMIN+14   49) SIGRTMIN+15   50) SIGRTMAX-14   51) SIGRTMAX-13   52) SIGRTMAX-12
+53) SIGRTMAX-11   54) SIGRTMAX-10   55) SIGRTMAX-9    56) SIGRTMAX-8    57) SIGRTMAX-7
+58) SIGRTMAX-6    59) SIGRTMAX-5    60) SIGRTMAX-4    61) SIGRTMAX-3    62) SIGRTMAX-2
+63) SIGRTMAX-1    64) SIGRTMAX      
+</pre></blockquote>
+
+For a more detailed list of signals and their meanings, look
+<a href="https://en.wikipedia.org/wiki/Unix_signal#POSIX_signals">here</a>. Here are some of the
+more common signals:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr><th>Name</th><th>Default behavior</th><th>Meaning</th></tr>
+
+<!-- **************************** -->
+<tr valign="top">
+<td>
+<tt>SIGINT</tt>
+</td>
+<td align="center">
+Terminate
+</td>
+<td>
+Interrupt
+</td>
+</tr>
+
+<!-- **************************** -->
+<tr valign="top">
+<td>
+<tt>SIGTERM</tt>
+</td>
+<td align="center">
+Terminate
+</td>
+<td>
+Terminate
+</td>
+</tr>
+
+<!-- **************************** -->
+<tr valign="top">
+<td>
+<tt>SIGKILL</tt>
+</td>
+<td align="center">
+Terminate
+</td>
+<td>
+Kill
+</td>
+</tr>
+<!-- **************************** -->
+<tr valign="top">
+<td>
+<tt>SIGSTOP</tt>
+</td>
+<td align="center">
+Stop
+</td>
+<td>
+Stop executing, if running
+</td>
+</tr>
+<!-- **************************** -->
+<tr valign="top">
+<td>
+<tt>SIGCONT</tt>
+</td>
+<td align="center">
+Continue
+</td>
+<td>
+Continue executing, if stopped
+</td>
+</tr>
+</table>
+</blockquote>
+
+There are values associated with the signal names, but they are implementation dependent, meaning
+each system may use different values. Because of this, you should always use the name of the signal,
+which is more portable.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Simple Example
+</p>
+
+For this first example, we'll write a program that runs in an infinite loop. We'll send 
+a <tt>SIGINT</tt> signal to the process by pressing <tt>Ctrl-C</tt> in the terminal. By default,
+this signal will terminate the process. Next, we'll see how we can ignore that signal.
+<p>
+The program: (<tt>infinte-loop.c</tt>)
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>while</b> (1)
+  {
+  }  
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Yep, this will work! (Well, <i>work</i> is a stretch here.) But, it does what we want:
+It will run forever, or until we terminate it from outside of the process. Compile the code:
+
+<blockquote><pre>
+gcc infinite-loop.c -o infinite-loop
+</pre></blockquote>
+
+and run it:
+
+<blockquote><pre>
+./infinite-loop
+</pre></blockquote>
+
+Of course, nothing seems to be happening, but it is happily looping doing nothing. To 
+terminate it, press <tt>Ctrl-C</tt>. The shell (in the terminal) sent a <tt>SIGINT</tt>
+to the process. You'll also see <tt>^C</tt> printed in the terminal. You can also use the
+
+<a href="http://man7.org/linux/man-pages/man1/kill.1.html">kill</a>
+
+or 
+
+<a href="http://man7.org/linux/man-pages/man1/killall.1.html">killall</a>
+
+program to send any signal to a process. (The name <i>kill</i> is
+really a misnomer from the olden-days, as the program doesn't necessarily kill any process. 
+A better name would
+have been <i>signal</i> or <i>send-signal</i>, since that's really what it does.)
+<p>
+To use these, while the process is running, open up another terminal (the current one is busy 
+running the infinite loop) and type:
+
+<blockquote><pre>
+killall -SIGINT infinite-loop
+</pre></blockquote>
+
+This will terminate the process. Actually, this will send a <tt>SIGINT</tt> to <i>all</i>
+processes named <i>infinite-loop</i>. So, be careful using this if you are trying to signal
+a process that has the same name as other processes. The <i>kill</i> command requires you
+to specify the process ID (PID), which is unique among all processes. So, for example, 
+if our <i>infinite-loop</i> process has a PID of 12345, you would use <i>kill</i> like 
+this:
+
+<blockquote><pre>
+kill -SIGINT 12345
+</pre></blockquote>
+
+<p>
+
+Since the program does not contain any code to ignore or handle the signal,
+the process is terminated. This is the default behavior of the interrupt signal. In fact,
+most signals that are received by a process will terminate the process unless the process
+does something to prevent that.
+<p>
+OK, let's fix the program so that if we receive an interrupt signal (<tt>SIGINT</tt>), we
+can ignore it and continue looping. There are two steps that must be taken to <i>handle</i>
+the signal. The first thing to do is to <i>register</i> or <i>install</i> a <i>signal handler</i>.
+This is done with the 
+<a href="http://man7.org/linux/man-pages/man2/signal.2.html">signal</a> function. Here's the prototype:
+
+<blockquote><pre>
+<b>void</b> (*signal(<b>int</b> signum, <b>void</b> (*func )(<b>int</b>)))(<b>int</b>);
+</pre></blockquote>
+
+This says that signal is <i>"a function that takes two parameters and returns a pointer to 
+a function that takes an integer and returns a void pointer; 
+the first parameter is an integer and the
+second is a pointer to a function and that function takes an integer and returns a void pointer"</i>.
+Duh. To make this easier to read and understand, a <b>typedef</b> helps:
+
+<blockquote><pre>
+<b>typedef</b> <b>void</b> (*sighandler_t)(<b>int</b>);
+sighandler_t signal(<b>int</b> signum, sighandler_t handler);
+</pre></blockquote>
+
+This says that <tt>sighandler_t</tt> is <i>"a pointer to a function that takes an integer and
+returns a void pointer"</i>. Then, signal is <i>"a function that takes an integer and a 
+sighandler_t and returns a sighandler_t"</i>. Fortunately, calling this function is much simpler
+than writing its prototype!
+<p>
+So, essentially what we are passing to the <i>signal</i> function is an integer that represents the
+signal that we wish to handle and a pointer to a function (callback) that will be called when the
+signal arrives. We typically call that function a <i>signal handler</i>. 
+<p>
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Here's the modified code:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;signal.h&gt; /* signal, signal defines */</font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf                 */</font>
+
+<font color="#003399"><i>/* This function will be called when a SIGINT arrives */</i></font>
+<b>void</b> sighandler(<b>int</b> sig)
+{
+  printf(<font color="#9933CC">&quot;I'm ignoring you!&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Install signal handler */</i></font>
+  signal(SIGINT, sighandler);
+
+  <b>while</b> (1)
+  {
+  }  
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Now, compile this and run it. It's still in an infinite loop, but if you press <tt>Ctrl-C</tt> in
+the terminal, all you see is: (I pressed <tt>Ctrl-C</tt> 3 times)
+
+<blockquote><pre>
+^CI'm ignoring you!
+^CI'm ignoring you!
+^CI'm ignoring you!
+</pre></blockquote>
+
+If you use the <i>killall</i> program to send the same signal, you'll see this: (I ran it 3 times)
+<blockquote><pre>
+I'm ignoring you!
+I'm ignoring you!
+I'm ignoring you!
+</pre></blockquote>
+
+It's the shell that puts the <tt>^C</tt> characters on the screen.
+<p>
+Nice! We've prevented our program from being terminated with <tt>Ctrl-C</tt>. BUT... it's still
+running! How do we stop it now?!?! In the terminal press <tt>Ctrl-\</tt> (That's the control + backslash
+keys.) You'll see this:
+
+<blockquote><pre>
+^\Quit
+</pre></blockquote>
+
+Of course, just like with any system call, you want to check for any errors. This is the proper
+way to install the signal handler (check the return value):
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;signal.h&gt; /* signal, signal defines */</font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf                 */</font>
+
+<b>void</b> sighandler(<b>int</b> sig)
+{
+  printf(<font color="#9933CC">&quot;I'm ignoring you!&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Install signal handler */</i></font>
+  <b>if</b> (signal(SIGINT, sighandler) == SIG_ERR)
+  {
+    printf(<font color="#9933CC">&quot;Error installing signal handler.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+  <b>while</b> (1)
+  {
+  }  
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+You'll also notice that the signal hander, <i>sighandler</i>, takes an integer (the signal number)
+as a parameter, yet it is ignored here. The reason the signal number is passed in is because we
+might want one function to handle more than one signal. You could write one function per signal
+that you wish to handle, but if the logic is similar or very simple, one function might be fine.
+<p>
+This example handles both <tt>SIGINT</tt>	and <tt>SIGQUIT</tt>
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;signal.h&gt; /* signal, signal defines */</font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf                 */</font>
+
+<b>void</b> sighandler(<b>int</b> sig)
+{
+  <b>if</b> (sig == SIGINT)
+    printf(<font color="#9933CC">&quot;I'm ignoring you!&#92;n&quot;</font>);
+  <b>else</b> <b>if</b> (sig == SIGQUIT)
+    printf(<font color="#9933CC">&quot;I mean it! I'm ignoring you!&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Install signal handler for SIGINT */</i></font>
+  <b>if</b> (signal(SIGINT, sighandler) == SIG_ERR)
+  {
+    printf(<font color="#9933CC">&quot;Error installing signal handler.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+    <font color="#003399"><i>/* Install signal handler for SIGQUIT */</i></font>
+  <b>if</b> (signal(SIGQUIT, sighandler) == SIG_ERR)
+  {
+    printf(<font color="#9933CC">&quot;Error installing signal handler.&#92;n&quot;</font>);
+    <b>return</b> 2;
+  }
+
+  <b>while</b> (1)
+  {
+  }  
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Now pressing <tt>Ctrl-C</tt> then <tt>Ctrl-\</tt> produces this:
+
+<blockquote><pre>
+^CI'm ignoring you!
+^\I mean it! I'm ignoring you!
+</pre></blockquote>
+
+We've handled both. BUT... Now how do we kill it!?!?! You have to send it a <tt>SIGKILL</tt> signal:
+
+<blockquote><pre>
+killall -SIGKILL infinite-loop
+</pre></blockquote>
+
+And, before you ask, no, you can't handle or ignore a <tt>SIGKILL</tt>. Attempting to register a handler
+for that signal will return <tt>SIG_ERR</tt> to your program. There are only two signals that 
+you can't handle. One is <tt>SIGKILL</tt> and the other is <tt>SIGSTOP</tt>. Deal with it.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Another Example
+</p>
+
+This example is a little more like something you'd do in the Real World<sup>&trade;</sup>. It's 
+a long running program (could run for hours or days or weeks or longer) and doesn't print anything out until it
+completes. Suppose we want to "check in" on the program from time to time to see how it's 
+progressing? One way to check-in would be by sending it a signal when we want it to print 
+something out to the display.
+<p>
+As usual, the program itself is not very interesting, but the way we interact with it is
+interesting. This program calculates the approximate value of <i>pi</i> using a series. 
+(Leibniz's formula for pi.</a>)
+
+<blockquote><pre><big>
+1 - 1/3 + 1/5 - 1/7 + 1/9 - ... = pi/4
+</big></pre></blockquote>
+
+<!--
+     1     1     1     1          pi
+1 - --- + --- - --- + --- ... =  ----
+     3     5     7     9           4
+-->
+
+The more numbers in the series, the better the approximation. Of course, this is an infinite
+series and will never actually reach that value. But this is perfect for our test.
+<p>
+You may have noticed in the 
+<a href="https://en.wikipedia.org/wiki/Unix_signal#POSIX_signals">list of signals</a> there
+are these two: <tt>SIGUSR1</tt> and <tt>SIGUSR2</tt>. These are user-defined signals, meaning
+you can use them for whatever you like in your programs. We're going to use <tt>SIGUSR1</tt>
+for our code.
+<p>
+<a name="LEIBNIZ_PI">
+Here's the program: (<tt>pi-sig.c</tt>)
+</a>
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;signal.h&gt; /* signal, signal defines */</font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf                 */</font>
+<font color="990099">#include &lt;unistd.h&gt; /* getpid                 */</font>
+
+<b>double</b> pi_current = 0.0;
+<b>unsigned</b> <b>long</b> it_current = 0;
+
+<b>void</b> sighandler(<b>int</b> sig)
+{
+    <font color="#003399"><i>/* Really don't need to check as we only handle this signal */</i></font>
+  <b>if</b> (sig == SIGUSR1)
+    printf(<font color="#9933CC">&quot;Current iteration: %lu, pi is %.16f&#92;n&quot;</font>, it_current, pi_current);
+}
+
+<b>double</b> leibniz_pi(<b>unsigned</b> <b>long</b> iterations)
+{
+  <b>double</b> quarterPI = 0.0;
+  <b>unsigned</b> <b>long</b> i;
+  <b>int</b> sign = -1;
+
+  <b>for</b> (i = 0; i &lt; iterations; i++)
+  {
+    sign *= -1;
+    quarterPI += sign / (2.0 * i + 1);
+
+      <font color="#003399"><i>/* Update the global vars so the signal handler can print them */</i></font>
+    pi_current = 4 * quarterPI;
+    it_current = i;
+  }
+
+  <b>return</b> 4 * quarterPI;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>unsigned</b> <b>long</b> count = 1000 * 1000 * 1000 * 64ul;
+  <b>double</b> pi;
+  
+    <font color="#003399"><i>/* Install signal handler */</i></font>
+  <b>if</b> (signal(SIGUSR1, sighandler) == SIG_ERR)
+  {
+    printf(<font color="#9933CC">&quot;Error installing signal handler.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+  
+  printf(<font color="#9933CC">&quot;PID: %i&#92;n&quot;</font>, getpid());
+  pi = leibniz_pi(count);
+  printf(<font color="#9933CC">&quot;iterations: %lu, pi is %.16f&#92;n&quot;</font>, count, pi);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+It's pretty self-explanatory, but I'll point out a few things. 
+<ul>
+	<li>The program is only handling the <tt>SIGUSR1</tt> signal, and that handler was setup.</li>
+	<li>The <i>leibniz_pi</i> function is the long-running function that will loop for a long time.</li>
+	<li>The number of iterations is an unsigned long, which is 8 bytes in a 64-bit system.
+		This allows us to use very large numbers and cause the program to run for years!</li>
+	<li>We have two global variables so that the signal handler can print out the values
+		of the current iteration and the current value of pi, which are calculated inside of
+		the <i>leibniz_pi</i> function.</li>
+</ul>
+	
+There's another point to be made. There is no way to tell exactly when the signal will arrive. When
+it does arrive, our currently executing code will be paused so that the signal handling function
+can execute. When the signal handler is done, execution will resume where it left off. 
+<p>
+What that means
+for this program is that, when the <tt>SIGUSR1</tt> signal arrives, we will be in the middle of the
+loop executing some instruction. That instruction will be paused. The signal handler will execute, 
+printing out the two values we are
+interested in and then return. The instruction that was executing in the loop will then be resumed
+as if nothing interrupted it.
+<p>
+Compile and run this program:
+<blockquote><pre>
+gcc pi-sig.c -o pi-sig
+./pi-sig
+</pre></blockquote>
+
+Nothing will appear on the screen. From another terminal, send it the
+signal:
+
+<blockquote><pre>
+killall -SIGUSR1 pi-sig
+</pre></blockquote>
+
+Here's the output when I ran it. I ran the <i>killall</i> command 5 times before letting it
+complete:
+
+<blockquote><pre>
+PID: 9198
+Current iteration: 108411881, pi is 3.1415926443653865
+Current iteration: 147297472, pi is 3.1415926603778059
+Current iteration: 178823842, pi is 3.1415926479967675
+Current iteration: 210190824, pi is 3.1415926583470455
+Current iteration: 246275480, pi is 3.1415926576496456
+iterations: 64000000000, pi is 3.1415926535728813
+</pre></blockquote>
+
+On my system, this took about 12.5 minutes to execute the loop 64,000,000,000 (64 billion) times. The
+largest unsigned long is 18,446,744,073,709,551,615. My back-of-the-envelope calculation tells me
+it would take about 6,800 years to complete with that number! Of course, this assumes that I don't have 
+to reboot during that time. Even Linux would struggle maintaining that kind of uptime!
+<p>
+<b>Convenient signaling</b>
+<p>
+It may seem a little inconvenient to have to open another shell and use the <i>kill</i>
+or <i>killall</i> programs to get the long-running program to print something out. Well, we
+can simplify things. Instead of having the program respond to the <tt>SIGUSR1</tt> signal,
+we can just have it respond to the <tt>SIGINT</tt> signal that is sent when you press
+<tt>Ctrl-C</tt> in the shell. Just add this code in <i>main</i> after the first signal
+handler is installed:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Install signal handler for SIGINT */</i></font>
+<b>if</b> (signal(SIGINT, sighandler) == SIG_ERR)
+{
+  printf(<font color="#9933CC">&quot;Error installing signal handler.&#92;n&quot;</font>);
+  <b>return</b> 1;
+}
+</pre></blockquote>
+
+Then, in the signal handler function, have it check for <tt>SIGINT</tt> as well:
+
+<blockquote><pre>
+<b>void</b> sighandler(<b>int</b> sig)
+{
+    <font color="#003399"><i>/* Really don't need to check as we only handle these two signals */</i></font>
+  <b>if</b> (sig == SIGUSR1 <font color="blue">|| sig == SIGINT</font>)
+    printf(<font color="#9933CC">&quot;Current iteration: %lu, pi is %.16f&#92;n&quot;</font>, it_current, pi_current);
+}
+</pre></blockquote>
+
+Now, you can just press <tt>Ctrl-C</tt> in the shell to see the progress:
+
+<blockquote><pre>
+PID: 30544
+^CCurrent iteration: 876738924, pi is 3.1415926547287345
+^CCurrent iteration: 1638731632, pi is 3.1415926541982557
+^CCurrent iteration: 2726090911, pi is 3.1415926532215415
+^\Quit
+</pre></blockquote>
+
+I pressed <tt>Ctrl-C</tt> 3 times, and then pressed <tt>Ctrl-\</tt> to terminate it, since
+<tt>Ctrl-C</tt> will no longer terminate the program. (The <tt>^C</tt> and <tt>^\Quit</tt>
+are printed by the shell.)
+<p>
+<p class="technote">
+Keep this technique in mind when you have long-running programs that you want to "check in"
+on periodically and don't want them constantly spewing output to the terminal. However, you
+still want to make it easy for the user to terminate the program via another key
+(such as <tt>Ctrl-\</tt>), otherwise they might get upset if they can't easily terminate the program!
+
+</p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+More Details
+</p>
+
+The examples above were merely a very simple introduction to signals. A few points must
+be made regarding signal handling. 
+<p>
+First, at the most basic level, the <i>signal</i> function
+just updates the <i>disposition of signals</i>. In other words, it keeps track of which
+signals to handle within our code. By default, a program doesn't handle any of them, and so
+the default behavior occurs (which usually means terminate the process.)
+<p>
+Information about signals for a process is stored in the 
+<a href="task_struct-linux.html">process control block</a> (PCB). Here's a
+snippet of it showing some of the members related to signal processing:
+
+<blockquote><pre>
+<b>struct</b> task_struct {
+
+  <font color="#003399"><i>/* hundreds of lines removed ... */</i></font>
+
+  <b>int</b> exit_code, exit_signal;
+  <b>int</b> pdeath_signal;  <font color="#003399"><i>/*  The signal sent when the parent dies  */</i></font>
+  <font color="#003399"><i>/* signal handlers */</i></font>
+  <b>struct</b> signal_struct *signal;
+  <b>struct</b> sighand_struct *sighand;
+
+  sigset_t blocked, real_blocked;
+  sigset_t saved_sigmask; <font color="#003399"><i>/* restored if set_restore_sigmask() was used */</i></font>
+  <b>struct</b> sigpending pending;
+
+  sigset_t *notifier_mask;
+  siginfo_t *last_siginfo; <font color="#003399"><i>/* For ptrace use.  */</i></font>
+
+  <font color="#003399"><i>/* hundreds of lines removed ... */</i></font>
+};
+</pre></blockquote>
+
+
+The return value from <i>signal</i> is the previous disposition of the signal. If you want to
+revert the disposition (e.g. you don't wish to handle it anymore), you would save this return
+value and use it in another call to <i>signal</i>, which would put things back the way they were.
+(I'm not going to go any further into that but you can use the links below to find out more about 
+this.)
+
+
+
+
+<p>
+Some notes about the signal handling function:
+<ul>
+	<li>The signal handling function should be very short. Remember, the rest of the program is
+		stopped while the signal handler is executing.</li>
+		<p>
+	<li>The signal handling function must be careful not to call unsafe functions. In the code
+		above, <i>printf</i> is NOT safe. In fact, most functions in stdio.h are unsafe.
+		 However, for this simple demonstration, it will work
+		fine.  For a list of signal-safe functions, look
+		<a href="http://man7.org/linux/man-pages/man7/signal.7.html">here</a>.
+    Essentially, unsafe means it is not 
+    <a href="https://en.wikipedia.org/wiki/Reentrancy_(computing)">reentrant</a>.</li>
+		<p>
+	<li>The signal handling function should be careful not to cause unwanted side-effects,
+		e.g. altering the value of the global <i>errno</i> variable or other global variables.
+		<p>
+	<li>You may have noticed this in the 
+		<a href="http://man7.org/linux/man-pages/man2/signal.2.html">signal man page</a>:
+		<blockquote>
+<i>The behavior of signal() varies across UNIX versions, and has also
+varied historically across different versions of Linux.  <b>Avoid its use</b>: use 
+<a href="http://man7.org/linux/man-pages/man2/sigaction.2.html">sigaction(2)</a> instead.</i>
+		</blockquote>
+	In Linux, the <i>signal</i> function is just a convenient wrapper around <i>sigaction</i>. 
+	Again, for this very simple introduction, using <i>signal</i> works just fine. 
+	We'll look at <i>sigaction</i> next. 
+
+</ul>
+
+<b>A brief look at <i>sigaction</i>:</b>
+<p>
+The <i>sigaction</i> function is more flexible and portable than the <i>signal</i> function, 
+which is why it should be used instead of <i>signal</i>. But, that flexibility comes with
+more complexity as you'll see. This is the prototype for <i>sigaction</i>:
+
+<blockquote><pre>
+<b>int</b> sigaction(<b>int</b> signum, <b>const</b> <b>struct</b> sigaction *act, <b>struct</b> sigaction *oldact);  
+</pre></blockquote>
+
+The function has 3 parameters:
+
+<ul>
+	<li><i>signum</i> - This is the signal to manipulate and it's the same as the <i>signal</i> function.</li>
+	<li><i>act</i> - This structure contains the function to call, as well as additional  
+		information about how the signal handling proceeds.</li>
+	<li><i>oldact</i> - This structure contains the previous disposition of the signal. This
+		was the return value from <i>signal</i>.</li>
+</ul>
+
+This is what the <i>sigaction</i> structure looks like:
+
+<blockquote><pre>
+<b>struct</b> sigaction
+{
+  <b>void</b> (*sa_handler)(<b>int</b>);
+  <b>void</b> (*sa_sigaction)(<b>int</b>, siginfo_t *, <b>void</b> *);
+  sigset_t sa_mask;
+  <b>int</b> sa_flags;
+  <b>void</b> (*sa_restorer)(<b>void</b>);
+};
+</pre></blockquote>
+
+The only member that we are interested in is the first one, which is the function pointer for
+the signal handling function. Here's the modified version of the infinite loop code
+from above: (<tt>infinite-loop2.c</tt>)
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;signal.h&gt; /* sigaction, signal defines */</font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf                    */</font>
+
+<b>void</b> sighandler(<b>int</b> sig)
+{
+  <b>if</b> (sig == SIGINT)
+    printf(<font color="#9933CC">&quot;I'm ignoring you!&#92;n&quot;</font>);
+  <b>else</b> <b>if</b> (sig == SIGQUIT)
+    printf(<font color="#9933CC">&quot;I mean it! I'm ignoring you!&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>struct</b> sigaction act;
+
+  sigemptyset(&amp;act.sa_mask);   <font color="#003399"><i>/* clear   */</i></font>
+  act.sa_flags = 0;            <font color="#003399"><i>/* clear   */</i></font>
+  act.sa_handler = sighandler; <font color="#003399"><i>/* handler */</i></font>
+
+    <font color="#003399"><i>/* Install signal handler */</i></font>
+  <b>if</b> (sigaction(SIGINT, &amp;act, NULL) == -1)
+  {
+    perror(<font color="#9933CC">&quot;Error installing signal handler for SIGINT&quot;</font>);
+    <b>return</b> 1;
+  }
+
+    <font color="#003399"><i>/* Install signal handler */</i></font>
+  <b>if</b> (sigaction(SIGQUIT, &amp;act, NULL) == -1)
+  {
+    perror(<font color="#9933CC">&quot;Error installing signal handler for SIGQUIT&quot;</font>);
+    <b>return</b> 2;
+  }
+
+  <b>while</b> (1)
+  {
+  }  
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Since I'm not interested in doing anything fancy with this introduction, the only portion of the 
+structure that needs to be set to something useful is the function pointer. Again, if you want
+to explore the rest of the options, follow the links at the bottom of the page.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Other Issues
+</p>
+
+Recall our long-running <a href="index.html#LEIBNIZ_PI">program</a> previously shown. When compiled
+like this:
+
+<blockquote><pre>
+gcc pi-sig.c -o pi-sig
+</pre></blockquote>
+
+It took about 12.5 minutes to complete. If we want to enable optimizations, compile like this:
+
+<blockquote><pre>
+gcc -O2 pi-sig.c -o pi-sigo
+</pre></blockquote>
+
+That's an UPPERCASE letter 'O' (not zero). With these optimizations, the program completed
+in only 10.5 minutes. That's a pretty decent speedup that the compiler gave us by optimizing
+our code. But, there's a problem. If I run the program and then send it a <tt>SIGUSR1</tt> signal,
+this is what is printed out: (I sent it 3 times)
+
+<blockquote><pre>
+Current iteration: 0, pi is 0.0000000000000000
+Current iteration: 0, pi is 0.0000000000000000
+Current iteration: 0, pi is 0.0000000000000000
+</pre></blockquote>
+
+What's going on here?!? You will not be able to figure this out by looking at the C code. You
+have to look at the assembly code that the compiler generated. I don't expect anyone to fully
+understand all of this (I don't), but you should be able to follow the explanation below.
+(I've <b><font color="blue">highlighted</font></b> the relevant lines.)
+<p>
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr><th>No optimization</th><th>With optimization (-O2)</th></tr>
+<tr valign="top">
+<td>
+<pre>
+leibniz_pi:
+.LFB1:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	movq	%rdi, -40(%rbp)
+	movl	$0, %eax
+	movq	%rax, -16(%rbp)
+	movl	$-1, -20(%rbp)
+	movq	$0, -8(%rbp)
+	jmp	.L4
+.L7:
+	negl	-20(%rbp)
+	cvtsi2sd	-20(%rbp), %xmm1
+	movq	-8(%rbp), %rax
+	testq	%rax, %rax
+	js	.L5
+	cvtsi2sdq	%rax, %xmm0
+	jmp	.L6
+.L5:
+	movq	%rax, %rdx
+	shrq	%rdx
+	andl	$1, %eax
+	orq	%rax, %rdx
+	cvtsi2sdq	%rdx, %xmm0
+	addsd	%xmm0, %xmm0
+.L6:
+	addsd	%xmm0, %xmm0
+	movsd	.LC2(%rip), %xmm2
+	addsd	%xmm2, %xmm0
+	divsd	%xmm0, %xmm1
+	movapd	%xmm1, %xmm0
+	movsd	-16(%rbp), %xmm1
+	addsd	%xmm1, %xmm0
+	movsd	%xmm0, -16(%rbp)
+	movsd	-16(%rbp), %xmm1
+	movsd	.LC3(%rip), %xmm0
+	mulsd	%xmm1, %xmm0
+	<b><font color="blue">movsd	%xmm0, pi_current(%rip)</font></b>
+	movq	-8(%rbp), %rax
+	<b><font color="blue">movq	%rax, it_current(%rip)</font></b>
+	addq	$1, -8(%rbp)
+.L4:
+	movq	-8(%rbp), %rax
+	cmpq	-40(%rbp), %rax
+	jb	.L7
+	movsd	-16(%rbp), %xmm1
+	movsd	.LC3(%rip), %xmm0
+	mulsd	%xmm1, %xmm0
+	movsd	%xmm0, -48(%rbp)
+	movq	-48(%rbp), %rax
+	movq	%rax, -48(%rbp)
+	movsd	-48(%rbp), %xmm0
+	popq	%rbp
+	ret
+</pre>
+</td>
+<td>
+<pre>
+leibniz_pi:
+.LFB39:
+	testq	%rdi, %rdi
+	je	.L11
+	movl	$-1, %edx
+	xorl	%eax, %eax
+	xorpd	%xmm1, %xmm1
+	movsd	.LC2(%rip), %xmm4
+	movsd	.LC3(%rip), %xmm3
+	jmp	.L10
+	.p2align 4,,10
+	.p2align 3
+.L13:
+	cvtsi2sdq	%rax, %xmm0
+.L8:
+	addsd	%xmm0, %xmm0
+	addq	$1, %rax
+	cmpq	%rdi, %rax
+	addsd	%xmm4, %xmm0
+	divsd	%xmm0, %xmm2
+	addsd	%xmm2, %xmm1
+	movapd	%xmm1, %xmm0
+	mulsd	%xmm3, %xmm0
+	je	.L12
+.L10:
+	negl	%edx
+	testq	%rax, %rax
+	cvtsi2sd	%edx, %xmm2
+	jns	.L13
+	movq	%rax, %rcx
+	movq	%rax, %rsi
+	shrq	%rcx
+	andl	$1, %esi
+	orq	%rsi, %rcx
+	cvtsi2sdq	%rcx, %xmm0
+	addsd	%xmm0, %xmm0
+	jmp	.L8
+	.p2align 4,,10
+	.p2align 3
+.L12:
+	subq	$1, %rax
+	<b><font color="blue">movsd	%xmm0, pi_current(%rip)</font></b>
+	<b><font color="blue">movq	%rax, it_current(%rip)</font></b>
+	ret
+.L11:
+	xorpd	%xmm0, %xmm0
+	ret
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+I'm only showing the code for the <i>leibniz_pi</i> function, as that's where the problem is.
+This is the loop (C code) from that function:
+
+<blockquote><pre>
+<b>for</b> (i = 0; i &lt; iterations; i++)
+{
+  sign *= -1;
+  quarterPI += sign / (2.0 * i + 1);
+
+    <font color="#003399"><i>/* Update the global vars so the signal handler can print them */</i></font>
+  pi_current = 4 * quarterPI;
+  it_current = i;
+}
+</pre></blockquote>
+
+Without compiler options enabled, the compiler will pretty much translate our C code into assembly without
+making any modifications (optimizations). It's more like "What you code is what you get." (WYCIWYG) 
+However,
+the compiler can be pretty smart sometimes (much smarter than a programmer) and it realizes when you
+are doing useless extra work. Specifically, this:
+
+<blockquote><pre>
+    <font color="#003399"><i>/* Update the global vars so the signal handler can print them */</i></font>
+  pi_current = 4 * quarterPI;
+  it_current = i;
+</pre></blockquote>
+
+The compiler sees that you assign to both of those variables inside the loop, yet you never use
+those values inside the loop. So, the compiler thinks this is a waste of time and moves the assignments
+outside of the loop. This way, only the final values are written just once, saving time. 
+That's an optimization. The end result is the same, except that it runs faster than before. 
+<p>
+<b>BUT, the results are NOT the same!</b>
+
+This is because the compiler has no way of knowing that a signal can cause the program to pause the
+loop, jump to another function, and then come back. As far as the compiler is concerned, there's no
+way any other part of the program can use these variables <i>until the leibniz_pi function returns</i>.
+<p>
+So, what do we do now? Disable optimizations? That's unacceptable. Fortunately, the C programming
+language had expected things like this and has just what we need to handle this exact situation. There is a keyword, 
+<a href="https://en.wikipedia.org/wiki/Volatile_(computer_programming)">volatile</a>,
+that tells the compiler, "Hey, these variables may be accessed/modified by code outside of what you're
+looking at so don't do anything that might change the expected results."
+<p>
+This is trivial to fix. Just modify the declarations by adding the <i>volatile</i> keyword:
+
+<blockquote><pre>
+<font color="blue"><b>volatile</b></font> <b>double</b> pi_current = 0.0;
+<font color="blue"><b>volatile</b></font> <b>unsigned</b> <b>long</b> it_current = 0;
+</pre></blockquote>
+
+Now, compile (with optimizations) and run the code. It's all working again!
+<p>
+Oh, and in case you're wondering, using the <i>volatile</i> keyword did not cause the program
+to run slower. The rest of the optimizations are still in effect, just not the ones on those
+variables. Here's the optimized version with the <i>volatile</i> keyword in place. The assignments
+are moved back inside the loop:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr><th>With optimization (-O2) and volatile</th></tr>
+<tr valign="top">
+<td>
+<pre>
+leibniz_pi:
+.LFB39:
+	testq	%rdi, %rdi
+	je	.L10
+	movl	$-1, %edx
+	xorl	%eax, %eax
+	xorpd	%xmm1, %xmm1
+	movsd	.LC2(%rip), %xmm4
+	movsd	.LC3(%rip), %xmm3
+	jmp	.L9
+	.p2align 4,,10
+	.p2align 3
+.L13:
+	cvtsi2sdq	%rax, %xmm0
+.L8:
+	addsd	%xmm0, %xmm0
+	addsd	%xmm4, %xmm0
+	divsd	%xmm0, %xmm2
+	addsd	%xmm2, %xmm1
+	movapd	%xmm1, %xmm0
+	mulsd	%xmm3, %xmm0
+	<b><font color="blue">movsd	%xmm0, pi_current(%rip)</font></b>
+	<b><font color="blue">movq	%rax, it_current(%rip)</font></b>
+	addq	$1, %rax
+	cmpq	%rdi, %rax
+	je	.L12
+.L9:
+	negl	%edx
+	testq	%rax, %rax
+	cvtsi2sd	%edx, %xmm2
+	jns	.L13
+	movq	%rax, %rcx
+	movq	%rax, %rsi
+	shrq	%rcx
+	andl	$1, %esi
+	orq	%rsi, %rcx
+	cvtsi2sdq	%rcx, %xmm0
+	addsd	%xmm0, %xmm0
+	jmp	.L8
+	.p2align 4,,10
+	.p2align 3
+.L12:
+	rep ret
+.L10:
+	xorpd	%xmm0, %xmm0
+	ret
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+<p class="technote">
+Yes, this is a trivial fix, but I wasted a good hour on this trying to figure out why <i>all of
+a sudden</i> nothing seemed to be working. I originally compiled without optimizations, as is
+normal during development, and then enabled them without realizing it. Once I realized the problem
+was coming from the compiler optimization, I immediately knew what was wrong. We don't teach
+beginning programmers about the <i>volatile</i> keyword because it's really only used in moderately
+advanced programs and beginners are no where near that stage. The same thing can happen in 
+multithreaded programs, as well.
+<br><br>
+The reason I even show this is because some of you <b><i>will</i></b> try this code and 
+you <b><i>will</i></b> compile
+with optimizations and it <b><i>will</i></b> fail
+and you <b><i>will NOT</i></b> have any clue as to what's wrong!
+<br><br>
+<i>"Anyone can learn from his mistakes, but a wise man learns from other people's mistakes."</i>
+<br><br>
+Learn from mine. <a href="https://www.youtube.com/watch?v=dNB_RjpWnsI">You're welcome!</a>
+</p>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+References
+</p>
+
+This was just an introduction to using signals on Linux. There are a lot more details
+that you may want to read about. These links are a good place to start:
+
+<p>
+<ul>
+	<li>The <a href="http://man7.org/linux/man-pages/man2/signal.2.html">signal</a> man page. (<tt>man 2 signal</tt>)</li>
+	<li>An <a href="http://man7.org/linux/man-pages/man7/signal.7.html">overview of signals</a> man page. (<tt>man 7 signal</tt>)</li>
+	<li>References for the <a href="http://man7.org/linux/man-pages/man1/kill.1.html">kill</a>
+		and <a href="http://man7.org/linux/man-pages/man1/killall.1.html">killall</a> programs.</li>
+	<li><a href="https://en.wikipedia.org/wiki/Unix_signal">Unix signals</a> from wikipedia.</li>
+</ul>
+
+<b>Mead Approved:</b>
+<p>
+<ul>
+	<li>The definitive reference for Linux programming is this book:
+
+<table cellpadding=5 cellspacing=0 border=0>
+<tr valign="top">
+<td>
+<a href="http://www.nostarch.com/tlpi"><img src="tlpi.png" width="85" height="113"></a>
+</td>
+<td>
+		<td valign="top">
+	<a href="http://www.nostarch.com/tlpi">The Linux Programming Interface</a>:
+A Linux and UNIX System Programming Handbook. 
+	It is one of the highest-rated Linux books listed on <a href="http://www.amazon.com/dp/1593272200/">Amazon</a>.
+	 Highly recommended	for anyone wanting to understand more about Linux systems programming.
+		<!--
+	<ul>
+		<li><a href="../../../CS180/tlpi-ch4.pdf">Chapter 4</a> - File I/O</a></li>
+		<li><a href="../../../CS180/tlpi-ch24.pdf">Chapter 24</a> - Process Creation</a></li>
+		<li><a href="../../../CS180/tlpi-ch52.pdf">Chapter 52</a> - POSIX Message Queues</a></li>
+		<li><a href="http://man7.org/tlpi/toc-detailed.html">Table of Contents</a> for the book.</li>
+	</ul>
+-->
+</td>
+<!--
+-->
+
+<!--
+-->
+</tr></table>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

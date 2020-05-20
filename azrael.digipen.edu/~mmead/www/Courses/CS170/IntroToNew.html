@@ -1,0 +1,354 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Introduction to new/delete</title>
+</head>
+
+<body>  
+<center><h1>Introduction to new/delete</h1></center>
+
+<!--
+<blockquote>
+<i>
+"The road to hell is paved with global variables"</i> -- Steve McConnell
+</blockquote>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Dynamic Memory Allocation in C++
+</p>
+
+Comparing C and C++ memory allocating:
+
+<ul>
+<li>In C, we use <tt>malloc</tt> and <tt>free</tt>.
+<li>In C++, we can still use <tt>malloc</tt> and <tt>free</tt>, but there are better alternatives.
+<li>In C++, we can use <b><tt>new</tt></b> to allocate memory, and <b><tt>delete</tt></b> to free the memory.
+  <ul>
+    <li><b><tt>new</tt></b> and <b><tt>delete</tt></b> are keywords</li>
+    <li>Use <tt><b>new</b></tt> instead of <tt>malloc</tt>.</li>
+    <li>Use <tt><b>delete</b></tt> instead of <tt>free</tt>.</li>
+    <li>Just like with <tt>free</tt>, it is safe to <tt><b>delete</b></tt> a NULL pointer.</li>
+    <ul>
+      <li>This means that you don't need to check (and shouldn't check) the pointer before deleting it.</li>
+    </ul>
+  </ul>
+<li>There are also array versions of <b><tt>new</tt></b> and <b><tt>delete</tt></b> (for allocating arrays).
+<li>Although the way of allocating memory has changed with C++, the use of that memory is identical to C.
+<li>Once more: You use the dynamically-allocated memory <i>exactly</i> as you would use it in C. There is 
+  absolutely no difference 
+	in how you <i>use</i> the memory.
+<ul>
+  <li>In fact, it is likely that <tt><b>new</b></tt> calls <tt>malloc</tt> to do the actual
+    memory allocation.</li>
+  </ul>
+</ul>
+
+Example 1: Simple allocation of built-in type:
+
+<blockquote><pre>
+<b>void</b> f1()
+{
+    <font color="#003399"><i>// Dynamically allocate space for an int</i></font>
+  <b>int</b> *i1 = (<b>int</b> *) malloc(<b>sizeof</b>(<b>int</b>)); <font color="#003399"><i>// C and C++ (4 bytes)</i></font>
+  <b>int</b> *i2 = <b>new</b> <b>int</b>;                     <font color="#003399"><i>// C++ only (4 bytes)</i></font>
+
+    <font color="#003399"><i>// Use i1 and i2</i></font>
+
+    <font color="#003399"><i>// Release the memory (programmer)</i></font>
+  free(i1);  <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> i2; <font color="#003399"><i>// C++ only</i></font>
+}
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+Example 2: Allocation of a struct:
+
+<blockquote><pre>
+  <font color="#003399"><i>// On-screen graphic</i></font>
+<b>struct</b> Sprite
+{
+  <b>double</b> x;
+  <b>double</b> y;
+  <b>int</b> weight; 
+  <b>int</b> level;
+  <b>char</b> name[20];
+};    
+
+<b>void</b> f2()
+{
+  Sprite s1; <font color="#003399"><i>// Allocated on the stack (handled by compiler)</i></font>
+
+    <font color="#003399"><i>// Dynamically allocate on the heap (handled by the programmer)</i></font>
+  Sprite *s2 = (Sprite *) malloc(<b>sizeof</b>(Sprite)); <font color="#003399"><i>// 44 bytes, ignoring padding/alignment (C and C++)</i></font>
+  Sprite *s3 = <b>new</b> Sprite;                        <font color="#003399"><i>// 44 bytes, ignoring padding/alignment (C++ only)</i></font>
+
+  s1.level = 1;  <font color="#003399"><i>// s1 is a Sprite struct</i></font>
+  s2-&gt;level = 2; <font color="#003399"><i>// s2 is a pointer to a Sprite struct</i></font>
+  s3-&gt;level = 3; <font color="#003399"><i>// s3 is a pointer to a Sprite struct</i></font>
+
+    <font color="#003399"><i>// Other stuff ...</i></font>
+
+    <font color="#003399"><i>// Release the memory (programmer)</i></font>
+  free(s2);  <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> s3; <font color="#003399"><i>// C++ only</i></font>
+
+} <font color="#003399"><i>// s1 goes out of scope and the memory is released automatically</i></font>
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+Example 3: Allocating arrays of built-in types:
+
+<blockquote><pre>
+<b>void</b> f3()
+{
+    <font color="#003399"><i>// Allocate space for array of 10 chars and 10 ints (C and C++)</i></font>
+  <b>char</b> *p1 = (<b>char</b> *) malloc(10 * <b>sizeof</b>(<b>char</b>)); <font color="#003399"><i>// 10 bytes</i></font>
+  <b>int</b> *p2 = (<b>int</b> *) malloc(10 * <b>sizeof</b>(<b>int</b>));    <font color="#003399"><i>// 40 bytes</i></font>
+
+    <font color="#003399"><i>// Allocate space for array of 10 chars and 10 ints (C++ only)</i></font>
+  <b>char</b> *p3 = <b>new</b> <b>char</b>[10]; <font color="#003399"><i>// 10 bytes</i></font>
+  <b>int</b> *p4 = <b>new</b> <b>int</b>[10];   <font color="#003399"><i>// 40 bytes</i></font>
+
+    <font color="#003399"><i>// Use p1, p2, p3, p4 ...</i></font>
+
+    <font color="#003399"><i>// Release the memory (programmer)</i></font>
+  free(p1);     <font color="#003399"><i>// C and C++</i></font>
+  free(p2);     <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> [] p3; <font color="#003399"><i>// C++ only (array delete)</i></font>
+  <b>delete</b> [] p4; <font color="#003399"><i>// C++ only (array delete)</i></font>
+}
+</pre></blockquote>
+
+<p class="technote">
+<b>Note:</b> If you allocate an array with <b><tt>new</tt></b> (using the array operator, <tt>[]</tt>), you 
+<b>MUST</b> use <b><tt>delete</tt></b> with the array operator as well. Failure to do so causes your program
+to be undefined (and lose points on an assignment) <b>EVEN IF YOU GET THE CORRECT OUTPUT</b>.
+</p>
+
+<hr width="90%">
+<p>
+
+Example 4: Allocating arrays of structs (user-defined type):
+
+<blockquote><pre>
+  <font color="#003399"><i>// On-screen graphic</i></font>
+<b>struct</b> Sprite
+{
+  <b>double</b> x;
+  <b>double</b> y;
+  <b>int</b> weight; 
+  <b>int</b> level;
+  <b>char</b> name[20];
+};    
+	
+<b>void</b> f4()
+{
+    <font color="#003399"><i>// Allocated array of 10 Sprites on the stack (handled by compiler)</i></font>
+  Sprite s1[10]; 
+
+    <font color="#003399"><i>// Dynamically allocate array of 10 Sprites on the heap (handled by the programmer)</i></font>
+  Sprite *s2 = (Sprite *) malloc(10 * <b>sizeof</b>(Sprite)); <font color="#003399"><i>// 440 bytes, ignoring padding/alignment (C and C++)</i></font>
+  Sprite *s3 = <b>new</b> Sprite[10];                         <font color="#003399"><i>// 440 bytes, ignoring padding/alignment (C++ only)</i></font>
+
+  s1[0].level = 1; <font color="#003399"><i>// s1[0] is a Sprite struct</i></font>
+  s2[0].level = 2; <font color="#003399"><i>// s2[0] is a Sprite struct</i></font>
+  s3[0].level = 3; <font color="#003399"><i>// s3[0] is a Sprite struct</i></font>
+
+  s1-&gt;level = 3; <font color="#003399"><i>// Does this work?</i></font>
+  s2-&gt;level = 4; <font color="#003399"><i>// Does this work?</i></font>
+  s3-&gt;level = 5; <font color="#003399"><i>// Does this work?</i></font>
+
+    <font color="#003399"><i>// Other stuff ...</i></font>
+
+    <font color="#003399"><i>// Release the memory (programmer)</i></font>
+  free(s2);     <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> [] s3; <font color="#003399"><i>// C++ only (array delete)</i></font>
+
+} <font color="#003399"><i>// s1 goes out of scope and the memory is released automatically</i></font>
+</pre></blockquote>
+
+<!--
+These all work because s1 decays into a pointer to the first element of the
+array and s2 and s3 are both pointers (to the first element as well).
+We can also do this: s2++, but not this: s1++ (s1 is a array/const pointer)
+
+  s1->level = 3; // Does this work?
+  s2->level = 4; // Does this work?
+  s3->level = 5; // Does this work?
+
+-->
+
+<p>
+<hr width="90%">
+<p>
+
+Example 5: Modified Sprite struct:
+
+<blockquote><pre>
+  <font color="#003399"><i>// On-screen graphic, new version</i></font>
+<b>struct</b> Sprite2
+{
+  <b>double</b> x;
+  <b>double</b> y;
+  <b>int</b> weight; 
+  <b>int</b> level;
+  <b>char</b> *name; <font color="#003399"><i>// not an array</i></font>
+};    
+
+<b>void</b> f5()
+{
+    <font color="#003399"><i>// Dynamically allocate Sprite2 on the heap (handled by the programmer)</i></font>
+  Sprite2 *s1 = (Sprite2 *) malloc(<b>sizeof</b>(Sprite)); <font color="#003399"><i>// 28/32 bytes, ignoring padding/alignment (C and C++)</i></font>
+  Sprite2 *s2 = <b>new</b> Sprite2;                        <font color="#003399"><i>// 28/32 bytes, ignoring padding/alignment (C++ only)</i></font>
+
+    <font color="#003399"><i>// Dynamically allocate 10 chars on the heap (programmer)</i></font>
+  s1-&gt;name = (<b>char</b> *) malloc(10 * <b>sizeof</b>(<b>char</b>)); <font color="#003399"><i>// 10 bytes (C and C++)</i></font>
+  s2-&gt;name = <b>new</b> <b>char</b>[10];                       <font color="#003399"><i>// 10 bytes (C++ only)</i></font>
+
+    <font color="#003399"><i>// Use s1 and s2 ...</i></font>
+
+    <font color="#003399"><i>// Release memory for chars</i></font>
+  free(s1-&gt;name);     <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> [] s2-&gt;name; <font color="#003399"><i>// C++ only (array delete)</i></font>
+  
+    <font color="#003399"><i>// Release memory for Sprite2</i></font>
+  free(s1);  <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> s2; <font color="#003399"><i>// C++ only</i></font>
+}
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+Example 6: Stack and heap allocations:
+
+<blockquote><pre>
+<b>void</b> f6()
+{
+    <font color="#003399"><i>// Allocate 10 characters on the stack</i></font>
+  <b>char</b> a[10]; 
+
+    <font color="#003399"><i>// Point at the first element (C and C++)</i></font>
+  <b>char</b> *p1 = a;
+
+    <font color="#003399"><i>// Allocate space for array of 10 chars and 10 ints (C and C++)</i></font>
+  <b>char</b> *p2 = (<b>char</b> *) malloc(10 * <b>sizeof</b>(<b>char</b>)); <font color="#003399"><i>// 10 bytes</i></font>
+
+    <font color="#003399"><i>// Allocate space for array of 10 chars and 10 ints (C++ only)</i></font>
+  <b>char</b> *p3 = <b>new</b> <b>char</b>[10]; <font color="#003399"><i>// 10 bytes</i></font>
+
+    <font color="#003399"><i>// Use p1, p2, p3</i></font>
+    <font color="#003399"><i>// All three pointers work in the exact same way</i></font>
+    <font color="#003399"><i>// There is no way to tell how the memory was allocated</i></font>
+
+    <font color="#003399"><i>// Release the memory</i></font>
+  free(p2);     <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> [] p3; <font color="#003399"><i>// C++ only</i></font>
+
+} <font color="#003399"><i>// a is automatically released here</i></font>
+  <font color="#003399"><i>// calling free or delete on a is very dangerous!</i></font>
+</pre></blockquote>
+
+
+<p>
+<hr width="90%">
+<p>
+
+Example 7: Zero-initialization
+
+<blockquote><pre>
+<b>void</b> f7()
+{
+  <b>int</b> *p1 = (<b>int</b> *) calloc(10, <b>sizeof</b>(<b>int</b>)); <font color="#003399"><i>// 40 bytes, ignoring padding/alignment, all zero, C/C++</i></font>
+  <b>int</b> *p2 = <b>new</b> <b>int</b>[10]();                   <font color="#003399"><i>// 40 bytes, ignoring padding/alignment, all zero, C++ only</i></font>
+
+  <font color="#003399"><i>// use the memory...</i></font>
+
+  free(p1);     <font color="#003399"><i>// C and C++</i></font>
+  <b>delete</b> [] p2; <font color="#003399"><i>// C++ only</i></font>
+}
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+<b>Notes:</b>
+<ul>
+  <li>Just as with <i>malloc</i>, if you allocate memory with <i>new</i> and don't
+    <i>delete</i> it, you will have a memory leak.</li>
+  <li>When allocating memory for built-in types (e.g. <tt><b>int</b></tt>, <tt><b>double</b></tt>, etc.)
+    and arrays of built-in types, 
+    <i>malloc/free</i> and <i>new/delete</i> behave pretty much the same.</li>
+  <li>When you start allocating memory for user-defined types (e.g. structures and classes), using
+    <i>new/delete</i> is a better, safer way to do it.</li>
+  <li><i>malloc</i> and <i>free</i> are functions; <i>new</i> and <i>delete</i> are actually 
+    operators. <a href="../../docs/OperatorPrecedence-CPP.html">Operator precedence chart for C++</a>
+  <li>It is <b>very</b> important that if you allocate an array of objects using <i>new[]</i> that
+    you use <i>delete[]</i> to free the memory. If you just use <i>delete</i>, bad things can happen.
+    The compiler can't and won't warn you about it.</li>
+  <li>Be careful not to mix <i>new/delete</i> with <i>malloc/free</i>, e.g. allocate with <i>new</i>
+    and deallocate with <i>free</i>. The compiler can't and won't warn you about it but you will
+    most certainly corrupt the memory in your program.</li>
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

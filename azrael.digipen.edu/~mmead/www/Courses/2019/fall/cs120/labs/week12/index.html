@@ -1,0 +1,257 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+As always, please read ALL of the information before writing any code. Most of the problems that
+student's have are a result of writing code without reading all of the instructions and
+information.
+</p>
+
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+In this lab, you will write functions that will manipulate singly-linked lists. Refer to the
+<a href="../../../../../CS120/LinkedLists-Intro1.html">linked list notes</a> for more information.
+(A lot of code is posted there for you to use.)
+Also, you can find more information in chapter 17 of the textbook.
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<ol>
+<li>There are 7 functions that you need to implement for this lab. Here are the functions with a
+  brief description for each. The approximate number of lines of code for each is listed 
+  at the end of the description.
+
+<p>
+<table border=1 cellspacing=1 cellpadding=5>
+<tr><th>Function</th><th>Description</th></tr>
+
+<tr valign="center">
+<td  width="40%"><tt>void<br>add_front(struct Node **list, int value);</tt></td>
+<td>
+Given a list, add a new node to the <b>front</b> of the list that contains <i>value</i>.
+<font color="blue">(~ 3 lines of code)</font>
+</td>
+</tr>
+
+<tr valign="center">
+<td  width="40%"><tt>void<br>print_list(const struct Node *list);</tt></td>
+<td>
+Given a list, <b>print</b> the value of each node. The format specifier for the printf
+function is <tt>"%3i"</tt>. 
+<font color="blue">(~ 4 lines of code)</font></td>
+</tr>
+
+<tr valign="center">
+<td  width="40%"><tt>void<br>free_list(struct Node *list);</tt></td>
+<td>
+Given a list, <b>free</b> all of the nodes on the list.
+<font color="blue">(~ 4 lines of code)</font></td>
+</tr>
+
+<tr valign="center">
+<td  width="40%"><tt>int<br>size_list(const struct Node *list);</tt></td>
+<td>
+Given a list, <b>count</b> the number of nodes in the list and return that value.
+<font color="blue">(~ 5 lines of code)</font></td>
+</tr>
+
+<tr valign="center">
+<td  width="40%"><tt>int<br>sum_list(const struct Node *list);</tt></td>
+<td>
+Given a list, <b>add up</b> all of the values in the nodes and return that value.
+<font color="blue">(~ 5 lines of code)</font></td>
+</tr>
+
+<tr valign="center">
+<td  width="40%"><tt>void<br>add_back(struct Node **list, int value);</tt></td>
+<td>
+Given a list, add a new node to the <b>back</b> of the list that contains <i>value</i>.
+<font color="blue">(~ 8 lines of code)</font></td>
+</tr>
+
+
+<tr valign="center">
+<td  width="40%"><tt>void<br>remove_item(struct Node **list, int value);</tt></td>
+<td>
+Given a list, <b>remove</b> the node that contains <i>value</i>. If there are multiple
+nodes that contain the same value, you will only remove the first one that you encounter.
+Don't forget to free the memory for this node or you'll have memory leaks!
+<font color="blue">(~ 16 lines of code)</font></td>
+</tr>
+
+
+
+</table>
+<p>
+<b>Notes:</b>
+<ol>
+  <li>All of the functions take a pointer (or a pointer to pointer) to a Node struct as the first 
+    parameter.</li>
+    <p>
+  <li>Three of the functions can potentially modify the front of the list. These functions take
+    a pointer to pointer to a Node.</li>
+    <p>
+  <li>All functions must be able to handle the situation when an empty list (NULL) is passed in.</li>
+    <p>
+  <li>You should work on the functions in this order:
+    <p>
+    <ol>
+      <li>add_front</li>
+      <li>print_list</li>
+      <li>free_list</li>
+      <li>size_list</li>
+      <li>sum_list</li>
+      <li>add_back</li>
+      <li>remove_item</li>
+    </ol>
+      <p>
+  The functions above are listed in order of their difficulty to implement. Also, the first 3 functions
+  are required for every test in the driver. Failure to properly implement these functions will
+  cause you to fail every test.</li>
+  <p>
+  <li><b>DRAW DIAGRAMS!</b> Neither myself nor any TA will help anyone that does not have a 
+    diagram that shows the logic
+    that you are trying to implement. (If you feel that you don't need diagrams, then you don't need any 
+    help. See how that works?)</li>
+  <p>
+  <li>Pay close attention to your diagrams and code when you are manipulating the first node in the list.
+    This is where most students will have problems.</li>
+    <p>
+  <li>Get into the habit of using <b><tt>while</tt></b> loops when working with linked list. Yes,
+    they can be manipulated with <b><tt>for</tt></b> loops, but you'll rarely see that outside of
+    a freshman course.</li>
+    <p>
+  <li>Be sure to properly free the memory used by the nodes. There are two functions where you
+    will need to free nodes: <tt>free_list</tt>, and <tt>remove_item</tt>. If you forget to 
+    free any nodes, you'll have a memory leak and the code won't be accepted.</li>
+
+
+
+</ol>
+
+</ol>
+
+<p>
+<hr width="90%">
+<p>
+
+<b>More details</b>
+<p>
+
+<ul>
+<li>Implement these functions in a file called <tt><b>list.c</b></tt> and compile it like so:
+
+<blockquote><pre>
+gcc -O -Wall -Wextra -ansi -pedantic -Werror main.c list.c PRNG.c -o list
+</pre></blockquote>
+
+<li>The header file <tt><b>list.h</b></tt> (you need to create this file):
+<pre class="sourcecode"><code><b>struct</b> Node
+{
+  <b>int</b> number;        <font color="#003399"><i>/* data portion    */</i></font>
+  <b>struct</b> Node *next; <font color="#003399"><i>/* pointer portion */</i></font>
+};
+
+<b>void</b> add_front(<b>struct</b> Node **list, <b>int</b> value);
+<b>void</b> add_back(<b>struct</b> Node **list, <b>int</b> value);
+<b>void</b> free_list(<b>struct</b> Node *list);
+<b>void</b> print_list(<b>const</b> <b>struct</b> Node *list);
+<b>void</b> remove_item(<b>struct</b> Node **list, <b>int</b> value);
+<b>int</b> size_list(<b>const</b> <b>struct</b> Node *list);
+<b>int</b> sum_list(<b>const</b> <b>struct</b> Node *list);
+</code></pre>
+<li>You will need to include other system header files in your <tt><b>list.c</b></tt> file.
+(You're calling <tt>printf</tt> and <tt>malloc</tt>)</li>
+<p>
+<li>Random number generator files
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+  </ul>
+<p> 
+<li>Here is a driver file (<tt>main.c</tt>): <a href="main.c.html">HTML</a>&nbsp;&nbsp;
+<a href="main.c">Text</a>
+<p>
+<li>Here is the output for each test:
+  <p>
+  <ol>
+    <li><a href="output1.txt">test_add_front</a></li>
+    <li><a href="output2.txt">test_size</a></li>
+    <li><a href="output3.txt">test_sum</a></li>
+    <li><a href="output4.txt">test_add_back</a></li>
+    <li><a href="output5.txt">test_add_front_back</a></li>
+    <li><a href="output6.txt">test_remove</a></li>
+    <li><a href="output7.txt">test_A</a></li>
+    <li><a href="output-all.txt">All output</a></li>
+  </ol>
+<p>
+<li>You'll see that the driver uses command line arguments. For example,
+<blockquote><pre>
+list 1
+</pre></blockquote>
+will run <tt>test_add_front</tt> and
+<blockquote><pre>
+list 6
+</pre></blockquote>
+will run <tt>test_remove</tt> 
+  If you want to run every test, 
+  don't provide any argument. If you want to run a specific test, you will provide an integer. 
+  See the driver for details. (The driver also uses an array of function pointers.)
+
+</ul>
+
+
+<p>
+<big><big>
+</big></big>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<hr>
+
+<table border=0 cellpadding=0 cellspacing=10>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+	<td>
+</td>
+<td></td>
+<td>
+</td>
+</tr></table>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,130 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS170 - Programming Assignment #4</title>
+</head>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<bodyxx bgcolor="#FFFFFF" background="../../../../../images/notebook.jpg"  leftmargin="50" rightmargin="0">
+
+<center>
+<h1>CS 170 - Programming Assignment #4</h1>
+</center>
+
+<p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<!--
+<table border=0>
+<tr><td><img src="../../../../../images/annew3.gif" width="90" height="45"></td>
+<td>
+<p class="technote">
+</p>
+</td>
+</tr></table>	
+-->
+
+<ul>
+<li><a href="cs170-programming-assignment-list.pdf">Handout</a>  <b>READ THIS THOROUGHLY BEFORE STARTING</b>
+<p>
+<li>Partial interface: <a href="List.h.html">HTML</a> <a href="List.h">Text</a>
+<li>Partial implementation: <a href="List.cpp.html">HTML</a> <a href="List.cpp">Text</a>
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a>
+<li>Sample output: <a href="output-sample.txt">output.txt</a>
+<li><a href="CS170-FAQ-List.html">FAQ</a> for this assignment. <b>Read this before starting.</b>
+
+
+<li>Sample command lines for compiling:
+	
+<blockquote>
+g++:
+<blockquote><pre>
+  <b>g++</b> -o gnu driver-sample.cpp List.cpp -Wall -Wextra -ansi -pedantic -O2 -g -Wconversion -Werror
+</pre></blockquote>
+</blockquote>
+
+<!--
+<blockquote>
+Clang++:
+<blockquote><pre>
+  <b>clang++</b> -o clan driver-sample.cpp List.cpp -Wall -Wextra -ansi -pedantic -O2 -g -Wconversion
+</pre></blockquote>
+</blockquote>
+-->
+
+<!--
+<blockquote>
+Microsoft: (Optional for use with Dr. Memory)
+<blockquote><pre>
+  <b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver-sample.cpp List.cpp	
+</pre></blockquote>
+</blockquote>
+-->
+
+<li>Additional test cases:
+<p>
+<ul>
+	<li>Driver: <a href="driver-stress.cpp.html">HTML</a> <a href="driver-stress.cpp">Text</a>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+	</ul>
+		
+	<li>Output:
+		<ol>
+		<li><a href="output-stress1.txt">Individual tests</a> 
+		<li><a href="output-stress2.txt">Combined</a>
+	</ol>
+	<br>
+	You can select the test to run by putting the number on the command line. For example, assuming your executable is named
+	<b>foo.exe</b>, to run test #3 you would do this:
+
+<blockquote><pre>
+foo 3
+</pre></blockquote>
+If you want to time your program, use the <b>time</b> program (from Cygwin):
+
+<blockquote><pre>
+c:\cygwin\bin\time -p foo 3
+</pre></blockquote>
+
+To run all of the tests, pass the number <tt><b>0</b></tt> or just leave it blank:
+<blockquote><pre>
+c:\cygwin\bin\time -p foo
+</pre></blockquote>
+
+You need to provide the entire path to the <b>time</b> program because there is a built-in time command in Windows
+(which isn't useful for this).
+<p>
+If you're working in Linux or MacOS, you should just do:
+<blockquote><pre>
+time ./foo
+</pre></blockquote>
+</ul>
+	
+</ul>
+
+</ul>
+
+<br><br>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,431 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - FAQ for Assignment #3</title>
+</head>
+
+<body>
+<center><H1>
+<A HREF="cs170-programming-assignment-point.pdf">Programming Assignment #3</A> FAQ
+<p>
+<h2>(Frequently Asked Questions)</h2>
+</H1>
+</center>
+
+<br>
+
+<p>
+
+Here are some popular Questions and Answers for this assignment.<BR>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<ol>
+<li><b>Question:<br>
+The table in the handout says that the subtraction operator calculates the difference between two Points, 
+but the driver program also shows subtraction between a Point and a double. Which is the correct one?
+</b>
+<p>
+
+<b>Answer:</b><br>
+Actually, they are both correct. You need to overload the subtraction operator for both cases. The first 
+case is as described in the handout: the distance between two points is a double. The second case will be a 
+double subtracted from a Point. The result will be a Point. The reason for this seemingly "weird" rule is 
+that subtracting a positive value from a Point should be the same as adding a negative value to a Point:
+
+<blockquote><pre>
+<b>void</b> TranslateTest(<b>void</b>)
+{
+  Point pt1(6, 8), pt2(4, 1);
+
+  <font color="#003399"><i>// This should result in a double</i></font>
+  <b>double</b> d = pt1 - pt2;
+
+  <font color="#003399"><i>// These two should result in the same Point</i></font>
+  Point pt3 = pt1 - 2;  
+  Point pt4 = pt1 + -2;
+
+  <font color="#003399"><i>// THIS SHOULD NOT COMPILE</i></font>
+  pt3 = 2 - pt1;
+}
+</pre></blockquote>
+
+
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+Can we include other header files in our .cpp file?
+</b>
+<p>
+
+<b>Answer:</b><br>
+No. 
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+My code compiles and runs all of the tests with only one constructor. Why do I need two? 
+</b>
+<p>
+
+<b>Answer:</b><br>
+Does your code compile and run the tests that are NOT supposed to compile? If so, then you have
+the wrong constructor. (Hint: You won't have any default parameters in your constructors.)
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+Are we allowed to create any gettor functions so the non-member, non-friend functions can access the 
+private <tt><b>x_</b></tt> and <tt><b>y_</b></tt> members?
+</b>
+<p>
+
+<b>Answer:</b><br>
+No. You do not need any gettor functions. You are only allowed to create the functions specified. That is, 
+2 constructors and 18 operators (14 member, 2 friend, and 2 non-member, non-friend.) Since all of the 
+functions are trivial, you won't need any helper functions (except for the ones that are already
+provided.)
+If you forgot how to implement the non-member, non-friend functions without gettor functions, review the
+lecture notes.
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+All of my output seems to be correct except for the rotation. I'm getting <tt>-0.000</tt> instead of
+just <tt>0.000</tt>. What's the problem and how can I fix it?
+</b>
+<p>
+
+<b>Answer:</b><br>
+The problem is with the <b>double</b> data type. When using integers, there is only 0; there is no -0. 
+However, with doubles (or any floating point type), you can have both +0.0 and -0.0. Usually, this 
+isn't a problem, but if you round a very small negative number, you will get -0.000. For example, if 
+you have the value <tt>0.00000000000664</tt> and you print it out rounded to 3 decimal places, you'll 
+get <tt>0.000</tt>. But, if you have the value <tt>-0.00000000000664</tt> and you print it out rounded 
+to 3 decimal places, you'll get <tt>-0.000</tt>.
+<p>
+To fix this, we have to check to see how small the value is, and if it is small enough, we will call it 
+zero. For this assignment, we will say that any value that is between -0.00001 and +0.00001 is zero. 
+This arbitrary value (0.00001) is called an <i><b>epsilon</b></i>. You'll see that there is a constant 
+in the partial implementation file like this:
+
+<blockquote><pre>
+<b>const double</b> EPSILON = 0.00001;
+</pre></blockquote>
+
+You should have code similar to this in your rotation code (for both x and y):
+
+<blockquote><pre>
+  <font color="#003399"><i>// If value is between -EPSILON and +EPSILON, make it 0.0</i></font>
+<b>if</b> (value &gt; -EPSILON &amp;&amp; value &lt; EPSILON)
+  value = 0.0;
+</pre></blockquote>
+
+To read up a little more on this notion of epsilon, check out 
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/3/FP.html">this page</a>, especially
+the section titled <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/3/FP.html#III"><b>Equality</b> in part III</a>, <i>"Effective FP Programming"</i>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<a name="Q6">
+<li><b>Question:<br>
+How can we overload the pre/post increment/decrement operators when they both take no arguments?
+How is the compiler going to distinguish between pre and post? For example:</b>
+
+<blockquote><pre>
+Point pt(3, 4);
+++pt; <font color="#003399"><i>// This should call operator++(), e.g. pt.operator++()</i></font>
+pt++; <font color="#003399"><i>// This should call operator++(), e.g. pt.operator++()</i></font>
+</pre></blockquote>
+</b>
+</a>
+<p>
+
+<b>Answer:</b><br>
+When the ++ operator comes before (pre) the operand, the compiler <i>knows</i> this is the pre-increment
+operator. When the ++ operator comes after (post) the operand, the compiler <i>knows</i> this is  the
+post-increment operator. Therefore, the compiler isn't confused about which one you mean.
+<p>
+However, neither operator requires
+an argument so both functions will look identical. (Neither one can be marked <tt><b>const</b></tt>
+because they both change the operand).
+<p>
+The solution is to pass a "dummy" argument (an integer) to
+the post-increment operator (showing functional notation that the compiler uses):
+
+<blockquote><pre>
+++pt; <font color="#003399"><i>// pre-increment, compiler changes to pt.operator++()</i></font>
+pt++; <font color="#003399"><i>// post-increment, compiler changes to pt.operator++(0)</i></font>
+</pre></blockquote>
+
+You as the programmer are not passing that value. When the compiler sees the pre-increment
+operator, it calls the function that takes no arguments. When the compiler sees the post-increment
+operator, it calls the function that takes an integer and passes a 0.
+<p>
+So, it is the compiler that is making the call and it will decide which to call.
+
+BTW, it doesn't have to be 0, it just has to be <i>any</i> integer so that the compiler knows which one to call.
+This means that the signatures look like this:
+
+<blockquote><pre>
+<b>operator</b>++();    <font color="#003399"><i>// pre-increment operator, no params</i></font>
+<b>operator</b>++(<b>int</b>); <font color="#003399"><i>// post-increment operator, one <b>int</b> param </i></font>
+
+</pre></blockquote>
+
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<a name="Q7">
+<li><b>Question:<br>
+The sample driver shows several commented-out lines in the <i>IncDecTest</i> that should not compile. When I enable those,
+my code still compiles cleanly. Why are they supposed to fail and why is my code
+"failing to fail"?
+</b>
+</a>
+<p>
+
+<b>Short Answer:</b><br>
+The answer is in the <a href="../../../../../../docs/OperatorPrecedence-CPP.html">operator precedence chart for C++</a>.
+<p>
+
+<b>Long Answer:</b><br>
+What is printed out below? In other words, what is the value of <i>number</i> after the second statement?
+<p>
+<blockquote><pre>
+<b>int</b> number = 0;
+number++;        <font color="#003399"><i>// What is being incremented?</i></font>
+cout &lt;&lt; number;
+</pre></blockquote>
+
+If you said <i>"1"</i>, you're correct. This is something you learned a long time ago
+and even beginner programmers get that correct. OK, suppose we change the second
+statement to this:
+
+<blockquote><pre>
+(number++)++;    <font color="#003399"><i>// What is being incremented?</i></font>
+</pre></blockquote>
+
+Now what is printed? If you said <i>"2"</i>, you'd be wrong and probably quite 
+surprised. The answer is that the
+second statement is illegal and won't compile. Realize that this is also illegal:
+
+<blockquote><pre>
+++(number++);    <font color="#003399"><i>// What is being incremented?</i></font>
+</pre></blockquote>
+
+If those statements were valid, the answer would still be 1, which would only
+lead to confusion for programmers the world over. The answer lies in the question
+that is in the comment:
+
+<blockquote><pre>
+<font color="#003399"><i>// What is being incremented?</i></font>
+</pre></blockquote>
+
+To answer that, you simply have to answer the question: <i>"What is returned from
+the postfix increment operator?"</i>. The answer to that question is:
+<i>"A temporary copy of number"</i>. A copy is being made so that this kind of
+statement works as expected:
+
+<blockquote><pre>
+<b>int</b> num1 = 0;
+<b>int</b> num2 = num1++; <font color="#003399"><i>// Returns the &quot;old&quot; value (a copy) of num1</i></font>
+</pre></blockquote>
+
+After the code above executes, <i>num1</i> is 1 and <i>num2</i> is 0. So, what's 
+happening inside the postfix increment operation is that a temporary copy of <i>num1</i>
+is made, then, <i>num1</i> is incremented to 1, and then the temporary copy is used
+to assign to <i>num2</i>.
+<p>
+So, if either of these were allowed:
+
+<blockquote><pre>
+(number++)++;    <font color="#003399"><i>// What is being incremented?</i></font>
+++(number++);    <font color="#003399"><i>// What is being incremented?</i></font>
+</pre></blockquote>
+
+The unnamed, compiler-generated, temporary copy of <i>number</i> would be incremented,
+but then that incremented copy is immediately discarded because the programmer has no
+access to it (it doesn't have a name). The short answer above said that the 
+answer was in the 
+<a href="../../../../../../docs/OperatorPrecedence-CPP.html">operator precedence chart for C++</a>.
+And if you look at the postfix increment/decrement operators you will see this
+(just showing the relevant operators):
+
+<blockquote><pre>
+<b> Rank   Operator            Description                  Result    Associativity</b>
+-------------------------------------------------------------------------------------
+  B5     ++                  Postfix increment            <b>rexp</b>         L-R
+  B6     --                  Postfix decrement            <b>rexp</b>         L-R
+-------------------------------------------------------------------------------------
+  C5     ++                  Prefix increment             <b>lexp</b>         R-L
+  C6     --                  Prefix decrement             <b>lexp</b>         R-L
+</pre></blockquote>
+
+The key is in the <b>Result</b> column. The postfix operators return an <i>r-expression</i>
+or <i>r-value</i>. That's a fancy name for <i>unnamed compiler-generated temporary</i> and
+the programmer cannot access these.
+<p>
+To the contrary, the prefix increment/decrement operators
+return an <i>l-value</i>, which represents a named memory location which the programmer
+can access. That's why this is completely legal and does what you'd expect:
+
+<blockquote><pre>
+<b>int</b> number = 0;
+++++number;     <font color="#003399"><i>// Same as ++(++number), parens are redundant</i></font>
+cout &lt;&lt; number; <font color="#003399"><i>// Prints the value 2</i></font>
+</pre></blockquote>
+
+Even this is fine:
+
+<blockquote><pre>
+<b>int</b> number = 0;
+++++++++++number;   
+cout &lt;&lt; number; <font color="#003399"><i>// Prints the value 5</i></font>
+</pre></blockquote>
+
+Since the compiler implements all of the operators for the built-in types
+(<i>int</i>, <i>long</i>, <i>double</i>, etc.), it enforces this rule and prevents
+<i>strange and surprising</i> behavior that would confuse programmers.
+However, when you, the programmer, are overloading operators for user-defined
+types (such as <i>Point</i>), the compiler does not enforce this. 
+(Which is why you can overload the <tt>'+'</tt> operator to do subtraction.
+The compiler doesn't care.)
+<p>
+<p class="technote">  
+To prevent the <i>strange and surprising</i> behavior when using the temporary
+copy returned from the postfix operators, you need to make sure they return
+constant (i.e. <tt><b>const</b></tt>) objects.
+</p>
+
+Finally, this applies to all operators that <i>return copies by value</i>, not just the postfix
+increment and decrement operators.
+
+<p>
+<hr width="90%">
+<p>
+
+This is one of the <i>Golden Rules</i> that Scott Meyers talks about in 
+<i>Item 6</i> in his book <i>Effective C++</i> from his
+<a href="https://www.aristeia.com/books.html">Effective C++ Series</a>.
+Here's an excerpt:
+<p>
+
+<font color="blue">
+<blockquote>
+A good rule to follow when designing classes is <i>when in doubt, do as the ints do</i>,
+and the ints most certainly do not allow double application of postfix increment:
+
+<blockquote><pre>
+<font color="blue"><b>int</b></font> i;
+i++++; // error!
+</pre></blockquote>
+
+The second reason is that double application of postfix increment almost never does
+what clients expect it to. As noted above, the second application of operator++ in
+a double increment changes the value of the object returned from the first invocation,
+not the value of the original object. Hence, if
+
+<blockquote><pre>
+i++++;
+</pre></blockquote>
+
+were legal, i would be incremented only once. This is counterintuitive and confusing
+(for both ints and user-defined types) so it's best prohibited.
+
+C++ prohibits it for ints, but you must prohibit it yourself for classes you write.
+The easiest way to do this is to make the return type of postfix increment a const
+object. Then when compilers see
+
+<blockquote><pre>
+i++++; // same as i.operator++(0).operator++(0);
+</pre></blockquote>
+
+they recognize that the const object returned from the first call to operator++
+is being used to call operator++ again. operator++, however, is a non-const member function,
+so const objects &mdash; such as those returned from postfix operator++ &mdash; can't call it.
+If you've ever wondered if it makes sense to have functions return const objects,
+now you know: sometimes it does, and postfix increment and decrement are examples.
+</blockquote>
+</font>
+
+There is even a g++ option named after his books, <i>-Weffc++</i>, which
+enforces a lot of his advice.
+<p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!--
+<hr>
+<li><b>Question:<br>
+Why does Borland's compiler give me an error message when I try to use sin and cos in my code? The error 
+is something like this:
+
+<blockquote><pre>
+Error E2268 Point.cpp 89: Call to undefined function 'cos' in function ...
+</pre></blockquote>
+
+
+</b>
+<p>
+
+<b>Answer:</b><br>
+You are calling the functions incorrectly. All C/C++ library functions are in the <b><tt>std</tt></b> 
+namespace. You must specify the namespace like this:
+
+<blockquote><pre>
+std::cos(value);
+</pre></blockquote>
+
+Microsoft and GNU allow it without the namespace, which is non-standard.
+-->
+<p>
+
+</ol>
+<br><br>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+</body>
+</html>

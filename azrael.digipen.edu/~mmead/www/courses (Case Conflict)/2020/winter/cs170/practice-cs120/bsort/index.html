@@ -1,0 +1,171 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>bsort</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+</head>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(bsort.c)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Information</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a function that will sort an array of integers. There are countless ways to do sorting,
+  some are very easy to implement, some, not so easy. Since this is our first attempt at sorting,
+  we're going to go the easy way. Simple sorting methods include selection sort, insertion sort,
+  and exchange sort, also known as a bubble sort. All of these methods are similar in their 
+  implementations and performance. 
+<p>
+  We're going to implement the bubble sort. Some of you have probably already seen this and maybe
+  even know it's not a very good way to sort things. That may be, but we aren't interested in
+  "the best" sort method at this point. (That time will come later...) I just want everyone to
+  see this sort, so that when you compare it to others, you'll see and understand the differences.
+  <p>
+  A bubble sort works by comparing adjacent items 
+  and exchanging (swapping) them if they are out of order. The meaning of "out of order" depends 
+  on how you want the items sorted: smallest to largest, or largest to smallest. 
+<p>
+
+
+<!--
+<font color="red"><b>100</b></font>
+<tt></tt>
+-->
+<p>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+  <tr><td><img border=1 src="bsort-wikipedia.gif"></td></tr>
+  <tr><td align="right"><span class="attrib">Courtesy of Wikipedia</span></td></tr>
+</table>
+</blockquote>
+
+<p>
+
+More details about the algorithm are <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/bsort.html">here</a>. Basically, you will have
+a nested <b><tt>for</tt></b> loop. You won't need more than 10 lines of code, and may be able to have less,
+depending on how you do your logic.
+<p>
+This is the prototype for the function:
+<blockquote><pre>
+void bsort(<b>int</b> array[], <b>int</b> size);
+</pre></blockquote>
+You'll notice that the array is not marked with the <tt><b>const</b></tt> keyword. This is simply
+because you are going to modify the array. 
+You must sort the elements in-place. That's why it's not <tt><b>const</b></tt>.
+This means that <b>you are not allowed to create another array.</b> 
+<p>
+The name of the file should be named <tt>bsort.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O2 -o bsort main.c bsort.c PRNG.c
+</pre></blockquote>
+
+<b>Files:</b>
+<p>
+<ul>
+  <li>Here is a sample driver file 
+    <tt>main.c</tt>: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/main.c.html">HTML</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/main.c">Text</a></li>
+  <p>
+  <li>Random number generator files (put these in the same directory as your C file)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/PRNG.h.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/PRNG.c.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/PRNG.c">Text</a>
+  </ul>
+  <p>
+  <li>Here is a sample <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/output.txt">output</a> file for you do diff with.</li>
+<p>
+
+  </li>
+</ul>
+
+</ol>
+
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ul>
+  <li><font color="blue">Approximate number of lines of code: 8.</font></li>
+  <p>
+
+  <li>You don't need to include any header files in your .c file.
+    <p>
+  <li>This is probably the simplest practice program thus far. (You will need it
+    for future assignments.)</li>
+  <p>
+  <li>If you are having trouble understanding the algorithm, please read 
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/bsort/bsort.html">this explanation</a> first. 
+    <p>
+<li><b>DO NOT UPLOAD ANYTHING UNTIL YOU HAVE TESTED YOUR CODE WITH REDIRECTION.</b></li>
+</ul>
+<p>
+<p class="Trivia">
+The bubble sort is called an <i>N<sup>2</sup></i> algorithm because the number of
+    operations required on N items is <i>N<sup>2</sup></i>, in the worst case. Other <i>N<sup>2</sup></i>
+    trivial sorting algorithms are selection sort and insertion sort. Both of those will typically run
+    faster than a bubble sort. However, at this stage in your career, you are more worried about
+    correctness than performance. In the Real World&trade; none of these sorting methods would
+    be useable with large numbers of items. However, any of these algorithms provide a beginning
+    programmer with a chance at creating a very simple sort function using the C programming
+    language.
+    You'll learn all about performance (worst-case asymptotic time complexity)
+    of various algorithms and data structures in 
+    CS280 (Data Structures) and in CS330 (Algorithm Analysis).
+</p>
+
+
+<br>
+<p><hr><p>
+
+
+
+
+</ol>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

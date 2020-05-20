@@ -1,0 +1,389 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Representing Floating-Point Numbers in Binary</title>
+</head>
+
+<body>  
+<center><h1>Representing Floating-Point Numbers in Binary</h1></center>
+
+<blockquote><i>
+"There are two ways of constructing a software design; one way is to make
+it so simple that there are obviously no deficiencies, and the other way
+is to make it so complicated that there are no obvious deficiencies.  The
+first method is far more difficult."</i> --  C. A. R. Hoare
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Background
+</p>
+
+
+
+All floating-point numbers consist of three parts:
+
+<ol>
+<li>A <i>sign</i> - Indicates whether the number is positive (above zero) or negative (below zero)
+<li>An <i>exponent</i> - This can be positive (absolute value of the number is above 1) or negative 
+(absolute value of the number is between 0 and 1).
+<li>A <i>mantissa</i> - This is the <i>precision</i> of the number (also called the <i>significand</i>
+in our usage). Usually this is the fractional portion of the number after it has been <i>normalized</i> 
+in scientific notation.
+</ol>
+
+Some examples in decimal (base 10):
+
+<blockquote><pre>
+<table border=1 cellpadding=10>
+<tr><th>Number</th><th>Sign</th><th>Mantissa</th><th>Exponent</th></tr>
+<tr align=center><td>3.763 x 10<sup>3</sup></td><td>+</td><td>3.763</td><td>3</td></tr>
+<tr align=center><td>1.2345 x 10<sup>-11</sup></td><td>+</td><td>1.2345</td><td>-11</td></tr>
+<tr align=center><td>-4.45 x 10<sup>5</sup></td><td>-</td><td>4.45</td><td>5</td></tr>
+<tr align=center><td>-2.6795 x 10<sup>-7</sup></td><td>-</td><td>2.6795</td><td>-7</td></tr>
+</table>
+</pre></blockquote>
+
+<p>
+
+Representing the value 12,345 in decimal:
+
+<blockquote><pre>
+<table border=1 cellpadding=10>
+<tr><th>Number</th><th>Sign</th><th>Mantissa</th><th>Exponent</th></tr>
+<tr align=center><td>12345 x 10<sup>0</sup></td><td>+</td><td>12345</td><td>0</td></tr>
+<tr align=center><td>1234.5 x 10<sup>1</sup></td><td>+</td><td>1234.5</td><td>1</td></tr>
+<tr align=center><td>123.45 x 10<sup>2</sup></td><td>+</td><td>123.45</td><td>2</td></tr>
+<tr align=center><td>12.345 x 10<sup>3</sup></td><td>+</td><td>12.345</td><td>3</td></tr>
+<tr align=center><td><b>1.2345 x 10<sup>4</sup></b></td><td><b>+</b></td><td><b>1.2345</b></td><td><b>4</b></td></tr>
+<tr align=center><td>.12345 x 10<sup>5</sup></td><td>+</td><td>.12345</td><td>5</td></tr>
+<tr align=center><td>.012345 x 10<sup>6</sup></td><td>+</td><td>.012345</td><td>6</td></tr>
+</table>
+</pre></blockquote>
+
+Notes:
+<ul>
+<li>The <b>bold</b> row above is the <i>normalized</i> value for 12,345. We will use this normalization 
+with binary floating-point numbers.
+<li>In computers, we usually see scientific notation displayed like: <tt>-1.2345e+004</tt> or something similar. (For -12,345)
+<li>All of the necessary information (sign, exponent, mantissa) are present in the number.
+</ul>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+IEEE 754
+</p>
+
+
+The IEEE (Institute of Electrical and Electronics Engineers) sets the standard for floating point 
+arithmetic. This standard specifies how single precision (32 bit) and double precision (64 bit) 
+floating point numbers are represented and how arithmetic should be carried out on them.
+<p>
+
+<b>32-bit single-precision</b>
+
+<p>
+<img src="32BitNumber.gif">
+<p>
+
+Parts:
+<ul>
+<li><i>Sign</i> - Like binary integers, a 0 means positive and a 1 means negative.
+<li><i>Exponent</i> - This is the power of 2 (binary) that the mantissa is multiplied with to get the actual value.
+<li><i>Mantissa</i> - The "fractional" portion of the number. There is an implied leading 1. 
+(Unlike base 10, base 2 has only one possible value for the first digit.)
+</ul>
+
+Notes:
+<ul>
+<li>The exponent is offset by 127 (called the <i>bias</i>). Subtract 127 from the binary value to get 
+the actual value of the exponent:
+<blockquote><pre>
+ Binary      Actual exponent (decimal)    
+------------------------------------------
+01111111        0  (127 - 127)
+10000000        1  (128 - 127)
+10000010        3  (130 - 127)
+01111100       -3  (124 - 127)
+00000000     -127  (  0 - 127)  This is a special case
+11111111      128  (255 - 127)  This is a special case
+</pre></blockquote>
+<li>There is no sign bit in the exponent and mantissa portions, so that's why there is a bias.
+<li>Note that you would add 127 to the decimal exponent to get a value to be converted to the binary representation.
+
+<li>There is no two's complement issue, so a negative number looks exactly like a positive number with 
+the exception of the sign bit:
+<blockquote><pre>
+Decimal                Binary            
+---------------------------------------------
+ 0.65625   0 01111110 01010000000000000000000
+-0.65625   1 01111110 01010000000000000000000
+ 0.2       0 01111100 10011001100110011001101
+-0.2       1 01111100 10011001100110011001101
+</pre></blockquote>
+</ul>
+
+
+Special numbers (some have many different binary representations):
+
+<blockquote><pre>
+<b>Zero</b>
+0 00000000 00000000000000000000000 = +0 (sign is 0, exponent is 0, mantissa is 0)
+1 00000000 00000000000000000000000 = -0 (sign is 1, exponent is 0, mantissa is 0)
+0 00000000 00100000000000000000000 = Dirty zero (sign is 0 or 1, exponent is 0, mantissa is non-zero)
+
+<b>INF - Infinity</b>
+0 11111111 00000000000000000000000 = +Infinity (sign is 0, exponent is 255, mantissa is 0)
+1 11111111 00000000000000000000000 = -Infinity (sign is 1, exponent is 255, mantissa is 0)
+
+<b>NAN - Not a Number</b>
+0 11111111 10000100000000000000000 = Quiet NaN (sign is 0 or 1, exponent is 255, mantissa is non-zero, MSB of mantisaa is 1)
+0 11111111 00100010001001010101010 = Signaling NaN (sign is 0 or 1, exponent is 255, mantissa is non-zero, MSB of mantissa is 0)
+</pre></blockquote>
+
+
+<b>64-bit double-precision</b>
+<p>
+<img src="64BitNumber.gif">
+<p>
+<ul>
+<li>Same as double-precision, except there are more bits, 11 for the exponent and 52 for the mantissa.
+<li>Exponent has a bias of 1023.
+</ul>
+
+Summary:
+<ul>
+<li>The sign bit is 0 for positive, 1 for negative.
+<li>The exponent field is 127 (single-precision) plus the actual exponent or 1023 (double-precision) 
+plus the actual exponent.
+<li>The first bit of the mantissa is an implied 1, so only the fractional portion is represented in
+the remaining 23 bits (single-precision) or 52 bits (double-precision).
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Constructing Numbers
+</p>
+
+
+Given the decimal number 3045.125:
+
+<blockquote><pre>
+     3045.125 = (3*1000) + (0*100) + (4*10) + (5*1) + (1/10) + (2/100) + (5/1000)
+
+              = (3*10<sup>3</sup>) + (0*10<sup>2</sup>) + (4*10<sup>1</sup>) + (5*10<sup>0</sup>) + (1*10<sup>-1</sup>) + (2*10<sup>-2</sup>) + (5*10<sup>-3</sup>) 
+
+              =   300   +   0     +   40    +   5     +   .1     +   .02    +  .005
+</pre></blockquote>
+       
+        
+Given the binary number 10110111.1011:
+
+<blockquote><pre>
+10110111.1011 = (1*128) + (0*64) + (1*32) + (1*16) + (0*8) + (1*4) + (1*2) + (1*1) + (1/2) + (0/4) + (1/8) + (1/16)
+
+10110111      = (1*2<sup>7</sup>) + (0*2<sup>6</sup>) + (1*2<sup>5</sup>) + (1*2<sup>4</sup>) + (0*2<sup>3</sup>) + (1*2<sup>2</sup>) + (1*2<sup>1</sup>) + (1*2<sup>0</sup>) 
+
+              =  128   +   0    +   32   +   16   +   0   +    4    +   2    +   1
+       
+        .1011 = (1*2<sup>-1</sup>) + (0*2<sup>-2</sup>) + (1*2<sup>-3</sup>) + (1*2<sup>-4</sup>)
+
+              =    .5   +    0    +  .125   +  .0625    
+                
+10110111.1011<sub>2</sub> = 183.6875<sub>10</sub>
+</pre></blockquote>
+
+Binary vs. decimal fraction
+
+<blockquote><pre>
+             Decimal     Decimal
+  Binary     fraction    value
+-----------------------------------
+  .1           1/2       .5      
+  .01          1/4       .25     
+  .001         1/8       .125     
+  .0001        1/16      .0625       
+  .00001       1/32      .03125
+  .000001      1/64      .015625
+  
+  etc...
+</pre></blockquote>
+
+Examples of binary and decimal equivalents:
+
+<blockquote><pre>
+   Binary         Decimal (fraction)     Decimal
+-------------------------------------------------
+    1.1                1 1/2             1.5
+    1.101              1 5/8             1.625
+  101.001              5 1/8             5.125
+ 1001.0101             9 5/16            9.3125
+ 0011.10101            3 21/32           3.65625
+</pre></blockquote>
+
+Examples of normalizing binary numbers and their associated exponents:
+
+<blockquote><pre>
+   Binary       Normalized     Exponent (decimal)   Exponent (IEEE 754 binary)
+-----------------------------------------------------------------------------
+.11011           1.1011              -1                01111110 (126<sub>10</sub>)
+1100.101         1.100101             3                10000010 (130<sub>10</sub>)
+1010.1           1.0101               3                10000010 (130<sub>10</sub>)
+100110           1.00110              5                10000100 (132<sub>10</sub>)
+.00010101        1.0101              -4                01111011 (123<sub>10</sub>)
+1.001            1.001                0                01111111 (127<sub>10</sub>)
+</pre></blockquote>
+
+Points
+<ul>
+<li>Notice that all normalized numbers have a single digit to the left of the point. 
+<li>It's a <i>decimal</i> point for base 10 numbers, <i>binary</i> point for base 2 numbers.
+<li>In base 10, there are 9 possible numbers (1-9) to the left of the decimal point.
+<li>In base 2, there is only one possible number, 1, to the left of the binary point.
+<li>We don't have to encode this leading one in the bits, it is implied.
+<li>Implying a leading 1 means that we have another bit for the mantissa (more precision)
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+Reference values:
+
+<blockquote><pre>
+  Bit                    Decimal              Decimal
+Position   Exponent      Fraction             Number
+------------------------------------------------------------------
+    1        1/2<sup>1</sup>              1/2     0.5000000000000000000000000
+    2        1/2<sup>2</sup>              1/4     0.2500000000000000000000000
+    3        1/2<sup>3</sup>              1/8     0.1250000000000000000000000
+    4        1/2<sup>4</sup>             1/16     0.0625000000000000000000000
+    5        1/2<sup>5</sup>             1/32     0.0312500000000000000000000
+    6        1/2<sup>6</sup>             1/64     0.0156250000000000000000000
+    7        1/2<sup>7</sup>            1/128     0.0078125000000000000000000
+    8        1/2<sup>8</sup>            1/256     0.0039062500000000000000000
+    9        1/2<sup>9</sup>            1/512     0.0019531250000000000000000
+   10        1/2<sup>10</sup>          1/1024     0.0009765625000000000000000
+   11        1/2<sup>11</sup>          1/2048     0.0004882812500000000000000
+   12        1/2<sup>12</sup>          1/4096     0.0002441406250000000000000
+   13        1/2<sup>13</sup>          1/8192     0.0001220703125000000000000
+   14        1/2<sup>14</sup>         1/16384     0.0000610351562500000000000
+   15        1/2<sup>15</sup>         1/32768     0.0000305175781250000000000
+   16        1/2<sup>16</sup>         1/65536     0.0000152587890625000000000
+   17        1/2<sup>17</sup>        1/131072     0.0000076293945312500000000
+   18        1/2<sup>18</sup>        1/262144     0.0000038146972656250000000
+   19        1/2<sup>19</sup>        1/524288     0.0000019073486328125000000
+   20        1/2<sup>20</sup>       1/1048576     0.0000009536743164062500000
+   21        1/2<sup>21</sup>       1/2097152     0.0000004768371582031250000
+   22        1/2<sup>22</sup>       1/4194304     0.0000002384185791015625000
+   23        1/2<sup>23</sup>       1/8388608     0.0000001192092895507812500
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<ul>
+<li>Representing decimal numbers in binary works great if the decimal number makes a nice "round"
+number in binary.
+<li>Most decimal numbers can't be represented exactly in binary.
+<li>The value 0.2 can be represented exactly in decimal, but in binary, it can't:
+
+<blockquote><pre>
+32 bits:
+-----------------------------------------------------------
+0 01111100 10011001100110011001100 --> 0.199999988079071045
+0 01111100 10011001100110011001101 --> 0.200000002980232239
+
+64-bits
+-------------------------------------------------------------------------------------------
+0 01111111100 1001100110011001100110011001100110011001100110011001 --> 0.199999999999999983
+0 01111111100 1001100110011001100110011001100110011001100110011010 --> 0.200000000000000011
+</pre></blockquote>
+</ul>
+
+The output from a program to demonstrate this shows the imperfection clearly:
+
+<blockquote><pre>
+Calculating bits for: 0.2
+
+ 1   -----------------------------
+ 2   -----------------------------
+ 3   subtract this: 0.125000000000
+         new value: 0.075000002980
+ 4   subtract this: 0.062500000000
+         new value: 0.012500002980
+ 5   -----------------------------
+ 6   -----------------------------
+ 7   subtract this: 0.007812500000
+         new value: 0.004687502980
+ 8   subtract this: 0.003906250000
+         new value: 0.000781252980
+ 9   -----------------------------
+10   -----------------------------
+11   subtract this: 0.000488281250
+         new value: 0.000292971730
+12   subtract this: 0.000244140625
+         new value: 0.000048831105
+13   -----------------------------
+14   -----------------------------
+15   subtract this: 0.000030517578
+         new value: 0.000018313527
+16   subtract this: 0.000015258789
+         new value: 0.000003054738
+17   -----------------------------
+18   -----------------------------
+19   subtract this: 0.000001907349
+         new value: 0.000001147389
+20   subtract this: 0.000000953674
+         new value: 0.000000193715
+21   -----------------------------
+22   -----------------------------
+23   subtract this: 0.000000119209
+         new value: 0.000000074506
+
+binary: 0.00110011001100110011001
+</pre></blockquote>
+
+<a href="BinConverter.exe">Binary/Decimal converter</a> (BinConverter.exe)
+<p>
+<a href="IEEE754-Examples.html">More examples</a>
+<p>
+</ul>
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+

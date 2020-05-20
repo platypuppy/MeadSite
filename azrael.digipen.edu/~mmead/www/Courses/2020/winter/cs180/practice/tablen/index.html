@@ -1,0 +1,369 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Practice Lab</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+
+pre.console {
+	#font-family: Courier, "Courier New", mono;
+	#font-size: 16px;
+	color: #000000;
+	background-color: #ffffdd;
+	padding: 8px 8px 8px 8px; # top,right,bottom,left
+	margin-left: 20px;
+	border: #000000;
+	border-style: dashed;
+	border-width: 1px;
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+pre.bconsole {
+	#font-family: Courier, "Courier New", mono;
+	#font-size: 16px;
+	color: #FFFFFF;
+	background-color: #000000;
+	padding: 8px 8px 8px 8px; # top,right,bottom,left
+	margin-left: 20px;
+	border: #000000;
+	border-style: dashed;
+	border-width: 1px;
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+</style>
+
+<body>  
+<center>
+<h1>Practice Lab</h1>
+(tablen)
+</center>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+The original freshman tablen is <a href="cs120/index.html">here</a>.
+<p>
+
+This practice lab has you working more with command line options via <tt>getopt</tt>. You will
+	enhance your <tt>tablen</tt> program that you wrote previously to support several command
+	line options and new behavior.
+	<p>
+		This is the help screen that will be displayed when you run
+	the program without providing any filenames or options:
+(You will get a similar screen with the <tt>--help</tt> or <tt>-h</tt> option.)</li>
+<p>
+<blockquote><pre class="console">
+<b>./tablen</b>
+No filenames specified.
+
+Usage: tablen [options] [file1 file2 ...] 
+
+Options:
+ -t   --tabs          look for tabs.
+ -lX  --longlines=X   look for lines longer than X (default X is 80).
+ -c   --color         use ANSI colors.
+ -a   --all           look for tabs and long lines (default).
+ -v   --verbose       show all problems, not just summary.
+ -V   --version       display version and quit.
+ -f   --filename      display filename with output.
+ -h   --help          display this information and quit.
+
+Exit codes: (Only meaningful if processing a single file.)
+  0 - no tabs or long lines in any file
+  1 - 1 or more files had tabs
+  2 - 1 or more files had long lines
+  3 - 1 or more files had tabs and/or long lines
+  4 - trouble (e.g. couldn't open a file)
+  5 - trouble (e.g. couldn't malloc)
+
+To detect which file had issues, process only one file at a time,
+or use the -f option to display the filename with the output.
+</pre></blockquote>
+<p>
+
+Sample input files: <a href="input0.txt">input0.txt</a>, <a href="input1.txt">input1.txt</a>, and <a href="input2.txt">intput2.txt</a>. 
+<p>
+Here are some sample runs with various command line options. Notice the semi-colon and <i>echo</i>
+command that follow the <i>tablen</i> command. The <i>echo</i> command prints the
+<a href="https://en.wikipedia.org/wiki/Exit_status">return code</a> 
+ of the last program that executed. The help
+screen above specifies what to return from <i>main</i>.
+<p>
+
+Default functionality with a clean file (checks tabs and long lines):
+<blockquote><pre class="console">
+<b>./tablen input0.txt ; echo $?</b>
+0
+</pre></blockquote>
+<p>
+
+Default functionality with a bad file (checks tabs and long lines):
+<blockquote><pre class="console">
+<b>./tablen input1.txt ; echo $?</b>
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+3
+</pre></blockquote>
+<p>
+
+Showing the filename (<tt>-f</tt> or <tt>--filename</tt>):
+<blockquote><pre class="console">
+<b>./tablen -f input1.txt ; echo $?</b>
+input1.txt
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+3
+</pre></blockquote>
+<p>
+
+Checking for tabs only (<tt>-t</tt> or <tt>--tabs</tt>):
+<blockquote><pre class="console">
+<b>./tablen -t input1.txt ; echo $?</b>
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+1
+</pre></blockquote>	
+<p>
+
+Checking for long lines only (<tt>-l</tt> or <tt>--longlines</tt>):
+<blockquote><pre class="console">
+<b>./tablen -l input1.txt ; echo $?</b>
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+2
+</pre></blockquote>	
+<p>
+
+With verbose (<tt>-v</tt> or <tt>--verbose</tt>):
+<blockquote><pre class="console">
+<b>./tablen -v input1.txt ; echo $?</b>
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+3
+</pre></blockquote>
+<p>
+
+Checking multiple files:
+<blockquote><pre class="console">
+<b>./tablen -f input1.txt input2.txt</b>
+input1.txt:
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+input2.txt:
+*****  TABS IN USE  *****: Number of tabs in the file is 17.
+***** LINE TOO LONG *****: 4 lines longer than 80. Longest line is 32 at 102 chars.
+</pre></blockquote>
+<p>
+
+Checking multiple files using the wildcard <tt><b>*</b></tt> character. There are 11 C files in the
+directory, but only 8 had problems. Some had no problems, some had only tabs, some had only long lines,
+and some had both:
+<blockquote><pre class="console">
+<b>./tablen -f *.c</b>
+colorize.c:
+***** LINE TOO LONG *****: 7 lines longer than 80. Longest line is 246 at 100 chars.
+colorize-save.c:
+*****  TABS IN USE  *****: Number of tabs in the file is 175.
+***** LINE TOO LONG *****: 7 lines longer than 80. Longest line is 246 at 100 chars.
+colors.c:
+*****  TABS IN USE  *****: Number of tabs in the file is 3.
+foo.c:
+***** LINE TOO LONG *****: 4 lines longer than 80. Longest line is 80 at 100 chars.
+getopt.c:
+*****  TABS IN USE  *****: Number of tabs in the file is 3099.
+***** LINE TOO LONG *****: 64 lines longer than 80. Longest line is 592 at 193 chars.
+showcolors.c:
+*****  TABS IN USE  *****: Number of tabs in the file is 2.
+termcolors.c:
+*****  TABS IN USE  *****: Number of tabs in the file is 48.
+***** LINE TOO LONG *****: 1 line longer than 80. Longest line is 17 at 86 chars.
+testcolors.c:
+*****  TABS IN USE  *****: Number of tabs in the file is 20.
+</pre></blockquote>
+<p>
+
+The same as above but setting the length of the longest line to 100 characters:
+<blockquote><pre class="console">
+<b>./tablen -f --longlines=100 *.c</b>
+getopt.c:
+***** LINE TOO LONG *****: 27 lines longer than 80. Longest line is 592 at 193 chars.
+</pre></blockquote>
+<p>
+
+Executing with a file that doesn't exist:
+<blockquote><pre class="console">
+<b>./tablen dummy.foo ; echo $?</b>
+Can't open dummy.foo for read.
+4
+</pre></blockquote>
+<p>
+
+Providing a file that doesn't exist with some that do:
+<blockquote><pre class="console">
+<b>./tablen -fl150 a.txt *.c b.txt</b>
+Can't open a.txt for read.
+getopt.c:
+***** LINE TOO LONG *****: 8 lines longer than 80. Longest line is 592 at 193 chars.
+Can't open b.txt for read.
+</pre></blockquote>
+<p>
+
+Displaying the version:
+<blockquote><pre class="console">
+<b>./tablen -V</b>
+tablen version 1.0
+</pre></blockquote>
+<p>
+
+
+With ANSI colors (<tt>--colors</tt> or <tt>-c</tt>) enabled (shown in a terminal with a black background):
+<!--<table bgcolor=black color=white border=0 cellspacing=0 cellpadding=0>-->
+
+<blockquote><pre class="bconsole">
+./tablen input1.txt -cv ; echo $?
+<span style="color:green">#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|</span>
+<span style="background-color:red"><b>*****  TABS IN USE  *****: Number of tabs in the file is 15.</b></span>
+<span style="color:purple"># 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|</span>
+<span style="background-color:red"><b>***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.</b></span>
+3
+</pre></blockquote>
+<p>
+The choice of colors is left up to you. 
+
+
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+Notes:
+<p>
+<ol>
+	<li>You must display the help message exactly as shown above, even if you didn't implement the
+		ANSI colors or use malloc in your code. This is so everyone's output looks the same. I encourage
+		you to experiment with colors, as they can be very useful in error messages.</li>
+<p>
+<li>You will have to create a <tt>main.c</tt> file to support the program. Don't put all of the code into
+<tt>tablen.c</tt>. In fact, all of the command line processing should be done in <tt>main.c</tt>,
+and the rest should be done in <tt>tablen.c</tt>. You will have to modify your <tt>tablen.c</tt> file
+to support the new features.
+<p>
+<li>Your prototype for the <i>tablen</i> function will likely change from before to accommodate the new
+	behavior and options. Here is my prototype for the new <i>tablen</i> function:
+
+<blockquote><pre>
+<b>int</b> tablen(<b>const char</b> *filename, <b>int</b> tabs, <b>int</b> lines, <b>int</b> verbose, <b>int</b> color, <b>int</b> showfilename)
+</pre></blockquote>
+
+With the exception of the <i>filename</i>, all of the other parameters are flags that enable/disable
+the options that were provided on the command line. 
+<p>
+<b>I fully expect that your <i>tablen</i> function may very well be different.</b>
+I am not dictating how you implement it because I will not be calling
+your <i>tablen</i> function directly. I will just be running your program with various filenames
+and options to see that you have implemented everything correctly and checking your output. 
+How you do it is up to you.</li>
+<p>
+<li>I will not be automating the testing the optional colorizing of the output. There are far too many ways that
+	you may do this and automating the testing would prove difficult unless I gave everyone the exact
+	code to do it. I don't want to do that, as I want you to learn how. I've given you a framework
+	that you can use to build the functions that you need. Programmers at this level should be able to do this
+easily.</li>
+<p>
+<li>The submission server will provide 
+	<a href="../../../../../../mg/ansicolors/termcolors.h.html">termcolors.h</a> and <tt>libtermcolors.a</tt> 
+	(which is just the compiled 
+	<a href="../../../../../../mg/ansicolors/termcolors.c.html">termcolors.c</a> in a static library). 
+	This is if you want to do colored output. Since your are only submitting your <tt>tablen.c</tt> and 
+<tt>main.c</tt>, if you add more helper functions for coloring, you must put them in 
+<tt>tablen.c</tt>. As I said, I won't be automating the color testing, but I fully expect you to do the 
+coloring. I don't want you to have to remove the code just to submit to the server.
+Refer to my <a href="../../../../../../mg/ansicolors/index.html">ANSI colors tutorial</a> for
+a refresher on how to build the library.</li>
+<p>
+
+
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+
+Additional files and information.
+<p>
+Command line to compile the program:
+<blockquote><pre>
+clang -O -g -Wall -Wextra -ansi -pedantic -Werror main.c tablen.c -o tablen libtermcolors.a
+</pre></blockquote>
+
+To run the program, type this at the command line:
+<blockquote><pre>
+./tablen <font color="red"><b>[options]</b></font> <font color="blue"><b>[file1 file2 ...]</b></font>
+</pre></blockquote>
+<p>
+
+Here is a simple bash script to run all of the tests: <a href="go.sh">go.sh</a>. You may have to
+make it executable after downloading it. To run it:
+
+<blockquote><pre>
+./go.sh > myoutput.txt
+</pre></blockquote>
+<p>
+
+
+<p>
+Sample output: <a href="output-sample.txt">output-sample.txt</a>
+ 
+</blockquote>
+
+
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br><br><br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

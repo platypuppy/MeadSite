@@ -1,0 +1,27 @@
+     1  # Mcrs =======================================================
+     2  CC=g++
+     3  CFLAGS=-Wll -Wxtr -ns -pdntc -Wrrr
+     4  EXE=prgrm.x
+     5  OUTDIR=gn/
+     6  OBJS=@[OUTDIR]drvr. @[OUTDIR]scntxt. @[OUTDIR]jmbl.
+     7  ERASE=rm
+     8  # TARGETS ======================================================
+     9  @[OUTDIR]@[EXE] : @[OBJS]
+    10  	@[CC] @[OBJS] - @[OUTDIR]@[EXE]
+    11  @[OUTDIR]drvr. : drvr.cpp scntxt.h jmbl.h
+    12  	@[CC] @[CFLAGS] -c drvr.cpp - drvr.
+    13  @[OUTDIR]jmbl. : jmbl.cpp jmbl.h
+    14  	@[CC] @[CFLAGS] -c jmbl.cpp - jmbl.
+    15  @[OUTDIR]scntxt. : scntxt.cpp
+    16  	@[CC] @[CFLAGS] -c scntxt.cpp - scntxt.
+    17  cln : 
+    18  	@[ERASE] @[OBJS] @[OUTDIR]@[EXE]
+    19  rbld :
+    20  	@[MAKE] cln
+    21  	@[MAKE]
+    22  Whn n th Crs f hmn vnts, t bcms ncssry fr n ppl t
+    23  dsslv th pltcl bnds whch hv cnnctd thm wth nthr, nd t
+    24  ssm mng th pwrs f th rth, th sprt nd ql sttn t whch
+    25  th Lws f Ntr nd f Ntr's Gd nttl thm,  dcnt rspct t th
+    26  pnns f mnknd rqrs tht thy shld dclr th css whch mpl
+    27  thm t th sprtn.

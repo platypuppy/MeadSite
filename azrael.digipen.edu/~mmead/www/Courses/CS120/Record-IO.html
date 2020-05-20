@@ -1,0 +1,1075 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Record-based File I/O</title>
+</head>
+
+<body>
+<center><h1>Record-based File I/O</h1></center>
+
+
+<blockquote>
+<i>
+
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Overview
+</p>
+
+There are two basic types of files: text and binary. Essentially, text-based files are
+meant to be read/written by humans. Binary files are meant for the computer.
+<p>
+Text files are generally unstructured and are used for things like:
+
+<ul>
+<li>Source code (C, C++, etc.)</li>
+<li>Configuration files (e.g. key/value pairs)</li>
+<li>Web pages (i.e HTML files)</li>
+<li>Unformatted text meant for humans</li>
+</ul>
+
+Binary files are generally (rigorously) structured and used for:
+<ul>
+<li>Compiled source code (e.g. object files, executable files)</li>
+<li>Images (e.g. JPG, PNG, etc.)</li>
+<li>Videos (e.g. MP4, WMV, etc.)</li>
+<li>Audio (e.g. MP3, FLAC, etc.)</li>
+<li>Office documents (word processing, spreadsheets, etc.)</li>
+<li>Databases (e.g. student record systems)</li>
+</ul>
+
+There are reasons why you would choose one format over the other:
+<ul>
+  <li>Convenience - If humans need to interact with the data, text is much easier.</li>
+  <li>Efficiency - Some data stored as binary is smaller than if it was stored as text.</li>
+  <li>Flexibility - Binary format can store virtually any data type. Text can become
+    burdensome when trying to store certain data (e.g. videos).</li>
+</ul>
+
+As an example, we'll create a system that contains information about students.
+To keep it simple, we're just going to track 5 pieces of information:
+<ol>
+  <li>An unique identifier (string)</li>
+  <li>A student's first name (string)</li>
+  <li>A student's last name (string)</li>
+  <li>A student's age (integer)</li>
+  <li>A student's GPA (double)</li>
+</ol>
+
+To further restrict the data, the ID will be at most 8 characters, the first name will
+be at most 20 characters, and the last name will be at most 20 characters.
+(As we will see, since the data will be stored in binary, we don't necessarily have
+to have the character arrays NUL-terminated in the file.)
+<p>
+Our C structure to hold each student record looks like this:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+<font color="990099">#define MAX_ID_LEN 8</font>
+<font color="990099">#define MAX_NAME_LEN 20</font>
+
+<b>struct</b> STUDENT
+{
+  <b>char</b> ID[MAX_ID_LEN];           <font color="#003399"><i>/* e.g. 101001 */</i></font>
+  <b>char</b> last_name[MAX_NAME_LEN];  <font color="#003399"><i>/* e.g. John   */</i></font>
+  <b>char</b> first_name[MAX_NAME_LEN]; <font color="#003399"><i>/* e.g. Smith  */</i></font>
+  <b>int</b> age;                       <font color="#003399"><i>/* e.g. 22     */</i></font>
+  <b>double</b> GPA;                    <font color="#003399"><i>/* e.g. 3.14   */</i></font>
+};
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Storing the Data as Text
+</p>
+
+Suppose we store the data in a text file. We'd still have to give it some kind of structure
+so that we could tell one record from the next. Here's a sample student:
+
+<blockquote><pre>
+        ID: 101001
+First name: Ian
+ Last name: Faith
+       Age: 18
+       GPA: 3.140000
+</pre></blockquote>
+
+Suppose we store each student as one line of text, with the fields separated by commas
+and ending with a newline (OS-dependent):
+
+<blockquote><pre>
+101001,Ian,Faith,18,3.140000&lt;NL&gt;
+</pre></blockquote>
+
+Here's what a set of records would look like:
+
+
+<blockquote><pre>
+101001,Faith,Ian,18,3.140000&lt;NL&gt;
+102001,Tufnel,Nigel,19,3.250000&lt;NL&gt;
+103001,Savage,Viv,22,3.870000&lt;NL&gt;
+104001,Shrimpton,Mick,25,2.610000&lt;NL&gt;
+105001,Besser,Joe,19,2.180000&lt;NL&gt;
+106001,Smalls,Derek,19,2.640000&lt;NL&gt;
+107001,St.Hubbins,David,20,2.900000&lt;NL&gt;
+108001,Fleckman,Bobbi,20,3.190000&lt;NL&gt;
+109001,Eton-Hogg,Denis,21,3.830000&lt;NL&gt;
+110001,Upham,Denny,18,3.310000&lt;NL&gt;
+111001,McLochness,Ross,19,1.980000&lt;NL&gt;
+112001,Pudding,Ronnie,20,2.890000&lt;NL&gt;
+113001,Schindler,Danny,20,3.410000&lt;NL&gt;
+114001,Pettibone,Jeanine,28,3.330000&lt;NL&gt;
+115001,Fame,Duke,18,2.990000&lt;NL&gt;
+116001,Fufkin,Artie,19,2.900000&lt;NL&gt;
+117001,DiBergi,Marty,19,3.750000&lt;NL&gt;
+118001,Floyd,Pink,20,3.840000&lt;NL&gt;
+119001,Zeppelin,Led,19,3.810000&lt;NL&gt;
+120001,Mason,Nick,18,2.710000&lt;NL&gt;
+121001,Wright,Richard,19,2.940000&lt;NL&gt;
+122001,Waters,Roger,19,3.090000&lt;NL&gt;
+123001,Gilmore,David,20,3.500000&lt;NL&gt;
+</pre></blockquote>
+
+Let's look at the pros and cons of using text format:
+<p>
+Pros:
+<ul>
+  <li>The data is easy to read and verify. This is very important when developing a system (for debugging).</li>
+  <li>We don't need any special "tools" to create/modify the data. Any text editor will work.</li>
+  <li>No special documentation is required to use the data.</li>
+  <li>Even though the names can be 20 characters long, we're only storing exactly what we need.</li>
+  <li>Since everything in the file is text, we don't have to worry about system dependencies like
+    endianess for integers and floating point numbers. Everything is a bunch of bytes, which is
+    likely the same on all systems.</li>
+</ul>
+
+Cons:
+<ul>
+  <li>If we have a comma in a name (or other fields), it will complicate things because we're using the comma as a delimiter.</li>
+  <!--
+  <li>The GPA requires 8 bytes to store the 8 characters. If we stored it as a binary float, it 
+    would only require 4 bytes. (<i>floats</i> are 4 bytes in C) Yes, it's true we don't need to store 
+    all of those trailing zeros, but some GPAs may have significant digits there.</li>
+  -->
+  <li>Storing large integers requires more space in text than binary. Although in this trivial example, the age is only
+    2 digits (requiring 2 bytes to store), if we have other integers (likely),
+    they may require much more space (e.g. this string "1234567890" requires 10 characters
+    to store, but an integer stored as binary only requires 4 bytes). </li>
+  <li>The length of a line in a text file is limited. If we were to store thousands of bytes
+    of data (likely for any real system), this would become a problem.</li>
+  <li>Moving a file between systems could be complicated because of the potential for different
+    end-of-line characters.</li>
+  <li>Finding a field within the string requires us to walk the string byte-by-byte to find
+    the comma separators. This will be very inefficient with large amounts of data.</li>
+  <li>Since everything is text, all numbers (floats, doubles, integers, etc.) would need to be
+    converted between text and numerical values each time we read or wrote the data.</li>
+  <li>Probably other issues...</li>
+</ul>
+
+It's already starting to look like text is going to be too limiting for a real world system,
+which it is. So, binary it is!
+
+<blockquote>
+<p class="technote">
+Keep in mind that, if the data is very limited (i.e. few records with few fields), storing the data
+as text is perfectly acceptable (and I prefer it, personally). However, we'd like to develop
+a system that can handle very large numbers of records with many fields in each record and we'd like
+to do this very efficiently. 
+At some point, the textual representation will become a real pain to use.
+</p>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Storing the Record in Binary
+</p>
+
+As a reminder, here's what our data looks like:
+<blockquote><pre>
+<font color="990099">#define MAX_ID_LEN 8</font>
+<font color="990099">#define MAX_NAME_LEN 20</font>
+
+<b>struct</b> STUDENT
+{
+  <b>char</b> ID[MAX_ID_LEN];           <font color="#003399"><i>/* e.g. 101001 */</i></font>
+  <b>char</b> last_name[MAX_NAME_LEN];  <font color="#003399"><i>/* e.g. John   */</i></font>
+  <b>char</b> first_name[MAX_NAME_LEN]; <font color="#003399"><i>/* e.g. Smith  */</i></font>
+  <b>int</b> age;                       <font color="#003399"><i>/* e.g. 22     */</i></font>
+  <b>double</b> GPA;                    <font color="#003399"><i>/* e.g. 3.14   */</i></font>
+};
+</pre></blockquote>
+
+Here's some code to show how we might (<b>inefficiently</b> <i>and</i> <b>incorrectly</b>) write out the data
+in binary:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Initialize a sample record */</i></font>
+<b>struct</b> STUDENT s = {<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>, <font color="#9933CC">&quot;Ian&quot;</font>, 18, 3.14};
+
+  <font color="#003399"><i>/* Open file for binary/write */</i></font>
+FILE *outfile = fopen(<font color="#9933CC">&quot;student-record&quot;</font>, <font color="#9933CC">&quot;wb&quot;</font>);
+
+  <font color="#003399"><i>/* Write all 5 fields of the record to the file */</i></font>
+fwrite(&amp;s.ID, <b>sizeof</b>(<b>char</b>), MAX_ID_LEN, outfile);
+fwrite(&amp;s.last_name, <b>sizeof</b>(<b>char</b>), MAX_NAME_LEN, outfile);
+fwrite(&amp;s.first_name, <b>sizeof</b>(<b>char</b>), MAX_NAME_LEN, outfile);
+fwrite(&amp;s.age, <b>sizeof</b>(<b>int</b>), 1, outfile);
+fwrite(&amp;s.GPA, <b>sizeof</b>(<b>double</b>), 1, outfile);
+
+  <font color="#003399"><i>/* Close the file, flushing all buffers */</i></font>
+fclose(outfile);
+</pre></blockquote>
+
+<p class="technote">
+In order to keep the sample code simple, very little error handling has been coded.
+In a Real World<sup>&trade;</sup> application, you would check that all of the 
+I/O functions (fopen, fwrite, etc.) were successful. It is quite possible
+that they could fail (e.g. disk full, invalid filenames, etc.)
+</p>
+
+Now that our data is in a binary file, we can no longer simply view it with
+a text editor. We'll be looking at the files using a <i>hex dump</i> tool
+called <i>dumpit</i> (<a href="../../files/dumpit.exe">Windows</a>, <a href="../../files/dumpit-mac">Mac</a>,
+<a href="../../files/dumpit">Linux</a>).
+Example usage:
+
+<blockquote><pre>
+dumpit student-record
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+student-record:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 <font color="blue"><b>31 30 31 30 30 31 00 00</b></font>  46 61 69 74 68 00 00 00   101001..Faith...
+000010 00 00 00 00 00 00 00 00  00 00 00 00 49 61 6E 00   ............Ian.
+000020 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00   ................
+000030 <font color="blue"><b>12 00 00 00</b></font> <font color="red"><b>1F 85 EB 51  B8 1E 09 40</b></font>               .......Q...@
+</pre></blockquote>
+
+I've highlighted the <i>ID</i> and <i>age</i> fields in <font color="blue"><b>blue</b></font> and the <i>GPA</i> 
+field in <font color="red"><b>red</b></font> so you can more easily see the fields.
+<p>
+
+The first thing we see is that the size of the file is 60 bytes. That's because
+of the sizes of the fields:
+
+<blockquote><pre>
+        ID:  8 bytes
+ last_name: 20 bytes
+first_name: 20 bytes
+       age:  4 bytes
++      GPA:  8 bytes
+--------------------
+            60 bytes
+</pre></blockquote>
+
+Add them all up and you get 60 bytes. Compare that with 28 or 29 bytes required to 
+hold the data as text:
+
+<blockquote><pre>
+101001,Ian,Faith,18,3.140000&lt;NL&gt;
+</pre></blockquote>
+
+It seems that we are using more space than necessary and we are. However, this is
+only one of the cons of using binary data. And, as stated in the pros and cons above,
+this isn't always the case. It just happens to be the case for this small example.
+In the long run, the benefits of using binary data will outweigh the extra space required.
+<p>
+OK, that was... interesting. But remember I said this technique was <i>inefficient</i>
+AND <i>incorrect</i>? Let's make it more efficient (which will also make it correct at the
+same time.) This is where C structures <i>really</i> shine.
+<p>
+Instead of writing one field-at-a-time to the file, we can write the entire structure (record)
+at once. For a small structure like this, the benefits are not quite as significant.
+However, you can imagine a real world situation where you have hundreds of fields, with
+many of the fields being structures themselves. Reading/writing individual fields is
+not only tedious and inefficient, but very error prone.
+<p>
+Take a look at this <a href="task_struct-linux.html">structure</a> and realize
+how near-impossible it would be to write out each field individually. You would
+have to know the exact layout of every field in all of the many nested structures.
+That's why we don't want to write individual fields!
+<p>
+
+So, we can replace the 5 calls to <i>fwrite</i> above with a single call:
+
+<blockquote><pre>
+fwrite(&amp;s, <b>sizeof</b>(<b>struct</b> STUDENT), 1, outfile);
+</pre></blockquote>
+
+And this is the dump of the file:
+
+<blockquote><pre>
+student-record2:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 31 30 31 30 30 31 00 00  46 61 69 74 68 00 00 00   101001..Faith...
+000010 00 00 00 00 00 00 00 00  00 00 00 00 49 61 6E 00   ............Ian.
+000020 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00   ................
+000030 12 00 00 00 <b>00 00 00 00</b>  1F 85 EB 51 B8 1E 09 40   ...........Q...@
+</pre></blockquote>
+
+The first thing you will notice is that the file is bigger. It's 4 bytes bigger.
+It was 60 bytes, now it's 64 bytes. You will also notice that the 4 bytes in
+<b>bold</b> are the reason. What gives?
+<p>
+<p class="technote">
+Long story short: The extra space (padding) is for alignment. This is kind of an
+involved topic that you can read more about here:
+<a href="Structures-2.html">Structure Alignment</a>. Briefly, for reasons of efficiency,
+members (fields) of a structure should be aligned on address boundaries that are
+multiples of the size of the data. This means that short integers should
+be on addresses that are evenly divisible by 2, integers and floats should be on addresses
+that are evenly divisible by 4, long integers (LP64 model), doubles and pointers (64-bit) should be on addresses
+that are evenly divisible by 8, etc. In order for the <b>double</b> in the structure above
+to be on the correct address, 4 extra bytes of "padding" are added after the integer
+so that the double "moves over" to the correct address.
+<br><br>
+That's why reading/writing individual fields of a structure is more difficult.
+The proper way is to always read the entire structure, which preserves this
+extra padding between fields. I showed you the "incorrect" way so that you 
+would understand why it was wrong and do it the correct way.
+</p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Storing Multiple Records
+</p>
+
+OK, so we now know how to store a structure in the file, but we want to store many
+such strucutres (records). Here's more sample data (23 records) that we are going to store in
+the file:
+
+<blockquote><pre>
+<font color="990099">#define MAX_ID_LEN 8</font>
+<font color="990099">#define MAX_NAME_LEN 20</font>
+
+<b>struct</b> STUDENT
+{
+  <b>char</b> ID[MAX_ID_LEN];           <font color="#003399"><i>/* e.g. 101001 */</i></font>
+  <b>char</b> last_name[MAX_NAME_LEN];  <font color="#003399"><i>/* e.g. John   */</i></font>
+  <b>char</b> first_name[MAX_NAME_LEN]; <font color="#003399"><i>/* e.g. Smith  */</i></font>
+  <b>int</b> age;                       <font color="#003399"><i>/* e.g. 22     */</i></font>
+  <b>double</b> GPA;                    <font color="#003399"><i>/* e.g. 3.14   */</i></font>
+};
+
+<b>struct</b> STUDENT Students[] = {
+  {<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,     18, 3.14},
+  {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,   19, 3.25},
+  {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,     22, 3.87},
+  {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,    25, 2.61},
+  {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,     19, 2.18},
+  {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,   19, 2.64},
+  {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,   20, 2.90},
+  {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   20, 3.19},
+  {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   21, 3.83},
+  {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Denny&quot;</font>,   18, 3.31},
+  {<font color="#9933CC">&quot;111001&quot;</font>, <font color="#9933CC">&quot;McLochness&quot;</font>, <font color="#9933CC">&quot;Ross&quot;</font>,    19, 1.98},
+  {<font color="#9933CC">&quot;112001&quot;</font>, <font color="#9933CC">&quot;Pudding&quot;</font>,    <font color="#9933CC">&quot;Ronnie&quot;</font>,  20, 2.89},
+  {<font color="#9933CC">&quot;113001&quot;</font>, <font color="#9933CC">&quot;Schindler&quot;</font>,  <font color="#9933CC">&quot;Danny&quot;</font>,   20, 3.41},
+  {<font color="#9933CC">&quot;114001&quot;</font>, <font color="#9933CC">&quot;Pettibone&quot;</font>,  <font color="#9933CC">&quot;Jeanine&quot;</font>, 28, 3.33},
+  {<font color="#9933CC">&quot;115001&quot;</font>, <font color="#9933CC">&quot;Fame&quot;</font>,       <font color="#9933CC">&quot;Duke&quot;</font>,    18, 2.99},
+  {<font color="#9933CC">&quot;116001&quot;</font>, <font color="#9933CC">&quot;Fufkin&quot;</font>,     <font color="#9933CC">&quot;Artie&quot;</font>,   19, 2.90},
+  {<font color="#9933CC">&quot;117001&quot;</font>, <font color="#9933CC">&quot;DiBergi&quot;</font>,    <font color="#9933CC">&quot;Marty&quot;</font>,   19, 3.75},
+  {<font color="#9933CC">&quot;118001&quot;</font>, <font color="#9933CC">&quot;Floyd&quot;</font>,      <font color="#9933CC">&quot;Pink&quot;</font>,    20, 3.84},
+  {<font color="#9933CC">&quot;119001&quot;</font>, <font color="#9933CC">&quot;Zeppelin&quot;</font>,   <font color="#9933CC">&quot;Led&quot;</font>,     19, 3.81},
+  {<font color="#9933CC">&quot;120001&quot;</font>, <font color="#9933CC">&quot;Mason&quot;</font>,      <font color="#9933CC">&quot;Nick&quot;</font>,    18, 2.71},
+  {<font color="#9933CC">&quot;121001&quot;</font>, <font color="#9933CC">&quot;Wright&quot;</font>,     <font color="#9933CC">&quot;Richard&quot;</font>, 19, 2.94},
+  {<font color="#9933CC">&quot;122001&quot;</font>, <font color="#9933CC">&quot;Waters&quot;</font>,     <font color="#9933CC">&quot;Roger&quot;</font>,   19, 3.09},
+  {<font color="#9933CC">&quot;123001&quot;</font>, <font color="#9933CC">&quot;Gilmore&quot;</font>,    <font color="#9933CC">&quot;David&quot;</font>,   20, 3.50}
+};
+
+<b>int</b> Count = <b>sizeof</b>(Students) / <b>sizeof</b>(*Students);
+</pre></blockquote>
+
+Here is the <a href="student-records-no-count.txt">hex dump</a> of the binary file. The
+size of the file is 1,472. There are 23 records and each record is 64 bytes. Multiply
+23 * 64 and you get 1,472. We're going to make a slight addition to our file to help
+when reading back the information. As it stands now, the only way to know how many
+records are in the file is to read them all one-at-a-time. We're going to store
+that count as the first integer in the file.
+<p>
+To create the file, just use a loop to write each structure to the file.
+This is what the first few records in the file look like with the count stored:
+
+
+<blockquote><pre>
+student-records:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 <b>17 00 00 00</b> 31 30 31 30  30 31 00 00 46 61 69 74   ....101001..Fait
+000010 68 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00   h...............
+000020 49 61 6E 00 00 00 00 00  00 00 00 00 00 00 00 00   Ian.............
+000030 00 00 00 00 12 00 00 00  00 00 00 00 1F 85 EB 51   ...............Q
+000040 B8 1E 09 40 31 30 32 30  30 31 00 00 54 75 66 6E   ...@102001..Tufn
+000050 65 6C 00 00 00 00 00 00  00 00 00 00 00 00 00 00   el..............
+000060 4E 69 67 65 6C 00 00 00  00 00 00 00 00 00 00 00   Nigel...........
+000070 00 00 00 00 13 00 00 00  00 00 00 00 00 00 00 00   ................
+000080 00 00 0A 40 31 30 33 30  30 31 00 00 53 61 76 61   ...@103001..Sava
+000090 67 65 00 00 00 00 00 00  00 00 00 00 00 00 00 00   ge..............
+0000A0 56 69 76 00 00 00 00 00  00 00 00 00 00 00 00 00   Viv.............
+0000B0 00 00 00 00 16 00 00 00  00 00 00 00 F6 28 5C 8F   .............(\.
+0000C0 C2 F5 0E 40 31 30 34 30  30 31 00 00 53 68 72 69   ...@104001..Shri
+0000D0 6D 70 74 6F 6E 00 00 00  00 00 00 00 00 00 00 00   mpton...........
+</pre></blockquote>
+
+The first integer (4 bytes) is highlighted. The value 17 is in hexadecimal
+(and little-endian), which is the value 23 in decimal, the exact number of records in the file.
+Knowing the count will make it easy to allocate an array large enough to hold all of the
+records when we read all of them in later.
+<p>
+
+This is the <a href="student-records-with-count.txt">hex dump</a> of the binary file
+with the count field. Code showing how to create the file.
+
+<blockquote><pre>
+<b>void</b> write_students(<b>void</b>)
+{
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Open file to write all records */</i></font>
+  FILE *outfile = fopen(<font color="#9933CC">&quot;student-records&quot;</font>, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Write the count first */</i></font>
+  fwrite(&amp;Count, <b>sizeof</b>(<b>int</b>), 1, outfile);
+
+    <font color="#003399"><i>/* Write each record to the file */</i></font>
+  <b>for</b> (i = 0; i &lt; Count; i++)
+    fwrite(&amp;Students[i], <b>sizeof</b>(<b>struct</b> STUDENT), 1, outfile);
+
+  fclose(outfile);
+}
+</pre></blockquote>
+
+However, we can do better. Instead of writing each structure one-at-a-time, we can
+write the entire array of structures at once.
+
+<blockquote><pre>
+<b>void</b> write_students(<b>void</b>)
+{
+    <font color="#003399"><i>/* Open file to write all records */</i></font>
+  FILE *outfile = fopen(<font color="#9933CC">&quot;student-records&quot;</font>, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Write the count first */</i></font>
+  fwrite(&amp;Count, <b>sizeof</b>(<b>int</b>), 1, outfile);
+
+    <font color="#003399"><i>/* Write entire array of structures at once */</i></font>
+  fwrite(Students, <b>sizeof</b>(<b>struct</b> STUDENT), Count, outfile);
+
+  fclose(outfile);
+}
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Reading Records from the File
+</p>
+Now that we have all of the data stored in the file, it won't be long until we need
+to read it and/or modify the data. Reading is just as simple as writing. We can either
+read one record-at-a-time or read in all records into an array. Sample code for both:
+<p>
+
+<b>Reading individual records:</b>
+
+<blockquote><pre>
+<b>void</b> read_records(<b>void</b>)
+{
+  <b>int</b> count;
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Open the binary file for reading */</i></font>
+  FILE *infile = fopen(<font color="#9933CC">&quot;student-records&quot;</font>, <font color="#9933CC">&quot;rb&quot;</font>);
+
+    <font color="#003399"><i>/* Get count of records in the file */</i></font>
+  fread(&amp;count, <b>sizeof</b>(<b>int</b>), 1, infile);
+
+    <font color="#003399"><i>/* Read each record and do something with it */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>struct</b> STUDENT s;
+    fread(&amp;s, <b>sizeof</b>(<b>struct</b> STUDENT), 1, infile);
+    <font color="#003399"><i>/* Do something with the record... */</i></font>
+  }
+
+  fclose(infile);
+}
+</pre></blockquote>
+
+<b>Reading entire file into an array:</b>
+
+
+<blockquote><pre>
+<b>void</b> read_records(<b>void</b>)
+{
+  <b>int</b> count;
+  <b>struct</b> STUDENT *students;
+
+    <font color="#003399"><i>/* Open the binary file for reading */</i></font>
+  FILE *infile = fopen(<font color="#9933CC">&quot;student-records&quot;</font>, <font color="#9933CC">&quot;rb&quot;</font>);
+
+    <font color="#003399"><i>/* Get count of records in the file */</i></font>
+  fread(&amp;count, <b>sizeof</b>(<b>int</b>), 1, infile);
+
+    <font color="#003399"><i>/* Allocate room for all of the records */</i></font>
+  students = (<b>struct</b> STUDENT *) malloc(count * <b>sizeof</b>(<b>struct</b> STUDENT));
+
+    <font color="#003399"><i>/* Read all records at once */</i></font>
+  fread(students, <b>sizeof</b>(<b>struct</b> STUDENT), count, infile);
+
+  <font color="#003399"><i>/* Do something with the records... */</i></font>
+
+    <font color="#003399"><i>/* Print out each student record */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+    print_student(&amp;students[i]);
+
+  free(students);
+  fclose(infile);
+}
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Reminder:</b> There is no error checking being done in this code. In a real application
+you would need to check that all of the library functions succeeded.
+(e.g. <i>fopen</i>, <i>malloc</i>, etc.)
+</p>
+</blockquote>
+
+Let's do something that will need to be done on a regular basis: Update a student's
+GPA. These are the steps involved:
+<ol>
+  <li>Open the file for read/binary.</li>
+  <li>Locate the student's record by ID. (We call this value the <i>key</i>.)</li>
+  <li>Read in the entire record.</li>
+  <li>Modify the GPA.</li>
+  <li>Write the entire record back out to the file.</li>
+  <li>Close the file.</li>
+</ol>
+
+This is pretty straight-forward and how we would modify any field within a student's
+record. However, there's a subtle point that needs to be made. According to the algorithm
+above, we are reading <i>and</i> writing the same file. There are at least a couple of
+ways we can deal with this. Briefly:
+<ol>
+  <li>Open the file for read/binary</li>
+  <li>Read in the record</li>
+  <li>Close the file</li>
+  <li>Modify the record</li>
+  <li>Open the file for write/binary</li>
+  <li>Write the modified record</li>
+  <li>Close the file</li>
+</ol>
+
+There is nothing wrong with this method and it will work. You already have all
+of the information to do that.
+But, C has a better way
+to deal with this: Open the file for update (i.e. reading and writing). This is
+what the first algorithm described above does.
+<p>
+For this example, let's change Artie Fufkin's GPA from 2.90 to 3.25.
+Artie Fufkin's ID is 116001. This function takes an ID and GPA and updates
+the record in the file. A call to the function would look like this:
+
+<blockquote><pre>
+update_GPA(<font color="#9933CC">&quot;116001&quot;</font>, 3.25);
+</pre></blockquote>
+
+This is the function:
+<blockquote><pre>
+<font color="#003399"><i>/* Find student record with ID and modify GPA */</i></font>
+<b>void</b> update_GPA(<b>const</b> <b>char</b> *ID, <b>double</b> newGPA)
+{
+  <b>int</b> count;
+
+    <font color="#003399"><i>/* Open the file for update (read/write) binary */</i></font>
+  FILE *inoutfile = fopen(<font color="#9933CC">&quot;student-records&quot;</font>, <font color="#9933CC">&quot;<b>rb+</b>&quot;</font>);
+
+    <font color="#003399"><i>/* Get count of records in the file */</i></font>
+  fread(&amp;count, <b>sizeof</b>(<b>int</b>), 1, inoutfile);
+
+    <font color="#003399"><i>/* Search for the specified record by ID */</i></font>
+  <b>while</b> (count--)
+  {
+    <b>long</b> position;    <font color="#003399"><i>/* The current position in the file */</i></font>
+    <b>struct</b> STUDENT s; <font color="#003399"><i>/* The record read/modified         */</i></font>
+
+      <font color="#003399"><i>/* Get current position so we can return to it */</i></font>
+    position = ftell(inoutfile);
+
+      <font color="#003399"><i>/* Get the next record */</i></font>
+    fread(&amp;s, <b>sizeof</b>(<b>struct</b> STUDENT), 1, inoutfile);
+
+      <font color="#003399"><i>/* If the student's record was found, update it */</i></font>
+    <b>if</b> (!strcmp(ID, s.ID))
+    {
+        <font color="#003399"><i>/* Update GPA */</i></font>
+      s.GPA = newGPA;
+      
+        <font color="#003399"><i>/* Move back to correct position in the file */</i></font>
+      fseek(inoutfile, position, SEEK_SET);
+
+        <font color="#003399"><i>/* Write out the updated record */</i></font>
+      fwrite(&amp;s, <b>sizeof</b>(<b>struct</b> STUDENT), 1, inoutfile);
+
+        <font color="#003399"><i>/* Done */</i></font>
+      fclose(inoutfile);
+
+      <b>return</b>;
+    }
+  }
+
+    <font color="#003399"><i>/* Record wasn't found */</i></font>
+  printf(<font color="#9933CC">&quot;Student ID: %s not found.&#92;n&quot;</font>, ID);
+}
+</pre></blockquote>
+
+This is Artie Fufkin's original record with the current GPA (2.90) highlighted:
+<blockquote><pre>
+0003C0 85 EB 07 40 31 31 36 30  30 31 00 00 46 75 66 6B   ...@116001..Fufk
+0003D0 69 6E 00 00 00 00 00 00  00 00 00 00 00 00 00 00   in..............
+0003E0 41 72 74 69 65 00 00 00  00 00 00 00 00 00 00 00   Artie...........
+0003F0 00 00 00 00 13 00 00 00  00 00 00 00 <b>33 33 33 33</b>   ............3333
+000400 <b>33 33 07 40</b> 31 31 37 30  30 31 00 00 44 69 42 65   33.@117001..DiBe
+</pre></blockquote>
+
+This is Artie Fufkin's updated record with the new GPA (3.25) highlighted:
+<blockquote><pre>
+0003C0 85 EB 07 40 31 31 36 30  30 31 00 00 46 75 66 6B   ...@116001..Fufk
+0003D0 69 6E 00 00 00 00 00 00  00 00 00 00 00 00 00 00   in..............
+0003E0 41 72 74 69 65 00 00 00  00 00 00 00 00 00 00 00   Artie...........
+0003F0 00 00 00 00 13 00 00 00  00 00 00 00 <b>00 00 00 00</b>   ................
+000400 <b>00 00 0A 40</b> 31 31 37 30  30 31 00 00 44 69 42 65   ...@117001..DiBe
+</pre></blockquote>
+
+With hexadecimal numbers, the values are not obvious. Not only are the 64-bit doubles
+displayed in hexadecimal, but they are in little-endian order. 
+Here are some conversions with the binary using IEEE-754 notation:
+<p>
+Original GPA:
+<blockquote><pre>
+Decimal: 2.90
+ Binary: 0100000000000111001100110011001100110011001100110011001100110011
+    Hex: 40 07 33 33 33 33 33 33
+</pre></blockquote>
+
+New GPA:
+<blockquote><pre>
+Decimal: 3.25
+ Binary: 0100000000001010000000000000000000000000000000000000000000000000
+    Hex: 40 OA 00 00 00 00 00 00
+</pre></blockquote>
+
+In a nutshell, that's how record-based I/O works. I leave it as an exercise for the
+reader to add more functionality like modifying other fields, adding records,
+deleting records, etc. This brief tutorial has given you all you need to get started.
+<p>
+
+<b>Notes</b>:
+<ul>
+  <li>The code reads one record-at-a-time. We know that we could have read the
+    entire file in at once. However, in practice, this may be undesirable because
+    with very large files (not unlikely), having enough memory could prove
+    difficult.</li>
+  <li>Related to the previous point, if we're only interested in one record,
+    why do we need to read every record? This seems sub-optimal and it is.</li>
+  <li>It would be better if we had some kind of "random access" so that we could
+    "jump" to the correct record without having to search through each and every
+    one.</li>
+  <li>These "issues" will be dealt with next.</li>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+More Efficient File I/O
+</p>
+
+The previous examples worked just fine, but as the file grows with more data, it soon
+becomes inefficient to have to read every record each time we update a single record. Like
+many things, there are multiple ways to solve this "problem". The way we're going to address
+it is by using an <i>index</i> to the data. 
+<p>
+By placing an index at the front of the file, we can more quickly locate where the
+record is further in the file. This is what the new format of the file looks like:
+
+
+<blockquote><pre>
+student-records-indexed:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 17 00 00 00 <b>31 30 31 30  30 31 00 00 31 30 32 30</b>   ....101001..1020
+000010 <b>30 31 00 00 31 30 33 30  30 31 00 00 31 30 34 30</b>   01..103001..1040
+000020 <b>30 31 00 00 31 30 35 30  30 31 00 00 31 30 36 30</b>   01..105001..1060
+000030 <b>30 31 00 00 31 30 37 30  30 31 00 00 31 30 38 30</b>   01..107001..1080
+000040 <b>30 31 00 00 31 30 39 30  30 31 00 00 31 31 30 30</b>   01..109001..1100
+000050 <b>30 31 00 00 31 31 31 30  30 31 00 00 31 31 32 30</b>   01..111001..1120
+000060 <b>30 31 00 00 31 31 33 30  30 31 00 00 31 31 34 30</b>   01..113001..1140
+000070 <b>30 31 00 00 31 31 35 30  30 31 00 00 31 31 36 30</b>   01..115001..1160
+000080 <b>30 31 00 00 31 31 37 30  30 31 00 00 31 31 38 30</b>   01..117001..1180
+000090 <b>30 31 00 00 31 31 39 30  30 31 00 00 31 32 30 30</b>   01..119001..1200
+0000A0 <b>30 31 00 00 31 32 31 30  30 31 00 00 31 32 32 30</b>   01..121001..1220
+0000B0 <b>30 31 00 00 31 32 33 30  30 31 00 00</b> 31 30 31 30  01..123001..1010
+0000C0 30 31 00 00 46 61 69 74  68 00 00 00 00 00 00 00   01..Faith.......
+0000D0 00 00 00 00 00 00 00 00  49 61 6E 00 00 00 00 00   ........Ian.....
+0000E0 00 00 00 00 00 00 00 00  00 00 00 00 12 00 00 00   ................
+0000F0 00 00 00 00 1F 85 EB 51  B8 1E 09 40 31 30 32 30   .......Q...@1020
+000100 30 31 00 00 54 75 66 6E  65 6C 00 00 00 00 00 00   01..Tufnel......
+000110 00 00 00 00 00 00 00 00  4E 69 67 65 6C 00 00 00   ........Nigel...
+
+[rest of the file...]
+</pre></blockquote>
+
+Here is sample code that created the indexed file:
+<blockquote><pre>
+<b>void</b> write_students_indexed(<b>void</b>)
+{
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Open file to write all records */</i></font>
+  FILE *outfile = fopen(<font color="#9933CC">&quot;student-records-indexed&quot;</font>, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Write the count first */</i></font>
+  fwrite(&amp;Count, <b>sizeof</b>(<b>int</b>), 1, outfile);
+
+    <font color="#003399"><i>/* Then write each ID to the file */</i></font>
+  <b>for</b> (i = 0; i &lt; Count; i++)
+    fwrite(&amp;Students[i].ID, MAX_ID_LEN, 1, outfile);
+
+    <font color="#003399"><i>/* Finally, write all of the records to the file */</i></font>
+  fwrite(Students, <b>sizeof</b>(<b>struct</b> STUDENT), Count, outfile);
+
+  fclose(outfile);
+}
+</pre></blockquote>
+
+Now, when we look up a record, we just have to scan the index and then use that
+to locate the actual record. We still have to read in the entire index, but that is
+likely to be <i>significantly less</i> data that reading in the entire file.
+<p>
+Let's write a function that, given an ID, displays the student record. We'll write
+an entire program that will accept an ID on the command line and display that
+student record. Here it is in its entirety: (<tt>lookup-student.c</tt>)
+
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;   /* FILE *, printf, fread, fopen, fclose */</font>
+<font color="990099">#include &lt;stdlib.h&gt;  /* malloc                               */</font>
+<font color="990099">#include &lt;string.h&gt;  /* strcmp                               */</font>
+<font color="990099">#include &quot;student.h&quot; /* Student struct                       */</font>
+
+<b>void</b> print_student(<b>const</b> <b>struct</b> STUDENT *student)
+{
+  printf(<font color="#9933CC">&quot;%8s: %s, %s (Age: %i, GPA: %3.2f)&#92;n&quot;</font>, 
+         student-&gt;ID,
+         student-&gt;last_name,
+         student-&gt;first_name,
+         student-&gt;age,
+         student-&gt;GPA);
+}
+
+<b>void</b> display_record(<b>const</b> <b>char</b> *ID)
+{
+  <b>int</b> i;       <font color="#003399"><i>/* Loop counter                      */</i></font>
+  <b>int</b> count;   <font color="#003399"><i>/* The number of records in the file */</i></font>
+  <b>char</b> *index; <font color="#003399"><i>/* All of the student IDs            */</i></font>
+
+    <font color="#003399"><i>/* Open the binary file for reading */</i></font>
+  FILE *infile = fopen(<font color="#9933CC">&quot;student-records-indexed&quot;</font>, <font color="#9933CC">&quot;rb&quot;</font>);
+
+    <font color="#003399"><i>/* Get count of records in the file */</i></font>
+  fread(&amp;count, <b>sizeof</b>(<b>int</b>), 1, infile);
+
+    <font color="#003399"><i>/* Allocate room for the index */</i></font>
+  index = (<b>char</b> *) malloc(count * <b>sizeof</b>(<b>char</b>) * MAX_ID_LEN);
+
+    <font color="#003399"><i>/* Read in the entire index */</i></font>
+  fread(index, MAX_ID_LEN, count, infile);
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+      <font color="#003399"><i>/* Does this ID match? */</i></font>
+    <b>if</b> (!strcmp(ID, index + i * MAX_ID_LEN))
+    {
+      <b>struct</b> STUDENT s;
+
+        <font color="#003399"><i>/* Calculate offset and move file pointer to that point */</i></font>
+      <b>long</b> position = <b>sizeof</b>(<b>int</b>) + (count * MAX_ID_LEN) + (i * <b>sizeof</b>(<b>struct</b> STUDENT));
+      fseek(infile, position, SEEK_SET);
+
+        <font color="#003399"><i>/* Read record at current position */</i></font>
+      fread(&amp;s, <b>sizeof</b>(<b>struct</b> STUDENT), 1, infile);
+
+        <font color="#003399"><i>/* Display record */</i></font>
+      print_student(&amp;s);
+
+        <font color="#003399"><i>/* Clean up */</i></font>
+      fclose(infile);
+      free(index);
+
+        <font color="#003399"><i>/* Done */</i></font>
+      <b>return</b>;
+    }
+  }
+
+    <font color="#003399"><i>/* Record wasn't found */</i></font>
+  printf(<font color="#9933CC">&quot;Student ID: %s not found.&#92;n&quot;</font>, ID);
+
+    <font color="#003399"><i>/* Clean up */</i></font>
+  free(index);
+  fclose(infile);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>const</b> <b>char</b> *ID = <font color="#9933CC">&quot;108001&quot;</font>;
+  <b>if</b> (argc &gt; 1)
+    ID = argv[1];
+
+  display_record(ID);
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>Some points to make:</b>
+<ul>
+  <li>Running the program as such:
+<blockquote><pre>
+lookup-student 105001
+</pre></blockquote>
+produces this output:
+<blockquote><pre>
+105001: Besser, Joe (Age: 19, GPA: 2.18)
+</pre></blockquote>
+
+
+  <li>The index is simply one large array of characters.</li>
+  <li>We are reading the entire index, which may be quite large. If it's too large
+    to fit into memory, we could read a portion of it at a time.</li>
+  <li>We need to find (search for) the ID within the large character array. This
+    is easy to do and we need to use pointer arithmetic to find out where each
+    ID starts in the array. That's what is going on in the call to <i>strcmp</i>.</li>
+  <li>Once we find the ID, we know which record it is by the value of the loop
+    counter, <i>i</i>.</li>
+  <li>This may need a little explanation:
+<blockquote><pre>
+  <font color="#003399"><i>/* Calculate offset and move file pointer to that point */</i></font>
+<b>long</b> position = <b>sizeof</b>(<b>int</b>) + (count * MAX_ID_LEN) + (i * <b>sizeof</b>(<b>struct</b> STUDENT));
+</pre></blockquote>
+
+We need to skip over all of the bytes that come before the record we are looking for. This means
+we need to skip over the first 4-bytes, which is the <i>count</i> of records.
+<p>
+Then, we need to skip
+over the entire index. Since we know how large each ID is (MAX_ID_LEN, 8 bytes) and we know
+how many records there are (<i>count</i>), we multiply them together to get the length of
+the index which is 184 bytes in the example (8 * 23).
+<p>
+Then, we have to skip over all of the records that come before the one we're looking for.
+For example, if we are looking for the
+record with ID 108001, we find it as the 8th ID in the index (101001, 102001..108001). This
+means we skip over 7 records (64-bytes each, 448 bytes total) to get to the one we want.
+<p>
+This gives us the exact byte in the file where the record with ID 108001 begins. 
+</li>
+<li>It may seem like this is a lot more work than simply reading each record in, but
+  it isn't. Sure, there is more <i>code</i> but the amount of <i>work</i> being done
+  is a lot less. This is simply because the disk is about 10,000 times SLOWER than
+  the CPU. So, the fewer bytes we need to actually read from the disk, the better
+  the performance will be. Sometimes this performance is orders of magnitude better.</li>
+</ul>
+
+<b>Additional issues and possible changes:</b>
+<p>
+<ul>
+<li>Currently, the IDs are sorted from smallest to largest. That's just the way
+  the file was created. This has some interesting properties:
+  <ul>
+    <li>We could use a binary search through the index instead of a linear search.
+      This can be a significantly faster way to find a record.</li>
+    <li>The file now contains two copies of the ID. One is in the "index" and the other
+      is in the "data". We could remove the second one (in the data), since it's already
+      in the index. In practice, the data is going to be several orders of magnitude larger
+      than the ID, so this isn't a huge deal. (However, it does violate the concept
+      of data normalization.)</li>
+    <li>The order of the IDs (<i>keys</i>) matches the order of the data records. This
+      is OK for small data, but as we add and delete records, this synchronization
+      will not last (unless we re-write the entire file at certains points).</li>
+    <li>Sorting the IDs and rewriting the index isn't that much work. However, if
+      we have to keep all of the data records in the same order, then there is a significant
+      amount of file I/O required.</li>
+    <li>One approach is to store the <i>offset</i> of the data record along with the ID
+      in the index. Now, if we insert an ID in the middle of the index (because we want to
+      keep the IDs sorted), we can simply add the data record to the end of the file and update
+      the record's index to include the position of the data. This is how many record-structured
+      files are implemented.</li>
+    <li>Currently, every time we add a new record (at the end), we still have to rewrite the
+      entire file because the index has to be re-written before we can start writing data records.
+      <ul>
+        <li>One solution is to have a lot of "extra" unused (reserved) slots in the index so we only
+      re-write the entire file after adding many records. This isn't so bad since disk
+      space is relatively inexpensive and the index is relatively small compared to the size
+      of the data records.</li>
+      <li>Another "solution" is to have a separate file for the indexes. We could have a file of
+        "indexes" and a file of "data". This means we would never have to rewrite the data file.
+        Adding new records <i>always</i> appends to the end of the data file. This saves time because
+        it is likely that the actual data is tens or hundreds or thousands of times larger than
+        the index.</li>
+      </ul>
+    <li>Technically, ever time we delete a record, the entire file needs to be re-written (index
+      and data). However, we could just "mark" the index for the record as "unused".
+      This would only require an update to the index. (No complete file rewrite.) We could then
+      reuse the record later when adding new ones.</li>
+  </ul>
+    <li>There are many other "features" that could easily be added to this scheme to make
+      the file I/O even more efficient.</li>
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Summary and Other Notes
+</p>
+
+As long as we use the same <i>compiled</i> program (executable) to read and write
+the files, everything will work out fine. However, if we compile the code using a
+<i>different compiler</i>, we could have problems.
+Specifically, the alignment of the fields in the structures are dependent on the
+compiler.
+<p>
+This is not an insurmountable problem and is well-known to software developers
+that deal with binary files. The technique used to make sure that all compilers
+employ the same alignment is called <i>structure packing</i>. You can read my
+introduction to it here: <a href="Structures-2.html">Structure Alignment</a>.
+<p>
+Also, check out this excellent article:
+<a href="http://www.catb.org/esr/structure-packing/">The Lost Art of Structure Packing</a>.
+
+
+<p>
+Here are links to the file I/O functions used:
+<ul>
+  <li><a href="http://www.cplusplus.com/reference/cstdio/fopen/">fopen</a> - Opens a file.
+    (<a href="http://man7.org/linux/man-pages/man3/fopen.3.html">man page</a>)</li>
+  <li><a href="http://www.cplusplus.com/reference/cstdio/fclose/">fclose</a> - Close a file.
+  (<a href="http://man7.org/linux/man-pages/man3/fclose.3.html">man page</a>)</li>
+    <li><a href="http://www.cplusplus.com/reference/cstdio/fread/">fread</a> - Read block of data from stream.
+  (<a href="http://man7.org/linux/man-pages/man3/fread.3.html">man page</a>)</li>
+  <li><a href="http://www.cplusplus.com/reference/cstdio/fwrite/">fwrite</a> - Write block of data to stream.
+  (<a href="http://man7.org/linux/man-pages/man3/fwrite.3p.html">man page</a>)</li>
+  <li><a href="http://www.cplusplus.com/reference/cstdio/ftell/">ftell</a> - Get current position in stream.
+  (<a href="http://man7.org/linux/man-pages/man3/fseek.3.html">man page</a>)</li>
+  <li><a href="http://www.cplusplus.com/reference/cstdio/fseek/">fseek</a> - Reposition stream position indicator.
+  (<a href="http://man7.org/linux/man-pages/man3/fseek.3.html">man page</a>)</li>
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<center>
+<blockquote>	
+</blockquote>
+</center>
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

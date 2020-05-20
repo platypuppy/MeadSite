@@ -1,0 +1,16 @@
+Usage: prp {options}
+
+Options:
+ -p X  --policy=X      Which page-replacement policy to use: lru, fifo, or clock (required)
+ -n X  --numframes=X   Number of physical frames to simulate (required)
+ -r X  --requests=X    Comma separated list of logical page requests without spaces (required)
+                       If the first character is '@', then a filename follows
+                       that contains the comma separated values.
+ -s    --summary       Display only the number of faults.
+ -u    --underscores   Use underscores instead of ANSI graphics for clock algorithm.
+ -v    --version       Display the version and quit
+ -h    --help          Display this information
+
+Examples:
+  ./prp -n3 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2
+  ./prp --numframes=4 --policy=lru --requests=@pages.txt

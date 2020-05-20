@@ -1,0 +1,154 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #11</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 11</h1>
+(TToolBar, TCoolBar, TMediaPlayer, TScrollBox, TMaskedEdit)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #11
+</p>
+
+<b>Dockable Toolbars</b> (There's a <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/Docking2009.html">flash video</a> that shows the docking in action.)
+<p>
+I'm going to show how you can undock a toolbar and create a floating toolbar. You can dock/undock
+on other forms in the application. This was done using a simple <i>TToolBar</i> object. I also show
+how to put toolbars on a <i>TCoolBar</i> component which allowed you to rearrange the toolbars without
+necessarily undocking them. 
+
+For more information, see Chapter 6 <i>Working with controls</i> in the
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/BCB-DevelopersGuide.pdf">Developer's Guide</a>.
+
+<p>
+Then I show a simple way to play media files using the <i>TMediaPlayer</i>
+component, which is kind of a wrapper around Windows Media Player (an older version). There are
+much better media player components out there, but this was just a sample demonstration of how
+you might go about using one. 
+For more information, see Chapter 10 <i>Working with graphics and multimedia</i> in the
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/BCB-DevelopersGuide.pdf">Developer's Guide</a>.
+<p>
+
+Finally, I show a few other components that can come in handy. <i>TMaskedEdit</i> allows you to create an
+input edit control that restricts the user's input. For example, if I want the user to type in a telephone
+number with an area code, this would be presented to the user:
+
+<blockquote><pre>
+(_ _ _) _ _ _ - _ _ _ _
+ </pre></blockquote>
+
+Only numbers could be typed where the underscores are. This allows for consistent and normalized input. A date mask might
+look like this:
+
+<blockquote><pre>
+_ _ / _ _ / _ _ _ _
+ </pre></blockquote>
+
+On the <i>Scrollbox and stuff</i> page you can see a few other components that I talked about. 
+
+
+
+
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Toolbar docking</th><th></th><th>Video file</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="docking1/Docking-1.png">
+</td>
+<td width=20></td>
+<td>
+<img border=0 src="docking1/Docking-2.png">
+</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr><th>Audio file</th><th></th><th>ScrollBox and stuff</th><th></th><tr>
+<tr valign="top">
+<td>
+<img border=0 src="docking1/Docking-3.png">
+</td>
+<td width=20></td>
+<td>
+<img border=0 src="docking1/Docking-4.png">
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/Docking1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/Docking1-XE3.zip">(XE 3)</a> - to build it yourself. 	
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/Dock1.exe">Executable</a>
+	</ul>
+<p class="technote">
+<b>Note about XE 3 (and later):</b> The Windows multimedia controls have changed since Turbo C++ and XP and are not
+fully compatible with Windows 7. I didn't bother to figure out how to fix it, or if it can be fixed, so I
+just commented out the 6 lines of code that caused problems. It compiles and runs, but you won't have any
+of the multimedia functionality that's present in the older version. The other components still work, although
+I had weird drawing issues with the toolbars in Windows 7. Some day I might re-visit this project and see
+if it can be updated with newer components.
+</p>
+<li>To see the toolbar docking in action, check out <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/11/docking1/Docking2009.html">this flash video</a>.
+</ul>
+
+<p>
+<hr width="95%">
+<p>
+
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

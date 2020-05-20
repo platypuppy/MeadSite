@@ -1,0 +1,145 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>xutility.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>// xutility internal header</i></font>
+
+<b>#if</b>     _MSC_VER &gt; 1000
+<b>#pragma</b> once
+<b>#endif</b>
+
+<b>#ifndef</b> _XUTILITY_
+<b>#define</b> _XUTILITY_
+<b>#include</b> &lt;utility&gt;
+
+<b>#ifdef</b>  _MSC_VER
+<b>#pragma</b> pack(push,8)
+<b>#endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+_STD_BEGIN
+		<font color="#003399"><i>// TEMPLATE FUNCTION copy</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI&gt; <b>inline</b>
+	_OI copy(_II _F, _II _L, _OI _X)
+	{<b>for</b> (; _F != _L; ++_X, ++_F)
+		*_X = *_F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION copy_backward</i></font>
+<b>template</b>&lt;<b>class</b> _BI1, <b>class</b> _BI2&gt; <b>inline</b>
+	_BI2 copy_backward(_BI1 _F, _BI1 _L, _BI2 _X)
+	{<b>while</b> (_F != _L)
+		*--_X = *--_L;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION equal</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2&gt; <b>inline</b>
+	<b>bool</b> equal(_II1 _F, _II1 _L, _II2 _X)
+	{<b>return</b> (mismatch(_F, _L, _X).first == _L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION equal WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>bool</b> equal(_II1 _F, _II1 _L, _II2 _X, _Pr _P)
+	{<b>return</b> (mismatch(_F, _L, _X, _P).first == _L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION fill</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> fill(_FI _F, _FI _L, <b>const</b> _Ty&amp; _X)
+	{<b>for</b> (; _F != _L; ++_F)
+		*_F = _X; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION fill_n</i></font>
+<b>template</b>&lt;<b>class</b> _OI, <b>class</b> _Sz, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> fill_n(_OI _F, _Sz _N, <b>const</b> _Ty&amp; _X)
+	{<b>for</b> (; 0 &lt; _N; --_N, ++_F)
+		*_F = _X; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION lexicographical_compare</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2&gt; <b>inline</b>
+	<b>bool</b> lexicographical_compare(_II1 _F1, _II1 _L1,
+		_II2 _F2, _II2 _L2)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; ++_F1, ++_F2)
+		<b>if</b> (*_F1 &lt; *_F2)
+			<b>return</b> (true);
+		<b>else</b> <b>if</b> (*_F2 &lt; *_F1)
+			<b>return</b> (<b>false</b>);
+	<b>return</b> (_F1 == _L1 &amp;&amp; _F2 != _L2); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION lexicographical_compare WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>bool</b> lexicographical_compare(_II1 _F1, _II1 _L1,
+		_II2 _F2, _II2 _L2, _Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; ++_F1, ++_F2)
+		<b>if</b> (_P(*_F1, *_F2))
+			<b>return</b> (true);
+		<b>else</b> <b>if</b> (_P(*_F2, *_F1))
+			<b>return</b> (<b>false</b>);
+	<b>return</b> (_F1 == _L1 &amp;&amp; _F2 != _L2); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION max</i></font>
+<font color="990099">#ifndef _MAX</font>
+ <font color="990099">#define _MAX	_cpp_max</font>
+ <font color="990099">#define _MIN	_cpp_min</font>
+<font color="990099">#endif</font>
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+	<b>const</b> _Ty&amp; _cpp_max(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y)
+	{<b>return</b> (_X &lt; _Y ? _Y : _X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION max WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>const</b> _Ty&amp; _cpp_max(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y, _Pr _P)
+	{<b>return</b> (_P(_X, _Y) ? _Y : _X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION min</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+	<b>const</b> _Ty&amp; _cpp_min(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y)
+	{<b>return</b> (_Y &lt; _X ? _Y : _X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION min WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>const</b> _Ty&amp; _cpp_min(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y, _Pr _P)
+	{<b>return</b> (_P(_Y, _X) ? _Y : _X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION mismatch</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2&gt; <b>inline</b>
+	pair&lt;_II1, _II2&gt; mismatch(_II1 _F, _II1 _L, _II2 _X)
+	{<b>for</b> (; _F != _L &amp;&amp; *_F == *_X; ++_F, ++_X)
+		;
+	<b>return</b> (pair&lt;_II1, _II2&gt;(_F, _X)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION mismatch WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _Pr&gt; <b>inline</b>
+	pair&lt;_II1, _II2&gt; mismatch(_II1 _F, _II1 _L, _II2 _X, _Pr _P)
+	{<b>for</b> (; _F != _L &amp;&amp; _P(*_F, *_X); ++_F, ++_X)
+		;
+	<b>return</b> (pair&lt;_II1, _II2&gt;(_F, _X)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION swap</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> swap(_Ty&amp; _X, _Ty&amp; _Y)
+	{_Ty _Tmp = _X;
+	_X = _Y, _Y = _Tmp; }
+_STD_END
+<b>#ifdef</b>  _MSC_VER
+<b>#pragma</b> pack(pop)
+<b>#endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+
+<b>#endif</b> <font color="#003399"><i>/* _XUTILITY_ */</i></font>
+
+<font color="#003399"><i>/*
+ * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
+ * Consult your license regarding permissions and restrictions.
+ */</i></font>
+
+<font color="#003399"><i>/*
+ * This file is derived from software bearing the following
+ * restrictions:
+ *
+ * Copyright (c) 1994
+ * Hewlett-Packard Company
+ *
+ * Permission to use, copy, modify, distribute and sell this
+ * software and its documentation for any purpose is hereby
+ * granted without fee, provided that the above copyright notice
+ * appear in all copies and that both that copyright notice and
+ * this permission notice appear in supporting documentation.
+ * Hewlett-Packard Company makes no representations about the
+ * suitability of this software for any purpose. It is provided
+ * &quot;as is&quot; without express or implied warranty.
+ */</i></font>
+
+</code></pre>
+
+
+</body>
+</html>
+

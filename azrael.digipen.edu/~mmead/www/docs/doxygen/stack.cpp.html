@@ -1,0 +1,294 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>stack.cpp</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+\file   stack.cpp
+\author Artie Fufkin
+\par    email: cooldude234\@hotmail.com
+\par    DigiPen login: afufkin
+\par    Course: CS170
+\par    Section C
+\par    Assignment #1
+\date   7/20/2021
+\brief  
+  This is the implementation file for all member functions
+  of a class called Stack, as specified in specification
+  file stack.h.  
+  
+  Operations include:
+
+  - Add an item to the stack
+  - Remove an item from the stack
+  - Read item on top of the stack
+  - Check to see if the stack is empty
+  - Check to see if the stack is full
+  - Output the stack to a stream
+  - Return the number of items on the stack
+  - Return the size of the stack
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="990099">#include &lt;iostream&gt; // for I/O</font>
+<font color="990099">#include &lt;iomanip&gt;  // for I/O manipulators</font>
+<font color="990099">#include &quot;stack.h&quot;    // the Stack interface</font>
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Creates a stack of size MAX_SIZE and initializes private data.
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+
+Stack::Stack()
+{
+   top = -1;         <font color="#003399"><i>// Initialize an empty stack</i></font>
+   size = MAX_SIZE;  <font color="#003399"><i>// Initialize a stack of maximum size.</i></font>
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Creates a stack of size 'initial_size' and initializes private data.
+  If the 'initial_size' is &lt; 0, then the size of the stack is set to
+  0. If 'initial_size' is &gt; \p MAX_SIZE then the size of the stack is
+  set to \p MAX_SIZE.
+          
+  \param initial_size 
+    An integer that specifies the maximum size of the stack. 
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+Stack::Stack(<b>int</b> initial_size)
+{
+    <font color="#003399"><i>// Initialize an empty stack</i></font>
+  top = -1;               
+
+  <b>if</b> (initial_size &lt; 0)
+    size = 0;
+
+    <font color="#003399"><i>// Set stack to maximum size when input size is oversized</i></font>
+  <b>else</b> <b>if</b> (initial_size &gt; MAX_SIZE)
+    size = MAX_SIZE;
+
+    <font color="#003399"><i>// Otherwize, set stack size to input size</i></font>
+  <b>else</b>
+    size = initial_size;
+} 
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Adds an item to the stack. Verifies the stack is not full before
+  adding the item. Changes the stack.
+          
+  \param item
+    An integer that is added to the stack.
+
+  \exception char* 
+    text message indicating the reason for the exception 
+    (push onto a full stack).
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>void</b> Stack::pushItem(<b>int</b> item)
+{
+    <font color="#003399"><i>// Check if stack is full</i></font>
+  <b>if</b> (isFull())
+    <b>throw</b> (<font color="#9933CC">&quot;Attempting to push when stack is full.&quot;</font>);
+
+    <font color="#003399"><i>// If stack is not full, increment the top index and add the item</i></font>
+  top = top + 1;              
+  items[top] = item;       
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Removes the item that is at the top of the stack. Verifies the
+  stack is not empty before removing the item. Changes the stack.
+      
+  \return 
+    The integer at the top of the stack.
+
+  \exception char* 
+    text message indicating the reason for the exception (pop an empty stack).
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>int</b> Stack::popItem(<b>void</b>)
+{
+
+    <font color="#003399"><i>// Check if stack is empty</i></font>
+  <b>if</b> (isEmpty())
+    <b>throw</b> (<font color="#9933CC">&quot;Attempting to pop when stack is empty.&quot;</font>);
+
+  <b>int</b> number = items[top]; <font color="#003399"><i>// Get the value of top item</i></font>
+  top--;                   <font color="#003399"><i>// Remove the top item</i></font>
+  <b>return</b> number;           <font color="#003399"><i>// Return the value of top item to caller</i></font>
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Returns the integer that is at the top of the stack without
+  removing it. 
+      
+  \return 
+    The integer at the top of the stack.
+
+  \attention
+    Due to the limited error handling, an empty stack will return 0.
+    The caller should check for an empty stack &lt;i&gt;before&lt;/i&gt; calling
+    this method.
+
+  \todo 
+    Add better error handling (throw an exception).
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>int</b> Stack::peekAtTop(<b>void</b>) <b>const</b>
+{
+    <font color="#003399"><i>// Check if stack is empty</i></font>
+  <b>if</b> (isEmpty())
+    <b>return</b> 0;        <font color="#003399"><i>// Return 0 to caller</i></font>
+
+  <b>return</b> items[top]; <font color="#003399"><i>// Return the value of top item to caller</i></font>
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Checks if the stack is empty.
+
+  \return 
+    &lt;b&gt;true&lt;/b&gt; if the stack is empty, otherwise, &lt;b&gt;false&lt;/b&gt;
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>bool</b> Stack::isEmpty(<b>void</b>) <b>const</b>
+{
+    <font color="#003399"><i>// if array index is negative,stack is empty</i></font>
+  <b>if</b> (top &lt; 0)
+    <b>return</b> true;
+  <b>else</b>
+    <b>return</b> <b>false</b>;
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Checks if the stack is full.
+
+  \return 
+    &lt;b&gt;true&lt;/b&gt; if the stack is full, otherwise, &lt;b&gt;false&lt;/b&gt;
+
+\brief
+    &lt;img src=&quot;http://www.digipen.edu/~mmead/images/HomerFace-1.gif&quot;&gt;
+    &lt;br&gt;
+    Mmmm... A full stack....
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>bool</b> Stack::isFull(<b>void</b>) <b>const</b>
+{
+    <font color="#003399"><i>// if array index is greater or equal to (size - 1),stack is full</i></font>
+  <b>if</b> (top &gt;= size - 1)
+    <b>return</b> true;
+  <b>else</b>
+    <b>return</b> <b>false</b>;
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Prints out the contents of the stack to the screen.
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>void</b> Stack::print(<b>void</b>) <b>const</b>
+{
+    <font color="#003399"><i>// call the general-purpose version</i></font>
+  print(std::cout, 6);
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Prints out the contents of the stack to a stream provided by the user.
+
+
+  \param stream
+    The destination of the output.
+
+  \param width
+    The width of the fields written on the stream.
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>void</b> Stack::print(std::ostream &amp;stream, <b>int</b> width) <b>const</b>
+{
+    <font color="#003399"><i>// index of array</i></font>
+  <b>int</b> i;       
+
+    <font color="#003399"><i>// Print out all items in the stack and set width to 6</i></font>
+  <b>for</b> (i = 0; i&lt;= top; i++)
+    stream &lt;&lt; std::setw(width) &lt;&lt; items[i];
+  stream &lt;&lt; std::endl;
+}
+
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Returns the number of items on the stack
+
+  \return 
+    The number of items on the stack
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>int</b> Stack::getCount(<b>void</b>) <b>const</b>
+{
+    <font color="#003399"><i>// Number of items is the top index plus one</i></font>
+  <b>return</b> (top + 1);
+}
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+
+  Returns the size of the stack
+
+  \return 
+    The size of the stack
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<b>int</b> Stack::getSize(<b>void</b>) <b>const</b>
+{
+    <font color="#003399"><i>// Returns size from private part of class</i></font>
+  <b>return</b> size;    
+}
+
+</code></pre>
+
+
+</body>
+</html>

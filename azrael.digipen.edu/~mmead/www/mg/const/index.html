@@ -1,0 +1,1301 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to const in C and C++</title>
+</head>
+
+<body>  
+<center><h1>Mead's Guide to <tt>const</tt></b> in C and C++</h1></center>
+<center><h3>(Everything You Ever Wanted to Know about <b><tt>const</tt></b>)</h2></center>
+
+<!--
+<blockquote>
+<i>
+"The road to hell is paved with global variables"</i> -- Steve McConnell
+</blockquote>
+-->
+
+<ol>
+<li><a href="index.html#INTRODUCTION">Introduction to <b><tt>const</tt></b></a><br>
+<li><a href="index.html#SIMPLE">Simple Uses of <tt>const</tt></a> (C and C++)<br>
+<li><a href="index.html#POINTERS">Pointers and <b><tt>const</tt></b></a> (C and C++)<br>
+<li><a href="index.html#ARGUMENTS">Protecting Function Arguments</a> (C and C++)<br>
+<li><a href="index.html#RETURNED1">Protecting Returned Data</a> (C and C++)<br>
+<li><a href="index.html#RETURNED2">Returning Non-constant Pointers/References</a> (C and C++)<br>
+<li><a href="index.html#CLASSDATA">Protecting Class Member Data (C++ only)</a> (C++ only)<br>
+<li><a href="index.html#CONST">Constants and Arrays: C vs. C++</a><br>
+<li><a href="index.html#GLOBAL">Global Constants: C vs. C++ (A Subtle Difference)</a><br>
+<li><a href="index.html#MOREINFO">More Information</a><br>
+</ol>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRODUCTION"></a>
+<p class="SectionHeader">Introduction to <b><tt>const</tt></b>
+</p>
+
+If we want to make sure that certain variables in our program will never change, we mark them with the
+<tt><b>const</b></tt> keyword. (Constant variables? That's an oxymoron...) Not only does this document the code by indicating that the objects
+won't change, but it will also detect any "accidental" attempts at changing the object's value. 
+The code below shows 6 typical uses of <tt><b>const</b></tt>:
+
+<blockquote>
+<p>
+<img src="Const-Examples.png">
+<p>
+</blockquote>
+
+Notes:
+<ol type="A">
+<li>The value of <tt>i</tt> is <tt><b>const</b></tt> (protected). It is not possible to change the value of <tt>i</tt>. It will
+	always be <tt>100</tt>.
+<li>The integer that <tt>pi</tt> is pointing at is protected. <!--<tt><b>const</b></tt> (protected)-->It is not possible to change <tt>i</tt>
+	through the pointer <tt>pi</tt>.
+<li>The value of <tt>pi</tt> is <tt><b>const</b></tt> (protected). Since <tt>pi</tt> is a pointer, it can never be 
+	modified to point at another integer. It will always point at <tt>i</tt>.
+<li>A pointer is returned from the <tt>Foo::bar</tt> method. The integer that is being
+	pointed at is <tt><b>const</b></tt> (protected) so the integer cannot be changed through the returned pointer.
+<li>A pointer is passed into the <tt>Foo::bar</tt> method. The character that is being
+	pointed at is <tt><b>const</b></tt> (protected) so the character can't be changed in this method.
+<li>The <tt>Foo::bar</tt> method itself is <tt><b>const</b></tt>. This means that all of the data (public, private, etc.)
+	in the object is protected <i>from this method</i>. The <tt>Foo::bar</tt> method cannot modify any of the data in the object. 
+	(Other non-const methods in class <tt>Foo</tt> can modify the data in the object, though.) This use of <tt><b>const</b></tt>
+	is only valid in C++. (C doesn't have classes, so how could it work with C?)
+</ol>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="SIMPLE"></a>
+<p class="SectionHeader">Simple Uses of <tt>const</tt> (C and C++)
+</p>
+
+Creating constant values in C and C++ is simple and straight forward:
+<p>
+	
+<blockquote><pre>
+<font color="#003399"><i>/* Globals */</i></font>
+<b>int</b> gi;         <font color="#003399"><i>/* 1. gi is initialized to 0           */</i></font>
+<b>int</b> gj = 10;    <font color="#003399"><i>/* 2. gj is initialized to 10          */</i></font>
+<b>const</b> <b>int</b> gci;  <font color="#003399"><i>/* 3. Illegal, gci must be initialized */</i></font>
+
+<font color="#003399"><i>/* Locals */</i></font>
+<b>void</b> constvalues(<b>void</b>)
+{
+  <b>int</b> i;               <font color="#003399"><i>/* 4. i is uninitialized (garbage)    */</i></font>
+  <b>int</b> j = 5;           <font color="#003399"><i>/* 5. j is initialized to 5           */</i></font>
+  <b>const</b> <b>int</b> ci;        <font color="#003399"><i>/* 6. Illegal, ci must be initialized */</i></font>
+  <b>const</b> <b>int</b> ci2 = 10;  <font color="#003399"><i>/* 7. Ok, ci2 is initialized to 10    */</i></font>
+  <b>const</b> <b>int</b> ci3 = ci2; <font color="#003399"><i>/* 8. Ok, ci3 is initialized to 10    */</i></font>
+  <b>const</b> <b>int</b> ci4 = j;   <font color="#003399"><i>/* 9. Ok, ci4 is initialized to 5     */</i></font>
+
+  i = 20;   <font color="#003399"><i>/* 10. Ok, <b>assignment</b> of 20 to i        */</i></font>
+  j = 12;   <font color="#003399"><i>/* 11. Ok, <b>assignment</b> of 12 to j        */</i></font>
+  ci2 = 10; <font color="#003399"><i>/* 12. Illegal, can't assign to a const */</i></font>
+}
+</pre></blockquote>
+
+Notes:
+<ul>
+<li>#1 - Uninitialized non-local data is set to 0.
+<li>#3 - This is legal in C and <tt>gci</tt> will be initialized to 0. In C++ it is an error not to initialize a constant.
+<li>#4 - Since <tt>i</tt> is uninitialized, it's value is undefined.
+<li>#6 - This is legal in C, although dangerous because <tt>ci</tt> is undefined. In C++, it is an error.
+<li>#12 - You cannot assign to a constant. #7, #8, and #9 are not assignments, they are <i>initializations</i>.
+</ul>
+
+
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="POINTERS"></a>
+<p class="SectionHeader">Pointers and <b><tt>const</tt></b> (C and C++)
+</p>
+
+<p>
+With pointers, you have more flexibility with <tt><b>const</b></tt>. You can make the pointer itself constant, 
+which means once it points at something, it can never be changed to point at something else. Or, you can make
+the data pointed at constant, which means that, although you can change the pointer to point at something else,
+you can't change what's being pointed at (<i>through the pointer</i>). 
+<p>
+Here are the four cases. The shaded values indicate that they are <tt><b>const</b></tt> (protected).
+
+<ol>
+<li>Neither the pointer nor the data being pointed at (the pointee) is <tt><b>const</b></tt>. Both can be changed:
+<blockquote><pre>
+<b>int</b> *pi; <font color="#003399"><i>/* pi is a (non-const) pointer to a (non-const) int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-non-const-non-const-1.png">
+</blockquote>
+<li>The pointer is not <tt><b>const</b></tt>, but the data pointed at (the pointee) is <tt><b>const</b></tt>. The data is protected. 
+Only the pointer can change:
+<blockquote><pre>
+<b>const</b> <b>int</b> *pci; <font color="#003399"><i>/* pci is a pointer to a const int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-non-const-const-2.png">
+</blockquote>
+<li>The pointer is <tt><b>const</b></tt> but the data being pointed at is non-const. The pointer is protected. The data can be changed through the pointer.
+<blockquote><pre>
+<b>int</b> * <b>const</b> cpi = &amp;i; <font color="#003399"><i>/* cpi is a const pointer to an int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-const-non-const-3.png">
+</blockquote>
+<li>Both the pointer and the data being pointed at are <tt><b>const</b></tt>. Both are protected. Neither can be changed:
+<blockquote><pre>
+<b>const</b> <b>int</b> * <b>const</b> cpci = &amp;ci;  <font color="#003399"><i>/* cpci is a const pointer to a const int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-const-const-4.png">
+</blockquote>
+</ol>
+
+Points to remember:
+<ul>
+<li>If you mark something as <tt><b>const</b></tt>, you are indicating that it should not change.
+<li>If you DO NOT mark something as <tt><b>const</b></tt>, you are indicating that it should change.
+<li>Therefore, if you are not going to change some data in your program, make sure to mark it <tt><b>const</b></tt>.
+<li>Also, remember when reading the pointer declarations to read them from <i>right to left</i>. These are both the same:
+<blockquote><pre>
+<b>const</b> <b>int</b> * pci;
+<b>int</b> <b>const</b> * pci;
+</pre></blockquote>
+and mean that pci is a <b>non-constant pointer to a <font color="blue">constant int</font></b> and that this:
+<blockquote><pre>
+<b>int</b> * <b>const</b> cpi = &amp;i;  
+</pre></blockquote>
+means that cpi is a <b><font color="blue">constant pointer</font> to a non-constant int</b>. Then, dereferencing:
+
+<blockquote><pre>
+*pci;  <font color="#003399"><i>/* <b>*pci</b> is a constant int */</i></font>
+*cpi;  <font color="#003399"><i>/* <b>*cpi</b> is an int         */</i></font>
+</pre></blockquote>
+
+so:
+
+<blockquote><pre>
+*pci = 5;  <font color="#003399"><i>/* ILLEGAL, can't assign to a constant  */</i></font>
+*cpi = 5;  <font color="#003399"><i>/* OK, you can assign to a non-constant */</i></font>
+</pre></blockquote>
+
+</ul>
+
+
+Here is an example that shows the <tt><b>const</b></tt> keyword in action in various ways:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i = 5;          <font color="#003399"><i>/* 1. i is a non-constant int */</i></font>
+  <b>int</b> j = 6;          <font color="#003399"><i>/* 2. j is a non-constant int */</i></font>
+  <b>const</b> <b>int</b> ci = 10;  <font color="#003399"><i>/* 3. ci is a constant int    */</i></font>
+  <b>const</b> <b>int</b> cj = 11;  <font color="#003399"><i>/* 4. cj is a constant int    */</i></font>
+
+  <b>int</b> *pi;                      <font color="#003399"><i>/* 5. pi is a pointer to an int              */</i></font>
+  <b>const</b> <b>int</b> *pci;               <font color="#003399"><i>/* 6. pci is a pointer to a const int        */</i></font>
+  <b>int</b> * <b>const</b> cpi = &amp;i;         <font color="#003399"><i>/* 7. cpi is a const pointer to an int       */</i></font>
+  <b>const</b> <b>int</b> * <b>const</b> cpci = &amp;ci; <font color="#003399"><i>/* 8. cpci is a const pointer to a const int */</i></font>
+
+  i = 6;      <font color="#003399"><i>/*  9. Ok, i is not const    */</i></font>
+  j = 7;      <font color="#003399"><i>/* 10. Ok, j is not const    */</i></font>
+  <font color="red"><b>ci = 8;</b></font>     <font color="#003399"><i>/* 11. ERROR: ci is const    */</i></font>
+  <font color="red"><b>cj = 9;</b></font>     <font color="#003399"><i>/* 12. ERROR: cj is const    */</i></font>
+
+  pi = &amp;i;    <font color="#003399"><i>/* 13. Ok, pi is not const   */</i></font>
+  *pi = 8;    <font color="#003399"><i>/* 14. Ok, *pi is not const  */</i></font>
+  pi = &amp;j;    <font color="#003399"><i>/* 15. Ok, pi is not const   */</i></font>
+  *pi = 9;    <font color="#003399"><i>/* 16. Ok, *pi is not const  */</i></font>
+
+  pci = &amp;ci;  <font color="#003399"><i>/* 17. Ok, pci is not const  */</i></font>
+  <font color="red"><b>*pci = 8;</b></font>   <font color="#003399"><i>/* 18. ERROR: *pci is const  */</i></font>
+  pci = &amp;cj;  <font color="#003399"><i>/* 19. Ok, pci is not const  */</i></font>
+  <font color="red"><b>*pci = 9;</b></font>   <font color="#003399"><i>/* 20. ERROR: *pci is const  */</i></font>
+
+  <font color="red"><b>cpi = &amp;j;</b></font>   <font color="#003399"><i>/* 21. ERROR: cpi is const   */</i></font>
+  *cpi = 10;  <font color="#003399"><i>/* 22. Ok, *cpi is not const */</i></font>
+  *cpi = 11;  <font color="#003399"><i>/* 23. Ok, *cpi is not const */</i></font>
+
+  <font color="red"><b>cpci = &amp;j;</b></font>  <font color="#003399"><i>/* 24. ERROR: cpci is const  */</i></font>
+  <font color="red"><b>*cpci = 10;</b></font> <font color="#003399"><i>/* 25. ERROR: *cpci is const */</i></font>
+  
+  pi = &amp;ci;   <font color="#003399"><i>/* 26. DANGER: constant ci can be changed through pi  */</i></font>
+}
+</pre></blockquote>
+  <!--cpi = &amp;ci;  <font color="#003399"><i>/* DANGER: constant ci can be changed through cpi */</i></font>-->
+
+<blockquote>
+Note the last line in the code says DANGER. In C, this is a warning, but in C++, this is an error.
+<p class="technote">
+<b>Important:</b> If you have a constant object, you can only point at that object with a pointer that is 
+declared to point at a constant. This means that you can not point at the constant object with a pointer
+that is NOT declared as pointing to a constant object. See #26 above. Consider this C warning as 
+an error, because it should be.
+</blockquote>
+
+A final note: It is perfectly fine to have a pointer-to-const point at a non-const object:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* i is non-const and can be changed through the variable name */</i></font>	
+<b>int</b> i = 5; 
+
+  <font color="#003399"><i>/* Ok, but i can't be changed <b>through the pointer</b> (but not really useful, since i isn't constant) */</i></font>
+<b>const int</b> *pci = &amp;i; 
+
+  <font color="#003399"><i>/* Ok, i is not const, so it can be changed */</i></font>
+i = 8;
+
+  <font color="#003399"><i>/* ERROR: can't change object that pci points to */</i></font>
+*pci = 8;
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Also realize that a pointer <b>does not affect the object it's pointing at</b>. In the example above, the pointer, <tt>pci</tt> does
+not make <tt>i</tt> constant. The variable <tt>i</tt> is not constant, and will never be constant. The pointer, <tt>pci</tt>, just
+means that you can't change <tt>i</tt> through the pointer. You can only change <tt>i</tt> directly (through <tt>i</tt>).
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="ARGUMENTS"></a>
+<p class="SectionHeader">Protecting Function Arguments (C and C++)
+</p>
+
+<b>Background</b>
+<p>
+In general, the only arguments that may need protection are pointers and references. This is because with
+a pointer or a reference, the function has access to the original data that the caller owns. When we pass by
+value (the default in C/C++), we don't need to protect the argument because a <i>copy</i> of the data is
+passed to the function. The function has no way of modifying the original data that the caller owns. Remember that
+the compiler makes sure that this copy is made automatically and immediately before the function is called.
+The compiler also makes sure that this copy is automatically destroyed immediately after the function
+returns. This is why there is no danger in passing an argument by value and why there is no need to protect
+these arguments.
+<p>
+Passing pointers/references is another matter. Here's an example of a function that simply finds the largest value in an array of integers.
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>Unsafe</th><th>Safe</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<!--<font color="#003399"><i>/* Modifies the array the was passed in!! */</i></font>-->
+<b>int</b> find_largest1(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest */</i></font>
+  <!--a[0] = 0;       <font color="#003399"><i>/* <b>change first element!</b> */</i></font>-->
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i];  <font color="#003399"><i>/* found a larger one */</i></font>
+    <!--a[i] = 0;      <font color="#003399"><i>/* <b>set element to 0!!</b> */</i></font>-->
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<!--<font color="#003399"><i>/* Unable to modify the array since it's const */</i></font>-->
+<b>int</b> find_largest2(<font color="blue"><b>const</b></font> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest */</i></font>
+  <!--<font color="red"><b>a[0] = 0;</b></font>       <font color="#003399"><i>/* <b>ILLEGAL: elements are const</b> */</i></font>-->
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i]; <font color="#003399" ><i>/* found a larger one    */</i></font>
+    <!--<font color="red"><b>a[i] = 0;</b></font>     <font color="#003399"><i>/* <b>ILLEGAL: elements are const</b> */</i></font>-->
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<ul>
+<li>The purpose of the function is to scan through the array looking for the largest value. No changes
+	should be made to the array (and the client doesn't expect any).
+<li>However, the unsafe version is allowed to modify the elements of the array that were passed in 
+	because the array (pointer to the first int) is unprotected.
+<li>Some arrays cannot be passed to this function, even though no changes
+	are being made to any element.
+<li><b>Remember:</b> If you create a function that takes a pointer (array) or reference and you don't 
+	mark it <tt><b>const</b></tt>, you are promising the callers that you will modify what
+	they point to or reference and the compiler will assume you are "telling the truth".
+<li>Examples:
+
+
+<blockquote><pre>
+	
+  <font color="#003399"><i>/* array of const integers will never change   */</i></font>
+<b>const</b> <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6};
+
+  <font color="#003399"><i>/* array of non-const integers that can change */</i></font>
+<b>int</b> b[] = {4, 5, 3, 9, 5, 2, 7, 6};
+
+<b>int</b> largest1, largest2;
+largest1 = find_largest1(a, 8); <font color="#003399"><i><b>/* Compiler Error, function claims it will modify the array */</b></i></font>
+largest2 = find_largest2(a, 8); <font color="#003399"><i>/* OK */</i></font>
+
+largest1 = find_largest1(b, 8); <font color="#003399"><i>/* OK */</i></font>
+largest2 = find_largest2(b, 8); <font color="#003399"><i>/* OK */</i></font>
+</pre></blockquote>
+
+<br>
+<p>
+The unsafe function can "accidentally" modify the array, but the safe function can't:
+<p>
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>Unsafe</th><th>Safe</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<!--<font color="#003399"><i>/* Modifies the array the was passed in, but it really shouldn't */</i></font>-->
+<b>int</b> find_largest1(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <!--<font color="#003399"><i>/* assume 1st is largest */</i></font>-->
+  <font color="blue"><b>a[0] = 0;</b></font>  <font color="#003399"><i>/* <b>change first element, compiler says nothing</b> */</i></font>
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i];  <!--<font color="#003399"><i>/* found a larger one */</i></font>-->
+    <font color="blue"><b>a[i] = 0;</b></font> <font color="#003399"><i>/* <b>set all elements to 0, compiler says nothing</b> */</i></font>
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<!--<font color="#003399"><i>/* Unable to modify the array since it's const */</i></font>-->
+<b>int</b> find_largest2(<b>const</b> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <!--<font color="#003399"><i>/* assume 1st is largest */</i></font>-->
+  <font color="red"><b>a[0] = 0;</b></font>   <font color="#003399"><i>/* <b>ILLEGAL: elements are const, compiler prevents it</b> */</i></font>
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i]; <!--<font color="#003399" ><i>/* found a larger one    */</i></font>-->
+    <font color="red"><b>a[i] = 0;</b></font> <font color="#003399"><i>/* <b>ILLEGAL: elements are const, compiler prevents it</b> */</i></font>
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+</ul>
+
+Notes:
+<ul>
+<li>Protecting pointer/reference parameters to functions is the most common use of the <tt><b>const</b></tt> keyword.
+<li>Passing by value does not require <tt><b>const</b></tt>.
+<li>If the function <i>must</i> modify the data that the caller passes a pointer/reference to, you must
+	not use <tt><b>const</b></tt>.
+<li>Passing large objects (of user-defined types, not built-in types) by value is expensive
+<ul>
+	<li>Passing them by reference or pointer (address) is more efficient.
+	<li>If you just want the efficiency, but don't want the parameters changed, use <tt><b>const</b></tt>.
+</ul>
+<li>When in doubt, when passing arrays, use <tt><b>const</b></tt>:
+<blockquote><pre>
+<b>void</b> some_function(<b>const int</b> array[], <b>int</b> size);
+</pre></blockquote>
+If you need to change elements in the array, the compiler will complain and you'll know that you need to remove the <tt><b>const</b></tt> keyword.
+<li>In C, when passing user-defined types (structs), pass a pointer to a <tt><b>const</b></tt>:
+<blockquote><pre>
+<b>void</b> some_function(<b>const</b> Foo* object);
+</pre></blockquote>
+<li>In C++, when passing user-defined types (structs, class objects), pass a reference to a <tt><b>const</b></tt>:
+<blockquote><pre>
+<b>void</b> some_function(<b>const</b> Foo& object);
+</pre></blockquote>
+If you need to modify the object, the compiler will complain and you'll know that you need to remove the <tt><b>const</b></tt> keyword.
+
+
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="RETURNED1"></a>
+<p class="SectionHeader">Protecting Returned Data (C and C++)
+</p>
+<b>Background</b>
+<p>
+Like function parameters, data returned from a function is returned by <i>value</i>. This means that
+the compiler makes sure that a <i>copy</i> of the returned data will be made immediately before the
+function returns. This also means that, generally speaking, you don't have to protect the copy of the data. Also, like
+function parameters, you generally only need to protect pointer and reference data that is being
+returned.
+<p>
+As an example, we'll modify the <i>find_largest</i> functions from before to return a pointer to
+the largest integer in the array, rather than a copy of the largest integer.
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Unsafe</th><th>Partially safe (but illegal)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> *find_largest3(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = 0;
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; a[max]) 
+      max = i;
+
+    <font color="#003399"><i>/* return pointer to max element */</i></font>
+  <b>return</b> &amp;a[max]; 
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> *find_largest4(<b>const</b> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = 0;
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; a[max]) 
+      max = i;
+
+    <font color="#003399"><i>/* return pointer to max element */</i></font>
+    <font color="#003399"><i>/* Compiler error: a is const    */</i></font>
+  <b>return</b> &amp;a[max]; 
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+<ul>
+<li>In the first, unsafe version of the function, there are <b>two</b> potential problems. 
+	(This is because there are two pointers: a parameter and the return.)
+<li>As with the original <i>find_largest1</i> function, the parameter is unprotected and the
+	function can modify the elements of the array.
+<li>The second problem, is the unprotected return. The function is giving the caller
+	a non-const pointer to an element in the array. This will allow the caller to 
+	change an element in the array.
+	<ul>
+		<li>Again, if you want to allow the caller (which may not be the originator of the array) to change
+			the elements, this is OK. But, if you want to protect the elements, this is another potential flaw.
+	</ul>
+<li>The second, partially safe (but illegal) function, is partially safe because the function
+	is unable to modify the elements. 
+<li>However, since it returns a non-const pointer, the elements can be changed by the caller.
+<li>Since the array is <tt><b>const</b></tt> in the function, it is illegal for a non-const
+	pointer to point into the array. (That's why the code is illegal)
+<li>By now, you should see the solution: make both the parameter and return <tt><b>const</b></tt>:
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Safe and correct</th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b><font color="blue">const</b></font> <b>int</b> *find_largest5(<font color="blue"><b>const</b></font> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = 0;
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; a[max]) 
+      max = i;
+
+    <font color="#003399"><i>/* return a pointer to the max element      */</i></font>
+    <font color="#003399"><i>/* a is const and returned pointer is const */</i></font>
+  <b>return</b> &amp;a[max]; 
+}
+</pre></blockquote>
+
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="RETURNED2"></a>
+<p class="SectionHeader">Returning Non-constant Pointers/References (C and C++)
+</p>
+
+Modifying the <i>find_largest</i> function and calling it <i>get_largest</i>. This function finds
+the largest integer in an array and returns a (non-constant) pointer to it.
+
+<blockquote><pre>
+<font color="#003399"><i>/* This function is not changing the array itself, but it is potentially */</i></font>
+<font color="#003399"><i>/* allowing other code to change it by returning a non-const pointer to  */</i></font>
+<font color="#003399"><i>/* an element of the array. Because of the potential for other code to   */</i></font>
+<font color="#003399"><i>/* change the array, the parameter must be non-const.                    */</i></font>
+<b>int</b> *get_largest(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = 0;
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; a[max]) 
+      max = i;
+
+    <font color="#003399"><i>/* return pointer to max element */</i></font>
+  <b>return</b> &amp;a[max]; 
+}
+</pre></blockquote>
+
+Example usage:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> Test(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6};
+
+    <font color="#003399"><i>/* Get a pointer to the largest int */</i></font>
+  <b>int</b> *p = get_largest(a, 8);
+
+    <font color="#003399"><i>/* Set the element to 0             */</i></font>
+  *p = 0;
+  print_array1(a, 8);
+
+    <font color="#003399"><i>/* No &quot;extra&quot; pointer required      */</i></font>
+  *get_largest(a, 8) = 0;
+  print_array1(a, 8);
+
+    <font color="#003399"><i>/* Set largest to 0, one at a time  */</i></font>
+  <b>for</b> (i = 0; i &lt; 6; i++)
+  {
+    *get_largest(a, 8) = 0;
+    print_array1(a, 8);
+  }
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>Output</b>:
+4  5  3  0  5  2  7  6
+4  5  3  0  5  2  0  6
+4  0  3  0  5  2  0  0
+4  0  3  0  0  2  0  0
+0  0  3  0  0  2  0  0
+0  0  0  0  0  2  0  0
+0  0  0  0  0  0  0  0
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Notes:
+<ul>
+<li>Because the <i>get_largest</i> function is returning a pointer to a <i>non-constant object</i>, the address returned
+	must be the address of an object <i>that can be changed</i>.
+<li>Marking the parameter as <tt><b>const</b></tt> would prohibit the function returning
+	any element's address (pointer).
+<li>With C++ code, we tend to use references more often than pointers, so it looks like this:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>C++ using references</th><th>C++ returning references</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> Test(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6};
+
+    <font color="#003399"><i>/* Get a reference to the largest int */</i></font>
+  <b>int</b> &amp;p = get_largest(a, 8);
+
+    <font color="#003399"><i>/* Set the element to 0             */</i></font>
+  p = 0;
+  print_array1(a, 8);
+
+    <font color="#003399"><i>/* No &quot;extra&quot; reference required      */</i></font>
+  get_largest(a, 8) = 0;
+  print_array1(a, 8);
+
+    <font color="#003399"><i>/* Set largest to 0, one at a time  */</i></font>
+  <b>for</b> (i = 0; i &lt; 6; i++)
+  {
+    get_largest(a, 8) = 0;
+    print_array1(a, 8);
+  }
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> &amp;get_largest(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = 0;
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; a[max]) 
+      max = i;
+
+    <font color="#003399"><i>/* return reference to max element */</i></font>
+  <b>return</b> a[max]; 
+}
+
+<b>Output</b>:
+4  5  3  0  5  2  7  6
+4  5  3  0  5  2  0  6
+4  0  3  0  5  2  0  0
+4  0  3  0  0  2  0  0
+0  0  3  0  0  2  0  0
+0  0  0  0  0  2  0  0
+0  0  0  0  0  0  0  0
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+	
+<blockquote><pre>
+</pre></blockquote>
+
+
+	
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="CLASSDATA"></a>
+<p class="SectionHeader">Protecting Class Member Data (C++ only)
+</p>
+
+Back in the olden-days (read: the C language), the compiler could easily detect when we were trying to
+modify a constant object:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Simple struct</th><th>Simple function</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>struct</b> Bar
+{
+  <b>int</b> a;
+  <b>int</b> b;
+};
+
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> PrintBar(<b>const</b> <b>struct</b> Bar* bar)
+{
+  printf(<font color="#9933CC">&quot;Bar-&gt;a is %i\n&quot;</font>, bar-&gt;a);
+  printf(<font color="#9933CC">&quot;Bar-&gt;b is %i\n&quot;</font>, bar-&gt;b);
+  
+    <font color="#003399"><i>/* Try to modify the object */</i></font>
+    <font color="#003399"><i>/* ERROR: object is const   */</i></font>
+  bar-&gt;a = 5; 
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+<ul>
+<li>The compiler can easily see that the function <i>PrintBar</i> is attempting
+	to modify the constant <i>Bar</i> object.
+<li>The parameter is a pointer to a constant <i>Bar</i> object, so it is not possible to modify the
+	object in anyway. (The function is attempting to modify the data member, <tt>a</tt>, which is part of the object)
+</ul>
+	
+Some more examples:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Simple struct</th><th>Simple function</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> TestBar1(<b>void</b>)
+{
+  Bar bar;   <font color="#003399"><i>/* Create a Bar  */</i></font>
+  bar.a = 5; <font color="#003399"><i>/* OK, not const */</i></font>
+  bar.b = 6; <font color="#003399"><i>/* OK, not const */</i></font>
+  
+    <font color="#003399"><i>/* Ok to pass non-const as const */</i></font>
+  PrintBar(&amp;bar);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> TestBar2(<b>void</b>)
+{
+    <font color="#003399"><i>/* Create a <b>const</b> Bar, must use this syntax */</i></font>
+  <b>const</b> Bar bar = {5, 6};
+  
+    <font color="#003399"><i>/* Now, assignment is illegal */</i></font>
+  bar.a = 5; <font color="#003399"><i>/* ERROR */</i></font> 
+  bar.b = 6; <font color="#003399"><i>/* ERROR */</i></font>
+  
+    <font color="#003399"><i>/* OK, passing as pointer to const */</i></font>
+  PrintBar(&amp;bar);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+Now, let's make this more C++-like:
+<p>
+	
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>File: Bar2.h</th><th>File: Bar2.cpp</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<pre class="sourcecode"><code><b>class</b> Bar2
+{
+  <b>public</b>:
+    Bar2(<b>int</b> a, <b>int</b> b);
+    <b>void</b> Print(<b>void</b>);
+  
+  <b>private</b>:  
+    <b>int</b> a_;
+    <b>int</b> b_;
+};
+</pre></blockquote></code>
+</td>
+<td>
+<blockquote><pre>
+<pre class="sourcecode"><code><b>#include</b> <font color="#9933CC">&quot;Bar2.h&quot;</font>
+	
+Bar2::Bar2(<b>int</b> a, <b>int</b> b)
+{
+  a_ = a;
+  b_ = b;
+}
+
+<b>void</b> Bar2::Print(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Bar-&gt;a is &quot;</font> &lt;&lt; a_ &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Bar-&gt;b is &quot;</font> &lt;&lt; b_ &lt;&lt; std::endl;
+  
+    <font color="#003399"><i>/* OK, nothing preventing this */</i></font>
+  a_ = 5; 
+}
+</pre></blockquote></code>
+</td>
+</tr></table>
+
+Sample usage:
+
+<blockquote><pre>
+<b>#include</b> <font color="#9933CC">&quot;Bar2.h&quot;</font>
+	
+<b>void</b> TestBar3(<b>void</b>)
+{
+  Bar2 b1(1, 2);       <font color="#003399"><i>// non-const</i></font>
+  <b>const</b> Bar2 b2(3, 4); <font color="#003399"><i>// const</i></font>
+  
+    <font color="#003399"><i>// Will b1's data members be changed? Doesn't</i></font>
+    <font color="#003399"><i>// matter since it is not a constant object.</i></font>
+  b1.Print(); 
+  
+    <font color="#003399"><i>// Will b2's data members be changed? It matters because</i></font>
+    <font color="#003399"><i>// it is a constant object and the compiler needs to be sure.</i></font>
+  b2.Print(); <font color="#003399"><i>// ERROR</i></font>
+}
+</pre></blockquote>
+
+Notes:
+<ul>
+<li>Since <tt>b1</tt> is a non-const object, the compiler will not worry about 
+	any changes that might occur to it.
+<li><tt>b2</tt> is a constant object, so the compiler will make sure that it
+	will never be changed.
+<li>Unfortunately, the compiler doesn't know what the <i>Print</i> method is
+	going to do. (The compiler only sees the header file for the <i>Print</i> method.)
+<li>The default in C++ is for the compiler to <b>assume that all methods will modify
+the object</b>. This is why the call to <i>Print</i> on the <tt>b2</tt> object is
+	an error.
+<li>If the method truly isn't going to change the object, you need to communicate this
+	fact to the compiler by marking the method with the <tt><b>const</b></tt> keyword:
+	
+<blockquote><pre>
+<b>void</b> Print(<b>void</b>) <font color="blue"><b>const</b></font>;
+</pre></blockquote>
+	
+<li>Now, the compiler will allow constant objects to invoke the <i>Print</i> method 
+	because the compiler knows it is safe to do so.
+<li>Remember, you must mark both the declaration (header file) and the definition (implementation)
+	with the <tt><b>const</b></tt> keyword.
+<li>Also, you can't fool the compiler by marking the method as <tt><b>const</b></tt> and modifying the object:
+	
+<blockquote><pre>
+<b>void</b> Bar2::Print(<b>void</b>) <font color="blue"><b>const</b></font>
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Bar-&gt;a is &quot;</font> &lt;&lt; a_ &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Bar-&gt;b is &quot;</font> &lt;&lt; b_ &lt;&lt; std::endl;
+  
+    <font color="#003399"><i>/* ERROR, the compiler will catch this and prevent it. */</i></font>
+  a_ = 5; 
+}
+</pre></blockquote>
+	
+<li>Finally, you can't call any non-const member functions from within a const member function. 
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="CONST"></a>
+<p class="SectionHeader">Constants and Arrays: C vs. C++
+</p>
+
+When defining static arrays in C, we use the <b><tt>#define</tt></b> preprocessor directive.
+In C, constants don't work the way they do in C++. (In C, constants are different than
+C++ constants, even though they look like just like them.) In C++, we would use the <b><tt>const</tt></b>
+keyword:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>The C Way</th><th>The C++ Way</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="black"><b>#define</b> SIZE 5</font>
+<b>int</b> a[SIZE];
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>const</b> <b>int</b> size = 5;
+<b>int</b> b[size];
+</pre></blockquote>
+</td></tr></table>
+</blockquote>
+
+If you try and compile the <b><tt>const</tt></b> version with C (<tt>-pedantic</tt>), 
+you'd get an error message something like this:
+
+
+<blockquote><pre>
+warning: ISO C90 forbids variable length array 'b' [-Wvla]
+</pre></blockquote>
+That's why C uses the <b><tt>#define</tt></b> directive and C++ uses <b><tt>const</tt></b>.
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="GLOBAL"></a>
+<p class="SectionHeader">Global Constants: C vs. C++ (A Subtle Difference)
+</p>
+Before we get to global constants, let's have a refresher on global non-const first. If we
+had a file that contained these statements at the global scope, the statements would clearly 
+issue a compiler error:
+
+
+<blockquote><pre>
+<b>int</b> foo = 1; <font color="#003399"><i>/* Definition    */</i></font>
+<b>int</b> bar = 2; <font color="#003399"><i>/* Definition    */</i></font>
+<b>int</b> baz = 3; <font color="#003399"><i>/* Definition    */</i></font>
+<b>int</b> foo = 1; <font color="#003399"><i>/* Re-definition */</i></font>
+</pre></blockquote>
+
+Error message:
+<blockquote><pre>
+error: redefinition of 'foo'
+</pre></blockquote>
+
+The compiler can easily see the duplicate definition. But, what if the duplicate definition
+was in a different file?
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>file1.c</th><th>file2.c</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>int</b> foo = 5;
+<b>void</b> fn(<b>void</b>); <font color="#003399"><i>/* Prototype */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;foo is %i&#92;n&quot;</font>, foo);
+  fn();
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>int</b> foo = 5;
+
+<b>void</b> fn(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;foo is %i&#92;n&quot;</font>, foo);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Since the compiler only sees one file at a time, it won't see this duplicate definition. 
+However, the linker will see it and present this friendly message:
+
+<blockquote><pre>
+/tmp/ccYXh9oj.o:(.data+0x0): multiple definition of 'foo'
+</pre></blockquote>
+
+The reason the linker complains is because both variables are global and, by default, have
+<i>external linkage</i>, which is a fancy way of saying they are visible from other files.
+The converse of external linkage is <i>internal linkage</i> (think <b><tt>static</tt></b>), 
+which means that the symbols
+are only visible within the file they are defined. Both C and C++ behave in this way.
+<p>
+When it comes to global <i>constants</i>, things change in C++. Global constants in C++
+have internal linkage, and, therefore, are not visible outside of the file.
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>file1.cpp</th><th>file2.cpp</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="blue"><b>const</b></font> <b>int</b> foo = 5;
+<b>void</b> fn(<b>void</b>); <font color="#003399"><i>/* Prototype */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;foo is %i&#92;n&quot;</font>, foo);
+  fn();
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="blue"><b>const</b></font> <b>int</b> foo = 5;
+
+<b>void</b> fn(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;foo is %i&#92;n&quot;</font>, foo);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Now the files will link successfully. 
+<p>
+BTW, by default, the gcc/g++ compilers look at the 
+file extension to determine whether to compile the file as a C file or a C++ file. You can
+override this behavior by using the <tt>-x</tt> command line option.
+<p>
+To compile C files as C++ files:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic <b>-x c++</b> file1.c file2.c
+</pre></blockquote>
+
+To compile C++ as C files:
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic <b>-x c</b> file1.cpp file2.cpp
+</pre></blockquote>
+
+<ul>
+  <li>Why did things change and why is this a big deal?</li>
+  <ul>
+  <li>Global constants are meant for the entire program (otherwise they wouldn't be global).</li>
+  <li>Global constants are meant to replace the <tt><b>#define</b></tt> directive.</li>
+  <li>This means that global constants are meant to be placed in header files 
+    (which will be included by all of the files in a project).</li>
+  </ul>
+</ul>
+Supposed we had a header file with all of our keyboard mappings:
+
+
+<blockquote><pre>
+<b>const</b> <b>int</b> UP_ARROW    = 78;
+<b>const</b> <b>int</b> DOWN_ARROW  = 79;
+<b>const</b> <b>int</b> LEFT_ARROW  = 80;
+<b>const</b> <b>int</b> RIGHT_ARROW = 81;
+<b>const</b> <b>int</b> HOME        = 90;
+<b>const</b> <b>int</b> END         = 92;
+<b>const</b> <b>int</b> ESC         = 27;
+<b>const</b> <b>int</b> BACKSPACE   = 26;
+<font color="#003399"><i>/* Many more below */</i></font>
+</pre></blockquote>
+
+If we did not use the <tt><b>const</b></tt> keyword, the linker would complain that every
+file has a duplicate definition for the key mappings. The <tt><b>const</b></tt> prevents
+that. There is also no fear of having two different files getting two different values for
+the key map because there is only one copy (the header file) of all of the key mappings.
+
+<p>
+Ok, this makes sense. If the constants are compile-time constants, then the mechanism described 
+above does make sense. But, what if you <i>really</i> need just one copy of a global constant
+in C++? This may be because the constant isn't known until runtime.
+<p>
+To ensure that there is just one copy, you must use the <i>extern</i> keyword:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>extern1.cpp</th><th>extern2.cpp</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;iostream&gt;</font>
+
+<b>int</b> getvalue()
+{
+  <b>int</b> x;
+  std::cin &gt;&gt; x; <font color="#003399"><i>// runtime</i></font>
+  <b>return</b> x;
+}
+
+<font color="#003399"><i>// Value is not known until runtime and must</i></font>
+<font color="#003399"><i>// be initialized in only one file.</i></font>
+<b>extern</b> <b>const</b> <b>int</b> foo = getvalue();
+
+<b>void</b> fn(<b>void</b>);
+
+<b>int</b> main(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;foo is &quot;</font> &lt;&lt; foo &lt;&lt; std::endl;
+  fn();
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;iostream&gt;</font>
+
+<font color="#003399"><i>// prototype</i></font>
+<b>int</b> getvalue();
+
+<b>extern</b> <b>const</b> <b>int</b> foo; <font color="#003399"><i>// no initialization allowed</i></font>
+
+<b>void</b> fn(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;foo is &quot;</font> &lt;&lt; foo &lt;&lt; std::endl;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<b>C++ only</b>
+<p>
+
+Remember, in C++ if the global constants are not marked <i>extern</i>, they will have internal linkage 
+(think <i>static</i>) and will be visible only in the file where they are defined. Also, if more
+than one global <i>extern</i> constant is initialized, the linker will complain about duplicate definitions.
+Here's a table showing various uses:
+<p>
+
+<blockquote>
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><th>First file</th><th>Second file</th><th>Output</th></tr>
+
+
+<tr valign="top">
+<td>
+<pre><b>const</b> <b>int</b> foo = 1;</pre>
+</td>
+<td>
+<pre><b>const</b> <b>int</b> foo = 2;</pre>
+</td>
+<td>
+<pre>foo is 1<br>foo is 2</pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo = 1;</pre>
+</td>
+<td>
+<pre><b>const</b> <b>int</b> foo = 2;</pre>
+</td>
+<td>
+<pre>foo is 1<br>foo is 2</pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo = 1;</pre>
+</td>
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo = 2;</pre>
+</td>
+<td>
+<pre>Linker error<br>multiple definitions</pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo;</pre>
+</td>
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo;</pre>
+</td>
+<td>
+<pre>Linker error<br>undefined reference to 'foo'</pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo = 1;</pre>
+</td>
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo;</pre>
+</td>
+<td>
+<pre>foo is 1<br>foo is 1</pre>
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo;</pre>
+</td>
+<td>
+<pre><b>extern</b> <b>const</b> <b>int</b> foo = 2;</pre>
+</td>
+<td>
+<pre>foo is 2<br>foo is 2</pre>
+</td>
+</tr>
+
+</table>
+
+</blockquote>
+<p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="MOREINFO"></a>
+<p class="SectionHeader">For More Information
+</p>
+
+For more details on using <tt><b>const</b></tt> correctly check out the
+<a href="http://isocpp.org/wiki/faq/const-correctness"><tt>const</tt> correctness page</a>. Don't 
+worry if you don't understand all of it.
+<p>
+Another set of good examples from Herb Sutter's <i>Guru Of The Week</i> blog. 
+It's <a href="http://www.gotw.ca/gotw/006.htm">GotW #6</a>. The blog is pretty old, but many
+of the topics are still very relevant.
+<p>
+The discussion of putting <b>const</b> on value parameters is also interesting in this
+<a href="http://stackoverflow.com/questions/117293/use-of-const-for-function-parameters">
+  stack overflow question</a>. Everyone has their own ideas sometimes!
+</body>
+</html>
+
+<!--
+<tt><b>const</b></tt>
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

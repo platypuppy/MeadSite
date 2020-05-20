@@ -1,0 +1,180 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Programming Assignment #6</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<p>
+<h1>CS 170 - Programming Assignment #6</h1>
+</center>
+
+<!--
+<td><img src="../../../../../images/annew3.gif" width=120 height=60><br></td>
+-->
+</p>
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<p>
+<li><a href="cs170-programming-assignment-file-strings.pdf">Handout</a> 
+<li><a href="CS170-FAQ-FileStrings.html">FAQ</a> for this assignment. (Also see the Additional Information at the bottom of this page.)
+  <b>Everyone MUST read this before starting.</b>
+<li>Here is the header file for you to use: <a href="FileStrings.h.html">HTML</a>   <a href="FileStrings.h">Text</a> 
+  (<b>DO NOT</b> modify this file. You are not submitting it.)
+<li>The partial .cpp file for you to start with: <a href="FileStrings.cpp.html">HTML</a>  <a href="FileStrings.cpp">Text</a>
+<p>
+<li>Here is a <i>sample</i> driver file for you to use and experiment with: <a href="driver-sample.cpp.html">HTML</a>
+  <a href="driver-sample.cpp">Text</a> 
+<p>
+<li>Sample command lines for compiling:
+<p>
+
+GNU g++:  
+<blockquote><pre>
+<b>g++</b> -o gnu driver-sample.cpp FileStrings.cpp -g -O2 -Wall -Wextra -ansi -pedantic -Wconversion -Wold-style-cast
+</pre></blockquote>
+<!--
+<b>clang++</b> -o clan driver-sample.cpp FileStrings.cpp -g -O2 -Wall -Wextra -ansi -pedantic -Wconversion -Wold-style-cast
+
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /D_CRT_SECURE_NO_WARNINGS /Fems.exe driver-sample.cpp FileStrings.cpp
+</pre></blockquote>
+-->
+
+
+</pre></blockquote>
+<li>Sample output:
+  <ol>
+  <li><a href="output-sample-1.txt">test1</a>
+  <li><a href="output-sample-2.txt">test2</a>
+  <li><a href="output-sample-3.txt">test3</a>
+  <li><a href="output-sample-4.txt">test4</a>
+  <li><a href="output-sample-5.txt">test5</a>
+  <li><a href="output-sample-6.txt">test6</a>
+  <li><a href="output-sample-7.txt">test7</a>
+  <li><a href="output-sample-8.txt">test8</a>
+  <li><a href="output-sample-9.txt">test9</a>
+  <li><a href="output-sample-10.txt">test10</a>
+  <li><a href="output-sample-11.txt">test11</a>
+  <li><a href="output-sample-12.txt">test12</a>
+  <li><a href="output-sample-13.txt">test13</a>
+  <li><a href="output-sample-14.txt">test14</a>
+  <li><a href="output-sample-15.txt">test15</a>
+  <li><a href="output-sample-16.txt">test16</a>
+  <li><a href="output-sample-17.txt">test17</a>
+  <li><a href="output-sample-all.txt">All tests</a>
+</ol>
+<p>
+
+<!--
+<li>Running all of the tests in the sample driver should take about 7.60 seconds (on an Edison computer). This is with
+	Microsoft's compiler and using these two additional switches: <tt><b>/MT /O2</b></tt> (Redirecting the output to nul will cause it to run in about 3.60 seconds.)
+-->  
+ <p>
+<li>Dictionaries: <a href="lexicon.txt">lexicon (12 words)</a>&nbsp;&nbsp;&nbsp;&nbsp;  
+  <a href="lexicon2.txt">lexicon2 (20 words)</a>&nbsp;&nbsp;&nbsp;&nbsp;  
+  <a href="small.txt">small (35 words)</a>&nbsp;&nbsp;&nbsp;&nbsp;  
+  large (100,000+ words)
+  <ul>
+    <li>All of them in a zip file (download the one that matches your operating system:
+      <ul>
+        <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/6/dictionaries-CRLF.zip">Windows (CR-LF)</a> The newlines use carriage return 
+          and line feed.</li>
+        <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/6/dictionaries-LF.zip">Linux/Mac OS X (LF)</a>. The newlines use line 
+      feed only.</li>
+      <p>
+    </ul>
+      By the way, to convert a text file from Windows (CR-LF) to Linux/Mac (LF) use the
+      <tt><b>dos2unix</b></tt> command. To convert in the other direction, use the 
+      <tt><b>unix2dos</b></tt> command. These commands are part of the Cygwin utilities 
+      on Windows and are native to Linux and Mac OS X.
+  </ul>
+</ul>
+<p>
+
+<p class="SectionHeader">
+Additional Information
+</p>
+
+<ol>
+  <li>Think. This should be your first action. Before writing a single line of code, make sure you can explain to
+    me or someone else what it is you are trying to do. If you can't write it in English (or your native language), you will not be able to
+    write it in C++.
+    <p>    
+  <li>The <i>WordWrap</i> function is definitely the most difficult for this assignment. Make sure that you
+    document (comment) the function heavily. Any function turned in with just minimal comments will earn 0 points,
+    even if it "works". If I modify the assignment (or put a bug in your code), another student should be able
+    to figure out what's wrong within a few minutes. This function is arguably the most algorithmic function
+    you've had to write in any of my courses so far, meaning, the code is not difficult or long, but intricate.
+    <p>    
+  <li>The dictionaries that you are given are sorted alphabetically. (Go figure.) This means you can stop looking for
+    a word when you encounter one that comes <i>after</i> the word you are looking for. Failure to follow this
+    will result in failing the stress tests.</li>
+    <p>    
+  <li>The dictionaries contain exactly one word per line. All words end with a newline character. Since you're 
+    using an <i>ifstream</i> and reading into a <i>std::string</i>, you don't have to strip off any newlines.
+    <p>    
+  <li>The dictionaries are <b>not guaranteed</b> to be in all lowercase or uppercase. You need to be able to handle both.
+    Do yourself a favor: after you get the code working, make the words in <b>lexicon.txt</b> all UPPERCASE, and see if
+    your program still works. (That's what I'm going to do.)
+    <p>    
+  <li>The only header files you are to include are <tt>string</tt>, <tt>vector</tt>, and <tt>fstream</tt>, and they
+    are already included for you.
+    <p>    
+  <li>Make sure you handle uppercase and lowercase correctly. 
+    <p>    
+  <li><b>DO NOT USE MAGIC NUMBERS.</b> Use the <b><tt>enum</tt></b>s and constants that you are 
+    given in <tt>FileStrings.h</tt> (in the <i>SpellChecker</i> class).
+    I will be changing the enumerators when I compile your code. (I'm replacing the header file.) 
+    If you used magic numbers instead, you will get an automatic 0 on the assignment
+    for failure to compile (failure to follow instructions).
+    <p>    
+  <li>Hint: For the <i>Tokenize</i> function, there are two methods of 
+    a <I>std::string</I> that might be helpful: <I>find_first_of</I> and <I>find_first_not_of</I>.
+   These methods will actually make the implementation almost trivial.</li> 
+    <p>    
+  <li>You may want to familiarize yourself with the methods in the <I>std::string</I> class, if you haven't already, since you are going to be manipulating <I>std::string</I> objects.</li>
+  <p>
+  <li>Finally: 
+
+
+<blockquote><center>
+<p class="technote">
+<big><big><i>Don't be a fool, use a diff tool&trade;</i></big></big>
+</p>
+<img src="pidy-the-fool.png">
+</center></blockquote>
+
+</ol>
+
+
+
+      
+</ul>
+<p>
+<p>
+<br><br>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,584 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-sample.cpp</title>
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> <font color="#9933CC">&quot;List.h&quot;</font>
+
+<b>void</b> TestPushFront()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushFront...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_front(i);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushBack()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushBack...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_back(i);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushFrontBack()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushFrontBack...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list.push_front(i);
+    list.push_back(i * 5);
+  }
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPopFront()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPopFront...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_front(i);
+
+  std::cout &lt;&lt; list;
+  <b>while</b> (!list.empty())
+  {
+    <b>int</b> item = list.front();
+    list.pop_front();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;First item was: &quot;</font> &lt;&lt; item &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;New list:&quot;</font>;
+    std::cout &lt;&lt; list;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  }
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestArray1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestArray1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> array[] = {4, 7, 12, 5, 9, 23, 7, 11, 15, 2};
+  <b>int</b> size = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(array) / <b>sizeof</b>(*array));
+
+    <font color="#003399"><i>// Construct from array</i></font>
+  CS170::List&lt;<b>int</b>&gt; list(array, size);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestArray2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestArray2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>const</b> <b>int</b> array[] = {4, 7, 12, 5, 9, 23, 7, 11, 15, 2};
+  <b>int</b> size = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(array) / <b>sizeof</b>(*array));
+
+    <font color="#003399"><i>// Construct from array</i></font>
+  CS170::List&lt;<b>int</b>&gt; list(array, size);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestCopyConstructor1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestCopyConstructor1...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(i * 3);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  CS170::List&lt;<b>int</b>&gt; list2(list1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestCopyConstructor2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestCopyConstructor2...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(i * 3);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  <b>const</b> CS170::List&lt;<b>int</b>&gt; list2(list1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  <b>if</b> (list2.empty())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List 2 is empty\n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List 2 is not empty\n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in List2: &quot;</font>;
+  std::cout &lt;&lt; list2.size();
+  std::cout &lt;&lt; std::endl;
+  
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAssignment1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAssignment1...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(i * 2);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list2 = list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAssignment2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAssignment2...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list1, list2, list3;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(i * 2);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3: &quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  list3 = list2 = list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3: &quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddition1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddition1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(i);
+    list2.push_front(i * 10);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  CS170::List&lt;<b>int</b>&gt; list3;
+  list3 = list1 + list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3: &quot;</font>;
+  std::cout &lt;&lt; list3;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddition2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddition2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(i);
+    list2.push_front(i * 10);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  <b>const</b> CS170::List&lt;<b>int</b>&gt; list3(list1 + list2);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3: &quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  CS170::List&lt;<b>int</b>&gt; list4;
+  list4 = list1 + list2 + list3;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 4: &quot;</font>;
+  std::cout &lt;&lt; list4;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list4.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(i);
+    list2.push_front(i * 10);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list1 += list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list1 += list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign3()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign3...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list2 += list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign4()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign4...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;<b>int</b>&gt; list1, list2, list3;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(i);
+    list2.push_front(i * 2);
+    list3.push_front(i * 5);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3: &quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  list1 += list2 += list3;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1: &quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2: &quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3: &quot;</font>;
+  std::cout &lt;&lt; list3;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestSubscript1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestSubscript1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_back(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;list[0] = &quot;</font> &lt;&lt; list1[0] &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;list[5] = &quot;</font> &lt;&lt; list1[5] &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;list[9] = &quot;</font> &lt;&lt; list1[9] &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestSubscript2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestSubscript2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::List&lt;<b>int</b>&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_back(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Original list:\n&quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  list1[0] = 10;
+  list1[5] = 20;
+  list1[9] = 30;
+  list1[7] = list1[2];
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Modified list:\n&quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> InUse()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;============================================\n&quot;</font>;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Total number of Nodes in use: &quot;</font>;
+  std::cout &lt;&lt; CS170::List&lt;<b>int</b>&gt;::node_count();
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;============================================\n&quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>int</b> main()
+{
+  <b>try</b> {
+    TestPushFront();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPushFront revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestPushBack();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPushBack revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestPushFrontBack();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPushFrontBack revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestPopFront();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPopFront revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestArray1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestArray1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestArray2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestArray2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestCopyConstructor1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestCopyConstructor1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestCopyConstructor2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestCopyConstructor2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAssignment1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAssignment1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAssignment2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAssignment2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign3();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign3 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign4();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign4 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestSubscript1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestSubscript1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestSubscript2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestSubscript2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddition1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddition1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddition2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddition2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  InUse();
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+  

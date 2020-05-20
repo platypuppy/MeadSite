@@ -1,0 +1,175 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS170 - Programming Assignment #3</title>
+</head>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<bodyxx bgcolor="#FFFFFF" background="../../../../../images/notebook.jpg"  leftmargin="50" rightmargin="0">
+
+<center>
+<h1>CS 170 - Programming Assignment #3</h1>
+</center>
+
+<p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<li><a href="cs170-programming-assignment-point.pdf">Handout</a>
+<li>Partial interface: <a href="Point.h.html">HTML</a> <a href="Point.h">Text</a>
+<li>Partial implementation: <a href="Point.cpp.html">HTML</a> <a href="Point.cpp">Text</a>
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a> 
+<li>Sample outputs (no input test): <a href="output-sample.txt">output.txt</a>
+	
+
+<li><a href="CS170-FAQ-Point.html">FAQ</a> for this assignment. <b>READ THIS!</b>
+	This is where you'll find out
+what that <i>EPSILON</i> constant in the .cpp file is used for, among other things.
+</td>
+
+<p>
+
+<li>Sample command lines for compiling
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o gnu driver-sample.cpp Point.cpp
+</pre></blockquote>
+</blockquote>
+
+<!--
+<blockquote>
+Clang++:
+<blockquote><pre>
+<b>clang++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o clan driver-sample.cpp Point.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+<!--
+<blockquote>
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver-sample.cpp Point.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+
+<li>Remember to use <tt><b>const</b></tt> where appropriate. (Hint: Make some
+	test cases that use constant Points and see if your functions still compile.) I am certainly going to test to see
+  if you've followed these instructions. <b>YOU HAVE BEEN WARNED!</b> 
+<!--
+<li>Also, remember the saying <i>"When in doubt, do as the <b>ints</b> do."</i></li>
+-->
+<p>
+
+<li>You <i>shouldn't</i> have any memory bugs because you are not using any pointers, doing any dynamic memory
+	allocation, or using arrays.</li>
+<p>	
+<li>From the handout:
+
+<table border=1 cellpadding=5 cellspacing=0>
+	<tr>
+		<th>Operator</th><th>Functionality</th><th>Description</th></tr>
+		<tr><td align="center"><big>%</big></td>
+				<td align="center">Rotation</td>
+				<td>Rotates a Point about the origin the specified number of degrees. Returns a new Point. 
+				This is a member function. (Varies)</td>
+		</tr>
+
+		<tr><td align="center"><big>-</big></td>
+				<td align="center">Distance (Binary operator)</td>
+				<td>Calculates the difference between two Points and returns the distance (a double). 
+					This is a member function. (4)</td>
+		</tr>
+
+		<tr><td align="center"><big>^</big></td>
+				<td align="center">Midpoint</td>
+				<td>Calculates the midpoint of two Points. Returns a new Point. This is a member function. (4)
+    </td>
+		</tr>
+
+		<tr><td align="center"><big>+=</big></td>
+				<td align="center">Translation</td>
+				<td>Adds two Points or a Point and a double and returns a reference to the left-hand operand 
+					which has been modified. These are both member functions. (3/3)</td>
+		</tr>
+
+		<tr><td align="center"><big>-</big></td>
+				<td align="center">Translation</td>
+				<td>Subtracts a double from a Point and returns a new Point. This is a member function. (2)</td>
+		</tr>
+
+		<tr><td align="center"><big>++</big></td>
+				<td align="center">Pre/Post<br>Increment</td>
+				<td>Adds one to the x/y values of the object. There are two versions, one for pre- and one for 
+					post-increment. Pre-increment returns a reference to the incremented Point and post-increment 
+					returns a new Point with the value of the "before incremented Point". 
+					Both are member functions. (3/3)</td>
+		</tr>
+
+		<tr><td align="center"><big>--</big></td>
+				<td align="center">Pre/Post<br>Decrement</td>
+				<td>Subtracts one from the x/y values of the object. There are two versions, one for pre- and one for 
+					post-decrement. Pre-decrement returns a reference to the decremented Point and post-decrement 
+					returns a new Point with the value of the "before decremented Point". 
+					Both are member functions. (3/3)</td>
+		</tr>
+
+		<tr><td align="center"><big>-</big></td>
+				<td align="center">Unary negation</td>
+				<td>Returns a new Point that has the x/y values of the input Point negated. 
+					This is a member function. (1)</td>
+		</tr>
+
+		<tr><td align="center"><big>+</big></td>
+				<td align="center">Translation</td>
+				<td>Adds two Points or a Point and a double and returns a new Point. There are two versions of the 
+					double/Point function. One is a member (2), the other is a non-member, non-friend (1). The Point/Point 
+					method is the member function. (2)</td>
+		</tr>
+
+		<tr><td align="center"><big>*</big></td>
+				<td align="center">Scale</td>
+				<td>Multiplies a Point by some numeric factor (double) and returns a new Point. There will be two 
+					versions of this, one is a member and the other is a non-member, non-friend. (2/1)</td>
+		</tr>
+
+		<tr><td align="center"><big>&lt;&lt;</big></td>
+				<td align="center">Output</td>
+				<td>Outputs a Point in the form of a string: (x, y), where x and y are the coordinates, e.g. (4, 7). 
+					This is a <b>friend</b> function. <b>Make sure you format it exactly as shown</b>. (2)</td>
+		</tr>
+
+		<tr><td align="center"><big>&gt;&gt;</big></td>
+				<td align="center">Input</td>
+				<td>Inputs a Point. Allows 2 numbers (separated by whitespace) to be entered, e.g. 4 7. This is a 
+					<b>friend</b> function. The inputs are both doubles. (2)</td>
+		</tr>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

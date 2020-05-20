@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="https://azrael.digipen.edu/~mmead/www/Courses/2019/fall/cs120/labs/week9/new.css">
+<title>main.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf         */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi           */</font>
+<font color="990099">#include &lt;string.h&gt; /* strcpy, strcat */</font>
+<font color="990099">#include &quot;histogram.h&quot;</font>
+
+<b>const</b> <b>char</b> s0[] = <font color="#9933CC">&quot;Real simple.&quot;</font>;
+
+<b>const</b> <b>char</b> s1[] = <font color="#9933CC">&quot;This is simple - a sentence with spaces - and other &quot;</font>
+                  <font color="#9933CC">&quot;punctuations.&quot;</font>;
+
+<b>const</b> <b>char</b> s2[] = 
+  <font color="#9933CC">&quot;When in the Course of human events, it becomes necessary for one people to &quot;</font>
+  <font color="#9933CC">&quot;dissolve the political bands which have connected them with another, and to &quot;</font>
+  <font color="#9933CC">&quot;assume among the powers of the earth, the separate and equal station to &quot;</font>
+  <font color="#9933CC">&quot;which the Laws of Nature and of Nature's God entitle them, a decent respect &quot;</font>
+  <font color="#9933CC">&quot;to the opinions of mankind requires that they should declare the causes &quot;</font>
+  <font color="#9933CC">&quot;which impel them to the separation.&quot;</font>;
+
+<b>const</b> <b>char</b> s3a[] =
+  <font color="#9933CC">&quot;We hold these truths to be self-evident, that all men are created equal, &quot;</font>
+  <font color="#9933CC">&quot;that they are endowed by their Creator with certain unalienable Rights, &quot;</font>
+  <font color="#9933CC">&quot;that among these are Life, Liberty and the pursuit of Happiness. --That &quot;</font>
+  <font color="#9933CC">&quot;to secure these rights, Governments are instituted among Men, deriving &quot;</font>
+  <font color="#9933CC">&quot;their just powers from the consent of the governed, --That whenever any &quot;</font>
+  <font color="#9933CC">&quot;Form of Government becomes destructive of these ends, it is the Right of &quot;</font>
+  <font color="#9933CC">&quot;the People to alter or to abolish it, and to institute new Government, &quot;</font>;
+
+<b>const</b> <b>char</b> s3b[] =
+  <font color="#9933CC">&quot;laying its foundation on such principles and organizing its powers in &quot;</font>
+  <font color="#9933CC">&quot;such form, as to them shall seem most likely to effect their Safety and &quot;</font> 
+  <font color="#9933CC">&quot;Happiness. Prudence, indeed, will dictate that Governments long &quot;</font>
+  <font color="#9933CC">&quot;established should not be changed for light and transient causes; and &quot;</font>
+  <font color="#9933CC">&quot;accordingly all experience hath shewn, that mankind are more disposed to &quot;</font>
+  <font color="#9933CC">&quot;suffer, while evils are sufferable, than to right themselves by &quot;</font>
+  <font color="#9933CC">&quot;abolishing the forms to which they are accustomed. But when a long train &quot;</font>;
+  
+<b>const</b> <b>char</b> s3c[] =
+  <font color="#9933CC">&quot;of abuses and usurpations, pursuing invariably the same Object evinces a &quot;</font>
+  <font color="#9933CC">&quot;design to reduce them under absolute Despotism, it is their right, it is &quot;</font>
+  <font color="#9933CC">&quot;their duty, to throw off such Government, and to provide new Guards for &quot;</font>
+  <font color="#9933CC">&quot;their future security.--Such has been the patient sufferance of these &quot;</font>
+  <font color="#9933CC">&quot;Colonies; and such is now the necessity which constrains them to alter &quot;</font>
+  <font color="#9933CC">&quot;their former Systems of Government. The history of the present King of &quot;</font>
+  <font color="#9933CC">&quot;Great Britain is a history of repeated injuries and usurpations, all &quot;</font>;
+
+<b>const</b> <b>char</b> s3d[] =
+  <font color="#9933CC">&quot;having in direct object the establishment of an absolute Tyranny over &quot;</font>
+  <font color="#9933CC">&quot;these States. To prove this, let Facts be submitted to a candid world.&quot;</font>; 
+
+<b>const</b> <b>char</b> s4[] = <font color="#9933CC">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</font>
+                  <font color="#9933CC">&quot;1234567890!@#$%^&amp;*()&lt;&gt;?:&#92;&quot;{}_+ ssTT<font color="#9933CC">&quot;;</font></font>
+
+<b>void</b> GetAndPrintStatistics(<b>const</b> <b>int</b> letters[])
+{
+  <b>double</b> average; <font color="#003399"><i>/* Average of the characters in the historgram. */</i></font>
+  <b>char</b> letter;    <font color="#003399"><i>/* Which character occurs the most?             */</i></font>
+  <b>int</b> max;        <font color="#003399"><i>/* How many times did the character appear?     */</i></font>
+
+  GetStatistics(letters, &amp;average, &amp;letter, &amp;max);
+  printf(<font color="#9933CC">&quot;Average: %.5f, max letter: %c, max count: %i&#92;n&quot;</font>, 
+         average, letter, max);
+
+}
+
+<b>void</b> DoTest(<b>const</b> <b>char</b> *string)
+{
+  <b>int</b> spaces, other;        <font color="#003399"><i>/* These will be filled in by GetCounts     */</i></font>
+  <b>int</b> letters[NUM_LETTERS]; <font color="#003399"><i>/* This will also be filled in by GetCounts */</i></font>
+  <b>int</b> count;                <font color="#003399"><i>/* Number of letters in the sentence        */</i></font>
+
+  count = GetCounts(string, letters, &amp;spaces, &amp;other);
+  printf(<font color="#9933CC">&quot;Count of letters is: %i, spaces: %i, other: %i&#92;n&quot;</font>, 
+         count, spaces, other);
+
+  PrintHistogram(letters);
+  GetAndPrintStatistics(letters);
+  printf(<font color="#9933CC">&quot;&#92;n&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+  <b>char</b> s3[2000]; <font color="#003399"><i>/* We'll handle strings up to this size */</i></font>
+  <b>int</b> test = -1; <font color="#003399"><i>/* Which test will we run?              */</i></font>
+
+    <font color="#003399"><i>/* Build a larger string */</i></font>
+  strcpy(s3, s3a);
+  strcat(s3, s3b);
+  strcat(s3, s3c);
+  strcat(s3, s3d);
+
+    <font color="#003399"><i>/* Which test? */</i></font>
+  <b>if</b> (argc &gt; 1)
+    test = atoi(argv[1]);
+
+  <b>switch</b> (test)
+  {
+    <b>case</b> 0:
+      DoTest(s0);
+      <b>break</b>;
+    <b>case</b> 1:
+      DoTest(s1);
+      <b>break</b>;
+    <b>case</b> 2:
+      DoTest(s2);
+      <b>break</b>;
+    <b>case</b> 3:
+      DoTest(s3);
+      <b>break</b>;
+    <b>case</b> 4:
+      DoTest(s4);
+      <b>break</b>;
+    <b>default</b>:
+      DoTest(s0);
+      DoTest(s1);
+      DoTest(s2);
+      DoTest(s3);
+      DoTest(s4);
+      <b>break</b>;
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

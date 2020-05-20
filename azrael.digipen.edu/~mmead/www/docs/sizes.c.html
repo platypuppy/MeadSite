@@ -1,0 +1,136 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>64-bit samples</title>
+</head>
+
+<body>  
+<center><h1>64-bit Differences</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<p class="SectionHeader">
+Sample Code
+</p>
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;    /* printf */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;sizeof(short) is %lu\n&quot;</font>, <b>sizeof</b>(<b>short</b>));
+  printf(<font color="#9933CC">&quot;sizeof(int) is %lu\n&quot;</font>, <b>sizeof</b>(<b>int</b>));
+  printf(<font color="#9933CC">&quot;sizeof(long) is %lu\n&quot;</font>, <b>sizeof</b>(<b>long</b>));
+  printf(<font color="#9933CC">&quot;sizeof(long long) is %lu\n&quot;</font>, <b>sizeof</b>(<b>long</b> <b>long</b>)); <font color="990099">/* C99 */</font>
+  printf(<font color="#9933CC">&quot;sizeof(void*) is %lu\n&quot;</font>, <b>sizeof</b>(<b>void</b>*));
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>Outputs:</b>
+<p>
+
+32-bit Windows (Microsoft)
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 4
+sizeof(long long) is 8
+sizeof(void*) is 4
+</pre></blockquote>
+
+32-bit Cygwin (gcc):
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 4
+sizeof(long long) is 8
+sizeof(void*) is 4
+</pre></blockquote>
+
+64-bit Windows (Microsoft LLP64)
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 4
+sizeof(long long) is 8
+sizeof(void*) is 8
+</pre></blockquote>
+
+64-bit Windows (MinGW LLP64)
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 4
+sizeof(long long) is 8
+sizeof(void*) is 8
+</pre></blockquote>
+
+
+32-bit Linux 
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 4
+sizeof(long long) is 8
+sizeof(void*) is 4
+</pre></blockquote>
+
+64-bit Linux (gcc LP64)
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 8
+sizeof(long long) is 8
+sizeof(void*) is 8
+</pre></blockquote>
+
+32-bit macOS (Clang/gcc)
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 4
+sizeof(long long) is 8
+sizeof(void*) is 4
+</pre></blockquote>
+
+64-bit macOS (Clang/gcc LP64)
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 8
+sizeof(long long) is 8
+sizeof(void*) is 8
+</pre></blockquote>
+
+</body>
+</html>
+
+<!--
+64-bit Cygwin:
+<blockquote><pre>
+sizeof(short) is 2
+sizeof(int) is 4
+sizeof(long) is 8
+sizeof(long long) is 8
+sizeof(void*) is 4
+</pre></blockquote>
+-->
+
+<tt><b></b></tt>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

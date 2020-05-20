@@ -1,0 +1,307 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>encoder</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+   
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(encoder.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>For this practice assignment, you will write two functions. The first function is called
+  <i>encode</i> and its prototype is this:
+
+<blockquote><pre>
+<b>void</b> encode(FILE *infile, FILE *outfile);
+</pre></blockquote>
+
+The second function is called <i>decode</i> and this is the prototype:
+
+<blockquote><pre>
+<b>void</b> decode(FILE *infile, FILE *outfile);
+</pre></blockquote>
+
+Looking at the names of the functions, you can probably guess what they do. One function
+<i>encodes</i> some file's data, and the other function <i>decodes</i> the data. There are no
+return values from the functions. We will assume that if the files can be opened (by the driver),
+then you should be able to encode/decode them successfully. 
+<p>
+The encoding/decoding algorithm that you are going to implement is a <i>lossless</i> data compression algorithm
+known as the <i>RLE algorithm</i>, or 
+<a href="https://en.wikipedia.org/wiki/Run-length_encoding">Run-length encoding</a> algorithm. It's a 
+simple algorithm that even beginning programmers can implement.
+In a nutshell, a data compression 
+algorithm (like those used to create <i>.zip</i> or <i>.rar</i> files) simply removes redundancy from
+a file. This will generally make the file smaller (sometimes, much smaller) than the original file.
+<p>
+As an example, suppose that you had a file (<tt>A</tt>) that contained 100 characters and they were all
+the letter 'A' (ASCII 65). That file would be 100 bytes in size and look like this:
+
+<blockquote><pre>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</pre></blockquote>
+
+Looking at it with <i>dumpit</i>, it looks like this:
+
+<blockquote><pre>
+A:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+000010 41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+000020 41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+000030 41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+000040 41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+000050 41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41   AAAAAAAAAAAAAAAA
+000060 41 41 41 41                                        AAAA
+</pre></blockquote>
+
+However, because there are so many consecutive letters that are the same, we
+can encode that information in fewer bytes. So, instead of writing 100 copies of 'A' to the file, we
+will write one letter 'A', and then follow it with a count. The count is the actual number of letter
+A's that were in the original file. So, our "encoded" file (<tt>A.rle</tt>) will have only two bytes in it (shown in hexadecimal):
+
+<blockquote><pre>
+41 64
+</pre></blockquote>
+
+Hex 41 is decimal 65 (the letter 'A') and hex 64 is decimal 100, the number of times to repeat the character.
+Looking at the binary file with <i>dumpit</i>:
+<p>
+<blockquote><pre>
+A.rle:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 41 64                                              Ad
+</pre></blockquote>
+
+
+That's a HUGE difference! The original file required 100 bytes on the disk, but the compressed file
+only required 2 bytes! (<i>"Welcome to the wonderful world of data compression!"</i>)
+<p>
+Of course, at some point we will have to "decode" the file and expand it back to the original size and contents.
+That's what the decode function will do. It will take as input a compressed file containing just those 2 bytes,
+and create a new file that has 100 characters in it, all of them are the letter 'A':
+
+<blockquote><pre>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</pre></blockquote>
+Pretty cool! Of course, if the file doesn't contain a lot of redundant data, the RLE algorithm will
+actually make the file larger, up to twice the size. But, this can happen with other compression
+algorithms, although to a lesser degree. As an example, suppose our file (<tt>ABCDE.txt</tt>) contains
+just the letters <tt>ABCDE</tt> (5 bytes):
+<p>
+
+<blockquote><pre>
+ABCDE.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 41 42 43 44 45                                     ABCDE
+</pre></blockquote>
+
+Encoding this file to <tt>ABCDE.rle</tt> causes it to be twice as large (10 bytes):
+
+<blockquote><pre>
+ABCDE.rle:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 41 01 42 01 43 01 44 01  45 01                     A.B.C.D.E.
+</pre></blockquote>
+
+So, the more redundancy in the file, the better the compression. Again, this is true for all
+compression algorithms.
+<p>
+  Here is a driver file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/main.c.html">HTML</a>&nbsp;&nbsp;
+  <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/main.c">Text</a>
+<p>
+The name of your implementation file should be <tt>encoder.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c encoder.c -o encoder
+</pre></blockquote>
+<p>
+To run the program and encode a file named <tt>A300.txt</tt> into a file named <tt>A300.rle</tt>:
+
+<blockquote><pre>
+encoder A300.txt A300.rle
+</pre></blockquote>
+
+To decode the encoded file:
+<blockquote><pre>
+encoder -d A300.rle myA300.txt
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+Simple test files to get you started: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/files.zip">files.zip</a>&nbsp;&nbsp;&nbsp;
+There are two sets of files. Files starting with <tt><b>in</b></tt> are input files, and files starting
+with <tt><b>out</b></tt> are the encoded output files. You'll see that for each input file, there is a 
+corresponding encoded file. Start with the smaller ones first.
+<p>
+After you've successfully tested your code with the simple files above, try to encode these bigger
+files:
+<p>
+<table border=1 cellspacing=0 cellpadding=10>
+  <tr valign="top"><th>Input file</th><th>Output file<br>(encoded)</th><th>Hex output<br>(dumpit)</th></tr>
+  <tr>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/A300.txt">A300.txt</a></td><td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/A300.rle">A300.rle</a></td>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/A300-hex.txt">A300-hex.txt</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/icon1.bmp">icon1.bmp</a></td><td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/icon1.rle">icon1.rle</a></td>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/icon1-hex.txt">icon1-hex.txt</a></td>
+  </tr>
+
+  <tr>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/smiley-bw.bmp">smiley-bw.bmp</a></td><td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/smiley-bw.rle">smiley-bw.rle</a></td>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/smiley-bw-hex.txt">smiley-bw-hex.txt</a></td>
+  </tr>
+
+  <tr>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/black.bmp">black.bmp</a></td><td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/black.rle">black.rle</a></td>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/black-hex.txt">black-hex.txt</a></td>
+  </tr>
+
+  <tr>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/dude.jpg">dude.jpg</a></td><td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/dude.rle">dude.rle</a></td>
+    <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/dude-hex.txt">dude-hex.txt</a></td>
+  </tr>
+</table>
+<p>
+All of the big files in one zip: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/encoder/big-files.zip">big-files.zip</a>
+<p>
+
+</ul>  
+
+<p>
+<font color="blue">Approximate number of lines of code for encode: 30</font><br>
+<font color="blue">Approximate number of lines of code for decode: 8</font><br>
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ol>
+  <li>Both functions take two FILE pointers. The driver has already opened both of them and will close
+    them. DO NOT close these files yourself. The first FILE pointer is opened for read/binary and the
+    second FILE pointer is opened for write/binary.</li>
+  <p>
+  <li>The only header file that you need to include is <i>stdio.h</i>.
+    <p>
+  <li>Since the largest value that will fit into a character is 255 (0xFF), that's the most number of
+    bytes that can be encoded at one time. So, if the letter 'A' appears 300 times consecutively, you
+    will have to store 2 <i>chunks</i>. The first chunk  encodes the first 255 bytes, and the second 
+    chunk encodes the remaining 45 bytes:
+
+<blockquote><pre>
+A300.rle:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 41 FF 41 2D                                        A.A-
+</pre></blockquote>
+</li>
+
+<li>You should start with the very simple files before attempting to encode the very large ones. There
+  is a .zip file that contains several simple test cases (<i>in</i> files) along with their corresponding
+  encodings (<i>out</i> files).
+</li>
+<p>
+<li>Because the encoded files (.rle) are binary files (not text files),
+  you won't be able to use <i>diff</i> to compare your output with the expected output. You can
+  use a program called <i>cmp</i> (from the Cygwin toolkit), which is meant for binary files. If the files are identical,
+  <i>cmp</i> won't say anything. However, if they are different, you will see output that resembles
+  this:
+<blockquote><pre>
+file1.rle file2.rle differ: byte 492, line 2
+</pre></blockquote>
+which isn't very helpful. See then next note.</li>
+<p>
+
+<li>You should use the <i>dumpit</i> program (or similiar) to see what your binary encoded files look
+  like to help debug your implementation. 
+  You can't use a text editor to view the encoded files because they are not text files. If you run
+  <i>dumpit</i> on both encoded files (your file and the expected output file) and then run
+  <i>diff</i> on those (or a visual diff tool like WinMerge or kdiff3), you'll get a better view
+  of what is wrong. So, using the example from above, run these commands:
+
+<blockquote><pre>
+dumpit file1.rle > file1-hex.txt
+dumpit file2.rle > file2-hex.txt
+diff file1-hex.txt file2-hex.txt
+</pre></blockquote>
+
+and you will be able to see which bytes are different using <i>diff</i>. Hint: use a visual diff
+tool.
+</li>
+
+</ol>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+  <hr width="100%">
+<p>
+<br><br><br><br>
+
+
+
+</body>
+</html>
+<b><tt></tt></b>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<b><tt></tt></b>

@@ -1,0 +1,165 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 180 - Assignment #1</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 180 - Assignment #1</h1>
+</center>
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<li><a href="cs180-programming-assignment-cachelist.pdf">Handout</a></li>
+<p>
+<li><a href="cachelist.h.html">cachelist.h</a> (<a href="cachelist.h">Text</a>) This is the interface.</li>
+<p>
+<li><a href="cachelist-skeleton.c.html">cachelist.c</a> (<a href="cachelist-skeleton.c">Text</a>) This is a 
+	skeleton to get you started. You'll need to modify it,
+	but be careful not to change the <i>cl_dump</i> function because you won't diff correctly if you do.
+	<b>Also: Make sure you document all functions with Doxygen, even if you didn't write the functions.</b>
+<p>
+<li><a href="sample-driver.c.html">sample-driver.c</a> (<a href="sample-driver.c">Text</a>) This is a 
+	sample driver to help you get started testing.</li>
+<p>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+	</ul>
+	
+<p>
+	<li>Command lines to compile the program:
+<blockquote><pre>
+clang -Werror -Wall -Wextra -std=c11 -pedantic -g -O2 sample-driver.c cachelist.c PRNG.c -o cachelist -pthread
+gcc -Werror -Wall -Wextra -std=c11 -pedantic -g -O2 sample-driver.c cachelist.c PRNG.c -o cachelist -pthread
+</pre></blockquote>
+
+<li>Everyone should be using makefiles for all of the assignments (this is true for all of my courses).
+	Here is a sample <a href="makefile.html">makefile</a> for the project to get you started. You should enhance it by adding rules 
+	so that you can run the executable and diff the output. You should also add a rule to run Doxygen.
+	Reminder: You can override a variable on the command line:
+
+<blockquote><pre>
+make CC=clang
+</pre></blockquote>
+
+This will use clang instead of the default gcc in the makefile.
+
+</li>
+<p>
+<li>A sample <a href="Doxyfile.txt">Doxyfile</a>. Use this as a starting point. (Remove the .txt extension)
+Make sure your name is in the PROJECT_NAME</li>
+<p>
+<li>To run the program, type this at the command line:
+<blockquote><pre>
+./cachelist <font color="blue"><b>X</b></font>
+</pre></blockquote>
+
+where <font color="blue"><b>X</b></font> is the test number to run. See the driver for details.
+<p>
+
+To detect memory errors and leaks, run it under valgrind like this:
+<blockquote><pre>
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./cachelist <font color="blue"><b>X</b></font>
+</pre></blockquote>
+
+replace <font color="blue"><b>X</b></font> with the test number to run.
+<p>
+<li>Sample outputs:	<p>
+<ol>
+<li><a href="output-add_front.txt">test_add_front</a><br>
+<li><a href="output-add_end.txt">test_add_end</a><br>
+<li><a href="output-remove1.txt">test_remove1</a><br>
+<li><a href="output-remove2.txt">test_remove2</a><br>
+<li><a href="output-insert_before1.txt">test_insert_before1</a><br>
+<li><a href="output-insert_after1.txt">test_insert_after1</a><br>
+<li><a href="output-find1.txt">test_find1</a><br>
+<li><a href="output-find2.txt">test_find2</a><br>
+<li><a href="output-find_stress1.txt">test_find_stress1</a> (This is without caching and takes about 6 seconds.)<br>
+<li><a href="output-find_stress2.txt">test_find_stress2</a> 
+	(This is with caching and takes about .5 seconds. This is also why caching is such an important topic in computers.
+	We will spend a lot of time discussing caching.)<br>
+<li><a href="output-test_stress1.txt">test_stress1</a></li>
+<li><a href="output-test_a_lot.txt">test_a_lot</a>&nbsp;&nbsp;(<a href="output-test_a_lot-verbose.txt">verbose</a>)<br>
+<li><a href="output-all.txt">all tests</a><br>
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+
+<li><b>Using <a href="http://man7.org/linux/man-pages/man1/script.1.html"><tt>script</tt></b></a></li>
+<p>
+You need to capture your shell session that shows various things like compiling and running the program, 
+using <b>diff</b> to make sure your output is correct and running with valgrind and then running Doxygen. 
+After you've finished coding and testing everything and are sure everything is correct, use the 
+<b>script</b> command to make a text file of your session. From the bash shell in the directory you've 
+setup to test with, run these commands. Make sure you're using the Doxyfile that I posted.
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+clang --version
+gcc --version
+clang -g -Werror -Wall -Wextra -std=c11 -pedantic sample-driver.c cachelist.c PRNG.c -o cachelist
+./cachelist | tee output.txt
+diff output.txt output-all.txt
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./cachelist > /dev/null
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> 
+was created with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first 
+name and last name. This is how you get your name in the typescript file. Consult the man pages 
+<a href="http://man7.org/linux/man-pages/man1/script.1.html">here</a>.if you want more information on 
+<tt>script</tt>.
+
+	
+</ul>
+
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br><br><br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

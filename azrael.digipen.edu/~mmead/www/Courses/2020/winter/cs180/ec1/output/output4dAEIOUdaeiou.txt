@@ -1,0 +1,31 @@
+# Mcrs =======================================================
+
+CC=g++
+CFLGS=-Wll -Wxtr -ns -pdntc -Wrrr
+X=prgrm.x
+TDR=gn/
+BJS=$(TDR)drvr. $(TDR)scntxt. $(TDR)jmbl.
+RS=rm
+
+# TRGTS ======================================================
+
+$(TDR)$(X) : $(BJS)
+	$(CC) $(BJS) - $(TDR)$(X)
+
+$(TDR)drvr. : drvr.cpp scntxt.h jmbl.h
+	$(CC) $(CFLGS) -c drvr.cpp - drvr.
+
+$(TDR)jmbl. : jmbl.cpp jmbl.h
+	$(CC) $(CFLGS) -c jmbl.cpp - jmbl.
+
+$(TDR)scntxt. : scntxt.cpp
+	$(CC) $(CFLGS) -c scntxt.cpp - scntxt.
+
+cln : 
+	$(RS) $(BJS) $(TDR)$(X)
+
+rbld :
+	$(MK) cln
+	$(MK)
+
+

@@ -1,0 +1,1817 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>More Structures</title>
+</head>
+
+<body>
+<center><h1>More Structures</h1></center>
+
+
+<blockquote>
+<i>
+
+</i>
+</blockquote>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name=ALIGNMENT>Structure Alignment</a>
+</p>
+
+Suppose we want to parse simple expressions and we need to store information about each symbol
+in the expression. We could use a structure like this:
+
+<blockquote><pre>
+<b>enum</b> Kind {OPERATOR, INTEGER, FLOAT, IDENTIFIER};
+
+<b>struct</b> Symbol
+{
+  <b>enum</b> Kind kind;
+  <b>char</b> op;
+  <b>int</b> ival;
+  <b>float</b> fval;
+  <b>char</b> id;
+};
+</pre></blockquote>
+
+A Symbol struct in memory would look something like this:
+
+<blockquote><pre>
+<img src="Symbol.gif">
+</pre></blockquote>
+
+What will be printed out by the following code? Assume a 32-bit computer with 4-byte integers and pointers.
+
+<blockquote><pre>
+<b>struct</b> Symbol sym1;
+
+printf(<font color="#9933CC">&quot;sizeof(sym1.kind) =  %i\n&quot;</font>, <b>sizeof</b>(sym1.kind));
+printf(<font color="#9933CC">&quot;sizeof(sym1.op)   =  %i\n&quot;</font>, <b>sizeof</b>(sym1.op));
+printf(<font color="#9933CC">&quot;sizeof(sym1.ival) =  %i\n&quot;</font>, <b>sizeof</b>(sym1.ival));
+printf(<font color="#9933CC">&quot;sizeof(sym1.fval) =  %i\n&quot;</font>, <b>sizeof</b>(sym1.fval));
+printf(<font color="#9933CC">&quot;sizeof(sym1.id)   =  %i\n&quot;</font>, <b>sizeof</b>(sym1.id));
+printf(<font color="#9933CC">&quot;sizeof(sym1)      =  %i\n&quot;</font>, <b>sizeof</b>(sym1));
+</pre></blockquote>
+
+The actual output on from <tt>gcc</tt> is this:
+
+<blockquote><pre>
+sizeof(sym1.kind) =  4
+sizeof(sym1.op)   =  1
+sizeof(sym1.ival) =  4
+sizeof(sym1.fval) =  4
+sizeof(sym1.id)   =  1
+sizeof(sym1)      = 20  
+</pre></blockquote>
+
+But 
+<blockquote><pre>
+4 + 1 + 4 + 4 + 1 != 20
+</pre></blockquote>
+
+What's going on?
+<p>
+<ul>
+<li>By default, data is aligned on "natural" boundaries, which are addresses that are multiples of the
+word size of the computer. 
+<li>Many computers we deal with today are 64-bit (8-byte) machines, so 8-byte data types,
+such as long integers (except Microsoft's compilers) and  pointers
+ on those machines are stored at addresses that are multiples of 8.
+<li>This means that data that is less than 8-bytes in size may cause "wasted" space in memory.
+<li>You can override this default using a compiler directive.
+</ul>
+
+So, a more accurate diagram of the <i>Symbol</i> structure would look like this:
+
+<p>
+<img src="Symbol-Align4.gif">
+<p>
+
+which is 20 bytes in size because all data is aligned on 4-byte boundaries. This means that the <b>char</b>
+data is actually padded with 3 bytes extra so the data that <i>follows</i> will be aligned properly. (Note
+the term "follows").
+<p>
+To change the structure alignment, use this compiler directive:
+
+<blockquote><pre>
+<b>#pragma pack</b>(n)
+</pre></blockquote>
+
+where n is the alignment. The <i>n</i> specifies the value, in bytes, to be used for packing. 
+In Microsoft Visual Studio, for example, the default value for <i>n</i> is 8. Valid values are 1, 2, 4, 8, and 16. 
+Some compilers let you set the alignment for all structures with a command line option.
+
+<blockquote>
+<p class="technote">
+<b>Important!</b> The alignment of a member will be on a boundary that 
+is either a multiple of <i>n</i> or a multiple of the size of the member, <i>whichever is smaller</i>.
+</p>
+</blockquote>
+
+
+For example, to align the fields of the <i>Symbol</i> structure
+on 2-byte boundaries:
+
+<blockquote><pre>
+<b>#pragma pack</b>(2)    <font color="#003399"><i>/* align on 2-byte boundaries */</i></font>
+<b>struct</b> Symbol
+{
+  <b>enum</b> Kind kind;
+  <b>char</b> op;
+  <b>int</b> ival;
+  <b>float</b> fval;
+  <b>char</b> id;
+};
+<b>#pragma pack</b>()     <font color="#003399"><i>/* restore compiler's default alignment setting */</i></font>
+</pre></blockquote>
+
+Now, it would look like this in memory:
+
+<p>
+<img src="Symbol-Align2.gif">
+<p>
+
+
+To align the fields on 1-byte boundaries:
+
+<blockquote><pre>
+<b>#pragma pack</b>(1)    <font color="#003399"><i>/* align on 1-byte boundaries */</i></font>
+<b>struct</b> Symbol
+{
+  <b>enum</b> Kind kind;
+  <b>char</b> op;
+  <b>int</b> ival;
+  <b>float</b> fval;
+  <b>char</b> id;
+};
+<b>#pragma pack</b>()     <font color="#003399"><i>/* restore compiler's alignment setting */</i></font>
+</pre></blockquote>
+
+Now, it would look like this in memory:
+<p>
+<img src="Symbol-Align1.gif">
+<p>
+
+An actual printout from GNU's gcc compiler:
+<blockquote><pre>
+   #pragma pack(4)               #pragma pack(2)              #pragma pack(1)
+--------------------------------------------------------------------------------
+     &sym1 = 0xffa9e0ec           &sym1 = 0xffc5fe70          &sym1 = 0xffc7d792
+&sym1.kind = 0xffa9e0ec      &sym1.kind = 0xffc5fe70     &sym1.kind = 0xffc7d792
+  &sym1.op = 0xffa9e0f0        &sym1.op = 0xffc5fe74       &sym1.op = 0xffc7d796
+&sym1.ival = 0xffa9e0f4      &sym1.ival = 0xffc5fe76     &sym1.ival = 0xffc7d797
+&sym1.fval = 0xffa9e0f8      &sym1.fval = 0xffc5fe7a     &sym1.fval = 0xffc7d79b
+  &sym1.id = 0xffa9e0fc        &sym1.id = 0xffc5fe7e       &sym1.id = 0xffc7d79f
+
+sizeof(sym1.kind) =  4       sizeof(sym1.kind) =  4      sizeof(sym1.kind) =  4
+sizeof(sym1.op)   =  1       sizeof(sym1.op)   =  1      sizeof(sym1.op)   =  1
+sizeof(sym1.ival) =  4       sizeof(sym1.ival) =  4      sizeof(sym1.ival) =  4
+sizeof(sym1.fval) =  4       sizeof(sym1.fval) =  4      sizeof(sym1.fval) =  4
+sizeof(sym1.id)   =  1       sizeof(sym1.id)   =  1      sizeof(sym1.id)   =  1
+sizeof(sym1)      = 20       sizeof(sym1)      = 16      sizeof(sym1)      = 14
+</pre></blockquote>
+
+Printout from Microsoft's compiler:
+
+<blockquote><pre>
+   #pragma pack(4)               #pragma pack(2)              #pragma pack(1)
+--------------------------------------------------------------------------------
+     &sym1 = 0012FEDC             &sym1 = 0012FEE0            &sym1 = 0012FEE0
+&sym1.kind = 0012FEDC        &sym1.kind = 0012FEE0       &sym1.kind = 0012FEE0
+  &sym1.op = 0012FEE0          &sym1.op = 0012FEE4         &sym1.op = 0012FEE4
+&sym1.ival = 0012FEE4        &sym1.ival = 0012FEE6       &sym1.ival = 0012FEE5
+&sym1.fval = 0012FEE8        &sym1.fval = 0012FEEA       &sym1.fval = 0012FEE9
+  &sym1.id = 0012FEEC          &sym1.id = 0012FEEE         &sym1.id = 0012FEED
+
+sizeof(sym1.kind) =  4       sizeof(sym1.kind) =  4      sizeof(sym1.kind) =  4
+sizeof(sym1.op)   =  1       sizeof(sym1.op)   =  1      sizeof(sym1.op)   =  1
+sizeof(sym1.ival) =  4       sizeof(sym1.ival) =  4      sizeof(sym1.ival) =  4
+sizeof(sym1.fval) =  4       sizeof(sym1.fval) =  4      sizeof(sym1.fval) =  4
+sizeof(sym1.id)   =  1       sizeof(sym1.id)   =  1      sizeof(sym1.id)   =  1
+sizeof(sym1)      = 20       sizeof(sym1)      = 16      sizeof(sym1)      = 14
+</pre></blockquote>
+
+
+The code to print the addresses:
+
+<blockquote><pre>
+<b>struct</b> Symbol sym1;
+
+printf(<font color="#9933CC">&quot;&amp;sym1 = %p\n&quot;</font>, (<b>void</b> *)&amp;sym1);
+printf(<font color="#9933CC">&quot;&amp;sym1.kind = %p\n&quot;</font>, (<b>void</b> *)&amp;sym1.kind);
+printf(<font color="#9933CC">&quot;&amp;sym1.op = %p\n&quot;</font>, (<b>void</b> *)&amp;sym1.op);
+printf(<font color="#9933CC">&quot;&amp;sym1.ival = %p\n&quot;</font>, (<b>void</b> *)&amp;sym1.ival);
+printf(<font color="#9933CC">&quot;&amp;sym1.fval = %p\n&quot;</font>, (<b>void</b> *)&amp;sym1.fval);
+printf(<font color="#9933CC">&quot;&amp;sym1.id = %p\n&quot;</font>, (<b>void</b> *)&amp;sym1.id);
+</pre></blockquote>
+
+Note that if we used any of these alignments:
+<p>
+
+<blockquote><pre>
+<b>#pragma pack</b>(4)    <font color="#003399"><i>/* align on 4-byte boundaries */</i></font>
+<b>#pragma pack</b>(8)    <font color="#003399"><i>/* align on 8-byte boundaries */</i></font>
+<b>#pragma pack</b>(16)   <font color="#003399"><i>/* align on 16-byte boundaries */</i></font>
+</pre></blockquote>
+
+the layout would still look like this:
+
+<p>
+<img src="Symbol-Align4.gif">
+<p>
+
+This is because none of the members of the structure are larger than 4 bytes (so they will never
+need to be aligned on 8-byte or 16-byte boundaries.) If you really need more padding between
+members, you have to add it manually like this:
+
+<blockquote><pre>
+<b>struct</b> MyStruct
+{
+  <b>char</b> a;         <font color="#003399"><i>/* size is 1 byte           */</i></font>
+  <b>char</b> dummy1[3]; <font color="#003399"><i>/* force 3 bytes of padding */</i></font>
+  <b>char</b> c;         <font color="#003399"><i>/* size is 1 byte           */</i></font>
+  <b>char</b> dummy2[3]; <font color="#003399"><i>/* force 3 bytes of padding */</i></font>
+};
+</pre></blockquote>
+
+The <i>sizeof(struct MyStruct)</i> is 8.
+
+
+<p>
+
+<b>Notes:</b>
+<p>
+<ul>
+<li>Choosing your alignment is a trade-off between speed and memory.
+<li>When you require lots of structures (e.g. large arrays of them) with some small data
+fields and large ones, aligning on large boundaries could waste a lot of space.
+<li>Accessing data that is <b>not</b> aligned on the natural boundaries of a computer may be
+slower.</li>
+<ul>
+<li>Memory may be accessed by some hardware only on the word boundary, and if it's misaligned,
+  the program will crash.</li>
+<li>Even if the program doesn't crash, misaligned data (straddling address boundaries) may be slower due to misaligned cache
+  lines (Advanced).</li>
+</ul>
+<li>Using the <b>pack</b> directive, you can selectively choose which structures to align and
+how to align them.
+</ul>
+
+<p class="technote">
+Pragmas are not part of the ANSI C language and are compiler-dependent. Although most compilers
+support the <b>pack</b> pragma, you should be aware that different compilers may have different
+default alignments. Also, MS says that the default alignment for Win32 is 8 bytes, not 4.
+You should consult the documentation for your compiler to determine the behavior.
+<p>
+
+This is from the top of <b><i>stdlib.h</i></b> from MS VC++ (older 32-bit version): <!-- 6.0: -->
+
+<blockquote><pre>
+<b>#ifdef</b>  _MSC_VER
+<font color="#003399"><i>/*
+ * Currently, all MS C compilers for Win32 platforms default to 8 byte
+ * alignment.
+ */</i></font>
+<b>#pragma pack</b>(<b>push</b>,8)
+</pre></blockquote>
+
+64-bit versions of Visual Studio default to 16-byte alignment.
+<p>
+Given these two logically equivalent structures, what are the ramifications of laying out the 
+members in these ways? In other words, what is <i>sizeof</i> each structure?
+
+<!--
+sizeof(struct BEAVIS) = 64
+sizeof(struct BUTTHEAD) = 40
+
+with default packing
+-->
+
+
+<p>
+<blockquote>
+<table><tr valign="top"><td>
+<pre>
+<b>struct</b> BEAVIS
+{
+  <b>char</b> a;
+  <b>double</b> b;
+  <b>char</b> c;
+  <b>double</b> d;
+  <b>char</b> e;
+  <b>double</b> f;
+  <b>char</b> g;
+  <b>double</b> h;
+};
+</pre>
+</td>
+<td width=20%></td>
+<td>
+<pre>
+<b>struct</b> BUTTHEAD
+{
+  <b>char</b> a;
+  <b>char</b> c;
+  <b>char</b> e;
+  <b>char</b> g;
+  <b>double</b> b;
+  <b>double</b> d;
+  <b>double</b> f;
+  <b>double</b> h;
+};
+</pre>
+</td></tr></table>
+</blockquote>
+<p>
+
+<a href="https://gcc.gnu.org/onlinedocs/gcc-4.4.4/gcc/Structure_002dPacking-Pragmas.html">Structure packing with GNU compilers</a>
+<br>
+<a href="https://docs.microsoft.com/en-us/cpp/build/reference/zp-struct-member-alignment">Compiler option for alignment</a> for Microsoft compilers.
+<p class="technote">
+<b>Note:</b> Structure alignment is compiler-dependent and varies between 32-bit
+and 64-bit compilers. You must check the documentation for the compiler that
+you are using to see <i>exactly</i> how it's done. These examples on this page
+were done using Microsoft's 32-bit compiler (unless otherwise noted). Running
+these examples with a different compiler may yield different results.
+Here's a <a href="https://en.wikipedia.org/wiki/Data_structure_alignment#Typical_alignment_of_C_structs_on_x86">
+synopsis of the differences</a>.
+</p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name=POINTEROFFSET>Accessing Structures Using Pointer/Offset</a>
+</p>
+
+
+Much like arrays, the compiler converts structure.member notation into pointer + offset
+notation:
+<blockquote><pre>
+structvar.member ==> *([address of structvar] + [offset of member])
+</pre></blockquote>
+
+So using the <i>Symbol</i> structure example above with the address of <i>sym1</i> being 100:
+<blockquote><pre>
+<b>struct</b> Symbol sym1;
+
+sym1.ival ==> *(&sym1 + 8)
+sym1.id   ==> *(&sym1 + 16)
+</pre></blockquote>
+
+Or more accurately:
+
+<blockquote><pre>
+sym1.ival ==> *( (int *)( (char *)&sym1 + 8) )
+sym1.id   ==> *( (char *)&sym1 + 16 )
+</pre></blockquote>
+
+Note that the code above assumes structures are aligned on 4-byte boundaries:
+
+<blockquote><pre>
+<img src="Symbol-Align4.gif">
+</pre></blockquote>
+
+<hr width=90%>
+<p>
+Code to print the values of a Symbol structure variable using pointer/offset with 4-byte alignment:
+
+<blockquote><pre>
+TestStructOffset4(<b>void</b>)
+{
+  <b>struct</b> Symbol sym1 = {IDENTIFIER, <font color="#9933CC">'+'</font>, 123, 3.14F, <font color="#9933CC">'A'</font>};
+  <b>char</b> *psym = (<b>char</b> *)&amp;sym1;
+
+  <b>int</b> kind   = *((<b>int</b> *)(psym + 0));    <font color="#003399"><i>/* 3    */</i></font>
+  <b>char</b> op    = *(psym + 4);             <font color="#003399"><i>/* '+'  */</i></font>
+  <b>int</b> ival   = *((<b>int</b> *)(psym + 8));    <font color="#003399"><i>/* 123  */</i></font>
+  <b>float</b> fval = *((<b>float</b> *)(psym + 12)); <font color="#003399"><i>/* 3.14 */</i></font>
+  <b>char</b> id    = *(psym + 16);            <font color="#003399"><i>/* 'A'  */</i></font>
+
+    <font color="#003399"><i>/* 3, +, 123, 3.140000, A */</i></font>
+  printf(<font color="#9933CC">&quot;%i, %c, %i, %f, %c\n&quot;</font>, kind, op, ival, fval, id);
+}
+</pre></blockquote>
+
+<hr width=90%>
+<p>
+Code to print the values of a Symbol structure variable using pointer/offset with 1-byte alignment:
+
+<blockquote><pre>
+TestStructOffset1(<b>void</b>)
+{
+  <b>struct</b> Symbol sym1 = {IDENTIFIER, <font color="#9933CC">'+'</font>, 123, 3.14F, <font color="#9933CC">'A'</font>};
+  <b>char</b> *psym = (<b>char</b> *)&amp;sym1;
+
+  <b>int</b> kind   = *((<b>int</b> *)(psym + 0));    <font color="#003399"><i>/* 3    */</i></font>
+  <b>char</b> op    = *(psym + 4);             <font color="#003399"><i>/* '+'  */</i></font>
+  <b>int</b> ival   = *((<b>int</b> *)(psym + 5));    <font color="#003399"><i>/* 123  */</i></font>
+  <b>float</b> fval = *((<b>float</b> *)(psym + 9));  <font color="#003399"><i>/* 3.14 */</i></font>
+  <b>char</b> id    = *(psym + 13);            <font color="#003399"><i>/* 'A'  */</i></font>
+
+    <font color="#003399"><i>/* 3, +, 123, 3.140000, A */</i></font>
+  printf(<font color="#9933CC">&quot;%i, %c, %i, %f, %c\n&quot;</font>, kind, op, ival, fval, id);
+}
+</pre></blockquote>
+
+<blockquote><pre>
+<img src="Symbol-Align1.gif">
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name=BITFIELDS>Bit Fields in Structures</a>
+</p>
+
+<ul>
+<li>C allows a structure to have fields which are smaller than a <i>char</i> (8 bits). 
+<li>Specifically, they can have fields as small as a single bit.
+<li>These fields are called <i>bit fields</i> and their type is either <b>int</b>,
+<b>signed int</b> or <b>unsigned int</b>.
+<li>You should always specify either <i>signed</i> or <i>unsigned</i> because, unlike integers
+  declared outside of a structure, the signedness of <b>int</b> in a bit field is implementation-dependent.
+(The original C definition only allowed unsigned int, but ANSI C allows all three types.)
+<li>In practice, you'll usually be using <i>unsigned int</i>.</li>
+</ul>
+
+Suppose we wanted to track these attributes of some object:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Variables for each attribute of some object              */</i></font>
+  <font color="#003399"><i>/* Comments represent the range of values for the attribute */</i></font>
+<b>unsigned</b> <b>char</b> level;   <font color="#003399"><i>/* 0 - 3    */</i></font>
+<b>unsigned</b> <b>char</b> power;   <font color="#003399"><i>/* 0 - 63   */</i></font>
+<b>unsigned</b> <b>short</b> range;  <font color="#003399"><i>/* 0 - 1023 */</i></font>
+<b>unsigned</b> <b>char</b> armor;   <font color="#003399"><i>/* 0 - 15   */</i></font>
+<b>unsigned</b> <b>short</b> health; <font color="#003399"><i>/* 0 - 511  */</i></font>
+<b>unsigned</b> <b>char</b> grade;   <font color="#003399"><i>/* 0 - 1    */</i></font>
+</pre></blockquote>
+
+Given the sizes of each data type, we could say that the <i>minimum</i> amount of memory
+required to hold these attributes is 8 bytes. 
+However, given a 32-bit computer, it's possible that the amount of memory required could 
+actually be 24 bytes, depending on where these variables exist. <!-- Why? -->
+
+<!--
+These are declare on the stack and are not part of a structure. Each variable will
+likely require at least one word of space on the stack. Note these values are different
+between GNU and MS. Borland is similar to GNU. The layout in global space is different
+in all three and is interesting.
+-->
+<p>
+Declared local to a function: (on the stack)
+<p>
+
+<p>
+<blockquote>
+<table border=0 cellspacing=5>
+<tr>
+<th>Microsoft</th><th width=10></th><th>GNU</th><th width=10></th><th>Borland</th>
+<tr>
+<td>
+<pre>
+Address of level = 0012FF28
+Address of power = 0012FF24
+Address of range = 0012FF20
+Address of armor = 0012FF1C
+Address of health = 0012FF18
+Address of grade = 0012FF14
+</pre>
+</td><td></td>
+<td>
+<pre>
+Address of level = 0x22F047
+Address of power = 0x22F046
+Address of range = 0x22F044
+Address of armor = 0x22F043
+Address of health = 0x22F040
+Address of grade = 0x22F03F
+</pre>
+</td><td></td>
+<td>
+<pre>
+Address of level = 0012FF83
+Address of power = 0012FF82
+Address of range = 0012FF80
+Address of armor = 0012FF7F
+Address of health = 0012FF7C
+Address of grade = 0012FF7B
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+<p>
+
+
+<p>
+Declared globally: 
+<p>
+
+<p>
+<blockquote>
+<table border=0 cellspacing=5>
+<tr>
+<th>Microsoft</th><th width=10></th><th>GNU</th><th width=10></th><th>Borland</th>
+<tr>
+<td>
+<pre>
+Address of level = 004310BE
+Address of power = 004310BC
+Address of range = 004312FC
+Address of armor = 004310BD
+Address of health = 00431142
+Address of grade = 004310BF
+</pre>
+</td><td></td>
+<td>
+<pre>
+Address of level = 0x405030
+Address of power = 0x406060
+Address of range = 0x406050
+Address of armor = 0x406080
+Address of health = 0x407110
+Address of grade = 0x407160
+</pre>
+</td><td></td>
+<td>
+<pre>
+Address of level = 004122E0
+Address of power = 004122E1
+Address of range = 004122E2
+Address of armor = 004122E4
+Address of health = 004122E6
+Address of grade = 004122E8
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+<p>
+
+
+
+
+
+</pre>
+
+<!--
+MS:
+***** Testing global storage *****
+Address of level = 004310BE
+Address of power = 004310BC
+Address of range = 004312FC
+Address of armor = 004310BD
+Address of health = 00431142
+Address of grade = 004310BF
+***** Testing stack storage *****
+Address of level = 0012FF28
+Address of power = 0012FF24
+Address of range = 0012FF20
+Address of armor = 0012FF1C
+Address of health = 0012FF18
+Address of grade = 0012FF14
+
+GNU:
+***** Testing global storage *****
+Address of level = 0x405030
+Address of power = 0x406060
+Address of range = 0x406050
+Address of armor = 0x406080
+Address of health = 0x407110
+Address of grade = 0x407160
+***** Testing stack storage *****
+Address of level = 0x22F047
+Address of power = 0x22F046
+Address of range = 0x22F044
+Address of armor = 0x22F043
+Address of health = 0x22F040
+Address of grade = 0x22F03F
+
+Borland:
+***** Testing global storage *****
+Address of level = 004122E0
+Address of power = 004122E1
+Address of range = 004122E2
+Address of armor = 004122E4
+Address of health = 004122E6
+Address of grade = 004122E8
+***** Testing stack storage *****
+Address of level = 0012FF83
+Address of power = 0012FF82
+Address of range = 0012FF80
+Address of armor = 0012FF7F
+Address of health = 0012FF7C
+Address of grade = 0012FF7B
+
+-->
+
+<p>
+Our first attempt to save memory is to put them in a structure:
+<p>
+
+<blockquote><pre>
+<font color="#003399"><i>/* Put into a struct */</i></font>
+<b>typedef</b> <b>struct</b>
+{
+  <b>unsigned</b> <b>char</b> level;   <font color="#003399"><i>/* 0 - 3    */</i></font>
+  <b>unsigned</b> <b>char</b> power;   <font color="#003399"><i>/* 0 - 63   */</i></font>
+  <b>unsigned</b> <b>short</b> range;  <font color="#003399"><i>/* 0 - 1023 */</i></font>
+  <b>unsigned</b> <b>char</b> armor;   <font color="#003399"><i>/* 0 - 15   */</i></font>
+  <b>unsigned</b> <b>short</b> health; <font color="#003399"><i>/* 0 - 511  */</i></font>
+  <b>unsigned</b> <b>char</b> grade;   <font color="#003399"><i>/* 0 - 1    */</i></font>
+}ENTITY_ATTRS;
+</pre></blockquote>
+
+<p>
+What is the memory requirements for this struct? Of course, it depends on how the compiler
+is packing structures. Given a default pack value of 8, the layout looks like this:
+<p>
+<img src="BitFields-1.gif">
+<p>
+
+What about this structure:
+<p>
+
+<blockquote><pre>
+<font color="#003399"><i>/* Put into a struct and pack */</i></font>
+<b>#pragma</b> <b>pack</b>(1)    <font color="990099">/* align on 1-byte boundaries */</font>
+<b>typedef</b> <b>struct</b>
+{
+  <b>unsigned</b> <b>char</b> level;   <font color="#003399"><i>/* 0 - 3    */</i></font>
+  <b>unsigned</b> <b>char</b> power;   <font color="#003399"><i>/* 0 - 63   */</i></font>
+  <b>unsigned</b> <b>short</b> range;  <font color="#003399"><i>/* 0 - 1023 */</i></font>
+  <b>unsigned</b> <b>char</b> armor;   <font color="#003399"><i>/* 0 - 15   */</i></font>
+  <b>unsigned</b> <b>short</b> health; <font color="#003399"><i>/* 0 - 511  */</i></font>
+  <b>unsigned</b> <b>char</b> grade;   <font color="#003399"><i>/* 0 - 1    */</i></font>
+}ENTITY_ATTRS;
+<b>#pragma</b> <b>pack</b>()
+</pre></blockquote>
+
+This code yields a layout like this:
+<p>
+<img src="BitFields-2.gif">
+<p>
+
+Of course, looking closer, we realize that we only need 32 bits for all 6 variables, 
+so we'll just use an unsigned integer
+to store the values:
+
+<p>
+<img src="BitFields-3.gif">
+<p>
+
+To set the fields to these values:
+
+<blockquote><pre>
+level = 3;     <font color="#003399"><i>/*  2 bits wide */</i></font>
+power = 32;    <font color="#003399"><i>/*  6 bits wide */</i></font>
+range = 1000;  <font color="#003399"><i>/* 10 bits wide */</i></font>
+armor = 7;     <font color="#003399"><i>/*  4 bits wide */</i></font>
+health = 300;  <font color="#003399"><i>/*  9 bits wide */</i></font>
+grade = 1;     <font color="#003399"><i>/*  1 bit wide  */</i></font>
+</pre></blockquote>
+ 
+We can use "simple" bit manipulation:
+
+<blockquote><pre>
+<b>unsigned</b> <b>int</b> attrs;
+
+attrs = 3 &lt;&lt; 30;              <font color="#003399"><i>/* set level to 3    */</i></font>
+attrs = attrs | (32 &lt;&lt; 24);   <font color="#003399"><i>/* set power to 32   */</i></font>
+attrs = attrs | (1000 &lt;&lt; 14); <font color="#003399"><i>/* set range to 1000 */</i></font>
+attrs = attrs | (7 &lt;&lt; 10);    <font color="#003399"><i>/* set armor to 7    */</i></font>
+attrs = attrs | (300 &lt;&lt; 1);   <font color="#003399"><i>/* set health to 300 */</i></font>
+attrs = attrs | 1;            <font color="#003399"><i>/* set grade to 1    */</i></font>
+</pre></blockquote>
+
+After shifting, we <b>OR</b> all of the values together:
+
+<blockquote><pre>
+Left shifts            Binary 
+-----------------------------------------------
+   3 << 30     <b>11</b>000000000000000000000000000000
+  32 << 24       <b>100000</b>000000000000000000000000
+1000 << 14             <b>1111101000</b>00000000000000  
+   7 << 10                       <b>0111</b>0000000000
+ 300 <<  1                           <b>100101100</b>0
+         1                                    <b>1</b>
+-----------------------------------------------         
+               11100000111110100001111001011001                                                     
+</pre></blockquote>
+
+<!--
+     11000000000000000000000000000000
+       100000000000000000000000000000
+             111110100000000000000000  
+                       01110000000000
+                           1001011000
+                                    1
+     11100000111110100001111001011001                                                     
+-->
+
+Of course, there's got to be a better way...
+<br><br><br><br>
+
+<blockquote><pre>
+<font color="#003399"><i>/* Use bitfields for the attributes */</i></font>
+<b>typedef</b> <b>struct</b>
+{
+  <b>unsigned</b> <b>int</b> level  :  2; <font color="#003399"><i>/* 0 - 3    */</i></font>
+  <b>unsigned</b> <b>int</b> power  :  6; <font color="#003399"><i>/* 0 - 63   */</i></font>
+  <b>unsigned</b> <b>int</b> range  : 10; <font color="#003399"><i>/* 0 - 1023 */</i></font>
+  <b>unsigned</b> <b>int</b> armor  :  4; <font color="#003399"><i>/* 0 - 15   */</i></font>
+  <b>unsigned</b> <b>int</b> health :  9; <font color="#003399"><i>/* 0 - 511  */</i></font>
+  <b>unsigned</b> <b>int</b> grade  :  1; <font color="#003399"><i>/* 0 - 1    */</i></font>
+}ENTITY_ATTRS_B;
+</pre></blockquote>
+
+The <b>sizeof</b> the structure above is 4, which is the same size as the unsigned integer
+used before. However, this structure allows for a much cleaner syntax:
+
+<blockquote><pre>
+ENTITY_ATTRS_B attrs;
+
+  <font color="#003399"><i>/* Easier to read, understand, and is self-documenting. */</i></font>
+  <font color="#003399"><i>/* Less likely to drive the programmer INSANE!!         */</i></font>
+attrs.level = 3;
+attrs.power = 32;
+attrs.range = 1000;
+attrs.armor = 7;
+attrs.health = 300;
+attrs.grade = 1;
+</pre></blockquote>
+
+Much like a lot of syntax in C, the compiler is doing the work for you behind-the-scenes.
+
+<p>
+<b>Notes</b>
+<ul>
+<li>You cannot take the address of a bit field (most computers can't address "unusually" sized fields)
+<li>Bit fields are supported in all compilers, but the implementations may differ.
+<li>Some bit fields are stored left to right on one compiler, but right to left on another.
+<li>Some compilers may pack the bits of two fields together, some may add padding to align
+on a word boundary.
+<li>The maximum number of bits in a field may differ from one compiler to another, especially
+when dealing with 16-bit, 32-bit, or 64-bit compilers.
+<li>For the most part, the compiler-generated code is similar to what the programmer would
+write. The shifting, masking, and'ing, or'ing may still need to be done. 
+<li>The elegance in the source code needs to be weighed against possible loss of portability.
+  Only you can make that decision.
+</ul>
+
+<!--
+853:    attrs = attrs | (power << 24);   /* set power to 32
+0040338F   mov         ecx,dword ptr [ebp-0Ch]
+00403392   shl         ecx,18h
+00403395   mov         edx,dword ptr [ebp-4]
+00403398   or          edx,ecx
+0040339A   mov         dword ptr [ebp-4],edx
+
+
+871:    attrs.power = power;
+004032F7   mov         edx,dword ptr [ebp-0Ch]
+004032FA   and         edx,3Fh
+004032FD   shl         edx,2
+00403300   mov         eax,dword ptr [ebp-4]
+00403303   and         al,3
+00403305   or          eax,edx
+00403307   mov         dword ptr [ebp-4],eax
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p>
+<hr width="90%">
+<p>
+<h2>Example Using Bit Manipulators - Half-life TFC Server Configuration</h2>
+
+<!--
+<a href="http://www.config-world.uklinux.net/tfc/1.shtml">Details</a> about TFC Server configuration.</a>
+-->
+
+<ul>
+<li>Configuring a Half-life server is done via a text file named server.cfg 
+(Any Quake-based server does it this way.)
+<li>One of the options in the config file (<b>mp_teamplay</b>) enables/disables 
+certain multiplayer/team behaviors.
+<li>This value of <b>mp_teamplay</b> is an integer whose bits represents the different settings
+<li>Set its value to the sum of the numbers of the options you want enabled: 
+<blockquote><pre>
+     1 = Teamplay on (always set this for teamplay mode)
+     2 = Half-damage friendly-fire
+     4 = No damage friendly-fire
+     8 = Half-damage friendly explosive
+    16 = No damage friendly-explosive
+    32 = (unused)
+    64 = (unused)
+   128 = Half-damage armor friendly-fire
+   256 = No damage to armor from friendly-fire
+   512 = Half-damage armor friendly explosive
+  1024 = No damage to armor from friendly explosive
+  2048 = YOU take half damage from hitting Teammate with direct weaponfire
+  4096 = YOU take no damage from hitting Teammate with direct weaponfire
+  8192 = YOU take half damage from hitting Teammate with explosive weaponfire
+ 16384 = YOU take no damage from hitting Teammate with explosive weaponfire
+ 32768 = YOUR armor takes half damage from hitting Teammate with direct weaponfire
+ 65536 = YOUR armor takes no damage from hitting Teammate with direct weaponfire
+131072 = YOUR armor takes half damage from hitting Teammate with explosive weaponfire
+262144 = YOUR armor takes no damage from hitting Teammate with explosive weaponfire
+</pre></blockquote>
+</ul>
+
+For example, to enable these options:
+<ul>
+<li>Teamplay is ON (1)
+<li>No damage friendly-fire (4)
+<li>Half damage friendly-explosive (8)
+<li>YOU take half damage from hitting Teammate with explosive weaponfire (8192)
+<li>YOUR armor takes half damage from hitting Teammate with direct weaponfire (32768)
+</ul>
+
+You would set <b>mp_teamplay</b> to 40973: 1 + 4 + 8 + 8192 + 32768
+<p>
+
+An example <a href="server.cfg">server.cfg</a> file for Half-life. Note the value 21 for the
+<tt>mp_teamplay</tt> variable. In binary, it would look like this:
+<blockquote><pre>
+00000000000000000000000000010101
+</pre></blockquote>
+<p>
+
+<!--
+<p class="technote">
+Write a function called <b>PrintHLTeamplayOptions</b> that takes an unsigned integer representing
+the Half-life teamplay options and displays the English equivalent. For example, calling the
+function with the value 21 will display:
+<br><br>
+Half-life teamplay configuration:<br><br>
+Teamplay is ON<br>
+No damage friendly-fire<br>
+No damage friendly-explosive<br>
+</p>
+
+Using the code developed above, you can create a real-world 
+-->
+
+<a href="HLOptions.exe"><i>Half-Life <b>mp_teamplay</b> Calculator</i></a>:
+<p>
+<blockquote>
+<img src="HLTeamPlayOptions-1.gif">
+</blockquote>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p class="SectionHeader">
+<a name=BITMAPFILEHEADER>Alignment Example Using BITMAPFILEHEADER</a>
+</p>
+
+Structure alignment is very important when dealing with <i>structured data files</i>.
+These files are essentially binary files that have a well-defined layout (structure).
+Reading this "structured" data is done effortlessly using C structures, but you
+must be aware of any alignment issues.
+<p>
+
+Given these definitions: (from Microsoft's <i>wingdi.h</i>)
+
+<blockquote><pre>
+<b>typedef</b> <b>unsigned</b> <b>short</b> WORD;
+<b>typedef</b> <b>unsigned</b> <b>long</b> DWORD;
+
+<b>typedef</b> <b>struct</b> tagBITMAPFILEHEADER
+{ 
+  WORD    bfType;       <font color="#003399"><i>/* 2 bytes */</i></font>
+  DWORD   bfSize;       <font color="#003399"><i>/* 4 bytes */</i></font>
+  WORD    bfReserved1;  <font color="#003399"><i>/* 2 bytes */</i></font>
+  WORD    bfReserved2;  <font color="#003399"><i>/* 2 bytes */</i></font> 
+  DWORD   bfOffBits;    <font color="#003399"><i>/* 4 bytes */</i></font>
+} BITMAPFILEHEADER, *PBITMAPFILEHEADER; 
+</pre></blockquote>
+
+And this function:
+
+<blockquote><pre>
+<b>void</b> PrintBitmapHeader(BITMAPFILEHEADER *header)
+{
+  printf(<font color="#9933CC">&quot;Type: %c%c (%04X)\n&quot;</font>, header-&gt;bfType &amp; 0xFF, 
+                                header-&gt;bfType &gt;&gt; 8, 
+                                header-&gt;bfType);
+  printf(<font color="#9933CC">&quot;Size: %lu (%08X)\n&quot;</font>, header-&gt;bfSize, header-&gt;bfSize);
+  printf(<font color="#9933CC">&quot;Res1: %lu (%04X)\n&quot;</font>, header-&gt;bfReserved1, header-&gt;bfReserved1);
+  printf(<font color="#9933CC">&quot;Res2: %lu (%04X)\n&quot;</font>, header-&gt;bfReserved2, header-&gt;bfReserved2);
+  printf(<font color="#9933CC">&quot;Offs: %lu (%08X)\n&quot;</font>, header-&gt;bfOffBits, header-&gt;bfOffBits);
+}
+</pre></blockquote>
+
+What should this program display? (Hint: the size of the file is 207,158 bytes, the offset
+to the bitmap itself is 1078 bytes, and the two reserved fields are 0.)
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  BITMAPFILEHEADER header;
+  FILE *fp = fopen(<font color="#9933CC">&quot;EightQueens.bmp&quot;</font>, <font color="#9933CC">&quot;rb&quot;</font>);
+  assert(fp);
+
+  fread(&amp;header, <b>sizeof</b>(BITMAPFILEHEADER), 1, fp);
+  PrintBitmapHeader(&amp;header);
+  fclose(fp);
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Given the "hint" above, the expected output should be:
+
+<blockquote><pre>
+Type: BM (4D42)
+Size: 207158 (00032936)
+Res1: 0 (0000)
+Res2: 0 (0000)
+Offs: 1078 (00000436)
+</pre></blockquote>
+
+However, the actual output is:
+
+<blockquote><pre>
+Type: BM (4D42)
+Size: 3 (00000003)
+Res1: 0 (0000)
+Res2: 1078 (0436)
+Offs: 2621440 (00280000)
+</pre></blockquote>
+
+Why is this incorrect? 
+
+<p>
+<hr width=90%>
+<p>
+
+The actual bytes in the bitmap file look like this:
+
+<blockquote><pre>
+42 4D 36 29 03 00 00 00 00 00 36 04 00 00 28 00 . . . . 
+</pre></blockquote>
+
+Separated by fields it looks like this:
+
+<blockquote><pre>
+ Type      Size       Res1    Res2      Offset       Other stuff
+ 
+42 4D | 36 29 03 00 | 00 00 | 00 00 | 36 04 00 00 | 28 00 . . . . 
+</pre></blockquote>
+
+
+And the BITMAPFILEHEADER structure in memory looks like this:
+
+<blockquote><pre>
+<img src="BitmapHeader-2.gif">
+</pre></blockquote>
+
+Why is the structure aligned like this? This means that:
+<blockquote><pre>
+  <b>sizeof</b>(BITMAPFILEHEADER) == 16
+</pre></blockquote>
+
+<p>
+Reading the header with the code:
+
+<blockquote><pre>
+fread(&amp;header, <b>sizeof</b>(BITMAPFILEHEADER), 1, fp);
+</pre></blockquote>
+
+causes the first 16 bytes (sizeof(BITMAPFILEHEADER)) of the file to be read into the buffer 
+(memory pointed to by &header), which yields:
+
+<blockquote><pre>
+<img src="BitmapHeader-3.gif">
+</pre></blockquote>
+
+Which gives the values we saw (adjusting for little-endian):
+
+<blockquote><pre>
+Member             Hex       Decimal
+---------------------------------------
+bfType              4D42       19778   
+bfSize          00000003           3
+bfReserved1         0000           0
+bfReserved2         0436        1078
+bfOffBits       00280000     2621440
+</pre></blockquote>
+
+
+Again, the correct output should be:
+
+<blockquote><pre>
+Type: BM (4D42)
+Size: 207158
+Res1: 0
+Res2: 0
+Offs: 1078
+</pre></blockquote>
+
+<p>
+<hr width=90%>
+<p>
+
+To achieve the correct results, we need to pack the structure:
+
+<blockquote><pre>
+<b>#pragma pack</b>(2) <font color="#003399"><i>/* 2-byte alignment */</i></font>
+  <b>typedef</b> <b>struct</b> tagBITMAPFILEHEADER
+  { 
+    WORD    bfType;       <font color="#003399"><i>/* 2 bytes */</i></font>
+    DWORD   bfSize;       <font color="#003399"><i>/* 4 bytes */</i></font>
+    WORD    bfReserved1;  <font color="#003399"><i>/* 2 bytes */</i></font>
+    WORD    bfReserved2;  <font color="#003399"><i>/* 2 bytes */</i></font> 
+    DWORD   bfOffBits;    <font color="#003399"><i>/* 4 bytes */</i></font>
+  } BITMAPFILEHEADER, *PBITMAPFILEHEADER; 
+<b>#pragma pack</b>() <font color="#003399"><i>/* Reset to default alignment */</i></font>
+</pre></blockquote>
+
+Now, the structure in memory looks like this:
+
+<blockquote><pre>
+<img src="BitmapHeader-1.gif">
+</pre></blockquote>
+
+and:
+
+<blockquote><pre>
+  <b>sizeof</b>(BITMAPFILEHEADER) == 14
+</pre></blockquote>
+
+so now when we read in 14 bytes, the structure is filled like this:
+
+<blockquote><pre>
+<img src="BitmapHeader-4.gif">
+</pre></blockquote>
+
+which gives the correct values:
+
+<blockquote><pre>
+Member             Hex       Decimal
+---------------------------------------
+bfType              4D42       19778   
+bfSize          00032936      207158
+bfReserved1         0000           0
+bfReserved2         0000           0
+bfOffBits       00000436        1078
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+The actual structure in <i>wingdi.h</i> looks like this:
+
+<blockquote><pre>
+<b>#include</b> &lt;pshpack2.h&gt;
+<b>typedef</b> <b>struct</b> tagBITMAPFILEHEADER
+{
+  WORD    bfType;
+  DWORD   bfSize;
+  WORD    bfReserved1;
+  WORD    bfReserved2;
+  DWORD   bfOffBits;
+} BITMAPFILEHEADER, FAR *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
+<b>#include</b> &lt;poppack.h&gt;
+</pre></blockquote>
+
+and <i>pshpack2.h</i> looks like this:
+
+
+<blockquote><pre>
+<b>#if</b> ! (<b>defined</b>(lint) || <b>defined</b>(_lint) || <b>defined</b>(RC_INVOKED))
+<b>#if</b> ( _MSC_VER &gt;= 800 ) || <b>defined</b>(_PUSHPOP_SUPPORTED)
+<b>#pragma</b> <b>warning</b>(<b>disable</b>:4103)
+<b>#if</b> !(<b>defined</b>( MIDL_PASS )) || <b>defined</b>( __midl )
+<b>#pragma</b> <b>pack</b>(<b>push</b>)
+<b>#endif</b>
+<b>#pragma</b> <b>pack</b>(2)
+<b>#else</b>
+<b>#pragma</b> <b>pack</b>(2)
+<b>#endif</b>
+<b>#endif</b> <font color="#003399"><i>/* ! (<b>defined</b>(lint) || <b>defined</b>(_lint) || <b>defined</b>(RC_INVOKED)) */</i></font>
+</pre></blockquote>
+
+<a href="pushpop-pragma.html">Complete listings</a>
+<p>
+
+Addresses and values at different <b>pack</b> values:
+
+<blockquote><pre>
+#pragma pack(1)              #pragma pack(2)              #pragma pack(4)
+-----------------------------------------------------------------------------------
+bfType = 0012FEE0            bfType = 0012FEE0            bfType = 0012FEE0
+bfSize = 0012FEE2            bfSize = 0012FEE2            bfSize = 0012FEE4
+bfRes1 = 0012FEE6            bfRes1 = 0012FEE6            bfRes1 = 0012FEE8
+bfRes2 = 0012FEE8            bfRes2 = 0012FEE8            bfRes2 = 0012FEEA
+bfOffs = 0012FEEA            bfOffs = 0012FEEA            bfOffs = 0012FEEC
+Type: BM (4D42)              Type: BM (4D42)              Type: BM (4D42)
+Size: 207158 (00032936)      Size: 207158 (00032936)      Size: 3 (00000003)
+Res1: 0 (0000)               Res1: 0 (0000)               Res1: 0 (0000)
+Res2: 0 (0000)               Res2: 0 (0000)               Res2: 1078 (0436)
+Offs: 1078 (00000436)        Offs: 1078 (00000436)        Offs: 2621440 (00280000)
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p class="SectionHeader">
+<a name=EXTENDED>Extended Example using Bitmap Files</a>
+</p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+There are actually multiple headers in a <a href="https://en.wikipedia.org/wiki/BMP_file_format">Bitmap</a>
+file. Another header of interest is the <a href="https://en.wikipedia.org/wiki/BMP_file_format#DIB_header_%28bitmap_information_header%29">BITMAPINFOHEADER</a> 
+which looks something like this:
+
+<blockquote><pre>
+<b>typedef</b> <b>unsigned</b> <b>short</b> WORD;
+<b>typedef</b> <b>unsigned</b> <b>int</b> DWORD;
+
+<font color="990099">#pragma pack(2)</font>
+<b>typedef</b> <b>struct</b> tagBITMAPINFOHEADER
+{
+  DWORD header_size;    <font color="#003399"><i>/* size of this header        */</i></font>
+  DWORD width;          <font color="#003399"><i>/* image width                */</i></font>
+  DWORD height;         <font color="#003399"><i>/* image height               */</i></font>
+  WORD color_planes;    <font color="#003399"><i>/* color planes               */</i></font>
+  WORD bpp;             <font color="#003399"><i>/* bits per pixel             */</i></font>
+  DWORD comp_method;    <font color="#003399"><i>/* compression method         */</i></font>
+  DWORD image_size;     <font color="#003399"><i>/* size of raw bitmap data    */</i></font>
+  DWORD h_res;          <font color="#003399"><i>/* horizontal resolution      */</i></font>
+  DWORD v_res;          <font color="#003399"><i>/* vertical resolution        */</i></font>
+  DWORD num_colors;     <font color="#003399"><i>/* colors in the palette      */</i></font>
+  DWORD num_imp_colors; <font color="#003399"><i>/* number of important colors */</i></font>
+}BITMAPINFOHEADER;
+<font color="990099">#pragma pack()</font>
+</pre></blockquote>
+
+Reading this information from the file is as trivial as reading the BITMAPFILEHEADER structure
+demonstrated above.
+
+<pre class="sourcecode"><code><b>void</b> TestBitmap(<b>const</b> <b>char</b> *filename)
+{
+  BITMAPFILEHEADER header;
+  BITMAPINFOHEADER info;
+
+  FILE *fp = fopen(filename, <font color="#9933CC">&quot;rb&quot;</font>);
+  <b>if</b> (!fp)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s for reading.&#92;n&quot;</font>, filename);
+    <b>return</b>;
+  }
+
+    <font color="#003399"><i>/* BITMAP header starts at offset 0x00 */</i></font>
+  fread(&amp;header, <b>sizeof</b>(BITMAPFILEHEADER), 1, fp);
+  PrintBitmapFileHeader(&amp;header);
+
+    <font color="#003399"><i>/* INFO header starts at offset 0x0E */</i></font>
+  fseek(fp, 0x0E, SEEK_SET);
+  fread(&amp;info, <b>sizeof</b>(BITMAPINFOHEADER), 1, fp);
+  PrintBitmapInfoHeader(&amp;info);
+
+  printf(<font color="#9933CC">&quot;sizeof(BITMAPFILEHEADER) = %lu&#92;n&quot;</font>, (<b>unsigned</b> <b>long</b>)<b>sizeof</b>(BITMAPFILEHEADER));
+  printf(<font color="#9933CC">&quot;sizeof(BITMAPINFOHEADER) = %lu&#92;n&quot;</font>, (<b>unsigned</b> <b>long</b>)<b>sizeof</b>(BITMAPINFOHEADER));
+
+  fclose(fp);
+}
+</code></pre>
+
+This is the code that will display the BITMAPINFOHEADER:
+
+<pre class="sourcecode"><code><b>void</b> PrintBitmapInfoHeader(BITMAPINFOHEADER *header)
+{
+  printf(<font color="#9933CC">&quot;BITMAPINFOHEADER:&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;============================&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;    Info Header size: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;header_size, header-&gt;header_size);
+  printf(<font color="#9933CC">&quot;         Image width: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;width, header-&gt;width);
+  printf(<font color="#9933CC">&quot;        Image height: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;height, header-&gt;height);
+  printf(<font color="#9933CC">&quot;        Color planes: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;color_planes, header-&gt;color_planes);
+  printf(<font color="#9933CC">&quot;          Bits/pixel: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;bpp, header-&gt;bpp);
+  printf(<font color="#9933CC">&quot;  Compression method: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;comp_method, header-&gt;comp_method);
+  printf(<font color="#9933CC">&quot;          Image size: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;image_size, header-&gt;image_size);
+  printf(<font color="#9933CC">&quot;      Horizontal res: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;h_res, header-&gt;h_res);
+  printf(<font color="#9933CC">&quot;        Vertical res: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;v_res, header-&gt;v_res);
+  printf(<font color="#9933CC">&quot;    Number of colors: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;num_colors, header-&gt;num_colors);
+  printf(<font color="#9933CC">&quot;Num important colors: %8u (0x%08X)&#92;n&quot;</font>, header-&gt;num_imp_colors, header-&gt;num_imp_colors);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+</code></pre>
+
+And this is the <i>main</i> function for you to use:
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;No filename provided.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+  TestBitmap(argv[1]);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Running these functions on this <a href="EightQueens.bmp">EightQueens.bmp</a> shows this:
+
+<table border=0 cellspacing=1 cellpadding=25>
+<tr valign="top">
+<td><pre>
+BITMAPFILEHEADER:
+============================
+     Type:       BM (0x4D42)
+     Size:   207158 (0x00032936)
+Reserved1:        0 (0x0000)
+Reserved2:        0 (0x0000)
+   Offset:     1078 (0x00000436)
+</pre>
+</td>
+<td>
+<pre>
+BITMAPINFOHEADER:
+============================
+    Info Header size:       40 (0x00000028)
+         Image width:      557 (0x0000022D)
+        Image height:      368 (0x00000170)
+        Color planes:        1 (0x00000001)
+          Bits/pixel:        8 (0x00000008)
+  Compression method:        0 (0x00000000)
+          Image size:   206080 (0x00032500)
+      Horizontal res:        0 (0x00000000)
+        Vertical res:        0 (0x00000000)
+    Number of colors:      256 (0x00000100)
+Num important colors:      256 (0x00000100)
+
+sizeof(BITMAPFILEHEADER) = 14
+sizeof(BITMAPINFOHEADER) = 40
+</pre>
+</td>
+</tr></table>
+<p>
+
+This is a hex dump of the first few bytes of the 207,158-byte image:
+
+
+<blockquote><pre>
+EightQueens-1.bmp:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 42 4D 36 29 03 00 00 00  00 00 36 04 00 00 28 00   BM6)......6...(.
+000010 00 00 2D 02 00 00 70 01  00 00 01 00 08 00 00 00   ..-...p.........
+000020 00 00 00 25 03 00 00 00  00 00 00 00 00 00 00 01   ...%............
+000030 00 00 00 01 00 00 00 00  00 00 6B 21 08 00 6B 29   ..........k!..k)
+000040 08 00 6B 21 10 00 73 21  10 00 6B 29 10 00 73 29   ..k!..s!..k)..s)
+</pre></blockquote>
+
+
+Here's a 200x144 pixel <a href="black.bmp">all-black bitmap</a> to look at.
+The file is 86,454 bytes in size.
+<p>
+
+<table border=0 cellspacing=1 cellpadding=25>
+<tr valign="top">
+<td><pre>
+BITMAPFILEHEADER:
+============================
+     Type:       BM (0x4D42)
+     Size:    86454 (0x000151B6)
+Reserved1:        0 (0x0000)
+Reserved2:        0 (0x0000)
+   <b>Offset:       54 (0x00000036)</b>
+
+</pre>
+</td>
+<td>
+<pre>
+BITMAPINFOHEADER:
+============================
+    Info Header size:       40 (0x00000028)
+         <font color="blue"><b>Image width:      200 (0x000000C8)</b></font>
+        <font color="red"><b>Image height:      144 (0x00000090)</b></font>
+        Color planes:        1 (0x00000001)
+          Bits/pixel:       24 (0x00000018)
+  Compression method:        0 (0x00000000)
+          Image size:        0 (0x00000000)
+      Horizontal res:        0 (0x00000000)
+        Vertical res:        0 (0x00000000)
+    Number of colors:        0 (0x00000000)
+Num important colors:        0 (0x00000000)
+
+sizeof(BITMAPFILEHEADER) = 14
+sizeof(BITMAPINFOHEADER) = 40
+</pre>
+</td>
+</tr></table>
+<p>
+
+This is a hex dump of the first few bytes of the all-black bitmap. 
+The actual image data is in <b>bold</b>.
+
+<blockquote><pre>
+black.bmp:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+000000 42 4D B6 51 01 00 00 00  00 00 36 00 00 00 28 <font color="blue"><b>00</b></font>   BM.Q......6...(.
+000010 <font color="blue"><b>00 00 C8</b></font> <font color="red"><b>00 00 00 90</b></font> 00  00 00 01 00 18 00 00 00   ................
+000020 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00   ................
+000030 00 00 00 00 00 00 <b>02 02  02 02 02 02 02 02 02 02   ................
+000040 02 02 02 02 02 02 02 02  02 02 02 02 02 02 02 02   ................
+000050 02 02 02 02 02 02 02 02  02 02 02 02 02 02 02 02   ................</b>
+</pre></blockquote>
+
+This is the dump of the EightQueens bitmap file showing the headers, color table, and indexes.
+The file size is in <font color="red"><b>bold</b></font> on the first line. 
+00032936<sub>16</sub> == 207158<sub>10</sub> (little-endian)
+
+<blockquote><pre>
+EightQueens-1.bmp:
+       00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F  10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+------------------------------------------------------------------------------------------------------------------------------------------
+<font color="red">000000 42 4D <b>36 29 03 00</b> 00 00 00 00 36 04 00 00 28 00  00 00 2D 02 00 00 70 01 00 00 01 00 08 00 00 00   BM6)......6...(...-...p.........
+000020 00 00 00 25 03 00 00 00 00 00 00 00 00 00 00 01  00 00 00 01 00 00</font> <font color="blue">00 00 00 00 6B 21 08 00 6B 29   ...%......................k!..k)
+000040 08 00 6B 21 10 00 73 21 10 00 6B 29 10 00 73 29  10 00 73 31 10 00 73 29 18 00 73 31 18 00 7B 31   ..k!..s!..k)..s)..s1..s)..s1..{1
+000060 18 00 7B 39 18 00 7B 31 21 00 7B 39 21 00 84 39  21 00 84 42 21 00 84 42 29 00 8C 42 29 00 84 4A   ..{9..{1!.{9!..9!..B!..B)..B)..J
+000080 29 00 8C 4A 29 00 8C 4A 31 00 94 4A 31 00 8C 52  31 00 94 52 31 00 94 52 39 00 9C 52 39 00 94 5A   )..J)..J1..J1..R1..R1..R9..R9..Z
+0000A0 39 00 9C 5A 39 00 42 42 42 00 9C 5A 42 00 9C 63  42 00 A5 63 42 00 9C 63 4A 00 A5 63 4A 00 A5 6B   9..Z9.BBB..ZB..cB..cB..cJ..cJ..k
+0000C0 4A 00 A5 6B 52 00 AD 6B 52 00 AD 73 52 00 AD 73  5A 00 B5 73 5A 00 AD 7B 5A 00 B5 7B 5A 00 42 42   J..kR..kR..sR..sZ..sZ..{Z..{Z.BB
+0000E0 63 00 42 63 63 00 84 63 63 00 B5 7B 63 00 B5 84  63 00 BD 84 63 00 42 A5 63 00 84 A5 63 00 42 52   c.Bcc..cc..{c...c...c.B.c...c.BR
+000100 6B 00 BD 84 6B 00 BD 8C 6B 00 C6 8C 6B 00 31 52  73 00 31 5A 73 00 4A 5A 73 00 C6 8C 73 00 C6 94   k...k...k...k.1Rs.1Zs.JZs...s...
+000120 73 00 CE 94 73 00 C6 9C 73 00 CE 9C 73 00 31 52  7B 00 31 5A 7B 00 42 5A 7B 00 7B 7B 7B 00 CE 94   s...s...s...s.1R{.1Z{.BZ{.{{{...
+000140 7B 00 CE 9C 7B 00 D6 9C 7B 00 CE A5 7B 00 42 5A  84 00 42 63 84 00 00 84 84 00 84 84 84 00 D6 9C   {...{...{...{.BZ..Bc............
+000160 84 00 CE A5 84 00 D6 A5 84 00 D6 AD 84 00 4A 63  8C 00 42 6B 8C 00 D6 A5 8C 00 DE A5 8C 00 D6 AD   ..............Jc..Bk............
+000180 8C 00 DE AD 8C 00 DE B5 8C 00 DE AD 94 00 DE B5  94 00 E7 B5 94 00 E7 BD 94 00 E7 B5 9C 00 E7 BD   ................................
+0001A0 9C 00 EF BD 9C 00 EF C6 9C 00 42 63 A5 00 84 63  A5 00 42 A5 A5 00 84 A5 A5 00 EF C6 A5 00 F7 C6   ..........Bc...c..B.............
+0001C0 A5 00 EF CE A5 00 F7 CE A5 00 F7 CE AD 00 84 63  C6 00 84 A5 C6 00 84 C6 C6 00 C6 C6 C6 00 7B A5   ...............c..............{.
+0001E0 D6 00 84 A5 D6 00 CE D6 D6 00 7B AD DE 00 8C AD  DE 00 84 B5 DE 00 8C B5 DE 00 84 A5 E7 00 73 AD   ..........{...................s.
+000200 E7 00 7B B5 E7 00 84 B5 E7 00 8C BD E7 00 84 C6  E7 00 73 B5 EF 00 84 BD F7 00 F7 FF FF 00 FF FF   ..{...............s.............
+000220 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000240 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000260 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000280 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+0002A0 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+0002C0 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+0002E0 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000300 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000320 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000340 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000360 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000380 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+0003A0 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+0003C0 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+0003E0 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000400 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF   ................................
+000420 FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF  FF 00 FF FF FF 00</font> <b>1C 1C 1C 1C 1C 1C 1C 1C 1C 1C   ................................
+000440 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C  1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C   ................................
+000460 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C  1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C 1C   ................................</b>
+
+6,000+ more lines here...
+</pre></blockquote>
+
+
+<!--
+<blockquote><pre>
+BITMAPINFOHEADER:
+============================
+    Info Header size:       40 (0x00000028)
+         Image width:      200 (0x000000C8)
+        Image height:      144 (0x00000090)
+        Color planes:        1 (0x00000001)
+          Bits/pixel:       24 (0x00000018)
+  Compression method:        0 (0x00000000)
+          Image size:        0 (0x00000000)
+      Horizontal res:        0 (0x00000000)
+        Vertical res:        0 (0x00000000)
+    Number of colors:        0 (0x00000000)
+Num important colors:        0 (0x00000000)
+
+sizeof(BITMAPFILEHEADER) = 14
+sizeof(BITMAPINFOHEADER) = 40
+</pre></blockquote>
+-->
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name=UNIONS>Unions</a>
+</p>
+
+Recall the <i>Symbol</i> structure and diagram (using 1-byte alignment to save space):
+<p>
+
+<table border=0>
+<tr><td valign=center>
+<blockquote><pre>
+<b>struct</b> Symbol
+{
+  <b>enum</b> Kind kind;
+  <b>char</b> op;
+  <b>int</b> ival;
+  <b>float</b> fval;
+  <b>char</b> id;
+};
+</pre></blockquote>
+</td>
+<td width=0></td>
+<td valign=center>
+<img src="Symbol.gif">
+</td>
+</tr></table>
+
+
+If we wanted to store the information about this expression:
+<blockquote>
+<i>A + 23 * 3.14</i>
+</blockquote>
+
+We could do this:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>struct</b> Symbol sym1, sym2, sym3, sym4, sym5;
+
+  sym1.kind = IDENTIFIER;
+  sym1.id = <font color="#9933CC">'A'</font>;
+
+  sym2.kind = OPERATOR;
+  sym2.op = <font color="#9933CC">'+'</font>;
+
+  sym3.kind = INTEGER;
+  sym3.ival = 23;
+
+  sym4.kind = OPERATOR;
+  sym4.op = <font color="#9933CC">'*'</font>;
+
+  sym5.kind = FLOAT;
+  sym5.fval = 3.14F;
+}
+</pre></blockquote>
+
+Memory usage would look something like this:
+
+<blockquote><pre>
+<img src="Symbols-1.gif">
+</pre></blockquote>
+
+<hr width=90%>
+<p>
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+
+When dealing with mutually exclusive data members, a better solution is to 
+create a <b>union</b> and use that instead:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<table cellpadding=5>
+<tr><th>The union</th><th>The new struct</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>union</b> SYMBOL_DATA
+{
+  <b>char</b> op;
+  <b>int</b> ival;
+  <b>float</b> fval;
+  <b>char</b> id;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>struct</b> NewSymbol
+{
+  <b>enum</b> Kind kind;
+  <b>union</b> SYMBOL_DATA data;
+};
+</pre></blockquote>
+</td>
+</tr></table>
+
+Note that <tt><b>sizeof</b>(SYMBOL_DATA)</tt> is 4, since that's the size of the
+largest member.
+<p>
+The same rules for naming structs apply to unions as well, so we could even typedef
+the union:
+<p>
+<table cellpadding=5>
+<tr><th>The union</th><th>The new struct</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>typedef union</b>
+{
+  <b>char</b> op;
+  <b>int</b> ival;
+  <b>float</b> fval;
+  <b>char</b> id;
+}SYMBOL_DATA;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>struct</b> NewSymbol
+{
+  <b>enum</b> Kind kind;
+  SYMBOL_DATA data;
+};
+</pre></blockquote>
+</td>
+</tr></table>
+
+Often, however, if the union is not intended to be used outside of a structure, we
+define it within the structure definition itself <i>without</i> the tag:
+
+<blockquote><pre>
+<b>struct</b> NewSymbol
+{
+  <b>enum</b> Kind kind;
+  <b>union</b> 
+  {
+    <b>char</b> op;
+    <b>int</b> ival;
+    <b>float</b> fval;
+    <b>char</b> id;
+  } data;
+};
+</pre></blockquote>
+
+Our NewSymbol struct would look like this in memory:
+
+<blockquote><pre>
+<img src="NewSymbol.gif">
+</pre></blockquote>
+
+Our code needs to be modified slightly:
+<p>
+<table cellpadding=5 cellspacing=5 border=0>
+<tr><th>New Code (<tt>union</tt>)</th><th>Old Code (<tt>struct</tt>)</th></tr>
+<tr><td>
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>struct</b> NewSymbol sym1, sym2, sym3, sym4, sym5;
+
+  sym1.kind = IDENTIFIER;
+  sym1.<font color="blue"><b>data</b></font>.id = <font color="#9933CC">'A'</font>;
+
+  sym2.kind = OPERATOR;
+  sym2.<font color="blue"><b>data</b></font>.op = <font color="#9933CC">'+'</font>;
+
+  sym3.kind = INTEGER;
+  sym3.<font color="blue"><b>data</b></font>.ival = 23;
+
+  sym4.kind = OPERATOR;
+  sym4.<font color="blue"><b>data</b></font>.op = <font color="#9933CC">'*'</font>;
+
+  sym5.kind = FLOAT;
+  sym5.<font color="blue"><b>data</b></font>.fval = 3.14F;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>struct</b> Symbol sym1, sym2, sym3, sym4, sym5;
+
+  sym1.kind = IDENTIFIER;
+  sym1.id = <font color="#9933CC">'A'</font>;
+
+  sym2.kind = OPERATOR;
+  sym2.op = <font color="#9933CC">'+'</font>;
+
+  sym3.kind = INTEGER;
+  sym3.ival = 23;
+
+  sym4.kind = OPERATOR;
+  sym4.op = <font color="#9933CC">'*'</font>;
+
+  sym5.kind = FLOAT;
+  sym5.fval = 3.14F;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+  
+And the memory usage with unions would look something like this:
+
+<blockquote><pre>
+<img src="NewSymbols-1.gif">
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p>
+<hr width=90%>
+<p>
+Using a union to get at individual bytes of data:
+<p>
+
+<blockquote><pre>
+<b>void</b> TestUnion(<b>void</b>)
+{
+  <b>union</b> 
+  {
+    <b>int</b> i;
+    <b>unsigned</b> <b>char</b> bytes[4];
+  }val;
+
+  val.i = 257;
+  printf(<font color="#9933CC">&quot;%3i  %3i  %3i  %3i\n&quot;</font>, 
+    val.bytes[0], val.bytes[1], val.bytes[2], val.bytes[3]);
+
+  val.i = 32767;
+  printf(<font color="#9933CC">&quot;%3i  %3i  %3i  %3i\n&quot;</font>, 
+    val.bytes[0], val.bytes[1], val.bytes[2], val.bytes[3]);
+
+  val.i = 32768;
+  printf(<font color="#9933CC">&quot;%3i  %3i  %3i  %3i\n&quot;</font>, 
+    val.bytes[0], val.bytes[1], val.bytes[2], val.bytes[3]);
+}
+</pre></blockquote>
+
+This prints out:
+
+<blockquote><pre>
+  1    1    0    0
+255  127    0    0
+  0  128    0    0
+</pre></blockquote>
+
+The values in binary:
+<blockquote><pre>
+  257: 00000000 00000000 00000001 00000001
+32767: 00000000 00000000 01111111 11111111
+32768: 00000000 00000000 10000000 00000000
+</pre></blockquote>
+
+As little-endian:
+<blockquote><pre>
+  257: 00000001 00000001 00000000 00000000
+32767: 11111111 01111111 00000000 00000000
+32768: 00000000 10000000 00000000 00000000
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+Changing the union to this:
+
+<blockquote><pre>
+<b>union</b> 
+{
+  <b>int</b> i;
+  <b>signed</b> <b>char</b> bytes[4];
+}val;
+</pre></blockquote>
+
+Gives this output (the bit patterns are the same):
+
+<blockquote><pre>
+   1     1     0     0
+  -1   127     0     0
+   0  -128     0     0
+</pre></blockquote>
+   
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+<h2>Initializing Unions</h2>
+
+The type of the initializer must be the same type as the first member of the union:
+<p>
+<blockquote><pre>
+<b>struct</b> NewSymbol sym1 = {OPERATOR, {<font color="#9933CC">'+'</font>} }; <font color="#003399"><i>/* fine, op is first member    */</i></font>
+<b>struct</b> NewSymbol sym2 = {FLOAT, {3.14} };   <font color="#003399"><i>/* this won't work as expected */</i></font>
+</pre></blockquote>
+
+Given the code above, what is printed below?
+<a href="../../docs/OperatorPrecedence.html">Precedence/ASCII Chart</a> 
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;%c, %i, %f, %c\n&quot;</font>, sym1.data.op, sym1.data.ival, 
+                           sym1.data.fval, sym1.data.id);
+</pre></blockquote>
+
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;%c, %i, %f, %c\n&quot;</font>, sym2.data.op, sym2.data.ival, 
+                           sym2.data.fval, sym2.data.id);
+</pre></blockquote>
+
+<!--
+<blockquote><pre>
++, 43, 0.000000, +
+???, 3, 0.000000, ???
+</pre></blockquote>
+-->
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+

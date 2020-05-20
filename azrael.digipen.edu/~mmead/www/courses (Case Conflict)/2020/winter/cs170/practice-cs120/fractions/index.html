@@ -1,0 +1,357 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>fractions.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(fractions.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<blockquote>
+<p class="technote">
+Please read ALL of the information before writing any code. Most of the problems that
+student's have are a result of writing code without reading the instructions.
+</p>
+</blockquote>
+
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+In this practice, you will write functions that will add, subtract, multiply, and reduce fractions. 
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<ol>
+<li>In the first part of the practice, you will write a GCD (Greatest Common Divisor) function. 
+This is in the textbook (Chapter 6 programming projects) and I showed the code during the first 
+lectures on <a href="../../../../../CS120/Fundamentals-1.html#GCD">Fundamentals</a> 
+at the bottom of the notes. After implementing the <i>GCD</i> function, run the tests from the 
+driver to make sure you've implemented it correctly before using it with the fractions in the later
+parts of the practice.
+<p>
+The prototype for the GCD function looks like this:
+
+<blockquote><pre>
+<b>int</b> GCD(<b>int</b> a, <b>int</b> b);
+</pre></blockquote>
+
+<p class="technote">
+The GCD is meant for positive integers. However, you may have 0 and negative numbers when 
+manipulating the fractions. So, for this practice you will need to modify the GCD function to
+deal with that situation. For example, if X is an integer, then:
+</p>
+<ul>
+  <li>GCD(0, X) is X</li>
+  <li>GCD(X, 0) is X</li>
+  <li>GCD(0, 0) is 0</li>
+</ul>
+<p>
+Some examples:
+<blockquote><pre>
+GCD of 15 and 18 is 3
+GCD of 21 and 47 is 1
+GCD of 153 and 68 is 17
+GCD of 18 and 0 is 18
+</pre></blockquote>
+
+<font color="blue">The function requires about 15 lines of code.</font>
+
+<p>
+<hr width="95%">
+<p>
+
+<li>In the second part of the practice you will write functions that will add, subtract, multiply, and 
+  reduce fractions. The trick is that you are not going	to convert the fraction into a decimal number, 
+  but you are going to leave the result in fractional form. This means that <b>all results will have a 
+  numerator and a denominator</b>. Some examples:
+	
+<blockquote><pre>
+ 1     1     1         2     1     5         1     4     29         1     -4    -11                                                     
+--- + --- = ---       --- + --- = ---       --- + --- = ----       --- + ---- = ----                                                                                        
+ 6     6     3         3     6     6         5     9     45         5     9      45                                                 
+</pre></blockquote>
+You'll notice that the fractions are all reduced to lowest terms. 
+
+<!--
+If the denominators are the
+same, it's very simple to add (or subtract):
+
+<blockquote><pre>
+ A     C       A + C 
+--- + ---  =  -------
+ B     B         B   
+</pre></blockquote>
+-->
+<p>
+This is the general form for adding two fractions:
+
+<blockquote><pre>
+ A     C       AD     BC       AD + BC            
+--- + ---  =  ---- + ----  =  ---------
+ B     D       BD     BD          BD        
+</pre></blockquote>
+
+Example:
+<blockquote><pre>
+ 2     1       2 * 6     1 * 3       12      3       12 + 3       15       5
+--- + ---  =  ------- + -------  =  ---- + ----  =  --------  =  ----  =  ---    
+ 3     6       3 * 6     3 * 6       18     18         18         18       6
+</pre></blockquote>
+
+Multiplying is even easier:
+<blockquote><pre>
+ A     C       AC
+--- * ---  =  ----
+ B     D       BD 
+</pre></blockquote>
+
+Example:
+<blockquote><pre>
+ 2     1       2 * 1      2       1
+--- * ---  =  ------- + ----  =  ---
+ 3     6       3 * 6     18       9
+</pre></blockquote>
+
+To practice with structures, we're going to create a structure called <tt>FRACTION</tt> which we'll 
+use to represent a fraction:
+
+<blockquote><pre>
+<b>struct</b> FRACTION
+{
+  <b>int</b> numerator;
+  <b>int</b> denominator;
+};
+</pre></blockquote>
+
+You'll need to write 3 functions that all take two <tt>FRACTION</tt> pointers and return a 
+new <tt>FRACTION</tt>:
+
+<blockquote><pre>
+<font color="blue">(18)</font>  <b>struct</b> FRACTION add_fractions(<b>const</b> <b>struct</b> FRACTION *a, <b>const</b> <b>struct</b> FRACTION *b);
+<font color="blue">( 3)</font>  <b>struct</b> FRACTION subtract_fractions(<b>const</b> <b>struct</b> FRACTION *a, <b>const</b> <b>struct</b> FRACTION *b);
+<font color="blue">( 8)</font>  <b>struct</b> FRACTION multiply_fractions(<b>const</b> <b>struct</b> FRACTION *a, <b>const</b> <b>struct</b> FRACTION *b);
+</pre></blockquote>
+
+The <font color="blue">numbers</font> to the left in parentheses represent the approximate number of lines
+required for each function.
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+To put the fraction in lowest terms, you need to divide the numerator and denominator by their 
+Greatest Common Factor, <b>GCD</b>. This is the function you wrote in the first part of the practice.
+<p>
+So, revisiting the example above, the GCD of 15 and 18 is 3, so we divided the numerator and denominator 
+by 3:
+<blockquote><pre>
+ 2     1       2 * 6     1 * 3       12      3       12 + 3       15       <b>15/3</b>       5
+--- + ---  =  ------- + -------  =  ---- + ----  =  --------  =  ----  =  <b>------</b>  =  ---    
+ 3     6       3 * 6     3 * 6       18     18         18         18       <b>18/3</b>       6
+</pre></blockquote>
+
+<p class="technote">
+Hint: Subtracting two fractions is very similar to adding them. In fact, subtraction in general is
+very similar to addition. For example, <i>a&nbsp;-&nbsp;b</i> can be re-written as addition simply 
+by negating
+<i>b</i>: <i>a&nbsp;+&nbsp;-b</i>. This means your <i>subtract_fractions</i> function should call your
+<i>add_fractions</i> function. This is code re-use. Writing two full add/subtract functions is the wrong
+way to do it. Don't be wrong. Be right<sup>&trade;</sup>.
+</p>
+
+<p>
+<hr width="95%">
+<p>
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<li>The third part of the practice you will convert an improper fraction into a mixed fraction:
+
+<blockquote><pre>
+ 52         20         5
+----  =  1 ----  =  1 ---    
+ 32         32         8
+</pre></blockquote>
+
+For example, the entire process looks like this:
+<blockquote><pre>
+ 3     7       3 * 8     4 * 7       24     28       24 + 28       52       13         5
+--- + ---  =  ------- + -------  =  ---- + ----  =  ---------  =  ----  =  ----  =  1 ----
+ 4     8       4 * 8     4 * 8       32     32         32          32        8         8
+</pre></blockquote>
+
+This is the prototype for the function to do this:
+<blockquote><pre>
+<b>struct</b> MIXED_FRACTION reduced_to_mixed(<b>const</b> <b>struct</b> FRACTION *fraction);
+</pre></blockquote>
+
+Because a mixed fraction can have a whole number and a proper fraction, we need another structure
+to support this:
+<blockquote><pre>
+<b>struct</b> MIXED_FRACTION
+{
+  <b>int</b> whole_number;
+  <b>struct</b> FRACTION proper_fraction;
+};
+</pre></blockquote>
+
+So, given a MIXED_FRACTION named <tt>mixed</tt> for this fraction:
+<blockquote><pre>
+   5
+1 ---
+   8
+</pre></blockquote>
+
+The fields are:
+<blockquote><pre>
+mixed.whole_number is 1
+mixed.proper_fraction.numerator is 5
+mixed.proper_fraction.denominator is 8
+</pre></blockquote>
+
+This function also "fixes" these "problems" as well:
+<blockquote><pre>
+1/1 ==> 1
+0/1 ==> 0
+</pre></blockquote>
+
+
+
+<p class="technote">
+Look at the <b>test_fraction</b> function in the driver and the output files to see how you should 
+represent 0.
+</p>
+
+<font color="blue">The function requires about 20 lines of code.</font>
+
+</ol>
+
+<p>
+<hr width="90%">
+<p>
+
+<b>More details</b>
+<p>
+
+<ul>
+<li>Implement these functions in a file called <tt><b>fractions.c</b></tt> and compile it like so:
+
+<blockquote><pre>
+gcc -O -Wall -Wextra -ansi -pedantic main.c fractions.c -o fractions
+</pre></blockquote>
+
+<li>The header file <tt><b>fractions.h</b></tt>:
+<pre class="sourcecode"><code><b>struct</b> FRACTION
+{
+  <b>int</b> numerator;
+  <b>int</b> denominator;
+};
+
+<b>struct</b> MIXED_FRACTION
+{
+  <b>int</b> whole_number;
+  <b>struct</b> FRACTION proper_fraction;
+};
+
+<b>struct</b> FRACTION add_fractions(<b>const</b> <b>struct</b> FRACTION *a, <b>const</b> <b>struct</b> FRACTION *b);
+<b>struct</b> FRACTION subtract_fractions(<b>const</b> <b>struct</b> FRACTION *a, <b>const</b> <b>struct</b> FRACTION *b);
+<b>struct</b> FRACTION multiply_fractions(<b>const</b> <b>struct</b> FRACTION *a, <b>const</b> <b>struct</b> FRACTION *b);
+<b>struct</b> MIXED_FRACTION reduced_to_mixed(<b>const</b> <b>struct</b> FRACTION *fraction);
+<b>int</b> GCD(<b>int</b> a, <b>int</b> b);
+</code></pre>
+
+<li>You may include other header files, if you need to.</li>
+<p>
+<li>Here is a driver file (<tt>main.c</tt>): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/main.c.html">HTML</a>&nbsp;&nbsp;
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/main.c">Text</a>
+<p>
+<li>Here is the output:
+  <ul>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output1.txt">Set 1</a> &nbsp;&nbsp;(GCD)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output2.txt">Set 2</a> &nbsp;&nbsp;(Add)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output3.txt">Set 3</a> &nbsp;&nbsp;(Subtract)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output4.txt">Set 4</a> &nbsp;&nbsp;(Multiply)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output5.txt">Set 5</a> &nbsp;&nbsp;(Add with mixed)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output6.txt">Set 6</a> &nbsp;&nbsp;(Subtract with mixed)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output7.txt">Set 7</a> &nbsp;&nbsp;(Multiply with mixed)</li>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/fractions/output-all.txt">All output</a></li>
+  </ul>
+<p>
+<li>You'll see that the driver uses command line arguments. For example,
+<blockquote><pre>
+fractions 1
+</pre></blockquote>
+will run the GCD tests and
+<blockquote><pre>
+fractions 4
+</pre></blockquote>
+will run the first multiply tests.
+  If you want to run every test, 
+  don't provide any argument. If you want to run a specific test (e.g. testing add, multiply, etc.)
+you will provide an integer. See the driver for details.
+
+<p>
+
+<li>As always, Linux and Mac users need to run the program like this:
+
+<blockquote><pre>
+./fractions
+</pre></blockquote>
+</li>
+
+</ul>
+
+
+
+<p>
+<big><big>
+</big></big>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<hr>
+
+<table border=0 cellpadding=0 cellspacing=10>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+	<td>
+</td>
+<td></td>
+<td>
+</td>
+</tr></table>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,246 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Binary Numbers</title>
+</head>
+
+<body>  
+<center><h1>Representing Decimal Numbers in Binary</h1></center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<p class="SectionHeader">
+Constructing Numbers
+</p>
+
+Remember way back when you first learned how numbers were in base 10. You could break down the number into
+its parts (ones, tens, hundreds, thousands, etc.). 
+<p>
+Given the decimal number 3045.125, it expands like this:
+<blockquote><pre>
+     3045.125 = (3*1000) + (0*100) + (4*10) + (5*1) + (1/10) + (2/100) + (5/1000)
+</pre></blockquote>
+
+Rewrite it as powers of 10:
+<blockquote><pre>
+              = (3*10<sup>3</sup>) + (0*10<sup>2</sup>) + (4*10<sup>1</sup>) + (5*10<sup>0</sup>) + (1*10<sup>-1</sup>) + (2*10<sup>-2</sup>) + (5*10<sup>-3</sup>) 
+</pre></blockquote>
+
+Simplify:
+<blockquote><pre>
+              =   300   +   0     +   40    +   5     +   .1     +   .02    +  .005
+</pre></blockquote>
+
+And do the arithmetic:
+<blockquote><pre>
+              =   3045.15
+</pre></blockquote>
+       
+Binary numbers work in the exact same way, except that we use 2 as a base instead of 10.
+<p>        
+Given the binary number 10110111.1011, it expands like this:
+<blockquote><pre>
+10110111.1011 = (1*128) + (0*64) + (1*32) + (1*16) + (0*8) + (1*4) + (1*2) + (1*1) + (1/2) + (0/4) + (1/8) + (1/16)
+</pre></blockquote>
+
+Rewrite as powers of 2 (integer portion):
+<blockquote><pre>
+10110111      = (1*2<sup>7</sup>) + (0*2<sup>6</sup>) + (1*2<sup>5</sup>) + (1*2<sup>4</sup>) + (0*2<sup>3</sup>) + (1*2<sup>2</sup>) + (1*2<sup>1</sup>) + (1*2<sup>0</sup>) 
+</pre></blockquote>
+
+Simplify:
+<blockquote><pre>
+              =  128   +   0    +   32   +   16   +   0   +    4    +   2    +   1
+</pre></blockquote>
+       
+Rewrite as powers of 2 (fractional portion):
+<blockquote><pre>
+        .1011 = (1*2<sup>-1</sup>) + (0*2<sup>-2</sup>) + (1*2<sup>-3</sup>) + (1*2<sup>-4</sup>)
+</pre></blockquote>
+
+Simplify:
+<blockquote><pre>
+              =    .5   +    0    +  .125   +  .0625    
+</pre></blockquote>
+        
+And do the arithmetic:                
+<blockquote><pre>
+10110111.1011<sub>2</sub> = 183.6875<sub>10</sub>
+</pre></blockquote>
+
+Condensed version:
+<p>
+Decimal:
+<blockquote><pre>
+      3045.125 = (3*1000) + (0*100) + (4*10) + (5*1) + (1/10) + (2/100) + (5/1000)
+               = (3*10<sup>3</sup>) + (0*10<sup>2</sup>) + (4*10<sup>1</sup>) + (5*10<sup>0</sup>) + (1*10<sup>-1</sup>) + (2*10<sup>-2</sup>) + (5*10<sup>-3</sup>) 
+               =   300   +   0     +   40    +   5     +   .1     +   .02    +  .005
+               =   3045.15
+</pre></blockquote>
+<p>        
+Binary:
+<blockquote><pre>
+ 10110111.1011 = (1*128) + (0*64) + (1*32) + (1*16) + (0*8) + (1*4) + (1*2) + (1*1) + (1/2) + (0/4) + (1/8) + (1/16)
+ 10110111      = (1*2<sup>7</sup>) + (0*2<sup>6</sup>) + (1*2<sup>5</sup>) + (1*2<sup>4</sup>) + (0*2<sup>3</sup>) + (1*2<sup>2</sup>) + (1*2<sup>1</sup>) + (1*2<sup>0</sup>) 
+               =  128   +   0    +   32   +   16   +   0   +    4    +   2    +   1
+               = 183
+         .1011 = (1*2<sup>-1</sup>) + (0*2<sup>-2</sup>) + (1*2<sup>-3</sup>) + (1*2<sup>-4</sup>)
+               =    .5   +    0    +  .125   +  .0625    
+               = .6875
+10110111.1011<sub>2</sub> = 183.6875<sub>10</sub>
+</pre></blockquote>
+<p>
+
+Binary vs. decimal fraction
+
+<blockquote><pre>
+             Decimal     Decimal
+  Binary     fraction    value
+-----------------------------------
+  .1           1/2       .5      
+  .01          1/4       .25     
+  .001         1/8       .125     
+  .0001        1/16      .0625       
+  .00001       1/32      .03125
+  .000001      1/64      .015625
+  
+  etc...
+</pre></blockquote>
+
+Examples of binary and decimal equivalents:
+
+<blockquote><pre>
+   Binary         Decimal (fraction)     Decimal
+-------------------------------------------------
+    1.1                1 1/2             1.5
+    1.101              1 5/8             1.625
+  101.001              5 1/8             5.125
+ 1001.0101             9 5/16            9.3125
+ 0011.10101            3 21/32           3.65625
+</pre></blockquote>
+
+Points
+<ul>
+<li>It's a <i>decimal</i> point for base 10 numbers, <i>binary</i> point for base 2 numbers.
+<li>In base 10, there are 10 possible numbers (0-9).
+<li>In base 2, there are only two possible numbers, 0 and 1.
+<li>However, since computers can only deal with 0 and 1, there is no binary point.
+<ul>
+<li>Non-integers (floating point) are encoded slightly differently in memory.
+<li>It's called IEEE 754 notation.
+</ul>
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+Reference values for integer portion (to the left of the point)
+
+<blockquote><pre>
+  Bit                    
+Position   Exponent      Decimal                   Binary
+--------------------------------------------------------------------
+    1        2<sup>0</sup>              1                         1 
+    2        2<sup>1</sup>              2                        10
+    3        2<sup>2</sup>              4                       100
+    4        2<sup>3</sup>              8                      1000
+    5        2<sup>4</sup>             16                     10000
+    6        2<sup>5</sup>             32                    100000
+    7        2<sup>6</sup>             64                   1000000
+    8        2<sup>7</sup>            128                  10000000
+    9        2<sup>8</sup>            256                 100000000
+   10        2<sup>9</sup>            512                1000000000
+   11        2<sup>10</sup>          1024               10000000000
+   12        2<sup>11</sup>          2048              100000000000
+   13        2<sup>12</sup>          4096             1000000000000
+   14        2<sup>13</sup>          8192            10000000000000
+   15        2<sup>14</sup>         16384           100000000000000 
+   16        2<sup>15</sup>         32768          1000000000000000
+   17        2<sup>16</sup>         65536         10000000000000000
+   18        2<sup>17</sup>        131072        100000000000000000
+   19        2<sup>18</sup>        262144       1000000000000000000
+   20        2<sup>19</sup>        524288      10000000000000000000
+   21        2<sup>20</sup>       1048576     100000000000000000000
+   22        2<sup>21</sup>       2097152    1000000000000000000000
+   23        2<sup>22</sup>       4194304   10000000000000000000000
+   24        2<sup>23</sup>       8388608  100000000000000000000000
+   
+   etc...
+</pre></blockquote>
+
+Example: 10010011001
+<blockquote><pre>
+ 10000000000      2048
+    10000000       128
+       10000        16
+        1000         8
++          1     +   1
+------------     -----
+ 10010011001      2201
+</pre></blockquote>
+
+
+Reference values for fractional portion (to the right of the point):
+<blockquote><pre>
+  Bit                    Decimal              Decimal
+Position   Exponent      Fraction             Number                    Binary
+-------------------------------------------------------------------------------------------------------
+    1        1/2<sup>1</sup>              1/2     0.5000000000000000000000000   .1    
+    2        1/2<sup>2</sup>              1/4     0.2500000000000000000000000   .01
+    3        1/2<sup>3</sup>              1/8     0.1250000000000000000000000   .001
+    4        1/2<sup>4</sup>             1/16     0.0625000000000000000000000   .00001
+    5        1/2<sup>5</sup>             1/32     0.0312500000000000000000000   .000001
+    6        1/2<sup>6</sup>             1/64     0.0156250000000000000000000   .0000001
+    7        1/2<sup>7</sup>            1/128     0.0078125000000000000000000   .00000001
+    8        1/2<sup>8</sup>            1/256     0.0039062500000000000000000   .000000001
+    9        1/2<sup>9</sup>            1/512     0.0019531250000000000000000   .0000000001
+   10        1/2<sup>10</sup>          1/1024     0.0009765625000000000000000   .00000000001
+   11        1/2<sup>11</sup>          1/2048     0.0004882812500000000000000   .000000000001
+   12        1/2<sup>12</sup>          1/4096     0.0002441406250000000000000   .0000000000001
+   13        1/2<sup>13</sup>          1/8192     0.0001220703125000000000000   .00000000000001
+   14        1/2<sup>14</sup>         1/16384     0.0000610351562500000000000   .000000000000001
+   15        1/2<sup>15</sup>         1/32768     0.0000305175781250000000000   .0000000000000001
+   16        1/2<sup>16</sup>         1/65536     0.0000152587890625000000000   .00000000000000001
+   17        1/2<sup>17</sup>        1/131072     0.0000076293945312500000000   .000000000000000001
+   18        1/2<sup>18</sup>        1/262144     0.0000038146972656250000000   .0000000000000000001
+   19        1/2<sup>19</sup>        1/524288     0.0000019073486328125000000   .00000000000000000001
+   20        1/2<sup>20</sup>       1/1048576     0.0000009536743164062500000   .000000000000000000001
+   21        1/2<sup>21</sup>       1/2097152     0.0000004768371582031250000   .0000000000000000000001
+   22        1/2<sup>22</sup>       1/4194304     0.0000002384185791015625000   .00000000000000000000001
+   23        1/2<sup>23</sup>       1/8388608     0.0000001192092895507812500   .000000000000000000000001
+   
+   etc...
+</pre></blockquote>
+
+<a href="BinConverter.exe">Binary/Decimal converter</a> (BinConverter.exe)
+<p>
+
+Additional Resources:
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Binary_numeral_system">Binary number system</a>
+<li><a href="http://en.wikipedia.org/wiki/Two's_complement">Two's complement</a>
+<li><a href="http://en.wikipedia.org/wiki/Floating_point">Floating point numbers</a>
+<li>All of the <a href="http://docs.sun.com/source/806-3568/ncg_goldberg.html">ugly details about IEE 754</a> for scientists
+</ul>
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+

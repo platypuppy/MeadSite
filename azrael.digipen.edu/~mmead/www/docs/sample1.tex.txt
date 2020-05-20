@@ -1,0 +1,143 @@
+\documentclass[letter,12pt]{article}
+\usepackage[utf8]{inputenc}
+% Hyphenation patterns
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage[version=3]{mhchem}
+\usepackage{chemfig}
+\usepackage{abc}
+\usepackage[left=2cm,top=1cm,right=2cm,bottom=1cm,nohead,nofoot]{geometry}
+
+\author{Matthew Mead}
+\title{Hello}
+
+\begin{document}
+
+
+\section{First section of \LaTeX{}}\label{sec}
+This is the first paragraph of Sect.~\ref{sec}, which is on p.~\pageref{sec} in our document. For more information, see \ref{subsec}.
+\subsection{Subsection}\label{subsec}
+This is a subsection that ought to contain more information, but really it has none.
+
+Hello, brave new \LaTeX{} world!
+
+The relationship between mass and energy, $E=mc^2$, is widely known and even appears in commercials.
+The pythagorean theorem states that for $a$, $b$, and $c$ being sides of a right triangle:
+
+\begin{equation*}
+a^2=b^2+c^2
+\end{equation*}
+
+Unnumbered equations:
+\[
+\sum_{i=1}^{\infty} \frac{1}{n^s} 
+= \prod_p \frac{1}{1 - p^{-s}} 
+\]
+
+\[
+{\frac {d}{dx}}\arctan(\sin({x}^{2}))=-2\,{\frac {\cos({x}^{2})x}{-2+
+\left (\cos({x}^{2})\right )^{2}}}
+\]
+
+Some numbered equations with summation:
+
+\begin{equation}
+\sum\limits_{n=1}^{\infty}{\frac{1}{n^2}}=\frac{\pi^2}{6}
+\end{equation}
+
+vector math:
+
+\begin{equation}
+\left(\vec x, \vec y\right)=\left|\vec x\right|\left|\vec y\right|\cos\alpha
+\end{equation}
+
+trigonometric equations:
+
+\begin{equation}
+\sin^2(\phi)+\cos^2(\phi)=1
+\end{equation}
+
+\begin{equation}
+\sin\left(\alpha\right)=2\sin\left(\frac{\alpha}{2}\right)\cos\left(\frac{\alpha}{2}\right)
+\end{equation}
+
+and even chemistry:
+\\ \\
+\ce{2KOH + H2SO4 -> K2SO4 v + H_2O}
+\\ \\
+Benzene (\ce {C6H6}) looks like
+\\ \\
+\chemfig{C*6(-C(-[6]H)=C(-[7]H)-C(-[1]H)=C(-[2]H)-C(-[3]H)=)(-[5]H)}
+
+\newpage
+It can even do full-blown musical notation using ABC notation:
+
+\begin{abc}
+X:1
+T:London Bridge Is Falling Down
+M:2/4
+L:1/8
+K:D
+A>B AG|FGA2|EFG2|FGA2|
+A>B AG|FGA2|E2A2|FDD2|
+
+X:2
+M:
+T:Chords with their inversions listed above:
+L:1/1
+E:lw 400
+K:D
+"D"[DFA] | "1st"[FAd] | "2nd"[Adf] |
+"D7"[DFA=c] | "1st"[FA=cd] | "2nd"[A=cdf] | "3rd"[=cdfa]
+
+X:3
+T: Balance the Straw (A sample from the internet)
+R: jig
+N: This tune goes with one of the best-known Morris dances. It is also a good jig
+N: for other dances, usually in AABB form. The B phrase bears a strong resemblance
+N: to a certain Christmas carol, and at Morris dances you will hear words like:
+N: __ Hark! the herald angels sing, __
+N: __ Glory to the Morris Ring. __
+N: Sometimes assorted other things are praised by the angels.
+N:
+M: 6/8
+L: 1/8
+K: G
+D \
+|: "G"G2B B>AB | "C"c2A A>ce | "D7"d>ed cAc | "G"G2B B2D \
+|  "G"G2B B>AB | "C"c2A A>ce | "D7"d>ed cEF | "G"G4 z2 :|
+B/c/ \
+|: "G"dz d dz G | "(D7)"c2B "D7"B2A |  "G"dz d dz G | "D7"B2A A2D \
+|  "G"G2B B>AB | "C"c2A A>ce | "D7"d>ed cEF | "G"G4 z2 :|
+
+
+X:4
+T:The Virtuoso-Pianist.
+T:Part I.
+T:Preparatory Exercises for the Aquirement of Agility, Independence,
+T:Strength and Perfect Evenness in the Fingers.
+C:C. L. HANON.
+M:2/4
+Q:1/4=60 to 108
+%%score (T1 T2) (B1 B2)
+V:T1           clef=treble
+V:B1  middle=d clef=bass
+K:
+%            End of header, start of tune body:
+% 1
+[V:T1]  z8 | z8 | z8 | z8  | z8 |
+%[V:T2]  
+[V:B1]  +1+c+2+e+3+f+4+g +5+agfe &\ +5+C+4+E+3+F+2+G +1+AGFE | 
+        +1+d+2+f+3+g+4+a +5+bagf &\ +5+D+4+F+3+G+2+A +1+BAGF |
+        +1+e+2+gab c'bag &\ +5+E+4+GAB cBAG | 
+        +1+f+2+abc' d'c'ba &\ +5+F+4+ABc dcBA | 
+        +1+g+2+bc'd' e'd'c'b &\ +5+G+4+Bcd edcB | 
+\end{abc}
+
+I did the above Virtuoso stuff. I have a book (first published in 1900) on building finger strength and it's awesome. You need this as well. This is the first exercise of 60 in the book and I have already mastered it. It's actually about 4 times longer, but I didn't have time to transcribe the whole thing.
+
+
+\end{document}
+
+
+

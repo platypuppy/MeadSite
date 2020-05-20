@@ -1,0 +1,386 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Searching and Sorting</title>
+</head>
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center><h1>Simple Searching and Sorting</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="SELECTION">
+Selection Sort
+</a>
+<p>
+
+Selection sort is probably the most intuitive sort because it mimics how people think. The 
+algorithm is straight-forward and can be implemented with a simple nested for loop and only 
+a few lines of code:
+
+<ol>
+<li>Set the current position to the first element.
+<li>From the current position, scan the rest of the array looking for the smallest value.
+<li>Swap the smallest value with the current position.
+<li>Increment the current position to the next position. (If you are at the last element, 
+  you're done and 
+  the array is sorted.)
+<li>Go to step 2
+</ol>
+
+
+Start out by marking the first element as the current position. (This is where we will
+place the smallest value.) Scan the array (loop) looking for the smallest value.
+<p>
+<blockquote>
+<img src="Selection-1.gif">
+</blockquote>
+<p>
+<br>
+
+1 was found to be the smallest (after 8 compares), so it is swapped (first swap) with the 
+value stored at the current position (the first slot)
+<p>
+<blockquote>
+<img src="Selection-2.gif">
+</blockquote>
+<p>
+<br>
+
+Move the current position to the right one element over and scan for the next smallest value.
+<p>
+<blockquote>
+<img src="Selection-3.gif">
+</blockquote>
+<p>
+<br>
+
+2 is the smallest (after 7 compares), so swap it with 4 (second swap).
+<p>
+<blockquote>
+<img src="Selection-4.gif">
+</blockquote>
+<p>
+<br>
+
+Move the current position to the right one and scan for the next smallest value.
+<p>
+<blockquote>
+<img src="Selection-5.gif">
+</blockquote>
+<p>
+<br>
+
+3 is the smallest (after 6 compares), so swap with 7 (third swap).
+<p>
+<blockquote>
+<img src="Selection-6.gif">
+</blockquote>
+<p>
+<br>
+
+Continue the process until the last position is reached.
+<p>
+<blockquote>
+<img src="Selection-7.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-8.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-9.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-10.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-11.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-12.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-13.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-14.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-15.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-16.gif">
+</blockquote>
+<p>
+<br>
+
+<p>
+<blockquote>
+<img src="Selection-17.gif">
+</blockquote>
+<p>
+
+Total compares: 36<br>
+Total swaps: 6
+<p>
+
+<b>Notes:</b>
+<ul>
+  <li>You will have a nested for-loop (2 loops) to traverse the vector.</li>
+  <li>Use your <tt><b>swap</b></tt> helper function (that you should have made already) to
+    perform the swaps. This is code-reuse and cuts down on bugs in your program.</li>
+  <li>You will need about 15 statements or so to implement the sort and counters.</li>
+  <p>
+  <li><b>Thought questions:</b> 
+    <p>
+   With an array of <i>N</i> items:
+    <ol>
+      <li>In the worst case, how many swaps need to be made?</li>
+      <li>In the best case, how many swaps need to be made?</li>
+      <li>In the worst case, how many comparisons need to be made?</li>
+      <li>In the best case, how many comparisons need to be made?</li>
+    </ol>
+    <p.
+  <li>This algorithm is known as an <i>N<sup>2</sup></i> algorithm and is very slow
+    for large data sets. You will learn about faster sort algorithms later
+    (e.g. quicksort and mergesort).</li>
+
+</ul>
+
+<!--
+Code for swapping two elements:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> swap(T &amp;a, T&amp; b)
+{
+  T temp = a;
+  a = b;
+  b = temp;
+}
+</pre></blockquote>
+-->
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="BSEARCH">
+Binary Search
+</a>
+</p>
+
+When looking for an item in a vector of unsorted data, you must perform a <i>linear search</i>.
+This simply means that you will start at the beginning and compare the value to every element 
+until you find a match. If there are 1,000,000 elements in the vector, you may have to 
+perform about 1,000,000 comparisons before you find the item you are looking for. This is not 
+a very efficient method, but it's the only way to search an unsorted vector.
+<p>
+If the data is sorted, you can perform the search much faster using a <i>binary search</i>. 
+Instead of looking at every element in the vector, you can narrow the search much faster 
+because the data is sorted.
+<p>
+For example, suppose we have these 11 values in our sorted vector:
+
+<blockquote><pre>
+22  23  25  26  27  31  35  38  39  42  45
+</pre></blockquote>
+
+and we wish to find the value <tt>42</tt> in the vector. Since the vector is sorted, we 
+can perform a very quick check to see in which "half" of the vector the number can be found.
+
+<blockquote><pre>
+  22  23  25  26  27  31  35  38  39  42  45
+  ^                   ^                   ^
+  ^                   ^                   ^
+  ^                   ^                   ^
+left               middle               right
+</pre></blockquote>
+
+In the example above, if the number we are searching for
+<ul>
+  <li>is the middle element, then we've found it.</li>
+  <li>is <i>less</i> than the middle, then we repeat the process using the range: 
+    <i>left to middle-1</i>. The updated middle and right elements would be:</li>
+<blockquote><pre>
+  22  23  25  26  27
+  ^       ^       ^
+  ^       ^       ^
+  ^       ^       ^
+left   middle   right
+</pre></blockquote>
+  <li>is <i>greater</i> than the middle, then we repeat the process using the range: 
+    <i>middle+1 to right</i>. The updated middle and left elements would be:</li>
+<blockquote><pre>
+  35  38  39  42  45
+  ^       ^       ^
+  ^       ^       ^
+  ^       ^       ^
+left   middle   right
+</pre></blockquote>
+</ul>
+<p>
+ 
+Eventually, we will find the element, if it is in the vector. If the size of the array is 
+even, then there will be no exact middle element. But, using integer division, you will 
+use the result as the middle. For example, if we only had four elements in the left half, 
+we would see this:
+<blockquote><pre>
+  35  38  39  42
+  ^       ^   ^
+  ^       ^   ^
+  ^       ^   ^
+  L       M   R
+</pre></blockquote>
+
+With L as the Left, M as the Middle, and R as the Right. It doesn't matter if the two 
+halves are not exactly the same size, as many times they won't be.
+<p>
+
+<hr width="90%">
+<p>
+
+<b>More details on the binary search:</b>
+<ul>
+  <li>Suppose we're searching for the value <tt>42</tt> in the vector.</li>
+  <li>Divide the number of elements by 2 (using integer division).</li>
+  <ul>
+    <li>This gives us the middle (within 1) element of the vector.</li>
+    <li>In the example, <tt>11/2</tt> is <tt>5</tt>.</li>
+    <li>At index <tt>5</tt> we find the value <tt>31</tt>.</li>
+<blockquote><pre>
+  22  23  25  26  27  31  35  38  39  42  45
+  ^                   ^                   ^
+  ^                   ^                   ^
+  ^                   ^                   ^
+left               middle               right
+</pre></blockquote>
+    <li>(If we found our value <tt>42</tt> at this index, we would stop the search because 
+      we found it.)</li>
+  </ul>
+  <li>Since the vector is sorted, we know that the value <tt>42</tt> must be to the right 
+    of <tt>31</tt>.</li>
+  <ul>
+    <li>This means that we can ignore all of the values to the left of (and including) <tt>31</tt>.</li>
+  </ul>
+  <li>Now, we divide the number of remaining values by 2:
+<blockquote><pre>
+  35  38  39  42  45
+  ^       ^       ^
+  ^       ^       ^
+  ^       ^       ^
+left   middle   right
+</pre></blockquote>
+    giving us the value <tt>39</tt>. (<tt>5/2</tt> is <tt>2</tt> and <tt>39</tt> 
+    is at index 2 in our new range).</li>
+  <li>We know that the value <tt>42</tt> must be to the right of <tt>39</tt>.</li>
+  <ul>
+    <li>This means that we can ignore all of the values to the left of (and including) <tt>39</tt>.</li>
+  </ul>
+  <li>The process of dividing the number of remaining elements by 2 will eventually lead us 
+    to the element we are looking for (or the search will end without having found the value, 
+    if it is not in the vector).</li>
+</ul>
+
+<p>
+The reason it's called a <i>binary search</i> is because, after each comparison, we have 
+removed half of the remaining elements from the search space. So, if we had 64 elements in 
+the sorted vector, the most number of comparisons we would have to do is 6:
+
+<ol>
+<li>64/2 = 32
+<li>32/2 = 16
+<li>16/2 = 8
+<li>8/2 = 4
+<li>4/2 = 2
+<li>2/2 = 1
+</ol>
+
+
+
+In technical terms, binary search is a logarithmic algorithm because, in the worst case, the 
+number of comparisons in a vector with <i>N</i> elements is <i>log<sub>2</sub> N</i>. So, in 
+a vector with 1,000,000 elements, a binary search would never require more than about 20 
+comparisons to find any item. This is why binary search is so much better than a simple 
+linear search.
+
+<blockquote>
+<p class="technote">
+Before writing any code, figure out how many comparisons you would have to do to find the 
+value <tt>27</tt> in the vector above. This will show you if you understand the algorithm
+or not. Writing code without properly understanding an algorithm is a sure way to fail.
+</p>
+</blockquote>
+
+Notes:
+<ul>
+<li>As always, do yourself a favor and 
+<b>DRAW DIAGRAMS</b> as you're studying the algorithm.</li>
+<li>A binary search algorithm is one of the simplest algorithms and will only require 
+about 10 statements or so.</li>
+<li>So, all-in-all, you're adding about 25 lines of code to this lab this week.</li>
+</ul>
+
+<p>
+<hr width="100%">
+<p>
+<br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

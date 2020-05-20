@@ -1,0 +1,38 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt; /* printf, scanf, getchar */</font>
+
+<b>void</b> number_to_words(<b>int</b> number);
+
+<b>void</b> myflush(<b>void</b>)
+{
+  <b>while</b> (getchar() != <font color="#9933CC">'&#92;n'</font>)
+    ;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>do</b>
+  {
+    <b>int</b> number;
+
+    printf(<font color="#9933CC">&quot;Enter a two-digit integer (10-99)? (0=quit) &quot;</font>);
+    scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;number);
+    <b>if</b> (number &lt; 10 || number &gt; 99)
+      <b>break</b>;
+
+    number_to_words(number);
+
+    myflush();
+  } <b>while</b> (1);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

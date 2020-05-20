@@ -1,0 +1,45 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>cachelist.h</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdbool.h&gt; /* bool */</font>
+
+<font color="#003399"><i>/* Max length of labels, including NUL character */</i></font>
+<font color="990099">#define LABEL_SIZE 16</font>
+
+<font color="#003399"><i>/* Cache list node */</i></font>
+<b>typedef</b> <b>struct</b> cl_node
+{
+	<b>char</b> label[LABEL_SIZE];
+	<b>int</b> value;
+	<b>struct</b> cl_node* next;
+}cl_node;
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+cl_node *cl_add_end(cl_node *list, <b>int</b> value, <b>const</b> <b>char</b> *label);
+cl_node *cl_add_front(cl_node *list, <b>int</b> value, <b>const</b> <b>char</b> *label);
+cl_node *cl_remove(cl_node *list, <b>int</b> search_value);
+cl_node *cl_insert_before(cl_node *list, <b>int</b> search_value, <b>int</b> value, <b>const</b> <b>char</b> *label);
+<b>void</b> cl_insert_after(cl_node *list, <b>int</b> search_value, <b>int</b> value, <b>const</b> <b>char</b> *label);
+cl_node *cl_find(cl_node *list, <b>int</b> search_value, <b>bool</b> cache, <b>int</b> *compares);
+<b>void</b> cl_destroy(cl_node *list);
+
+<font color="#003399"><i>/* Provided for you. DO NOT modify the code in cachelist.c */</i></font>
+<b>void</b> cl_dump(<b>const</b> cl_node *list);
+</code></pre>
+
+</body>
+</html>

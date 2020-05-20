@@ -1,0 +1,237 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment</h1>
+(vector1)
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<!--
+<p class="technote">
+Usually, you are give one week to implement each of the labs. This lab can easily be
+done in one week, but I'm giving you two weeks to implement it. The reason is because
+we will have another week off from school (Spring Break) and some of you may want to use that time
+to get caught up in all of your work. On Friday, March 15, 2019, I will give out the
+second Vector lab, which you will also have two weeks to complete. It doesn't require
+two weeks to complete either, but since Spring Break is the following week, some of
+you may want to use that time to do all of the work.
+<br><br>
+<b>Bottom line:</b> There is plenty of time to implement both of these labs. I'm just
+letting you choose if you want to complete them over Spring Break, or do them during
+the "normal" semester weeks. The choice is yours.
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+For the next few labs we will be implementing a different class. The class is <b><tt>Vector</tt></b> 
+and will be similar to the <b><tt>std::vector</tt></b> that is in the STL. Just as with the 
+linked list labs, all of the labs will build off of each other so you'll have to complete 
+all of them. Near the end of the semester, you will submit all of the code as an assignment,
+just like you did with the <b><tt>List</tt></b> lab.
+
+<p class="technote">
+At its most basic level, the Vector class is simply a wrapper around a dynamically-allocated
+array. (Much like how the <tt>std::string</tt> class is a wrapper around a NUL-terminated
+character array.) The Vector class shields the user from dealing with the allocations and
+deallocations of memory. It provides many conveniences that a built-in array doesn't provide,
+such as bounds-checked access and automatic resizing.
+<br><br>
+<b>Note:</b> This is NOT a templated class like the vector class from the STL.
+</p>
+
+<hr width="95%">
+
+<ol>
+<li>In this lab, you will be creating a <tt>Vector</tt> class, similar to the one in the 
+	Standard Template Library. You won't be providing any iterator classes, as that is beyond 
+	the scope of CS170. There is only one non-trivial method that you need to implement 
+	for this lab.
+<p>
+<ul>
+<li>You are given the header file <a  href="Vector.h">Vector.h</a> (<a href="Vector.h.html">HTML</a>) 
+to start with, and a partial implementation in <a href="Vector.cpp">Vector.cpp</a> 
+(<a href="Vector.cpp.html">HTML</a>) 
+to help get you started. There are 11 public methods so far, and 9 of them are trivial. 
+(I've implemented 6 of them for you.)
+The ones
+in <font color="blue">blue</font> have already been implemented for you.
+(<a href="https://www.youtube.com/watch?v=dNB_RjpWnsI">You're welcome!</a>).
+<ol>
+	<p>
+	<li><font color="blue">Default constructor</font></li>
+	<li>Destructor</li>
+	<li>clear</li>
+	<li>operator[] (non-const)</li>
+	<li>operator[] (const)</li>
+	<li><font color="blue">empty</font></li>
+	<li><font color="blue">size</font></li>
+	<li><font color="blue">capacity</font></li>
+	<li><font color="blue">allocations</font></li>
+</ol>	
+<p>
+You'll need about 10 lines of code (total) to implement the remaining 4 functions above.
+The remaining 2 public methods are a little more involved:
+	<p>
+<ol>
+	<li><b>push_front</b> - You need to shift all elements over one position. If the array
+	is full, you must grow it first.</li>
+		<p>
+	<li><b>push_back</b> - No shifting, but if the array is full, you will need to grow the array first.</li>
+</ol>
+
+<p>
+<li>Your task is to implement all of the methods that are defined in the header file. There are 
+	some private fields already defined, and you shouldn't need any others. There are also some 
+	simple methods already implemented.</li>
+<p>
+<li>Start with the <b><tt>push_back</tt></b> method and try to pass the first test. Once you 
+	get <b><tt>push_back</tt></b> working, the rest will come pretty quickly.</li>
+<p>
+<li>Probably, the most difficult method at this point is the private <b><tt>grow</tt></b> method. 
+	<b><tt>push_back</tt></b> calls this method, so you will need to implement it to get 
+	<b><tt>push_back</tt></b> to work.</li>
+	<p>
+<li>Growing a vector/array simply means allocating another array that is <b>twice</b> 
+	the size of the original array, copying the elements from the orginal array into the new 
+	array, and then deleting the original array.</li>
+	<p>
+<li>The subscript operators should call <i>check_bounds</i> before returning the item.
+	The reason you aren't checking in the subscript operator is code-reuse. There will be
+	several other places you'll need to check the bounds and you don't want to duplicate this
+	code every where. This is especially important when we change the behavior of the <i>check_bounds</i>
+	function: You don't want to change it in mulitple places.</li>
+</ul>
+<p>
+<b>Growing a vector:</b> (<font color="blue">Requires about 10 lines of code.</font>)
+<ol>
+<li>Original vector:
+<blockquote>
+<img src="Vector-grow-1.jpg">
+</blockquote>
+
+<li>After growing (allocate another array that is twice as large):
+<blockquote>
+<img src="Vector-grow-2.jpg">
+</blockquote>
+
+<li>Copy existing elements from original array into new array <i>using a loop of some kind</i>. 
+	Do not use <b><tt>memcpy</tt></b> or anything like that. If you don't understand why
+	that is, then you <b>DEFINITELY</b> should not use it!
+<blockquote>
+<img src="Vector-grow-4.jpg">
+</blockquote>
+
+<li><b>Don't forget: Free the memory from the original array or you'll have a memory leak.</b></li>
+</ol>
+<p><br><br>
+<b>Pushing to the front: Example: <tt>push_front(2);</tt></b>
+<ol>
+<li>Original vector:
+<blockquote>
+<img src="Vector-push_front-1.jpg">
+</blockquote>
+
+<li>Copy all elements to the right one slot starting with the <b>right-most element first</b>:
+<blockquote>
+<img src="Vector-push_front-2.jpg">
+</blockquote>
+
+<li>Put the value in the open slot:
+<blockquote>
+<img src="Vector-push_front-3.jpg">
+</blockquote>
+	
+<li>Make sure there is enough room in the array before shifting all of the elements. 
+	You may have to grow the array first.
+	<p>
+	<b>Hint:</b> You might want to make a private helper function that shifts elements.
+	This will make <tt>push_front</tt> (and other methods to come) simpler.
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add Doxygen comments to <tt><b>Vector.h</b></tt> and <tt><b>Vector.cpp</b></tt>. 
+	Make a bullet list of the functions in the .cpp file. Create doxygen function header comments 
+	for each function.  
+
+<p>
+<hr width="100%">
+<p>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+Here is some test code in <a href="driver.cpp">driver.cpp</a> (<a href="driver.cpp.html">HTML</a>). 
+Command lines:
+<p>
+GNU g++:
+
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--<b>clang++</b> -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp<br>
+Microsoft (Optional for use with Dr. Memory)
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp Vector.cpp
+-->
+
+To run a single test, provide the number on the command line. Example:
+
+<blockquote><pre>
+gnu 5
+</blockquote>
+
+will run test #5 (calls the TestALot1 function). If you don't provide any number, all tests 
+will be run.
+
+<blockquote>
+<a href="output-all.txt">Output from all functions</a>
+</blockquote>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore 
+the newlines between GNU's output and the other compilers.
+<p>
+<br><br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

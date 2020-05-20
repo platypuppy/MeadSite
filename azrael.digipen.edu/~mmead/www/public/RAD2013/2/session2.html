@@ -1,0 +1,172 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #2</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 2</h1>
+Actions, menus, toolbars, image lists, file dialogs
+</center>
+
+<p>
+	
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="MAY14">
+<p class="SectionHeader">
+Session #2
+</p>
+</a>
+
+This session's main topic was to present <i>Actions</i> and see how they are connected to user-interface
+elements (e.g. menu items). I built a small text editor (like Notepad) to demonstrate this topic. The name of
+the project is <i>TextEdit</i> and you can download all of the project/source files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/TextEdit1.zip">here</a>.
+(XE 3 version <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/TextEdit1-XE3.zip">here</a>)
+There's a project file included (TextEdit.bdsproj). Just double-click on that and Turbo C++ or RAD Studio should fire up and load the
+project. You can then build and run the application. 
+<p>
+	
+<ol>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/TextEdit.cpp.html">TextEdit.cpp</a> - This is where WinMain resides (This file will usually look very similar in all VCL applications.)
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/MainForm.h.html">MainForm.h</a> - The definition of the main window. 
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/MainForm.cpp.html">MainForm.cpp</a> - The implementation of the main window.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/MainForm.dfm">MainForm.dfm</a> - The resource file for the main window. This file was built and managed by the IDE. 
+	You should browse through it for a few minutes to see how the components' information is stored in the file.
+</ol>
+
+
+The project contains more code than I demonstrated because I didn't have enough time to implement all of it. I don't necessarily want to show
+every single line of code during the session, since most of it is repetitive. I also don't have the toolbar or images (menus/tool buttons) implemented
+in this project. (That's an exercise for you.) I'm including a folder with the bitmaps that I used for the images.
+You can download the <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/2/textedit1/TextEdit2.exe">executable</a> and try it yourself.
+
+<p>
+You should load the project into the IDE and run it.
+The code should be easy to follow. Most of the added code pertains to making sure that changes made to a file are
+not accidentally discarded. This can happen, for example, if the user changes a file and then chooses <b>File | New</b>
+from the menu. The application must ask the user if the modified file should be saved before discarding the
+current file. There is a variable named <i>Dirty_</i> which keeps track of the state of the text. This is how the rest of
+	the code knows that the file has been modified. There are still things that need to be fixed <b>before</b> moving on (and are exercises for the reader).
+<p>
+
+<p>
+<hr width="90%">
+<p>
+Some screenshots of the project at design time:
+<p>	
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>The Form at Design Time</th><th>ActionList Editor</th><th>Menu Designer</th><th>Panels Editor</tr>
+<tr valign="top">
+<td>
+<img src="textedit1/TextEdit-Form-Design1.png">
+</td>
+<td>
+<img src="textedit1/ActionListEditor.png">
+</td>
+<td>
+<img src="textedit1/MenuDesigner.png">
+</td>
+<td>
+<img src="textedit1/PanelsEditor.png">
+</td>
+</tr></table>
+<p>
+	
+<p>
+<hr width="90%">
+<p>	
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>The application showing some information</th><th>Some components used to build the application</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="textedit1/TextEdit-5.png">
+</td>
+<td>
+<img border=0 src="textedit1/TextEdit-9.png">
+</td>
+</tr></table>
+<p>
+
+<p>	
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>The main menu with images and hints (in the status bar)</th><th>A toolbar with images and tool tips</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="textedit1/TextEdit2-1.png">
+</td>
+<td>
+<img border=0 src="textedit1/TextEdit2-2.png">
+</td>
+</tr></table>
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+
+<ol>
+<li>Add a toolbar (TToolBar) to the application with buttons for each of the 5 menu items.
+	(The image on the right above shows the toolbar.)</li>
+<li>Create an image list (TImageList) and add the 5 images. Associate the image list with the actions, toolbar, and main menu.
+<li>If the file has been modified and the user exits the application, no prompting is done and the changes
+	are lost. Very bad! (Hint: TForm has an event called <i>OnCloseQuery</i> 
+	that gives the form a chance to do something before closing.)
+<li>The File Open/Save dialog boxes allow the user to type in an invalid filename. This should be prevented. (Hint: this
+	is an option in the dialogs)
+<li>The position of the caret is only updated when a key is pressed. It doesn't get updated if you click the 
+	mouse in the TMemo or load a new file. 
+<li>Other things as well...
+</ol>	
+<p>
+
+
+<blockquote>
+</blockquote>
+	
+	
+	
+<blockquote>
+</blockquote>
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

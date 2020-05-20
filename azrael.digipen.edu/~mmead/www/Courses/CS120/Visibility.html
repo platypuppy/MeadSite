@@ -1,0 +1,958 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Visibility and Lifetime</title>
+</head>
+
+<style>
+.BlueBox
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+</style>
+
+<body>  
+<center><h1>Visibility and Lifetime</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Introduction
+</p>
+
+When we declare/define a symbol (e.g. variable, constant, function, etc.), where and how we declare
+determines its scope. Let's look at a simple example that everyone should understand:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* file1.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* This function is visible/accessible to other functions in this file */</i></font>
+<font color="#003399"><i>/* as well as functions in other files. It is a global function.       */</i></font>
+<b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>int</b> local_var1 = a + b; <font color="#003399"><i>/* visible only in this function */</i></font>
+
+  <b>return</b> local_var1;
+}
+<font color="#003399"><i>/* add's local_var1 is not accessible here. */</i></font>
+
+<font color="#003399"><i>/* main is global and MUST be global because it is called from elsewhere */</i></font>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> local_var1;     <font color="#003399"><i>/* visible anywhere within main, uninitialized    */</i></font> 
+  <b>int</b> local_var2 = 5; <font color="#003399"><i>/* visible anywhere within main, initialized to 5 */</i></font>
+
+  <b>for</b> (local_var1 = 0; local_var1 &lt; 5; local_var1++)
+  {
+    <b>int</b> local_var3; <font color="#003399"><i>/* visible only in this loop, uninitialized */</i></font>
+
+    local_var3 = add(local_var1, local_var2);
+
+    printf(<font color="#9933CC">&quot;%i + %i is %i&#92;n&quot;</font>, local_var1, local_var2, local_var3);
+  }
+
+  <font color="#003399"><i>/* local_var3 is not accessible here */</i></font>
+
+  <b>return</b> 0;
+}
+
+<font color="#003399"><i>/* main's local_var1 and local_var2 are not accessible here. */</i></font>
+
+<font color="#003399"><i>/* The global function add is still accessible here. */</i></font>
+</code></pre>
+
+
+Compiling and executing:
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic file1.c -o file1 && ./file1
+
+0 + 5 is 5
+1 + 5 is 6
+2 + 5 is 7
+3 + 5 is 8
+4 + 5 is 9
+</pre></blockquote>
+
+Putting the <i>add</i> function and <i>main</i> into separate files:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* main.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* add is defined in another file */</i></font>
+<b>int</b> add(<b>int</b> a, <b>int</b> b);
+
+<font color="#003399"><i>/* main is global and MUST be global because it is called from elsewhere */</i></font>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> local_var1;     <font color="#003399"><i>/* visible anywhere within main, uninitialized    */</i></font> 
+  <b>int</b> local_var2 = 5; <font color="#003399"><i>/* visible anywhere within main, initialized to 5 */</i></font>
+
+  <b>for</b> (local_var1 = 0; local_var1 &lt; 5; local_var1++)
+  {
+    <b>int</b> local_var3; <font color="#003399"><i>/* visible only in this loop, uninitialized */</i></font>
+
+    local_var3 = add(local_var1, local_var2);
+
+    printf(<font color="#9933CC">&quot;%i + %i is %i&#92;n&quot;</font>, local_var1, local_var2, local_var3);
+  }
+
+  <font color="#003399"><i>/* local_var3 is not accessible here */</i></font>
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* functions.c */</i></font>
+
+<font color="#003399"><i>/* This function is visible/accessible to other functions in this file */</i></font>
+<font color="#003399"><i>/* as well as functions in other files. It is a global function.       */</i></font>
+<b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>int</b> local_var1 = a + b; <font color="#003399"><i>/* visible only in this function */</i></font>
+
+  <b>return</b> local_var1;
+}
+</code></pre>
+
+Now, we have to specify both files when building the program:
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic main.c functions.c -o prog
+</pre></blockquote>
+
+None of this information is new. We've been doing things like this for a while. Only the most trivial
+programs will have all of its code in a single file. Most of the time, we will have multiple files
+and we need to be able to access the functions across the files.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Linkage: External vs. Internal vs. None
+</p>
+
+The technical term for the accessiblity of a symbol (e.g. function, variable, constant, etc.)
+is its <i>linkage</i>, which is either <i>external</i>, <i>internal</i>, or <i>none</i>:
+<ul>
+  <li><i>External</i> - The symbol is accessible from any file/function in the program. We
+    often refer to symbols with external linkage as <i>global</i> symbols. In the example above,
+    the <i>add</i> function has external linkage (global) so that it can be called from within
+    the <i>main</i> function in another file.</li>
+<p>
+  <li><i>Internal</i> - The symbol is accessible only within the file (translation unit) where
+  it appears. This is done when you want to "hide" the symbol from other files. We often
+  refer to symbols with internal linkage as "file scope" symbols, because they are only visible
+  within the file where they appear.</li>
+<p>
+  <li><i>None</i> - The symbol has no linkage. This is true for symbols (generally variables)
+  that are defined in a local scope, which is any code that is within curly braces <tt>{ }</tt>, 
+  e.g. functions, loops, conditionals, etc. Local variables are also known as <i>auto</i>
+  variables because they are "automatically" created/destroyed at runtime.</li>
+</ul>
+
+We've already seen how to make a function global (i.e. external linkage). This is done by defining
+it outside of another function. The <i>add</i> function is defined outside of other functions, so
+by default, it has external linkage.
+<p>
+It's interesting to note that C does not allow local functions, i.e. functions defined inside other
+functions. Some languages, like Pascal, Ada, and Python do allow this. (Newer versions of C# also allow
+this.) However, the GNU C compiler (not C++) has an
+extension that supports
+<a href="https://gcc.gnu.org/onlinedocs/gcc/Nested-Functions.html">nested functions</a>. For example:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* nested.c  Compile without -pedantic */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> factor = 10; <font color="#003399"><i>/* Visible every where in main */</i></font>
+
+    <font color="#003399"><i>/* Local or nested function, not allowed in standard C.  */</i></font>
+    <font color="#003399"><i>/* The gcc compiler does support nested functions.       */</i></font>
+    <font color="#003399"><i>/* Neither Clang nor Microsoft's compiler supports them. */</i></font>
+  <b>int</b> calculate(<b>int</b> a, <b>int</b> b)
+  {
+    <b>int</b> c = a + b; <font color="#003399"><i>/* Local to this nested function */</i></font>
+
+    <b>return</b> c * factor;
+  }
+
+    <font color="#003399"><i>/* Call local function and print result */</i></font>
+  printf(<font color="#9933CC">&quot;Calculated: %i&#92;n&quot;</font>, calculate(3, 5));
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+This document won't spend any more time on local variables, i.e. variables with no linkage, because
+they are straight-forward and easily understood. What will be covered in more detail is the other
+two types: external and internal.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Changing the Linkage with the <tt>extern</tt> and <tt>static</tt> Keywords
+</p>
+
+Going back to our <i>add</i> function:
+
+<blockquote><pre>
+<font color="#003399"><i>/* This function has external linkage and is accessible to all  */</i></font>
+<font color="#003399"><i>/* files/functions in the program. It is a global function.     */</i></font>
+<b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+This is the default behavior for functions. Unless otherwise specified, functions have external linkage.
+There is a keyword, <i>extern</i>, which you can use to make this explicit:
+
+<blockquote><pre>
+<font color="#003399"><i>/* The <b>extern</b> keyword explicitly marks this function */</i></font>
+<font color="#003399"><i>/* as having external linkage, which is the default. */</i></font>
+<b>extern</b> <b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+C programmers rarely, if ever, use this keyword with functions because it is redundant. The default for all
+functions is <i>extern</i>, so the keyword is generally omitted. So, all functions have external linkage.
+The question is, how do you specify that a function should have <i>internal</i> linkage? 
+With the <i>intern</i> keyword? Sadly, as obvious as that sounds, that doesn't exist. It's the 
+<i>static</i> keyword:
+
+<blockquote><pre>
+<font color="#003399"><i>/* The <b>static</b> keyword marks this function as having internal     */</i></font>
+<font color="#003399"><i>/* linkage. Only functions in this file can access the function. */</i></font>
+<b>static</b> <b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+Building the program:
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic main.c functions.c -o prog
+</pre></blockquote>
+
+leads to this <i>linker</i> error:
+
+<blockquote><pre>
+/tmp/cck78WC2.o: In function `main':
+main.c:(.text+0x23): undefined reference to `add'
+collect2: error: ld returned 1 exit status
+</pre></blockquote>
+
+The exact error message will vary depending on the linker and platform, but the one thing that will be the same
+is the "undefined reference" to the add function. This is because, with the <i>static</i> keyword,
+the function has internal linkage, making it only visible within the file (<tt>functions.c</tt>)
+where it is defined.
+<p>
+So, what's the main purpose of marking a function static? It's used when you don't intend for other files
+to access the function. Think helper functions.
+<p>
+Helper functions are functions that are not meant to be
+called from outside of the file they are defined in. They are only meant for other functions within the
+same file. Sure, they don't <i>have</i> to be made static, but, if they have external linkage (global),
+there's a higher chance that the name of the helper function will conflict with other global functions.
+<p>
+With small programs (i.e. beginning programmers), this is not usually a big deal. But, when you
+start having thousands or tens of thousands of functions accessible from your program (not that
+unlikely), you will get yourself into trouble. So, there is a simple rule-of-thumb:
+<p>
+<blockquote>
+<p class="technote">
+<i>If you ONLY need to access the function from within the file it is defined, mark it with the
+  <b>static</b> keyword to keep it hidden/private to the file. If you intend to access the function
+  from within the entire program (i.e. other files), don't use the <b>static</b> keyword.</i>
+</p>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Linkage and Non-Local Variables
+</p>
+As stated earlier, local variables have no linkage and are only accessible within the <i>scope</i>
+where they are defined. However, it is possible to have variables with external linkage (global)
+and internal linkage (file-scope). First, let's talk about file-scope variables first, as they are
+a little easier to understand.
+<p>
+Here's the simple header file:
+
+
+<blockquote><pre>
+<font color="#003399"><i>/* geometry.h */</i></font>
+<b>typedef</b> <b>struct</b> GeometryResults
+{
+  <b>double</b> circle_area;
+  <b>double</b> circle_circumference;
+  <b>double</b> sphere_volume;
+}GeometryResults;
+</pre></blockquote>
+
+Here's a file that calculates a few geometrical values:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* file2.c */</i></font>
+<font color="990099">#include &quot;geometry.h&quot;</font> <font color="#003399"><i>/* struct GeometryResults */</i></font>
+
+<font color="#003399"><i>/* external linkage (global) */</i></font>
+<b>const</b> <b>double</b> PI = 3.1415926;
+
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>double</b> area_of_circle(<b>double</b> radius)
+{
+  <b>return</b> PI * radius * radius;
+}
+
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>double</b> circumference_of_circle(<b>double</b> radius)
+{
+  <b>return</b> 2 * PI * radius;
+}
+
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>double</b> volume_of_sphere(<b>double</b> radius)
+{
+  <b>return</b> 4.0 / 3.0 * PI * radius * radius;
+}
+
+<font color="#003399"><i>/* external linkage (global) */</i></font>
+<b>struct</b> GeometryResults calculate_values(<b>double</b> radius)
+{
+  <b>struct</b> GeometryResults results;
+  
+  results.circle_area = area_of_circle(radius);
+  results.circle_circumference = circumference_of_circle(radius);
+  results.sphere_volume = volume_of_sphere(radius);
+
+  <b>return</b> results;
+}
+</code></pre>
+
+And this is how we might want to use it:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* file1.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>    <font color="#003399"><i>/* printf          */</i></font>
+<font color="990099">#include &quot;geometry.h&quot;</font> <font color="#003399"><i>/* GeometryResults */</i></font>
+
+<font color="#003399"><i>/* external linkage (global) */</i></font>
+<b>const</b> <b>double</b> PI = 3.14;
+
+<font color="#003399"><i>/* prototype */</i></font>
+GeometryResults calculate_values(<b>double</b> radius);
+
+<b>static</b> <b>void</b> print_results(<b>const</b> GeometryResults *results, <b>double</b> radius)
+{
+  printf(<font color="#9933CC">&quot;With a radius of %.2f:&#92;n&quot;</font>, radius);
+  printf(<font color="#9933CC">&quot;----------------------&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Area of a circle is %.2f&#92;n&quot;</font>, results-&gt;circle_area);
+  printf(<font color="#9933CC">&quot;Circumference of a circle is %.2f&#92;n&quot;</font>, results-&gt;circle_circumference);
+  printf(<font color="#9933CC">&quot;Volume of a sphere is %.2f&#92;n&quot;</font>, results-&gt;sphere_volume);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>double</b> radius;           <font color="#003399"><i>/* radius used in all calculations */</i></font>
+  <b>double</b> height;           <font color="#003399"><i>/* used for volume of a cone       */</i></font>
+  <b>double</b> cone_volume;      <font color="#003399"><i>/* volume of a cone                */</i></font>
+  GeometryResults results; <font color="#003399"><i>/* other geometric calculations    */</i></font>  
+
+  radius = 5.5;
+  height = 10.0;
+  cone_volume = PI * radius * radius * height / 3;
+
+  printf(<font color="#9933CC">&quot;A cone with radius %.2f and height of %.2f has volume %.2f&#92;n&#92;n&quot;</font>, 
+          radius, height, cone_volume);
+
+  results = calculate_values(radius);
+
+  print_results(&amp;results, radius);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Attempting to build the program:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -g file1.c file2.c -o prog
+</pre></blockquote>
+
+results in this linker cryptic error message:
+
+<blockquote><pre>
+/tmp/ccsSdszg.o:(.rodata+0x0): multiple definition of `PI'
+/tmp/cc42WWRP.o:(.rodata+0x0): first defined here
+collect2: error: ld returned 1 exit status
+</pre></blockquote>
+
+It's telling us the <tt>PI</tt> is defined twice, which was done on purpose to demonstrate how to avoid
+this message. These are the duplicated definitions:
+<p>
+In <i>file1.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* external linkage (global) */</i></font>
+<b>const</b> <b>double</b> PI = 3.14;
+</pre></blockquote>
+
+In <i>file2.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* external linkage (global) */</i></font>
+<b>const</b> <b>double</b> PI = 3.1415926;
+</pre></blockquote>
+
+This often happens when one programmer creates a global symbol in one file, and another
+programmer (maybe the same programmer?), creates a duplicate definition of the same symbol in
+another file. Also, it would still be an error even if the values assigned to <tt>PI</tt> were
+identical. By now, we know what the solution is: <i>static</i>
+<p>
+In both files, add the <i>static</i> keyword to the definition to give <tt>PI</tt> internal linkage:
+
+<p>
+In <i>file1.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>const</b> <b>double</b> PI = 3.14;
+</pre></blockquote>
+
+In <i>file2.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>const</b> <b>double</b> PI = 3.1415926;
+</pre></blockquote>
+
+Now, building and running works as expected:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -g file1.c file2.c -o prog &amp;&amp; ./prog 
+
+A cone with radius 5.50 and height of 10.00 has volume 316.62
+
+With a radius of 5.50:
+----------------------
+Area of a circle is 95.03
+Circumference of a circle is 34.56
+Volume of a sphere is 126.71
+</pre></blockquote>
+
+But, it seems that there's something not right with this. We have multiple definitions for <tt>PI</tt>.
+Even though each definition is internal to the file it is defined within, it just seems bad. Especially,
+since one file's definition has more precision than the other. That will likely lead to odd results
+at some point. 
+<p>
+What we really want is to have just one definition and be able to use that one definition for
+all files. Let's go back to global functions to see what the solution is. 
+<p>
+All functions (as well as all symbols), must obey the <b>O</b>ne <b>D</b>efinition <b>R</b>ule (<b>ODR</b>).
+This is something we learned from the beginning and everyone should understand it pretty well. There can be exactly
+one definition of a function. That definition will exist in exactly one file.
+<p>
+All other files that
+wish to call the function must have a <i>prototype</i> (i.e. declaration) for that function. 
+Remember, a function prototype does not include the body (i.e. curly braces and code). There are no
+limits to how many times you can prototype/declare a function, as long as they are all identical.
+<p>
+
+Going back to our original example with the <i>add</i> function, the definition was in a file
+called <tt>functions.c</tt>
+
+<blockquote><pre>
+<font color="#003399"><i>/* This function is visible/accessible to other functions in this file */</i></font>
+<font color="#003399"><i>/* as well as functions in other files. It is a global function.       */</i></font>
+<b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</pre></blockquote>
+
+and in <tt>main.c</tt> we have a prototype:
+
+<blockquote><pre>
+<font color="#003399"><i>/* add is defined in another file */</i></font>
+<b>int</b> add(<b>int</b> a, <b>int</b> b);
+</pre></blockquote>
+
+This is pretty straight-forward and we've been doing this for a while now. So, the question becomes,
+<i>"How do I create a single definition of a variable in one file and then prototype that variable
+  in other files so I can use it?"</i>
+<p>
+The answer is: with the <i>extern</i> keyword.
+<p>
+Here's a sample to demonstrate:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>fileA.c</th><th>fileB.c</th></tr>
+<tr valign="top">
+<td>
+
+<pre>
+<font color="#003399"><i>/* fileA.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* definition, external linkage (global) */</i></font>
+<b>int</b> a = 5;
+
+<font color="#003399"><i>/* prototype, it's defined in fileB.c */</i></font>
+<b>void</b> foo(<b>void</b>);
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;The value of a in main is %i&#92;n&quot;</font>, a);
+  foo();
+
+  <b>return</b> 0;
+}
+</pre>
+
+</td>
+<td>
+
+<pre>
+<font color="#003399"><i>/* fileB.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* definition, external linkage (global) */</i></font>
+<b>void</b> foo(<b>void</b>)
+{
+    <font color="#003399"><i>/* Try to access a from fileA.c */</i></font>
+  printf(<font color="#9933CC">&quot;The value of a in foo is %i&#92;n&quot;</font>, a);
+}
+</pre>
+
+</td>
+
+</tr></table>
+</blockquote>
+
+Attempting to build the program:
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -g fileA.c fileB.c -o prog
+</pre></blockquote>
+
+leads to this compiler error:
+
+<blockquote><pre>
+fileB.c: In function 'foo':
+fileB.c:7:43: error: 'a' undeclared (first use in this function)
+   printf("The value of a in foo is %i\n", a);
+                                           ^
+fileB.c:7:43: note: each undeclared identifier is reported only once for each function it appears in
+</pre></blockquote>
+
+This error makes complete sense. The compiler sees only one file at a time (<tt>fileB.c</tt>) and
+is unaware of the global variable <i>a</i> in <tt>fileA.c</tt>. The linker doesn't even get a chance
+to do its magic because the compilation fails.
+<p>
+Of course, if we try to "declare" the variable <i>a</i> in the <i>foo</i> function, it actually 
+ends up hiding the global <i>a</i> from the other file:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> a; <font color="#003399"><i>/* Try to "prototype" a from fileA.c */</i></font>
+    
+  printf(<font color="#9933CC">&quot;The value of a in foo is %i&#92;n&quot;</font>, a);
+}
+</pre></blockquote>
+
+Not only does it hide the one we want, it's an uninitialized local variable that the compiler warns
+about:
+
+<blockquote><pre>
+fileB.c: In function 'foo':
+fileB.c:9:3: warning: 'a' is used uninitialized in this function [-Wuninitialized]
+   printf("The value of a in foo is %i\n", a);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</pre></blockquote>
+
+This is the proper way to "declare" (NOT define) a variable in another file:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+    <font color="#003399"><i>/* This is NOT a definition, it's a declaration. No space is      */</i></font>
+    <font color="#003399"><i>/* allocated. The linker will figure out where the definition is. */</i></font>
+    <font color="#003399"><i>/* This tells the compiler that the variable <b>a</b> exists elsewhere   */</i></font>
+    <font color="#003399"><i>/* and to not emit any errors.                                    */</i></font>
+  <b>extern</b> <b>int</b> a;
+  
+  printf(<font color="#9933CC">&quot;The value of a in foo is %i&#92;n&quot;</font>, a);
+}
+</pre></blockquote>
+
+The reason we need the <i>extern</i> keyword is so that the compiler can distinguish between
+a declaration and a definition. With functions, it's easy. If the function has a body, then
+it is a definition. If there is no body, it's a declaration. There is no ambiguity. The
+<i>extern</i> used with functions has no bearing on the declaration/definition difference.
+<p>
+If a variable has the <i>extern</i> keyword, then it is a declaration. It's just telling the
+compiler that the variable is defined elsewhere (so don't give an error message) and that 
+the linker will figure out where it is. If there is no <i>extern</i> keyword, then it is
+a definition.
+<p>
+Like functions, you must have exactly one definition of the variable, but you can have
+as many declarations (using the <i>extern</i> keyword) that you want.
+<p>
+
+Unfortunately, there is a slight caveat in C:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>fileA.c</th><th>fileB.c</th></tr>
+<tr valign="top">
+<td>
+
+<pre>
+<font color="#003399"><i>/* fileA.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* 
+ * External linkage (global). With no initializer this is
+ * considered extern in C, but error in C++. If more than  
+ * one are initialized, it's an error in C, as well. The
+ * solution is to use extern on all but one. There is still
+ * only one <b>a</b> in the program and the linker will make sure
+ * that there is only one definition.
+ */</i></font>
+<b>int</b> a;
+
+<b>int</b> foo(<b>void</b>); <font color="#003399"><i>/* prototype, it's defined in fileB.c */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;The value of a in main is %i and address is %p&#92;n&quot;</font>, 
+         a, (<b>void</b> *)&amp;a);
+  foo();
+
+  <b>return</b> 0;
+}</pre>
+
+</td>
+<td>
+
+<pre>
+<font color="#003399"><i>/* fileB.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* 
+ * External linkage (global). With no initializer this is
+ * considered extern in C, but error in C++. If more than  
+ * one are initialized, it's an error in C, as well. The
+ * solution is to use extern on all but one. There is still
+ * only one <b>a</b> in the program and the linker will make sure
+ * that there is only one definition.
+ */</i></font>
+<b>int</b> a;
+
+<font color="#003399"><i>/* definition, external linkage (global) */</i></font>
+<b>void</b> foo(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;The value of a in foo is %i and address is %p&#92;n&quot;</font>,
+         a, (<b>void</b> *)&amp;a);
+}</pre>
+
+</td>
+
+</tr></table>
+</blockquote>
+
+The output shows that there is only one <i>a</i> in the program:
+<blockquote><pre>
+The value of a in main is 0 and address is 0x601044
+The value of a in foo is 0 and address is 0x601044
+</pre></blockquote>
+
+Going back to our original problem:
+
+<p>
+In <i>file1.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>const</b> <b>double</b> PI = 3.14;
+</pre></blockquote>
+
+In <i>file2.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* internal linkage (file-scope) */</i></font>
+<b>static</b> <b>const</b> <b>double</b> PI = 3.1415926;
+</pre></blockquote>
+
+we want to put the <i>extern</i> keyword on one of these. We'll assume that the definition
+is in <tt>file2.c</tt> and that <tt>file1.c</tt> will have the <i>extern</i> keyword:
+
+<p>
+In <i>file1.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* Declaration. Keeps the compiler happy. PI is defined in another file.  */</i></font>
+<font color="#003399"><i>/* Do not initialize it with any value, or you will get a compiler error. */                                  */</i></font>
+<b>extern</b> <b>const</b> <b>double</b> PI;
+</pre></blockquote>
+
+In <i>file2.c</i>
+<blockquote><pre>
+<font color="#003399"><i>/* Definition. External linkage (global), visible to entire program */</i></font>
+<b>const</b> <b>double</b> PI = 3.1415926;
+</pre></blockquote>
+
+
+<o>
+Since the <i>extern</i> keyword is used with global variables, it's an advanced concept that is
+not necessary for beginners. However, as you write larger and more complex programs, you will need
+to become aware of it at some point.
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="STORAGE_CLASSES">
+<p class="SectionHeader">
+Storage Classes
+</p>
+</a>
+
+The previous discussions above focused on visibility and scope. Now, we're going to talk about
+storage classes. There are two parts to a storage class:
+
+<ol>
+  <li>where the object is located in memory</li>
+  <li>the lifetime of the object</li>
+</ol>
+
+There are 4 keywords that are related to an object's storage class and lifetime. Some of these only
+apply to local objects (i.e. variables defined within a function or smaller scope). As such, the
+explanations below are only relevant when the keyword is applied to a local variable, not a function.
+
+<ol>
+  <li><i>auto</i> - This is the default when defining a (local) variable inside of a function or
+    other local scope (i.e. between curly braces).
+    This tells the compiler to put the object in memory (on the stack).
+
+     Since
+    it is the default, it is rarely used by programmers, as it is redundant. 
+    In fact, you should <b>never use it</b> now
+    that C++ has re-purposed this keyword for other uses. The name of the keyword comes from the
+    fact that local variables are "automatic", in that the compiler deals with the creation
+    and removal of them at run-time. Automatic variables that are not initialized have undefined
+    values.
+    <p>
+    <font color="blue">The lifetime of an <i>auto</i> object is until the end of the scope.</font></li>
+    <p>
+  <li><i>extern</i> - This tells the compiler that the object is defined elsewhere. No space
+    is allocated for the object, since it does not define anything. You can think of this as
+    a "declaration/prototype" for an object so the compiler doesn't complain. The linker will
+    be responsible for figuring out exactly where (i.e. which file) the object is defined.
+    <p>
+    <font color="blue">The lifetime of an <i>extern</i> object is until the program ends.</font>
+  </li>
+    <p>
+  <li><i>register</i> - This tells the compiler that you want to put the object in a register on the CPU
+    instead of putting it in memory (on the stack). 
+     This can only be used
+    for local variables within a block {}.
+    This is for performance reasons, since registers are significantly
+    faster than memory. However, most compilers will do this whenever they determine that it
+    is possible. There are only a handful of registers that are available for programmers,
+    so they are a very scarce resource and should only be used if you know exactly what you're doing.
+    <b>Rule of Thumb: Beginning C programmers DO NOT know what they are doing and should let the compiler
+    decide when to use registers.</b> Using the <i>register</i> keyword is just a suggestion
+    to the compiler, as the compiler knows far more about your code at the lowest level than
+    what any programmer knows. In fact, if you (the programmer) use the <i>register</i> keyword, you
+    are likely interfering with the compiler's ability to optimize your code for better performance,
+    in which case your program will actually run slower. Again, follow the Rule of Thumb.
+    <font color="red">
+    C++17 has now <i>removed</i> this, so it no longer works. That should indicate that you really
+    shouldn't use it at all.</font>
+    <p>
+    <font color="blue">The lifetime of a <i>register</i> object is until the end of the scope.</font></li>
+    <p>
+  <li><i>static</i> - When applied to a local variable, this tells the compiler that the object
+    should NOT be stored on the stack, but stored in some other memory location that will still
+    exist when the function or scope ends. This means that the value stored in the object is retained between
+    calls to the function. The first time the function is called, it is initialized. Subsequent function
+    calls modify the object's value and it will be retained. If you do not initialize the object when
+    you define it, it will be initialized to 0. If you define an object with the <i>static</i> keyword
+    inside an inner scope (e.g. a for loop), then its value is retained through each iteration of
+    the scope.
+    <p>
+    <font color="blue">The lifetime of a <i>static</i> object is until the program ends.</font>
+  </li>
+</ol>
+
+Here's some code to demonstrate:
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* storage.c */</i></font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>void</b> foo(<b>void</b>)
+{
+  <b>static</b> <b>int</b> count = 1; <font color="#003399"><i>/* not stored on the stack, value persists between function calls */</i></font>
+
+  printf(<font color="#9933CC">&quot;The function has been called %i times.&#92;n&quot;</font>, count++);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>auto</b> <b>int</b> a;     <font color="#003399"><i>/* a is uninitialized on the stack, auto is redundant      */</i></font>
+  <b>int</b> b;          <font color="#003399"><i>/* b is uninitialized and is also on the stack             */</i></font>
+  <b>register</b> <b>int</b> c; <font color="#003399"><i>/* c will be put in a register, if possible (no guarantee) */</i></font>
+  <b>extern</b> <b>int</b> d;   <font color="#003399"><i>/* d is defined elsewhere, this is just a declaration      */</i></font>
+
+  <b>for</b> (a = 0; a &lt; 5; a++)
+  {
+    <b>static</b> <b>int</b> e = 5; <font color="#003399"><i>/* not stored on the stack, value persists in loops    */</i></font>
+    <b>static</b> <b>int</b> f;     <font color="#003399"><i>/* not stored on the stack, f will be initialized to 0 */</i></font>
+    <b>int</b> g = 10;       <font color="#003399"><i>/* on the stack, g will be initialized to 10 each time */</i></font>
+
+    printf(<font color="#9933CC">&quot;e is %i, f is %i, g is %i&#92;n&quot;</font>, e++, f++, g++);
+    foo();
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Output:
+<blockquote><pre>
+e is 5, f is 0, g is 10
+The function has been called 1 times.
+e is 6, f is 1, g is 10
+The function has been called 2 times.
+e is 7, f is 2, g is 10
+The function has been called 3 times.
+e is 8, f is 3, g is 10
+The function has been called 4 times.
+e is 9, f is 4, g is 10
+The function has been called 5 times.
+</pre></blockquote>
+
+<b>Notes:</b>
+<ul>
+  <li>Don't confuse <i>lifetime</i> (storage) with <i>visibility</i> (scope). They are unrelated concepts.</li>
+  <p>
+  <li>The <i>static</i> keyword has one meaning when applied to functions
+    and another (unrelated) meaning when applied to local variables. When applied
+    to functions, its purpose is for scope/visibility. When applied to local variables,
+    its purpose is for storage requirements. It is unfortunate that C uses the same
+    keyword for two, unrelated purposes. In C++, we'll see that it has a third meaning,
+    which is also unrelated to the two meanings above.</li>
+    <p>
+  <li>When the <i>extern</i> keyword is used with a function, it means that the function
+    can be seen in every file (global). When used with a local variable, it means that
+    the variable is only being declared and that its definition is elsewhere (possibly another file).
+    This means you can put an <i>extern</i> variable declaration in a header file, which 
+    is something you can't do without the <i>extern</i> keyword (violates the One Definition Rule).</li>
+    <p>
+  <li>The <i>register</i> keyword is just a hint or suggestion to the compiler. You should not
+    use it yourself, as it may interfere with the compiler's ability to optimize your code for faster
+    performance. When it comes to optimizations, compilers are much smarter than humans,
+    and as such, can do a better job figuring which objects should be in registers and which
+    should be on the stack. If you're looking for better performance, just compile your code
+    with optimizations enabled, and the compiler will put things in registers to improve performance.
+
+    As one last caveat, you cannot take the address of a variable
+    that is declared with the <i>register</i> keyword (it's not in memory).
+
+<font color="red">
+    C++17 has now <i>removed</i> this, so it no longer works. That should indicate that you really
+    shouldn't use it at all.</font>
+  </li>
+
+    <p>
+  <li>Most C programmers have never used the <i>auto</i> keyword. This is why it was safe for
+    C++ to "hijack" its original meaning and re-purpose it for other things. As such, you should
+    never use the <i>auto</i> keyword in any C code.</li>
+    <p>
+  <li>Some of these keywords were mentioned as being advanced
+    <a href="Fundamentals-1.html#KEYWORDS">here</a>.
+</ul>
+
+<br><br><br><br><br><br>
+
+</body>
+</html>
+
+<!--
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<center>
+<blockquote>	
+</blockquote>
+</center>
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

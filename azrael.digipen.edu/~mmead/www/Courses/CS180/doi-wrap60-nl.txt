@@ -1,0 +1,76 @@
+     1	When in the Course of human events, it becomes necessary
+     2	for one people to dissolve the political bands which
+     3	have connected them with another, and to assume among
+     4	the powers of the earth, the separate and equal station
+     5	to which the Laws of Nature and of Nature's God entitle
+     6	them, a decent respect to the opinions of mankind requires
+     7	that they should declare the causes which impel them to
+     8	the separation.
+     9	
+    10	We hold these truths to be self-evident, that all men are
+    11	created equal, that they are endowed by their Creator
+    12	with certain unalienable Rights, that among these are
+    13	Life, Liberty and the pursuit of Happiness.--That to
+    14	secure these rights, Governments are instituted among
+    15	Men, deriving their just powers from the consent of the
+    16	governed, --That whenever any Form of Government becomes
+    17	destructive of these ends, it is the Right of the People to
+    18	alter or to abolish it, and to institute new Government,
+    19	laying its foundation on such principles and organizing
+    20	its powers in such form, as to them shall seem most
+    21	likely to effect their Safety and Happiness. Prudence,
+    22	indeed, will dictate that Governments long established
+    23	should not be changed for light and transient causes;
+    24	and accordingly all experience hath shewn, that mankind
+    25	are more disposed to suffer, while evils are sufferable,
+    26	than to right themselves by abolishing the forms to which
+    27	they are accustomed. But when a long train of abuses and
+    28	usurpations, pursuing invariably the same Object evinces a
+    29	design to reduce them under absolute Despotism, it is their
+    30	right, it is their duty, to throw off such Government,
+    31	and to provide new Guards for their future security.--Such
+    32	has been the patient sufferance of these Colonies; and such
+    33	is now the necessity which constrains them to alter their
+    34	former Systems of Government. The history of the present
+    35	King of Great Britain is a history of repeated injuries and
+    36	usurpations, all having in direct object the establishment
+    37	of an absolute Tyranny over these States. To prove this,
+    38	let Facts be submitted to a candid world.
+    39	
+    40	In every stage of these Oppressions We have Petitioned for
+    41	Redress in the most humble terms: Our repeated Petitions
+    42	have been answered only by repeated injury. A Prince whose
+    43	character is thus marked by every act which may define a
+    44	Tyrant, is unfit to be the ruler of a free people.
+    45	
+    46	Nor have We been wanting in attentions to our Brittish
+    47	brethren. We have warned them from time to time of
+    48	attempts by their legislature to extend an unwarrantable
+    49	jurisdiction over us. We have reminded them of the
+    50	circumstances of our emigration and settlement here. We
+    51	have appealed to their native justice and magnanimity, and
+    52	we have conjured them by the ties of our common kindred
+    53	to disavow these usurpations, which, would inevitably
+    54	interrupt our connections and correspondence. They too have
+    55	been deaf to the voice of justice and of consanguinity. We
+    56	must, therefore, acquiesce in the necessity, which
+    57	denounces our Separation, and hold them, as we hold the
+    58	rest of mankind, Enemies in War, in Peace Friends.
+    59	
+    60	We, therefore, the Representatives of the united States
+    61	of America, in General Congress, Assembled, appealing to
+    62	the Supreme Judge of the world for the rectitude of our
+    63	intentions, do, in the Name, and by Authority of the good
+    64	People of these Colonies, solemnly publish and declare,
+    65	That these United Colonies are, and of Right ought to be
+    66	Free and Independent States; that they are Absolved from
+    67	all Allegiance to the British Crown, and that all political
+    68	connection between them and the State of Great Britain,
+    69	is and ought to be totally dissolved; and that as Free
+    70	and Independent States, they have full Power to levy War,
+    71	conclude Peace, contract Alliances, establish Commerce,
+    72	and to do all other Acts and Things which Independent
+    73	States may of right do. And for the support of this
+    74	Declaration, with a firm reliance on the protection of
+    75	divine Providence, we mutually pledge to each other our
+    76	Lives, our Fortunes and our sacred Honor.

@@ -1,0 +1,366 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf              */</font>
+<font color="990099">#include &lt;string.h&gt; /* strlen              */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi                */</font>
+<font color="990099">#include &lt;time.h&gt;   /* time                */</font>
+<font color="990099">#include &quot;PRNG.h&quot;   /* RandomInt, ut_srand */</font>
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>const</b> <b>char</b> *find_byte(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>char</b> byte);
+<b>const</b> <b>char</b> *find_any_byte(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>const</b> <b>char</b> *bytes, <b>int</b> count);
+<b>int</b> count_bytes(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>char</b> byte);
+<b>int</b> count_any_bytes(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>const</b> <b>char</b> *bytes, <b>int</b> count);
+<b>int</b> compare_bytes(<b>const</b> <b>char</b> *location1, <b>const</b> <b>char</b> *location2, <b>int</b> count);
+<b>void</b> exchange_bytes(<b>char</b> *location1, <b>char</b> *location2, <b>int</b> count);
+<b>void</b> copy_bytes(<b>char</b> *from, <b>char</b> *to, <b>int</b> count);
+
+<b>void</b> test1(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *string = <font color="#9933CC">&quot;abcdefghijklmnopqrstuvwxyz&quot;</font>;
+  <b>int</b> length = strlen(string);
+  <b>const</b> <b>char</b> *bytes = <font color="#9933CC">&quot;aimzX1&quot;</font>;
+  <b>const</b> <b>char</b> *found;
+
+  printf(<font color="#9933CC">&quot;============ test1 ============&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;01234567890123456789012345&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+
+  <b>while</b> (*bytes)
+  {
+    found = find_byte(string, string + length, *bytes);
+    <b>if</b> (found)
+      printf(<font color="#9933CC">&quot;Found '%c' at offset %li&#92;n&quot;</font>, *bytes, (<b>long</b> <b>int</b>)(found - string));
+    <b>else</b>
+      printf(<font color="#9933CC">&quot;Didn't find byte: %c&#92;n&quot;</font>, *bytes);
+
+    bytes++;
+  }
+
+  found = find_byte(string + 10, string + 20, <font color="#9933CC">'z'</font>);
+  <b>if</b> (found)
+    printf(<font color="#9933CC">&quot;Found z at offset %li&#92;n&quot;</font>, (<b>long</b> <b>int</b>)(found - string));
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;Didn't find z&#92;n&quot;</font>);
+
+  found = find_byte(string + 10, string + 20, <font color="#9933CC">'p'</font>);
+  <b>if</b> (found)
+    printf(<font color="#9933CC">&quot;Found p at offset %li&#92;n&quot;</font>, (<b>long</b> <b>int</b>)(found - string));
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;Didn't find p&#92;n&quot;</font>);
+
+  found = find_byte(string, string, <font color="#9933CC">'a'</font>);
+  <b>if</b> (found)
+    printf(<font color="#9933CC">&quot;Found a at offset %li&#92;n&quot;</font>, (<b>long</b> <b>int</b>)(found - string));
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;Didn't find a&#92;n&quot;</font>);
+
+  found = find_byte(string, string, <font color="#9933CC">'b'</font>);
+  <b>if</b> (found)
+    printf(<font color="#9933CC">&quot;Found b at offset %li&#92;n&quot;</font>, (<b>long</b> <b>int</b>)(found - string));
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;Didn't find b&#92;n&quot;</font>);
+}
+
+<b>void</b> test2(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *string = <font color="#9933CC">&quot;There's a fine line between clever and stupid.&quot;</font>;
+  <b>int</b> length = strlen(string);
+  <b>const</b> <b>char</b> *bytes = <font color="#9933CC">&quot;gjkqxyz&quot;</font>;
+  <b>const</b> <b>char</b> *found;
+
+  printf(<font color="#9933CC">&quot;============ test2 ============&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;012345678901234567890123456789012345678901234567890&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+
+  found = find_any_byte(string, string + length, bytes, strlen(bytes));
+  <b>if</b> (found)
+    printf(<font color="#9933CC">&quot;Found '%c' at offset %li&#92;n&quot;</font>, *found, (<b>long</b> <b>int</b>)(found - string));
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;Didn't find any bytes: %s&#92;n&quot;</font>, bytes);
+
+  bytes = <font color="#9933CC">&quot;gjkqxybz&quot;</font>;
+  found = find_any_byte(string, string + length, bytes, strlen(bytes));
+  <b>if</b> (found)
+    printf(<font color="#9933CC">&quot;Found '%c' at offset %li&#92;n&quot;</font>, *found, (<b>long</b> <b>int</b>)(found - string));
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;Didn't find any bytes: %s&#92;n&quot;</font>, bytes);
+
+}
+
+<b>void</b> test3(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *string = <font color="#9933CC">&quot;There's a fine line between clever and stupid.&quot;</font>;
+  <b>int</b> length = strlen(string);
+  <b>const</b> <b>char</b> *bytes = <font color="#9933CC">&quot;aeiou&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;============ test3 ============&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;012345678901234567890123456789012345678901234567890&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+
+  <b>while</b> (*bytes)
+  {
+    <b>int</b> count = count_bytes(string, string + length, *bytes);
+    printf(<font color="#9933CC">&quot;Found %i occurrences of '%c'&#92;n&quot;</font>, count, *bytes);    
+    bytes++;
+  }
+}
+
+<b>void</b> test4(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *string = <font color="#9933CC">&quot;There's a fine line between clever and stupid.&quot;</font>;
+  <b>int</b> length = strlen(string);
+  <b>const</b> <b>char</b> *bytes = <font color="#9933CC">&quot;aeiou&quot;</font>;
+  <b>int</b> count;
+
+  printf(<font color="#9933CC">&quot;============ test4 ============&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;012345678901234567890123456789012345678901234567890&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+
+  count = count_any_bytes(string, string + length, bytes, strlen(bytes));
+  printf(<font color="#9933CC">&quot;Found %i occurrences from the set '%s'&#92;n&quot;</font>, count, bytes);
+}
+
+<b>void</b> scanner(<b>const</b> <b>char</b> *loc1, <b>const</b> <b>char</b> *loc2, <b>int</b> count)
+{
+  <b>int</b> result;
+  <b>int</b> i;
+  <b>const</b> <b>char</b> *bytes;
+
+  bytes = loc1;
+  <b>for</b> (i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;%c&quot;</font>, *bytes++);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  bytes = loc2;
+  <b>for</b> (i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;%c&quot;</font>, *bytes++);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  
+ result = compare_bytes(loc1, loc2, count);
+
+  <b>if</b> (result == 0)
+    printf(<font color="#9933CC">&quot;The bytes are the same.&#92;n&quot;</font>);
+  <b>else</b> <b>if</b> (result &lt; 0)
+    printf(<font color="#9933CC">&quot;The first bytes are less than the second bytes.&#92;n&quot;</font>);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;The first bytes are greater than the second bytes.&#92;n&quot;</font>);
+}
+
+<b>void</b> test5(<b>void</b>)
+{
+  <font color="#003399"><i>/*                    0123456789012345678901234567890 */</i></font>
+  <b>const</b> <b>char</b> *bytes1 = <font color="#9933CC">&quot;abccefghijklmnopqrstuvwxyzxxxxx&quot;</font>;
+  <b>const</b> <b>char</b> *bytes2 = <font color="#9933CC">&quot;abcdefxxxxxghijklpqwxyzabcdefxx&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;============ test5 ============&#92;n&quot;</font>);
+
+  scanner(bytes1, bytes2, 3);
+  scanner(bytes1, bytes2, 4);
+  scanner(bytes1 + 12, bytes2 + 11, 6);
+  scanner(bytes1 + 22, bytes2 + 14, 4);
+  scanner(bytes1 + 10, bytes2 + 15, 1);
+  scanner(bytes1 +  6, bytes2 + 11, 6);
+
+  <b>while</b> (*bytes1 &amp;&amp; *bytes2)
+    scanner(bytes1++, bytes2++, 1);
+}
+
+<b>void</b> test6(<b>void</b>)
+{
+  <font color="#003399"><i>/*               0123456789.123456789.123456789.  */</i></font>
+  <font color="#003399"><i>/*                         1         2            */</i></font>
+  <b>char</b> string[] = <font color="#9933CC">&quot;Four score and seven years ago.&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;============ test6 ============&#92;n&quot;</font>);
+
+  printf(<font color="#9933CC">&quot;BEFORE: %s&#92;n&quot;</font>, string);
+  exchange_bytes(string + 5, string + 15, 5);
+  printf(<font color="#9933CC">&quot; AFTER: %s&#92;n&quot;</font>, string);
+  exchange_bytes(string + 0, string + 27, 4);
+  printf(<font color="#9933CC">&quot; AFTER: %s&#92;n&quot;</font>, string);
+  exchange_bytes(string + 7, string + 19, 9);
+  printf(<font color="#9933CC">&quot; AFTER: %s&#92;n&quot;</font>, string);
+}
+
+<b>void</b> test7(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;Any sufficiently advanced technology is indistinguishable from magic.&quot;</font>;
+  <b>int</b> length = strlen(string);
+  <b>int</b> maxsize = length / 3; 
+  <b>int</b> count = 100;
+  <b>int</b> i;
+
+  <font color="990099">#define MAX_EXCHANGES 1000</font>
+  <b>int</b> sizes[MAX_EXCHANGES];
+  <b>int</b> loffsets[MAX_EXCHANGES];
+  <b>int</b> roffsets[MAX_EXCHANGES];
+
+  printf(<font color="#9933CC">&quot;============ test7 ============&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>int</b> size = RandomInt(1, maxsize);
+    <b>int</b> loffset = RandomInt(0, length - 2 * maxsize);
+
+    <b>int</b> roffset = RandomInt(loffset + size, length - maxsize);
+    exchange_bytes(string + loffset, string + roffset, size);
+    printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+    sizes[i] = size;
+    loffsets[i] = loffset;
+    roffsets[i] = roffset;
+  }
+
+  printf(<font color="#9933CC">&quot;*********************************************************************&#92;n&quot;</font>);
+
+  <b>for</b> (i = count - 1; i &gt;= 0; i--)
+  {
+    exchange_bytes(string + loffsets[i], string + roffsets[i], sizes[i]);
+    printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string);
+  }
+}
+
+<b>void</b> test8(<b>void</b>)
+{
+  <font color="#003399"><i>/*               01234567890123456789012345 */</i></font>
+  <b>char</b> string1[] = <font color="#9933CC">&quot;abcdefghijklmnopqrstuvwxyz&quot;</font>;
+
+  <b>char</b> string2[] = 
+  <font color="#003399"><i>/*           1         2         3         4         5         6        */</i></font>
+  <font color="#003399"><i>/* 012345678901234567890123456789012345678901234567890123456789012345678*/</i></font>
+    <font color="#9933CC">&quot;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;============ test8 ============&#92;n&quot;</font>);
+
+  printf(<font color="#9933CC">&quot;01234567890123456789012345&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+  copy_bytes(string1 + 6, string1 + 11, 10);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+  copy_bytes(string1 + 2, string1 + 5, 15);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+
+  printf(<font color="#9933CC">&quot;          1         2         3         4         5         6        &#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;012345678901234567890123456789012345678901234567890123456789012345678&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string2);
+
+  copy_bytes(string2 + 6, string2 + 11, 9);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string2);
+
+  copy_bytes(string2 + 3, string2 + 19, 30);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string2);
+
+  copy_bytes(string2 + 30, string2 + 35, 22);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string2);
+
+  copy_bytes(string2 + 1, string2 + 2, 3);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string2);
+}
+
+<b>void</b> testX(<b>void</b>)
+{
+  <b>char</b> string1[] = <font color="#9933CC">&quot;There's a fine line between clever and stupid.&quot;</font>;
+  <b>const</b> <b>char</b> *string2 = <font color="#9933CC">&quot;abcdefghijklm&quot;</font>;
+  <b>const</b> <b>char</b> *string3 = <font color="#9933CC">&quot;abcdehijklmno&quot;</font>;
+  <b>int</b> length = strlen(string1);
+  <b>const</b> <b>char</b> *found;
+  <b>const</b> <b>char</b> *bytes;
+  <b>int</b> count;
+
+  <font color="#003399"><i>/* Finds 'b' in the range 'fine line between' and returns a pointer to it */</i></font>
+  found = find_byte(string1 + 10, string1 + 26, <font color="#9933CC">'b'</font>);
+  printf(<font color="#9933CC">&quot;Found %c at offset %li&#92;n&quot;</font>, *found, (<b>long</b> <b>int</b>)(found - string1));
+
+  <font color="#003399"><i>/* Doesn't find 'z' in the range 'There's a fi' and returns NULL */</i></font>
+  found = find_byte(string1, string1 + 11, <font color="#9933CC">'z'</font>);
+
+  <font color="#003399"><i>/*
+   * Finds the 'l' in the entire range of characters and returns pointer to it.     
+   * It first looks for x, then y, then z, and then l. It stops after finding 
+   * the l, and doesn't look for a, b, or c.                                  
+   */</i></font>
+  bytes = <font color="#9933CC">&quot;xyzlabc&quot;</font>;
+  found = find_any_byte(string1, string1 + length, bytes, 7);
+  printf(<font color="#9933CC">&quot;Found %c at offset %li&#92;n&quot;</font>, *found, (<b>long</b> <b>int</b>)(found - string1));
+
+  <font color="#003399"><i>/* Returns 3, the number of time 'e' is in range 'There's a fine '  */</i></font>
+  count = count_bytes(string1, string1 + 15, <font color="#9933CC">'e'</font>);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns 15, the number of times a vowel appears in the entire string  */</i></font>
+  bytes = <font color="#9933CC">&quot;aeiou&quot;</font>;
+  count = count_any_bytes(string1, string1 + length, bytes, 5);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns 0 as the ranges 'abcde' and 'abcde' are the same */</i></font>
+  count = compare_bytes(string2, string3, 5);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns negative number as 'abcdef' is less than 'abcdeh' */</i></font>
+  count = compare_bytes(string2, string3, 6);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns positive number as 'bcd' is greater than 'abc' */</i></font>
+  count = compare_bytes(string2 + 1, string3, 3);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns 0 as the ranges 'jklm' and 'jklm' are the same */</i></font>
+  count = compare_bytes(string2 + 9, string3 + 7, 4);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Changes string to &quot;There's a line fine between clever and stupid.&quot; */</i></font>
+  exchange_bytes(string1 + 10, string1 + 15, 4);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+  <font color="#003399"><i>/* Changes string to &quot;There's a line fine between stupid and clever.&quot; */</i></font>
+  exchange_bytes(string1 + 28, string1 + 39, 6);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+  <font color="#003399"><i>/* Changes string to &quot;There's a line line fine between stand clever.&quot; */</i></font>
+  copy_bytes(string1 + 10, string1 + 15, 20);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>typedef</b> <b>void</b> (*Test)(<b>void</b>);
+  Test tests[] = {test1, test2, test3, test4, test5, test6, test7, test8};
+  <b>int</b> count = <b>sizeof</b>(tests) / <b>sizeof</b>(*tests);
+  <b>int</b> testno = 0;
+  <b>int</b> i;
+
+  ut_srand(3, 4);
+
+  <b>if</b> (argc &gt; 1)
+    testno = atoi(argv[1]);
+
+ <b>if</b> (testno &gt; count)
+   testno = 0;
+
+  <b>if</b> (testno == 0)
+  {
+    <b>for</b> (i = 0; i &lt; count; i++)
+      tests[i]();
+  }
+  <b>else</b>
+    tests[testno - 1]();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,207 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-stress.cpp</title>
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+<b>#include</b> <font color="#9933CC">&quot;List.h&quot;</font>
+<b>#include</b> <font color="#9933CC">&quot;PRNG.h&quot;</font>
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> &lt;cstdlib&gt;  <font color="#003399"><i>// rand, atoi</i></font>
+
+<font color="#003399"><i>// generate random numbers between low and high </i></font>
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> rnd = <b>static_cast</b>&lt;<b>int</b>&gt;(CS170::Utils::rand());
+  <b>int</b> number = rnd % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<font color="#003399"><i>// push_front, subscript</i></font>
+<b>void</b> TestStress1(<b>int</b> size)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nTestStress1...&quot;</font> &lt;&lt; std::endl;
+
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_front(RandomInt(1, 9));
+
+  <font color="#003399"><i>//std::cout &lt;&lt; list;</i></font>
+  <b>int</b> sum = 0;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i += 10)
+    sum += list[i];
+    
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sum of 10%: &quot;</font> &lt;&lt; sum &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<font color="#003399"><i>// push_front</i></font>
+<b>void</b> TestStress2(<b>int</b> size)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nTestStress2...&quot;</font> &lt;&lt; std::endl;
+
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_front(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<font color="#003399"><i>// push_front, rotate the items</i></font>
+<b>void</b> TestStress3(<b>int</b> size)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nTestStress3...&quot;</font> &lt;&lt; std::endl;
+
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list.push_front(RandomInt(1, 9));
+
+  <font color="#003399"><i>//std::cout &lt;&lt; list;</i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    list.push_back(list.front());
+    list.pop_front();
+    <font color="#003399"><i>//std::cout &lt;&lt; list;</i></font>
+  }
+  <font color="#003399"><i>//std::cout &lt;&lt; list;</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<font color="#003399"><i>// push_front, subscript</i></font>
+<b>void</b> TestStress4(<b>int</b> size, <b>int</b> value)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nTestStress4...&quot;</font> &lt;&lt; std::endl;
+
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list.push_front(RandomInt(1, 9));
+
+  <font color="#003399"><i>//std::cout &lt;&lt; list;</i></font>
+  <b>int</b> count = 0;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    <b>if</b> (list[i] == value)
+      count++;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;The number &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; appears &quot;</font> &lt;&lt; count
+            &lt;&lt; <font color="#9933CC">&quot; times in the list&quot;</font> &lt;&lt;  std::endl;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<font color="#003399"><i>// push_front, subscript</i></font>
+<b>void</b> TestStress5(<b>int</b> size)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nTestStress5...&quot;</font> &lt;&lt; std::endl;
+
+  CS170::List&lt;<b>int</b>&gt; list;
+  <b>int</b> low = 1, high = 9;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list.push_front(RandomInt(low, high));
+
+  <font color="#003399"><i>//std::cout &lt;&lt; list;</i></font>
+  <b>int</b> total = 0;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= high; i++)
+  {
+    <b>int</b> count = 0;
+    <b>for</b> (<b>int</b> j = 0; j &lt; size; j++)
+      <b>if</b> (list[j] == i)
+        count++;
+
+    total += count;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;The number &quot;</font> &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot; appears &quot;</font> &lt;&lt; count
+              &lt;&lt; <font color="#9933CC">&quot; times in the list&quot;</font> &lt;&lt;  std::endl;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; total &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  CS170::Utils::srand(1, 2);
+
+  <b>int</b> test = 0;
+  <b>if</b> (argc &gt; 1)
+    test = std::atoi(argv[1]);
+
+  <b>switch</b> (test)
+  {
+    <b>case</b> 1:
+      <b>try</b> {
+        TestStress1(100000);
+      }
+      <b>catch</b> (...) {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;***TestStress1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+      }
+      <b>break</b>;
+
+    <b>case</b> 2:
+      <b>try</b> {
+        TestStress2(1000000);
+      }
+      <b>catch</b> (...) {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;***TestStress2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+      }
+      <b>break</b>;
+
+    <b>case</b> 3:
+      <b>try</b> {
+        TestStress3(1000000);
+      }
+      <b>catch</b> (...) {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;***TestStress3 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+      }
+      <b>break</b>;
+
+    <b>case</b> 4:
+      <b>try</b> {
+        TestStress4(50000, 3);
+      }
+      <b>catch</b> (...) {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;***TestStress4 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+      }
+      <b>break</b>;
+
+    <b>case</b> 5:
+      <b>try</b> {
+        TestStress5(10000);
+      }
+      <b>catch</b> (...) {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;***TestStress5 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+      }
+      <b>break</b>;
+
+    <b>default</b>:
+        TestStress1(100000);
+        TestStress2(1000000);
+        TestStress3(1000000);
+        TestStress4(50000, 3);
+        TestStress5(10000);
+      <b>break</b>;
+  }
+
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;============================================\n&quot;</font>;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Total number of Nodes in use: &quot;</font>;
+  std::cout &lt;&lt; CS170::List&lt;<b>int</b>&gt;::node_count();
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;============================================\n&quot;</font>;
+  std::cout &lt;&lt; std::endl;
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+</body>
+</html>
+  

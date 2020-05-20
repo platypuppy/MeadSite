@@ -1,0 +1,214 @@
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1 120136  3960 ?        Ss   May30   0:03 /sbin/init splash
+root         2  0.0  0.0      0     0 ?        S    May30   0:00 [kthreadd]
+root         4  0.0  0.0      0     0 ?        S<   May30   0:00 [kworker/0:0H]
+root         6  0.0  0.0      0     0 ?        S    May30   0:02 [ksoftirqd/0]
+root         7  0.0  0.0      0     0 ?        S    May30   1:18 [rcu_sched]
+root         8  0.0  0.0      0     0 ?        S    May30   0:00 [rcu_bh]
+root         9  0.0  0.0      0     0 ?        S    May30   0:00 [migration/0]
+root        10  0.0  0.0      0     0 ?        S<   May30   0:00 [lru-add-drain]
+root        11  0.0  0.0      0     0 ?        S    May30   0:01 [watchdog/0]
+root        12  0.0  0.0      0     0 ?        S    May30   0:00 [cpuhp/0]
+root        13  0.0  0.0      0     0 ?        S    May30   0:00 [cpuhp/1]
+root        14  0.0  0.0      0     0 ?        S    May30   0:01 [watchdog/1]
+root        15  0.0  0.0      0     0 ?        S    May30   0:00 [migration/1]
+root        16  0.0  0.0      0     0 ?        S    May30   0:02 [ksoftirqd/1]
+root        18  0.0  0.0      0     0 ?        S<   May30   0:00 [kworker/1:0H]
+root        19  0.0  0.0      0     0 ?        S    May30   0:00 [cpuhp/2]
+root        20  0.0  0.0      0     0 ?        S    May30   0:01 [watchdog/2]
+root        21  0.0  0.0      0     0 ?        S    May30   0:00 [migration/2]
+root        22  0.0  0.0      0     0 ?        S    May30   0:02 [ksoftirqd/2]
+root        24  0.0  0.0      0     0 ?        S<   May30   0:00 [kworker/2:0H]
+root        25  0.0  0.0      0     0 ?        S    May30   0:00 [cpuhp/3]
+root        26  0.0  0.0      0     0 ?        S    May30   0:01 [watchdog/3]
+root        27  0.0  0.0      0     0 ?        S    May30   0:00 [migration/3]
+root        28  0.0  0.0      0     0 ?        S    May30   0:02 [ksoftirqd/3]
+root        30  0.0  0.0      0     0 ?        S<   May30   0:00 [kworker/3:0H]
+root        31  0.0  0.0      0     0 ?        S    May30   0:00 [kdevtmpfs]
+root        32  0.0  0.0      0     0 ?        S<   May30   0:00 [netns]
+root        33  0.0  0.0      0     0 ?        S    May30   0:00 [khungtaskd]
+root        34  0.0  0.0      0     0 ?        S    May30   0:00 [oom_reaper]
+root        35  0.0  0.0      0     0 ?        S<   May30   0:00 [writeback]
+root        36  0.0  0.0      0     0 ?        S    May30   0:00 [kcompactd0]
+root        37  0.0  0.0      0     0 ?        SN   May30   0:00 [ksmd]
+root        38  0.0  0.0      0     0 ?        SN   May30   0:05 [khugepaged]
+root        39  0.0  0.0      0     0 ?        S<   May30   0:00 [crypto]
+root        40  0.0  0.0      0     0 ?        S<   May30   0:00 [kintegrityd]
+root        41  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root        42  0.0  0.0      0     0 ?        S<   May30   0:00 [kblockd]
+root        43  0.0  0.0      0     0 ?        S<   May30   0:00 [ata_sff]
+root        44  0.0  0.0      0     0 ?        S<   May30   0:00 [md]
+root        45  0.0  0.0      0     0 ?        S<   May30   0:00 [devfreq_wq]
+root        46  0.0  0.0      0     0 ?        S<   May30   0:00 [watchdogd]
+root        50  0.0  0.0      0     0 ?        S    May30   0:00 [kauditd]
+root        51  0.0  0.0      0     0 ?        S    May30   0:07 [kswapd0]
+root        52  0.0  0.0      0     0 ?        S<   May30   0:00 [vmstat]
+root        53  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root        54  0.0  0.0      0     0 ?        S    May30   0:00 [ecryptfs-kthrea]
+root        97  0.0  0.0      0     0 ?        S<   May30   0:00 [kthrotld]
+root        98  0.0  0.0      0     0 ?        S<   May30   0:00 [acpi_thermal_pm]
+root        99  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       100  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       101  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       102  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       103  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       104  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       105  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       106  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       107  0.0  0.0      0     0 ?        S    May30   0:00 [scsi_eh_0]
+root       108  0.0  0.0      0     0 ?        S<   May30   0:00 [scsi_tmf_0]
+root       109  0.0  0.0      0     0 ?        S    May30   0:00 [scsi_eh_1]
+root       110  0.0  0.0      0     0 ?        S<   May30   0:00 [scsi_tmf_1]
+root       116  0.0  0.0      0     0 ?        S<   May30   0:00 [ipv6_addrconf]
+root       137  0.0  0.0      0     0 ?        S<   May30   0:00 [charger_manager]
+root       138  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       198  0.0  0.0      0     0 ?        S<   May30   0:01 [kworker/3:1H]
+root       199  0.0  0.0      0     0 ?        S    May30   0:00 [scsi_eh_2]
+root       200  0.0  0.0      0     0 ?        S<   May30   0:00 [scsi_tmf_2]
+root       201  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       203  0.0  0.0      0     0 ?        S<   May30   0:01 [kworker/2:1H]
+root       204  0.0  0.0      0     0 ?        S<   May30   0:04 [kworker/1:1H]
+root       205  0.0  0.0      0     0 ?        S<   May30   0:01 [kworker/0:1H]
+root       285  0.0  0.0      0     0 ?        S<   May30   0:00 [bioset]
+root       313  0.0  0.0      0     0 ?        S    May30   0:03 [jbd2/sda1-8]
+root       314  0.0  0.0      0     0 ?        S<   May30   0:00 [ext4-rsv-conver]
+root       357  0.0  0.1  31036  3176 ?        Ss   May30   0:01 /lib/systemd/systemd-journald
+root       372  0.0  0.0  45940  2052 ?        Ss   May30   0:00 /lib/systemd/systemd-udevd
+root       380  0.0  0.0 102964   580 ?        Ss   May30   0:00 /sbin/lvmetad -f
+root       462  0.0  0.0      0     0 ?        S<   May30   0:00 [iprt-VBoxWQueue]
+root       468  0.0  0.0      0     0 ?        S<   May30   0:00 [ttm_swap]
+root       737  0.0  0.1 291444  3296 ?        Ssl  May30   0:05 /usr/lib/accountsservice/accounts-daemon
+message+   740  0.0  0.1  44284  3516 ?        Ss   May30   0:25 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+root       753  0.0  0.0   4392  1080 ?        Ss   May30   0:02 /usr/sbin/acpid
+root       754  0.0  0.0  38320  1708 ?        Ss   May30   0:00 /sbin/cgmanager -m name=systemd
+root       760  0.0  0.0  28612  1216 ?        Ss   May30   0:00 /lib/systemd/systemd-logind
+root       764  0.0  0.2 455880  7676 ?        Ssl  May30   0:00 /usr/sbin/NetworkManager --no-daemon
+avahi      765  0.0  0.0  44776  1296 ?        Ss   May30   0:00 avahi-daemon: running [sylvia.local]
+syslog     777  0.0  0.0 256388  1240 ?        Ssl  May30   0:00 /usr/sbin/rsyslogd -n
+root       778  0.0  0.0 337444  2372 ?        Ssl  May30   0:00 /usr/sbin/ModemManager
+root       802  0.0  0.0  29004  1768 ?        Ss   May30   0:00 /usr/sbin/cron -f
+avahi      804  0.0  0.0  44776    40 ?        S    May30   0:00 avahi-daemon: chroot helper
+root       866  0.0  0.0  19468    84 ?        Ss   May30   0:11 /usr/sbin/irqbalance --pid=/var/run/irqbalance.pid
+root       897  0.0  0.1 295768  5244 ?        Ssl  May30   0:00 /usr/lib/policykit-1/polkitd --no-debug
+ntp        918  0.0  0.0 112096  1788 ?        Ss   May30   0:21 /usr/sbin/ntpd -p /var/run/ntpd.pid -g -u 109:116
+nobody    1140  0.0  0.0  52860  1320 ?        S    May30   0:00 /usr/sbin/dnsmasq --no-resolv --keep-in-foreground --no-hosts --bind-interfaces --pid-file=/var/run/NetworkManager/dnsmasq.pid --listen-address=127.0.1.1 --cache-size=0 --conf-file=/dev/null --proxy-dnssec --enable-dbus=org.freedesktop.NetworkManager.dnsmasq --conf-dir=/etc/NetworkManager/dnsmasq.d
+root      1190  0.0  0.0 292240  2708 ?        SLsl May30   0:00 /usr/sbin/lightdm
+root      1194  0.0  0.0 256748  1208 ?        Sl   May30   1:06 /usr/sbin/VBoxService --pidfile /var/run/vboxadd-service.sh
+root      1203  0.0  0.0 2102192 2292 ?        Ssl  May30   0:12 /usr/sbin/console-kit-daemon --no-daemon
+root      1458  0.0  0.0  15932  1120 tty1     Ss+  May30   0:00 /sbin/agetty --noclear tty1 linux
+root      1579  0.0  0.0 347160  2668 ?        Ssl  May30   0:00 /usr/lib/upower/upowerd
+mmead     1648  0.0  0.0  45236  1600 ?        Ss   May30   0:00 /lib/systemd/systemd --user
+mmead     1649  0.0  0.0  98408   492 ?        S    May30   0:00 (sd-pam)
+mmead     1983  0.0  0.2 435080  7272 ?        S<l  May30   0:00 /usr/bin/pulseaudio --start --log-target=syslog
+colord    2050  0.0  0.1 313616  4284 ?        Ssl  May30   0:00 /usr/lib/colord/colord
+root      2051  0.0  0.0 382352  3076 ?        Ssl  May30   0:00 /usr/lib/udisks2/udisksd --no-debug
+rtkit     2052  0.0  0.0 183540  1768 ?        SNsl May30   0:04 /usr/lib/rtkit/rtkit-daemon
+root      4725  0.0  0.0      0     0 ?        S<   May31   0:00 [bioset]
+root      4726  0.0  0.0      0     0 ?        S<   May31   0:00 [xfsalloc]
+root      4729  0.0  0.1  93272  5508 ?        Ss   Jun03   0:00 /usr/sbin/cupsd -l
+root      4730  0.0  0.2 274812  6968 ?        Ssl  Jun03   0:00 /usr/sbin/cups-browsed
+root      4734  0.0  0.0      0     0 ?        S<   May31   0:00 [xfs_mru_cache]
+root      4739  0.0  0.0      0     0 ?        S    May31   0:00 [jfsIO]
+root      4740  0.0  0.0      0     0 ?        S    May31   0:00 [jfsCommit]
+root      4741  0.0  0.0      0     0 ?        S    May31   0:00 [jfsCommit]
+root      4742  0.0  0.0      0     0 ?        S    May31   0:00 [jfsCommit]
+root      4743  0.0  0.0      0     0 ?        S    May31   0:00 [jfsCommit]
+root      4744  0.0  0.0      0     0 ?        S    May31   0:00 [jfsSync]
+root     14081  0.2  3.6 503068 113552 tty7    Ssl+ May30  16:05 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+root     14163  0.0  0.1 262236  3328 ?        Sl   May30   0:00 lightdm --session-child 12 19
+mmead    14173  0.0  0.0 278940  2060 ?        Sl   May30   0:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+mmead    14175  0.0  0.2 438872  9128 ?        Ssl  May30   0:00 cinnamon-session --session cinnamon
+mmead    14189  0.0  0.0  49496    72 ?        S    May30   0:00 /usr/bin/VBoxClient --clipboard
+mmead    14191  0.0  0.0 117880  1376 ?        Sl   May30   0:00 /usr/bin/VBoxClient --clipboard
+mmead    14200  0.0  0.0  49496    96 ?        S    May30   0:00 /usr/bin/VBoxClient --display
+mmead    14201  0.0  0.0  49628  1020 ?        S    May30   0:00 /usr/bin/VBoxClient --display
+mmead    14206  0.0  0.0  49496    48 ?        S    May30   0:00 /usr/bin/VBoxClient --seamless
+mmead    14208  0.0  0.0 115680   180 ?        Sl   May30   0:00 /usr/bin/VBoxClient --seamless
+mmead    14214  0.0  0.0  49496   100 ?        S    May30   0:00 /usr/bin/VBoxClient --draganddrop
+mmead    14215  0.1  0.0 181732  1500 ?        Sl   May30   7:14 /usr/bin/VBoxClient --draganddrop
+mmead    14296  0.0  0.0  11136    96 ?        Ss   May30   0:01 /usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-session /usr/bin/im-launch cinnamon-session-cinnamon
+mmead    14299  0.0  0.0  43728  1328 ?        S    May30   0:00 /usr/bin/dbus-launch --exit-with-session /usr/bin/im-launch cinnamon-session-cinnamon
+mmead    14300  0.0  0.1  43824  3128 ?        Ss   May30   0:00 /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+mmead    14312  0.0  0.1 274516  3116 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfsd
+mmead    14317  0.0  0.0 420008  1988 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+mmead    14326  0.0  0.0 353956  2700 ?        Sl   May30   0:00 /usr/lib/at-spi2-core/at-spi-bus-launcher
+mmead    14332  0.0  0.0  43140  2040 ?        S    May30   0:00 /usr/bin/dbus-daemon --config-file=/etc/at-spi2/accessibility.conf --nofork --print-address 3
+mmead    14334  0.0  0.1 206968  4876 ?        Sl   May30   0:00 /usr/lib/at-spi2-core/at-spi2-registryd --use-gnome-session
+mmead    14379  0.0  0.2 334440  7520 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-cursor
+mmead    14380  0.0  0.1 384740  5360 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-wacom
+mmead    14384  0.0  0.2 409960  7816 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-xsettings
+mmead    14389  0.0  0.1 408232  5232 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-screensaver-proxy
+mmead    14390  0.0  0.1 334440  5556 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-clipboard
+mmead    14400  0.0  0.1 584524  5736 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-color
+mmead    14413  0.0  0.2 723080  6448 ?        Sl   May30   0:06 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-sound
+mmead    14415  0.0  0.2 408548  7840 ?        Sl   May30   0:03 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-housekeeping
+mmead    14416  0.0  0.1 668204  5192 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-media-keys
+mmead    14419  0.0  0.1 408560  6008 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-mouse
+mmead    14423  0.0  0.1 484416  5384 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-automount
+mmead    14427  0.0  0.4 483944 13876 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-background
+mmead    14429  0.0  0.2 408532  7648 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-a11y-settings
+mmead    14441  0.0  0.3 598980 10372 ?        Sl   May30   0:02 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-power
+mmead    14442  0.0  0.1 408512  5788 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-a11y-keyboard
+mmead    14443  0.0  0.1 454392  5904 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-print-notifications
+mmead    14444  0.0  0.2 451928  6200 ?        Sl   May30   0:01 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-keyboard
+mmead    14445  0.0  0.1 555936  4756 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-orientation
+mmead    14451  0.0  0.2 493180  6836 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-xrandr
+mmead    14460  0.0  0.0 370156  2612 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfs-udisks2-volume-monitor
+mmead    14466  0.0  0.0 178660  2724 ?        Sl   May30   0:00 /usr/lib/dconf/dconf-service
+mmead    14493  0.0  0.0 257528  2488 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfs-goa-volume-monitor
+mmead    14497  0.0  0.2 777704  7972 ?        Sl   May30   0:00 /usr/lib/gnome-online-accounts/goa-daemon
+mmead    14500  0.0  0.2 194548  8588 ?        S    May30   0:00 /usr/bin/python3 /usr/bin/cinnamon-launcher
+mmead    14512  0.0  0.0 508896  2544 ?        Sl   May30   0:00 /usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-printer
+mmead    14520  0.0  0.0 296388  1632 ?        Sl   May30   0:00 /usr/lib/gnome-online-accounts/goa-identity-service
+mmead    14528  0.0  0.1 403652  4944 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfs-afc-volume-monitor
+mmead    14534  0.0  0.0 271712  1508 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+mmead    14539  0.0  0.1 259516  3500 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfs-mtp-volume-monitor
+mmead    14543  3.5 11.2 2411944 346392 ?      Sl   May30 232:20 cinnamon --replace
+mmead    14569  0.0  0.2 439792  8292 ?        Sl   May30   0:00 blueberry-obex-agent
+mmead    14574  0.0  0.1 336560  4640 ?        Sl   May30   0:00 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+mmead    14575  0.0  0.8 1096020 24672 ?       Sl   May30   0:02 nemo-desktop
+mmead    14576  0.0  0.4 611648 13324 ?        Sl   May30   0:00 nm-applet
+mmead    14581  0.0  0.2 427560  7476 ?        Sl   May30   0:00 /usr/bin/python3 /usr/bin/cinnamon-killer-daemon
+mmead    14612  0.0  0.0 150344  2352 ?        S    May30   0:00 /usr/lib/bluetooth/obexd
+mmead    14623  0.0  0.0 186008  2732 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfsd-metadata
+mmead    14651  0.0  0.0 363692  2684 ?        Sl   May30   0:00 /usr/lib/gvfs/gvfsd-trash --spawner :1.1 /org/gtk/gvfs/exec_spaw/0
+mmead    14673  0.0  0.7 677484 22960 ?        Sl   May30   0:01 cinnamon-screensaver
+mmead    14695  0.0  1.0 519012 32540 ?        Sl   May30   2:54 /usr/lib/gnome-terminal/gnome-terminal-server
+mmead    14699  0.0  0.1  21432  3124 pts/0    Ss+  May30   0:01 bash
+mmead    14703  0.0  0.0  61160  2576 ?        S    May30   0:00 /usr/lib/x86_64-linux-gnu/gconf/gconfd-2
+mmead    14706  0.0  0.1 174160  5252 ?        Ss   May30   0:00 kdeinit4: kdeinit4 Running...
+mmead    14707  0.0  0.2 198252  7880 ?        S    May30   0:00 kdeinit4: klauncher [kdeinit] --fd=8
+mmead    14709  0.0  0.4 377484 14468 ?        S    May30   0:00 kdeinit4: kded4 [kdeinit]
+mmead    14716  0.0  0.2  44420  8224 ?        S    May30   0:00 /usr/bin/python3 /usr/bin/mintupdate-launcher
+mmead    14719  0.0  0.0   4500   412 ?        S    May30   0:00 sh -c /usr/lib/linuxmint/mintUpdate/mintUpdate.py
+mmead    14720  0.0  0.8 726276 26380 ?        Sl   May30   0:00 mintUpdate
+mmead    14771  0.0  0.5 236052 17164 ?        Sl   May30   0:00 /usr/bin/python3 /usr/share/system-config-printer/applet.py
+mmead    15085  0.4  7.8 2331324 240968 ?      Sl   May31  32:14 /usr/lib/firefox/firefox
+mmead    20336  0.0  0.1  21680  4232 pts/6    Ss   11:21   0:00 /bin/bash
+mmead    20338  0.0  0.0  18336  2908 pts/6    S+   11:21   0:00 man find
+mmead    20350  0.0  0.0   9812  2528 pts/6    S+   11:21   0:00 pager
+mmead    20620  0.0  0.5 1269356 16984 ?       Sl   May31   0:00 /usr/bin/knotify4
+root     21125  0.0  0.0      0     0 ?        S    12:27   0:00 [kworker/2:2]
+root     21130  0.0  0.0      0     0 ?        S    12:27   0:01 [kworker/3:0]
+root     21288  0.0  0.1  16116  3680 ?        S    12:27   0:00 /sbin/dhclient -d -q -sf /usr/lib/NetworkManager/nm-dhcp-helper -pf /var/run/dhclient-enp0s3.pid -lf /var/lib/NetworkManager/dhclient-e0aff208-cf64-3f70-8aad-cd306fd1116d-enp0s3.lease -cf /var/lib/NetworkManager/dhclient-enp0s3.conf enp0s3
+root     21740  0.0  0.0      0     0 ?        S    13:28   0:00 [kworker/u8:1]
+root     21793  0.0  0.0      0     0 ?        S    13:46   0:00 [kworker/u8:0]
+mmead    21843  0.0  0.1  37360  3276 pts/1    R+   14:02   0:00 ps aux
+root     22067  0.0  0.0      0     0 ?        S    Jun03   0:02 [kworker/0:1]
+mmead    22173  0.0  1.5 1045908 47596 ?       Sl   Jun03   0:12 nemo
+mmead    22273  0.0  2.8 1154384 87200 ?       Sl   Jun03   0:18 /usr/bin/konqueror --silent
+mmead    22401  0.0  0.8 382148 25164 ?        Sl   Jun03   0:00 /usr/bin/geany /home/mmead/cs180/hello/hello.cpp
+mmead    22404  0.0  0.0  14868  1796 ?        S    Jun03   0:00 gnome-pty-helper
+mmead    22405  0.0  0.1  21532  4016 pts/2    Ss+  Jun03   0:00 /bin/bash
+root     22674  0.0  0.0      0     0 ?        S    Jun03   0:01 [kworker/2:1]
+root     24777  0.0  0.0      0     0 ?        S    05:59   0:02 [kworker/3:1]
+mmead    24919  0.1  1.4 459352 43408 ?        Sl   05:59   0:47 /usr/bin/python /usr/bin/terminator
+mmead    24947  0.0  0.0  14868  1904 ?        S    05:59   0:00 gnome-pty-helper
+mmead    24948  0.0  0.1  21552  4088 pts/3    Ss+  05:59   0:00 /bin/bash
+root     24951  0.0  0.0      0     0 ?        S    05:59   0:00 [kworker/1:0]
+mmead    24952  0.0  0.1  21568  4100 pts/4    Ss+  05:59   0:00 /bin/bash
+mmead    24995  0.0  0.1  21568  4152 pts/5    Ss+  06:02   0:00 /bin/bash
+root     25815  0.0  0.0      0     0 ?        S    09:33   0:01 [kworker/1:1]
+root     25846  0.0  0.0      0     0 ?        S    09:33   0:00 [kworker/0:0]
+mmead    26383  0.0  0.1  21652  4188 pts/1    Ss   Jun01   0:04 bash
+

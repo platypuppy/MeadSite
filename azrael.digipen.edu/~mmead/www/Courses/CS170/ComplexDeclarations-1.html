@@ -1,0 +1,1140 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Complex Declarations</title>
+</head>
+
+<body>  
+<center><h1>Complex Declarations</h1></center>
+
+<blockquote><i>
+If debugging is the process of removing bugs, then programming must be
+the process of putting them in.</i> -- Edsgar Dijkstra
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="BASICS"></a>
+<p class="SectionHeader">
+Declaration Basics
+</p>
+
+Given these declaration:
+
+<blockquote><pre>
+<b>int</b> foo;    <font color="#003399"><i>/* an integer             */</i></font>
+<b>int</b> *foo;   <font color="#003399"><i>/* a pointer to integer   */</i></font>
+<b>int</b> foo[5]; <font color="#003399"><i>/* an array of 5 integers */</i></font>
+</pre></blockquote>
+
+What is the type of <i>foo</i>? (These are trivial.)
+<p>
+
+How about this? (Maybe not so trivial?)
+<blockquote><pre>
+<b>int</b> *foo[5]; <font color="#003399"><i>/* how about this?        */</i></font>
+</pre></blockquote>
+
+The <tt>foo</tt> above is a <i>complex</i> or <i>compound</i> declaration because
+it consists of more than one type specifier. (Pointer and array) You may need to
+refer to the <a href="../../docs/OperatorPrecedence.html">precedence chart</a> when
+deciphering it.
+<p>
+
+<br><br>
+
+Given this declaration:
+
+<blockquote><pre>
+<b>char</b> *(*foo(<b>char *</b>, <b>int</b>))[5];
+</pre></blockquote>
+
+What is the type of <i>foo</i>? 
+<ol>
+  <li>Is it a pointer? If so, a pointer to what?</li>
+  <li>Is it a function? If so, a function that takes what as input and returns what as output?</li>
+  <li>Is it an array? If so, an array of what?</li>
+</ol>
+
+This is what we call a <i>complex declaration</i>.
+
+<p>
+
+<ul>
+<li>The arrangement of operators determines the type.</li>
+<li>Like operators in expressions, precedence determines the ordering.</li>
+<ul>
+<li>function: ( ) and array: [ ] have the highest precedence and evaluate left-to-right</li>
+<li>indirection or dereference: * has lower precedence and evaluates right-to-left</li>
+<li>Refer to the <a href="../../docs/OperatorPrecedence.html">precedence chart</a>.
+
+</ul>
+</ul>
+
+<blockquote><pre>
+Operator    Meaning     English phrase
+------------------------------------------------------------------------
+    *       Pointer      pointer to
+   []       Array        array of <i>N</i>
+   ()       Function     function taking <i>X</i> and returning <i>Y</i>
+</pre></blockquote>
+
+Examples:
+
+<blockquote><pre>
+<b>int</b> *p;       <font color="#003399"><i>/* pointer to an int  */</i></font>
+<b>double</b> p[5];  <font color="#003399"><i>/* array of 5 doubles */</i></font>
+<b>int</b> p(<b>float</b>); <font color="#003399"><i>/* function taking a float and returning an int */</i></font>
+</pre></blockquote>
+
+Basic combinations:
+
+<blockquote><pre>
+Operators            Meaning                 with variable
+--------------------------------------------------------
+  *()        function returning a pointer      *foo()
+ (*)()       pointer to a function             (*foo)()
+  *[]        array of pointers                 *foo[]
+ (*)[]       pointer to an array               (*foo)[] 
+  [][]       array of array                    foo[][]
+  **         pointer to a pointer              **foo
+</pre></blockquote>
+
+  
+Illegal declarations:
+  
+<blockquote><pre>
+Operators            Meaning
+----------------------------------------------------
+  ()[]       function returning an array (ILLEGAL)
+  ()()       function returning a function (ILLEGAL)
+  []()       an array of functions (ILLEGAL)
+</pre></blockquote>
+  
+Proper declarations
+  
+<blockquote><pre>
+Operators            Meaning                               with variable
+------------------------------------------------------------------------
+ (*())[]     function returning a pointer to an array       (*foo())[]
+ (*())()     function returning a pointer to a function     (*foo())()
+ (*[])()     an array of pointers to functions              (*foo[])()
+</pre></blockquote>
+
+
+Notes:
+<ul>
+<li>Some uses of these operators can be illegal (as shown above).</li>
+<li>It is legal to use <i>pointers to</i> arrays and functions, however.</li>
+<li>You must use additional parentheses between adjacent [] and () operators.</li>
+<li>The dereference operator (indirection) is <i>always</i> on the <b>left</b> of the variable.</li>
+<li>The array and function call operators are <i>always</i> on the <b>right</b> of the variable.</li>
+<li>Be sure to distinguish parentheses for grouping from parentheses for a function call.</li>
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="LEFTRIGHT"></a>
+<p class="SectionHeader">
+The Right-Left (or Inside-Out) Rule
+</p>
+
+
+<ol>
+<li>Start with an identifier.
+<li>Look to its immediate right for an operator.
+<li>If none is found, look to the left.
+<li>If found, substitute English keyword.
+<li>Continue right-left substitutions, moving outward from the identifier (be
+  sure to pay attention to precedence).
+</ol> 
+
+<b>C Declarations to English</b>
+<p>
+
+What is the English equivalent of each declaration? In other words, what is the type of <i>f1</i>,
+<i>f2</i>, etc?
+
+
+<ol>
+Pointers/Arrays
+
+<blockquote><pre>
+<li><b>int</b> f1;
+<li><b>int</b> *f2;
+<li><b>int</b> f3[3];
+<li><b>int</b> *f4[3];
+<li><b>int</b> (*f5)[3];
+<li><b>int</b> *(*f6)[3];
+<li><b>int</b> f7[3][4];
+<li><b>int</b> *f8[3][4];
+<li><b>int</b> (*f9)[3][4];
+<li><b>int</b> *(*f10)[3][4];
+<li><b>int</b> (*f11[3])[4];
+<li><b>int</b> *(*f12[3])[4];
+</pre></blockquote>
+
+<ul>
+  <li>Draw diagrams for <tt>f11</tt> and <tt>f12</tt>.</li>
+  <li>What is <tt>sizeof(f11)</tt>? <tt>sizeof(*f11)</tt>? <tt>sizeof(**f11)</tt>? <tt>sizeof(***f11)</tt>?</li>
+  <li>What is <tt>sizeof(f12)</tt>? <tt>sizeof(*f12)</tt>? <tt>sizeof(**f12)</tt>? <tt>sizeof(***f12)</tt>?</li>
+  <li><a href="ComplexDeclarations-diagrams.html">Diagrams</a> for the above.</li>
+</ul>
+
+<!--
+f11 with 8-byte pointers: 24, 8, 16, 4
+f12 with 8-byte pointers: 24, 8, 32, 8
+-->
+<p>
+Functions/Pointers
+
+<blockquote><pre>
+<li><b>int</b> f21(<b>void</b>);
+<li><b>void</b> f22(<b>int</b>, <b>float</b>);
+<li><b>void</b> f23(<b>int</b> age, <b>float</b> weight);
+<li><b>int</b> *f24(<b>void</b>);
+<li><b>int</b> (*f25)(<b>void</b>);
+<li><b>int</b> **f26(<b>void</b>);
+<li><b>int</b> *(*f27)(<b>void</b>);
+<li><b>double</b> *(*f28)(<b>int</b>, <b>float</b> *);
+<li><b>int</b> **(**f29)(<b>void</b>);
+</pre></blockquote>
+
+Functions/Pointers/Arrays
+
+<blockquote><pre>
+<li><b>int</b> f31()[5];     
+<li><b>int</b> *f31a[5]();   
+<li><b>int</b> (*f31b[5])(); 
+
+<li><b>int</b> f32()();     
+<li><b>int</b> *f32a()();   
+<li><b>int</b> (*f32b())(); 
+
+<li><b>int</b> f33[5]();     
+<li><b>int</b> *f33a[5]();   
+<li><b>int</b> (*f33b[5])(); 
+</pre></blockquote>
+</ol>
+
+What are these declarations?
+<blockquote><pre>
+<b>struct</b> BITMAP *(*(*f41)[5])(<b>const</b> <b>char</b> *, <b>int</b>);
+<b>unsigned</b> <b>int</b> *(*f42(<b>struct</b> BITMAP **))[5];
+</pre></blockquote>
+
+<!--
+f41 is a pointer to an array of 5 pointers to functions taking a const char *
+and an int and returning a pointer to a BITMAP struct.
+
+f42 is a function taking a pointer to a pointer to a BITMAP struct and returning
+a pointer to an array of 5 unsigned ints.
+
+-->
+
+<a href="CToEnglishDeclarations.html">Answers</a> to the above C declarations.
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+<b>English to C Declarations</b>
+
+<ol>
+<li>An int
+<li>A pointer to an int
+<li>An array of 3 ints
+<li>An array of 3 pointers to ints
+<li>A pointer to an array of 3 ints
+<li>A pointer to an array of 3 pointers to ints
+<li>A pointer to an array of 3 arrays of 5 pointers to ints (hint: there is a 3x5 array in there)
+<li>A pointer to an array of 3 pointers to an array of 5 pointers to int
+<li>An array of 5 pointers to functions that take an int and return nothing.
+<li>A function that takes two ints and returns a pointer to a double
+<li>A function that takes no arguments and returns a pointer to an array of 10 ints
+<li>A function that takes a pointer to an array of 3 doubles and returns a pointer to a function that takes no
+arguments and returns a float.
+<p>
+<b>Bonus:</b>
+<li>A function that takes a pointer to a pointer to an int and returns a pointer to an array of
+5 pointers to functions that take a pointer to a const char and return an int.
+</ol>
+
+<a href="EnglishToCDeclarations.html">Answers</a> to the above English declarations.
+
+<p class="technote">
+<b>Exercise</b>: Declare a function that takes a single argument (which is a pointer to a function taking no 
+arguments and returning <b>void</b>) and returns a similar function pointer (that is: it returns
+another pointer to a function taking no arguments and returning <b>void</b>). This is a common function
+in C++.
+</p>
+
+<!-- <a href="http:/*www.csse.monash.edu.au/~damian/papers/PS/ModestProposal.ps">C++ Resyntaxed</a> -->
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FNPOINTERS"></a>
+<p class="SectionHeader">
+Function Pointers
+</p>
+
+
+Functions are treated slightly differently by the compiler:
+<ul>
+<li>Functions are basically blocks of code (instructions) in memory.
+<li>A function's name is the same as it's address.
+<li>To call a function, you simply use the function call operator after the function's name: ()
+<li>You don't need to dereference (*) or take the address of (&) a function. The compiler always
+converts the function name to an address whenever it is used.
+
+<blockquote><pre>
+<b>int</b> f(<b>void</b>)
+{
+  <b>return</b> 255;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;%p, %p, %p, %X\n&quot;</font>, f, *f, &amp;f, f());
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+<b>0x400e60, 0x400e60, 0x400e60, FF</b>
+</pre></blockquote>
+<!--<b>00401028, 00401028, 00401028, FF</b>-->
+</ul>
+
+Since functions are very similar to pointers, we can assign them to other pointers. Specifically, we
+can assign them to function pointers (variables which can point to functions.)
+
+<p>
+<a href="../../docs/OperatorPrecedence.html">Precedence chart</a>
+<p>
+
+
+<blockquote><pre>
+<b>int</b> f(<b>void</b>)
+{
+  <b>return</b> 255;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> (*pf)(<b>void</b>); <font color="#003399"><i>/* a pointer to a function taking void and returning int */</i></font>
+
+  pf = f;   <font color="#003399"><i>/* Ok, no function call */</i></font>
+  pf = &amp;f;  <font color="#003399"><i>/* Ok, but unnecessary  */</i></font>
+  pf = *f;  <font color="#003399"><i>/* Ok, but unnecessary  */</i></font>
+  pf = f(); <font color="#003399"><i>/* Error: 'int (*)(void)' differs in levels of indirection from 'int' */</i></font>
+  i = f();  <font color="#003399"><i>/* Ok */</i></font>
+  f = pf;   <font color="#003399"><i>/* Error: '=' : left operand must be l-value */</i></font>
+  
+  printf(<font color="#9933CC">&quot;%p, %p, %p, %X\n&quot;</font>, f, *f, &amp;f, f());
+  printf(<font color="#9933CC">&quot;%p, %p, %p, %X\n&quot;</font>, pf, *pf, &amp;pf, pf());
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Output:
+<!--
+<blockquote><pre>
+<b>0040102D, 0040102D, 0040102D, FF
+0040102D, 0040102D, 0012FF7C, FF  </b>
+</pre></blockquote>
+-->
+
+<blockquote><pre>
+<b>0x400e60, 0x400e60, 0x400e60, FF
+0x400e60, 0x400e60, 0x7fff1cda12b8, FF</b>
+</pre></blockquote>
+
+
+Calling the function <i>f</i> can be accomplished in different ways:
+
+<blockquote><pre>
+<b>int</b> f(<b>void</b>)
+{
+  <b>return</b> 255;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> value;
+  <b>int</b> (*pf)(<b>void</b>) = f; <font color="#003399"><i>/* Initialize pf with address of f */</i></font>
+
+    <font color="#003399"><i>/* All statements are equivalent */</i></font>
+  value = f();      <font color="#003399"><i>/* call function &quot;normally&quot;                  */</i></font>
+  value = pf();     <font color="#003399"><i>/* call function through pointer to function */</i></font>
+  value = (*pf)();  <font color="#003399"><i>/* dereference pointer to function           */</i></font>
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+<b>Type compatiblity is important:</b>
+<p>
+
+<blockquote><pre>
+<font color="#003399"><i>/* a function that takes nothing and returns an int */</i></font>
+<b>int</b> f(<b>void</b>)
+{
+  <b>return</b> 255;
+}
+
+<font color="#003399"><i>/* a function that takes nothing and returns an int</i></font>
+<b>int</b> g(<b>void</b>)
+{
+  <b>return</b> 0;
+}
+
+<font color="#003399"><i>/* a function that takes nothing and returns a double */</i></font>
+<b>double</b> h(<b>void</b>)
+{
+  <b>return</b> 0.5;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> value;
+  <b>int</b> (*pf)(<b>void</b>);    <font color="#003399"><i>/* function pointer */</i></font>
+  <b>double</b> (*ph)(<b>void</b>); <font color="#003399"><i>/* function pointer */</i></font>
+
+  pf = f; <font color="#003399"><i>/* Ok, pf and f are same type */</i></font>
+  pf = g; <font color="#003399"><i>/* Ok, pf and g are same type */</i></font>
+  pf = h; <font color="#003399"><i>/* Error: incompatible types  */</i></font>
+  ph = h; <font color="#003399"><i>/* Ok, ph and h are same type */</i></font>
+
+  pf = (<b>int</b> (*)(<b>void</b>)) h; <font color="#003399"><i>/* Only if you know what you're doing! (Unlikely in this case.) */</i></font>
+  value = pf();           <font color="#003399"><i>/* Value is undefined garbage, not 0. Bonus if you know why.    */</i></font>
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+<!--
+  pf = (int (*)(void)) h;  /* Only if you know what you're doing!
+  value = pf();
+
+Function h puts a float onto the floating point stack (fld instruction).
+value tries to retrieve the return val from the eax register. (Garbage)
+
+  ph = (double (*)(void)) f;  /* Only if you know what you're doing!
+  dval = ph();
+
+Function f puts 255 in eax, but the code here pops the top of
+the floating point stack (fstp instruction) and puts it into
+dval.
+-->
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FNPOINTERS"></a>
+<p class="SectionHeader">
+Using Function Pointers
+</p>
+
+Given these math functions:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* From math.h */</i></font>
+<b>double</b> sin(<b>double</b>);
+<b>double</b> cos(<b>double</b>);
+<b>double</b> tan(<b>double</b>);
+</pre></blockquote>
+
+and this declaration:
+
+<blockquote><pre>
+<b>double</b> (*pMathFns[])(<b>double</b>) = {sin, cos, tan};
+</pre></blockquote>
+
+What is the type of <tt>pMathFns</tt>? What is <tt><b>sizeof</b>(pMathFns)</tt>? What is <tt><b>sizeof</b>(*pMathFns)</tt>?
+What is <tt><b>sizeof</b>(pMathFns[1])</tt>? (As always, drawing a diagram may help you answer these questions.)
+<p>
+
+<!--
+  Sizeof a function is 1 on GNU. Microsoft gives compiler error attempting
+  to take sizeof.
+-->
+
+It is easy to invoke the functions pointed to: (<a href="../../docs/OperatorPrecedence.html">precedence chart</a>)
+
+<blockquote><pre>
+<b>void</b> TestFnArray1(<b>void</b>)
+{  
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>double</b> x = pMathFns[i](2.0); <font color="#003399"><i>/* Evaluating left to right makes it easy */</i></font>
+    printf(<font color="#9933CC">&quot;%f  &quot;</font>, x);
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+Output:
+<b>0.909297  -0.416147  -2.185040</b>
+</pre></blockquote>
+
+
+Or we can declare a compatible variable and use that instead.
+<p>
+What is the type of <tt>pf</tt> below? What is <tt><b>sizeof</b>(pf)</tt>? What is <tt><b>sizeof</b>(*pf)</tt>?
+ What is <tt><b>sizeof</b>(**pf)</tt>?
+(As always, drawing a diagram may help you answer these questions.)
+
+
+<blockquote><pre>
+<b>void</b> TestFnArray2(<b>void</b>)
+{  
+  <b>double</b> (*(*pf)[3])(<b>double</b>) = &amp;pMathFns; <font color="#003399"><i>/* Why &amp;? Draw a diagram! */</i></font>
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>double</b> x = (*pf)[i](2.0); <font color="#003399"><i>/* Easy to evaluate */</i></font>
+    printf(<font color="#9933CC">&quot;%f  &quot;</font>, x);
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+
+
+<!--
+    Since pMathFns is an array, just specifying the name is the same as:
+
+      &pMathFns[0]
+
+    which is a single pointer, not an array of pointers. Note that you can't do 
+    this either:
+
+      double (*pf[3])(double) = pMathFns;
+
+    because you can't initialize an array from another array. Needs {} for initialization.
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+Note the initialization of pf. If we leave off the &, we get warnings:
+<p>
+
+GNU gcc:
+<blockquote><pre>
+warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   double (*(*pf)[3])(double) = pMathFns;
+                                ^~~~~~~~
+</pre></blockquote>
+
+Clang:
+<blockquote><pre>
+warning: incompatible pointer types initializing 'double (*(*)[3])(double)' with
+         an expression of type 'double (*[3])(double)'; take the address with &
+         [-Wincompatible-pointer-types]
+  double (*(*pf)[3])(double) = pMathFns;
+             ^                 ~~~~~~~~
+                               &amp;
+</pre></blockquote>
+
+
+<!--
+MS VC++ 6.0/7.1
+<blockquote><pre>
+main.c(218) : warning C4047: 'initializing' : 'double (__cdecl *(*)[3])(double )' 
+  differs in levels of indirection from 'double (__cdecl ** )(double )'
+</pre></blockquote>
+
+Borland C++ 5.6.4
+<blockquote><pre>
+Warning W8075 main.c 218: Suspicious pointer conversion in function TestFnArray2
+</pre></blockquote>
+
+GNU gcc:
+<blockquote><pre>
+main.c: In function `TestFnArray2':
+main.c:218: warning: initialization from incompatible pointer type
+</pre></blockquote>
+-->
+
+Also, given the same declaration for <tt>pf</tt>, what exactly is wrong with #2 and #3?
+
+<blockquote><pre>
+<b>double</b> (*(*pf)[3])(<b>double</b>) = &amp;pMathFns;
+
+1. <b>double</b> x = (*pf)[i](2.0); <font color="#003399"><i>/* Ok (as above) */</i></font>
+2. <b>double</b> x = *pf[i](2.0);   <font color="#003399"><i>/* ???           */</i></font>
+3. <b>double</b> x = (*pf[i])(2.0); <font color="#003399"><i>/* ???           */</i></font>
+</pre></blockquote>
+
+<!--
+#2 won't compile: 'term does not evaluate to a function taking'.
+pf[i] is an array and () won't work on an array
+
+#3 compiles, works with pf[0], but prints garbage afterwards. pf[1] is the "next"
+array of 3 pointers, pf[2] is the array after that.
+
+gcc:  0.909297  2.000000  Inf
+bor:  0.909297  2.000000  1.073198794716033575000000000000000000000e+307
+
+If I move the pMathFns declaration to the top of the file, I get this from gcc:
+
+      4 [main] a 2232 handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+  10896 [main] a 2232 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+  
+And a crash from Borland as well.  
+-->
+
+Or using pointer notation:
+
+<blockquote><pre>
+<b>void</b> TestFnArray3(<b>void</b>)
+{  
+  <b>double</b> (**ppf)(<b>double</b>) = pMathFns;
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>double</b> x = (*ppf++)(2.0); <font color="#003399"><i>/* (**ppf++)(2.0) will also work */</i></font>
+    printf(<fon t color="#9933CC">&quot;%f  &quot;</font>, x);
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+
+
+An example <a href="Driver-fn-pointers.html">driver</a> using function pointers.
+
+<!--
+
+Declaring parameters to functions:
+<p>
+
+<table border=0>
+<tr>
+<td valign="top">
+<blockquote><pre>
+<b>void</b> PassFnArray1(<b>double</b> (*(*pf)[3])(<b>double</b>))
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>double</b> x = (*pf)[i](2.0);
+    printf(<font color="#9933CC">&quot;%f  &quot;</font>, x);
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+</td>
+
+<td valign="top">
+<blockquote><pre>
+<b>void</b> PassFnArray2(<b>double</b> (**pf)(<b>double</b>))
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>double</b> x = (*pf++)(2.0);
+    printf(<font color="#9933CC">&quot;%f  &quot;</font>, x);
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+</td>
+</tr>
+</table>
+
+Calling the functions:
+
+<blockquote><pre>
+<b>void</b> main(<b>void</b>)
+{
+  PassFnArray1(&amp;pMathFns); 
+  PassFnArray2(pMathFns);
+}
+</pre></blockquote>
+
+Do we need the '3' in the function parameter? In other words, can we do this:
+
+<blockquote><pre>
+<b>void</b> PassFnArray1(<b>double</b> (*(*pf)[])(<b>double</b>))
+</pre></blockquote>
+
+instead of this:
+
+<blockquote><pre>
+<b>void</b> PassFnArray1(<b>double</b> (*(*pf)[3])(<b>double</b>))
+</pre></blockquote>
+
+If so, what is <tt><b>sizeof</b>(*pf)</tt>?
+-->
+
+<!--
+sizeof(*pf) is 0 because it's an incomplete type
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="CALLBACKS"></a>
+<p class="SectionHeader">
+Function Pointers as Callbacks
+</p>
+
+
+<i>qsort</i> is a function that can sort an array of <i>any</i> data. Even types that haven't been
+invented yet!
+<p>
+
+<blockquote><pre>
+<b>void</b> qsort(<b>void</b> *base, 
+           size_t num, 
+           size_t width, 
+           <b>int</b> (*compare)(<b>const</b> <b>void</b> *elem1, <b>const</b> <b>void</b> *elem2) 
+          );
+</pre></blockquote>
+
+Parameters
+
+<ul>
+<li><i>base</i> - Start of target array
+<li><i>num</i> - Array size in elements
+<li><i>width</i> - Element size in bytes
+<li><i>compare</i> - Comparison function
+<ul>
+<li><i>elem1</i> - Pointer to the key for the search
+<li><i>elem2</i> - Pointer to the array element to be compared with the key
+</ul>
+</ul>
+
+From MSDN documentation:
+<p class="technote">
+The <b>qsort</b> function implements a quick-sort algorithm to sort an array of num elements, 
+each of width bytes. The argument base is a pointer to the base of the array to be sorted. 
+<b>qsort</b> overwrites this array with the sorted elements. The argument compare is a pointer to a 
+user-supplied routine that compares two array elements and returns a value specifying their 
+relationship. <b>qsort</b> calls the compare routine one or more times during the sort, passing 
+pointers to two array elements on each call:
+
+<blockquote><pre>
+compare((<b>void</b> *) elem1, (<b>void</b> *) elem2);
+</pre></blockquote>
+
+The routine must compare the elements, then return one of the following values:
+
+<blockquote><pre>
+Return Value          Description 
+-------------------------------------------
+   &lt; 0           elem1 less than elem2 
+     0           elem1 equivalent to elem2 
+   &gt; 0           elem1 greater than elem2 
+</pre></blockquote>
+
+The array is sorted in increasing order, as defined by the comparison function. 
+To sort an array in decreasing order, reverse the sense of "greater than" and "less than" in the 
+comparison function.
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Example</h2>
+
+This is the comparison function that will be used to determine the order:
+
+<blockquote><pre>
+<b>int</b> compare_int(<b>const</b> <b>void</b> *arg1, <b>const</b> <b>void</b> *arg2)
+{
+  <b>int</b> left = *(<b>int</b> *)arg1;  <font color="#003399"><i>/* Can't dereference a void * */</i></font>
+  <b>int</b> right = *(<b>int</b> *)arg2; <font color="#003399"><i>/* Can't dereference a void * */</i></font>
+
+  <b>if</b> (left &lt; right)
+    <b>return</b> -1;  
+  <b>else</b> <b>if</b> (left &gt; right)
+    <b>return</b> 1;
+  <b>else</b> 
+    <b>return</b> 0;
+}
+</pre></blockquote>
+
+This is usually written in a more compact way:
+
+<blockquote><pre>
+<b>int</b> compare_int1(<b>const</b> <b>void</b> *arg1, <b>const</b> <b>void</b> *arg2)
+{
+  <b>return</b> *(<b>int</b> *)arg1 - *(<b>int</b> *)arg2;
+}
+</pre></blockquote>
+
+This will work nicely as the last parameter to the <b>qsort</b> function:
+
+<blockquote><pre>
+<b>void</b> qsort(<b>void</b> *base, 
+           size_t num, 
+           size_t width, 
+           <b>int</b> (*compare)(<b>const</b> <b>void</b> *elem1, <b>const</b> <b>void</b> *elem2) </b>
+          );
+</pre></blockquote>
+
+
+A program using the function:
+
+<blockquote><pre>
+<b>void</b> PrintInts(<b>int</b> array[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%i &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> TestInts(<b>void</b>)
+{
+  <b>int</b> array[] = {5, 12, 8, 4, 23, 13, 15, 2, 13, 20};
+
+  PrintInts(array, 10);                         <font color="#003399"><i>/* print the array        */</i></font>
+  qsort(array, 10, <b>sizeof</b>(<b>int</b>), compare_int1);  <font color="#003399"><i>/* sort the array         */</i></font>
+  PrintInts(array, 10);                         <font color="#003399"><i>/* print the sorted array */</i></font>
+}
+
+Output:<b>
+5 12 8 4 23 13 15 2 13 20
+2 4 5 8 12 13 13 15 20 23</b>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width="90%">
+<p>
+By creating another comparison function, we can sort in descending order:
+
+<blockquote><pre>
+<b>int</b> compare_int2(<b>const</b> <b>void</b> *arg1, <b>const</b> <b>void</b> *arg2)
+{
+  <b>return</b> *(<b>int</b> *)arg2 - *(<b>int</b> *)arg1;
+}
+</pre></blockquote>
+
+How could we have written the above to take advantage of code reuse?
+<p>
+<!--
+<p>
+&nbsp;&nbsp;&nbsp;<font color="white"><tt>return compare_int1(arg2, arg1);
+&nbsp;or&nbsp; return -compare_int1(arg1, arg2);</tt>
+</font>
+
+return compare_int1(arg2, arg1);  /* swap args */
+or
+return -compare_int1(arg1, arg2); /* negate return value */
+-->
+Now we can do:
+
+<blockquote><pre>
+<b>void</b> TestInts(<b>void</b>)
+{
+  <b>int</b> array[] = {5, 12, 8, 4, 23, 13, 15, 2, 13, 20};
+
+  PrintInts(array, 10);                         <font color="#003399"><i>/* print original array            */</i></font>
+  qsort(array, 10, <b>sizeof</b>(<b>int</b>), compare_int1);  <font color="#003399"><i>/* sort in ascending order         */</i></font>
+  PrintInts(array, 10);                         <font color="#003399"><i>/* print sorted array (ascending)  */</i></font>
+  qsort(array, 10, <b>sizeof</b>(<b>int</b>), compare_int2);  <font color="#003399"><i>/* sort in descending order        */</i></font>
+  PrintInts(array, 10);                         <font color="#003399"><i>/* print sorted array (descending) */</i></font>
+}
+
+Output:<b>
+5 12 8 4 23 13 15 2 13 20
+2 4 5 8 12 13 13 15 20 23
+23 20 15 13 13 12 8 5 4 2</b>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width="90%">
+<p>
+Given a POINT structure we can code comparison functions. What does it mean for one structure to
+be <i>greater</i> or <i>less</i> than another?
+
+<blockquote><pre>
+<b>struct</b> POINT
+{
+  <b>int</b> x;
+  <b>int</b> y;
+};
+</pre></blockquote>
+
+A comparison function for comparing the <b>x</b> member: (note the function name)
+
+<blockquote><pre>
+<b>int</b> compare_ptsx(<b>const</b> <b>void</b> *arg1, <b>const</b> <b>void</b> *arg2)
+{
+  <b>return</b> ((<b>struct</b> POINT *)arg1)-&gt;x - ((<b>struct</b> POINT *)arg2)-&gt;x;
+}
+</pre></blockquote>
+
+A comparison function for comparing the <b>y</b> member: (note the function name)
+
+<blockquote><pre>
+<b>int</b> compare_ptsy(<b>const</b> <b>void</b> *arg1, <b>const</b> <b>void</b> *arg2)
+{
+  <b>return</b> ((<b>struct</b> POINT *)arg1)-&gt;y - ((<b>struct</b> POINT *)arg2)-&gt;y;
+}
+</pre></blockquote>
+
+Now we can use them in a program:
+
+<blockquote><pre>
+<b>void</b> PrintPts(<b>const</b> <b>struct</b> POINT pts[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;(%i,%i) &quot;</font>, pts[i].x, pts[i].y);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> TestStructs1(<b>void</b>)
+{
+    <font color="#003399"><i>/* Array of 5 POINT structs */</i></font>
+  <b>struct</b> POINT pts[] = { {3, 5}, {1, 4}, {7, 2}, {2, 5}, {1, 8} };
+
+    <font color="#003399"><i>/* These values are calculated at compile time */</i></font>
+  <b>int</b> count = <b>sizeof</b>(pts) / <b>sizeof</b>(pts[0]);
+  <b>int</b> size = <b>sizeof</b>(pts[0]);
+
+  PrintPts(pts, count);                   <font color="#003399"><i>/* print the points        */</i></font>
+  qsort(pts, count, size, compare_ptsx);  <font color="#003399"><i>/* sort the points (on x)  */</i></font>
+  PrintPts(pts, count);                   <font color="#003399"><i>/* print the sorted points */</i></font>
+  qsort(pts, count, size, compare_ptsy);  <font color="#003399"><i>/* sort the points (on y)  */</i></font>
+  PrintPts(pts, count);                   <font color="#003399"><i>/* print the sorted points */</i></font>
+}
+
+Output:<b>
+(3,5) (1,4) (7,2) (2,5) (1,8)
+(1,4) (1,8) (2,5) (3,5) (7,2)
+(7,2) (1,4) (3,5) (2,5) (1,8)</b>
+</pre></blockquote>
+
+In this example, we didn't care if two x or y coordinates were the same. It didn't matter how
+we arranged them. However, if you want to have a secondary sort, you would just first sort on
+x or y, and if they are the same, sort on y or x.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width="90%">
+<p>
+We can do something more "exotic" with the POINTS like sorting by the distance from the origin. 
+Here's one way of doing that:
+
+<blockquote><pre>
+<b>int</b> compare_ptsd(<b>const</b> <b>void</b> *arg1, <b>const</b> <b>void</b> *arg2)
+{
+  <b>struct</b> POINT *pt1 = (<b>struct</b> POINT *)arg1;  <font color="#003399"><i>/* first point  */</i></font>
+  <b>struct</b> POINT *pt2 = (<b>struct</b> POINT *)arg2;  <font color="#003399"><i>/* second point */</i></font>
+
+    <font color="#003399"><i>/* calculate distances from origin: d = sqrt(x<sup>2</sup> + y<sup>2</sup>) */</i></font>
+  <b>double</b> d1 = sqrt( (pt1-&gt;x * pt1-&gt;x) + (pt1-&gt;y * pt1-&gt;y) );
+  <b>double</b> d2 = sqrt( (pt2-&gt;x * pt2-&gt;x) + (pt2-&gt;y * pt2-&gt;y) );
+  <b>double</b> diff = d1 - d2;
+  
+    <font color="#003399"><i>/* return -1, 0, 1 depending on the difference */</i></font>
+  <b>if</b> (diff &gt; 0)
+    <b>return</b> 1;
+  <b>else</b> <b>if</b> (diff &lt; 0)
+    <b>return</b> -1;
+  <b>else</b>
+    <b>return</b> 0;
+}
+</pre></blockquote>
+
+Then test it:
+
+<blockquote><pre>
+<b>void</b> TestStructs1(<b>void</b>)
+{
+    <font color="#003399"><i>/* Array of 5 POINT structs: [A,B,C,D,E] */</i></font>
+  <b>struct</b> POINT pts[] = { {3, 5}, {1, 4}, {7, 2}, {2, 5}, {1, 8} };
+
+    <font color="#003399"><i>/* These values are calculated at compile time */</i></font>
+  <b>int</b> count = <b>sizeof</b>(pts) / <b>sizeof</b>(pts[0]);
+  <b>int</b> size = <b>sizeof</b>(pts[0]);
+
+  PrintPts(pts, count);                   <font color="#003399"><i>/* print the points                       */</i></font>
+  qsort(pts, count, size, compare_ptsd);  <font color="#003399"><i>/* sort the points (by distance from 0,0) */</i></font>
+  PrintPts(pts, count);                   <font color="#003399"><i>/* print the sorted points                */</i></font>
+}
+
+Output:
+<b>(3,5) (1,4) (7,2) (2,5) (1,8)</b>    [A,B,C,D,E]
+<b>(1,4) (2,5) (3,5) (7,2) (1,8)</b>    [B,D,A,C,E]
+</pre></blockquote>
+
+Diagram:
+<p>
+<blockquote>
+<img src="PointDistance-1.gif">
+</blockquote>
+<p>
+
+Distances from origin: A(5.83), B(4.12), C(7.28), D(5.38), E(8.06)
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="JUMPTABLES"></a>
+<p class="SectionHeader">
+Jump Tables
+</p>
+
+
+A <i>jump table</i> is simply a table (array) of function pointers. Instead of searching through the
+list of functions using an <b>if-then-else</b> paradigm, we just index into the table.
+<p>
+
+Assuming we have a function for each operation on a calculator:
+
+<blockquote><pre>
+<b>double</b> add(<b>double</b> operand1, <b>double</b> operand2)
+{
+  <b>return</b> operand1 + operand2;
+}
+
+<b>double</b> subtract(<b>double</b> operand1, <b>double</b> operand2)
+{
+  <b>return</b> operand1 - operand2;
+}
+
+<b>double</b> multiply(<b>double</b> operand1, <b>double</b> operand2)
+{
+  <b>return</b> operand1 * operand2;
+}
+
+<b>double</b> divide(<b>double</b> operand1, <b>double</b> operand2)
+{
+  <b>return</b> operand1 / operand2;
+}
+</pre></blockquote>
+
+We can create a calculator program around these functions:
+
+<blockquote><pre>
+<b>enum</b> OPERATION {ADD, SUB, MUL, DIV};
+
+<b>void</b> DoMath1(<b>double</b> operand1, <b>double</b> operand2, <b>enum</b> OPERATION op)
+{
+  <b>double</b> result;
+  <b>switch</b> (op)
+  {
+    <b>case</b> ADD:
+      result = add(operand1, operand2);
+      <b>break</b>;
+
+    <b>case</b> SUB:
+      result = subtract(operand1, operand2);
+      <b>break</b>;
+  
+    <b>case</b> MUL:
+      result = multiply(operand1, operand2);
+      <b>break</b>;
+
+    <b>case</b> DIV:
+      result = divide(operand1, operand2);
+      <b>break</b>;
+    
+    <font color="#9933CC">/* possibly other cases ... */</font>
+    
+  }
+
+  printf(<font color="#9933CC">&quot;%f\n&quot;</font>, result);
+}
+</pre></blockquote>
+
+Calling the function:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  DoMath1(3, 5, ADD);
+  DoMath1(3.14, 2, MUL);
+  DoMath1(8.4, 8.4, SUB);
+  
+  <b>return</b> 0;
+}
+
+Output:<b>
+8.000000
+6.280000
+0.000000</b>
+</pre></blockquote>
+
+We can be much more efficient by using a jump table instead:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* create a &quot;jump table&quot; of calculator functions */</i></font>
+<b>double</b> (*operation[])(<b>double</b>, <b>double</b>) = {add, subtract, multiply, divide};
+
+<b>void</b> DoMath2(<b>double</b> operand1, <b>double</b> operand2, <b>enum</b> OPERATION op)
+{
+    <font color="#003399"><i>/* replace the entire switch statement with this one line: */</i></font>
+  <b>double</b> result = operation[op](operand1, operand2);
+  printf(<font color="#9933CC">&quot;%f\n&quot;</font>, result);
+}
+</pre></blockquote>
+
+The calling function, <b>main</b>, doesn't have to change.
+<p>
+Extending the operations to include a <tt><b>power</b></tt> function:
+
+<blockquote><pre>
+<font color="#003399"><i>/* Implement the new functionality */</i></font>
+<b>double</b> power(<b>double</b> operand1, <b>double</b> operand2)
+{
+  <b>return</b> pow(operand1, operand2);
+}
+
+<font color="#003399"><i>/* Update the table */</i></font>
+<b>enum</b> OPERATION {ADD, SUB, MUL, DIV, POW};
+<b>double</b> (*operation[])(<b>double</b>, <b>double</b>) = {add, subtract, multiply, divide, power};
+</pre></blockquote>
+
+Use it:
+
+<blockquote><pre>
+DoMath2(3, 5, ADD);
+DoMath2(3.14, 2, MUL);
+DoMath2(8.4, 8.4, SUB);
+DoMath2(5, 3, POW);  <font color="#003399"><i>/* new function */</i></font>
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+8.000000
+6.280000
+0.000000
+125.000000
+</pre></blockquote>
+
+<br><br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

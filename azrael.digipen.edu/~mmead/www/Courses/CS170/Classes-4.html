@@ -1,0 +1,1120 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Classes Part 4</title>
+</head>
+
+<body>  
+<center><h1>Classes Part 4</h1></center>
+
+<!--
+<blockquote>
+<i>
+"The road to hell is paved with global variables"</i> -- Steve McConnell
+</blockquote>
+-->
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Aggregation
+</p>
+
+Aggregation is a relationship between classes. It is also a form of code-reuse, and is therefore a very important concept.
+
+<ul>
+<li>The relationship is what's called a <i>"has-a"</i> relationship. For example, 
+<ul>
+<li>A car <i>has a</i> steering wheel.
+<li>A car <i>has a</i> a tire (usually, four of them).
+<li>A student <i>has a</i> name. 
+</ul>
+<li>Aggregation is also called <i>containment</i> because one class object <i>contains</i> another class object.</li>
+<ul>
+  <li>Note that this is different from nested classes, where one class is defined 
+    within another class.</li>
+  </ul>
+<li>Almost every class you write (except for trivial ones) will have some form of aggregation.
+</ul>
+
+Recall the <tt>Student</tt> class from before:
+
+<a name="STUDENT"></a>
+
+<pre class="sourcecode"><code>
+<b>class</b> Student           
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Constructor (non-default)</i></font>
+    Student(<b>const</b> <b>char</b> * login, <b>int</b> age, <b>int</b> year, <b>float</b> GPA);
+
+      <font color="#003399"><i>// Explicit (not compiler-generated) copy constructor</i></font>
+    Student(<b>const</b> Student&amp; student);
+
+      <font color="#003399"><i>// Explicit (not compiler-generated) assignment operator</i></font>
+    Student&amp; <b>operator</b>=(<b>const</b> Student&amp; student);
+
+      <font color="#003399"><i>// Destructor (not compiler-generated)</i></font>
+    ~Student();
+
+      <font color="#003399"><i>// Mutators (settors) are not const</i></font>
+    <b>void</b> set_login(<b>const</b> <b>char</b>* login);
+    <b>void</b> set_age(<b>int</b> age);
+    <b>void</b> set_year(<b>int</b> year);
+    <b>void</b> set_GPA(<b>float</b> GPA);
+
+      <font color="#003399"><i>// Accessor (gettors) are const</i></font>
+    <b>int</b> get_age() <b>const</b>;
+    <b>int</b> get_year() <b>const</b>;
+    <b>float</b> get_GPA() <b>const</b>;
+    <b>const</b> <b>char</b> *get_login() <b>const</b>;
+
+      <font color="#003399"><i>// Nothing will be modified by display</i></font>
+    <b>void</b> display() <b>const</b>;
+
+  <b>private</b>:
+    <b>char</b> *login_; 
+    <b>int</b> age_;
+    <b>int</b> year_;
+    <b>float</b> GPA_;
+
+      <font color="#003399"><i>// Called by copy constructor and assignment operator</i></font>
+    <b>void</b> copy_data(<b>const</b> Student&amp; rhs);
+};
+</code></pre>
+
+Notes:
+<ul>
+  <li>In a way, you could say that the <tt>Student</tt> class employs some form of aggregation.</li>
+  <ul>
+  <li>But, we generally don't consider a class with only built-in types 
+    (<tt><b>int</b></tt>, <tt><b>float</b></tt>, pointers, etc.) to be an aggregate class.</li>
+  </ul>
+  <li>The <tt>Student</tt> class is a fairly simple class to implement.</li>
+  <ul>
+  <li>Most of the work (copy constructor, assignment operator, destructor, etc.)
+    was due to the dynamically allocated data used for the private <tt>login_</tt> member.</li>
+</ul>
+<li>Let's make use of our new new <tt>String</tt> type and change the type of <tt>login_</tt> from 
+<tt><b>char *</b></tt> to <tt>String</tt> type.</li>
+<ul>
+  <li>This small change is going to be a huge improvement over using "raw" pointers (C-style strings).</li>
+</ul>
+</ul>
+
+<p>
+That's the easy part:
+
+<blockquote><pre>
+<font color="blue"><b><b>#include</b> &quot;String.h&quot;</b></font>
+
+<b>class</b> Student           
+{
+  <b>public</b>:
+    <font color="#003399"><i>// Public stuff...</i></font>
+
+  <b>private</b>:
+    <font color="blue"><b>String login_;</b></font> 
+
+    <font color="#003399"><i>// Other private stuff...</i></font>
+};
+</pre></blockquote>
+
+Of course, this is going to set off a bunch of compiler warnings/errors with the rest of the code
+since it currently assumes we're using pointers and not <i>Strings</i>.
+<p>
+Here are the parts of the code that reference <tt>login_</tt>:
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Constructor</th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+Student::Student(<b>const</b> <b>char</b> * login, <b>int</b> age, <b>int</b> year, <b>float</b> GPA) : <font color="blue"><b>login_(0)</b></font>
+{
+  <font color="blue"><b>set_login(login);</b></font>
+  set_age(age);
+  set_year(year);
+  set_GPA(GPA);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Copy constructor</th><th>Destructor</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+Student::Student(<b>const</b> Student&amp; student) : <font color="blue"><b>login_(0)</b></font>
+{
+  <font color="blue"><b>set_login(student.login_);</b></font>
+  set_age(student.age_);
+  set_year(student.year_);
+  set_GPA(student.GPA_);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+Student::~Student()
+{
+  <font color="blue"><b><b>delete</b> [] login_;</b></font>
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Settor</th><th>Gettor</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> Student::set_login(<b>const</b> <b>char</b>* login)
+{
+    <font color="#003399"><i>// Delete &quot;old&quot; login</i></font>
+  <font color="blue"><b><b>delete</b> [] login_;</b></font>
+
+    <font color="#003399"><i>// Allocate new one</i></font>
+  <b>int</b> len = (<b>int</b>)std::strlen(login);
+  <font color="blue"><b>login_ = <b>new</b> <b>char</b>[len + 1];</b></font>
+  <font color="blue"><b>std::strcpy(login_, login);</b></font>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>const</b> <b>char</b> *Student::get_login() <b>const</b>
+{
+  <font color="blue"><b><b>return</b> login_;</b></font>
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Display (output)</th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> Student::display() <b>const</b>
+{
+  <b>using</b> std::cout;
+  <b>using</b> std::endl;
+
+  <font color="blue"><b>cout &lt;&lt; &quot;login: &quot; &lt;&lt; login_ &lt;&lt; endl;</b></font>
+  cout &lt;&lt; <font color="#9933CC">&quot;  age: &quot;</font> &lt;&lt; age_ &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot; year: &quot;</font> &lt;&lt; year_ &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;  GPA: &quot;</font> &lt;&lt; GPA_ &lt;&lt; endl;
+
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+
+Changes that need to be made:
+
+<ol>
+<li>Constructors - remove the 0 initialization, it's not a pointer anymore.</li>
+<ul>
+  <li>Will it compile with the 0 as the argument to the constructor?</li>
+</ul>
+<!--
+It will compile with login(0), but segfaults with any kind of accessing, 
+which is dereferencing the NULL pointer.)
+-->
+
+<li>Destructor - remove the <tt><b>delete</b></tt> statement altogether. (It's not a pointer or dynamically allocated array)</li>
+<li>Gettor - needs to be changed to return the correct type.</li>
+<li>Settor - incompatible types</li>
+<li>Display - OK as is, there is already an overloaded <tt><b>operator&lt;&lt;</b></tt> for a <tt>String</tt>
+  , thanks to our implementation.</li>
+</ol>
+<p>
+Setting the login is now trivial:
+	
+<blockquote><pre>
+<b>void</b> Student::set_login(<b>const</b> <b>char</b>* login)
+{
+  login_ = login;  <font color="#003399"><i>// Safe, but currently inefficient.</i></font>
+                   <font color="#003399"><i>// Calls String::operator= after conversion.</i></font>
+                   <font color="#003399"><i>// Why does this work (i.e. is allowed)?</i></font>
+}
+</pre></blockquote>
+
+<!--
+  works because the conversion constructor is not marked explicit
+-->
+
+<p>
+Current <a href="String-1.cpp.html">String implementation</a>
+<p>
+However, there is something that is not quite right about calls to <tt>set_login</tt> (in the copy constructor):
+<blockquote><pre>
+Student::Student(<b>const</b> Student&amp; student)
+{
+  <font color="blue"><b>set_login(student.login_);</b></font>
+  set_age(student.age_);
+  set_year(student.year_);
+  set_GPA(student.GPA_);
+}
+</pre></blockquote>
+
+
+<!--
+set_login is expecting a const char *, but we're passing a String. There is no conversion
+from String to const char *. (The other way will work due to the conversion ctor).
+-->
+
+Let's first rewrite it using a proper <i>member initializer list</i>: <!--(There's still a problem, though)-->
+
+<blockquote><pre>
+Student::Student(<b>const</b> Student&amp; student) : <font color="blue"><b>login_(student.login_)</b></font>,
+                                           age_(student.age_),
+                                           year_(student.year_),
+                                           GPA_(student.GPA_)
+{
+}
+</pre></blockquote>
+
+Is this better? What happens to our data-validation code?
+
+<!--
+  With the member init list, there is no longer any data validation on the built-in types
+  However, we don't need data validation since it's a copy of a VALID Student
+-->
+
+<p>
+
+Also, the <tt>get_login()</tt> method is also problematic:
+
+<blockquote><pre>
+<b>const</b> <b>char</b> *Student::get_login() <b>const</b>
+{
+  <font color="blue"><b><b>return</b> login_;</b></font>
+}
+</pre></blockquote>
+
+Both of these problems result in these errors: <a href="Classes-4.html#STUDENT">Student class</a>
+	
+<blockquote><pre>
+Student.cpp: In copy constructor `Student::Student(const Student&)':
+Student.cpp:25: <b>error: no matching function for call to `Student::set_login(const String&)'</b>
+Student.h:19: note: candidates are: void Student::set_login(const char*)
+Student.cpp: In member function `Student& Student::operator=(const Student&)':
+Student.cpp:40: <b>error: no matching function for call to `Student::set_login(const String&)'</b>
+Student.h:19: note: candidates are: void Student::set_login(const char*)
+Student.cpp: In member function `void Student::copy_data(const Student&)':
+Student.cpp:51: <b>error: no matching function for call to `Student::set_login(const String&)'</b>
+Student.h:19: note: candidates are: void Student::set_login(const char*)
+Student.cpp: In member function `const char* Student::get_login() const':
+Student.cpp:140: <b>error: cannot convert `const String' to `const char*' in return	</b>
+</pre></blockquote>
+
+Summary of the problems:
+<ol>
+  <li>We need to overload the <tt>set_login</tt> method to accept a <tt>String</tt> as a parameter.
+    Currently, it takes a <tt><b>const char *</b></tt> only.</li>
+  <li>We need to convert the return value in <tt>get_login</tt> from a <tt>String</tt> to 
+    a <tt><b>const char *</b></tt> and return that.</li>
+</ol>
+<p>
+<br><br>
+
+We can actually solve both at the same time. I'm going to "cheat" and take the easy way out for now.
+(We will fix this soon.)
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>class</b> String
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Other public stuff...</i></font>
+
+      <font color="#003399"><i>// Conversion operator</i></font>
+    <b>operator</b> <b>const</b> <b>char</b> *() <b>const</b>;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+String::<b>operator</b> <b>const</b> <b>char</b> *() <b>const</b>
+{
+  <b>return</b> string_;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+Notes:
+<ul>
+<li>Now, the compiler is able to convert a <tt>String</tt> object to a constant character pointer
+whenever it needs to do so.  (This will be done silently without the programmer even knowing that this has occurred. Is this a <b>Good Thing<sup>&trade;</sup></b>?)
+<li><b>The client (<tt>main.cpp</tt>) is totally unaware that this change has taken place.</b> 
+	(In fact, the client doesn't even know what a <tt>String</tt> is. The <tt>String</tt> header file doesn't need to be included by the client.)
+<ul>
+  <li>This is one of the primary goals of <i>data abstraction</i> (hiding).
+</ul>
+<li>It was easy to do with this example because I could modify the <tt>String</tt> class.
+<li>You may not always be able to do this. (You may have to accommodate the existing class.)
+</ul>
+
+<p>
+	
+Let's look at a very simple program that demonstrates a very important concept.
+(We've removed the <tt>login_(0)</tt> from the member initializer list in the constructors,
+otherwise, the program will crash.)
+
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Annotated Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f1()
+{
+  Student john(<font color="#9933CC">&quot;jdoe&quot;</font>, 20, 3, 3.10f);
+  john.display();
+}
+
+<b>Output:</b>
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre><font color="blue"><b>
+[String] Default constructor
+[String] Conversion constructor: jdoe
+[String] operator=  = jdoe
+[String] Destructor: jdoe</font><font color="red">
+[Student] Student constructor for jdoe</b></font>
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+<font color="red"><b>[Student] Student destructor for jdoe</font><font color="blue">
+[String] Destructor: jdoe</b></font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+How many <tt>String</tt> objects were created? (<a href="String-1.cpp.html">String implementation</a>)
+<p>
+<ul>
+<li>Original Student header file, <a href="Student.h.html">Student.h</a>
+<li>Original Student implementation file, <a href="Student.cpp.html">Student.cpp</a>
+<p>
+
+<a name="STUDENT_UPDATE">
+Updated Student class:	
+</a>
+
+<blockquote><pre>
+<font color="blue"><b><b>#include</b> &quot;String.h&quot;</b></font>
+
+<b>class</b> Student           
+{
+  <b>public</b>:
+    <font color="#003399"><i>// Public stuff...</i></font>
+
+  <b>private</b>:
+    <font color="blue"><b>String login_;</b></font> 
+
+    <font color="#003399"><i>// Other private stuff...</i></font>
+};
+</pre></blockquote>
+
+<!--
+Now do you see why I said that I was "cheating" by creating a conversion operator?
+-->
+</ul>
+
+<p>
+Notes:
+<ul>
+<li>When an object is created (instantiated), all of the data members must be created. (In what order?)</li>
+<li>These data elements are created <i>before</i> the first statement in the constructor is executed.</li>
+<ul>
+  <li>This means that the contained objects can not be constructed in the body of the constructor.</li>  
+  <li>Therefore, we must use the initializer list.</li>  
+</ul>
+<li>Built-in types (<tt><b>int</b></tt>, <tt><b>float</b></tt>, etc.) are "automatic" (have no constructors).</li>
+<ul>
+  <li>They will be left uninitialized (random garbage).</li>
+</ul>
+<li>User-defined types will be constructed at this time.</li>
+<ul>
+  <li>They cannot be left uninitialized.</li>
+</ul>
+<li>Which constructor will be used? It's up to the programmer to choose.</li>
+<ul>
+  <li>If the programmer does not choose a constructor, then the compiler will <i>always</i> use the
+    default constructor.</li>
+    <li>What if there is no default constructor?</li>
+  </ul>
+<li>Also, when the destructor is called, each contained object's destructor is called <i>in the reverse
+order of construction</i>. 
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Making the <tt>Student</tt> and <tt>String</tt> Classes More Efficient
+</p>
+
+The first step is easy. Simply use the member initializer list to construct the contained <tt>String</tt>
+object only once:
+<p>
+	
+<blockquote><pre>
+<font color="#003399"><i>// Non-default constructor</i></font>
+Student::Student(<b>const</b> <b>char</b> * login, <b>int</b> age, <b>int</b> year, <b>float</b> GPA) <font color="blue"><b>: login_(login)</b></font>
+{
+  set_age(age);
+  set_year(year);
+  set_GPA(GPA);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[Student] Student constructor for &quot;</font> &lt;&lt; login_ &lt;&lt; std::endl;
+}
+
+<font color="#003399"><i>// Copy constructor</i></font>
+Student::Student(<b>const</b> Student&amp; student) : <font color="blue"><b>login_(student.login_)</b></font>,
+                                           age_(student.age_),
+                                           year_(student.year_),
+                                           GPA_(student.GPA_)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[Student] Student copy constructor for &quot;</font> &lt;&lt; login_ &lt;&lt; std::endl;
+}
+<!--
+Student::Student(<b>const</b> Student&amp; student) <font color="blue"><b>: login_(student.login_)</b></font>
+{
+  set_age(student.age_);
+  set_year(student.year_);
+  set_GPA(student.GPA_);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[Student] Student copy constructor for &quot;</font> &lt;&lt; login_ &lt;&lt; std::endl;
+}
+--></pre></blockquote>
+
+Notice the use of the member initializer list in the copy constructor but not the non-default
+constructor. What's the difference?
+<!--
+We must do validation on the built-in data types.
+The copy ctor is copying an existing and VALID object, so no validation is needed.
+If the non-default ctor took UDTs, we could use the MIL.
+-->
+<p>
+
+That leads to this:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Annotated Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f1()
+{
+  Student john(<font color="#9933CC">&quot;jdoe&quot;</font>, 20, 3, 3.10f);
+  john.display();
+}
+
+<b>Output:</b>
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre><font color="blue"><b>
+[String] Conversion constructor: jdoe</font><font color="red">
+[Student] Student constructor for jdoe</b></font>
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+<font color="red"><b>[Student] Student destructor for jdoe</font><font color="blue">
+[String] Destructor: jdoe</b></font>
+
+</pre><center><b>Old Annotated Output:</b></center><pre>
+<font color="blue"><b>[String] Default constructor
+[String] Conversion constructor: jdoe
+[String] operator=  = jdoe
+[String] Destructor: jdoe</font><font color="red">
+[Student] Student constructor for jdoe</b></font>
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+<font color="red"><b>[Student] Student destructor for jdoe</font><font color="blue">
+[String] Destructor: jdoe</b></font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+This trivial change has a significant effect on the runtime properties of the program.
+<ul>
+<li>No call to the default constructor (the object was discarded immediately anyway).
+<li>No call to the assignment operator (which is an expensive operation).
+<li>No call to the destructor (for the object above).
+<li>Each of these operations takes time to execute and are unnecessary. 
+<li>Creating many <tt>Student</tt> objects will cause a lot of overhead.
+<li>All of this "behind-the-scenes" work is what causes many students to have very inefficient code.
+<li>This is a double-edged sword:
+	<ul>
+		<li>On the one hand, the student doesn't have to understand how C++ works. It Just Works<sup>&trade;</sup>.</li>
+		<li>On the other hand, not knowing how things work causes poor runtime performance.</li>
+		<li>Game development cannot afford to have programmers that don't understand the language details.</li>
+    <ul>
+      <li>There's a reason why game development is mostly done in C++ (very fast and efficient <i>only</i> if you understand it).</li>
+      <li>This is fundamentally why a game developer can also do "general-purpose development" very well but
+        a "general-purpose developer" doesn't do game development very well.</li>
+      </ul>
+	</ul>
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+	
+Let's look at another simple operation:
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Annotated Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f2()
+{
+  Student john(<font color="#9933CC">&quot;jdoe&quot;</font>, 20, 3, 3.10f);
+  Student jane(<font color="#9933CC">&quot;jsmith&quot;</font>, 22, 4, 3.82f);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;=============================\n&quot;</font>;
+  john = jane;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;=============================\n&quot;</font>;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+[String] Conversion constructor: jsmith
+[Student] Student constructor for jsmith
+=============================
+[String] Conversion constructor: jsmith
+[String] operator= jdoe = jsmith
+[String] Destructor: jsmith
+[Student] Student operator= for jsmith
+=============================
+[Student] Student destructor for jsmith
+[String] Destructor: jsmith
+[Student] Student destructor for jsmith
+[String] Destructor: jsmith
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p>
+This is the problem:
+
+<blockquote><pre>
+<b>void</b> Student::set_login(<b>const</b> <b>char</b>* login)
+{
+    <font color="#003399"><i>// login must be converted to a <b>String</b> object first.</i></font>
+  login_ = login;
+}
+</pre></blockquote>
+
+What's the solution?
+<p>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Declaration</th><th>Implementation</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> set_login(<b>const</b> String&amp; login);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> Student::set_login(<b>const</b> String&amp; login)
+{
+    <font color="#003399"><i>// No conversion required.</i></font>
+    <font color="#003399"><i>// login is already a <b>String</b> object.</i></font>
+  login_ = login;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+	
+Now, the output looks like this:
+<p>
+	
+
+<blockquote><pre>
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+[String] Conversion constructor: jsmith
+[Student] Student constructor for jsmith
+=============================
+[String] operator= jdoe = jsmith
+[Student] Student operator= for jsmith
+=============================
+[Student] Student destructor for jsmith
+[String] Destructor: jsmith
+[Student] Student destructor for jsmith
+[String] Destructor: jsmith
+</pre></blockquote>
+
+
+Notes:
+<ul>
+<li>Most (if not all) beginners don't even realize the extra conversions are taking place behind their backs.
+<li>It is crucial that you understand what the compiler is doing <i>for you</i>. 
+<li>This "hidden" behavior comes at a price:
+<ol>
+<li>It's very convenient and useful at times (especially for beginners). 
+<li>You may have to pay for that convenience at runtime.
+</ol>
+<li>Do not choose convenience out of laziness or ignorance. Choose it deliberately, not by accident.
+<li>How could we have been alerted to these extra copies (conversions) being made (besides printing out the text)?
+<!-- Making the String conversion constructors explicit -->
+</ul>	
+<br><br>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Explicit vs. Implicit Conversions
+</p>
+
+We still have another "convenience" occurring:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>class</b> String
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Other public stuff...</i></font>
+
+      <font color="#003399"><i>// Conversion operator</i></font>
+    <b>operator</b> <b>const</b> <b>char</b> *() <b>const</b>;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+String::<b>operator</b> <b>const</b> <b>char</b> *() <b>const</b>
+{
+  <b>return</b> string_;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+This is required to support this function in <tt>Student</tt>:
+
+<blockquote><pre>
+<b>const</b> <b>char</b> *Student::get_login() <b>const</b>
+{
+    <font color="#003399"><i>// Conversion required (login is a <b>String</b>)</i></font>
+  <b>return</b> login_;
+}
+</pre></blockquote>
+
+
+If we want to prevent these "silent" conversions, we have to remove the conversion function that we implemented:
+
+<blockquote><pre>
+<font color="#003399"><i>// Automatic (and silent) conversion from <b>String</b> to <b>const char *</b></i></font>
+String::<b>operator</b> <b>const</b> <b>char</b> *() <b>const</b>
+{
+  <b>return</b> string_;
+}
+</pre></blockquote>
+
+
+<a href="String-1.cpp.html">String implementation</a>
+<p>
+How will we convert a <tt>String</tt> to a <tt><b>const char *</b></tt> now?
+<br><br>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Declaration</th><th>Implementation</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>// Convert a String to a const char *</i></font>
+<b>const</b> <b>char</b> *c_str() <b>const</b>;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>const</b> <b>char</b> *String::c_str() <b>const</b>
+{
+  <b>return</b> string_;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+Now we can modify the function to call this explicitly instead of the implicit conversion function:
+
+<blockquote><pre>
+<b>const</b> <b>char</b> *Student::get_login() <b>const</b>
+{
+  <b>return</b> login_.c_str();
+}
+</pre></blockquote>
+
+<p>
+Now, in C++11, we can have explicit conversion operators:
+<blockquote><pre>
+  <font color="#003399"><i>// Non-automatic conversion from <b>String</b> to <b>const char * (in the String class)</b></i></font>
+<b>explicit operator</b> <b>const</b> <b>char</b> *() <b>const</b>;
+</pre></blockquote>
+
+
+
+Notes on containment:
+<ul>
+<li>Usually the contained objects are <tt><b>private</b></tt> and the clients of the outer class can't access them directly.
+<li>The clients may not even be aware of what types are contained in a class.
+<li>If the clients of the outer class need to access the contained object, the outer class can make it available.
+<li>The contained objects do not have any special access to the outer class members.
+<ul>
+<li>For example, the <tt>String</tt> object has no access to the <tt><b>private</b></tt> members of <tt>Student</tt>.
+<li>Also, the <tt>Student</tt> class has no access to the <tt><b>private</b></tt> members of <tt>String</tt>.</li>
+</ul>
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Arrays of Objects (Revisited)
+</p>
+
+A previous <tt>Student</tt> class:
+<p>
+	
+<a href="Student.h.html">Student.h</a> &nbsp; &nbsp; <a href="Student.cpp.html">Student.cpp</a>
+<p>
+	
+What's wrong with the code below?
+<p>
+
+<blockquote><pre>
+<b>int</b> a[4];      <font color="#003399"><i>// Values of elements?</i></font>
+Student s1[4]; <font color="#003399"><i>// Values of elements?</i></font>
+</pre></blockquote>
+
+Error messages:
+
+<blockquote><pre>
+ error: no matching function for call to `Student::Student()'
+ note: candidates are: Student::Student(const Student&)
+                 note: Student::Student(const char*, int, int, float)
+</pre></blockquote>
+
+Larger example:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<cblockquote><pre>
+<b>int</b> main()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n1 ======================\n&quot;</font>;
+  
+  Student s[] = { 
+                  Student(<font color="#9933CC">&quot;jdoe&quot;</font>, 20, 3, 3.10f),
+                  Student(<font color="#9933CC">&quot;jsmith&quot;</font>, 22, 4, 3.60f), 
+                  Student(<font color="#9933CC">&quot;foobar&quot;</font>, 18, 2, 2.10f),
+                  Student(<font color="#9933CC">&quot;stimpy&quot;</font>, 20, 4, 3.0f) 
+                  };
+  
+  
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n2 ======================\n&quot;</font>;
+  
+  <b>for</b> (<b>int</b> i = 0; i &lt; 4; i++)
+    s[i].display();
+  
+  Student *ps1[4]; <font color="#003399"><i>// Values of elements?</i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 4; i++)
+    ps1[i] = &amp;s[i];
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n3 ======================\n&quot;</font>;
+  
+  <b>for</b> (<b>int</b> i = 0; i &lt; 4; i++)
+    ps1[i]-&gt;display();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n4 ======================\n&quot;</font>;
+  
+  Student *ps2[4]; <font color="#003399"><i>// Values of elements?</i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 4; i++)
+    ps2[i] = <b>new</b> Student(<font color="#9933CC">&quot;jdoe&quot;</font>, 20, 3, 3.10f);
+  
+  
+  
+  
+  
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n5 ======================\n&quot;</font>;
+  
+  <b>for</b> (<b>int</b> i = 0; i &lt; 4; i++)
+    ps2[i]-&gt;display();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n6 ======================\n&quot;</font>;
+  
+  <b>for</b> (<b>int</b> i = 0; i &lt; 4; i++)
+    <b>delete</b> ps2[i];
+  
+  
+  
+  
+  
+  
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\n7 ======================\n&quot;</font>;
+  
+  <b>return</b> 0;
+} 
+</pre></blockquote>
+</td>
+<td>
+<xblockquote><pre>
+	
+	
+1 ==========================================
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+[String] Conversion constructor: jsmith
+[Student] Student constructor for jsmith
+[String] Conversion constructor: foobar
+[Student] Student constructor for foobar
+[String] Conversion constructor: stimpy
+[Student] Student constructor for stimpy
+
+2 ==========================================
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+login: jsmith
+  age: 22
+ year: 4
+  GPA: 3.6
+login: foobar
+  age: 18
+ year: 2
+  GPA: 2.1
+login: stimpy
+  age: 20
+ year: 4
+  GPA: 3
+
+3 ==========================================
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+login: jsmith
+  age: 22
+ year: 4
+  GPA: 3.6
+login: foobar
+  age: 18
+ year: 2
+  GPA: 2.1
+login: stimpy
+  age: 20
+ year: 4
+  GPA: 3
+
+4 ==========================================
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+[String] Conversion constructor: jdoe
+[Student] Student constructor for jdoe
+
+5 ==========================================
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+login: jdoe
+  age: 20
+ year: 3
+  GPA: 3.1
+
+6 ==========================================
+[Student] Student destructor for jdoe
+[String] Destructor: jdoe
+[Student] Student destructor for jdoe
+[String] Destructor: jdoe
+[Student] Student destructor for jdoe
+[String] Destructor: jdoe
+[Student] Student destructor for jdoe
+[String] Destructor: jdoe
+
+7 ==========================================
+
+
+
+
+[Student] Student destructor for stimpy
+[String] Destructor: stimpy
+[Student] Student destructor for foobar
+[String] Destructor: foobar
+[Student] Student destructor for jsmith
+[String] Destructor: jsmith
+[Student] Student destructor for jdoe
+[String] Destructor: jdoe
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p class="technote">
+<b>Self check:</b> Make sure you can follow the code above and understand exactly why each line of output is generated.
+This will tell you if you understand these concepts or not.
+</p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

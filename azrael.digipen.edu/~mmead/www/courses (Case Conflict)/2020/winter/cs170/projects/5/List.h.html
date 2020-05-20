@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<b>#ifndef</b> LIST_H
+<b>#define</b> LIST_H
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>/* ostream, endl */</i></font>
+
+<b>namespace</b> CS170
+{
+  <b>template</b> &lt;<b>typename</b> T&gt; <b>class</b> List;
+
+  <b>template</b> &lt;<b>typename</b> T&gt;
+  std::ostream &amp; <b>operator</b>&lt;&lt;(std::ostream &amp; os, <b>const</b> List&lt;T&gt; &amp;list);
+
+  <b>template</b> &lt;<b>typename</b> T&gt;
+  <b>class</b> List
+  {
+    <b>public</b>:
+        <font color="#003399"><i>// Default constructor</i></font>
+      List();
+
+        <font color="#003399"><i>// Copy contructor for constructing a list from an existing list</i></font>
+      List(<b>const</b> List &amp;list);
+
+        <font color="#003399"><i>// Contruct a list from a T array</i></font>
+      List(<b>const</b> T *array, <b>int</b> size);
+
+        <font color="#003399"><i>// Destructor</i></font>
+      ~List();
+
+      <b>void</b> push_front(<b>const</b> T&amp; Value); <font color="#003399"><i>// adds the item to the front of the list</i></font>
+      <b>void</b> push_back(<b>const</b> T&amp; Value);  <font color="#003399"><i>// adds the item to the end of the list</i></font>
+      <b>void</b> pop_front();                <font color="#003399"><i>// removes the first item in the list</i></font>
+      T front() <b>const</b>;                 <font color="#003399"><i>// retrieves the first item in the list</i></font>
+      <b>int</b> size() <b>const</b>;                <font color="#003399"><i>// returns the number of items in the list</i></font>
+      <b>bool</b> empty() <b>const</b>;              <font color="#003399"><i>// true if empty, else false</i></font>
+      <b>void</b> clear();                    <font color="#003399"><i>// clears the list</i></font>
+
+        <font color="#003399"><i>// Overloaded assignment operator (=) for assigning one list to another</i></font>
+      List&amp; <b>operator</b>=(<b>const</b> List &amp;list);
+
+        <font color="#003399"><i>// Overloaded addition operator (+) for adding two lists</i></font>
+      List <b>operator</b>+(<b>const</b> List &amp;list) <b>const</b>;
+
+        <font color="#003399"><i>// Overloaded addition/assignment (+=) for adding to a list &quot;in place&quot;</i></font>
+      List&amp; <b>operator</b>+=(<b>const</b> List &amp;list);
+
+        <font color="#003399"><i>// Overloaded subscript operators</i></font>
+      <b>const</b> T&amp; <b>operator</b>[](<b>int</b> index) <b>const</b>;
+      T&amp; <b>operator</b>[](<b>int</b> index);
+
+      <font color="#003399"><i>/*!**********************************************************************
+        Outputs all of the data in a list to an output stream.
+
+        &#92;param os
+          The stream to output the list to.
+
+        &#92;param list
+          The list to output to the stream.
+
+        &#92;return
+          The ouput stream (ref) that was passed in (for chaining)
+      ************************************************************************/</i></font>  
+      <b>friend</b> std::ostream&amp; <b>operator</b>&lt;&lt; &lt;T&gt;(std::ostream &amp; os, <b>const</b> List &amp;list);
+
+        <font color="#003399"><i>// Returns the number of Nodes that have been created</i></font>
+      <b>static</b> <b>int</b> node_count();
+
+    <b>private</b>:
+        <font color="#003399"><i>// Used to build the linked list</i></font>
+      <b>struct</b> Node
+      {
+        Node(T value);           <font color="#003399"><i>// constructor (conversion)</i></font>
+        ~Node();                 <font color="#003399"><i>// destructor</i></font>
+        Node *next;              <font color="#003399"><i>// pointer to the next Node</i></font>
+        T data;                  <font color="#003399"><i>// the actual data in the node</i></font>
+        <b>static</b> <b>int</b> nodes_alive; <font color="#003399"><i>// number of Nodes created</i></font>
+      };
+
+      Node *head_; <font color="#003399"><i>// pointer to the head of the list</i></font>
+      Node *tail_; <font color="#003399"><i>// pointer to the last node</i></font>
+      <b>int</b> size_;   <font color="#003399"><i>// number of items on the list</i></font>
+
+        <font color="#003399"><i>// All nodes are created in this method</i></font>
+      Node *new_node(<b>const</b> T&amp; data) <b>const</b>;
+  };
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<b>#include</b> <font color="#9933CC">&quot;List.cpp&quot;</font>
+
+<b>#endif</b>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+</code></pre>
+
+</body>
+</html>
+  

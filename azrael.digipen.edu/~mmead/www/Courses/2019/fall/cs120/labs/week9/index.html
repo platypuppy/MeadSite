@@ -1,0 +1,569 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+<p class="technote">
+<b>Please read the entire web page before starting the lab or asking any questions about it.</b>
+</p>
+
+In this lab assignment you will practice using arrays, pointers, and strings and passing them to functions. 
+Remember, in C/C++, when you pass an array (or string) to a function, you are actually just passing a 
+pointer to the first element of the array. However, since the strings are NUL-terminated, you don't
+have to pass the size to the functions. You will also be passing pointers to some functions 
+as a way for the called function to communicate information back to the calling function.
+<p>
+
+<ol>
+<p>
+<hr width="100%">
+<p>
+
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+
+<li>The first function that you are going to write is <tt>GetCounts</tt> and the prototype looks like this:
+
+<blockquote><pre>
+<b>int</b> GetCounts(<b>const</b> <b>char</b> *string, <b>int</b> letters[], <b>int</b> *spaces, <b>int</b> *other);
+</pre></blockquote>
+
+The purpose of the function is to count the number of letters, spaces, and other characters in a
+string. The <i>string</i> is a NUL-terminated array of (constant) characters. A letter is any
+letter from <tt>a</tt> to <tt>z</tt> (either uppercase or lowercase, <tt>a..z</tt> and <tt>A..Z</tt>). Spaces are, well, spaces, and the
+<i>other</i> parameter is going to hold the number of other characters (non-letters, non-spaces).
+<p>
+
+The meanings of the parameters are described in the table below. Notice the tags of <i><b>in</b></i> and <i><b>out</b></i> 
+below. This helps you understand how the parameters are being used inside the function. That is, as inputs and/or outputs.
+
+<p>
+<table border=1 cellspacing=1 cellpadding=5>
+<tr><th>Parameter</th><th>In/Out</th><th>Description</th></tr>
+<tr valign="top">
+<td align="center">string</td><td align="center">IN</td>
+<td>
+This is a pointer to a <i><b>const</b></i> character, meaning that the function can't change
+the characters that are in the string. The function is only going to read the 
+characters in the string, not modify them.  
+</td>
+</tr>
+
+<tr>
+<td align="center">letters</td><td align="center">OUT</td>
+<td>This is an array of integers that will contain the number of occurrences of each letter (a..z and A..Z).
+  The reason I say "will contain" is because, when the array is passed to the function, the elements
+  are random garbage. The function is going to fill in the values.
+    Note that this array is not marked <i><b>const</b></i> so the function will be allowed to set the values.
+
+</td>
+</tr>
+
+<tr>
+<td align="center">spaces</td><td align="center">OUT</td>
+<td>Since this is a pointer to a non-const integer, the function will set it to the number of spaces
+    that are in the <i>string</i>.
+</td>
+</tr>
+
+<tr>
+<td align="center">other</td><td align="center">OUT</td>
+<td>
+This is also a pointer to a non-const integer and the function will set this value to the number of
+    other characters (i.e. anything but a letter or a space).  
+</td>
+</tr>
+</table>
+
+<p>
+The return value from <tt>GetCounts</tt> is the <i>total</i> number of letters 
+(<tt>a..z</tt> and <tt>A..Z</tt>) that were counted. The count of individual
+characters is in the <i>letters</i> array. The reason we are passing pointers for 
+<tt>spaces</tt> and <tt>other</tt> is because a function can only return one value. This
+function is returning the number of letters found in the sentence. The only way we can
+"return" more information is through the pointers passed in to the function. (Well, there are other ways,
+but we haven't seen them yet.)
+
+<blockquote>
+<p class="technote">
+Passing the address of a variable is a very common way of communicating multiple values back to the caller.
+You will see this quite often in the C libraries as well as your own code.
+</p>
+</blockquote>
+
+<p>
+
+Here is an example that calls <tt>GetCounts</tt>:
+
+<pre class="sourcecode"><code><font color="990099">#define NUM_LETTERS 26</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> spaces;               <font color="#003399"><i>/* The number of spaces in the string                 */</i></font>
+  <b>int</b> total;                <font color="#003399"><i>/* The number of letters (a..z, A..Z) in the string   */</i></font>
+  <b>int</b> other;                <font color="#003399"><i>/* The number of other characters in the string       */</i></font>
+  <b>int</b> letters[NUM_LETTERS]; <font color="#003399"><i>/* The number of each individual letter in the string */</i></font>
+
+    <font color="#003399"><i>/* Simple test sentence */</i></font>
+  <b>const</b> <b>char</b> *a = <font color="#9933CC">&quot;This is simple - a sentence with spaces - and other punctuations.&quot;</font>;
+
+    <font color="#003399"><i>/* Call function and print out results. Do you understand the second argument? */</i></font>
+  total = GetCounts(a, letters, &amp;spaces, &amp;other);
+  printf(<font color="#9933CC">&quot;Count of letters is: %i, spaces: %i, other: %i&#92;n&quot;</font>, total, spaces, other);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+And this is the output from <tt>main</tt>:
+
+<blockquote><pre>
+Count of letters is: 51, spaces: 11, other: 3
+</pre></blockquote>
+
+The contents of the <tt>letters</tt> array are the number of occurrences of each letter in the string.
+In the example above the value of <tt>letters[0]</tt> is 4. This is because the first element in the
+array represents the number of times the letter <tt><i>a</i></tt> occurred in the string. The value of
+<tt>letters[1]</tt> is 0 because the letter <tt><i>b</i></tt> does not occur in the string. The value of
+<tt>letters[2]</tt> is 3, the value of <tt>letters[3]</tt> is 1, etc.
+<p>
+This is the first part of the lab. In the next part, you will print out information associated with each letter that was found in the strings.
+<p>
+<font color="blue"><b>This function requires about 18 lines of code.</b></font>
+
+<p>
+<hr width="100%">
+<p>
+
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+
+<li>The second function that you will write is <tt>PrintHistogram</tt> and the prototype looks like this:
+
+<blockquote><pre>
+<b>void</b> PrintHistogram(<b>const</b> <b>int</b> letters[]);  
+</pre></blockquote>
+
+The function doesn't return anything and the only parameter is the array of letter counts. 
+This array was filled in by the call to the <tt>GetCounts</tt> function you wrote above. Now you 
+are using the values in that array to print out information. Notice that we are not passing the number
+of elements in the array. This is because there are <i>exactly</i> 26 characters in the English alphabet, 
+and we're only concerned about those. That's why we have this:
+
+<blockquote><pre>
+<b>#define</b> NUM_LETTERS 26
+</pre></blockquote>
+
+<p>
+The function
+will print a <a href="http://en.wikipedia.org/wiki/Histogram">histogram</a> of the letters. There will be
+one asterisk (<tt>*</tt>) for each occurrence of the letter. Notice that the parameter is tagged with the
+<tt><b>const</b></tt> keyword, indicating that the function promises not to modify the elements of the
+array. This is important because we may want to display all arrays (const and non-const) with this one
+function.
+<p>
+This is the histogram for the example above:
+
+<blockquote><pre>
+A:****
+B:
+C:***
+D:*
+E:******
+F:
+G:
+H:***
+I:*****
+J:
+K:
+L:*
+M:*
+N:*****
+O:**
+P:***
+Q:
+R:*
+S:*******
+T:******
+U:**
+V:
+W:*
+X:
+Y:
+Z:
+</pre></blockquote>
+
+And, for reference, this was the input string (the quotes are not part of the string):
+
+<blockquote><pre>
+<font color="blue">This is simple - a sentence with spaces - and other punctuations.</font>
+</pre></blockquote>
+
+Again, in the histogram you can see that the number of times the letter '<tt>A</tt>' 
+was encountered was 4, the number of occurrences of the letter '<tt>B</tt>' is 0, the 
+letter '<tt>C</tt>' is 3, '<tt>D</tt>' is 4, etc. Please be sure to use <tt><b>diff</b></tt> 
+when checking your output to make sure that you format the output <i>exactly</i> as shown since
+your code is printing the histogram. <b>Notice that you are not distinguishing between UPPERCASE
+and lowercase characters.</b>
+
+<p>
+
+Here is the output from another test case:
+<p>
+The input string:
+
+<blockquote><tt>
+<p class="technote">
+When in the Course of human events, it becomes necessary for one people to
+dissolve the political bands which have connected them with another, and to 
+assume among the powers of the earth, the separate and equal station to 
+which the Laws of Nature and of Nature's God entitle them, a decent respect 
+to the opinions of mankind requires that they should declare the causes 
+which impel them to the separation.
+</p>
+</tt></blockquote>
+
+
+<blockquote><pre>
+Count of letters is: 330, spaces: 70, other: 6
+A:**************************
+B:**
+C:*************
+D:***********
+E:**************************************************
+F:******
+G:**
+H:***************************
+I:*****************
+J:
+K:*
+L:**********
+M:*********
+N:************************
+O:***************************
+P:*********
+Q:**
+R:**************
+S:**********************
+T:*************************************
+U:*********
+V:***
+W:*******
+X:
+Y:**
+Z:
+</pre></blockquote>
+
+You'll notice some things that are somewhat obvious with the English language: The letter 'E' is the most
+"popular" character, followed by the letter "T". Other languages will have a different distribution of
+letters. (As an aside, this is how the game <tt>SCRABBLE<sup>TM</sup></tt> determines how the point values
+are awarded for each letter/word.)
+<p>
+<font color="blue"><b>This function requires about 8 lines of code.</b></font>
+
+
+
+<p>
+<hr width="100%">
+<p>
+
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+
+<li>The third function you will write is <tt>GetStatistics</tt> and the prototype looks like:
+
+<blockquote><pre>
+<b>void</b> GetStatistics(<b>const</b> <b>int</b> letters[], <b>double</b> *average, <b>char</b> *max_letter, <b>int</b> *max_count);
+</pre></blockquote>
+
+The purpose of this function is to return various information about the string. The
+parameters are:
+<p>
+<ul>
+  <li><i>letters</i> - (in) The array of counts that was filled in by the <tt>GetCounts</tt> function.</li>
+  <li><i>average</i> - (out) The "average" of the letters (described below).</li>
+  <li><i>max_letter</i> - (out) The letter that appeared the most in the string.</li>
+  <li><i>max_count</i> - (out) The number of times that <i>max_letter</i> appeared in the string.</li>
+</ul>
+
+<p>
+Using the example above:
+
+<blockquote><pre>
+<font color="blue">This is simple - a sentence with spaces - and other punctuations.</font>
+</pre></blockquote>
+
+The histogram (showing the "score" for each letter to the right). 
+Note that you are NOT printing the stuff in <font color="blue">BLUE</font>.
+I'm just showing you how to calculate the scores.
+
+<blockquote><pre>
+A:****     <font color="blue"><xb> 1 x 4 =   4</xb></font>
+B:         <font color="blue"><xb> 2 x 0 =   0</xb></font>
+C:***      <font color="blue"><xb> 3 x 3 =   9</xb></font>
+D:*        <font color="blue"><xb> 4 x 1 =   4</xb></font>
+E:******   <font color="blue"><xb> 5 x 6 =  30</xb></font>
+F:         <font color="blue"><xb> 6 x 0 =   0</xb></font>
+G:         <font color="blue"><xb> 7 x 0 =   0</xb></font>
+H:***      <font color="blue"><xb> 8 x 3 =  24</xb></font>
+I:*****    <font color="blue"><xb> 9 x 5 =  45</xb></font>
+J:         <font color="blue"><xb>10 x 0 =   0</xb></font>
+K:         <font color="blue"><xb>11 x 0 =   0</xb></font>
+L:*        <font color="blue"><xb>12 x 1 =  12</xb></font>
+M:*        <font color="blue"><xb>13 x 1 =  13</xb></font>
+N:*****    <font color="blue"><xb>14 x 5 =  70</xb></font>
+O:**       <font color="blue"><xb>15 x 2 =  30</xb></font>
+P:***      <font color="blue"><xb>16 x 3 =  48</xb></font>
+Q:         <font color="blue"><xb>17 x 0 =   0</xb></font>
+R:*        <font color="blue"><xb>18 x 1 =  18</xb></font>
+S:*******  <font color="blue"><xb>19 x 7 = 133</xb></font>
+T:******   <font color="blue"><xb>20 x 6 = 120</xb></font>
+U:**       <font color="blue"><xb>21 x 2 =  42</xb></font>
+V:         <font color="blue"><xb>22 x 0 =   0</xb></font>
+W:*        <font color="blue"><xb>23 x 1 =  23</xb></font>
+X:         <font color="blue"><xb>24 x 0 =   0</xb></font>
+Y:         <font color="blue"><xb>25 x 0 =   0</xb></font>
+Z:         <font color="blue"><xb>26 x 0 =   0</xb></font>
+           <font color="blue"><xb>------------</xb></font>
+                    <font color="blue"><xb>625</xb></font>
+</pre></blockquote>
+
+Calculate the "average" by adding up the totals and dividing by 26 (actually, <tt>NUM_LETTERS</tt>). 
+The position in the alphabet gives the "weight" of the letter. So, the letter <tt>A</tt> is worth 1, 
+<tt>B</tt> is worth 2, <tt>C</tt> is worth 3, ..., and <tt>Z</tt> is worth 26. Multiply the letter's
+worth by the number of occurrences, add everything up, and divide by the number of letters:
+
+<blockquote><pre>
+625 / 26 = 24.03846
+</pre></blockquote>
+
+This is a code snippet showing how to call <tt>GetStatistics</tt>:
+
+<blockquote><pre>
+<b>int</b> max;
+<b>double</b> average;
+<b>char</b> letter;
+
+GetStatistics(letters, &amp;average, &amp;letter, &amp;max);
+printf(<font color="#9933CC">&quot;Average: %.5f, max letter: %c, max count: %i&#92;n&quot;</font>, average, letter, max);
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+and it yields this output:
+
+
+<blockquote><pre>
+Average: 24.03846, max letter: S, max count: 7
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Notice that the variables: <tt>max</tt>, <tt>average</tt>, and <tt>letter</tt> are undefined when you
+pass them to the <tt>GetCounts</tt> function. The compiler does not warn you about this. You MUST
+understand why that is.
+</p>
+</blockquote>
+
+<font color="blue"><b>This function requires about 10 lines of code.</b></font>
+
+
+</ol>   
+
+<p>
+<hr width="90%">
+<p>
+
+<b>Other notes:</b>
+<ul>
+  <li>You are not distinguishing between uppercase letters and lowercase letters, 
+    e.g. <tt>a</tt> and <tt>A</tt> are considered the same character. There is a function
+    in the C library called 
+    <a href="http://www.cplusplus.com/reference/clibrary/cctype/toupper/"><tt>toupper</tt></a>,
+    which will convert a character to uppercase, if you want to use it.
+    <p>
+  <li>The data pointed at by the pointers passed to the <tt>GetCounts</tt> function may be
+    garbage. In other words, for example, the values in the <tt>letters</tt> array may be random
+    garbage. You must initialize those values to 0 <i>before</i> starting to count the occurrences of
+    each letter. The same is true for the other pointers (e.g. <tt>spaces</tt>).
+  </li>
+  <p>
+  <li>Instead of creating 26 different variables 
+  (one for the letter <tt>A</tt>, one for <tt>B</tt>, one for <tt>C</tt> etc.), we are
+  simply creating an array of 26 elements, one for each letter of the alphabet. This makes
+  it much simpler to count the letters because we can use a loop. Index 0 is for <tt>A</tt>,
+  index 1 is for <tt>B</tt>, index 2 is for <tt>C</tt>, and so on with index 25 referring
+  to the count for <tt>Z</tt>.</li>
+  <p>
+  <li>It is easy to use the uppercase letter as an index into the <tt>letters</tt> arrray. All
+    you have to do is subtract the integer '<tt>A</tt>' from the letter. For example, if 
+    <tt>letter</tt> is <tt>A</tt> and you do this: <tt>letter - 'A'</tt>, the result is 0, which
+    is the first slot in the array. If <tt>letter</tt> is <tt>J</tt> (the 10th letter of the alphabet)
+    and you do this: <tt>letter - 'A'</tt>, the result is 9, which is the index of the 10th letter.
+    This should make it very easy to read a character from the sentence and increment the corresponding
+    array element. <b>This is one of the reasons that so few lines of code are required 
+    for this lab (or any lab/assignment for that matter).</b>
+    <p>
+  <li>If more than one letter has the most occurrences, select the one that comes first in
+    the alphabet. For
+    example, if both the letter <tt>A</tt> and the letter <tt>E</tt> have the most 
+    occurrences, select the letter <tt>A</tt>.</li>
+    <p>
+<!--
+  <li>Note: If you receive the warning (likely with Cygwin, not with Linux or Mac)
+    <blockquote><pre>warning: array subscript has type `char'</pre></blockquote>
+    when using <tt>toupper</tt>, you need to cast the argument to an <tt><b>int</b></tt> like this: 
+    <blockquote><pre>toupper((<b>int</b>)sentence[i])</pre></blockquote>
+
+    Yes, the warning makes absolutely no sense because the subscript in the statement above is <b>NOT</b> a character. 
+    It's clearly an integer and the cast that we're
+    providing isn't casting the subscript!! What's going on here!?!? The issue is with the conversion, which you don't see. The macro converts this:
+    <blockquote><pre>char letter = toupper(sentence[i]);</pre></blockquote>
+    to this (the <font color="blue"><b>highlighted</b></font> portion is the problem):
+    <blockquote><pre>char letter = __extension__ ({ __typeof__ (sentence[i]) __x = (sentence[i]); (void) <font color="blue"><b>__ctype_ptr__[__x]</b></font>; (toupper) (__x);});</pre></blockquote>
+
+    It's for reasons like this that many people consider macros evil, or at least something that should be 
+    understood thoroughly before using. This is why I discourage students from using macros in CS120: 
+    Students 
+    just don't understand the problems they can potentially create. 
+    Yeah, they look innocent and student's feel <i>cool</i> that they can do this, but it's just a big
+    can of worms for very little benefit. Just like you don't need global variables, <tt><b>goto</b></tt>
+    statements or other advanced features in CS120, you don't need complicated macros.
+    I don't expect anyone in this class to 
+    understand the 
+    warning because you can't know what a macro may be doing to your code unless a) you've been programming 
+    for many years in C, or b) you look at the preprocessed code, which students and beginners rarely do. 
+    Just chalk this up to <i>Lesson Learned</i>. (We will not discuss this matter further!)
+  </li>
+  <p>
+-->    
+      <!--
+  <li>This lab (actually, all labs) is a good time to practice following the style guide
+    as well as the commenting. This way, you can ask a TA to look at your code
+    and give you immediate feedback on how well you are following the guides.</li>
+  -->
+
+</ul>
+
+Files to get you started:
+
+<blockquote>
+Here is a <a href="main.c"><tt>main.c</tt></a> file for you to use. 
+(<a href="main.c.html">HTML</a>)<br>
+Here is a <a href="histogram-skeleton.c"><tt>histogram.c</tt></a> file for you to start with.
+(<a href="histogram-skeleton.c.html">HTML</a>)
+<p>
+
+Put this code into a file named <tt>histogram.h</tt>:
+
+<pre class="sourcecode"><code><font color="990099">#define NUM_LETTERS 26</font>
+<font color="990099">#define SPACE ' '</font>
+
+<b>int</b> GetCounts(<b>const</b> <b>char</b> *string, <b>int</b> letters[], <b>int</b> *spaces, <b>int</b> *other);
+<b>void</b> PrintHistogram(<b>const</b> <b>int</b> letters[]);
+<b>void</b> GetStatistics(<b>const</b> <b>int</b> letters[], <b>double</b> *average, <b>char</b> *max_letter, <b>int</b> *max_count);
+</code></pre>
+
+Here are outputs for the 5 tests in <tt>main.c</tt>. Download them to your computer.
+
+<ul>
+  <li><a href="s0.txt">s0.txt</a></li>
+  <li><a href="s1.txt">s1.txt</a></li>
+  <li><a href="s2.txt">s2.txt</a></li>
+  <li><a href="s3.txt">s3.txt</a></li>
+  <li><a href="s4.txt">s4.txt</a></li>
+</ul>
+
+This is the command line to build the program:
+
+<!--
+gcc -Wno-overlength-strings -O -Wall -Wextra -ansi -pedantic main.c histogram.c -o histogram
+-->
+
+<blockquote><pre>
+gcc -O -Wall -Wextra -ansi -pedantic main.c histogram.c -o histogram
+</pre></blockquote>
+
+When you run the program, you should provide the test number to run. If you want to run test
+0, you would do this:
+<blockquote><pre>
+histogram 0  
+</pre></blockquote>
+
+If you want to run test 3, you would do this:
+<blockquote><pre>
+histogram 3
+</pre></blockquote>
+
+If you want to run all the tests, don't provide any number:
+<blockquote><pre>
+histogram
+</pre></blockquote>
+
+On Linux and Mac OS X you will likely have to prepend the current directory like this:
+
+If you want to run test 3, you would do this:
+<blockquote><pre>
+./histogram 3
+</pre></blockquote>
+
+Don't forget that you may need to use the <tt>--strip-trailing-cr</tt> option with <tt><b>diff</b></tt>.
+
+</blockquote>
+<br>
+<br>
+<br>
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

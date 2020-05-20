@@ -1,0 +1,594 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>megadriver.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+<font color="990099">#include &quot;List.h&quot;</font>
+<font color="990099">#include &quot;PRNG.h&quot;</font>
+
+<b>using</b> CS170::ListLab::List;
+<b>using</b> CS170::ListLab::Node;
+
+<b>namespace</b> {
+
+<font color="#003399"><i>// generate random numbers between low and high </i></font>
+<b>int</b> RandomInt(<b>unsigned</b> low, <b>unsigned</b> high)
+{
+  <b>int</b> number = <b>static_cast</b>&lt;<b>int</b>&gt;(CS170::Utils::rand() % (high - low + 1) + low);
+  <b>return</b> number;
+}
+
+<b>void</b> TestAdd(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestAdd ********************&#92;n&quot;</font>;
+
+  List list1;
+  List list2; 
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+    <font color="#003399"><i>// Create two lists</i></font>
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    list1.AddToEnd(numbers[i]);
+    list2.AddToFront(numbers[i]);
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+    std::cout &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestFind(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestFind ********************&#92;n&quot;</font>;
+
+  List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         22, 23, 38, 94, 56, 34, 
+                         67, 56, 88, 19, 10, 59
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+    list1.AddToEnd(numbers[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Find an existing value</i></font>
+  <b>int</b> value = 56;
+  Node *node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+  value = 22;
+  node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+  value = 59;
+  node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+    <font color="#003399"><i>// Find a non-existant value</i></font>
+  value = 123;
+  node = list1.FindItem(value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestDelete1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDelete1 ********************&#92;n&quot;</font>;
+
+  List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         22, 23, 38, 94, 56, 34, 
+                         67, 56, 88, 19, 10, 59
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+    list1.AddToEnd(numbers[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(56);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 56 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(22);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 22 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(59);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 59 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(99);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 99 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  {
+    <b>const</b> <b>int</b> numbers[] = {
+                           23, 38, 94, 34, 
+                           67, 56, 88, 19, 10
+                          };
+    size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+    <b>for</b> (size_t i = 0; i &lt; size; i++)
+    {
+      list1.<b>Delete</b>(numbers[i]);
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: &quot;</font> &lt;&lt; numbers[i] &lt;&lt; <font color="#9933CC">&quot; (&quot;</font> &lt;&lt; std::setw(2) 
+                &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+      std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+    }
+    list1.<b>Delete</b>(99);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Deleting: 99 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestDelete2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDelete1 ********************&#92;n&quot;</font>;
+
+  List list1;
+  <b>const</b> <b>int</b> numbers1[] = {
+                         22, 23, 38, 94, 56, 34, 
+                         67, 56, 88, 19, 10, 59
+                        };
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  <b>for</b> (size_t i = 0; i &lt; size1; i++)
+    list1.AddToEnd(numbers1[i]);
+
+  List list2;
+  <b>const</b> <b>int</b> numbers2[] = {
+                         94, 23, 56, 22, 56, 19, 
+                         67, 38, 34, 59
+                        };
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+  <b>for</b> (size_t i = 0; i &lt; size2; i++)
+    list2.AddToEnd(numbers2[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+
+  list1.<b>Delete</b>(list2);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 after deleting list2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestConcat(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestConcat ********************&#92;n&quot;</font>;
+
+  List list1;
+  List list2; 
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 21, 56, 38, 94, 23};
+  <b>const</b> <b>int</b> numbers2[] = {67, 56, 88, 19, 59, 10, 17};
+
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  <b>for</b> (size_t i = 0; i &lt; size1; i++)
+    list1.AddToEnd(numbers1[i]);
+
+  <b>for</b> (size_t i = 0; i &lt; size2; i++)
+    list2.AddToEnd(numbers2[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Adding both lists (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  list1.Concat(list2);
+}
+
+<b>void</b> TestInsert1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestInsert1 ********************&#92;n&quot;</font>;
+
+  List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    list1.AddToEnd(numbers[i]);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+    std::cout &lt;&lt; std::endl;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 91 at position 3&#92;n&quot;</font>;
+  list1.Insert(91, 3);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 92 at position 0&#92;n&quot;</font>;
+  list1.Insert(92, 0);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 93 at position 7&#92;n&quot;</font>;
+  list1.Insert(93, 7);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting... 94 at position 9&#92;n&quot;</font>;
+  list1.Insert(94, 9);
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestInsert2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestInsert2 ********************&#92;n&quot;</font>;
+
+  List list1;
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    list1.Insert(numbers[i]);
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes) &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting &quot;</font> &lt;&lt; std::setw(2) &lt;&lt; numbers[i] &lt;&lt; <font color="#9933CC">&quot;: &quot;</font>;
+    std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestMerge(<b>const</b> <b>int</b> numbers1[], <b>const</b> <b>int</b> numbers2[], size_t size1, size_t size2)
+{
+  List list1;
+  List list2;
+
+  <b>for</b> (size_t i = 0; i &lt; size1; i++)
+    list1.Insert(numbers1[i]);
+ 
+  <b>for</b> (size_t i = 0; i &lt; size2; i++)
+    list2.Insert(numbers2[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Merge list2 into list1:&#92;n&quot;</font>;
+  list1.Merge(list2);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list2.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestMerge1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge1 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 70, 21};
+  <b>const</b> <b>int</b> numbers2[] = {67, 23, 88};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  TestMerge(numbers1, numbers2, size1, size2);
+}
+
+<b>void</b> TestMerge2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge2 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 21, 56, 38, 94, 27, 22};
+  <b>const</b> <b>int</b> numbers2[] = {67, 23, 88, 19, 59, 10, 17, 30};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  TestMerge(numbers1, numbers2, size1, size2);
+}
+
+<b>void</b> TestMerge3(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge3 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 21, 56};
+  <b>const</b> <b>int</b> numbers2[] = {67, 23, 88, 19, 59, 10, 17, 30};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  TestMerge(numbers1, numbers2, size1, size2);
+}
+
+<b>void</b> TestMerge4(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge4 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 21, 56, 38, 94, 27, 22};
+  <b>const</b> <b>int</b> numbers2[] = {67, 23, 88};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  TestMerge(numbers1, numbers2, size1, size2);
+}
+
+<b>void</b> TestMerge5(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge5 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 21, 56, 38, 94, 27, 22};
+  <b>const</b> <b>int</b> numbers2[] = {0};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  TestMerge(numbers1, numbers2, size1, 0);
+}
+
+<b>void</b> TestMerge6(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge6 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {0};
+  <b>const</b> <b>int</b> numbers2[] = {67, 23, 88, 19, 59, 10, 17, 30};
+                        
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  TestMerge(numbers1, numbers2, 0, size2);
+}
+
+<b>void</b> TestMerge7(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge7 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 12, 56, 12, 12, 27, 22};
+  <b>const</b> <b>int</b> numbers2[] = {12, 12, 88, 12, 59, 12, 17, 12};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+  size_t size2 = <b>sizeof</b>(numbers2) / <b>sizeof</b>(*numbers2);
+
+  TestMerge(numbers1, numbers2, size1, size2);
+}
+
+<b>void</b> TestMerge8(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestMerge8 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 70, 21, 55, 56, 20, 21, 12, 12, 8, 43};
+                        
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Merging a list into itself...&#92;n&quot;</font>;
+  TestMerge(numbers1, numbers1, size1, size1);
+}
+
+<b>void</b> TestDuplicates(<b>const</b> <b>int</b> numbers1[], size_t size1)
+{
+  List list1;
+
+  <b>for</b> (size_t i = 0; i &lt; size1; i++)
+    list1.Insert(numbers1[i]);
+ 
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates removed: &quot;</font>;
+  std::cout &lt;&lt; list1.RemoveDuplicates() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestDuplicates1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates1 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 34, 12, 24, 12, 12, 27, 34, 12, 12, 88, 27, 59, 12, 27, 12};
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates2 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 12, 12, 12, 12, 12, 12, 12};
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates3(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates3 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {12, 17, 5, 10, 4, 11, 9, 8};
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates4(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates4 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {5};
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates5(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates5 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {5, 1};
+  size_t size1 = <b>sizeof</b>(numbers1) / <b>sizeof</b>(*numbers1);
+
+  TestDuplicates(numbers1, size1);
+}
+
+<b>void</b> TestDuplicates6(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates6 ********************&#92;n&quot;</font>;
+
+  <b>const</b> <b>int</b> numbers1[] = {5, 1};
+
+  TestDuplicates(numbers1, 0);
+}
+
+<b>void</b> TestDuplicates7(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestDuplicates7 ********************&#92;n&quot;</font>;
+
+  List list1;
+  <b>const</b> <b>int</b> size = 10000;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list1.Insert(RandomInt(1, 9));
+ 
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &#92;n&quot;</font>;
+  <font color="#003399"><i>//std::cout &lt;&lt; list1 &lt;&lt; std::endl;</i></font>
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates removed: &quot;</font>;
+  std::cout &lt;&lt; list1.RemoveDuplicates() &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; list1.Count() &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+  std::cout &lt;&lt; list1 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestStress1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestStress1 ********************&#92;n&quot;</font>;
+
+  CS170::Utils::srand(1, 2);
+  <b>int</b> size = 20000;
+  <b>unsigned</b> low = 1, high = 20;
+  List list;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+    list.AddToFront(RandomInt(low, high));
+
+  std::cout &lt;&lt; list &lt;&lt; std::endl;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size + 1500; i++)
+  {
+    <b>int</b> item = RandomInt(low, high);
+    list.<b>Delete</b>(item);
+    <font color="#003399"><i>//std::cout &lt;&lt; std::endl;</i></font>
+    <font color="#003399"><i>//std::cout &lt;&lt; list &lt;&lt; std::endl;</i></font>
+  }
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; list &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.Count() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+} <font color="#003399"><i>// end namespace</i></font>
+
+<b>void</b> PassByConst(List &amp;list1, <b>const</b> List &amp;list2)
+{
+  list1.Concat(list2);
+  list2.Count();
+  list2.FindItem(10);
+  list1.<b>Delete</b>(list2);
+  std::cout &lt;&lt; list2 &lt;&lt; std::endl;
+}
+
+<b>void</b> TestConst(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n******************** TestConst ********************&#92;n&quot;</font>;
+
+  List list1;
+  List list2; 
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+    <font color="#003399"><i>// Create two lists</i></font>
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    list1.AddToEnd(numbers[i]);
+    list2.AddToFront(numbers[i]);
+  }
+  PassByConst(list1, list2);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  size_t test_num = 0;
+  <b>if</b> (argc &gt; 1)
+    test_num = <b>static_cast</b>&lt;size_t&gt;(std::atoi(argv[1]));
+
+  <b>typedef</b> <b>void</b> (*Test)(<b>void</b>);
+  Test Tests[] = {
+                    TestAdd,         <font color="#003399"><i>//  1 </i></font>
+                    TestFind,        <font color="#003399"><i>//  2</i></font>
+                    TestInsert1,     <font color="#003399"><i>//  3</i></font>
+                    TestInsert2,     <font color="#003399"><i>//  4</i></font>
+                    TestConcat,      <font color="#003399"><i>//  5</i></font>
+                    TestDelete1,     <font color="#003399"><i>//  6</i></font>
+                    TestDelete2,     <font color="#003399"><i>//  7</i></font>
+                    TestMerge1,      <font color="#003399"><i>//  8</i></font>
+                    TestMerge2,      <font color="#003399"><i>//  9</i></font>
+                    TestMerge3,      <font color="#003399"><i>// 10</i></font>
+                    TestMerge4,      <font color="#003399"><i>// 11</i></font>
+                    TestMerge5,      <font color="#003399"><i>// 12</i></font>
+                    TestMerge6,      <font color="#003399"><i>// 13</i></font>
+                    TestMerge7,      <font color="#003399"><i>// 14</i></font>
+                    TestMerge8,      <font color="#003399"><i>// 15</i></font>
+                    TestDuplicates1, <font color="#003399"><i>// 16</i></font>
+                    TestDuplicates2, <font color="#003399"><i>// 17</i></font>
+                    TestDuplicates3, <font color="#003399"><i>// 18</i></font>
+                    TestDuplicates4, <font color="#003399"><i>// 19</i></font>
+                    TestDuplicates5, <font color="#003399"><i>// 20</i></font>
+                    TestDuplicates6, <font color="#003399"><i>// 21</i></font>
+                    TestDuplicates7, <font color="#003399"><i>// 22</i></font>
+                    TestStress1,     <font color="#003399"><i>// 23</i></font>
+                 };
+
+  size_t num = <b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests);
+  <b>if</b> (test_num == 0)
+  {
+    <b>for</b> (size_t i = 0; i &lt; num; i++)
+      Tests[i]();
+  }
+  <b>else</b> <b>if</b> (test_num &gt; 0 &amp;&amp; test_num &lt;= num)
+    Tests[test_num - 1]();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

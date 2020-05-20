@@ -1,0 +1,126 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.cpp</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>namespace</b> CS170
+{
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// static members</i></font>
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>int</b> List&lt;T&gt;::Node::nodes_alive = 0;
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>int</b> List&lt;T&gt;::node_count()
+{
+  <b>return</b> Node::nodes_alive;
+}
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// List::Node methods</i></font>
+<b>template</b> &lt;<b>typename</b> T&gt;
+List&lt;T&gt;::Node::Node(T value) : data(value)
+{
+  nodes_alive++;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+List&lt;T&gt;::Node::~Node()
+{
+  nodes_alive--;
+}
+
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// public methods</i></font>
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// Function: List::clear</i></font>
+<font color="#003399"><i>//  Purpose: Removes all of the nodes in the list.</i></font>
+<font color="#003399"><i>//   Inputs: None</i></font>
+<font color="#003399"><i>//  Outputs: None</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> List&lt;T&gt;::clear()
+{
+  <b>while</b> (!empty())
+    pop_front();
+}
+
+
+
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// private methods</i></font>
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// Function: new_node</i></font>
+<font color="#003399"><i>//  Purpose: Allocate a node, initialize the data and next pointer</i></font>
+<font color="#003399"><i>//   Inputs: data - the data to put in the node</i></font>
+<font color="#003399"><i>//  Outputs: A pointer to the node</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>typename</b> List&lt;T&gt;::Node *List&lt;T&gt;::new_node(<b>const</b> T&amp; data) <b>const</b>
+{
+  Node *node = <b>new</b> Node(data); <font color="#003399"><i>// create the node</i></font>
+  node-&gt;next = 0;              <font color="#003399"><i>// no next pointer yet</i></font>
+
+  <b>return</b> node;
+}
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>/////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// non-members</i></font>
+
+<b>#include</b> &lt;iomanip&gt;
+
+<font color="#003399"><i>/*!**********************************************************************
+  Outputs all of the data in a list to an output stream.
+
+  &#92;param os
+    The stream to output the list to.
+
+  &#92;param list
+    The list to output to the stream.
+
+  &#92;return
+    The ouput stream (ref) that was passed in (for chaining)
+************************************************************************/</i></font>  
+<b>template</b> &lt;<b>typename</b> T&gt;
+std::ostream&amp; CS170::<b>operator</b>&lt;&lt;(std::ostream &amp; os, <b>const</b> CS170::List&lt;T&gt; &amp;list)
+{
+    <font color="#003399"><i>// Start at the beginning</i></font>
+  <b>typename</b> CS170::List&lt;T&gt;::Node *pnode = list.head_;
+
+    <font color="#003399"><i>// Print each item</i></font>
+  <b>while</b> (pnode != 0)
+  {
+    os &lt;&lt; std::setw(4) &lt;&lt; pnode-&gt;data;
+    pnode = pnode-&gt;next;
+  }
+  os &lt;&lt; std::endl;
+
+  <b>return</b> os;
+}
+</code></pre>
+</body>
+</html>
+  

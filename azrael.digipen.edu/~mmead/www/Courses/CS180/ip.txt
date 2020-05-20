@@ -1,0 +1,58 @@
+
+Windows IP Configuration
+
+        Host Name . . . . . . . . . . . . : DIT1799
+        Primary Dns Suffix  . . . . . . . :
+        Node Type . . . . . . . . . . . . : Hybrid
+        IP Routing Enabled. . . . . . . . : No
+        WINS Proxy Enabled. . . . . . . . : No
+        DNS Suffix Search List. . . . . . : digipen.edu
+
+Ethernet adapter VMware Network Adapter VMnet8:
+
+        Connection-specific DNS Suffix  . :
+        Description . . . . . . . . . . . : VMware Virtual Ethernet Adapter for VMnet8
+        Physical Address. . . . . . . . . : 00-50-56-C0-00-08
+        Dhcp Enabled. . . . . . . . . . . : No
+        IP Address. . . . . . . . . . . . : 192.168.17.1
+        Subnet Mask . . . . . . . . . . . : 255.255.255.0
+        Default Gateway . . . . . . . . . :
+
+Ethernet adapter VMware Network Adapter VMnet1:
+
+        Connection-specific DNS Suffix  . :
+        Description . . . . . . . . . . . : VMware Virtual Ethernet Adapter for VMnet1
+        Physical Address. . . . . . . . . : 00-50-56-C0-00-01
+        Dhcp Enabled. . . . . . . . . . . : No
+        IP Address. . . . . . . . . . . . : 192.168.13.1
+        Subnet Mask . . . . . . . . . . . : 255.255.255.0
+        Default Gateway . . . . . . . . . :
+
+Ethernet adapter Local Area Connection:
+
+        Connection-specific DNS Suffix  . : digipen.edu
+        Description . . . . . . . . . . . : 3Com EtherLink XL 10/100 PCI For Complete PC Management NIC (3C905C-TX)
+        Physical Address. . . . . . . . . : 00-04-57-A1-0A-18
+        Dhcp Enabled. . . . . . . . . . . : Yes
+        Autoconfiguration Enabled . . . . : Yes
+        IP Address. . . . . . . . . . . . : 10.10.32.67
+        Subnet Mask . . . . . . . . . . . : 255.255.255.0
+        Default Gateway . . . . . . . . . : 10.10.32.1
+        DHCP Server . . . . . . . . . . . : 204.174.42.88
+        DNS Servers . . . . . . . . . . . : 204.174.42.68
+                                            204.174.42.88
+        Primary WINS Server . . . . . . . : 204.174.42.91
+        Lease Obtained. . . . . . . . . . : Wednesday, September 19, 2012 11:25:18 AM
+        Lease Expires . . . . . . . . . . : Thursday, September 20, 2012 11:25:18 AM
+
+Ethernet adapter VirtualBox Host-Only Network:
+
+        Connection-specific DNS Suffix  . :
+        Description . . . . . . . . . . . : VirtualBox Host-Only Ethernet Adapter
+        Physical Address. . . . . . . . . : 08-00-72-00-74-12
+        Dhcp Enabled. . . . . . . . . . . : No
+        IP Address. . . . . . . . . . . . : 192.168.56.1
+        Subnet Mask . . . . . . . . . . . : 255.255.255.0
+        Default Gateway . . . . . . . . . :
+
+

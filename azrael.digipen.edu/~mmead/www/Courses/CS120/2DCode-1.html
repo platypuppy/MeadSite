@@ -1,0 +1,47 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>2D Code</title>
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+<b>void</b> Test2DArray1(<b>void</b>)
+{
+  <b>double</b> points[3][4] = { {1.0,  2.0,  3.0,  4.0}, 
+                          {5.0,  6.0,  7.0,  8.0}, 
+                          {9.0, 10.0, 11.0, 12.0}};           
+
+  printf(<font color="#9933CC">&quot;points = %p&#92;n&quot;</font>, (<b>void</b> *)points);               <font color="#003399"><i>/* address of entire array */</i></font>
+  printf(<font color="#9933CC">&quot;&amp;points = %p&#92;n&quot;</font>, (<b>void</b> *)&amp;points);             <font color="#003399"><i>/* address of entire array */</i></font>
+  printf(<font color="#9933CC">&quot;points[0] = %p&#92;n&quot;</font>, (<b>void</b> *)points[0]);         <font color="#003399"><i>/* address of first row    */</i></font>
+  printf(<font color="#9933CC">&quot;&amp;points[0] = %p&#92;n&quot;</font>, (<b>void</b> *)&amp;points[0]);       <font color="#003399"><i>/* address of first row    */</i></font>
+  printf(<font color="#9933CC">&quot;*points = %p&#92;n&quot;</font>, (<b>void</b> *)*points);             <font color="#003399"><i>/*   same as above         */</i></font>
+  printf(<font color="#9933CC">&quot;&amp;points[0][0] = %p&#92;n&quot;</font>, (<b>void</b> *)&amp;points[0][0]); <font color="#003399"><i>/* address of first double */</i></font>
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;**points = %f&#92;n&quot;</font>, **points);       <font color="#003399"><i>/* first double */</i></font>
+  printf(<font color="#9933CC">&quot;*points[0] = %f&#92;n&quot;</font>, *points[0]);   <font color="#003399"><i>/* first double */</i></font>
+  printf(<font color="#9933CC">&quot;points[0][0]=%f&#92;n&quot;</font>, points[0][0]); <font color="#003399"><i>/* first double */</i></font>
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;sizeof(points) = %lu&#92;n&quot;</font>, <b>sizeof</b>(points));           <font color="#003399"><i>/* sizeof entire array  */</i></font>
+  printf(<font color="#9933CC">&quot;sizeof(*points) = %lu&#92;n&quot;</font>, <b>sizeof</b>(*points));         <font color="#003399"><i>/* sizeof of first row  */</i></font>
+  printf(<font color="#9933CC">&quot;sizeof(**points) = %lu&#92;n&quot;</font>, <b>sizeof</b>(**points));       <font color="#003399"><i>/* sizeof first element */</i></font>
+  printf(<font color="#9933CC">&quot;sizeof(points[0]) = %lu&#92;n&quot;</font>, <b>sizeof</b>(points[0]));     <font color="#003399"><i>/* sizeof first row     */</i></font>
+  printf(<font color="#9933CC">&quot;sizeof(points[0][0])=%lu&#92;n&quot;</font>, <b>sizeof</b>(points[0][0])); <font color="#003399"><i>/* sizeof first element */</i></font>
+  printf(<font color="#9933CC">&quot;sizeof(&amp;points)=%lu&#92;n&quot;</font>, <b>sizeof</b>(&amp;points));           <font color="#003399"><i>/* sizeof a pointer     */</i></font>
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+

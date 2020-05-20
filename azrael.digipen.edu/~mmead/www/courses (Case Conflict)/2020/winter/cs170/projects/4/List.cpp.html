@@ -1,0 +1,60 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.cpp</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// ostream, endl</i></font>
+<b>#include</b> &lt;iomanip&gt;  <font color="#003399"><i>// setw</i></font>
+<b>#include</b> <font color="#9933CC">&quot;List.h&quot;</font>   <font color="#003399"><i>// List class</i></font>
+
+<b>namespace</b> CS170
+{
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// Node methods</i></font>
+<font color="#003399"><i>// Constructor, destructor</i></font>
+
+
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// public methods in this order: </i></font>
+<font color="#003399"><i>// Constructors (default, copy, non-defaults), destructor, operators, others</i></font>
+
+
+
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// private methods</i></font>
+
+
+
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// non-member methods</i></font>
+
+std::ostream &amp; <b>operator</b>&lt;&lt;(std::ostream &amp; os, <b>const</b> List &amp;list)
+{
+    <font color="#003399"><i>// Start at the first node</i></font>
+  List::Node *pnode = list.head_;
+
+    <font color="#003399"><i>// Until we reach the end of the list</i></font>
+  <b>while</b> (pnode != 0)
+  {
+    os &lt;&lt; std::setw(4) &lt;&lt; pnode-&gt;data; <font color="#003399"><i>// print the data in this node</i></font>
+    pnode = pnode-&gt;next;               <font color="#003399"><i>// move to the next node</i></font>
+  }
+  
+  os &lt;&lt; std::endl; <font color="#003399"><i>// extra newline for readability</i></font>
+  <b>return</b> os;
+}
+
+} <font color="#003399"><i>//namespace CS170</i></font>
+
+</code></pre>
+</body>
+</html>
+  

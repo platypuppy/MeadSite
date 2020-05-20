@@ -1,0 +1,274 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>replacestr</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(replacestr.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>For this practice assignment, you will write a program that will print out lines of a text file.
+  However, instead of just simply reading in the lines of text and writing them to stdout, you
+  will substitute certain substrings with a different string. The name of the function you will create is
+  <i>replacestr</i> and this is the prototype:
+
+<blockquote><pre>
+<b>enum</b> FILE_ERR replacestr(<b>const</b> <b>char</b> *filename, <b>const</b> <b>char</b> *oldstr, <b>const</b> <b>char</b> *newstr);  
+</pre></blockquote>
+
+
+
+  For example, if you are given a text file named <i>poem.txt</i> that contains these 4 lines of text:
+<blockquote><pre>
+Roses are red.
+Violets are blue.
+Some poems rhyme.
+But not this one.
+</pre></blockquote>
+
+and you are to replace each occurrence of the string <i>are</i> with the string <i>may be</i>, this is
+how you would call the function:
+
+<blockquote><pre>
+<b>enum</b> FILE_ERR result = replacestr(<font color="#9933CC">&quot;poem.txt&quot;</font>, <font color="#9933CC">&quot;are&quot;</font>, <font color="#9933CC">&quot;may be&quot;</font>);
+</pre></blockquote>
+
+and this is what would be printed out on the screen:
+
+<blockquote><pre>
+Roses may be red.
+Violets may be blue.
+Some poems rhyme.
+But not this one.
+</pre></blockquote>
+
+Here is a header file that you should use (<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/replacestr.h">replacestr.h</a>):
+<pre class="sourcecode"><code><font color="#003399"><i>/* Max length of a line */</i></font>
+<font color="990099">#define LINE_MAX 2048</font>
+
+<font color="#003399"><i>/* Possible file errors */</i></font>
+<b>enum</b> FILE_ERR {feNONE, feINPUT};
+<b>enum</b> FILE_ERR replacestr(<b>const</b> <b>char</b> *filename, <b>const</b> <b>char</b> *oldstr, <b>const</b> <b>char</b> *newstr);
+</code></pre>
+
+  Here is a driver file: (<tt>main.c</tt>, <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/main.c.html">HTML</a>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/main.c">Text</a>) You must specify the filename, old string, and new string on the
+    command line like this:
+<blockquote><pre>
+replacestr poem.txt are "may be"
+</pre></blockquote>
+  <p>
+If you don't provide 3 arguments to the program, it will display this message:
+<blockquote><pre>
+Usage:  replacestr filename oldstring newstring
+
+where:  filename is the file to search through
+        oldstring is the text to search for
+        newstring is the text to replace oldstring with
+
+Example: poem.txt are "may be"
+
+If either of the strings contain spaces, it must be surrounded by quotes.
+</pre></blockquote>
+<p>
+The name of your implementation file should be <tt>replacestr.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c replacestr.c -o replacestr
+</pre></blockquote>
+
+Here is a skeleton for <i>replacestr.c</i> to get you started:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  </font>
+<font color="990099">#include &lt;string.h&gt; </font>
+<font color="990099">#include &quot;replacestr.h&quot;</font>
+
+<b>static</b> <b>void</b> print_replace(<b>const</b> <b>char</b> *string, 
+                          <b>const</b> <b>char</b> *oldstr, 
+                          <b>const</b> <b>char</b> *newstr)
+{
+
+}
+
+<b>enum</b> FILE_ERR replacestr(<b>const</b> <b>char</b> *filename, 
+                         <b>const</b> <b>char</b> *oldstr, 
+                         <b>const</b> <b>char</b> *newstr)
+{
+
+}
+</code></pre>
+
+<p>
+Here are some sample outputs using the input file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/input1-LF.txt">input1-LF.txt</a>.
+Windows version is here: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/input1-CRLF.txt">input1-CRLF.txt</a>
+<p>
+<ol>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output1.txt">output1.txt</a> with this command:</li>
+<blockquote><pre>
+./replacestr input1-LF.txt one ONE > output1.txt
+</pre></blockquote>
+
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output2.txt">output2.txt</a> with this command:</li>
+<blockquote><pre>
+./replacestr input1-LF.txt one Wubalubadubdub! > output2.txt
+</pre></blockquote>
+
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output3.txt">output3.txt</a> with this command:</li>
+<blockquote><pre>
+./replacestr input1-LF.txt "one one one one one one one one" XXX > output3.txt
+</pre></blockquote>
+
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output4.txt">output4.txt</a> with this command:</li>
+<blockquote><pre>
+./replacestr input1-LF.txt "one one" XXX > output4.txt
+</pre></blockquote>
+</ol>
+
+<p>
+
+Here's another test using <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/input2-LF.txt">input2-LF.txt</a>. Windows version:
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/input2-CRLF.txt">input2-CRLF.txt</a> using this command:
+<blockquote><pre>
+./replacestr input2-LF.txt the THE
+</pre></blockquote>
+
+<p>
+Output: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output5.txt">output5.txt</a>
+<p>
+
+Another test:
+
+<blockquote><pre>
+./replacestr input2-LF.txt " " "" > output6.txt
+</pre></blockquote>
+
+Output: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output6.txt">output6.txt</a>
+<p>
+
+A bigger test using <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/doi-100-2-LF.txt">doi-100-2-LF.txt</a> and the Windows version: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/doi-100-2-CRLF.txt">doi-100-2-CRLF.txt</a>
+
+<blockquote><pre>
+./replacestr doi-100-2-LF.txt "of" "X X X" > output7.txt
+</pre></blockquote>
+
+Output: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output7.txt">output7.txt</a>
+<p>
+
+A stress test using <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/stress-LF.txt">stress-LF.txt</a> and the Windows version: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/stress-CRLF.txt">stress-CRLF.txt</a>
+
+<blockquote><pre>
+./replacestr stress-LF.txt one X > output8.txt
+</pre></blockquote>
+
+Output: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/output8.txt">output8.txt</a>
+<p>
+
+<p class="technote">
+With Windows, use the CRLF version of the input files on the command lines and replace <i>./replacestr</i>
+with <i>replacestr</i>.
+</p>
+
+All of the files in one zip: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/replacestr/all-in-out-files.zip">all-in-out-files.zip</a>
+
+
+<p>
+<font color="blue">Approximate number of lines of code: 30.</font>
+
+</ol>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ol>
+  <li>You should break this program into 2 functions. The first function, <i>replacestr</i> does all
+    of the file I/O, and the second function (let's call it <i>print_replace</i>), should do the printing and substituting.
+    Remember, 1 task per function. These two tasks are not related at all, so they should not be in the
+    same function. This is the prototype:
+
+<blockquote><pre>
+<b>static</b> <b>void</b> print_replace(<b>const</b> <b>char</b> *string, <b>const</b> <b>char</b> *oldstr, <b>const</b> <b>char</b> *newstr);
+</pre></blockquote>
+
+  </li>
+  <p>
+  <li>Before doing any file I/O, make sure you can do the printing and substituting, as that is the only
+    difficult part of this assignment. For example, you should make sure that you can <i>print_replace</i>
+    these lines of text (replacing <i>red</i> with <i>yellow</i>)
+
+<blockquote><pre>
+Red monkeys play in the big red tent with three blue elephants that turned red
+</pre></blockquote>    
+
+The output should look like this:
+
+<blockquote><pre>
+Red monkeys play in the big yellow tent with three blue elephants that turned yellow
+</pre></blockquote>
+Notice that the strings are case-sensitive, e.g. UPPERCASE is not the same as lowercase.</li>
+  <p>
+  <li>Use the <a href="http://www.cplusplus.com/reference/cstring/strstr/">strstr</a> function to locate the substring in the line of text. You'll
+    need to do this in a loop so you can find every occurrence.</li>
+  <p>
+  <li>You can assume that no line will be longer than <tt>LINE_MAX</tt>, which is defined in the header file.
+    Just create a buffer (array) of that size to read the lines from the file. You are only reading 1 line
+    at a time. DO NOT try to load the entire file. It may be too large to fit into memory.</li>
+  <p>
+  <li>DO NOT create any extra buffers (static or dynamic) besides the one you need above to read
+    a line from the file.
+    Since you are not storing the new text, you don't
+    need any extra memory. You are just doing the substitutions as you print out the line.
+    You should start learning to be memory-efficient with your code.</li>
+  <p>
+<li>You should be using pointer notation in <i>print_replace</i>, not array notation.
+It will be easier and clearer if you use pointers. It will also give you some good
+practice.</li>
+
+<p>
+  <li>You are reading from a file, but writing to <i>stdout</i>. Do not attempt to write to any
+    files.</li>
+  <p>
+  <li>You should open the input file in text/translate mode. If you can't open the file (for whatever reason),
+    you should just return <tt>feINPUT</tt> to the caller.
+    <p>
+    We are going to assume that, if you can open the file, then you can read all of the lines.
+    It is possible to get a read error during the process, but you don't have to handle that at this point. 
+  </li>
+  <p>
+  <li>You are not allowed to include any other files than are already included in the skeleton.</li>
+</ol>
+
+<p>
+  <hr width="95%">
+<p>
+
+<br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

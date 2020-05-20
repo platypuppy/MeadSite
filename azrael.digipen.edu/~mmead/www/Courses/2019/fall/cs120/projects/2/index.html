@@ -1,0 +1,221 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Programming Assignment #2</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 120 - Programming Assignment #2<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Please read this entire page before starting to write code. You'll be glad you did.
+<br><br>
+This assignment requires about 20 lines of code in total. That includes variable
+declarations, but not comments or curly braces.
+</p>
+
+<ul>
+<li><a href="cs120-programming-assignment-arrays.pdf">Homework description</a> 
+<li>Here is the starting point of <tt>array.c</tt>: <a href="array.c.html">HTML</a> &nbsp;&nbsp;<a href="array.c">Text</a>
+<li>Random number generator files
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+  </ul>
+<li>Here is a <i>sample</i> <tt>driver.c</tt> file for you to use and experiment with: <a href="driver.c.html">HTML</a> 
+	<a href="driver.c">Text</a>
+	to match the output <i>exactly</i>.
+<ul>
+<li>Sample <a href="output-sample1.txt">output</a>.
+<li>Command line to compile:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic driver.c array.c PRNG.c -o arrays
+<pre></blockquote>
+
+</ul>
+<li>Here is another sample driver file: <a href="driver2.c.html">HTML</a> <a href="driver2.c">Text</a>
+<ul>
+<li>Sample <a href="output-sample2.txt">output2</a>.</li>
+<li>Command line to compile:
+
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic driver2.c array.c PRNG.c -o arrays2
+<pre></blockquote>
+
+
+<li>Make sure that your functions (except cross product) can handle any size array (not just the ones that are demonstrated in the <tt>driver.c</tt> files).
+<li>You'll see some <tt><b>#define</b></tt> directives in the second driver file. How large can you make the arrays so that the program still
+	works? (Hint: redirect the output to <tt><b>nul</b></tt>, otherwise it will take <i>forever</i> to print very large arrays to the screen.) 
+	From the Windows command prompt, use this	syntax:
+<blockquote><pre>
+arrays > nul
+</pre></blockquote>
+
+On Linux or Mac:
+<blockquote><pre>
+./arrays > /dev/null
+</pre></blockquote>
+
+When it fails, you'll see something like this on Windows (under Cygwin's gcc):
+<blockquote><pre>
+9 [main] arrays2 2604 cygwin_exception::open_stackdumpfile: Dumping stack trace to arrays2.exe.stackdump  
+</pre></blockquote>
+
+Unfortunately, Windows 10 just causes the program to fail silently (that's bad!), using either 
+MinGW or Microsoft's compiler.
+<p>
+You'll see something like this on Linux/Mac:
+
+<blockquote><pre>
+Segmentation fault
+</pre></blockquote>
+
+
+What do you think the problem is?
+</ul>
+</ul>
+
+<!--
+<blockquote>
+<p class="technote">
+Some of you will want to go back and re-read pages 195-197 in the textbook. These pages 
+discuss passing arrays to functions. Some of you may have skipped this part before 
+because we had not discussed arrays yet. 
+The current assignment is passing arrays (actually, pointers to the first element of an array) 
+to functions. This will help you understand better about what's going on. Also, you 
+should peek ahead on the pointers page where I show examples that pass arrays to functions. 
+The page is here:
+
+<a href="../../../../../CS120/Pointers-1.html#PASSINGARRAYS">
+  Passing Arrays to Functions</a>
+<br><br>
+
+This will explain the use of the const keyword in some of the function parameters. Basically, 
+if you do NOT want the function to modify the elements of an array, you must use the const 
+keyword. If you DO want the function to modify the elements, you must NOT use the const keyword. 
+It really is that simple. Remember, when you pass a pointer to a function (a pointer to anything), 
+that function has direct access to the data; it is not receiving a copy of the data, so it 
+can change the original values. If this is not desirable, then use the const keyword. I'll 
+be explaining more about const soon.
+</p>
+</blockquote>
+-->
+
+<p class="SectionHeader">
+Dot and Cross Products (A short review of MAT140)
+</p>
+
+
+
+<ul>
+<li>The <b>dot product</b> evaluates to a scalar (number) and is simply the sum of the products all of the corresponding elements of two arrays. 
+So, if we have two arrays of 3 integers each, a and b:
+		
+<blockquote><pre>
+int a[] = {1, -4, 5};
+int b[] = {3,  1, 2};
+</pre></blockquote>
+
+and we want to calculate the dot product, it would be like this mathematically:
+
+<blockquote><pre>
+a &#9679; b = a<sub>1</sub>&middot;b<sub>1</sub> + a<sub>2</sub>&middot;b<sub>2</sub> + a<sub>3</sub>&middot;b<sub>3</sub> 
+</pre></blockquote>
+
+Expanding the example:	
+<blockquote><pre>
+[1  -4   5] * [3   1   2] = (1)(3) + (-4)(1) + (5)(2) = 3 + (-4) + 10 = 9
+</pre></blockquote>
+
+Note that the arrays can be of any size, but both will be the same size. So, if the arrays had 100 elements in each:
+
+<blockquote><pre>
+a &#9679; b = a<sub>1</sub>&middot;b<sub>1</sub> + a<sub>2</sub>&middot;b<sub>2</sub> + a<sub>3</sub>&middot;b<sub>3</sub> + ... + a<sub>100</sub>&middot;b<sub>100</sub>
+</pre></blockquote>
+
+<li>The <b>cross product</b> evaluates to an array and only works on arrays of size 3.
+So, if we have two arrays of 3 integers each, a and b, and a third array, c:
+		
+<blockquote><pre>
+int a[] = {1, -4, 5};
+int b[] = {3,  1, 2};
+int c[3];
+</pre></blockquote>
+
+and we want to calculate the cross product, it would be like this mathematically:
+
+<blockquote><pre>
+c = a &Chi; b
+
+c<sub>1</sub> = a<sub>2</sub>&middot;b<sub>3</sub> - a<sub>3</sub>&middot;b<sub>2</sub>
+c<sub>2</sub> = -(b<sub>3</sub>&middot;a<sub>1</sub> - b<sub>1</sub>&middot;a<sub>3</sub>)
+c<sub>3</sub> = a<sub>1</sub>&middot;b<sub>2</sub> - a<sub>2</sub>&middot;b<sub>1</sub>
+</pre></blockquote>
+
+Expanding the example:
+
+<blockquote><pre>
+int a[] = {10, 9, -7};
+int b[] = {-2, 4, -5};
+int c[3];
+</pre></blockquote>
+
+Calculations:
+<blockquote><pre>
+c<sub>1</sub> = (9)(-5) - (-7)(4) = -45 - (-28) = -17
+c<sub>2</sub> = -((-5)(10) - (-2)(-7) = -(-50 - (14)) = -(-64) = 64
+c<sub>3</sub> = (10)(4) - (9)(-2) = 40 - (-18) = 58
+</pre></blockquote>
+	
+So, the array, c, looks like this:
+<blockquote><pre>
+[-17, 64, 58]
+</pre></blockquote>
+
+<li>Also, don't forget that arrays in C start at index 0 and that no checking is done
+on the index when you access the elements. Using an invalid index will cause the
+output of your program to be undefined.
+</ul>
+
+<!--
+<blockquote>
+<p class="technote">
+<big><big><big>
+<b>Reminder:</b>
+There will be a Friday lecture tomorrow at 4:00 pm in Plato
+</big></big></big>
+</p>
+</blockquote>
+-->
+<p>
+<hr>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

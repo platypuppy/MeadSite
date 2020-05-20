@@ -1,0 +1,122 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf */</font>
+<font color="990099">#include &lt;string.h&gt; /* strcpy */</font>
+
+<b>struct</b> GRADE
+{
+  <b>int</b> score;
+  <b>int</b> max;
+};
+
+<font color="#003399"><i>/* These are the functions you need to write */</i></font>
+<b>double</b> calculate_grade(<b>const</b> <b>char</b> *filename);
+<b>struct</b> GRADE parse_line(<b>const</b> <b>char</b> *line);
+
+<font color="#003399"><i>/* Given a score out of 100, print the letter grade */</i></font>
+<b>void</b> print_grade(<b>double</b> score)
+{
+  <b>if</b> (score &gt;= 93)
+    printf(<font color="#9933CC">&quot;A&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 90)
+    printf(<font color="#9933CC">&quot;A-&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 87)
+    printf(<font color="#9933CC">&quot;B+&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 83)
+    printf(<font color="#9933CC">&quot;B&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 80)
+    printf(<font color="#9933CC">&quot;B-&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 77)
+    printf(<font color="#9933CC">&quot;C+&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 73)
+    printf(<font color="#9933CC">&quot;C&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 70)
+    printf(<font color="#9933CC">&quot;C-&quot;</font>);
+  <b>else</b> <b>if</b> (score &gt;= 60)
+    printf(<font color="#9933CC">&quot;D&quot;</font>);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;F&quot;</font>);
+}
+
+<b>void</b> test_parse(<b>void</b>)
+{
+  <font color="#003399"><i>/* Lines are of the form: LAB02:100/100 and the tag is exactly 5 chars. */</i></font>
+  <b>const</b> <b>char</b> *lines[] = 
+    {
+      <font color="#9933CC">&quot;LAB02:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB03:0/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB04:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB05:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB06:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB07:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB08:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB09:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB10:0/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB11:100/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB12:0/100&quot;</font>,
+      <font color="#9933CC">&quot;LAB13:100/100&quot;</font>,
+      <font color="#9933CC">&quot;PHW01:90/100&quot;</font>,
+      <font color="#9933CC">&quot;PHW02:65/80&quot;</font>,
+      <font color="#9933CC">&quot;PHW03:75/80&quot;</font>,
+      <font color="#9933CC">&quot;PHW04:80/80&quot;</font>,
+      <font color="#9933CC">&quot;PHW05:85/100&quot;</font>,
+      <font color="#9933CC">&quot;PHW06:100/120&quot;</font>,
+      <font color="#9933CC">&quot;MID00:60/79&quot;</font>,
+      <font color="#9933CC">&quot;FIN00:87/100&quot;</font>,
+    };
+
+  <b>int</b> size = <b>sizeof</b>(lines) / <b>sizeof</b>(*lines);
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+  {
+    <b>char</b> tag[14]; <font color="#003399"><i>/* Max line length is 13 */</i></font>
+    <b>struct</b> GRADE grade = parse_line(lines[i]);
+    strcpy(tag, lines[i]);
+    tag[5] = <font color="#9933CC">'&#92;0'</font>;
+    printf(<font color="#9933CC">&quot;Tag: %s, Score: %i, Max: %i&#92;n&quot;</font>, tag, grade.score, grade.max);
+  }
+}
+
+<b>void</b> test_calculate(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>double</b> total; <font color="#003399"><i>/* The score out of 100 */</i></font>
+
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Usage: grades textfile_with_grades&#92;n&quot;</font>);
+    <b>return</b>;
+  }
+
+    <font color="#003399"><i>/* Get the total score for the class */</i></font>
+  total = calculate_grade(argv[1]);
+
+    <font color="#003399"><i>/* Display the score and the letter grade */</i></font>
+  printf(<font color="#9933CC">&quot;Your final score in CS120 is %.2f &quot;</font>, total);
+  printf(<font color="#9933CC">&quot;and your letter grade is: &quot;</font>);
+  print_grade(total);
+  printf(<font color="#9933CC">&quot;.&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>if</b> (argc &lt; 2)
+    test_parse();
+  <b>else</b>
+    test_calculate(argc, argv);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

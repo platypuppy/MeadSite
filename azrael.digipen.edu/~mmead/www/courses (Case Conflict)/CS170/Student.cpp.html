@@ -1,0 +1,153 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Student.cpp</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt;  <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> &lt;cstring&gt;   <font color="#003399"><i>// strlen, strcpy</i></font>
+<b>#include</b> <font color="#9933CC">&quot;Student.h&quot;</font> <font color="#003399"><i>// Student class</i></font>
+
+Student::Student(<b>const</b> <b>char</b> * login, <b>int</b> age, <b>int</b> year, <b>float</b> GPA)
+{
+  login_ = 0;
+  set_login(login);
+  set_age(age);
+  set_year(year);
+  set_GPA(GPA);
+}
+
+Student::~Student()
+{
+  <b>delete</b> [] login_;
+}
+
+<b>void</b> Student::set_login(<b>const</b> <b>char</b>* login)
+{
+  <b>delete</b> [] login_;
+  
+  <b>int</b> len = std::strlen(login);
+  login_ = <b>new</b> <b>char</b>[len + 1]; 
+  std::strcpy(login_, login);
+}
+
+<b>void</b> Student::set_age(<b>int</b> age)
+{
+  <b>if</b> ( (age &lt; 18) || (age &gt; 100) )
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Error in age range!\n&quot;</font>;
+    age_ = 18;
+  }
+  <b>else</b>
+    age_ = age;
+}
+
+<b>void</b> Student::set_year(<b>int</b> year)
+{
+  <b>if</b> ( (year &lt; 1) || (year &gt; 4) )
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Error in year range!\n&quot;</font>;
+    year_ = 1;
+  }
+  <b>else</b>
+    year_ = year;
+}
+
+<b>void</b> Student::set_GPA(<b>float</b> GPA)
+{
+  <b>if</b> ( (GPA &lt; 0.0) || (GPA &gt; 4.0) )
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Error in GPA range!\n&quot;</font>;
+    GPA_ = 0.0;
+  }
+  <b>else</b>
+    GPA_ = GPA;
+}
+
+<b>void</b> Student::display() <b>const</b>
+{
+  <b>using</b> std::cout;
+  <b>using</b> std::endl;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;login: &quot;</font> &lt;&lt; login_ &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;  age: &quot;</font> &lt;&lt; age_ &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot; year: &quot;</font> &lt;&lt; year_ &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;  GPA: &quot;</font> &lt;&lt; GPA_ &lt;&lt; endl;
+
+}
+
+<b>int</b> Student::get_age() <b>const</b>
+{
+  <b>return</b> age_;
+}
+
+<b>int</b> Student::get_year() <b>const</b>
+{
+  <b>return</b> year_;
+}
+
+<b>float</b> Student::get_GPA() <b>const</b>
+{
+  <b>return</b> GPA_;
+}
+
+<b>const</b> <b>char</b> *Student::get_login() <b>const</b>
+{
+  <b>return</b> login_;
+}
+
+</code></pre>	
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

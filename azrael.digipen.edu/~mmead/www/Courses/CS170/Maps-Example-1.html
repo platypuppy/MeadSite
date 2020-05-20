@@ -1,0 +1,383 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>STL map Example</title>
+</head>
+
+<body>  
+<center><h1>A Simple STL map Example</h1></center>
+
+<!--
+<a href="STL-Intro.html">Basic introduction to the Standard Template Library</a>
+-->
+<p>
+
+
+The initial problem:
+<p>
+Given a text file, count the number of occurrences of each word in the file, then print the
+all of the words alphabetically with their corresponding count. For example, if a file 
+named <tt>line.txt</tt> contained this line:
+<blockquote><pre>
+a line of text that has a word that occurs more than once in the line
+</pre></blockquote>
+
+the solution would be presented like this:
+
+<blockquote><pre>
+2 a
+1 has
+1 in
+2 line
+1 more
+1 occurs
+1 of
+1 once
+1 text
+1 than
+2 that
+1 the
+1 word
+</pre></blockquote>
+
+Before implementing this algorithm with an STL container, how would you implement it without using 
+any STL containers? In other words, using only arrays, linked-lists, or other data structure that
+you might invent. (In other other words, do it in C.) Keep in mind that the file could be 
+any size, so hard-coding anything is out of the question.
+<p>
+What are the pros and cons with:
+<ul>
+  <li>static array?</li>
+  <li>dynamic array?</li>
+  <li>linked-list?</li>
+  <li>sorting (ordering)?</li>
+  <li>lookups (searching)?</li>
+</ul>
+
+<!--
+static array: size is hard-coded at compile time, random access
+dynamic array: will need to be grown, possibly multiple times, random access
+linked-list: no random access, some overhead per node, never full
+
+sorted: keeping it sorted may be faster than sorting later, it's in the correct order for output
+lookups: sorted will be faster than unsorted. binary search with arrays, linear search with LL.
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>A First Attempt</h2>
+
+The algorithm goes like this:
+<ol>
+<li>Open a file for input
+<li>While there are more words
+<ol>
+<li>Read a word.
+<li>Find the word in the <i>container</i>. (<tt><b>find</b></tt>)
+<li>If the word is in the <i>container</i>, increment the <i>associated</i> count by 1.
+<li>If the word is not in the <i>container</i>, add it to the <i>container</i> 
+  (<tt><b>insert</b></tt> in the proper position) and set its count to 1.
+</ol>
+<li>Print out the counts and the words sorted alphabetically (by word, of course).
+</ol>
+
+This example is going to show how to use a <i>map</i> as the container and why it's so
+powerful.
+<p>
+
+<blockquote>
+<p class="technote">
+<i>"If I was stranded on a Desert Island and could take only one STL container with me,
+  it would be std::map."</i> -- Mead
+</blockquote>
+
+Sample code (without all of the necessary error handling to keep it simple):
+<p>
+
+<pre class="sourcecode"><code><b>void</b> CountWords1(<b>void</b>)
+{
+    <font color="#003399"><i>// For convenience (each word has an associated count)</i></font>
+  <b>typedef</b> std::map&lt;std::string, <b>int</b>&gt; FreqMap;
+
+  std::string word; <font color="#003399"><i>// the input word</i></font>
+  FreqMap wf;       <font color="#003399"><i>// the frequencies of each word</i></font>
+
+    <font color="#003399"><i>// Open some text file</i></font>
+  std::ifstream infile(<font color="#9933CC">&quot;line.txt&quot;</font>);
+
+    <font color="#003399"><i>// Read all words from the file</i></font>
+  <b>while</b> (infile &gt;&gt; word)
+  {
+      <font color="#003399"><i>// See if the key/value pair is already</i></font>
+      <font color="#003399"><i>// in the map</i></font>
+    FreqMap::iterator it = wf.find(word);
+
+      <font color="#003399"><i>// If it is present, increment the count (value)</i></font>
+    <b>if</b> (it != wf.end())
+      it-&gt;second++;  <font color="#003399"><i>// Same as: (*it).second++</i></font>
+    <b>else</b>
+    {
+        <font color="#003399"><i>// Create a new pair with value set to 1</i></font>
+      std::pair&lt;std::string, <b>int</b>&gt; pr(word, 1);
+      wf.insert(pr);
+    }
+  }
+
+    <font color="#003399"><i>// Print out all of the key/value pairs</i></font>
+  <b>for</b> (FreqMap::iterator it = wf.begin(); it != wf.end(); ++it)
+    std::cout &lt;&lt; it-&gt;second &lt;&lt; <font color="#9933CC">&quot; &quot;</font> &lt;&lt; it-&gt;first &lt;&lt; std::endl;
+}</code></pre>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p>
+<hr width="90%">
+<p>
+
+<h2>A Slight Modification</h2>
+<p>
+
+We can take advantage of the subscript operator that is implemented by <tt>std::map</tt>. This
+has a couple of very handy features. 
+<p>
+<ul>
+<li>You can "index" into the map just as if it was an array. The difference is that the
+index doesn't have to be an integer. (It's the <i>key</i>). For example:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Create a map with std::strings for keys (indexes) and <b>int</b> values.</i></font>
+std::map&lt;std::string, <b>int</b>&gt; MyMap;
+
+MyMap["foo"] = 10;       <font color="#003399"><i>// Add the value 10 at index "foo"</i></font>
+MyMap["foo"] = 15;       <font color="#003399"><i>// Change the value at index "foo" to 15</i></font>
+std::cout << map["foo"]; <font color="#003399"><i>// Reads the value at index "foo" (15)</i></font>
+</pre></blockquote>
+
+<li><b>If the item at the index doesn't exist, it is added. (Very different than array subscripts.)</b>
+</ul>
+
+<br>
+Only the loop is modified:
+<p>
+
+<blockquote><pre>
+  <font color="#003399"><i>// Read all words from the file</i></font>
+<b>while</b> (infile &gt;&gt; word)
+{
+    <font color="#003399"><i>// See if the key/value pair is already</i></font>
+    <font color="#003399"><i>// in the map</i></font>
+  FreqMap::iterator it = wf.find(word);
+
+    <font color="#003399"><i>// If it is present</i></font>
+  <b>if</b> (it != wf.end())
+    it-&gt;second++;  <font color="#003399"><i>// increment existing value</i></font>
+  <b>else</b>
+    wf[word] = 1;  <font color="#003399"><i>// else &quot;add&quot; key with value set to 1</i></font>
+}
+</pre></blockquote>
+
+<br>
+Given the knowledge of the subscript operator, we can do better at this point. We don't have to 
+call <tt>find</tt> to locate the item. We can just add it with the subscript operator and it
+will find it for us:
+<p>
+
+
+<blockquote><pre>
+  <font color="#003399"><i>// Read all words from the file</i></font>
+<b>while</b> (infile &gt;&gt; word)
+{
+  <b>int</b> count = wf[word]; <font color="#003399"><i>// Get current value</i></font>
+  wf[word] = count + 1; <font color="#003399"><i>//   and update it</i></font>
+}
+</pre></blockquote>
+
+<br>
+Of course, we can go further and be more like C++:
+<p>
+
+<blockquote><pre>
+  <font color="#003399"><i>// Read all words from the file and update the count in the map</i></font>
+<b>while</b> (infile &gt;&gt; word)
+  ++wf[word];
+</pre></blockquote>
+
+
+Ironically, the code to print the contents of the map is more than the code needed to build the map!
+<p>
+
+The final (so far) version:
+<p>
+
+<pre class="sourcecode"><code><b>void</b> CountWords4(<b>void</b>)
+{
+    <font color="#003399"><i>// For convenience</i></font>
+  <b>typedef</b> std::map&lt;std::string, <b>int</b>&gt; FreqMap;
+
+  std::string word; <font color="#003399"><i>// the input word</i></font>
+  FreqMap wf;       <font color="#003399"><i>// the frequencies of each word</i></font>
+
+    <font color="#003399"><i>// Open some text file</i></font>
+  std::ifstream infile(<font color="#9933CC">&quot;preamble.txt&quot;</font>);
+
+    <font color="#003399"><i>// Read all words from the file and update the count in the map</i></font>
+  <b>while</b> (infile &gt;&gt; word)
+    ++wf[word];
+
+    <font color="#003399"><i>// Print out all of the key/value pairs</i></font>
+  <b>for</b> (FreqMap::iterator it = wf.begin(); it != wf.end(); ++it)
+    std::cout &lt;&lt; it-&gt;second &lt;&lt; <font color="#9933CC">&quot; &quot;</font> &lt;&lt; it-&gt;first &lt;&lt; std::endl;
+}</code></pre>
+
+You could use the <b><tt>for_each</tt></b> algorithm to remove the last loop. Here's the function
+to print the pair:
+
+<blockquote><pre>
+<b>void</b> print_pair(<b>const</b> std::pair&lt;std::string, <b>int</b>&gt;&amp; pair)
+{
+  std::cout &lt;&lt; pair.second &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; pair.first &lt;&lt; <font color="#9933CC">&quot;\n&quot;</font>;
+}
+</pre></blockquote>
+
+and this is the call:
+<blockquote><pre>
+  <font color="#003399"><i>// Print out all of the key/value pairs</i></font>
+std::for_each(wf.begin(), wf.end(), print_pair);
+</pre></blockquote>
+
+<br>
+
+or using a lambda expression in C++11 (removing <tt>std::</tt> for readability):
+<blockquote><pre>
+std::for_each(wf.begin(), wf.end(), [] (pair&lt;string, <b>int</b>&gt; pair){ cout &lt;&lt; pair.second &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; pair.first &lt;&lt; <font color="#9933CC">&quot;\n&quot;</font>;});
+</pre></blockquote>
+
+
+With the C++ 11 stuff and no <b>typedef</b> or namespaces (just to make it even shorter to read)
+<p>
+
+<pre class="sourcecode"><code><b>void</b> CountWords5(<b>void</b>)
+{
+  map&lt;string, <b>int</b>&gt; wf; <font color="#003399"><i>// the map of word frequencies</i></font>
+  string word;         <font color="#003399"><i>// the input word</i></font>
+
+    <font color="#003399"><i>// Open some text file</i></font>
+  ifstream infile(<font color="#9933CC">&quot;preamble.txt&quot;</font>);
+
+    <font color="#003399"><i>// Read all words from the file and update the count in the map</i></font>
+  <b>while</b> (infile &gt;&gt; word)
+    ++wf[word];
+
+    <font color="#003399"><i>// Print out all of the key/value pairs</i></font>
+  std::for_each(wf.begin(), wf.end(), [] (pair&lt;string, <b>int</b>&gt; pair){ cout &lt;&lt; pair.second &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; pair.first &lt;&lt; <font color="#9933CC">&quot;\n&quot;</font>;});
+}</code></pre>
+
+Given a file containing this text:
+<p>
+<blockquote><pre>
+When, in the course of human events, it becomes necessary for a people to advance from that 
+subordination in which they have hitherto remained, and to assume among the powers of the 
+earth, the equal and independent station to which the laws of nature and of nature's god 
+entitle them, a decent respect to the opinions of mankind requires that they should declare the 
+causes which impel them to the change.
+</pre></blockquote>
+
+We would get this (formatted with columns for the browser):
+<p>
+
+<blockquote>
+<table>
+<tr valign="top">
+<td>
+<td><pre>
+1 When,
+2 a
+1 advance
+1 among
+3 and
+1 assume
+1 becomes
+1 causes
+1 change.
+1 course
+1 decent
+1 declare
+1 earth,
+1 entitle
+1 equal
+1 events,
+</pre></td>
+<td width=20></td>
+<td><pre>
+1 for
+1 from
+1 god
+1 have
+1 hitherto
+1 human
+1 impel
+2 in
+1 independent
+1 it
+1 laws
+1 mankind
+1 nature
+1 nature's
+1 necessary
+5 of
+</pre></td>
+<td width=20></td>
+<td><pre>
+1 opinions
+1 people
+1 powers
+1 remained,
+1 requires
+1 respect
+1 should
+1 station
+1 subordination
+2 that
+8 the
+1 them
+1 them,
+2 they
+5 to
+3 which
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+
+Future modifications:
+<ul>
+<li>Remove the punctuation.</li>
+<li>Find the one word that occurs the most. (May be more than one)</li>
+<li>Print sorted by occurrences instead of alphabetically. (Sort by value, not key)</li>
+<li>Print sorted by length of the word (subsort alphabetically or by length).</li>
+<li>Find all of the words of a specific length (e.g. find all of the 4-letter words.)</li>
+<li>Make it case-insensitve (e.g. uppercase and lowercase are the same).</li>
+<li>Remove the loops from the program. (Already did that!)</li>
+<li>Other stuff...</li>
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2></h2>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,224 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf              */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi                */</font>
+<font color="990099">#include &quot;PRNG.h&quot;   /* RandomInt, ut_srand */</font>
+<font color="990099">#include &quot;list.h&quot;</font>
+
+<font color="#003399"><i>/*
+int RandomInt(int low, int high)
+{
+  int number;
+  number = rand() % (high - low + 1) + low;
+  return number;
+}
+*/</i></font>
+
+<b>static</b> <b>void</b> test_add_front(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>struct</b> Node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_add_front ========================================&#92;n&quot;</font>);
+  <b>for</b> (i = 1; i &lt;= 10; i++)
+  {
+    printf(<font color="#9933CC">&quot;add %2i to front: &quot;</font>, i);
+    add_front(&amp;list, i);
+    print_list(list);
+  }
+
+  free_list(list);
+}
+
+<b>static</b> <b>void</b> test_add_back(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>struct</b> Node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_add_back ========================================&#92;n&quot;</font>);
+  <b>for</b> (i = 1; i &lt;= 10; i++)
+  {
+    printf(<font color="#9933CC">&quot;add %2i to back: &quot;</font>, i);
+    add_back(&amp;list, i);
+    print_list(list);
+  }
+
+  free_list(list);
+}
+
+<b>static</b> <b>void</b> test_add_front_back(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>struct</b> Node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_add_front_back ========================================&#92;n&quot;</font>);
+  <b>for</b> (i = 1; i &lt;= 5; i++)
+  {
+    printf(<font color="#9933CC">&quot;add %2i to front and back: &quot;</font>, i);
+    add_front(&amp;list, i);
+    add_back(&amp;list, i);
+    print_list(list);
+  }
+
+  free_list(list);
+}
+
+<b>static</b> <b>void</b> test_remove(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>struct</b> Node *list = NULL;
+  <b>int</b> items[] = {5, 6, 10, 9, 2, 1, 3, 7, 8, 4};
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_remove ========================================&#92;n&quot;</font>);
+    <font color="#003399"><i>/* Populate the list */</i></font>
+  <b>for</b> (i = 1; i &lt;= 10; i++)
+    add_front(&amp;list, i);
+
+  printf(<font color="#9933CC">&quot;Start list : &quot;</font>);
+  print_list(list);
+
+    <font color="#003399"><i>/* These values don't exist, but you need to handle that */</i></font>
+  remove_item(&amp;list, 100);
+  remove_item(&amp;list, 99);
+
+    <font color="#003399"><i>/* Remove &quot;random&quot; order */</i></font>
+  <b>for</b> (i = 0; i &lt; 10; i++)
+  {
+    printf(<font color="#9933CC">&quot;Removing %2i: &quot;</font>, items[i]);
+    remove_item(&amp;list, items[i]);
+    print_list(list);
+  }
+
+    <font color="#003399"><i>/* List should empty, but this is legal */</i></font>
+  printf(<font color="#9933CC">&quot;Removing  0: &quot;</font>);
+  remove_item(&amp;list, 1); 
+  print_list(list);
+
+<font color="990099">#if 1</font>
+  free_list(list); <font color="#003399"><i>/* should be empty at this point           */</i></font>
+  free_list(NULL); <font color="#003399"><i>/* This is legal and you need to handle it */</i></font>
+<font color="990099">#endif</font>
+}
+
+<b>static</b> <b>void</b> test_size(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>struct</b> Node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_size ========================================&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Size is %2i: &quot;</font>, size_list(list));
+  print_list(list);
+
+  <b>for</b> (i = 1; i &lt;= 10; i++)
+  {
+    add_front(&amp;list, i);
+    printf(<font color="#9933CC">&quot;Size is %2i: &quot;</font>, size_list(list));
+    print_list(list);
+  }
+
+  free_list(list);
+}
+
+<b>static</b> <b>void</b> test_sum(<b>void</b>)
+{
+  <b>int</b> i, sum = 0;
+  <b>struct</b> Node *list = NULL;
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_sum ========================================&#92;n&quot;</font>);
+  <b>for</b> (i = 1; i &lt;= 10; i++)
+    add_front(&amp;list, i);
+
+  sum = sum_list(list);
+  print_list(list);
+  printf(<font color="#9933CC">&quot;Sum is %i&#92;n&quot;</font>, sum);
+  free_list(list);
+}
+
+<b>static</b> <b>void</b> test_A(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>struct</b> Node *list = NULL;
+  <b>int</b> count = 50;
+  <b>int</b> low = 1;
+  <b>int</b> high = 20;
+
+  printf(<font color="#9933CC">&quot;&#92;ntest_A ========================================&#92;n&quot;</font>);
+  <b>for</b> (i = 1; i &lt;= count; i++)
+    add_front(&amp;list, RandomInt(low, high));
+
+  print_list(list);
+  printf(<font color="#9933CC">&quot;Size is %i.&#92;n&quot;</font>, size_list(list));
+  printf(<font color="#9933CC">&quot;Sum is %i.&#92;n&quot;</font>, sum_list(list));
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>int</b> r = RandomInt(low, high);
+    printf(<font color="#9933CC">&quot;Remove %2i: &quot;</font>, r);
+    remove_item(&amp;list, r);
+    print_list(list);
+  }
+
+  printf(<font color="#9933CC">&quot;Size is %i.&#92;n&quot;</font>, size_list(list));
+  printf(<font color="#9933CC">&quot;Sum is %i.&#92;n&quot;</font>, sum_list(list));
+
+
+  free_list(list);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> test = 0;
+
+    <font color="#003399"><i>/* An array of 7 function pointers taking nothing and returning nothing */</i></font>
+  <b>void</b> (*Tests[])(<b>void</b>) = {test_add_front,      <font color="#003399"><i>/* 1 */</i></font>
+                           test_size,           <font color="#003399"><i>/* 2 */</i></font>
+                           test_sum,            <font color="#003399"><i>/* 3 */</i></font>
+                           test_add_back,       <font color="#003399"><i>/* 4 */</i></font>
+                           test_add_front_back, <font color="#003399"><i>/* 5 */</i></font>
+                           test_remove,         <font color="#003399"><i>/* 6 */</i></font>
+                           test_A               <font color="#003399"><i>/* 7 */</i></font>
+                          };
+
+  <b>int</b> count = <b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests);
+
+  <b>if</b> (argc &gt; 1)
+    test = atoi(argv[1]);
+
+  ut_srand(1, 0);
+
+    <font color="#003399"><i>/* If the number is out of range, run all tests */</i></font>
+  <b>if</b> (test &lt;= 0 || test &gt; count)
+  {
+    <b>int</b> i;
+
+    <b>for</b> (i = 0; i &lt; count; i++)
+      Tests[i]();
+  }
+  <b>else</b>
+    Tests[test - 1]();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

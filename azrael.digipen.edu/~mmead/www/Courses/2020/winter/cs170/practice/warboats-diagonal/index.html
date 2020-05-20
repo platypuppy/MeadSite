@@ -1,0 +1,197 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>warboats-diagonal</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(warboats-diagonal)
+<br>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+This practice assignment extends the previous practice assignment that allows for boats of variable sizes. You
+must use that as the starting point for this practice.
+</p>
+
+
+<ol>
+<li>This practice assignment is a modification of the WarBoatsOO (Object-oriented WarBoats)
+	assignment. In the original WarBoats program, all of the boats were placed either vertically
+  or horizontally in the ocean. In this version, the boats can be place diagonally, as well.
+  A diagonal placement has two directions: right and left:
+  <p>
+  <ul>
+    <li>Right - The boat goes from top left to bottom right.</li>
+    <li>Left - The boat goes from top right to bottom left.</li>
+  </ul>
+  <p>
+  In the diagram below, boat #1 is diagonal-right and boat #2 is diagonal-left:
+
+<blockquote><pre>
+   0   0   0   0   0   0   0   0   0   0
+   <b>1</b>   0   0   0   0   0   0   0   0   0
+   0   <b>1</b>   0   0   0   0   0   0   0   0
+   0   0   <b>1</b>   0   0   0   0   0   0   0
+   0   0   0   <b>1</b>   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   <b>2</b>   0   0   0   0
+   0   0   0   0   <b>2</b>   0   0   0   0   0
+   0   0   0   <b>2</b>   0   0   0   0   0   0
+   0   0   <b>2</b>   0   0   0   0   0   0   0
+</pre></blockquote>
+
+	<p>
+	In order to support placing boats diagonally, you must update the enumeration in <tt>WarBoats.h</tt> as such:
+
+<blockquote><pre>
+<b>enum</b> Orientation { oHORIZONTAL, oVERTICAL<font color="blue"><b>, oDIAGONAL_RIGHT, oDIAGONAL_LEFT</b></font> };  
+</pre></blockquote>
+
+See the sample driver for examples.
+<p>
+At first glance, it seems pretty straight-forward to support diagonally-placed boats. However, if you look
+closely at the outputs below, you will see a situation that isn't as easy as it first seemed:
+<p>
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>Overlapping points</th><th width="20"></th><th>Non-overlapping points</th></tr>
+<tr>
+
+<td>
+<pre>
+0   0   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+0   <b>1</b>   0   0   0   <b>2</b>   0   0   0   0
+0   0   <b>1</b>   0   <b>2</b>   0   0   0   0   0
+0   0   0   <b>X</b>   0   0   0   0   0   0
+0   0   <b>2</b>   0   <b>1</b>   0   0   0   0   0
+0   <b>2</b>   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+</pre>
+</td>
+<td width="100"></td>
+<td>
+<pre>
+0   0   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+0   <b>1</b>   0   0   0   0   0   0   0   0
+0   0   <b>1</b>   0   0   <b>2</b>   0   0   0   0
+0   0   0   <b>1</b>   <b>2</b>   0   0   0   0   0
+0   0   0   <b>2</b>   <b>1</b>   0   0   0   0   0
+0   0   <b>2</b>   0   0   0   0   0   0   0
+0   <b>2</b>   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   0   0   0
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+In the first diagram on the left above, boat #2 is clearly occupying a cell that boat #1 is occupying. This
+cell is marked with an <b>X</b>. The current method of detecting intersecting boats will handle this
+case.
+<p>
+The "intersection" in the right diagram won't be detected because the two boats are not
+sharing a common point. However, it is undesirable to allow that boat placement. Clearly,
+a different technique is required. There are many ways to detect this intersection, but one that
+you may want to use is the technique you have learned in CS 230. That is, detecting whether
+two line segments intersect.
+
+<blockquote>
+<p class="technote">
+If you haven't had CS230 or you want to use a different technique, you should just use
+Google to find more information such as 
+<a href="https://math.stackexchange.com/questions/149622/finding-out-whether-two-line-segments-intersect-each-other">
+  this</a>.
+</p>
+</blockquote>
+
+It goes without saying, but I'm going to say it anyway,
+<i>"To help solve this you should have several helper functions."</i> If you try to
+calculate everything in your existing <i>PlaceBoat</i> method, you will fail miserably, or
+at the very least you'll have unreadable and unmaintainable code that wouldn't get any
+points if this were a real assignment.
+
+<p>
+For each boat, you are given it's location in the Ocean. You are also given it's length
+and it's orientation. This is enough information to transform a boat into a line segment
+(two end-points) and then compare that line segment with other boats (line segments) to
+see if there is an intersection. You should call this helper function from your <i>PlaceBoat</i>
+method.
+
+
+</ol>
+
+<p>
+<hr width="95%">
+<p>
+
+Files:
+<ul>
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a> 
+  <p>
+<li>Outputs from the tests:
+	<ol>
+		<li><a href="output1.txt">test 1</a> Simple placement test</li>
+		<li><a href="output2-stress.txt">test 2</a> Stress placement</li>
+		<li><a href="output3-stress-attempts.txt">test 3</a> Stress placement with attempts</li>
+    <li><a href="output4-stress-diagonals.txt">test 4</a> Stress placement with diagonals-only</li>
+    <li><a href="output5-stress-attempts-diagonals.txt">test 5</a> Stress placement with attempts and diagonals-only</li>
+    <li><a href="output6-stress-play.txt">test 6</a> Stress placement with "game play"</li>
+	</ol>
+
+  <p>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+	</ul>
+  <p>
+<li>Sample command lines for compiling
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o warboats-diagonal driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+
+
+
+</ul>
+</ol>
+
+
+<p>
+<hr width=100%>
+<p>
+<br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

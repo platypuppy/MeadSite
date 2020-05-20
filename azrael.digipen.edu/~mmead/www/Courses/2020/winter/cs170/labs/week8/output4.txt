@@ -1,0 +1,5 @@
+
+******************** TestDuplicates4 ********************
+List1 ( 1 nodes): 5   
+Duplicates removed: 0
+List1 ( 1 nodes): 5   

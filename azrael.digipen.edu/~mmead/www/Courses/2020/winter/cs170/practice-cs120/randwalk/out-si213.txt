@@ -1,0 +1,9 @@
+ A B E F G . . .
+ . C D . H U T .
+ . . . . I V S .
+ . . . K J W R Q
+ . . . L M N O P
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 23 steps.

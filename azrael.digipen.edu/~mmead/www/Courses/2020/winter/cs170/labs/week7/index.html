@@ -1,0 +1,203 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Warning
+{
+  margin-left: 0;
+  font-size : 12pt;
+  font-weight : bold;
+  background-color: #FFFF00; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+For this week's lab, you will only be adding one method. Of course, you're starting with 
+the previous 3 labs, so you already have all of the rest of the functionality required 
+(creating, inserting, deleting, printing, etc.) If you don't have the previous work,
+you won't be able to do the lab.
+<p>
+Here are the two tasks:
+
+<ol>
+
+<li>You will merge two <b>sorted</b> lists together into one. For example, given these 
+  two sorted lists:
+
+<blockquote><pre>
+List1 ( 8 nodes): 12   21   22   27   34   38   56   94   
+List2 ( 8 nodes): 10   17   19   23   30   59   67   88   
+</pre></blockquote>
+
+The result of merging <i>List2</i> into <i>List1</i> looks like this:
+
+<blockquote><pre>
+List1 (16 nodes): 10   12   17   19   21   22   23   27   30   34   38   56   59   67   88   94   
+List2 ( 0 nodes): 
+</pre></blockquote>
+
+The second list (the <b>rhs</b>) is empty because all of the nodes have been <b>moved</b> 
+to the first list. Notice the term <i>moved</i>. You are not copying nodes, you are moving 
+them which simply means you are removing the node from the second list 
+(unlinking it only; don't <b>delete</b> it)
+and putting it on the first list by changing pointers.
+This means that, in the example above, you are only creating 16 nodes in total.
+
+
+<p>
+<a href="merge-diagrams.html">Diagrams</a> depicting the before and after lists. 
+<b>YOU MUST READ THIS BEFORE STARTING.</b>
+<p>
+	
+The call will look like this:
+
+<blockquote><pre>
+List1.Merge(List2); <font color="#003399"><i>// Merge all of the nodes from List2 into List1 in the proper position.</i></font>
+</pre></blockquote>
+
+
+
+The method in <font color="blue">BLUE</font> is new. 
+<blockquote><pre>
+<b>class</b> List
+{
+  <b>public</b>:
+
+      <font color="#003399"><i>// Takes a sorted list and merges the items into the correct locations.</i></font>
+      <font color="#003399"><i>// The lhs (*this) must also be sorted. The rhs list is empty afterwards.</i></font>
+      <font color="#003399"><i>// You are removing (unlinking) nodes from rhs and inserting (linking) them</i></font>
+      <font color="#003399"><i>// into lhs (*this). You are NOT creating (<b>new</b>) or deleting (<b>delete</b>) any</i></font>
+      <font color="#003399"><i>// nodes during this process. Also notice that there is no <b>const</b> keyword</i></font>
+      <font color="#003399"><i>// anywhere. Both the lhs (*this) and the rhs are being modified.</i></font>
+    <big><font color="blue"><b>void</b> Merge(List&amp; rhs);</font></big>
+    
+      <font color="#003399"><i>// Other existing public methods</i></font>
+
+  <b>private</b>:
+    Node *head_; <font color="#003399"><i>// This is really the only data member needed</i></font>
+    Node* MakeNode(<b>int</b> value) <b>const</b>;   
+      
+    <font color="#003399"><i>// Any other helper functions you need</i></font>
+};
+</code></pre></pre></blockquote>
+
+
+Add the method to your <tt>List.h</tt> and <tt>List.cpp</tt> files.
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add a Doxygen file header comment to <tt><b>List.cpp</b></tt>. Make a bullet list of the 
+  functions in the file. Create doxygen function header comments for each function. You 
+  already have Doxygen comments for all of the other functions, so it's just a matter of 
+  adding the new one.
+
+<p>
+<hr width="100%">
+<p>
+
+
+Here's some test code in <a href="driver.cpp">driver.cpp</a>. 
+<p>
+There is a disabled test called
+<i>TestInsert2</i> at the top of the driver. This is there to help you test your insert 
+method, if you haven't done so already.
+You can only implement <i>Merge</i> if your <i>Insert</i> method is working 100%.
+
+<p>
+Output from the tests:
+<blockquote>
+<a href="output1.txt">TestMerge1</a>&nbsp;&nbsp;&nbsp;
+<a href="output2.txt">TestMerge2</a>&nbsp;&nbsp;&nbsp;
+<a href="output3.txt">TestMerge3</a>&nbsp;&nbsp;&nbsp;
+<a href="output4.txt">TestMerge4</a>&nbsp;&nbsp;&nbsp;
+<a href="output5.txt">TestMerge5</a>&nbsp;&nbsp;&nbsp;
+<a href="output6.txt">TestMerge6</a>&nbsp;&nbsp;&nbsp;
+<a href="output7.txt">TestMerge7</a>&nbsp;&nbsp;&nbsp;
+<a href="output8.txt">TestMerge8</a>&nbsp;&nbsp;&nbsp;
+<p>
+<a href="output-all.txt">All tests</a>&nbsp;&nbsp;
+	
+</blockquote>
+
+Command lines: 
+<p>
+<!--<b>clang++</b> -o clan -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp List.cpp<br>-->
+GNU g++:
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp List.cpp
+</pre></blockquote>
+
+<!--
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp List.cpp
+</pre></blockquote>
+-->
+
+To run an individual test, provide the test number on the command line. For example, to run <i>TestMerge3</i>, do this:
+
+<blockquote><pre>
+gnu 3
+</pre></blockquote>
+
+To run all tests, don't provide any number on the command line.
+<p>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the 
+newlines between operating systems.
+<p>
+</blockquote>
+
+</p>
+
+<br><br><br>
+<hr>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

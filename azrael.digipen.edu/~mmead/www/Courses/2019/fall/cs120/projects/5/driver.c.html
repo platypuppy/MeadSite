@@ -1,0 +1,260 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+filename    driver.c
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS120
+assignment  15
+due date    12/24/2046
+
+Brief Description:
+  This file contains the test functions for the scan text program.
+
+*******************************************************************************/</i></font>
+<b>#include</b> &lt;stdio.h&gt;    <font color="#003399"><i>/* printf */</i></font>
+ 
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>int</b> count_words(<b>const</b> <b>char</b> *string);
+<b>int</b> count_tabs(<b>const</b> <b>char</b> *string);
+<b>int</b> substitute_char(<b>char</b> *string, <b>char</b> old_char, <b>char</b> new_char);
+<b>void</b> calculate_lengths(<b>const</b> <b>char</b> *string, <b>int</b> tabsize, <b>int</b> *string_length, 
+                       <b>int</b> *display_length);
+
+
+<b>int</b> mystrlen(<b>const</b> <b>char</b> *string)
+{
+  <b>int</b> length = 0;
+  <b>while</b> (*string++)
+    length++;
+
+  printf(<font color="#9933CC">&quot;This should not be called.\n&quot;</font>);
+  <b>return</b> length;
+}
+
+<b>static</b> <b>void</b> test1(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;This\tstring\thas\tfive\twords.&quot;</font>;
+  <b>int</b> tabs;
+
+  printf(<font color="#9933CC">&quot;\n== test1 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  tabs = count_tabs(string);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i.\n&quot;</font>, tabs);
+}
+
+<b>static</b> <b>void</b> test2(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;This\tstring\thas\tfive\twords.&quot;</font>;
+  <b>int</b> char_count;
+  <b>int</b> print_length;
+  <b>int</b> tabsize = 2;
+
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+
+  printf(<font color="#9933CC">&quot;\n== test2 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+
+  tabsize = 3;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+
+  tabsize = 6;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+
+  tabsize = 8;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+}
+
+<b>static</b> <b>void</b> test3(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;This\tstring\thas\tfive\twords.&quot;</font>;
+  <b>int</b> count;
+  <b>int</b> tabs;
+  <b>int</b> tabsize;
+  <b>int</b> char_count;
+  <b>int</b> print_length;
+
+  printf(<font color="#9933CC">&quot;\n== test3 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  tabs = count_tabs(string);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i.\n&quot;</font>, tabs);
+
+  tabsize = 4;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+
+  count = substitute_char(string, <font color="#9933CC">'\t'</font>, <font color="#9933CC">' '</font>);
+  printf(<font color="#9933CC">&quot;Replacements made: %i. After replacing tabs with spaces:\n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i\n&quot;</font>, count_tabs(string));
+
+  tabsize = 4;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+}
+
+<b>static</b> <b>void</b> test4(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;\t\t\t\t\t\t&quot;</font>;
+  <b>int</b> count;
+  <b>int</b> tabs;
+  <b>int</b> tabsize;
+  <b>int</b> char_count;
+  <b>int</b> print_length;
+
+  printf(<font color="#9933CC">&quot;\n== test4 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  tabs = count_tabs(string);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i.\n&quot;</font>, tabs);
+
+  tabsize = 4;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+
+  count = substitute_char(string, <font color="#9933CC">'\t'</font>, <font color="#9933CC">' '</font>);
+  printf(<font color="#9933CC">&quot;Replacements made: %i. After replacing tabs with spaces:\n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i\n&quot;</font>, count_tabs(string));
+
+  tabsize = 4;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+}
+
+
+<b>static</b> <b>void</b> test5(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;This is a simple string.&quot;</font>;
+  <b>int</b> count;
+
+  printf(<font color="#9933CC">&quot;\n== test5 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %2i\n&quot;</font>, count);
+}
+
+<b>static</b> <b>void</b> test6(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;These\twords\tare\tseparated\tby\ttabs.&quot;</font>;
+  <b>int</b> count;
+
+  printf(<font color="#9933CC">&quot;\n== test6 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %2i\n&quot;</font>, count);
+}
+
+<b>static</b> <b>void</b> test7(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;  This string has leading and trailing spaces.  &quot;</font>;
+  <b>int</b> count;
+
+  printf(<font color="#9933CC">&quot;\n== test7 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %2i\n&quot;</font>, count);
+}
+
+<b>static</b> <b>void</b> test8(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;  \t This\t  string  \t \t\t  has \t  \tfive\t\n  words.\n&quot;</font>;
+  <b>int</b> count;
+
+  printf(<font color="#9933CC">&quot;\n== test8 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %2i\n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i\n&quot;</font>, count_tabs(string));
+}
+
+<b>static</b> <b>void</b> test9(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;  \t This\t  string\n  \t \t\t  has\n \t\n  \t\&quot;</font>more\<font color="#9933CC">&quot; than five \n\t\n  words.\n\n&quot;</font>;
+  <b>int</b> count;
+
+  printf(<font color="#9933CC">&quot;\n== test9 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %2i\n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i\n&quot;</font>, count_tabs(string));
+}
+
+<b>static</b> <b>void</b> test10(<b>void</b>)
+{
+  <b>char</b> string[] = <font color="#9933CC">&quot;Four\nscore\tand\nseven\t&quot;</font>
+                  <font color="#9933CC">&quot;years\nago\nour fathers\tbrought\n&quot;</font>
+                  <font color="#9933CC">&quot;forth\ton\nthis\ncontinent a\n&quot;</font>
+                  <font color="#9933CC">&quot;new\tnation.&quot;</font>;
+
+  <b>int</b> count;
+  <b>int</b> tabs;
+  <b>int</b> tabsize;
+  <b>int</b> char_count;
+  <b>int</b> print_length;
+
+  printf(<font color="#9933CC">&quot;\n== test10 ==========================================================\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  tabs = count_tabs(string);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i.\n&quot;</font>, tabs);
+
+  tabsize = 4;
+  calculate_lengths(string, tabsize, &amp;char_count, &amp;print_length);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;With tab size of %i, the print length is %i.\n&quot;</font>, tabsize, print_length);
+
+  count = substitute_char(string, <font color="#9933CC">'\n'</font>, <font color="#9933CC">' '</font>);
+  printf(<font color="#9933CC">&quot;Replacements made: %i. After replacing newlines with spaces:\n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i\n&quot;</font>, count_tabs(string));
+
+  count = substitute_char(string, <font color="#9933CC">'\t'</font>, <font color="#9933CC">' '</font>);
+  printf(<font color="#9933CC">&quot;Replacements made: %i. After replacing tabs with spaces:\n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;|%s|\n&quot;</font>, string);
+  printf(<font color="#9933CC">&quot;Number of characters in the string is %i.\n&quot;</font>, char_count);
+  printf(<font color="#9933CC">&quot;Number of tabs is %i\n&quot;</font>, count_tabs(string));
+}
+
+
+<b>int</b> main(<b>void</b>)
+{
+  test1();
+  test2();
+  test3();
+  test4();
+  test5();
+  test6();
+  test7();
+  test8();
+  test9();
+  test10();
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

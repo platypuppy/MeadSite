@@ -1,0 +1,4 @@
+
+********** TestSelectionSortStress **********
+Sorted: compares = 49995000, swaps = 9986
+2  3  4  7  14  37  73  138  258  540  1099  2076  4064  8214  

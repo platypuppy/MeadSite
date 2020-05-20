@@ -1,0 +1,363 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Linux task_struct</title>
+
+
+</head>
+
+<body>  
+
+<center><h1>
+task_struct
+</h1></center>
+
+<pre class="sourcecode"><code>
+<b>struct</b> task_struct {
+  <b>volatile</b> <b>long</b> state;  <font color="#003399"><i>/* -1 unrunnable, 0 runnable, &gt;0 stopped */</i></font>
+  <b>void</b> *stack;
+  atomic_t usage;
+  <b>unsigned</b> <b>int</b> flags; <font color="#003399"><i>/* per process flags, defined below */</i></font>
+  <b>unsigned</b> <b>int</b> ptrace;
+
+  <b>int</b> lock_depth;   <font color="#003399"><i>/* BKL lock depth */</i></font>
+
+<font color="990099">#ifdef CONFIG_SMP</font>
+<font color="990099">#ifdef __ARCH_WANT_UNLOCKED_CTXSW</font>
+  <b>int</b> oncpu;
+<font color="990099">#endif</font>
+<font color="990099">#endif</font>
+
+  <b>int</b> prio, static_prio, normal_prio;
+  <b>unsigned</b> <b>int</b> rt_priority;
+  <b>const</b> <b>struct</b> sched_class *sched_class;
+  <b>struct</b> sched_entity se;
+  <b>struct</b> sched_rt_entity rt;
+
+<font color="990099">#ifdef CONFIG_PREEMPT_NOTIFIERS</font>
+  <font color="#003399"><i>/* list of struct preempt_notifier: */</i></font>
+  <b>struct</b> hlist_head preempt_notifiers;
+<font color="990099">#endif</font>
+
+  <font color="#003399"><i>/*
+   * fpu_counter contains the number of consecutive context switches
+   * that the FPU is used. If this is over a threshold, the lazy fpu
+   * saving becomes unlazy to save the trap. This is an unsigned char
+   * so that after 256 times the counter wraps and the behavior turns
+   * lazy again; this to deal with bursty apps that only use FPU for
+   * a short time
+   */</i></font>
+  <b>unsigned</b> <b>char</b> fpu_counter;
+<font color="990099">#ifdef CONFIG_BLK_DEV_IO_TRACE</font>
+  <b>unsigned</b> <b>int</b> btrace_seq;
+<font color="990099">#endif</font>
+
+  <b>unsigned</b> <b>int</b> policy;
+  cpumask_t cpus_allowed;
+
+<font color="990099">#ifdef CONFIG_PREEMPT_RCU</font>
+  <b>int</b> rcu_read_lock_nesting;
+  <b>char</b> rcu_read_unlock_special;
+  <b>struct</b> list_head rcu_node_entry;
+<font color="990099">#endif /* #ifdef CONFIG_PREEMPT_RCU */</font>
+<font color="990099">#ifdef CONFIG_TREE_PREEMPT_RCU</font>
+  <b>struct</b> rcu_node *rcu_blocked_node;
+<font color="990099">#endif /* #ifdef CONFIG_TREE_PREEMPT_RCU */</font>
+<font color="990099">#ifdef CONFIG_RCU_BOOST</font>
+  <b>struct</b> rt_mutex *rcu_boost_mutex;
+<font color="990099">#endif /* #ifdef CONFIG_RCU_BOOST */</font>
+
+<font color="990099">#if defined(CONFIG_SCHEDSTATS) || defined(CONFIG_TASK_DELAY_ACCT)</font>
+  <b>struct</b> sched_info sched_info;
+<font color="990099">#endif</font>
+
+  <b>struct</b> list_head tasks;
+<font color="990099">#ifdef CONFIG_SMP</font>
+  <b>struct</b> plist_node pushable_tasks;
+<font color="990099">#endif</font>
+
+  <b>struct</b> mm_struct *mm, *active_mm;
+<font color="990099">#if defined(SPLIT_RSS_COUNTING)</font>
+  <b>struct</b> task_rss_stat  rss_stat;
+<font color="990099">#endif</font>
+<font color="#003399"><i>/* task state */</i></font>
+  <b>int</b> exit_state;
+  <b>int</b> exit_code, exit_signal;
+  <b>int</b> pdeath_signal;  <font color="#003399"><i>/*  The signal sent when the parent dies  */</i></font>
+  <font color="#003399"><i>/* ??? */</i></font>
+  <b>unsigned</b> <b>int</b> personality;
+  <b>unsigned</b> did_exec:1;
+  <b>unsigned</b> in_execve:1; <font color="#003399"><i>/* Tell the LSMs that the process is doing an
+         * execve */</i></font>
+  <b>unsigned</b> in_iowait:1;
+
+
+  <font color="#003399"><i>/* Revert to default priority/policy when forking */</i></font>
+  <b>unsigned</b> sched_reset_on_fork:1;
+
+  pid_t pid;
+  pid_t tgid;
+
+<font color="990099">#ifdef CONFIG_CC_STACKPROTECTOR</font>
+  <font color="#003399"><i>/* Canary value for the -fstack-protector gcc feature */</i></font>
+  <b>unsigned</b> <b>long</b> stack_canary;
+<font color="990099">#endif</font>
+
+  <font color="#003399"><i>/* 
+   * pointers to (original) parent process, youngest child, younger sibling,
+   * older sibling, respectively.  (p-&gt;father can be replaced with 
+   * p-&gt;real_parent-&gt;pid)
+   */</i></font>
+  <b>struct</b> task_struct *real_parent; <font color="#003399"><i>/* real parent process */</i></font>
+  <b>struct</b> task_struct *parent; <font color="#003399"><i>/* recipient of SIGCHLD, wait4() reports */</i></font>
+  <font color="#003399"><i>/*
+   * children/sibling forms the list of my natural children
+   */</i></font>
+  <b>struct</b> list_head children;  <font color="#003399"><i>/* list of my children */</i></font>
+  <b>struct</b> list_head sibling; <font color="#003399"><i>/* linkage in my parent's children list */</i></font>
+  <b>struct</b> task_struct *group_leader; <font color="#003399"><i>/* threadgroup leader */</i></font>
+
+  <font color="#003399"><i>/*
+   * ptraced is the list of tasks this task is using ptrace on.
+   * This includes both natural children and PTRACE_ATTACH targets.
+   * p-&gt;ptrace_entry is p's link on the p-&gt;parent-&gt;ptraced list.
+   */</i></font>
+  <b>struct</b> list_head ptraced;
+  <b>struct</b> list_head ptrace_entry;
+
+  <font color="#003399"><i>/* PID/PID hash table linkage. */</i></font>
+  <b>struct</b> pid_link pids[PIDTYPE_MAX];
+  <b>struct</b> list_head thread_group;
+
+  <b>struct</b> completion *vfork_done;    <font color="#003399"><i>/* for vfork() */</i></font>
+  <b>int</b> __user *set_child_tid;    <font color="#003399"><i>/* CLONE_CHILD_SETTID */</i></font>
+  <b>int</b> __user *clear_child_tid;    <font color="#003399"><i>/* CLONE_CHILD_CLEARTID */</i></font>
+
+  cputime_t utime, stime, utimescaled, stimescaled;
+  cputime_t gtime;
+<font color="990099">#ifndef CONFIG_VIRT_CPU_ACCOUNTING</font>
+  cputime_t prev_utime, prev_stime;
+<font color="990099">#endif</font>
+  <b>unsigned</b> <b>long</b> nvcsw, nivcsw; <font color="#003399"><i>/* context switch counts */</i></font>
+  <b>struct</b> timespec start_time;     <font color="#003399"><i>/* monotonic time */</i></font>
+  <b>struct</b> timespec real_start_time;  <font color="#003399"><i>/* boot based time */</i></font>
+<font color="#003399"><i>/* mm fault and swap info: this can arguably be seen as either mm-specific or thread-specific */</i></font>
+  <b>unsigned</b> <b>long</b> min_flt, maj_flt;
+
+  <b>struct</b> task_cputime cputime_expires;
+  <b>struct</b> list_head cpu_timers[3];
+
+<font color="#003399"><i>/* process credentials */</i></font>
+  <b>const</b> <b>struct</b> cred __rcu *real_cred; <font color="#003399"><i>/* objective and real subjective task
+           * credentials (COW) */</i></font>
+  <b>const</b> <b>struct</b> cred __rcu *cred;  <font color="#003399"><i>/* effective (overridable) subjective task
+           * credentials (COW) */</i></font>
+  <b>struct</b> cred *replacement_session_keyring; <font color="#003399"><i>/* for KEYCTL_SESSION_TO_PARENT */</i></font>
+
+  <b>char</b> comm[TASK_COMM_LEN]; <font color="#003399"><i>/* executable name excluding path
+             - access with [gs]et_task_comm (which lock
+               it with task_lock())
+             - initialized normally by setup_new_exec */</i></font>
+<font color="#003399"><i>/* file system info */</i></font>
+  <b>int</b> link_count, total_link_count;
+<font color="990099">#ifdef CONFIG_SYSVIPC</font>
+<font color="#003399"><i>/* ipc stuff */</i></font>
+  <b>struct</b> sysv_sem sysvsem;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_DETECT_HUNG_TASK</font>
+<font color="#003399"><i>/* hung task detection */</i></font>
+  <b>unsigned</b> <b>long</b> last_switch_count;
+<font color="990099">#endif</font>
+<font color="#003399"><i>/* CPU-specific state of this task */</i></font>
+  <b>struct</b> thread_struct thread;
+<font color="#003399"><i>/* filesystem information */</i></font>
+  <b>struct</b> fs_struct *fs;
+<font color="#003399"><i>/* open file information */</i></font>
+  <b>struct</b> files_struct *files;
+<font color="#003399"><i>/* namespaces */</i></font>
+  <b>struct</b> nsproxy *nsproxy;
+<font color="#003399"><i>/* signal handlers */</i></font>
+  <b>struct</b> signal_struct *signal;
+  <b>struct</b> sighand_struct *sighand;
+
+  sigset_t blocked, real_blocked;
+  sigset_t saved_sigmask; <font color="#003399"><i>/* restored if set_restore_sigmask() was used */</i></font>
+  <b>struct</b> sigpending pending;
+
+  <b>unsigned</b> <b>long</b> sas_ss_sp;
+  size_t sas_ss_size;
+  <b>int</b> (*notifier)(<b>void</b> *priv);
+  <b>void</b> *notifier_data;
+  sigset_t *notifier_mask;
+  <b>struct</b> audit_context *audit_context;
+<font color="990099">#ifdef CONFIG_AUDITSYSCALL</font>
+  uid_t loginuid;
+  <b>unsigned</b> <b>int</b> sessionid;
+<font color="990099">#endif</font>
+  seccomp_t seccomp;
+
+<font color="#003399"><i>/* Thread group tracking */</i></font>
+    u32 parent_exec_id;
+    u32 self_exec_id;
+<font color="#003399"><i>/* Protection of (de-)allocation: mm, files, fs, tty, keyrings, mems_allowed,
+ * mempolicy */</i></font>
+  spinlock_t alloc_lock;
+
+<font color="990099">#ifdef CONFIG_GENERIC_HARDIRQS</font>
+  <font color="#003399"><i>/* IRQ handler threads */</i></font>
+  <b>struct</b> irqaction *irqaction;
+<font color="990099">#endif</font>
+
+  <font color="#003399"><i>/* Protection of the PI data structures: */</i></font>
+  raw_spinlock_t pi_lock;
+
+<font color="990099">#ifdef CONFIG_RT_MUTEXES</font>
+  <font color="#003399"><i>/* PI waiters blocked on a rt_mutex held by this task */</i></font>
+  <b>struct</b> plist_head pi_waiters;
+  <font color="#003399"><i>/* Deadlock detection and priority inheritance handling */</i></font>
+  <b>struct</b> rt_mutex_waiter *pi_blocked_on;
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef CONFIG_DEBUG_MUTEXES</font>
+  <font color="#003399"><i>/* mutex deadlock detection */</i></font>
+  <b>struct</b> mutex_waiter *blocked_on;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_TRACE_IRQFLAGS</font>
+  <b>unsigned</b> <b>int</b> irq_events;
+  <b>unsigned</b> <b>long</b> hardirq_enable_ip;
+  <b>unsigned</b> <b>long</b> hardirq_disable_ip;
+  <b>unsigned</b> <b>int</b> hardirq_enable_event;
+  <b>unsigned</b> <b>int</b> hardirq_disable_event;
+  <b>int</b> hardirqs_enabled;
+  <b>int</b> hardirq_context;
+  <b>unsigned</b> <b>long</b> softirq_disable_ip;
+  <b>unsigned</b> <b>long</b> softirq_enable_ip;
+  <b>unsigned</b> <b>int</b> softirq_disable_event;
+  <b>unsigned</b> <b>int</b> softirq_enable_event;
+  <b>int</b> softirqs_enabled;
+  <b>int</b> softirq_context;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_LOCKDEP</font>
+<font color="990099"># define MAX_LOCK_DEPTH 48UL</font>
+  u64 curr_chain_key;
+  <b>int</b> lockdep_depth;
+  <b>unsigned</b> <b>int</b> lockdep_recursion;
+  <b>struct</b> held_lock held_locks[MAX_LOCK_DEPTH];
+  gfp_t lockdep_reclaim_gfp;
+<font color="990099">#endif</font>
+
+<font color="#003399"><i>/* journalling filesystem info */</i></font>
+  <b>void</b> *journal_info;
+
+<font color="#003399"><i>/* stacked block device info */</i></font>
+  <b>struct</b> bio_list *bio_list;
+
+<font color="#003399"><i>/* VM state */</i></font>
+  <b>struct</b> reclaim_state *reclaim_state;
+
+  <b>struct</b> backing_dev_info *backing_dev_info;
+
+  <b>struct</b> io_context *io_context;
+
+  <b>unsigned</b> <b>long</b> ptrace_message;
+  siginfo_t *last_siginfo; <font color="#003399"><i>/* For ptrace use.  */</i></font>
+  <b>struct</b> task_io_accounting ioac;
+<font color="990099">#if defined(CONFIG_TASK_XACCT)</font>
+  u64 acct_rss_mem1;  <font color="#003399"><i>/* accumulated rss usage */</i></font>
+  u64 acct_vm_mem1; <font color="#003399"><i>/* accumulated virtual memory usage */</i></font>
+  cputime_t acct_timexpd; <font color="#003399"><i>/* stime + utime since last update */</i></font>
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_CPUSETS</font>
+  nodemask_t mems_allowed;  <font color="#003399"><i>/* Protected by alloc_lock */</i></font>
+  <b>int</b> mems_allowed_change_disable;
+  <b>int</b> cpuset_mem_spread_rotor;
+  <b>int</b> cpuset_slab_spread_rotor;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_CGROUPS</font>
+  <font color="#003399"><i>/* Control Group info protected by css_set_lock */</i></font>
+  <b>struct</b> css_set __rcu *cgroups;
+  <font color="#003399"><i>/* cg_list protected by css_set_lock and tsk-&gt;alloc_lock */</i></font>
+  <b>struct</b> list_head cg_list;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_FUTEX</font>
+  <b>struct</b> robust_list_head __user *robust_list;
+<font color="990099">#ifdef CONFIG_COMPAT
+</font>
+
+
+  <b>struct</b> compat_robust_list_head __user *compat_robust_list;
+<font color="990099">#endif</font>
+  <b>struct</b> list_head pi_state_list;
+  <b>struct</b> futex_pi_state *pi_state_cache;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_PERF_EVENTS</font>
+  <b>struct</b> perf_event_context *perf_event_ctxp[perf_nr_task_contexts];
+  <b>struct</b> mutex perf_event_mutex;
+  <b>struct</b> list_head perf_event_list;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_NUMA</font>
+  <b>struct</b> mempolicy *mempolicy;  <font color="#003399"><i>/* Protected by alloc_lock */</i></font>
+  <b>short</b> il_next;
+<font color="990099">#endif</font>
+  atomic_t fs_excl; <font color="#003399"><i>/* holding fs exclusive resources */</i></font>
+  <b>struct</b> rcu_head rcu;
+
+  <font color="#003399"><i>/*
+   * cache last used pipe for splice
+   */</i></font>
+  <b>struct</b> pipe_inode_info *splice_pipe;
+<font color="990099">#ifdef  CONFIG_TASK_DELAY_ACCT</font>
+  <b>struct</b> task_delay_info *delays;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_FAULT_INJECTION</font>
+  <b>int</b> make_it_fail;
+<font color="990099">#endif</font>
+  <b>struct</b> prop_local_single dirties;
+<font color="990099">#ifdef CONFIG_LATENCYTOP</font>
+  <b>int</b> latency_record_count;
+  <b>struct</b> latency_record latency_record[LT_SAVECOUNT];
+<font color="990099">#endif</font>
+  <font color="#003399"><i>/*
+   * time slack values; these are used to round up poll() and
+   * select() etc timeout values. These are in nanoseconds.
+   */</i></font>
+  <b>unsigned</b> <b>long</b> timer_slack_ns;
+  <b>unsigned</b> <b>long</b> default_timer_slack_ns;
+
+  <b>struct</b> list_head  *scm_work_list;
+<font color="990099">#ifdef CONFIG_FUNCTION_GRAPH_TRACER</font>
+  <font color="#003399"><i>/* Index of current stored address in ret_stack */</i></font>
+  <b>int</b> curr_ret_stack;
+  <font color="#003399"><i>/* Stack of return addresses for return function tracing */</i></font>
+  <b>struct</b> ftrace_ret_stack *ret_stack;
+  <font color="#003399"><i>/* time stamp for last schedule */</i></font>
+  <b>unsigned</b> <b>long</b> <b>long</b> ftrace_timestamp;
+  <font color="#003399"><i>/*
+   * Number of functions that haven't been traced
+   * because of depth overrun.
+   */</i></font>
+  atomic_t trace_overrun;
+  <font color="#003399"><i>/* Pause for the tracing */</i></font>
+  atomic_t tracing_graph_pause;
+<font color="990099">#endif</font>
+<font color="990099">#ifdef CONFIG_TRACING</font>
+  <font color="#003399"><i>/* state flags for use by tracers */</i></font>
+  <b>unsigned</b> <b>long</b> trace;
+  <font color="#003399"><i>/* bitmask of trace recursion */</i></font>
+  <b>unsigned</b> <b>long</b> trace_recursion;
+<font color="990099">#endif /* CONFIG_TRACING */</font>
+<font color="990099">#ifdef CONFIG_CGROUP_MEM_RES_CTLR /* memcg uses this to do batch job */</font>
+  <b>struct</b> memcg_batch_info {
+    <b>int</b> do_batch; <font color="#003399"><i>/* incremented when batch uncharge started */</i></font>
+    <b>struct</b> mem_cgroup *memcg; <font color="#003399"><i>/* target memcg of uncharge */</i></font>
+    <b>unsigned</b> <b>long</b> bytes;    <font color="#003399"><i>/* uncharged usage */</i></font>
+    <b>unsigned</b> <b>long</b> memsw_bytes; <font color="#003399"><i>/* uncharged mem+swap usage */</i></font>
+  } memcg_batch;
+<font color="990099">#endif</font>
+};
+</code></pre>
+
+
+</body>
+</html>
+

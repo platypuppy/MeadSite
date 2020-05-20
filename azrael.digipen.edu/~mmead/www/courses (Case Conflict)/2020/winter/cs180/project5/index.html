@@ -1,0 +1,245 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 180 - Assignment #5</title>
+</head>
+
+<style>
+body {
+   background : #ffffff;
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>
+<center>
+<h1>CS 180 - Assignment #5</h1>
+</center>
+
+<p class="technote">
+This assignment is not difficult (they never are), but there are a lot of things going on
+here. If you want things to go smoothly, I <b>highly</b> recommend that you create a 
+<tt>makefile</tt> for this project. There are several files that need to be built,
+and if you insist on doing it the hard way, one-at-a-time by-hand, you will most certainly 
+get confused. The 10 minutes or so that you spend creating the makefile will pay-off in
+a very short time.
+</p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<li><a href="cs180-programming-assignment-memmgr.pdf">Handout</a></li>
+<p>
+<!--
+<li>Use this <a href="Doxyfile.txt">Doxyfile</a>. (Remove the .txt extension
+  and change the PROJECT_NAME). To make sure that you catch all of the missing items,
+  you should run Doxygen like this:
+<blockquote><pre>
+( cat Doxyfile ; echo "EXTRACT_ALL=YES" ) | doxygen -
+( cat Doxyfile ; echo "EXTRACT_ALL=NO" ) | doxygen -
+</pre></blockquote>  
+</li>
+-->
+<p>  
+<li><a href="memmgr.h.html">memmgr.h</a> (<a href="memmgr.h">Text</a>) This is the interface.</li>
+<p>
+<li><a href="driver-sample-s.c.html">driver-sample-s.c</a> (<a href="driver-sample-s.c">Text</a>) 
+	This is a sample driver to help you get started testing. (Static linking, not shared objects.)
+<b>This driver is just to be used to get your memory manager working. I will be grading your assignment
+	using the shared object version below so you must have that version working to get a grade.</b></li>
+	<p>
+
+	<li>Command line to compile the program (statically-linked):
+<blockquote><pre>
+gcc -O2 -g -Wall -Wextra -Werror -std=c11 -pedantic driver-sample-s.c memmgr.c -o memmgr
+clang -O2 -g -Wall -Wextra -Werror -std=c11 -pedantic driver-sample-s.c memmgr.c -o memmgr
+</pre></blockquote>
+
+<li>To run the program, type this at the command line:
+<blockquote><pre>
+./memmgr <font color="blue"><b>X</b></font> <font color="blue"><b>Y</b></font>
+</pre></blockquote>
+
+where <font color="blue"><b>X</b></font> is the test number to run and <font color="blue"><b>Y</b></font> 
+is the value for the policy used to find an available block of memory. A value of 0 
+for <font color="blue"><b>Y</b></font> means <i>first-fit</i>
+and a value of 1 (or any non-zero value) means <i>best-fit</i>. The default is to run all tests
+using the first-fit policy.
+This flag only applies to the last 4 tests. See the driver for details.
+<p>
+
+To detect memory errors and leaks, run it under valgrind like this:
+<blockquote><pre>
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./memmgr <font color="blue"><b>X</b></font> <font color="blue"><b>Y</b></font>
+</pre></blockquote>
+
+replace <font color="blue"><b>X</b></font> with the test number to run and <font color="blue"><b>Y</b></font> with the policy.
+	<p>
+<li>Refer to the <a href="../../../../CS180/MemoryManagerDiagrams.html">diagrams</a> from the <a href="../../../../CS180/Memory-1.html#DYNAMIC_LOADING">Memory lecture</a> for a refresher.
+<p>
+<li>Sample outputs:	
+<ol>
+<li><a href="output-alloc1.txt">test_alloc1</a> (<a href="gv_alloc1.png">diagram</a>, <a href="gv_alloc1.txt">source</a>)
+<li><a href="output-alloc2.txt">test_alloc2</a> (<a href="gv_alloc2.png">diagram</a>, <a href="gv_alloc2.txt">source</a>)
+<li><a href="output-alloc3.txt">test_alloc3</a> (<a href="gv_alloc3.png">diagram</a>, <a href="gv_alloc3.txt">source</a>)
+<li><a href="output-alloc4.txt">test_alloc4</a> (<a href="gv_alloc4.png">diagram</a>, <a href="gv_alloc4.txt">source</a>)
+<li><a href="output-alloc5.txt">test_alloc5</a> (<a href="gv_alloc5.png">diagram</a>, <a href="gv_alloc5.txt">source</a>)
+<li><a href="output-alloc6.txt">test_alloc6</a> (<a href="gv_alloc6.png">diagram</a>, <a href="gv_alloc6.txt">source</a>)
+	<p>
+<li><a href="output-dealloc1.txt">test_dealloc1</a> (<a href="gv_dealloc1.png">diagram</a>, <a href="gv_dealloc1.txt">source</a>)
+<li><a href="output-dealloc2.txt">test_dealloc2</a> (<a href="gv_dealloc2.png">diagram</a>, <a href="gv_dealloc2.txt">source</a>)
+<li><a href="output-dealloc3.txt">test_dealloc3</a> (<a href="gv_dealloc3.png">diagram</a>, <a href="gv_dealloc3.txt">source</a>)
+<li><a href="output-dealloc4.txt">test_dealloc4</a> (<a href="gv_dealloc4.png">diagram</a>, <a href="gv_dealloc4.txt">source</a>)
+<li><a href="output-dealloc5.txt">test_dealloc5</a> (<a href="gv_dealloc5.png">diagram</a>, <a href="gv_dealloc5.txt">source</a>)
+	<p>
+<li><a href="output-ada1ff.txt">test_ada1ff</a> (first-fit)
+<li><a href="output-ada1bf.txt">test_ada1bf</a> (best-fit)
+<li><a href="output-ada2ff.txt">test_ada2ff</a> (first-fit)
+<li><a href="output-ada2bf.txt">test_ada2bf</a> (best-fit)
+	<p>
+<li><a href="output-allff.txt">All tests</a> (first-fit)
+<li><a href="output-allbf.txt">All tests</a> (best-fit)
+</ol>
+<p>
+
+<li>Sample stress driver #1 &nbsp;&nbsp;<a href="driver-sample-stress1.c.html">HTML</a> &nbsp;&nbsp;<a href="driver-sample-stress1.c">Text</a> (add <tt>-Wno-format-overflow</tt> to command line)
+	<p>
+<li>Sample stress driver #2 &nbsp;&nbsp;<a href="driver-sample-stress2.c.html">HTML</a> &nbsp;&nbsp;<a href="driver-sample-stress2.c">Text</a> (add <tt>-Wno-format-overflow</tt> to command line)
+<p>
+<li>Sample stress outputs:</li>
+<ol>
+<li><a href="output-stress1-f.txt">Stress1</a> (first-fit)<br>
+<li><a href="output-stress1-fv.txt">Stress1</a> (first-fit, verbose)<br>
+<li><a href="output-stress1-b.txt">Stress1</a> (best-fit)<br>
+<li><a href="output-stress1-bv.txt">Stress1</a> (best-fit, verbose)<br>
+<li><a href="output-stress2-f.txt">Stress2</a> (first-fit)<br>
+<li><a href="output-stress2-b.txt">Stress2</a> (best-fit)<br>
+</ol>
+
+<p>
+<li>Using the <b><tt>dot</tt></b> tool from the <a href="http://www.graphviz.org/">Graphviz</a> package:</li>
+<blockquote><pre>
+<b>dot</b> -T <i>graphic-type</i> -o <i>output-file</i> <i>input-file</i>
+</pre></blockquote>
+For example, assume you have the graph definition in a text file named <tt>graph.txt</tt> and you want to create a PNG file
+called <tt>graph.png</tt>. This is the command:
+<blockquote><pre>
+<b>dot</b> -T png -o graph.png graph.txt
+</pre></blockquote>
+
+</ul>
+
+<p class="SectionHeader">
+Shared Library
+</p>
+No changes to your <tt>memmgr.c</tt> file are required, but the way you build it is a little
+different:
+<ul>
+	<li>Command lines to compile and link your memory manager into a shared library:
+<blockquote><pre>
+gcc -O2 -g -Wall -Wextra -Werror -std=c11 -pedantic <b>-fPIC</b> -c memmgr.c -o memmgr.o
+gcc <b>-shared</b> memmgr.o -o libmemmgr.so
+</pre></blockquote>
+</ul>
+To help the driver in testing the shared library, you will need these files:
+
+<ul>
+<li><a href="shared.h.html">shared.h</a> (<a href="shared.h">Text</a>) This is some helper stuff.
+You need to implement two functions: <tt>load_library</tt> and <tt>get_functions</tt> that are
+prototyped in the header file.</li>
+<p>
+	<li>Command line to compile the <tt>shared.c</tt> code:
+<blockquote><pre>
+gcc -O2 -g -Wall -Wextra -Werror -std=c11 -pedantic -c shared.c -o shared.o
+</pre></blockquote>
+
+<p class="technote">
+A note about the <tt>dlsym</tt> library function: Because the <tt>dlsym</tt> function can 
+return NULL as a valid value of a requested symbol, it is not always safe to assume that
+a NULL value being returned is an indication of an error. However, for our purposes (and with
+the way we're implementing things), a NULL value <b>will indicate an error condition</b>. So,
+if the return from <tt>dlsym</tt> is NULL, you will return <tt>FAILURE</tt> immediately.
+(DO NOT call <tt>dlerror</tt> as that will mess things up when the driver calls it.)
+</p>
+
+<li><a href="driver-sample-d.c.html">driver-sample-d.c</a> (<a href="driver-sample-d.c">Text</a>) 
+	This is a sample driver that expects shared objects.</li>
+<p>
+	<li>Command line to compile and link the driver with the shared library:
+<blockquote><pre>
+gcc -O2 -g -Wall -Wextra -std=c11 -pedantic -Werror driver-sample-d.c shared.o -o memmgr-d <b>-ldl</b>
+</pre></blockquote>
+
+<p class="technote">
+Be aware that I will be running/grading your assignment based solely on the shared object version. The static version
+above was just for you to get a working memory manager. So, if you got the static version working, but
+not the shared object version, you will receive a failing grade for the assignment.
+</p>
+
+</ul>
+<p>
+<hr width="100%">
+<p>
+
+<ul>
+<li><b>Using <tt>script</tt></b></li>
+<p>
+You need to capture your shell session that shows various things like compiling and running the program, using <b>diff</b> to make sure your output is correct and running with valgrind and then running Doxygen. After
+you've finished coding and testing everything and are sure everything is correct, use the <b>script</b> command to make a
+text file of your session. From the bash shell in the directory you've setup to test with, run these commands:
+(You'll need a proper Doxygen config file called <tt>Doxyfile</tt> for the <tt>doxygen</tt> command to work.)
+
+<!--gcc -O2 -g -Wall -Wextra -std=c11 -pedantic driver-sample-s.c memmgr.c -o memmgr-->
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+gcc -O2 -g -Wall -Wextra -Werror -std=c11 -pedantic -fPIC -c memmgr.c -o memmgr.o
+gcc -shared memmgr.o -o libmemmgr.so
+gcc -O2 -g -Wall -Wextra -Werror -std=c11 -pedantic -c shared.c -o shared.o
+gcc -O2 -g -Wall -Wextra -std=c11 -pedantic -Werror driver-sample-d.c shared.o -o memmgr-d -ldl
+./memmgr-d 2 0 | tee output.txt
+diff --strip-trailing-cr output.txt output-alloc2.txt
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./memmgr-d > /dev/null
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> was created
+with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first name and last name. This is
+how you get your name in the typescript file. Consult the man pages if you want more information on <b>script</b>.
+
+</ul>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

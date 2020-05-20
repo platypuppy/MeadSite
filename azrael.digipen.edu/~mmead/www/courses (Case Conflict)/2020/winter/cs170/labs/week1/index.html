@@ -1,0 +1,268 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Practice</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+
+<body>  
+<center>
+<h1>CS 170 - Lab Practice<p></h1>
+
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+Here are some makefiles that I demonstrated during the lecture for you <b>to study and 
+experiment with</b>. There is nothing to submit for this practice. However, remember:
+
+<blockquote>
+<p class="technote">
+There are two types of students. <i>Which one do you want to be?</i>
+</p>
+</blockquote>
+
+<p>
+Don't forget that the first character on the indented action/recipe lines <b>MUST</b> be the tab character.
+This is one situation where you do not want to replace tabs with spaces. If you do, the makefile will
+not work.
+<p>
+To work with these makefiles, save them from the links below. 
+<b>DO NOT</b> copy and paste the code from this page. Why? Because you may not get the tab characters 
+when you do that. Also, the makefile files have a <tt>.txt</tt> extension so that they can be more 
+easily viewed in a browser. You should remove that file extension.
+<p>
+You will need your <tt>bytes</tt>, <tt>scantext</tt>, and <tt>spellcheck</tt> source and header files 
+from CS120. Here is a <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week1/main.c">main.c</a> to use.
+<p>
+
+<p class="technote">
+<b>Note 1:</b> If you don't have any of those projects you can just subsitute another project. Ideally, you will
+have at least one .c file and one .h file for the project. For example, if you don't have a <i>spellcheck</i>
+project but you have a <i>foobar</i> project, just replace the word <i>spellcheck</i> with the word <i>foobar</i> in
+the makefile. You'll have to modify the driver (<tt>main.c</tt>) to call one of your functions.
+</p>
+
+<p class="technote">
+<b>Note 2:</b> The <i>scantext</i> assignment did not have a header file. The functions were simply prototyped in the driver.
+You will need to create a header file yourself. Simply prototype the 4 functions in a file named
+<tt>scantext.h</tt> and you should be good to go.
+</p>
+
+Make sure that you create the <tt><b>gcc</b></tt> directory <i>before</i> you run
+make, as make won't create it automatically.
+
+
+<p>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week1/makefile.txt">GNU makefile with macros</a> (with tabs to download). 
+
+<blockquote><pre>
+# Macros ========================================
+
+CC=gcc
+CFLAGS=-c -Wall -Wextra -Werror -ansi -pedantic -O2
+OUTDIR=gcc/
+OBJECTS=$(OUTDIR)main.o $(OUTDIR)bytes.o $(OUTDIR)scantext.o $(OUTDIR)spellcheck.o
+EXE=program
+ERASE=rm
+
+# Targets ========================================
+
+$(OUTDIR)$(EXE) : $(OBJECTS)
+  $(CC) $(OBJECTS) -o $(OUTDIR)$(EXE)
+
+$(OUTDIR)main.o : main.c bytes.h scantext.h spellcheck.h
+  $(CC) $(CFLAGS) main.c -o $(OUTDIR)main.o
+
+$(OUTDIR)bytes.o : bytes.c bytes.h
+  $(CC) $(CFLAGS) bytes.c -o $(OUTDIR)bytes.o
+
+$(OUTDIR)scantext.o : scantext.c scantext.h
+  $(CC) $(CFLAGS) scantext.c -o $(OUTDIR)scantext.o
+
+$(OUTDIR)spellcheck.o : spellcheck.c spellcheck.h
+  $(CC) $(CFLAGS) spellcheck.c -o $(OUTDIR)spellcheck.o
+
+clean :
+  $(ERASE) $(OUTDIR)$(EXE) $(OBJECTS)
+  
+rebuild : 
+  -$(MAKE) clean
+  -$(MAKE)
+</pre></blockquote>
+
+
+
+
+<!--
+<p class="technote">
+For those that wish to experiment with the optional Microsoft compiler, you can use this makefile
+as a test.
+</p>
+
+
+
+<p>
+<a href="makefile-ms.txt">Microsoft makefile with macros</a> (with tabs).  Run as: <tt>make -f makefile-ms</tt>
+
+<blockquote><pre>
+# Macros ========================================
+
+CC=cl
+CFLAGS=/c /W3 /nologo /Za /WX /D_CRT_SECURE_NO_WARNINGS
+DIR=ms/
+OBJECTS=$(DIR)main.obj $(DIR)jumble.obj $(DIR)scantext.obj $(DIR)spellcheck.obj
+EXE=program.exe
+
+# Targets ========================================
+
+$(DIR)$(EXE) : $(OBJECTS)
+  $(CC) $(OBJECTS) /Fe$(DIR)$(EXE)
+
+$(DIR)main.obj : main.c jumble.h scantext.h spellcheck.h
+  $(CC) $(CFLAGS) main.c /Fo$(DIR)main.obj
+
+$(DIR)jumble.obj : jumble.c jumble.h
+  $(CC) $(CFLAGS) jumble.c /Fo$(DIR)jumble.obj
+
+$(DIR)scantext.obj : scantext.c scantext.h
+  $(CC) $(CFLAGS) scantext.c /Fo$(DIR)scantext.obj
+
+$(DIR)spellcheck.obj : spellcheck.c spellcheck.h
+  $(CC) $(CFLAGS) spellcheck.c /Fo$(DIR)spellcheck.obj
+
+clean :
+  rm $(DIR)$(EXE) $(OBJECTS)
+  
+rebuild : 
+  $(MAKE) clean
+  $(MAKE)
+</pre></blockquote>
+ -->
+
+<p>
+<hr width="90%">
+<p>
+
+<b>Additional practice:</b> (Not everyone will be able to do all of these, and that's fine.)
+<ol>
+  <li>Add or modify rules/recipes to run, diff, and tablen the output, as well. You'll need
+    to create a master output file.</li>
+<p>
+  <li>If the build, run, and diff were successful, modify the rule to then
+    zip up all of the source files that would be uploaded to the submission 
+    server (had this been a real assignment).</li>
+<p>
+  <li>Practice overriding other macros (e.g. <tt>CLFAGS</tt>, <tt>EXE</tt>) from
+    the command line.</li>
+<p>
+  <li>Add or modify rules/recipes to also run Doxygen. You will need to Doxygenize the
+    source files, of course.</li>
+<p>
+  <li>For those that have <b>clang</b> installed and working (very easy in Linux and Mac), 
+    make a <tt>clang</tt>
+    directory and use the <tt>makefile</tt> file to build the project in the
+    <tt>clang</tt> directory. DO NOT modify <tt>makefile</tt>. Override
+    the relevant macros on the command line. 
+    (The name of the compiler is <tt>clang</tt> and the compiler options are the same
+    as <tt>gcc</tt>.)</li>
+
+<p>
+  <li>If you don't have <b>clang</b> (and most of you probably don't), then do the
+    same thing with <b>g++</b>. Since all of our CS120 programs were 100% C++ compatible,
+    you should not have to make any changes. Make sure you create a <tt><b>gpp</b></tt>
+    directory first. In general, file and directory names should follow the rules for
+    C identifiers (letters, numbers, underscores only). It will cause a lot less
+    headaches in the future. For similar reasons, you wouldn't want to put a leading
+    minus sign on a file. (It will be interpreted as an option, e.g. <tt>-ansi</tt>).
+
+
+<p>
+     <li>If you are familiar with Microsoft's compiler and options (and are using Windows), 
+     create a makefile that will allow you to build the project with that
+     compiler.</li>
+
+<p>
+  <li>If you are familiar with revision control systems (e.g. git, svn), add a rule that will
+    put the files into the RCS. You might invoke make like this:
+<blockquote><pre>
+make git
+</pre></blockquote>
+    which would put the modified source files into the version control system
+    (whichever system you are using). You wouldn't want to add this to the 
+    primary rule, as it would put the files into RCS <b>every time</b> that 
+    you modified the code!
+    </li>
+</ol>
+
+<p class="technote">
+<b>Summary</b>: It should be pretty obvious by now that using makefiles can <i>significantly</i> reduce the amount
+of repetitive work that you have to do. This is why <b>make</b> was created. 
+As we all know, programmers are inherently lazy when it comes to repetition!
+<br><br>
+With a little
+effort up front, you can save a lot of effort later.
+Not only 
+does it reduce the workload, but once the makefile is created, it removes any
+possibility of making errors and guarantees that every step is executed in the
+proper order, e.g. you'll never forget to run tablen again!
+<br><br>
+Of course, once you have a working makefile for a project, re-using it for other
+projects is usually a simple matter of changing a few lines to suit the new project's
+file names.
+</p>
+
+<p class="technote">
+<b>Challenge for the hard-core student</b>: Write a program that will automatically create
+a makefile (or at least a partial makefile) from a given set of files.
+There are many ways to attempt this from fully-automated
+(open each source file in the directory and look for local includes) to providing the
+program some hints in the form of command-line arguments.
+<br><br>
+<b>Hint</b>: Run <font color="blue"><tt>gcc -MM main.c</tt></font> to see how to get <i>gcc</i> help with this task.
+<br><br>
+Every semester I see a few dedicated students that attempt this!
+</p>
+
+<p class="Extra">
+<b>Mead's Rule of Automation</b>: If I'm going to do something more than <i>three times</i>, I will
+automate the process!
+</p>
+
+<br><br>
+
+
+  
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

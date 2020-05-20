@@ -1,0 +1,215 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #4</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 4</h1>
+Creating a tile-based editor for a platform game
+<br>
+(Grids, check buttons, WinExec, handling draw events)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #4
+</p>
+
+The session dealt with implementing a tile-based editor for a platform game. The platform game was actually from 
+a CS230 course at Digipen. This is a screen shot of that game:
+
+<p>
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>The game in action</th><th></th><th>The data file used</th></tr>
+<tr valign="top">
+<td>
+<img src="peditor1/platform1.png">
+</td>
+<td width="10"></td>
+<td>
+<pre>
+Width 20
+Height 20
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 0 4 3 0 0 0 0 0 4 0 3 0 0 1 1 1 1 1 1 
+1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 
+1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 1 1 
+1 0 0 0 1 1 1 1 1 1 1 1 1 0 0 2 0 1 1 1 
+1 0 0 0 4 0 0 0 3 0 0 0 0 0 0 0 0 0 1 1 
+1 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+1 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+1 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+1 0 0 0 1 1 0 0 1 1 1 1 1 1 1 0 1 1 1 1 
+1 0 0 0 0 1 0 0 0 3 4 0 0 4 0 0 0 4 0 1 
+1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 
+1 0 4 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 
+1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 1 
+1 0 0 1 1 1 1 1 0 0 1 1 1 1 0 0 0 0 0 1 
+1 0 0 0 3 4 0 0 0 0 0 0 4 0 0 0 0 0 0 1 
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+</pre>	
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+
+<p>
+<blockquote>
+</blockquote>
+<p>
+
+
+This tool is by no means complete, but it is a good starting point. The primary focus of this lecture was to introduce the drawing
+grid components (TDrawGrid and TStringGrid). These components are very powerful and can bring a lot of power with minimal cost.
+<p>
+This is a very small program that just demonstrates some of the properties of the TDrawGrid and TStringGrid components. You should look
+at the properties in the Object Inspector in the IDE. Modify some of them and see how it changes the behavior. Specifically, modify 
+these properties:
+
+<ul>
+<li>ColCount, RowCount - The number of columns and rows
+<li>DefaultColWidth, DefaultRowWidth - The default settings for these properties
+<li>FixedCols, FixedRows - The "non-cell" portion of the grid
+<li>GridLineWidth - The, well, width of the grid lines
+<br>
+<li>Options:
+<ul>
+<li>Toggle the checkboxes to see how these affect the grid.
+<li>You can resize and move the rows/columns, perform inline editing (string grid), range select, etc.</li>
+<li>Just play around with it to get the idea of how the options affect the grids.</li>
+</ul>
+<li>Although the two sets of checkboxes look identical, they were created in different ways:</li>
+<ul>
+	<li>The checkboxes for the DrawGrid were create at runtime.</li>
+	<li>The checkboxes for the StringGrid were create at design time.</li>
+</ul>
+<li>Often times, it can be tedious to create many very similar components at design time. Creating them
+at runtime requires more code (since you are not using the designer to layout things), but may actually
+end up shortening the overall development time.</li>
+<li>Look at the source code and the form at design-time and see the difference. You will definitely want
+	to be able to create, layout, and manipulate visible components at runtime.</li>
+</ul>
+
+<blockquote>
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>The draw grid</th><th></th><th>The string grid</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="grid/grid1.png">
+</td>
+<td width="10"></td>
+<td>
+<img border=0 src="grid/grid2.png">
+</td>
+</tr></table>
+<p>
+</blockquote>
+
+<ul>
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/grid/grid.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/grid/grid-XE3.zip">(XE 3)</a> - Everything to build the project.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/grid/DrawGrid1.exe">Executable</a> - If you want to try it out immediately.
+	</ul>
+	<p>
+<li>Random walk project <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/randomwalk/RandomWalk.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/randomwalk/RandomWalk-XE3.zip">(XE 3)</a>. 
+	This is another GUI that uses the TDrawGrid component. It's the GUI for 
+	the "Drunk man on a pier" program that you may remember from CS120.	Warning: It's not very well commented as it was just thrown 
+	together for an old "CS 120 Friday Lecture Series" that I used to give. (Yeah, I'm always doing some kind of
+	"extra lecture" series about something...) Still, you should be able to easily follow it by now.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/randomwalk/RandomWalk.exe">Executable</a> - If you want to try it out immediately.
+	</ul>
+	<p>
+<li>WarBoats project <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/warboats/warboats.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/warboats/warboats-XE3.zip">(XE 3)</a> You will need to provide your own Ocean.h and Ocean.cpp from the CS170 assignment. 
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/warboats/WarBoats.exe">Executable</a> - If you want to try it out immediately.
+	</ul>
+</ul>
+
+
+
+<p>
+<hr width="90%">
+<p>	
+
+This is the "platform editor" that was presented during the session:
+
+<blockquote>
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>The empty editor</th><th></th><th>The completed "level"</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="peditor1/peditor1.png">
+</td>
+<td width="10"></td>
+<td>
+<img border=0 src="peditor1/peditor2.png">
+</td>
+</tr></table>
+<p>
+</blockquote>
+
+<p>
+<hr width="90%">
+<p>	
+Be sure to read the comments in the .cpp file. They should explain most of what is going on.
+
+<P>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/peditor1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/peditor1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/peditor1/peditor1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/peditor1/peditor1-XE3.zip">(XE 3)</a> - Includes the images to build the application. The archive includes a folder named Debug_Build
+	that contains some sample data files (Exported?.txt) and the CS230 platform game executable
+	(and the required DirectX DLL).
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/4/peditor1/PEditor.exe">Executable</a> - If you want to try it out immediately.
+	</ul>
+</ul>
+	
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

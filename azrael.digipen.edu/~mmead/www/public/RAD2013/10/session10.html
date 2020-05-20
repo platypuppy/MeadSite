@@ -1,0 +1,380 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../../css/styles.css">
+<title>RAD Lecture Series: #10</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+
+
+.Disclaimer
+{
+  margin-left: 0;
+  /*font-size : 10pt;*/
+  font-weight : bold;
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: medium;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+<body>  
+
+<center>
+<h1>Session 10</h1>
+(OwnerDraw, detecting multiple instances, memory-mapped files, DLLs.<!--A veritable Smörgåsbord of information!-->)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #10
+</p>
+
+<ol>
+	
+<li><b>OwnerDraw Techniques</b>
+<p>
+Suppose that a visual component doesn't display information exactly the way you want it to? For example,
+in a tree view control (<i>TTreeView</i>), you can specify the properties of the font (<i>TFont</i>) used
+for the text. However, this property applies to the entire tree view. You can't specify the font that is
+used for each individual line in the tree view. Well, this is where the concept of "OwnerDraw" comes in. 
+Basically, it means that the programmer takes control of drawing each item in the control, instead
+of letting the control do it automatically. This is actually a fairly easy thing to do, depending of course
+on what you actually want to do.
+<p>
+In addition to changing the font properties (name, size, color, etc.) you can do things like wordwrap
+the lines in the tree view, or draw bitmaps within the text. Pretty much anything. Again, the more "radical"
+you want to get, the more work it is. Most of the time you will rarely need to draw things yourself. But, when you do, 
+OwnerDraw is the mechanism.
+<p>
+This application shows how to use the OwnerDraw style to display each line in a list box in a different font and/or color.
+It also shows how to draw each panel in the status bar in a different way. There isn't a lot of code or a lot of output
+displayed here, but the OwnerDraw technique is a very powerful concept that can come in handy when you need it.
+It will distinguish a good UI from a <i>Really Good</i><sup>&trade;</sup> UI.
+	
+<blockquote>
+	
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>All items have the same font and color</th><th></th><th>Each item has its own font and color</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="ownerdraw1/OwnerDraw1.png">	
+</td>
+<td width="30"></td>
+<td>
+<img border=0 src="ownerdraw1/OwnerDraw2.png">	
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/ownerdraw1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/ownerdraw1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/ownerdraw1/OwnerDraw1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/ownerdraw1/OwnerDraw1-XE3.zip">(XE 3)</a> - to build it yourself. 	
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/ownerdraw1/OwnerDraw1.exe">Executable</a>
+	</ul>
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+	
+<p>
+<li><b>Single-instance Applications</b>
+<p>
+This technique can be seen in many applications. It's the technique where, if a program is already running and you try to run
+another instance, instead of a second program running, the existing instance is brought to the foreground. This is
+made even more popular by applications that allow you to open more than one document at a time (e.g. any text editor other
+than Notepad.) For example, suppose you're running Notepad++ and you have a few files opened in it. Now, you double-click
+on another text file in Explorer. What happens (probably) is that instead of running a second instance of Notepad++ and 
+loading the text file into it, the text file is loaded into another tab in the already-running instance of Notepad++. 
+This just doesn't happen automatically. The program had to make this happen. (In the absence of a program preventing a second
+instance from running, Windows will always start another, completely separate, instance).
+<p>
+There are 3 projects here that demonstrate how to deal with this. The application is a simple text editor that allows you
+to open multiple text files, each in its own tab. However, each version of the application handles multiple instances differently,
+from simple (do nothing), to more complex. Although the application is fairly straight-forward, there are a lot of little details that
+have nothing to do with the mulitple-instance issue. The zip files contain the complete project source for each example but I've only
+posted an HTML document of the file containing <tt><b>WinMain</b></tt>.
+<ol>
+<li>The original application. If it's running and you try to run another instance, a second (or third, or fourth) instance
+	will gladly open.
+	<blockquote>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEdit/MultiEdit.exe">Original executable</a> &nbsp;&nbsp;&nbsp;(<tt>MultiEdit.exe</tt>)
+		<br>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEdit/MultiEdit.cpp.html">WinMain file (MultiEdit.cpp)</a> This is pretty much the same as all applications.
+	</blockquote>
+<li>Adding a little bit of code to the .cpp containing WinMain and it detects the presence of an existing instance
+	and switches to that one instead of running itself. Immediately after switching to the other instance, the new 
+	instance terminates.
+	<blockquote>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEditSI/MultiEditSI.exe">Single-instance executable</a> &nbsp;&nbsp;&nbsp;(<tt>MultiEditSI.exe</tt>)
+		<br>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEditSI/MultiEditSI.cpp.html">WinMain file (MultiEditSI.cpp)</a> This has a little additional code to detect running
+		a second instance of the program.
+	</blockquote>
+<li>This is similar to the second version but it has a significant enhancement: Any information that was passed to the 
+	second instance will be forwarded to the original instance. This is important, for example, if the user tried to 
+	open a second instance of the text editor and load a text file into it. If all that happened was that the existing
+	instance was brought to the foreground, the user would be confused as to why it didn't open the text file that
+	was requested.
+	<p>
+	You can easily see how this works by running an instance of the .exe file. Then, drop a text file on the .exe
+	file in Windows explorer. This is the same thing as running it from a command prompt and typing the name of
+	the text file on the command line.
+	<blockquote>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEditMM/MultiEditMM.exe">Single-instance executable</a>  &nbsp;&nbsp;&nbsp;(<tt>MultiEditMM.exe</tt>)
+		Forwards the command line to the existing instance using memory mapped files. A memory mapped file in Windows
+		is similar to POSIX shared memory that you may have seen in CS 180. In other words, it's a form of 
+		interprocess communication (IPC), as the new instance is communicating with the existing instance by 
+		"handing off" the command line to it.
+		<br>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEditMM/MultiEditMM.cpp.html">WinMain file (MultiEditMM.cpp)</a> This has more additional code to detect multiple
+		instances and allow for data exchange between them. Uses memory mapped files.
+	</blockquote>
+		<br>
+	
+
+All 3 projects <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEdit-all.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/single-instance/MultiEdit-all-XE3.zip">(XE 3)</a>
+ A zip file that contains a project group with all 3 projects ready 
+to build and run.
+<br><br>
+</ol>
+<p>
+	 
+Although the focus of this section was on how to detect multiple instances of an application, there is another interesting
+aspect at work here. It's that this application is a very good starting point for a full-blown multiple-file text editor.
+You'll notice that you can open many files at one time, each in their own tab. There's an entire class called <b><tt>TTextEditor</tt></b>
+that encapsulates most of the work. (Each tab is created and holds an instance of a TTextEditor	object). This class
+has many properties and also has a protected section, as it can be used as a base class for other editors.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<center><p class="Disclaimer">
+Other Uses For Command Line Arguments
+</p></center>
+Even if you think that you aren't going to use the command line or that no one else is going
+to run your program from the command line, there are other reasons why supporting command line
+arguments will make your program much nicer to use.
+<p>
+<b>Uses in GUI Environments</b>
+<p>
+Have you ever dragged and dropped a file in Windows, Mac, Linux, or any other graphical environment? 
+(Of course you have.) Well, a lot of the functionality of drag and drop is implemented via command 
+line arguments. That's right, command line arguments.
+<p>
+If you drag and drop a file onto an executable (or shortcut) in a graphical environment, you will notice
+that the executable is launched (run) and it opens the file that was dropped. So, if you drop a file onto
+<b>Notepad.exe</b> in Windows, Notepad will run and open the file that was dropped. This doesn't happen
+automatically. It works because the people that programmed Notepad provided a command line interface, which
+can also be used by GUI environments. (It's actually just another way to communicate with the program.)
+<p>
+If you dropped a file named <b>foo.txt</b> onto <b>Notepad.exe</b>, the
+GUI environment is really doing something like this:
+
+<blockquote><pre>
+Notepad.exe foo.txt
+</pre></blockquote>
+
+which is very similar to how you would run <b>Notepad.exe</b> from the command line and pass the name
+of the file, <b>foo.txt</b>, to the program.
+
+<p>
+<b>Launching a Program from a Running Program</b>
+<p>
+Most students have learned a simple trick that executing a program from within their C/C++ code can be 
+done using the <tt>system</tt> function. If your program was running and you wanted to execute
+<b>Notepad.exe</b> (Windows, of course) from your program and have it edit <b>foo.txt</b>, you would do this:
+
+<blockquote><pre>
+system("Notepad foo.txt");
+</pre></blockquote>
+
+This will load <b>Notepad.exe</b> and pass the filename, <b>foo.txt</b>. to Notepad. <b>Notepad.exe</b>
+will parse the command line and realize that it is being asked to load the file <b>foo.txt</b>.
+
+<p class="info">
+It is often a good idea to have your programs support command line arguments, even if you don't think
+that you or anyone else will ever actually execute the program from a command line. Command line arguments are
+a very simple way for one process to communicate with another and are supported on all operating systems in
+pretty much the same way.
+</p>
+	
+
+
+<p>
+<hr width="90%">
+<p>
+
+<li><b>Putting the UI in a DLL</b>
+<p>
+Some of you may already know how to create and use a Dynamic Linked Library or DLL, for short. Time permitting,
+I usually give a brief overview of Windows DLLs in CS 280, as they are a very powerful programming mechanism.
+In a nutshell, a DLL is a way of sharing code (read: code re-use), without actually integrating the code
+with the executable. In other words, the libraries are "linked" to the program at <i>run-time</i> instead of
+the traditional <i>link-time</i>. 
+<p>
+There are many benefits of this technique, but one
+of the most important benefits is that you can share your C++ libraries (or a library in any language for that matter)
+with a program written in any other language. Got a blazingly-fast way of squaring
+a 100x100 matrix in C code? Put it in a DLL and you can use it in a C++, C#, D, Delphi, Visual Basic, Java, Python, Ruby, etc., 
+program. Very powerful, indeed!
+<p>
+In this demo, I will show you how to put your UI in a DLL that can then be used in any project you have.
+This is especially useful if you're working in a language or environment that doesn't provide a productive 
+environment for UI development. 
+<p>
+
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=0>
+<tr><th>The main UI in the executable</th><th></th><th>The UI from the DLL</th><th></th></tr>
+<tr valign="top">
+<td>
+<img src="DLL/DLL-1a.png">
+</td>
+<td></td>
+<td>
+<img src="DLL/DLL-2.png">
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+After clicking the "Get data" button in the main UI form or clicking the "Callback" button in the DLL form:
+<p>
+
+<blockquote>
+<img src="DLL/DLL-3.png">
+</blockquote>
+<p>
+<br>
+<b>The DLL</b> (<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLProject.dll">DLLProject.dll</a>)
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLMain.h.html">DLLMain.h</a> - The definition of the interface
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLMain.cpp.html">DLLMain.cpp</a> - The implementation of the interface (DLLMain)
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLForm.h.html">DLLForm.h</a> - The definition of the DLL's form class
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLForm.cpp.html">DLLForm.cpp</a> - The implementation of the DLL's form class
+</ul>
+<p>
+<b>The Executable</b> (<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/EXEProject.exe">EXEProject.exe</a>)
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/EXEProject.cpp.html">EXEProject.cpp</a> - The project file (WinMain)
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/EXEForm.h.html">EXEForm.h</a> - The definition of the main form
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/EXEForm.cpp.html">EXEForm.cpp</a> - The implementation of the main form
+</ul>
+
+<p>
+Project files (with exe/dll) <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLForm-example-withbuild.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLForm-example-withbuild-XE3.zip">(XE 3)</a> - Both project files to build it yourself (includes .exe and .dll)
+<br>
+Project files (without exe/dll) <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/10/DLL/DLLForm-example-nobuild.zip">(Turbo C++ only)</a> - Both project files to build it yourself (without .exe and .dll)
+
+
+<p>
+<hr width="90%">
+<p>
+
+
+<li><b>Non-rectangular forms</b>
+<p>
+This example program is more on the "lighter-side" of programming. Although, to be honest, I actually used
+these techniques on a shipping product back in the late 1990's. As it turns out, windows (forms) don't have
+to be rectangular. They can be any shape. Of course, you have to convey this information to Windows so that
+the form will be rendered properly. 
+<p>
+The examples below contain an image (TImage) of the state of Washington. The first one includes the normal
+borders and title bar. The second one has no border because the image <i>is</i> the form! You won't see
+a lot of these kinds of forms in business apps, but for "entertainment-like" apps you might.
+
+<blockquote>
+<table>
+<tr><th>The form with a border</th><th>The form with no border</th></tr>
+<tr>
+<td>
+<img src="nonrect/washington-form.jpg"
+</td>
+
+<td>
+<img src="nonrect/washington-state.jpg"
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+<b>TODO:</b> Finish this demo!
+
+</ol>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+<ol>
+<li><b>Challenge:</b> The memory-mapped file only reserves enough space for a 255-byte string. (This is used
+	to pass the command line from one instance to another.) However, if the second instance is invoked with
+	a command line longer than 255 characters (which is possible), only the first 255 characters are used,
+	which will likely cause odd behavior. Modify the structure used to communicate between the two instances
+	in such a way that it can pass larger command lines. You don't have to make it handle any size, but something
+	more than 255 would be nice. (Maybe 4K or something).
+<p>
+<li>The EXEForm has a button to toggle between showing the DLL form and hiding it. However, if it is showing
+	and the user closes it by clicking the 'X' in the top-right corner, the EXEForm's button still says
+	"Hide form". It still works correctly, but it would be nice if the DLL communicated with the EXEForm
+	so it could update the button to read "Show form".
+</ol>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

@@ -1,0 +1,183 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>coins</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(coins.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a function that, given an amount a money and a number of coins to use, will tell you how 
+  many ways that amount can be achieved using different combinations of coins. Here is the prototype
+  for the function:
+<blockquote><pre>
+<b>void</b> calculate_coins(<b>int</b> value, <b>int</b> num_coins);
+</pre></blockquote>
+
+Here are some example inputs and outputs:
+<p>
+Example 1:
+<blockquote>
+
+<blockquote><pre>
+calculate_coins(500, 15); <font color="#003399"><i>/* Specify amount in cents */</i></font
+</pre></blockquote>
+
+<b>Output:</b>
+<blockquote><pre>
+You can make $5.00 with 5 halves  10 quarters  
+You can make $5.00 with 7 halves  5 quarters  2 dimes  1 nickel  
+You can make $5.00 with 8 halves  2 quarters  5 dimes  
+You can make $5.00 with 8 halves  3 quarters  1 dime  3 nickels  
+You can make $5.00 with 9 halves  4 dimes  2 nickels  
+You can make $5.00 with 9 halves  1 quarter  5 nickels  
+There are 6 possible ways to make $5.00 from 15 coins.
+</pre></blockquote>
+</blockquote>
+
+Example 2:
+<blockquote>
+
+<blockquote><pre>
+calculate_coins(1234, 35); <font color="#003399"><i>/* Specify amount in cents */</i></font
+</pre></blockquote>
+
+<b>Output:</b>
+<blockquote><pre>
+You can make $12.34 with 19 halves  11 quarters  1 nickel  4 pennies  
+You can make $12.34 with 20 halves  8 quarters  3 dimes  4 pennies  
+You can make $12.34 with 21 halves  6 quarters  2 dimes  2 nickels  4 pennies  
+You can make $12.34 with 22 halves  3 quarters  5 dimes  1 nickel  4 pennies  
+You can make $12.34 with 22 halves  4 quarters  1 dime  4 nickels  4 pennies  
+You can make $12.34 with 23 halves  8 dimes  4 pennies  
+You can make $12.34 with 23 halves  1 quarter  4 dimes  3 nickels  4 pennies  
+You can make $12.34 with 23 halves  2 quarters  6 nickels  4 pennies  
+You can make $12.34 with 23 halves  3 quarters  9 pennies  
+There are 9 possible ways to make $12.34 from 35 coins.
+</pre></blockquote>
+</blockquote>
+
+Example 3:
+<blockquote>
+
+<blockquote><pre>
+calculate_coins(1234, 30); <font color="#003399"><i>/* Specify amount in cents */</i></font
+</pre></blockquote>
+
+<b>Output:</b>
+<blockquote><pre>
+You can make $12.34 with 24 halves  1 quarter  1 nickel  4 pennies  
+There is 1 possible way to make $12.34 from 30 coins.
+</pre></blockquote>
+</blockquote>
+Example 4:
+<blockquote>
+<blockquote><pre>
+calculate_coins(1000, 15); <font color="#003399"><i>/* Specify amount in cents */</i></font
+</pre></blockquote>
+
+<b>Output:</b>
+<blockquote><pre>
+It is not possible to make $10.00 from 15 coins.
+</pre></blockquote>
+</blockquote>
+
+The name of the file should be <tt>coins.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c coins.c -o coins
+</pre></blockquote>
+
+<p>
+<font color="blue">Approximate number of lines of code: 20.</font>
+
+</ol>
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+
+<ol>
+  <li>You are given the dollar amount in cents (pennies). So, instead of getting the value 8.13
+    (for 8 dollars and 13 cents), you are given the number 813. It just makes life easier
+    for now.</li>
+    <p>
+  <li><b>Hint:</b> You will use nested loops (5 of them). One for each type of coin. 
+    Put the largest valued coin in the outer-most loop and have the inner loops decrease in value
+    towards the inner-most loop (which will be the pennies).
+    Do not worry about 
+    trying to micro-optimize your code to be really fast and using only logical combinations. If 
+    you don't know what that last sentence means, then you're probably not going to do it.</li>
+<p>
+  <li>The maximum number of pennies you will be given is 2000 ($20.00) and the maximum number
+    of coins will be 40. You don't have to handle invalid values because the driver is taking
+    care of it for you.</li>
+    <p>
+  <li>Use the function <tt>print_coins</tt> to print out your results. 
+    (It's included in the <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/coins-partial.c.html">partial C file</a> to get you started.)
+    This will ensure that your output is formatted properly. If you don't understand 
+    some of the code, don't worry about it. You just need to call it with the number of halves, 
+    quarters, dimes, nickels, and pennies. It will do the rest.</li>
+  <p>
+  <li>The driver (<tt>main.c</tt>, <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/main.c.html">HTML</a>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/main.c">Text</a>) is not prompting for input. You must specify the input on
+    the command line like this:
+<blockquote><pre>
+coins 500 27
+</pre></blockquote>
+This will set the amount to $5.00 and the number of coins to 27. These values are passed to your
+function.</li>
+  <p>
+  <li>Here is a partial C file to get you started: &nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/coins-partial.c.html">HTML</a>
+    &nbsp;&nbsp; <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/coins-partial.c">Text</a>
+    <p>
+      and here are some sample outputs for you to try:
+      <p>
+
+
+  
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/output100-10.txt">Output for $1.00 and 10 coins</a>&nbsp;&nbsp; (coins 100 10)<br>  
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/output500-27.txt">Output for $5.00 and 27 coins</a>&nbsp;&nbsp; (coins 500 27)<br>  
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/coins/output813-40.txt">Output for $8.13 and 40 coins</a>&nbsp;&nbsp; (coins 813 40)<br>  
+
+<p>
+
+
+</ol>
+
+<p>
+  <hr width="95%">
+<p>
+
+<p class="technote">
+<b>Thought Question:</b> What happens if you accept any amount of money and any number of coins?
+</p>
+<br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

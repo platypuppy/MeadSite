@@ -1,0 +1,212 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #9</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 9</h1>
+Threads
+<br>
+(TThread class, thread priorities, TListView class, file system search, ShellExecute, Windows clipboard)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #9
+</p>
+
+<ol>
+	
+<li>During the first part of the session I show a very simple demo on how to capture all message sent to 
+	the window and how to capture events when idle. The application doesn't do much, but it gives you a 
+	glimpse into how you dealing with all of the messages that Windows might send to your application.
+
+<blockquote>
+<p>
+<img border=0 src="winproc1/WinProc1.png">
+<p>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/winproc1/WinProcMain.h.html">WinProcMain.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/winproc1/WinProcMain.cpp.html">WinProcMain.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/winproc1/WinProc1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/winproc1/WinProc1-XE3.zip">(XE 3)</a> - to build it yourself. 	
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/winproc1/WinProcTest.exe">Executable</a>
+	</ul>
+</ul>
+</blockquote>
+
+I also showed a nifty tool from Microsoft called Spy++. It comes with Visual Studio and you can find
+it on the Start Menu under:
+
+<blockquote><pre>
+ Programs | Microsoft Visual Studio 2010 | Visual Studio Tools | Spy++
+</pre></blockquote>
+
+It's kind of a niche tool, but when you need to know about Windows messages and stuff, it can be
+invaluable.
+
+<p>
+<hr width="90%">
+<p>
+
+<li>During the second part of the session, I show some code that demonstrates how to search the file system for files. For example, you can find all of the <tt><b>.cpp</b></tt>
+files on the D: drive. The purpose of this was to set up for the next version which is going to be a multi-threaded file find program. This
+will allow you to search all of your drives simultaneously. Look at the code to get familiar with the algorithm. Since the directory
+structure in Windows uses a tree structure, it lends itself to a simple recursive algorithm. The tree isn't a binary tree, since a 
+directory can have 0, 1, or N subdirectories (children). The algorithm isn't any more complicated than if there were just two 
+subdirectories. The application itself is very simple because it's only meant to show the recursive search algorithm. When I extend it
+with multiple threads, the application will be more useful.
+<p>
+If you've never "searched" a file system below, you should check out the help for the functions: FindFirst, FindNext, and FindClose. You
+should be able to figure out how they work from the example code and the online help. These functions are wrappers around _findfirst, _findnext, 
+and _findclose. (Some compilers will accept these latter functions with or without the leading underscores.) Some information on
+<a href="http://msdn.microsoft.com/en-us/library/kda16keh.aspx">these functions</a>.
+
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr>
+<tr valign="top">
+<td>
+<img border=0 src="filefind1/FileFind-1.png">
+</td>
+<td>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind1/FileFind1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind1/FileFind1-XE3.zip">(XE 3)</a> - to build it yourself. 	
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind1/FileFind.exe">Executable</a>
+	</ul>
+</ul>
+</td>
+</tr></table>
+<p>
+
+<p>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width="90%">
+<p>	
+
+<li>During the third part of the session, I showed another way of traversing subdirectories in the
+Windows file system. This time, I made a multi-threaded application that allowed the application
+to search in multiple folders simultaneously. There is a lot of good information in this simple
+application. For details on working with the TThread class, look at Chapter 11 <i>Writing multi-threaded applications</i> in the
+<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/BCB-DevelopersGuide.pdf">Developer's Guide</a>.
+
+<p>
+I also demonstrated how to launch files from within the application. By double-clicking on an item
+in the list view, that file will "launch". If it's an executable, it will run, it if it's a text file,
+it will be opened by the associated text editor, if it's an HTML file, it will be loaded by the default
+browser, etc. You can choose how to "launch" the file based on the radio buttons.
+<p>
+Finally, I showed how to use the clipboard to put files on it and then paste (copy) them to another folder
+in Windows. This is how it works when you copy and paste files in Explorer.
+
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr>
+<tr valign="top">
+<td>
+<img border=0 src="filefind2/FileFind2-1.png">
+</td>
+<td>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/FileFindThread.h.html">FileFindThread.h</a> - The definition of the thread class.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/FileFindThread.cpp.html">FileFindThread.cpp</a> - The implementation of the thread class.
+	<br>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/MainForm.cpp.html">MainForm.cpp</a> - The implementation of the main form.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/ThreadedFF.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/ThreadedFF-XE3.zip">(XE 3)</a> - to build it yourself.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/ThreadedFF.exe">Executable</a>
+	</ul>
+</ul>
+</td>
+</tr></table>
+<p>
+
+<b>Update for the Clipboard:</b> RAD Studio 2010 and later uses Unicode throughout the library. This can cause some problems when migrating from
+the older Turbo C++ version (which all of these code samples are based). I discovered one such "issue" when using the
+Windows clipboard. You need to make a slight change in order for the code to work properly. 
+<p>
+Change <tt>c_str()</tt> to <tt>t_str()</tt> near the end of <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/9/filefind2/MainForm.cpp.html">MainForm.cpp</a>:
+
+<pre><blockquote>
+  <font color="#003399"><i>// Copy the filename starting at 'next' in the buffer</i></font>
+strcpy(next, Filelist-&gt;Strings[i].<font color="blue"><b>c_str</b></font>());
+</blockquote></pre>
+to
+<pre><blockquote>
+  <font color="#003399"><i>// Copy the filename starting at 'next' in the buffer</i></font>
+strcpy(next, Filelist-&gt;Strings[i].<font color="blue"><b>t_str</b></font>());
+</blockquote></pre>
+
+Without this change, you may get weird results when pasting into Windows Explorer:
+<p>
+<blockquote>
+<img src="filefind2/BadClipboardData-1.png"
+</blockquote>
+<p>
+
+<b>Update for XE 3:</b> I just discovered that the above no longer works in XE 3. You need to cast
+the String to AnsiString:
+<pre><blockquote>
+  <font color="#003399"><i>// Copy the filename starting at 'next' in the buffer</i></font>
+strcpy(next, <font color="blue"><b>AnsiString(</b></font>Filelist-&gt;Strings[i]<font color="blue"><b>)</b></font>.c_str</font>());
+</blockquote></pre>
+
+
+</ol>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

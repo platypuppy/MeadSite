@@ -1,0 +1,23 @@
+102:32 D;865533;3;axis;IllegalShift;821922;4;allies;camper_special;mp44_mp;40;MOD_RIFLE_BULLET;torso_lower
+102:35 K;770711;1;axis;One Pap;891186;2;allies;Grissom;enfield_scope_mp;135;MOD_RIFLE_BULLET;left_leg_upper
+102:43 K;865533;3;axis;IllegalShift;891186;2;allies;Grissom;enfield_scope_mp;135;MOD_RIFLE_BULLET;torso_upper
+102:47 Weapon;138766;0;Uncle Fester;frag_grenade_german_mp
+102:55 D;865533;3;axis;IllegalShift;138766;0;allies;Uncle Fester;m1garand_mp;90;MOD_RIFLE_BULLET;torso_lower
+102:56 K;865533;3;axis;IllegalShift;138766;0;allies;Uncle Fester;m1garand_mp;90;MOD_RIFLE_BULLET;torso_lower
+102:58 K;770711;1;axis;One Pap;891186;2;allies;Grissom;enfield_scope_mp;135;MOD_RIFLE_BULLET;torso_lower
+103:05 Weapon;138766;0;Uncle Fester;mp44_mp
+103:38 D;891186;2;allies;Grissom;865533;3;axis;IllegalShift;shotgun_mp;50;MOD_PISTOL_BULLET;left_arm_upper
+103:38 K;891186;2;allies;Grissom;865533;3;axis;IllegalShift;shotgun_mp;50;MOD_PISTOL_BULLET;left_hand
+103:40 Weapon;865533;3;IllegalShift;frag_grenade_british_mp
+103:45 K;865533;3;axis;IllegalShift;821922;4;allies;camper_special;mp44_mp;120;MOD_HEAD_SHOT;head
+103:46 D;138766;0;allies;Uncle Fester;770711;1;axis;One Pap;mp44_mp;40;MOD_RIFLE_BULLET;torso_upper
+103:52 Weapon;138766;0;Uncle Fester;frag_grenade_german_mp
+103:55 D;865533;3;axis;IllegalShift;821922;4;allies;camper_special;mp44_mp;40;MOD_RIFLE_BULLET;left_leg_upper
+103:57 D;865533;3;axis;IllegalShift;821922;4;allies;camper_special;mp44_mp;40;MOD_RIFLE_BULLET;torso_upper
+103:58 D;891186;2;allies;Grissom;770711;1;axis;One Pap;mp44_mp;40;MOD_RIFLE_BULLET;torso_lower
+103:58 D;891186;2;allies;Grissom;770711;1;axis;One Pap;mp44_mp;40;MOD_RIFLE_BULLET;left_arm_upper
+103:58 K;891186;2;allies;Grissom;770711;1;axis;One Pap;mp44_mp;40;MOD_RIFLE_BULLET;torso_upper
+104:01 W;allies;138766;Uncle Fester;891186;Grissom;821922;camper_special
+104:01 L;axis;770711;One Pap;865533;IllegalShift
+104:06 ExitLevel: executed
+104:06 ShutdownGame:

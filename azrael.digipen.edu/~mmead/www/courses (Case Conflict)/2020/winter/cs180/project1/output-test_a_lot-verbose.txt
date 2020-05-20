@@ -1,0 +1,919 @@
+----- test_a_lot ----------------------------------------
+add_front - value:14, where:-1
+==================
+  14: node
+
+add_end - value:9, where:-1
+==================
+  14: node
+   9: node
+
+insert_after - value:8, where:17
+==================
+  14: node
+   9: node
+
+insert_before - value:14, where:17
+==================
+  14: node
+   9: node
+
+remove - value:1, where:-1
+==================
+  14: node
+   9: node
+
+add_front - value:12, where:-1
+==================
+  12: node
+  14: node
+   9: node
+
+add_end - value:17, where:-1
+==================
+  12: node
+  14: node
+   9: node
+  17: node
+
+insert_after - value:5, where:17
+==================
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+
+insert_before - value:14, where:10
+==================
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+
+remove - value:6, where:-1
+==================
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+
+add_front - value:15, where:-1
+==================
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+
+add_end - value:10, where:-1
+==================
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+  10: node
+
+insert_after - value:17, where:4
+==================
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+  10: node
+
+insert_before - value:9, where:10
+==================
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+
+remove - value:8, where:-1
+==================
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+
+add_front - value:4, where:-1
+==================
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+
+add_end - value:9, where:-1
+==================
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+
+insert_after - value:6, where:9
+==================
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+
+insert_before - value:1, where:1
+==================
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+
+remove - value:18, where:-1
+==================
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+
+add_front - value:11, where:-1
+==================
+  11: node
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+
+add_end - value:16, where:-1
+==================
+  11: node
+   4: node
+  15: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+
+insert_after - value:10, where:15
+==================
+  11: node
+   4: node
+  15: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+
+insert_before - value:5, where:8
+==================
+  11: node
+   4: node
+  15: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+
+remove - value:15, where:-1
+==================
+  11: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+
+add_front - value:8, where:-1
+==================
+   8: node
+  11: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+
+add_end - value:15, where:-1
+==================
+   8: node
+  11: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+
+insert_after - value:9, where:11
+==================
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+
+insert_before - value:11, where:7
+==================
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+
+remove - value:18, where:-1
+==================
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+
+add_front - value:8, where:-1
+==================
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+
+add_end - value:10, where:-1
+==================
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+
+insert_after - value:18, where:12
+==================
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+
+insert_before - value:9, where:17
+==================
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+
+remove - value:2, where:-1
+==================
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+
+add_front - value:8, where:-1
+==================
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+
+add_end - value:7, where:-1
+==================
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+   7: node
+
+insert_after - value:10, where:20
+==================
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  16: node
+  15: node
+  10: node
+   7: node
+
+insert_before - value:17, where:16
+==================
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+
+remove - value:3, where:-1
+==================
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+
+add_front - value:4, where:-1
+==================
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+
+add_end - value:17, where:-1
+==================
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+
+insert_after - value:12, where:9
+==================
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+  12: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+
+insert_before - value:2, where:12
+==================
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+  17: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+
+remove - value:17, where:-1
+==================
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+
+add_front - value:8, where:-1
+==================
+   8: node
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+
+add_end - value:14, where:-1
+==================
+   8: node
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+  14: node
+
+insert_after - value:6, where:10
+==================
+   8: node
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+   6: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+  14: node
+
+insert_before - value:6, where:16
+==================
+   8: node
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+   6: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+   6: node
+  16: node
+  15: node
+  10: node
+   7: node
+  17: node
+  14: node
+
+remove - value:16, where:-1
+==================
+   8: node
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+   6: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+   6: node
+  15: node
+  10: node
+   7: node
+  17: node
+  14: node
+
+==================
+   8: node
+   4: node
+   8: node
+   8: node
+   8: node
+  11: node
+   9: node
+   2: node
+  12: node
+   4: node
+  10: node
+   6: node
+  12: node
+  18: node
+  14: node
+   9: node
+   6: node
+   9: node
+   5: node
+   9: node
+  10: node
+   9: node
+  17: node
+   6: node
+  15: node
+  10: node
+   7: node
+  17: node
+  14: node

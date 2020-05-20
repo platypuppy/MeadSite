@@ -1,0 +1,112 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>mem1.c</title>
+
+
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;stdio.h&gt;
+<b>#include</b> &lt;stdlib.h&gt;
+
+<b>typedef</b> <b>int</b> (*FN)(<b>int</b> *, <b>int</b>);
+
+<b>void</b> print_array(<b>int</b> *array, <b>int</b> stride)
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; stride; i++)
+  {
+    <b>for</b> (j = 0; j &lt; stride; j++)
+    {
+      <b>int</b> index = i * stride + j;
+      printf(<font color="#9933CC">&quot;%3i &quot;</font>, array[index]);
+    }
+    printf(<font color="#9933CC">&quot;\n&quot;</font>);
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>int</b> row_major(<b>int</b> *array, <b>int</b> stride)
+{
+  <b>int</b> i, j, index = 0, count = 0;
+  
+  printf(<font color="#9933CC">&quot;Row major:\n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; stride; i++)
+  {
+    <b>for</b> (j = 0; j &lt; stride; j++)
+    {
+      index = i * stride + j;
+      array[index] = count++;
+    }
+  }
+  <b>return</b> index;
+}
+
+<b>int</b> col_major(<b>int</b> *array, <b>int</b> stride)
+{
+  <b>int</b> i, j, index = 0, count = 0;
+  
+  printf(<font color="#9933CC">&quot;Column major:\n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; stride; i++)
+  {
+    <b>for</b> (j = 0; j &lt; stride; j++)
+    {
+      index = j * stride + i;
+      array[index] = count++;
+    }
+  }
+  <b>return</b> index;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> i, j;
+  <b>int</b> stride = 1000;
+  <b>int</b> size = stride * stride;
+  <b>int</b> *array;
+  <b>int</b> total = size;
+  FN funcs[] = {row_major, col_major};
+  <b>int</b> fnnum = 0;
+  <b>int</b> print = 0;
+  FN fn = funcs[fnnum];
+  
+  <b>if</b> (argc &gt; 1)
+  {
+    stride = atoi(argv[1]);
+    total = stride * stride;
+  }
+  
+  <b>if</b> (argc &gt; 2)
+  {
+    fnnum = atoi(argv[2]);
+    fn = funcs[fnnum];
+  }
+    
+  <b>if</b> (argc &gt; 3)
+    print = atoi(argv[3]);
+
+  printf(<font color="#9933CC">&quot;stride = %i, total = %i, fn = %i\n&quot;</font>, stride, total, fnnum);
+      
+  array = (<b>int</b> *) malloc(total * <b>sizeof</b>(<b>int</b>));
+  
+  fn(array, stride);
+
+  <b>if</b> (print)
+  {
+    printf(<font color="#9933CC">&quot;\n&quot;</font>);
+    print_array(array, stride);
+  }
+  
+  free(array);
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+</body>
+</html>
+

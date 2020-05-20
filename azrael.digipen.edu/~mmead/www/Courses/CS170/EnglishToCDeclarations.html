@@ -1,0 +1,46 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>English to C Declarations</title>
+</head>
+
+<body>  
+<center><h1>English to C Declarations</h1></center>
+
+<pre class="sourcecode"><code>
+<b>int</b> g1;                 <font color="#003399"><i>/* an int                                                                    */</i></font>
+<b>int</b> *g2;                <font color="#003399"><i>/* a pointer to an int                                                       */</i></font>
+<b>int</b> g3[3];              <font color="#003399"><i>/* an array of 3 int                                                         */</i></font>
+<b>int</b> *g4[3];             <font color="#003399"><i>/* an array of 3 pointers to int                                             */</i></font>
+<b>int</b> (*g5)[3];           <font color="#003399"><i>/* a pointer to an array of 3 ints                                           */</i></font>
+<b>int</b> *(*g6)[3];          <font color="#003399"><i>/* a pointer to an array of 3 pointers to int                                */</i></font>
+<b>int</b> *(*g7)[3][5];       <font color="#003399"><i>/* a pointer to an array of 3 arrays of 5 pointers to int                    */</i></font>
+<b>int</b> *(*(*g8)[3])[5];    <font color="#003399"><i>/* a pointer to an array of 3 pointers to an array of 5 pointers to int      */</i></font>
+<b>void</b> (*g9[5])(<b>int</b>);     <font color="#003399"><i>/* an array of 5 pointers to functions that take an int and return nothing   */</i></font>
+<b>double</b> *g10(<b>int</b>, <b>int</b>);  <font color="#003399"><i>/* a function taking an int and an int and returning a pointer to a double   */</i></font>
+<b>int</b> (*g11(<b>void</b>))[10];   <font color="#003399"><i>/* a function that takes nothing and returns a pointer to an array of 10 int */</i></font>
+
+<font color="#003399"><i>/* a function that takes a pointer to an array of 3 doubles and returns a pointer to a function  */</i></font>
+<font color="#003399"><i>/* that takes nothing and returns a float */</i></font>
+<b>float</b> (*g12(<b>double</b> (*) [3]))(<b>void</b>);
+
+<font color="#003399"><i>/* a function that takes a pointer to a pointer to an int and returns a pointer to an */</i></font>
+<font color="#003399"><i>/* array of 5 pointers to functions that take a pointer to a const char and return an int */</i></font>
+<b>int</b> (*(*g13(<b>int</b> **))[5])(<b>const</b> <b>char</b> *);
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

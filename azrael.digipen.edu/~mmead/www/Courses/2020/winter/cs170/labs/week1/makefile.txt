@@ -1,0 +1,32 @@
+# Macros ========================================
+
+CC=gcc
+CFLAGS=-c -Wall -Wextra -Werror -ansi -pedantic -O2
+OUTDIR=gcc/
+OBJECTS=$(OUTDIR)main.o $(OUTDIR)bytes.o $(OUTDIR)scantext.o $(OUTDIR)spellcheck.o
+EXE=program
+ERASE=rm
+
+# Targets ========================================
+
+$(OUTDIR)$(EXE) : $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(OUTDIR)$(EXE)
+
+$(OUTDIR)main.o : main.c bytes.h scantext.h spellcheck.h
+	$(CC) $(CFLAGS) main.c -o $(OUTDIR)main.o
+
+$(OUTDIR)bytes.o : bytes.c bytes.h
+	$(CC) $(CFLAGS) bytes.c -o $(OUTDIR)bytes.o
+
+$(OUTDIR)scantext.o : scantext.c scantext.h
+	$(CC) $(CFLAGS) scantext.c -o $(OUTDIR)scantext.o
+
+$(OUTDIR)spellcheck.o : spellcheck.c spellcheck.h
+	$(CC) $(CFLAGS) spellcheck.c -o $(OUTDIR)spellcheck.o
+
+clean :
+	$(ERASE) $(OUTDIR)$(EXE) $(OBJECTS)
+  
+rebuild : 
+	-$(MAKE) clean
+	-$(MAKE)

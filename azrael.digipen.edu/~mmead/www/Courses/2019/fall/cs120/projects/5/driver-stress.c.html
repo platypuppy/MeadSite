@@ -1,0 +1,140 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+filename    driver-stress.c
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS120
+assignment  15
+due date    12/24/2046
+
+Brief Description:
+  This file contains the stress-test functions for the scan text program.
+
+*******************************************************************************/</i></font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf, fopen, fgets, fclose */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* calloc, free                 */</font>
+<font color="990099">#include &lt;string.h&gt; /* strcat, strlen               */</font>
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>int</b> count_words(<b>const</b> <b>char</b> *string);
+<b>int</b> count_tabs(<b>const</b> <b>char</b> *string);
+<b>int</b> substitute_char(<b>char</b> *string, <b>char</b> old_char, <b>char</b> new_char);
+<b>void</b> calculate_lengths(<b>const</b> <b>char</b> *string, <b>int</b> tabsize, <b>int</b> *string_length, 
+                       <b>int</b> *display_length);
+
+<font color="990099">#define MAX_LINE_LENGTH 200</font>
+
+<b>int</b> mystrlen(<b>const</b> <b>char</b> *string)
+{
+  <b>int</b> length = 0;
+  <b>while</b> (*string++)
+    length++;
+
+  printf(<font color="#9933CC">&quot;This should not be called.&#92;n&quot;</font>);
+  <b>return</b> length;
+}
+
+<b>void</b> test1(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *filename = <font color="#9933CC">&quot;decl80j-lf.txt&quot;</font>; <font color="#003399"><i>/* For Windows, decl80j-crlf.txt */</i></font>
+  <b>char</b> *string;
+  <b>int</b> count;
+  FILE *fp;
+
+  string = calloc(20000, <b>sizeof</b>(<b>char</b>)); <font color="#003399"><i>/* The file is 10,034 bytes    */</i></font>
+  <b>if</b> (!string)
+  {
+    printf(<font color="#9933CC">&quot;calloc failed&#92;n&quot;</font>);
+    <b>return</b>;
+  }
+  
+  fp = fopen(filename, <font color="#9933CC">&quot;r&quot;</font>);
+  <b>if</b> (!fp)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s for read/text.&#92;n&quot;</font>, filename);
+    free(string);
+    <b>return</b>;
+  }
+
+  printf(<font color="#9933CC">&quot;Reading...&#92;n&quot;</font>);
+  <b>while</b> (!feof(fp))
+  {
+    <b>char</b> buffer[MAX_LINE_LENGTH]; <font color="#003399"><i>/* Lines in this file are 80 chars max */</i></font>
+    <b>if</b> (!fgets(buffer, MAX_LINE_LENGTH, fp))
+      <b>break</b>;
+
+    strcat(string, buffer);
+  }
+
+  fclose(fp);
+
+  printf(<font color="#9933CC">&quot;&#92;n== test1 ======================================================&#92;n&quot;</font>);
+  <font color="#003399"><i>/*printf(&quot;|%s|&#92;n&quot;, string);*/</i></font>
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %i&#92;n&quot;</font>, count);
+  free(string);
+}
+
+<b>void</b> test2(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *filename = <font color="#9933CC">&quot;big100-lf.txt&quot;</font>; <font color="#003399"><i>/* For Windows, big100-crlf.txt */</i></font>
+  <b>char</b> *string;
+  <b>int</b> count;
+  FILE *fp;
+
+  string = calloc(1000 * 1000 * 8, <b>sizeof</b>(<b>char</b>)); <font color="#003399"><i>/* The file is about 6 MBs */</i></font>
+  <b>if</b> (!string)
+  {
+    printf(<font color="#9933CC">&quot;calloc failed&#92;n&quot;</font>);
+    <b>return</b>;
+  }
+  
+  fp = fopen(filename, <font color="#9933CC">&quot;r&quot;</font>);
+  <b>if</b> (!fp)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s for read/text.&#92;n&quot;</font>, filename);
+    free(string);
+    <b>return</b>;
+  }
+
+  printf(<font color="#9933CC">&quot;Reading...&#92;n&quot;</font>);
+  <b>while</b> (!feof(fp))
+  {
+    <b>char</b> buffer[MAX_LINE_LENGTH]; <font color="#003399"><i>/* Lines in this file are 100 chars max */</i></font>
+    <b>if</b> (!fgets(buffer, MAX_LINE_LENGTH, fp))
+      <b>break</b>;
+
+    strcat(string, buffer);
+  }
+
+  fclose(fp);
+
+  printf(<font color="#9933CC">&quot;&#92;n== test2 ======================================================&#92;n&quot;</font>);
+  count = count_words(string);
+  printf(<font color="#9933CC">&quot;Word count is %i&#92;n&quot;</font>, count);
+  free(string);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  test1(); <font color="#003399"><i>/* Word count is 1499   */</i></font>
+  <font color="#003399"><i>/*test2();*/</i></font> <font color="#003399"><i>/* Word count is 991170 */</i></font>
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

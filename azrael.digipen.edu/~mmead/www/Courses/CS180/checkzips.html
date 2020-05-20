@@ -1,0 +1,126 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>checkzips</title>
+
+<style type="text/css">
+</style> 
+
+</head>
+<body>  
+
+A bash script to validate zip file names:
+<pre class="sourcecode"><code>
+#!/bin/bash -e
+# -e Exit immediately if a command exits with a non-zero status.
+
+# Command line parameters
+COURSE=$1 
+ASSIGNMENT=$2
+STUDENTS=$3
+
+usage()
+{
+  echo "usage: $0 COURSE ASSIGNMENT STUDENTS"
+  echo " e.g.: $0 cs180 2 student-list.txt"
+}
+
+# Need 3 parameters
+if [[ $# != "3" ]]; then
+  echo "Not enough parameters. (Requires 3 parameters)"
+  usage
+  exit
+fi
+
+# Make sure student list exists
+if [[ ! -e $STUDENTS ]]; then
+  echo "Requires name of file with student logins"
+  usage
+  exit
+fi
+
+logincount=0
+zipcount=0
+
+# Read student logins from text file
+# e.g. "Doe, John",j.doe ==> j.doe
+while read line 
+do 
+  user=$(echo "$line" | cut -d\" -f3 | cut -d\, -f2,3) 
+  logins[$logincount]=$user
+  ((logincount = logincount + 1))
+done < $STUDENTS
+
+# Get all of the existing zip file names
+for z in *.zip
+do
+  zipfiles[$zipcount]=$z
+  ((zipcount = zipcount + 1))
+done
+
+# Compare list of student logins with zip files
+# This checks for missing zip files (i.e. student didn't submit)
+for lg in ${logins[@]}
+do
+  file=$COURSE"_"$lg"_"$ASSIGNMENT".zip" 
+  properzipfiles[$a]=$file
+  ((a = a + 1))
+  if [[ ! -e $file ]]; then
+    echo "   Not found: $file"
+  fi
+done
+
+# Check for unknown zip names, e.g. j.doe_cs180_1.zip
+# Compare actual zip files with expected zip files.
+for z in ${zipfiles[*]}
+do
+  found=0
+  for pz in ${properzipfiles[*]}
+  do
+    if [[ $pz == $z ]]; then
+      found=1  # zip file is expected
+      break;
+    fi
+  done
+  if [[ $found != "1" ]]; then
+    echo "Unknown file: $z"  # zip file is probably named incorrectly
+  fi
+done
+</code></pre>
+
+The format of the student list:
+<blockquote><pre>
+"Smith, John",j.smith
+"Doe, Jane",jane.doe
+</pre></blockquote>
+
+Running the command:
+<blockquote><pre>
+./checkzips
+</pre></blockquote>
+
+gives this output:
+
+<blockquote><pre>
+Not enough parameters. (Requires 3 parameters)
+usage: ./checkzips COURSE ASSIGNMENT STUDENTS
+ e.g.: ./checkzips cs180 2 student-list.txt
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<hr>
+<br><br><br>
+
+
+</body>
+</html>
+
+

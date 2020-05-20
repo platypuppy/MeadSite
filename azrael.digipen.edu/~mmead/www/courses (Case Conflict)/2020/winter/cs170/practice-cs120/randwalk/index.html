@@ -1,0 +1,557 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>randwalk</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: rgb(255,255,220); 
+  border-style: solid;
+  border-color: teal;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 0px;
+  padding-bottom : 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}   
+
+
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(randwalk.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+  
+<li>For this practice assignment you will write a program that performs 
+  a "<a href="https://en.wikipedia.org/wiki/Random_walk">random walk</a>" over
+  a 2-dimensional grid (8x8 array). You start in the top/left of the array (array[0][0])
+  and choose a random direction to travel: UP, DOWN, RIGHT, or LEFT.
+<p>
+  Here are a few examples showing 3 successful random walks:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><!-- seed 22 -->
+<pre><big>
+ A B C D . . I J
+ . . . E F G H K
+ . . . . . N M L
+ . . . . . O R S
+ . . . . . P Q T
+ . . . . X W V U
+ . . . . Y Z . .
+ . . . . . . . .
+</big></pre>
+</td>
+
+<td width=100></td>
+
+<td><!-- seed 4 -->
+<pre><big>
+ A . . . . . . .
+ B . . . . . . .
+ C . . . . . . .
+ D . . . . . . .
+ E . . . O P . Z
+ F . . . N Q R Y
+ G . . . M T S X
+ H I J K L U V W
+</big></pre>
+</td>
+
+<td width=100></td>
+
+<td><!-- seed 12 -->
+<pre><big>
+ A . . . . . . .
+ B . . . . . . .
+ C D . . . . . .
+ . E . . . Y Z .
+ . F . . . X W .
+ . G H . . . V U
+ . J I . O P Q T
+ . K L M N . R S
+</big></pre>
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+Here are a few examples showing 3 unsuccessful random walks:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td><!-- seed 1 -->
+<pre><big>
+ A B . . . . . .
+ D C . . . . . .
+ E J I . . . . .
+ F G H . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+</big></pre>
+</td>
+
+<td width=100></td>
+
+<td><!-- seed 3 -->
+<pre><big>
+ A H I J . . . .
+ B G . K . . . .
+ C F . L . . . .
+ D E N M . . . .
+ . . O . . . . .
+ . . P Q R . . .
+ . X Y T S . . .
+ . W V U . . . .
+</big></pre>
+</td>
+
+<td width=100></td>
+
+<td><!-- seed 7 -->
+<pre><big>
+ A . E F G . . .
+ B C D . H . . .
+ . . K J I . . .
+ . M L U T . . .
+ . N . R S . . .
+ . O P Q . . . .
+ . . . . . . . .
+ . . . . . . . .
+</big></pre>
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+This is the prototype of the function that the driver will call:
+
+<blockquote><pre>
+<b>void</b> random_walk(<b>int</b> showall);
+</pre></blockquote>
+
+The <i>showall</i> parameter is a boolean (integer) that tells the function if it should show every
+board (each new character placement) or just show the final board (like the boards above).
+If <i>showall</i> is 0 (false), then you will only show the final board. If it is non-zero
+(true), you will show every board. You can see all of the boards for the first example here:
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/all-sample1.txt">all-sample1.txt</a>. <b>Notice that there is an extra blank
+line printed after the board when all boards are printed.</b>
+<p>
+Having the ability to show all of the boards is necessary to debug your programs. Otherwise,
+you won't know which step is producing incorrect results.
+<p>
+
+This is the command line to compile it:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c randwalk.c PRNG.c -o randwalk
+</pre></blockquote>
+
+Here is a simple driver file: (<tt>main.c</tt>, <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/main.c.html">HTML</a>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/main.c">Text</a>) The program requires 2 command line parameters:
+    <p>
+<ol>
+  <li>The first parameter is an integer, either 0 or non-zero. This controls whether or not you
+    should print every board or just the final board. A zero means just print the final
+    board and any other integer means print all boards.</li>
+  <li>The second parameter is an unsigned (0 or positive) integer that will be used as the
+    seed to the PRNG. This allows you to reproduce walks when developing the program.</li>
+</ol>
+<p>
+Examples: (The text from the semi-colon on is just for descriptive purposes)
+<blockquote><pre>
+randwalk 0 123    ; Just show final board, seed is 123
+randwalk 1 123    ; Show all boards, seed is 123
+randwalk 1        ; Show all boards, seed is time(NULL) this is random
+randwalk          ; Just show final board, seed is time(NULL) this is random
+</pre></blockquote>
+
+See the driver to see how it works.
+    <p>
+  Random number generator files (put these in the same directory as your C file)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/PRNG.h.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/PRNG.c.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/PRNG.c">Text</a>
+  </ul>
+
+  </li>
+</ul>
+<p>
+Sample output files:
+<p>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr>
+  <th>Final board</th><th>All boards</th>
+</tr>
+
+<tr>
+  <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-sc12.txt">out-sc12.txt</a></td> <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-sc12a.txt">out-sc12a.txt</a></td>
+</tr>
+
+<tr>
+  <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-se22.txt">out-se22.txt</a></td> <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-se22a.txt">out-se22a.txt</a></td>
+</tr>
+
+<tr>
+  <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-si213.txt">out-si213.txt</a></td> <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-si213a.txt">out-si213a.txt</a></td>
+</tr>
+
+<tr>
+  <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-ss1.txt">out-ss1.txt</a></td> <td><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/out-ss1a.txt">out-ss1a.txt</a></td>
+</tr>
+
+</table>
+<p>
+
+The seemingly cryptic file names actually reflect what's in the file as well as the command
+line arguments used to create them. All of the files start with <tt>out-s</tt>. The first
+character after that prefix is one of <tt>c e i s</tt>:
+<ul>
+  <li><tt><b>c</b></tt> - <b>C</b>omplete. All 26 letters are present.</li>
+  <li><tt><b>e</b></tt> - Incomplete, the walk ended on a spot at the <b>e</b>dge of the board.</li>
+  <li><tt><b>i</b></tt> - Incomplete, the walk ended on a spot at the <b>i</b>nterior of the board.</li>
+  <li><tt><b>s</b></tt> - Incomplete, only a <b>s</b>mall number of letters are placed.</li>
+</ul>
+
+<p>
+The number in the filename is the seed used for the PRNG. This will allow you to reproduce these boards.
+<p>
+If the letter <b>a</b> follows the seed, it means that <i>all</i> of the boards are in the
+file. If no letter <b>a</b> follows, the file contains just the final board.
+<p>
+So, to generate the first file on the first line:
+<blockquote><pre>
+randwalk 0 12
+</pre></blockquote>
+
+To generate the second file on the first line:
+<blockquote><pre>
+randwalk 1 12
+</pre></blockquote>
+
+This file contains 36 test cases: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/allfiles.zip">allfiles.zip</a>. The reason
+there are so many tests is because there are many cases you need to be able to handle and
+these represent most (if not all) of the cases. There are actually only 13 tests, but
+there are two files for each test: one file that just contains the final board, and another
+file that contains all of the boards for the test.
+<p>
+This file contains the output from all 36 test cases: 
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/output-all.txt">output-all.txt</a>.
+<p>
+There is also a stress test here, which you shouldn't test until you've passed all of the
+above tests. It basically does 500 runs (seeding 1 to 500) and puts the output into
+a file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/stress.txt">stress.txt</a>.
+<p>
+There are batch files (Windows) and bash scripts (Linux and Mac) that will help you
+to automate the running of all of the tests:
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/all.bat.txt">all.bat</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/stress.bat.txt">stress.bat</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/all.sh.txt">all.sh</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/stress.sh.txt">stress.sh</a></li>
+</ul>
+<p>
+
+You need to remove the <tt>.txt</tt> extension on these files for them to work. All of the
+files are also in <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/allfiles.zip">allfiles.zip</a>.
+<p>
+
+<b>Update:</b>
+<p>
+<blockquote>
+Here's another stress driver: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/main-stress.c.html">HTML</a>&nbsp;&nbsp;&nbsp;
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/main-stress.c">Text</a>
+<p>
+Run it like this:
+<blockquote><pre>
+randwalk 0 -100
+</pre></blockquote>
+
+And the output: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/randwalk/stress2.txt">stress2.txt</a>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</ol>
+
+<p>
+  <hr width="95%">
+</p>
+
+<b>Notes:</b>
+
+<ol>
+<li>You can see some details about this in the textbook. It's programming project 8.9 on page
+  179. That program is using a 10x10 array, but we will be using an 8x8 array.</li>
+<p>
+<li>The driver handles the details of seeding the PRNG. You must NOT do that, or you will
+  not get the correct output.</li>
+<p>
+<li>After displaying the board you will print out how many steps were completed. On a
+  successful walk (all 26 characters were placed) you'll display this:
+<blockquote><pre>
+All 26 steps were completed.  
+</pre></blockquote>
+If you can't complete the walk, you must display something like this:
+<blockquote><pre>
+Only completed 22 steps.
+</pre></blockquote>
+
+<li>You'll notice there are extra blank lines printed when printing all of the boards.
+  Look at the sample outputs to see how to format them.</li>
+<p>
+
+<li>The board should be a 2-dimensional array (8x8) of <i>char</i>. All of the elements must
+  be initialized to just a period.</li>
+<p>
+<li>The only system header file that you should need is <b>stdio.h</b> (for <i>printf</i>).
+  <p>
+<li>Your code is basically in a loop (do..while) that repeatedly calls the <i>RandomInt</i> 
+  function similar to this:
+<blockquote><pre>
+<b>int</b> direction = RandomInt(0, 3);
+</pre></blockquote>
+  
+  There are 4 possible directions: UP, DOWN, RIGHT, and LEFT. You must use this enumeration
+  in your file:
+<blockquote><pre>
+<b>typedef enum</b> DIRECTION {dirUP, dirDOWN, dirRIGHT, dirLEFT} DIRECTION;
+</pre></blockquote>
+
+  This will essentially give the enumerators the values 0 to 3. It's very important
+  that you order the enumerators like this. If you use other values for those directions, you will not get
+  the correct output because of the PRNG.
+<p>
+  <li>If you generate a random move that leads to a spot on the board that is already
+    taken, or the random move leads you off of the board,
+     you just call the <i>RandomInt</i> function again.</li>
+   <p>
+
+<li>There are two ways the program ends:
+  <p>
+  <ol>
+    <li>You successfully placed the last character (Z) on a spot. 
+      (See the first 3 examples at the top of this page.)</li>
+    <li>The last character that was placed is surrounded on all 4 sides by other characters
+      or an off-the-board location. (See the second 3 examples at the top of this page.)</li>
+  </ol>
+
+<p>
+</ol>
+
+<b>Hints and advice:</b>
+<p>
+  This is by far the most complex practice. However, you have all of the C knowledge
+    required. You just need to apply good coding practices.</li>
+  <p>
+<ol>
+  <li><b>Think!</b> - You should spend at least 20 minutes thinking about how you are going
+    to structure your solution. Don't start writing code until you can sketch out the
+    entire process. This leads to the next point.
+  <p>
+  <li><b>Helper functions</b> - You'll need several helper functions. If you try to do
+    all of the work in one or two functions, you will fail. Even if you were able to
+    do that, your code will most likely be a mess that no one would ever want to work with.
+    <p>
+    There are two important helper functions. The first is for determining the next move based on
+    the current position. The second is to determine if a particular character is surrounded.
+    If the last character placed is surrounded so that another character cannot be placed,
+    the program must end. You should call this second helper function before attempting to
+    place another character. If you don't, you may find yourself in an infinite loop looking
+    for an open spot that doesn't exist.
+  </li>
+  <p>
+  <li><b>Don't hard-code values</b> - Even though you are only expected to support an 8x8 array, you
+    shouldn't hard-code those numbers anywhere. Use a <b>#define</b>. This will make it trivial
+    for you to change to a 10x10, or 20x20, or whatever size you want. In fact, you should
+    allow both the number of rows and the number of columns to change, something like this:
+<blockquote><pre>
+<b>#define</b> BOARD_SIZE_ROWS 8
+<b>#define</b> BOARD_SIZE_COLS 8
+</pre></blockquote>
+
+    That is the proper way to write code.</li>
+  <p>
+</ol>
+
+<p>
+  <hr width="95%">
+</p>
+
+<b>Additional features:</b>
+<p>
+This practice has been purposely kept simple. If you feel you are up to a bigger challenge,
+here are some ideas. If you've been using good programming habits, these additional features
+are not difficult at all.
+
+<ol>
+  <li><b>Dynamic sized boards</b> - Don't hard-code the size as 8x8. Dynamically allocate the 2-dimensional board
+    at runtime. You should allow the user to specify the size of the board on the 
+    command line. Example of a 12x12 board:</li>
+
+<blockquote><pre><big>
+ A D E . . . . . . . . .
+ B C F I J K L M N . Z Y
+ . . G H . . . . O . . X
+ . . . . . . . Q P . V W
+ . . . . . . . R S T U .
+ . . . . . . . . . . . .
+ . . . . . . . . . . . .
+ . . . . . . . . . . . .
+ . . . . . . . . . . . .
+ . . . . . . . . . . . .
+ . . . . . . . . . . . .
+ . . . . . . . . . . . .
+</big></pre></blockquote>    
+  <p>
+  <li><b>Non-square boards</b> - You should be able to handle boards
+    like 5x10, 10x5, 20x8, etc. The smallest rows/columns should be set to 2.
+     Example of an 8x20 board:
+<blockquote><pre><big>
+ A . . F G H . . . . . . . . . . . . . .
+ B C D E . I J K . . . . . . . . . . . .
+ . . U T . . . L . . . . . . . . . . . .
+ . . V S R Q P M . . . . . . . . . . . .
+ . . W . . . O N . . . . . . . . . . . .
+ . . X . . . . . . . . . . . . . . . . .
+ . . Y Z . . . . . . . . . . . . . . . .
+ . . . . . . . . . . . . . . . . . . . .
+</big></pre></blockquote> 
+
+And an example with 2 rows and 24 columns:
+<blockquote><pre><big>
+ A B C F G J K L . P Q T U X Y . . . . . . . . .
+ . . D E H I . M N O R S V W Z . . . . . . . . .
+</big></pre></blockquote> 
+</li>
+
+
+  <p>
+  <li><b>Starting position</b> - Allow the first character to be placed anywhere on the board instead of always
+    placing it at the top left. Example of a 9x9 board with starting position row 5, column 5:</li>
+<blockquote><pre><big>
+ . J I H . . . . .
+ . K . G F . . . .
+ . L . . E . . . .
+ . M N C D . . . .
+ . P O B <font color="red"><b>A</b></font> . . . .
+ . Q . . . . . . .
+ S R . . . . . . .
+ T W X Y Z . . . .
+ U V . . . . . . .
+</big></pre></blockquote>
+
+  <p>
+  <li><b>Length of the walk</b> - Instead of hard-coding the length to 26 characters, 
+    allow more or less. With more than 26, it's a little weird because you have to know
+    the order of the ASCII values. Example of an 8x8 with 30 moves instead of 26:</li>
+<blockquote><pre><big>
+ A B . . . X Y Z
+ D C . U V W \ [
+ E F G T . . ] ^
+ J I H S . e f _
+ K L Q R . d c `
+ . M P . . . b a
+ . N O . . . . .
+ . . . . . . . .
+</big></pre></blockquote>
+Another strategy to having more than 26 characters is to start over at A after
+you place Z on the board. Yet another strategy would be to switch to lowercase characters
+after the uppercase characters have been exhausted. Of course, using numbers instead
+of letters will allow the most flexibility, at the cost of more code to format the
+output, as well as possibly having to use ints instead of chars in the 2D array.
+<p>
+
+Example of a 5x5 board with a limit of only 10 moves:
+<blockquote><pre><big>
+ A B C D .
+ . . . E .
+ I H G F .
+ J . . . .
+ . . . . .
+</big></pre></blockquote>
+
+  <p>
+  <li><b>Diagonal moves</b> - In addition to the 4 moves (UP, DOWN, RIGHT, LEFT), allow
+    diagonal moves. This gives a maximum of 8 moves instead of just 4. With this in mind,
+    rename the directions to North, South, East, West, NorthEast, SouthEast, SouthWest,
+    and NorthWest:
+<blockquote><pre><big>
+ NW  N  NE
+  W  <xbig>&middot;</xbig>  E
+ SW  S  SE
+</big></pre></blockquote>
+
+and a possible enumeration:
+
+<blockquote><pre>
+<b>typedef enum</b> DIRECTION {dirN, dirS, dirE, dirW, dirNE, dirSE, dirSW, dirNW} DIRECTION;
+</pre></blockquote>
+
+Here's a sample walk:
+<blockquote><pre><big>
+ A . . . . . . . . .
+ . B . . . . . . . .
+ . C E . . . . . . .
+ . . D F . . . . . .
+ . . . G . . . . . .
+ . . . . H . . . . .
+ . . . R S I . . Z .
+ . . Q T J K . . Y .
+ . . P . U M L X . .
+ . . . O N V W . . .
+</big></pre></blockquote>
+</li>
+
+
+
+</ol>
+
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,153 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Programming Assignment #6</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<p>
+<h1>CS 120 - Programming Assignment #6</h1>
+</center>
+
+<!--
+<td><img src="../../../../../images/annew3.gif" width=120 height=60><br></td>
+-->
+</p>
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+<ul>
+<li><a href="cs120-programming-assignment-spellcheck.pdf">Handout</a> 
+<p>
+<li>Here is the header file for you to use: <a href="spellcheck.h.html">HTML</a> 	<a href="spellcheck.h">Text</a> (Do not modify this file.)
+<li>The partial .c file for you to start with: <a href="spellcheck.c.html">HTML</a> 	<a href="spellcheck.c">Text</a>
+<p>
+<li>Here is a <i>sample</i> <tt>driver.c</tt> file for you to use and experiment with: <a href="driver.c.html">HTML</a>
+	<a href="driver.c">Text</a>
+<ul>
+<p>
+<li>Compile it like this:
+<blockquote><pre>
+gcc -O -Wall -Wextra -Werror -ansi -pedantic driver.c spellcheck.c -o spell
+</pre></blockquote>
+<li>Sample output: <a href="output.sample.txt">here</a>.
+<li>Dictionaries (for Windows): <a href="lexicon.txt">lexicon (12 words)</a>&nbsp;&nbsp;&nbsp;&nbsp;  
+	<a href="small.txt">small (35 words)</a>&nbsp;&nbsp;&nbsp;&nbsp;  
+	large (100,000+ words)
+	<ul>
+		<li>All of them in zip files:
+			<ul>
+			<a href="dictionaries.zip">Windows</a> (CR + LF, hex 0D0A)<br>
+			<a href="dictionaries-linux.zip">Linux and Mac OS X</a> (LF only, hex 0A)<br>
+			<!--<a href="dictionaries-mac.zip">Older Mac computers</a> (CR only, hex 0D)-->
+			</ul>
+	</ul>
+</ul>
+<p>
+
+<li>Additional Information (Failure to follow these "hints" will cause you to lose points.)
+<p>
+<ol>
+	<li><b>Think</b>. This should be your first action. Before writing a single line of code, make sure you 
+		can explain to
+		me or someone else what it is you are trying to do. If you can't write it in English (or your 
+		native language), you will not be able to
+		write it in C.</li>
+		<p>
+	<li>Make sure you check the return value from <tt>fgets</tt>. If it returns NULL, then nothing was 
+		read (so don't try
+		and do anything with the buffer that was passed in because it is meaningless.)</li>
+		<p>
+	<li>The dictionaries that you are given are sorted alphabetically. (Go figure.) This means you can 
+		stop looking for a word when you encounter one that comes <i>immediately after</i> the word you are looking 
+		for. <b>Failure to do this will result in loss of points.</b></li>
+		<p>
+	<li>The dictionaries contain exactly one word per line. All words end with a newline character. This 
+		means you don't
+		have to "search" from the beginning of the word looking for the newline. It's the last character.
+		Always. There, I told you where it is.
+		So you don't have to search for it. Why are you still searching? It's at the end. Really. At. 
+		The. End.</li>
+		<p>
+	<li>Here's a hint: Immediately after reading a line/word from the dictionary, convert the newline to 
+		a 0. Now, when you call <tt>strlen</tt>
+		on the string, it will give the correct count (without the newline). Where's the newline in
+		the string? See #4. Hey, here's more advice for you to ignore: Make a function that removes the newline
+		character from a string.</li>
+		<p>
+	<li>The dictionaries are <b>not guaranteed</b> to be in all lowercase or uppercase. You need to be 
+		able to handle both.
+		Do yourself a favor: after you get the code working, make the words in <b>lexicon.txt</b> all 
+		UPPERCASE, and see if
+		your program still works. (That's what I'm going to do.)</li>
+		<p>
+	<li>Since you are given a text file that contains lines, you should use <tt>fgets</tt> to read them 
+		in. Don't use anything else.
+		Especially don't try to read in one character at a time. Read in the whole line. That's why I 
+		showed you <tt>fgets</tt>.
+		I even posted code that shows you how to do it. Reading in one character at a time is just plain 
+		wrong. <i>Don't be wrong. Be Right<sup>&trade;</sup></i>.</li>
+		<p>
+	<li>You may use any of the string functions that are found in <tt>string.h</tt>. 
+		(e.g. <a href="http://www.cplusplus.com/reference/clibrary/cstring/strcmp/">strcmp</a>, 
+		<a href="http://www.cplusplus.com/reference/clibrary/cstring/strcpy/">strcpy</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstring/strlen/">strlen</a>,
+		 etc.)</li>
+
+
+		<p>
+	<li>You may not include any other system header file.</li>
+		<p>
+	<li>Make sure you handle uppercase and lowercase correctly.</li> 
+		<p>
+	<li>Make sure you set the values of any variables that might not be initialized. 
+		(Hint: the <tt>lengths</tt> array that is passed to
+		the <tt>word_lengths</tt> function may not have been initialized. It could have garbage values 
+		and likely will.)</li>
+		<p>
+	<li>Make sure to use <tt>"r"</tt> in your mode parameter to <tt>fopen</tt>. If you don't, you are 
+		not guaranteed to get
+		the correct results when I test your program (even though <i>your way</i> appears to work for 
+		you on your computer).</li>
+		<p>
+	<li>If you opened a file successfully, be sure to close it. (Be careful if you leave the function 
+		through muliple return statements. Again, THINK!) Before submitting, take a couple of minutes
+		to check each function that opens a file and make sure it is being closed. 
+		<b>Failure to do this will result in loss of points.</b></li>
+		<p>
+	<li>Also, if <tt>fopen</tt> fails to open
+		the file <b>DO NOT TRY TO CLOSE IT</b>! (It's not opened). You will lose points if you 
+		try to close it.</li>
+		<p>
+	<li><b>DO NOT USE MAGIC NUMBERS.</b> Use the <b><tt>#define</tt></b>s that you are given in 
+		<tt>spellcheck.h</tt>. Not using those
+		<b><tt>#define</tt></b>s will cause you to lose points, maybe a significant number due to 
+		your failure to follow instructions.</li>
+</ol>
+			
+</ul>
+<br><br>
+<p>
+<hr>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

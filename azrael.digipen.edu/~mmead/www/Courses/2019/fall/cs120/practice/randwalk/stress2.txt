@@ -1,0 +1,900 @@
+ A B . . . . . .
+ D C . . . . . .
+ E J I . . . . .
+ F G H . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 10 steps.
+ A B C D E . . .
+ N M L . F . . .
+ O P K J G . . .
+ . Q R I H . . .
+ . . S T W X . .
+ . . . U V Y Z .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B . . M N O X
+ D C H I L . P W
+ E F G J K R Q V
+ . . . . . S T U
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 24 steps.
+ A B . . . . . .
+ D C . . . . . .
+ E F . . . . . .
+ L G H . . . . .
+ K J I . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 12 steps.
+ A B C D . . . .
+ . . . E . . . .
+ . . . F . . . .
+ . Q P G H . . .
+ S R O . I . . .
+ T U N K J . . .
+ Y V M L . . . .
+ X W . . . . . .
+Only completed 25 steps.
+ A B C D . . . .
+ J K L E . . . .
+ I H G F . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 12 steps.
+ A B . . . . . .
+ F C . . . . . .
+ E D . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 6 steps.
+ A B C . . . . .
+ F E D . . . . .
+ G H . . . . . .
+ . I . . . . . .
+ K J . . . Z . .
+ L Q R . X Y . .
+ M P S . W . . .
+ N O T U V . . .
+All 26 steps were completed.
+ A B . . . L M N
+ . C . . . K P O
+ . D . . . J Q T
+ . E F G H I R S
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 20 steps.
+ A B E F G H I R
+ . C D . . K J Q
+ . . . . . L M P
+ . . . . . . N O
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 18 steps.
+ A B . . . L M N
+ D C H I J K P O
+ E F G . . R Q .
+ . . . . . S . .
+ . . . V U T . .
+ . . . W . . . .
+ . . . X Y Z . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B K L M . . .
+ . C J I N . . .
+ . D . H O R S .
+ . E F G P Q T U
+ . . . . . . W V
+ . . . . . Y X .
+ . . . . . Z . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B . . I J K N
+ . C D . H . L M
+ . . E F G . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 14 steps.
+ A D E . . . . .
+ B C F . . . . .
+ K J G . . . . .
+ L I H . . . . .
+ M T S R . . . .
+ N O P Q . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 20 steps.
+ A . . N M . . .
+ B C D O L K . .
+ . . E F I J . .
+ . . . G H . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 15 steps.
+ A B . . . L M N
+ . C . G H K . O
+ . D E F I J Q P
+ . . . . . . R .
+ . . . . . . S T
+ . . . . . . V U
+ . . . . . Z W .
+ . . . . . Y X .
+All 26 steps were completed.
+ A B . . . . . .
+ . C J K L . . .
+ E D I P M . . .
+ F G H O N . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 16 steps.
+ A . . . . . . .
+ B . . . . . . .
+ C . . . . . . .
+ D E . . . . . .
+ O F G . . . . .
+ N M H . . . . .
+ . L I . . . . .
+ . K J . . . . .
+Only completed 15 steps.
+ A F E . . . . .
+ B C D . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 6 steps.
+ A . . . . V U T
+ B . . . . W . S
+ C D E F . X Y R
+ . . . G H I Z Q
+ . . . . . J K P
+ . . . . . . L O
+ . . . . . . M N
+ . . . . . . . .
+All 26 steps were completed.
+ A B . . . . . .
+ . C D . . . . .
+ . . E F . . U V
+ . . . G H I T W
+ . . . . . J S X
+ . . . . . K R Y
+ . . . . M L Q Z
+ . . . . N O P .
+All 26 steps were completed.
+ A B C D . . . .
+ H G F E . . . .
+ I J . . . . . .
+ L K . . . . . .
+ M . . . . . . .
+ N . . . V W . .
+ O R S T U X . .
+ P Q . . . Y Z .
+All 26 steps were completed.
+ A B . R Q . . .
+ D C T S P O . .
+ E . U X M N . .
+ F G V W L . . .
+ . H I J K . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 24 steps.
+ A . . . . . . .
+ B C . . . . . .
+ . D . . . . . .
+ F E . . . Y X W
+ G . . . . Z . V
+ H . . . R S T U
+ I L M . Q . . .
+ J K N O P . . .
+All 26 steps were completed.
+ A . . F G J K P
+ B C D E H I L O
+ . . . . . . M N
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 16 steps.
+ A B . . . . . .
+ . C . . . . . .
+ . D . . . . . .
+ . E . . . . . .
+ G F . . . . . .
+ H I J K . . . .
+ Q R S L . . . .
+ P O N M . . . .
+Only completed 19 steps.
+ A . . N O P . Z
+ B C . M . Q R Y
+ . D . L . . S X
+ . E F K J . T W
+ . . G H I . U V
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A . . H I J . .
+ B C . G . K L M
+ . D E F . . O N
+ . . . . . . P Q
+ . . . . . V U R
+ . . . . . W T S
+ . . . . . X Y Z
+ . . . . . . . .
+All 26 steps were completed.
+ A B C D E J K .
+ . . . . F I L .
+ . V U . G H M N
+ . W T S R Q P O
+ . X . . . . . .
+ . Y Z . . . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B . . . . . .
+ . C D E F G . .
+ . Z . J I H . .
+ X Y L K . . . .
+ W N M . . . . .
+ V O . . . . . .
+ U P Q . . . . .
+ T S R . . . . .
+All 26 steps were completed.
+ A . . . . . . .
+ B C . . . . . .
+ E D . . . . . .
+ F G . . . . . .
+ I H . . . . . .
+ J K . . . . . .
+ O L . . . . . .
+ N M . . . . . .
+Only completed 15 steps.
+ A . . . . . . .
+ B . . . . . . .
+ C . . . . . . .
+ D E F . . . . .
+ . . G . . Z Y .
+ . . H . . . X W
+ . J I N O R S V
+ . K L M P Q T U
+All 26 steps were completed.
+ A . . . . . . .
+ B . . . . . . .
+ C . . . . . . .
+ D E F . . . . .
+ . . G J K P Q R
+ . . H I L O X S
+ . . . . M N W T
+ . . . . . . V U
+Only completed 24 steps.
+ A B C . . . . .
+ F E D . . . . .
+ G X W . . . . .
+ H I V . . . . .
+ K J U T . . . .
+ L M N S . . . .
+ . . O R . . . .
+ . . P Q . . . .
+Only completed 24 steps.
+ A J K L . . . .
+ B I N M . . . .
+ C H G . . . . .
+ D E F . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 14 steps.
+ A B . L M N S R
+ D C . K J O P Q
+ E F G H I . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 19 steps.
+ A F E . . . . .
+ B C D . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 6 steps.
+ A . . . . . . .
+ B . . . . . . .
+ C D E . . . . .
+ H G F . N O P .
+ I J K L M R Q .
+ . . . . . S T .
+ . . . . W V U .
+ . . . . X Y Z .
+All 26 steps were completed.
+ A F E . . . . .
+ B C D . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 6 steps.
+ A . . . . . . .
+ B C . . . . . .
+ G D . . . . . .
+ F E . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 7 steps.
+ A B C . . . . .
+ F E D . . . . .
+ G . . . . . . .
+ H . . . . . . .
+ I L M . . . . .
+ J K N O . . . .
+ . . Q P . V W X
+ . . R S T U Z Y
+All 26 steps were completed.
+ A B . . . . Q R
+ . C . . J K P O
+ . D E H I L M N
+ . . F G . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 18 steps.
+ A . . . . . . .
+ B C D . . . . .
+ G F E . . . . .
+ H I . . . . . .
+ . J K L M . . .
+ . . R Q N . . .
+ . . S P O . . Z
+ . . T U V W X Y
+All 26 steps were completed.
+ A J I . . . . .
+ B G H . . . . .
+ C F . . . . . .
+ D E . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 10 steps.
+ A V W X Y Z . .
+ B U T S . . . .
+ C D . R Q . . .
+ F E . . P . . .
+ G H I J O N . .
+ . . . K L M . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B C D . . . .
+ . . Z E F . . .
+ . . Y X G . . .
+ . U V W H . . .
+ . T S R I . . .
+ . . P Q J K . .
+ . . O N M L . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B I H . . . .
+ . C J G . . . .
+ . D E F . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 10 steps.
+ A . . . . . . .
+ B C . . . . . .
+ I D . . . . . .
+ H E . . . . . .
+ G F . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 9 steps.
+ A . . . . . . .
+ B . . . . . . .
+ C D E . . . . .
+ H G F . . . . .
+ I . U V . . . .
+ J K T W X . . .
+ M L S R Y . . .
+ N O P Q Z . . .
+All 26 steps were completed.
+ A B M L . . . .
+ . C J K . . . .
+ . D I . . . . .
+ . E H . . . . .
+ . F G . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 13 steps.
+ A B C . . . I J
+ . . D E F G H K
+ . . . . . . . L
+ . . . . . . . M
+ . Z . . . . . N
+ . Y X . . . . O
+ . . W . . R Q P
+ . . V U T S . .
+All 26 steps were completed.
+ A . M N . . . .
+ B . L O P Q . .
+ C . K . . R . .
+ D E J I . S . .
+ . F G H U T . .
+ . . . . V W . .
+ . . . Z Y X . .
+ . . . . . . . .
+All 26 steps were completed.
+ A . . . . . . .
+ B . . . . . . .
+ C F G . . . . .
+ D E H . . . . .
+ K J I . . . . .
+ L . P Q R . . .
+ M N O . S . . .
+ X W V U T . . .
+Only completed 24 steps.
+ A B . . . . . .
+ D C . . . . . .
+ E F I J K . . .
+ . G H . L . . .
+ . . Q P M . . .
+ . . R O N . . .
+ . . S T Y X . .
+ . . . U V W . .
+Only completed 25 steps.
+ A . . . . . . .
+ B E F G H . . .
+ C D O N I J . .
+ T U P M L K . .
+ S R Q . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 21 steps.
+ A . . . U T . .
+ B . Z . V S . .
+ C . Y X W R . .
+ D E N O P Q . .
+ . F M . . . . .
+ H G L . . . . .
+ I J K . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A . . . . . . .
+ B C . . . . . .
+ . D . . . . . Z
+ F E . . . . . Y
+ G H . . . V W X
+ J I . . . U . .
+ K . O P Q T . .
+ L M N . R S . .
+All 26 steps were completed.
+ A . . . . . . .
+ B C . . . . . .
+ . D E F . . . .
+ . . . G H . . .
+ . Z Y X I . . .
+ . . . W J K L M
+ . . . V . R Q N
+ . . . U T S P O
+All 26 steps were completed.
+ A B . . . . . .
+ . C D . . . . .
+ G F E . . . . .
+ H . . . . . . .
+ I J K . . . . .
+ . M L . Z . . .
+ . N O . Y X W V
+ . . P Q R S T U
+All 26 steps were completed.
+ A B C D . . . .
+ . . . E . . . .
+ . . . F G H K L
+ . . . . . I J M
+ . . . . . . O N
+ . . . . . . P S
+ . . . . . . Q R
+ . . . . . . . .
+Only completed 19 steps.
+ A . . N O P Q R
+ B C . M L . T S
+ E D I J K . U .
+ F G H . . . V W
+ . . . . . . Y X
+ . . . . . . Z .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A D E F . . . .
+ B C . G . . Z .
+ K J I H W X Y .
+ L . . . V . . .
+ M N O P U . . .
+ . . . Q T . . .
+ . . . R S . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A F G . . . . .
+ B E H . . . . .
+ C D I . . . . .
+ . . J . . . . .
+ . L K . . . Y Z
+ . M . . . W X .
+ . N . . . V U .
+ . O P Q R S T .
+All 26 steps were completed.
+ A D E F I J K .
+ B C . G H . L M
+ . . . . . R Q N
+ . . . U T S P O
+ . . . V W . . .
+ . . . . X . . .
+ . . . Z Y . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B C D . . . .
+ . . . E . . . .
+ . J I F . . . .
+ L K H G . . . .
+ M P Q R S . . .
+ N O . . T . . .
+ . Z . . U . . .
+ . Y X W V . . .
+All 26 steps were completed.
+ A D E F I J O P
+ B C . G H K N Q
+ . . . . . L M R
+ . . . . . . T S
+ . . . . . . U Z
+ . . . . . . V Y
+ . . . . . . W X
+ . . . . . . . .
+All 26 steps were completed.
+ A B C . . . . .
+ . . D E F G . .
+ . . K J I H . .
+ . . L M . . . .
+ . P O N . . . .
+ R Q . . . . . .
+ S V W . . . . .
+ T U X Y Z . . .
+All 26 steps were completed.
+ A . I J W X Y Z
+ B C H K V U T .
+ . D G L M N S R
+ . E F . . O P Q
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B C J K L S R
+ . . D I H M P Q
+ . . E F G N O .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 19 steps.
+ A B K J . . . .
+ D C L I . . . .
+ E F G H . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 12 steps.
+ A B C . . . . .
+ . . D E . . . .
+ . . . F . . . .
+ . . . G . . . .
+ . . . H . . . .
+ . . . I . . P Q
+ . . . J K L O R
+ . . . . . M N S
+Only completed 19 steps.
+ A H G F . . . .
+ B C D E . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 8 steps.
+ A F E . . . . .
+ B C D . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 6 steps.
+ A . . J K . O P
+ B . . I L M N Q
+ C . . H U T S R
+ D E F G V . . .
+ . . . X W . . .
+ . . . Y Z . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A D E F . . . .
+ B C H G . . . .
+ . . I . O P . .
+ . . J M N Q . .
+ . . K L Y R . .
+ . . . W X S . .
+ . . . V U T . .
+ . . . . . . . .
+Only completed 25 steps.
+ A . . . . . . .
+ B E F . . . . .
+ C D G H I . . .
+ X M L K J . . .
+ W N O P . . . .
+ V S R Q . . . .
+ U T . . . . . .
+ . . . . . . . .
+Only completed 24 steps.
+ A D E . . . . .
+ B C F G . . . .
+ M L I H . . . .
+ N K J . . . . .
+ O P U T . . . .
+ . Q R S . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 21 steps.
+ A F E . . . . .
+ B C D . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 6 steps.
+ A H G . . . . .
+ B E F . . . . .
+ C D . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 8 steps.
+ A B . . K L M .
+ . C . . J Q N .
+ . D . H I P O .
+ . E F G . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 17 steps.
+ A B . . S T U V
+ D C . Q R . Z W
+ E F . P . . Y X
+ H G N O . . . .
+ I L M . . . . .
+ J K . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B . . . . . .
+ D C . K L . . .
+ E H I J M . . .
+ F G . . N O . .
+ . . . . . P Q R
+ . . . . . . T S
+ . . . . . . U V
+ . . . . Z Y X W
+All 26 steps were completed.
+ A . . . . N O P
+ B C . . . M L Q
+ . D G H I J K R
+ . E F W V U T S
+ . Z Y X . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B . . . . . .
+ . C D E F . . .
+ . L M N G . . .
+ . K J I H . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 14 steps.
+ A . . . . . . .
+ B C D . . . . .
+ K F E . . . . .
+ J G . . . . . .
+ I H . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 11 steps.
+ A . . . . . . .
+ B C D E . . . .
+ . . G F . . . .
+ . . H K L . . .
+ . . I J M N Q R
+ . . . . . O P S
+ . . . . . . . T
+ . . Z Y X W V U
+All 26 steps were completed.
+ A F G T Q P . .
+ B E H S R O . .
+ C D I J K N . .
+ . . . . L M . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 20 steps.
+ A B . . . . Q R
+ D C . . . O P S
+ E H I L M N U T
+ F G J K . . V W
+ . . . . . . . X
+ . . . . . . Z Y
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A B C D E . . .
+ . . J K F . . .
+ . . I H G . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 11 steps.
+ A . . . . . W X
+ B C D E . U V Y
+ . . . F . T S R
+ . . . G H M N Q
+ . . . . I L O P
+ . . . . J K . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 25 steps.
+ A B . . . . . .
+ D C . . . . . .
+ E . . . . . . .
+ F . . . . . . .
+ G . . N O P Q R
+ H I J M X W V S
+ . . K L Y Z U T
+ . . . . . . . .
+All 26 steps were completed.
+ A . G H I . . Z
+ B E F . J K X Y
+ C D . N M L W V
+ . . . O . . T U
+ . . . P Q R S .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A . . . . . . .
+ B . . . . . . .
+ C . . . . . . .
+ D E . . . . . .
+ O F . . . . . .
+ N G . . . . . .
+ M H I . . . . .
+ L K J . . . . .
+Only completed 15 steps.
+ A B E F G T S R
+ . C D I H O P Q
+ . . . J K N . .
+ . . . . L M . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 20 steps.
+ A B . . I J K L
+ . C D G H . N M
+ . . E F . . O P
+ . . . . . . . Q
+ . . . . U T S R
+ Z Y X W V . . .
+ . . . . . . . .
+ . . . . . . . .
+All 26 steps were completed.
+ A P O N . . . .
+ B K L M . . . .
+ C J I H . . . .
+ D E F G . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 16 steps.
+ A B C D E F . .
+ . . . . . G . .
+ . . . . . H I J
+ . . . . . M L K
+ . . . . . N W V
+ . . . . . O P U
+ . . . . . . Q T
+ . . . . . . R S
+Only completed 23 steps.
+ A B C . . . . .
+ J I D . . . . .
+ K H E . . . . .
+ L G F . . . . .
+ M . . . . . . .
+ N . . . . . Z .
+ O . . . . . Y X
+ P Q R S T U V W
+All 26 steps were completed.
+ A R Q N M . . .
+ B S P O L . . .
+ C T G H K . . .
+ D E F I J . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+ . . . . . . . .
+Only completed 20 steps.
+ A B . . . . . .
+ . C . . . . . .
+ . D E . . . . .
+ . . F . . . . .
+ . . G H . L M N
+ . . . I J K P O
+ . Z Y X . . Q R
+ . . . W V U T S
+All 26 steps were completed.

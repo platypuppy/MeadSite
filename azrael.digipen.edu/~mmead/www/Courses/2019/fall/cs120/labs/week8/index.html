@@ -1,0 +1,607 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<p class="technote">
+This is the first <i>Real Lab</i><sup>&trade;</sup> of the semester, meaning, all of the others were just
+practices to get to this point. This lab will test your ability to follow instructions, use loops, 
+conditionals, arrays, functions, etc. There are 3 distinct portions to this lab and they must be done
+in order. <b>READ</b> each section closely <b>BEFORE</b> you write a single line of code. If there is
+something you don't understand, <b>ASK BEFORE</b> you start wrting code.
+<br><br>
+As with all labs and assignments, if you follow the instructions, this is not difficult at all. If
+you ignore all of the advice that has been given, you will likely fail.
+</p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+In this lab assignment you will practice using arrays and formatted output. 
+You will also practice following a specific algorithm. Your goal is to print out a monthly calendar for any year from 1700 onwards. 
+This includes dealing with any leap years, as well. For example, here are a few calendars:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr valign="top">
+<td>
+<blockquote><pre>
+October, 2014
+Su Mo Tu We Th Fr Sa
+---------------------
+          1  2  3  4 
+ 5  6  7  8  9 10 11 
+12 13 14 15 16 17 18 
+19 20 21 22 23 24 25 
+26 27 28 29 30 31 
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+July, 1776
+Su Mo Tu We Th Fr Sa
+---------------------
+    1  2  3  4  5  6 
+ 7  8  9 10 11 12 13 
+14 15 16 17 18 19 20 
+21 22 23 24 25 26 27 
+28 29 30 31 
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+July, 2776
+Su Mo Tu We Th Fr Sa
+---------------------
+             1  2  3 
+ 4  5  6  7  8  9 10 
+11 12 13 14 15 16 17 
+18 19 20 21 22 23 24 
+25 26 27 28 29 30 31 
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+If you just start coding without thinking, you will quickly find that you are unable to manage the task. 
+However, if you break the task down into smaller chunks, you will find that it isn't as difficult as it 
+first appears. We are going to break it down into 3 parts. Each part requires you to create 
+a single function.
+<p>
+There is really only 3 pieces of information that you need in order to print a calendar for
+a specific month. You need to know:
+
+<ol>
+  <li>whether or not the year is a leap year.</li>
+  <li>the day of the week the month starts on.</li>
+  <li>the number of days in the month.</li>
+</ol>
+
+That's it! That's all you need to know. The number of days in the month is well-known
+and is provided, so you
+will just be creating functions to calculate the other two pieces of information.
+<p>
+<blockquote>
+<p class="technote">
+Work on each function, one-at-a-time, testing it before moving on to the next function.
+This is exactly how all software, regardless of complexity, should be written.
+</p>
+</blockquote>
+
+<ol>
+<p>
+<hr width="100%">
+<p>
+
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+
+<li>The first function that you are going to write is called <tt>is_leapyear</tt> and the prototype 
+  looks like this:
+
+<blockquote><pre>
+<b>int</b> is_leapyear(<b>int</b> year);
+</pre></blockquote>
+
+The purpose of the function is pretty self-explanatory: Given a year, return TRUE (1) if the year
+represents a leap year or FALSE (0), if the year doesn't represent a leap year. A leap year is a
+year that is evenly divisible by 4 with this exception:
+<p>
+<ul>
+  <li>if the year is divisible by 100 it's not a leap year unless it is also divisible by 400,
+    in which case it is a leap year.</li>
+</ul>
+<p>
+This is a trivial function to write and you will need it to do the rest of the lab.
+<p>
+<font color="blue">Number of lines of code is about <b>8</b>.</font>
+You can certainly do it in less lines, but your logic will be much more complicated.
+<p>
+Implement and test this function before moving on.
+
+<p>
+<hr width="100%">
+<p>
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<li>The second function that you are going to write is called <tt>day_of_the_week</tt> and the 
+  prototype looks like this:
+<blockquote><pre>
+<b>int</b> day_of_the_week(<b>int</b> day, <b>int</b> month, <b>int</b> year);
+</pre></blockquote>
+
+This function is also pretty self-explanatory: Given a date (day, month, year, in that order), 
+determine which day of the week the date falls on. In the 3 calendars above, the first day 
+of each month falls on a Wednesday, Monday, and Thursday, respectively. 
+<b>The function returns 1 for Sunday, 2 for Monday, 3 for Tuesday, etc.</b>
+<p>
+There are many ways to calculate this, and some are more complicated than others. One method
+is <a href="http://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week#Zeller.E2.80.99s_algorithm">
+Zeller's Rule</a>. However, we are going to use a different, simpler key/value method that is very 
+different from Zeller's algorithm. 
+<p>
+This algorithm is as follows. We'll use the date December 15, 2014 as an example:
+<ol>
+  <li>Extract the last 2 digits of the year using the modulus operator. (2014 % 100 = 14)</li>
+  <p>
+  <li>Divide that number by 4 using integer division. (14 / 4 = 3)</li>
+  <p>
+  <li>Add the day of the month. (3 + 15 = 18)</li>
+  <p>
+  <li>Add the month's <i>key value</i> from this table:
+    <p>
+    <table border=1 cellpadding=5 cellspacing=0>
+      <tr><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sept</th><th>Oct</th><th>Nov</th><th>Dec</th></tr>
+      <tr align="center"><td>1</td><td>4</td><td>4</td><td>0</td><td>2</td><td>5</td><td>0</td><td>3</td><td>6</td><td>1</td><td>4</td><td>6</td></tr>
+    </table>
+    <p>
+    The month is December, so the key value is 6. (18 + 6 = 24)</li>
+      <p>
+  <li>If the date is in January or February <b>AND</b> the year is a leap year, subtract 1 
+    from the total so far. (Use the <tt>is_leapyear</tt> you wrote previously.) 
+    Since 2014 is <b>NOT</b> a leap you, you do nothing for December 15, 2014.</li>
+  <p>
+  <li>Add the <i>century code</i> from the following table:
+    <p>
+    <table border=1 cellpadding=5 cellspacing=0>
+      <tr><th>1700-1799</th><th>1800-1899</th><th>1900-1999</th><th>2000-2099</th></tr>
+      <tr align="center"><td>4</td><td>2</td><td>0</td><td>6</td></tr>
+    </table>
+    <p>
+    The example year is 2014, so we add 6: (24 + 6 = 30)
+    <p>
+    If the year is not in the table (e.g. the year 3030), you just keep subtracting 400 
+    from the year until you get one of the centuries that is in the table. 
+    (Hint: Use a <b>while</b> loop).
+    For 3030, you would do
+    3030 - 400 = 2630, then 2630 - 400 = 2230, then 2230 - 400 = 1830 and use that value for
+    the 1800's. (The reason this works is because the Gregorian calendar repeats every 400 years.)
+    <p>
+    <li>Add the last 2 digits (that you extracted in step #1) to the total. (30 + 14 = 44)</li>
+    <p>
+    <li>Finally, divide by 7 and take the remainder using the modulus operator. (44 % 7 = 2)
+      <br>
+      <b>
+      In this scheme above, Saturday is 0, Sunday is 1, Monday is 2, ... Friday is 6. In our example, 
+      December 15, 2014 falls on a Monday. You need to make sure your function returns
+      1 for Sunday, 2 for Monday, 3 for Tuesday, ... 7 for Saturday, as that is the scheme 
+      we are using (1 to 7 instead of 0 to 6).</b></li>
+</ol>
+<p>
+This may seem complicated, but it's really just simple 5th grade <strike>math</strike> arithmetic, 
+nothing more. You just need to turn each step of the algorithm above into C code.
+
+<blockquote>
+<p class="technote">
+Each numbered item above represents one step in the algorithm. Many of the steps will require
+only one line of C code. Some steps will require more. The hardest part of this lab
+is coming up with algorithm. However, I am giving you the algorithm in a step-by-step fashion,
+requiring no effort on your part.
+<br><br>
+You just need to convert each English phrase into C code.
+</p>
+</blockquote>
+
+<font color="blue">Number of lines of code is about <b>20</b>.</font>
+<p>
+<hr width="100%">
+<p>
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<li>Ok, now that you have those two functions, you are ready to actually print a monthly calendar.
+The third function that you are going to write is called <tt>print_calendar</tt> and the 
+  prototype looks like this:
+<blockquote><pre>
+<b>void</b> print_calendar(<b>int</b> month, <b>int</b> year);
+</pre></blockquote>
+To print the second calendar that is displayed above (July 1776), you would simply call it like this:
+<blockquote><pre>
+print_calendar(7, 1776);
+</pre></blockquote>
+and the output would be:
+<blockquote><pre>
+July, 1776
+Su Mo Tu We Th Fr Sa
+---------------------
+    1  2  3  4  5  6 
+ 7  8  9 10 11 12 13 
+14 15 16 17 18 19 20 
+21 22 23 24 25 26 27 
+28 29 30 31 
+</pre></blockquote>
+
+Your task is to print out the calendar, properly formatted, with help from the 2 functions you wrote 
+previously. That's why we wrote those separately. Trying to do all of the work in one function is just
+a recipe for failure. It will take some time to get the formatting correct, and there will be a 
+little trial and error until you get it exact. None of this work is beyond what you're expected 
+to do at this point in the course.
+<p>
+<font color="blue">Number of lines of code is about <b>16</b>.</font> (Not counting the lines
+that are already given to you below.)
+
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+
+Other notes:
+<ul>
+  <li>Remember that arrays are indexed starting from 0. This program uses January as month 1
+    and Sunday as the first (1) day of the week. Make sure to compensate for these.
+    (The reason we don't start at 0 is because calendars are for <i>humans</i>, not computers.
+    Humans expect that January to December is 1 to 12, not 0 to 11.)</li>
+    <p>
+  <li>The algorithm using key/values for calculating the day of the week has Saturday as 0. Make sure you 
+    compensate for this as well since our scheme has Saturday as 7.</li>
+    <p>
+  <li>You are given an array of literal strings in the <tt>print_calendar</tt> function. You
+    are also given the <tt>printf</tt> statement for them. %s is the format specifier for strings. You
+    won't need this anywhere else.</li>
+    <p>
+  <li>There is a program that is included with the Cygwin utilities called <b>cal.exe</b> (just plain
+    <b>cal</b> on Linux and Mac OS X) that does a similar thing. To print any month, give it the month
+    (by number) and the year. To print October, 2014, do this:
+    <blockquote><pre>
+cal 10 2014
+</pre></blockquote>
+Just typing <b>cal</b>, will give you a print out of the current month and year. It has an additional
+feature where the current day is highlighted. Typing just a year (e.g. <tt><b>cal 2014</b></tt>), gives 
+you all 12 months. Try it. (And be thankful you're just printing out a single month!) To find out
+more about it, type <tt><b>man cal</b></tt> at the command prompt.
+</li>
+<p>
+<li>Finally:
+<xblockquote>
+  <p class="technote">
+    This is probably the most involved lab in CS120 thus far, as this is where I expect students
+  to be at after 8 weeks of class. Everything you need for this lab has been done before
+  (functions, conditionals, iteration, arrays, etc.) The difference this time is that you are probably
+  writing more lines of code than you have before. The previous labs, assignments, and practices that you
+  have completed have led up to this point. If you have not been keeping up with the labs,
+  assignments, and practices, you may find this lab difficult to complete.
+</p>
+</blockquote>
+</li>
+    <p>
+</ul>
+
+<p>
+<p>
+<hr width="90%">
+<p>
+
+Files to get you started:
+
+<blockquote>
+Here is a <a href="main.c"><tt>main.c</tt></a> file for you to use. 
+(<a href="main.c.html">HTML</a>) You will need to comment/uncomment the test to run in the 
+main function.
+<p>
+Here is a <a href="calendar-skeleton.c"><tt>calendar-skeleton.c</tt></a> file for you to start with.
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="990099">#define TRUE  1</font>
+<font color="990099">#define FALSE 0</font>
+
+<b>int</b> is_leapyear(<b>int</b> year)
+{
+  <b>return</b> 0;
+}
+
+<b>int</b> day_of_the_week(<b>int</b> day, <b>int</b> month, <b>int</b> year)
+{
+  <b>int</b> month_keys[] = {1, 4, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6};
+  <b>int</b> year_keys[] = {4, 2, 0, 6};
+
+  <b>return</b> 0;
+}
+
+<b>void</b> print_calendar(<b>int</b> month, <b>int</b> year)
+{
+  <b>int</b> days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};  
+  <b>char</b> *months[] = {<font color="#9933CC">&quot;January&quot;</font>,   <font color="#9933CC">&quot;February&quot;</font>, <font color="#9933CC">&quot;March&quot;</font>,    <font color="#9933CC">&quot;April&quot;</font>, 
+                    <font color="#9933CC">&quot;May&quot;</font>,       <font color="#9933CC">&quot;June&quot;</font>,     <font color="#9933CC">&quot;July&quot;</font>,     <font color="#9933CC">&quot;August&quot;</font>,
+                    <font color="#9933CC">&quot;September&quot;</font>, <font color="#9933CC">&quot;October&quot;</font>,  <font color="#9933CC">&quot;November&quot;</font>, <font color="#9933CC">&quot;December&quot;</font>};
+
+    <font color="#003399"><i>/* Print calendar header */</i></font>
+  printf(<font color="#9933CC">&quot;%s, %i&#92;n&quot;</font>, months[month - 1], year);
+  printf(<font color="#9933CC">&quot;Su Mo Tu We Th Fr Sa&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;---------------------&#92;n&quot;</font>);
+
+}
+</code></pre>
+
+
+<p>
+
+Here are outputs for the 3 tests in <tt>main.c</tt>. Download them to your computer.
+
+<ul>
+  <li><a href="output-leap.txt">test_leap</a> output</li>
+  <li><a href="output-dayofweek.txt">test_day</a> output</li>
+  <li><a href="output-calendars.txt">test_calendar</a> output</li>
+</ul>
+<p>
+Don't forget that you may need to use the <tt>--strip-trailing-cr</tt> option with <tt><b>diff</b></tt>.
+<p>
+This is the command line to build the program:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c calendar.c -o calendar
+</pre></blockquote>
+
+To run the program, you would do this:
+<blockquote><pre>
+calendar  
+</pre></blockquote>
+
+On Linux and Mac OS X you will likely have to prepend the current directory like this:
+<blockquote><pre>
+./calendar
+</pre></blockquote>
+
+Here's a stress test for you:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+<font color="#003399"><i>/* Prints a calendar for the month and year */</i></font>
+<b>void</b> print_calendar(<b>int</b> month, <b>int</b> year);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> year;  <font color="#003399"><i>/* The current year  */</i></font>
+  <b>int</b> month; <font color="#003399"><i>/* The current month */</i></font>
+
+    <font color="#003399"><i>/* Print all calendars in the range 1900-2000, inclusive */</i></font>
+  <b>for</b> (year = 1900; year &lt;= 2000; year++)
+  {
+    <b>for</b> (month = 1; month &lt;= 12; month++)
+    {
+      print_calendar(month, year);
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+    }
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<a href="output-stress.txt">stress output</a>
+
+<blockquote>
+<p class="technote">
+<b>DO NOT</b> upload anything to the server until you have tested your code with
+the stress test.
+</p>
+</blockquote>
+
+</blockquote>
+
+<p>
+<hr width="100%">
+<p>
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<b>For students that would like an additional challenge:</b> (Do not submit this.)
+<p>
+
+For the calendar program to be more useful (and convenient) for the user (which is the goal
+of <i>all</i> software), modify the program to support these additional "features":
+<ol>
+
+<li>If the user provides the month and year on the command line, the program should print the
+  calendar for that month/year. For example, if the user types this:
+<blockquote><pre>
+calendar 2 2012
+</pre></blockquote>
+the program should display the calendar for February, 2012:
+<blockquote><pre>
+February, 2012
+Su Mo Tu We Th Fr Sa
+---------------------
+          1  2  3  4 
+ 5  6  7  8  9 10 11 
+12 13 14 15 16 17 18 
+19 20 21 22 23 24 25 
+26 27 28 29
+</pre></blockquote>
+
+<li>If the user supplies just the month on the command line, the program should display the month
+  for the current year. For example, if the current year is 2020 and the user types:
+<blockquote><pre>
+calendar 2
+</pre></blockquote>
+the program should display the calendar for February, 2020
+<blockquote><pre>
+February, 2020
+Su Mo Tu We Th Fr Sa
+---------------------
+                   1 
+ 2  3  4  5  6  7  8 
+ 9 10 11 12 13 14 15 
+16 17 18 19 20 21 22 
+23 24 25 26 27 28 29 
+</pre></blockquote>
+</li>
+<p>
+
+  <li>If the user just types <b>calendar</b>, have the program print out the calendar for the
+    current month and year. For example, if today's date is October 29, 2022 (or any day in 
+    October 2022 for that matter) and the user types:
+<blockquote><pre>
+calendar
+</pre></blockquote>
+the program should display the calendar for October, 2022
+<blockquote><pre>
+October, 2022
+Su Mo Tu We Th Fr Sa
+---------------------
+                   1 
+ 2  3  4  5  6  7  8 
+ 9 10 11 12 13 14 15 
+16 17 18 19 20 21 22 
+23 24 25 26 27 28 29 
+30 31 
+</pre></blockquote>
+<p>
+</li>
+</ol>
+Be sure to handle invalid input. 
+<p>
+
+Example 1:  
+<blockquote><pre>
+calendar 15
+</pre></blockquote>
+Output:
+<blockquote><pre>
+Month must be between 1 and 12.
+</pre></blockquote>
+
+Example 2:  
+<blockquote><pre>
+calendar 2 -2015
+</pre></blockquote>
+Output:
+<blockquote><pre>
+Year must be a positive number.
+</pre></blockquote>
+
+Hints:
+<ul>
+  <li><b>DO NOT modify your <tt>calendar.c</tt> file in any way.</b> You should create a new
+    <tt>main.c</tt> file (maybe name it <tt>main2.c</tt>), and put all of the logic there.
+    Use this new file to replace the original <tt>main.c</tt> file.
+    <p>
+    In other words, you've already written a <i>calendar display engine</i>. You just need to
+    modify <b>main</b> to drive it. (This is also how Real World<sup>&trade;</sup> software is
+    written.)</li>
+    <p>
+  <li>To access the command line arguments, see Chapter 13, section 7 in the textbook.</li>
+    <p>
+  <li>Command line arguments are always NUL-terminated strings. To convert them to 
+    integers, use the <a href="http://man7.org/linux/man-pages/man3/atoi.3.html">atoi</a>
+    function.</li>
+    <p>
+  <li>To get the current date or time, use the 
+    <a href="http://man7.org/linux/man-pages/man2/time.2.html">time</a> function.
+    See also the <a href="http://man7.org/linux/man-pages/man3/strftime.3.html">strftime</a> 
+    function.</li>
+    <p>
+  <li>Consult the textbook for more information.</li>
+  <p>
+</ul>
+
+<p>
+  <hr width="100%">
+<p class="Extra">
+
+  For anyone curious about the calendar and history, check out
+    the <a href="http://en.wikipedia.org/wiki/Gregorian_calendar">Gregorian calendar</a>
+    and the <a href="http://en.wikipedia.org/wiki/Julian_calendar">Julian calendar</a>. And if
+    you're curious about the discrepancies, look at the month of September
+    in 1752 with <b><tt>cal 1752</tt></b> and just shake your head. 
+    So, yes, I'm aware that some of the 1700 
+    calendars will be incorrect! (But we're not going to worry about that.) 
+    <p>
+    <b>The Jeopardy answer is:</b> 19.
+    <br>
+    <b>Question:</b> <i>What is the number of days in the month of September, 1752?</i>
+    <p>
+    <b>Moral of the story:</b> Dealing with dates from history is a non-trivial pursuit. 
+    Pursue it at your own risk!</li> 
+</p>
+
+
+<hr>
+<br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

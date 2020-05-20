@@ -1,0 +1,212 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>dice1</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+</head>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(dice1.c)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Information</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a program that similates rolling 5 dice like in the game of 
+  <a href="http://en.wikipedia.org/wiki/Yahtzee">Yahtzee</a>. Yahtzee is kind of like the card game
+  poker, but using dice instead of cards. On Linux, the game is called 
+  <a href="https://www.kde.org/applications/games/kiriki/">Kiriki</a>.
+  <p>
+  You will ask the user how many times to roll the 5 dice. For each roll, you will need to generate 5 random 
+  numbers from 1 to 6.
+  You are to count how many times all of the dice are the same value 
+  (5 of a kind, a Yahtzee). After all of the rolls have been done, you will display how many times 
+  all of the dice were the same and the percentage. 
+  <p>
+  The actual <a href="http://mathworld.wolfram.com/Yahtzee.html">probability</a> of rolling a "5 of a kind" is 
+  1/1296, or about 0.0007716. (The Internet is rife with all kinds of 
+  <a href="https://www.google.com/?gws_rd=ssl#q=yahtzee+probability">Yahtzee-related</a> stuff.)
+<p>
+Here is the output from the program run interactively:
+<blockquote><pre>
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>100</b></font>
+After 100 rolls, you had 5 of a kind 0 times.
+This is a percentage of 0.00000000.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>1000</b></font>
+After 1000 rolls, you had 5 of a kind 2 times.
+This is a percentage of 0.00200000.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>1000</b></font>
+After 1000 rolls, you had 5 of a kind 0 times.
+This is a percentage of 0.00000000.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>1000</b></font>
+After 1000 rolls, you had 5 of a kind 1 time.
+This is a percentage of 0.00100000.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>10000</b></font>
+After 10000 rolls, you had 5 of a kind 8 times.
+This is a percentage of 0.00080000.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>20000</b></font>
+After 20000 rolls, you had 5 of a kind 10 times.
+This is a percentage of 0.00050000.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>12345</b></font>
+After 12345 rolls, you had 5 of a kind 11 times.
+This is a percentage of 0.00089105.
+
+How many times do you want to roll the dice? (0=quit) <font color="red"><b>0</b></font>
+</pre></blockquote>
+
+<!--
+<font color="red"><b>100</b></font>
+-->
+
+<p>
+The program continues to run until the user types in 0 (zero) for the number of rolls.
+<p>
+
+
+<blockquote>
+<p class="technote">
+<b>Questions:</b> What do you notice as you increase the number of rolls? How large of an integer
+can you provide? Caution: A very large integer could cause the program to take a long time to finish.
+(Press <tt><b>Ctrl-C</b></tt> to stop the program, if you get tired of waiting.)
+</p>
+</blockquote>
+
+
+
+The name of the file should be <tt>dice1.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O2 -Wno-unused-result -o dice1 dice1.c PRNG.c
+</pre></blockquote>
+
+<b>Files:</b>
+<p>
+<ul>
+  <li>Here is a sample <a href="input.txt">input</a> file and <a href="output.txt">output</a> file for 
+you do diff with. Remember, using redirection will not show the actual numbers or provide a 
+newline.</li>
+<p>
+  <li>Here's a starting point for your code: <a href="dice1-partial.c">dice1.c</a> (You'll need to rename it.)
+    <p>
+  <li>Random number generator files (put these in the same directory as your C file)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+  </ul>
+
+  </li>
+</ul>
+
+</ol>
+
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+
+<ul>
+  <li><font color="blue">Approximate number of lines of code: 25</font>
+    <p>
+  <li>You should use a <a href="../../../../../CS120/Iteration-1.html#DOLOOP"><tt><b>do...while</b></tt></a> loop
+    (as usual) to get the user's input.</li>
+    <p>
+  <li>You don't have to worry about invalid input. You can assume that the user is going to input
+    an integer greater than or equal to 0.</li>
+    <p>
+  <li>You will have multiple scopes in your program (likely in <tt>main</tt>). This means you do not have
+    to define all of your variables at the top of the function (it's OK if you do). But, if you want to practice
+    defining variables in other scopes, this is a good time to do so. The rule-of-thumb is: Define your 
+    variables in the scope where they are used.
+    <p>
+  <li>Don't use the built-in pseudo-random number generator. Use the one provided in the files above.
+    Refer the CS120 notes on <a href="../../../../../CS120/RandomNumbers-1.html">random numbers</a>, if
+    you need to.
+    You don't have to create any functions yourself, just use the <tt>RandomInt</tt> function from the PRNG
+    files. To generate a random number between 1 and 6 and assign to an integer named value:</li>
+<blockquote><pre>
+value = RandomInt(1, 6);
+</pre></blockquote>
+Also, the PRNG is already seeded for you in the partial <tt>dice1.c</tt> file above. Don't change it.</li>
+    <p>
+  <li>To run the code non-interactively (redirecting input and output), you would do this:
+<blockquote><pre>
+dice1 &lt; input.txt &gt; myoutput.txt
+</pre></blockquote>
+and then diff with the provided output.</li>
+<p>
+<li><b>DO NOT UPLOAD ANYTHING UNTIL YOU HAVE TESTED YOUR CODE WITH REDIRECTION.</b></li>
+</ul>
+<p>
+
+<p class="Trivia">
+<b>Mead trivia:</b> Yahtzee was one of the first computer "games" I ever wrote. I coded in SanyoBasic on the
+ <a href="http://www.seasip.info/VintagePC/sanyo.html">Sanyo MBC550</a> (but mine had only one floppy disk drive).
+ I had to write my own games because there was no software for this computer!
+ I also had to upgrade the RAM from 128K to 256K (yes, that's a K) to do the 2 color 640x200 graphics on a 
+ low end video chip because I wanted to draw the dice (with pathetic animation) on the screen.
+  I wish I still had that code so I could show students how NOT to write code. (Butt-ugly comes to mind.)
+</p>
+
+<p>
+
+</ol>
+
+<br>
+<p><hr><p>
+
+
+
+
+</ol>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

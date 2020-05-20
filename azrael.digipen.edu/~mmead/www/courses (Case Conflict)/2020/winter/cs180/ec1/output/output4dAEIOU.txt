@@ -1,0 +1,31 @@
+# Macros =======================================================
+
+CC=g++
+CFLGS=-Wall -Wextra -ansi -pedantic -Werror
+X=program.exe
+TDR=gnu/
+BJS=$(TDR)driver.o $(TDR)scantext.o $(TDR)jumble.o
+RS=rm
+
+# TRGTS ======================================================
+
+$(TDR)$(X) : $(BJS)
+	$(CC) $(BJS) -o $(TDR)$(X)
+
+$(TDR)driver.o : driver.cpp scantext.h jumble.h
+	$(CC) $(CFLGS) -c driver.cpp -o driver.o
+
+$(TDR)jumble.o : jumble.cpp jumble.h
+	$(CC) $(CFLGS) -c jumble.cpp -o jumble.o
+
+$(TDR)scantext.o : scantext.cpp
+	$(CC) $(CFLGS) -c scantext.cpp -o scantext.o
+
+clean : 
+	$(RS) $(BJS) $(TDR)$(X)
+
+rebuild :
+	$(MK) clean
+	$(MK)
+
+

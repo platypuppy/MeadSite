@@ -1,0 +1,32 @@
+
+Test17----------------------------------------------------
+There are 26 lines wrapped at 20 characters:
+Line #  1 [16] |When   in the   |
+Line #  2 [16] |Course of  human|
+Line #  3 [20] |events, it   becomes|
+Line #  4 [20] |necessary for one   |
+Line #  5 [18] |people to dissolve|
+Line #  6 [15] |the   political|
+Line #  7 [20] |bands   which have  |
+Line #  8 [18] |  connected   them|
+Line #  9 [17] |with     another,|
+Line # 10 [19] |and to    assume   |
+Line # 11 [19] |among the powers of|
+Line # 12 [14] |the earth, the|
+Line # 13 [18] |separate and equal|
+Line # 14 [20] |station to which the|
+Line # 15 [20] |  Laws of Nature    |
+Line # 16 [16] |  and         of|
+Line # 17 [20] |Nature's God entitle|
+Line # 18 [18] |them,     a decent|
+Line # 19 [16] |respect to the  |
+Line # 20 [17] |opinions of      |
+Line # 21 [18] |mankind requires  |
+Line # 22 [20] |that they   should  |
+Line # 23 [17] | declare     the |
+Line # 24 [19] |causes  which impel|
+Line # 25 [13] |them   to the|
+Line # 26 [11] |separation.|
+Shortest line: 11
+ Longest line: 20
+

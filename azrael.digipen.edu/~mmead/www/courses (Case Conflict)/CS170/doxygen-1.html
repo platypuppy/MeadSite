@@ -1,0 +1,131 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Doxygen examples</title>
+</head>
+<body>  
+
+Online <a href="http://www.doxygen.nl/manual/index.html">Doxygen manual</a>.
+<p>
+	
+A CS120 file header comment:
+
+<blockquote><pre>
+/*******************************************************************************
+filename    scantext.c
+author      Nigel Tufnel
+DP email    tap11@digipen.edu
+course      CS120
+section     A
+assignment  Programming Assignment #6
+due date    11-30-2018
+
+Brief Description:
+  This program takes strings and performs various tasks on them via several
+  separate functions. The functions include:
+
+         mystrlen - Calculates the length (in characters) of a given string.
+
+       count_tabs - Takes a string and counts the amount of tabs within.
+
+  substitute_char - Takes a string and replaces every instance of a certain
+                    character with another given character.
+
+calculate_lengths - Calculates the length (in characters) of a given string
+                    first with tabs, and again after tabs have been converted
+                    to a given amount of spaces.
+
+      count_words - Takes a string and counts the amount of words inside.
+*******************************************************************************/
+</pre></blockquote>
+
+
+A Doxygen-style file header comment:
+
+<blockquote><pre>
+/*!*****************************************************************************
+\file    scantext.c
+\author  Nigel Tufnel
+\par     DP email: tap11\@digipen.edu
+\par     Course: CS120
+\par     Programming Assignment #6
+\date    11-30-2018
+
+\brief
+  This program takes strings and performs various tasks on them via several
+  separate functions. The functions include:
+  
+  - mystrlen          
+      Calculates the length (in characters) of a given string.
+
+  - count_tabs        
+      Takes a string and counts the amount of tabs within.
+
+  - substitute_char   
+      Takes a string and replaces every instance of a certain character with 
+      another given character.
+
+  - calculate_lengths 
+      Calculates the length (in characters) of a given string first with tabs, 
+      and again after tabs have been converted to a given amount of spaces.
+      
+  - count_words       
+      Takes a string and counts the amount of words inside.
+*******************************************************************************/
+</pre></blockquote>
+
+A CS120-style function header comment:
+<blockquote><pre>
+/*******************************************************************************
+    Function: int substitute_char(char *string, char old_char, char new_char)
+
+ Description: Replaces each instance of a given character in a string with
+              other given characters.
+
+      Inputs: string   - The string to walk through and replace characters in.
+
+              old_char - The original character that will be replaced in the
+                         string.
+
+              new_char - The character used to replace the old characters.
+
+     Outputs: replacements - The amount of characters changed in the string.
+*******************************************************************************/
+</pre></blockquote>
+
+<!--
+\fn int substitute_char(char *string, char old_char, char new_char)
+-->
+
+A Doxygen-style function header comment:
+<blockquote><pre>
+/*!*****************************************************************************
+\brief
+   Replaces each instance of a given character in a string with
+   other given characters.
+
+\param string
+  The string to walk through and replace characters in.
+
+\param old_char
+  The original character that will be replaced in the string.
+    
+\param new_char
+  The character used to replace the old characters
+
+\return 
+  The amount of characters changed in the string.
+*******************************************************************************/
+</pre></blockquote>
+
+Online <a href="http://www.doxygen.nl/manual/index.html">Doxygen manual</a>.
+
+
+<br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,366 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>What You've Learned</title>
+</head>
+
+<body>  
+<center><h1>What We Have Learned At This Point</tt></h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Some of the Topics Covered
+</p>
+
+This is not a complete list, but it does list most of the concepts that have been covered in the 
+lectures and the textbook so far.
+<p>
+<a href="../../../CS120/Fundamentals-1.html#KEYWORDS">List of keywords</a> we've discussed
+in class.
+<p>
+
+<blockquote>
+<table style="text-align: left; width: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-family: monospace;"><font color="black"><b>auto</b></font></td>
+      <td style="font-family: monospace;"><b>const</b></td>
+      <td style="font-family: monospace;"><b>double</b></td>
+      <td style="font-family: monospace;"><b>float</b></td>
+      <td style="font-family: monospace;"><b>int</b></td>
+      <td style="font-family: monospace;"><b>short</b></td>
+      <td style="font-family: monospace;"><b>struct</b></td>
+      <td style="font-family: monospace;"><b>unsigned</b></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;"><b>break</b></td>
+      <td style="font-family: monospace;"><b>continue</b></td>
+      <td style="font-family: monospace;"><b>else</b></td>
+      <td style="font-family: monospace;"><b>for</b></td>
+      <td style="font-family: monospace;"><b>long</b></td>
+      <td style="font-family: monospace;"><b>signed</b></td>
+      <td style="font-family: monospace;"><b>switch</b></td>
+      <td style="font-family: monospace;"><b>void</b></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;"><b>case</b></td>
+      <td style="font-family: monospace;"><b>default</b></td>
+      <td style="font-family: monospace;"><b>enum</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>goto</b></font></td>
+      <td style="font-family: monospace;"><font color="black"><b>register</b></font></td>
+      <td style="font-family: monospace;"><b>sizeof</b></td>
+      <td style="font-family: monospace;"><b>typedef</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>volatile</b></font></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;"><b>char</b></td>
+      <td style="font-family: monospace;"><b>do</b></td>
+      <td style="font-family: monospace;"><font color="black"><b>extern</b></font></td>
+      <td style="font-family: monospace;"><b>if</b></td>
+      <td style="font-family: monospace;"><b>return</b></td>
+      <td style="font-family: monospace;"><b>static</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>union</b></font></td>
+      <td style="font-family: monospace;"><b>while</b></td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+
+<ul>
+<li>Fundamentals</li>
+<ul>
+	<li>The difference between a compiled program and an interpreted program</li>
+	<li>What the preprocessor does</li>
+	<li>What the compiler does</li>
+	<li>What the linker does</li>
+	<li>The difference between source code and object code</li>
+	<li>The relationship between C code, assembly code, and machine code</li>
+  <li>Basic data types: <tt><b>int</b></tt> and <tt><b>float</b></tt></li>
+  <li>The relationship between a variable's name and its location in memory</li>
+	<li>Preprocessor directives</li>
+		<ul>
+			<li><tt><b>#include</b></tt></li>
+			<li><tt><b>#define</b></tt></li>
+		</ul>
+	<li>Lexical conventions</li>
+		<ul>
+			<li>Identifiers</li>
+			<li>Keywords</li>
+			<li>Constants</li>
+			<li>Operators</li>
+			<li>Tokens</li>
+			<li>Whitespace</li>
+		</ul>
+</ul>
+<p>
+<li>Creating a simple program</li>
+	<ul>
+		<li>Create/Edit a program</li>
+		<li>Compile C files</li>
+		<li>Link object files</li>
+		<li>Execute programs</li>
+		<li>The role of the <tt>main</tt> function</li>
+		<li>Understand the purpose of the GNU compiler <tt>gcc</tt></li>
+		<li>Understand commands like these:</li>
+<blockquote><pre>
+gcc -Wall -Wextra -c foo.c -o foo.o
+gcc foo.o -o foo.exe
+gcc -Wall -Wextra foo.c -o foo.exe
+gcc -Wall -Wextra -ansi -pedantic foo.c
+</pre></blockquote>
+<li>Understand the warnings and errors from the GNU compiler.</li>
+</ul>
+
+<p>
+<li>Formatted Input/Output</li>
+	<ul>
+		<li><tt>printf</tt> - printing integers, floating point numbers</li>
+    <li><tt>scanf</tt> - reading integers, floating point numbers</li>
+    <li>The significance of the <tt>&</tt> operator in a <tt>scanf</tt> statement</li>
+    <li>Format/Conversion specifiers used in <tt>printf</tt> and <tt>scanf</tt></li>
+    <li>Controlling width and precision of output of integers and floating point numbers</li>
+    <li>Escape sequences (able to understand the meaning of this: <tt>printf("\"\\%%\t%%\t%%\\\"\n");</tt></li>
+  </ul>
+
+<p>
+<li>Expressions and Operators</li>
+	<ul>
+		<li>Precedence</li>
+		<li>Associativity</li>
+		<li>Expression evaluation</li>
+		<li>Assignments and side-effects</li>
+		<li>Increment and decrement operators (pre and post)</li>
+		<li>Unary vs. Binary operators</li>
+		<li>Expressions vs. statements</li>
+	</ul>
+
+<p>
+<li>Conditionals</li>
+	<ul>
+		<li>Boolean values (true, false)</li>
+		<li><tt><b>if</b></tt>, <tt><b>else</b></tt></li>
+		<li>Nested <tt><b>if</b></tt> statements</li>
+		<li>The dangling <tt><b>else</b></tt> problem</li>
+		<li><tt><b>switch</b></tt>, <tt><b>case</b></tt></li>
+		<!--<li>The conditional operator: <tt>? :</tt>-->
+		<li>Compound statements</li>
+		<li>Logical operators: <tt>!  ||  &&</tt></li>
+		<li>Short-circuit evaluation</li>
+		<li>Why these operators are special (hint: they are sequence operators)</li>
+			<ul>
+				<li>logical  or: <tt>||</tt></li>
+				<li>logical and: <tt>&&</tt></li>
+				<li>comma operator: <tt>,</tt></li>
+				<!--<li>conditional operator: <tt>? :</tt></li>-->
+			</ul>
+		<li>Relational operators: <tt><  >  <=  >=</tt></li>
+		<li>Equality operators: <tt>==  !=</tt></li>
+		<li>Integer values for true and false</li>
+	</ul>		
+
+<p>
+<li>Iteration - Looping and repetitions</li>
+	<ul>
+		<li>The <tt><b>while</b></tt> statement</li>
+		<li>The <tt><b>do</b></tt> statement</li>
+	  <li>The <tt><b>for</b></tt> statement and the significance of its three expressions: <tt><b>for</b> (<i>exp1</i>; <i>exp2</i>; <i>exp3</i>)</tt></li>
+		<li>Rewriting a <tt><b>while</b></tt> loop using a <tt><b>for</b></tt> loop and vice-versa</li>
+		<li>"Infinite" loops</li>
+		<li>The <tt><b>break</b></tt> statement</li>
+		<li>The <tt><b>continue</b></tt> statement</li>
+  </ul>
+  
+<p>
+<li>Functions</li>
+	<ul>
+		<li>Function declarations (prototypes)</li>
+		<li>Function definitions</li>
+		<li>Calling functions</li>
+		<li>Functions that return a value</li>
+		<li>Functions that do not return a value (<tt><b>void</b></tt>)</li>
+		<li>Functions that take parameters</li>
+		<li>Functions that do not take any parameters (<tt><b>void</b></tt>)</li>
+		<li>Return statements (single and multiple returns)</li>
+		<li>Significance of function ordering in a program</li>
+		<li>Problems with missing function prototypes (compiler)</li>
+		<li>Problems with missing functions definitions (linker)</li>
+		<li>C's "pass-by-value" mechanism</li>
+		<li>Passing parameters using the stack</li>
+		<li>Functions and their scope</li>
+	</ul>
+	
+<p>
+<li>Larger Programs</li>
+	<ul>
+		<li>Multi-file programs</li>
+		<li>File scope, global scope, local scope</li>
+		<li>Linking with multiple files</li>
+		<li>One Definition Rule (ODR)</li>
+		<li>Importance of header files and function prototypes</li>
+	</ul>
+	
+<p>
+<li>Psuedo-random numbers</li>
+	<ul>
+		<li><tt>rand</tt> and <tt>srand</tt></li>
+		<li>Constraining random numbers (using the modulus operator, <tt>%</tt>)</li>
+	</ul>
+
+<p>
+<li>Arrays</li>
+	<ul>
+	<li>Arrays and <tt><b>sizeof</b></tt> operator</li>
+	<li>Relationship between pointers and arrays</li>
+	<li>Accessing array elements (read/write)</li>
+	<li>Looping over arrays</li>
+	<li>Zero-based arrays (first element has index 0)</li>
+	<li>Initializing arrays using curly braces</li>
+	<li>Static arrays vs. dynamically allocated arrays</li>
+	<li>Passing arrays to functions</li>
+	<li>Two-dimensional arrays</li>
+	<li>Dynamically allocated 2D arrays</li>
+  </ul>
+  
+<p>
+<li>Data Types</li>
+	<ul>
+		<li>Integral types (signed and unsigned) and their relative sizes</li>
+		<li>Floating point types and their relative sizes</li>
+		<li>Literal constants</li>
+		<li>Decimal, hexadecimal, and octal notation</li>
+	</ul>
+
+<p>
+<li>Pointers</li>
+	<ul>
+		<li>Declaring pointers with <tt><b>*</b></tt></li>
+		<li>Pointer types, <tt><b>sizeof</b></tt> pointers</li>
+		<li>Pointers for 32-bit computers vs. 64-bit computers</li>
+		<li>The address-of operator: <tt><b>&</b></tt></li>
+		<li>Dereferencing pointers</li>
+		<li>Using <tt><b>const</b></tt> with pointers</li>
+		<li>Passing pointers to functions</li>
+		<li>Pointer arithmetic</li>
+		<li>Differences between pointers and arrays</li>
+		<li>Pointer notation vs. subscript notation</li>
+	</ul>
+
+<p>
+<li>Strings</li>
+	<ul>
+	<li>Character arrays vs. strings</li>
+	<li>Literal strings</li>
+	<li>NUL-terminated strings</li>
+  <li><tt><b>char</b></tt> pointers and strings</li>
+  <li>Initializing character arrays and strings</li>
+	<li>Strings and the <tt><b>sizeof</b></tt> operator</li>
+	<li>Looping over strings and character arrays</li>
+	<li>String input and output</li>
+	<li>Common string functions (<tt>string.h</tt>)</li>
+	<li>The string pool</li>
+</ul>
+
+<p>
+	<li>File I/O</li>
+	<ul>
+	<li>Opening files, closing files</li>
+	<li>Reading and writing files</li>
+	<li>Text files vs. binary files</li>
+	<li>Functions for reading/writing strings</li>
+</ul>
+
+<p>
+	<li>Structures</li>
+		<ul>
+			<li>Declaring structures</li>
+			<li>Accessing members of structures</li>
+		<li>Structure member operator ( <tt><b>.</b></tt> ) and structure pointer operator ( <tt><b>-&gt;</b></tt> )</li>
+			<li>Nested structures</li>
+			<li>Initializing structures using curly braces</li>
+			<li>Passing structures to functions (by value and address)</li>
+			<li>Returning structures from functions (by value)</li>
+			<!--<li>Unions</li>-->
+			<li>Structure alignment</li>
+			<li>Bitfields</li>
+			<!--
+		-->
+	</ul>
+	
+<p>
+	<li>Dynamic Memory Allocation</li>
+		<ul>
+	<li>Allocating memory with <tt>malloc</tt></li>
+	<li>Deallocating memory with <tt>free</tt></li>
+	<li>Problems with memory management</li>
+	<ul>
+	<li>Memory leaks</li>
+	<li>Dangling pointers</li>
+	<li>Multiple frees</li>
+	</ul>
+</ul>
+
+<p>
+	<li>Linked Lists</li>
+		<ul>
+	<li>Node structures used in linked lists</li>
+	<li>Single vs. double linked lists</li>
+	<li>Allocating and freeing nodes</li>
+	<li>Adding nodes</li>
+	<li>Removing nodes</li>
+	<li>Traversing nodes</li>
+	<li>Head and tail pointers</li>
+	<li>Pointers to pointers</li>
+	</ul>
+
+<p>
+	<li>Complex Declarations and Function Pointers</li>
+	<ul>
+		<li>Pointers to arrays</li>
+		<li>Pointers to functions</li>
+		<li>Arrays of function pointers</li>
+		<li>Returning function pointers</li>
+		<li>Returning pointers to arrays</li>
+		<li>Illegal types:</li>
+		<ul>
+			<li>Arrays of functions</li>
+			<li>Functions returning arrays</li>
+			<li>Functions returning functions</li>
+		</ul>
+	</ul>
+
+<p>
+	<li>Miscellaneous Topics</li>
+	<ul>
+		<li>Variadic functions, default argument promotions</li>
+		<li>Command line arguments</li>
+		<!--<li>The <tt><b>system</b></tt> and <tt><b>exec</b></tt> family of functions</li>-->
+		<li>Probably a lot of other stuff, too...</li>
+<!--
+-->
+	</ul>
+
+</ul>
+
+
+
+</body>
+</html>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

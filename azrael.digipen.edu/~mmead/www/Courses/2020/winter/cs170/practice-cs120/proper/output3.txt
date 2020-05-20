@@ -1,0 +1,7 @@
+This file has all.kinds.of.weird?things going on.		This line has a couple.of.leading!tabs!!in it!
+You can assume that only ascii characters are going to be #@$! Used.
+Even floating point numbers like 3.e+10 can be used.
+It doesn't matter. Commas can't end a sentence,
+either, so don't get fooled by that.     And don't get fooled by something
+like this, either: a?b!c.d?e!.
+

@@ -1,0 +1,173 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>slots1</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(slots1.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a program that similates a slot machine with 3 slots. The player will start out with
+  100 points. Each time the player requests another spin, 3 random numbers (from 1 to 5) will 
+  be generated. If two of the slots are the same, the player will win 15 points. If all 3 are the same,
+  the player wins 30 points. This continues until the player chooses to quit, or the player has less 
+  than 10 points left. (Each spin costs 10 points).
+  
+<p>
+Here is a sample output from the program:
+<blockquote><pre>
+You start with 100 points. Each play costs 10 points.
+There are 3 slots, each contains 5 different values.
+If you get 2 of the same, you win 15 points.
+If you get 3 of the same, you win 30 points.
+Here we go!
+
+ 4  4  4
+BIG WINNER! You get 30 points!! You now have 120 points.
+
+Play again? (1=yes,0=no) <font color="red"><b>1</b></font>
+ 1  4  4
+You win 15 points. You now have 125 points.
+
+Play again? (1=yes,0=no) <font color="red"><b>1</b></font>
+ 2  4  4
+You win 15 points. You now have 130 points.
+
+Play again? (1=yes,0=no) <font color="red"><b>1</b></font>
+ 2  2  2
+BIG WINNER! You get 30 points!! You now have 150 points.
+
+Play again? (1=yes,0=no) <font color="red"><b>1</b></font>
+ 2  2  5
+You win 15 points. You now have 155 points.
+
+Play again? (1=yes,0=no) <font color="red"><b>1</b></font>
+ 1  4  1
+You win 15 points. You now have 160 points.
+
+Play again? (1=yes,0=no) <font color="red"><b>0</b></font>
+</pre></blockquote>
+
+<p>
+The program continues to run until the user types in 0 (zero) or runs out of points.
+ You should use 
+a <a href="../../../../../CS120/Iteration-1.html#DOLOOP"><tt><b>do...while</b></tt></a> loop
+again.
+<p>
+The name of the file should be <tt>slots1.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic slots1.c PRNG.c -o slots1
+</pre></blockquote>
+<!--
+Here is an executable for you to observe: <a href="slots1-demo.exe">slots1-demo.exe</a>
+-->
+<p>
+<font color="blue">Approximate number of lines of code: 30.</font>
+
+</ol>
+
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ol>
+  <li>You are not given a driver or main file. All code is in your <tt>slots1.c</tt> file.</li>
+  <p>
+  <li>You don't have to handle invalid input. You only need to handle 0 and 1 as input.</li>
+  <p>
+  <li>You should start out testing your code interactively. Once you've got it working as
+    expected, use input and output redirection to test it:
+<blockquote><pre>
+slots1 &lt; input.txt &gt; myoutput.txt
+</pre></blockquote>
+using the correct names for the input and output files. You can make your own input files, as well.</li>
+<p>
+  <li>Since there is no driver, you will need to make sure that the PRNG is seeded. This is already done
+    for you in the partial C file.</li>
+    <p>
+  <li>Here is a partial C file for you to get started: 
+    <a href="slots1-partial.c.html">HTML</a>&nbsp;&nbsp;&nbsp;
+    <a href="slots1-partial.c">Text</a></li>
+    <p>
+  <li>Sample output: <a href="out52.txt">output.txt</a>. You need to do this to generate it:
+<blockquote><pre>
+slots1 &lt; input1.txt &gt; myoutput.txt
+slots1 &lt; input2.txt &gt;&gt; myoutput.txt
+</pre></blockquote>
+Pay attention to the redirection operators. Here are the input files:
+<a href="input1.txt">input1.txt</a> and <a href="input2.txt">input2.txt</a>
+<p>
+  <li>Random number generator files (put these in the same directory as your C file)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+  </ul>
+
+</ol>
+
+<p>
+<p class="Extra">
+For students that would like an additional challenge:</b> (Do not submit this.)
+</p>
+<ol>
+  <li>Allow the player to choose how many points to start with.</li>
+  <li>Have 5 slots instead of 3.</li>
+  <li>With 5 slots, change the reward system (there is now 4 of a kind and 5 of a kind).</li>
+  <li>Make the reward system based on how many points the player bets. Currently, the cost to play 
+    is always 10 points.</li>
+  <li>Each slot has 5 different values. What happens to the odds if each slot has only 3 different 
+    values? 8 Different values?</li>
+  <li>There are enough variations to keep you busy for days! (You have all of the C knowlege that
+    is required.)</li>
+</ol>
+
+
+
+
+<br>
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

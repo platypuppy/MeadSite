@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>stdio.h (64-bit Linux)</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* Copyright (C) 1994-2014 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   &lt;http://www.gnu.org/licenses/&gt;.  */</i></font>
+
+<font color="990099">#if !defined _STDIO_H &amp;&amp; !defined __need_FOPEN_MAX &amp;&amp; !defined __need_IOV_MAX</font>
+<font color="990099"># error &quot;Never include &lt;bits/stdio_lim.h&gt; directly; use &lt;stdio.h&gt; instead.&quot;</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef _STDIO_H</font>
+<font color="990099"># define L_tmpnam 20</font>
+<font color="990099"># define TMP_MAX 238328</font>
+<b><font color="990099"># define FILENAME_MAX 4096</font></b>
+
+<font color="990099"># ifdef __USE_POSIX</font>
+<font color="990099">#  define L_ctermid 9</font>
+<font color="990099">#  if !defined __USE_XOPEN2K || defined __USE_GNU</font>
+<font color="990099">#   define L_cuserid 9</font>
+<font color="990099">#  endif</font>
+<font color="990099"># endif</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#if defined __need_FOPEN_MAX || defined _STDIO_H</font>
+<font color="990099"># undef  FOPEN_MAX</font>
+<font color="990099"># define FOPEN_MAX 16</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#if defined __need_IOV_MAX &amp;&amp; !defined IOV_MAX</font>
+<font color="990099"># define IOV_MAX 1024</font>
+<font color="990099">#endif</font>
+</code></pre>
+
+</body>
+</html>

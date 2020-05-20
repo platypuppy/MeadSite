@@ -1,0 +1,111 @@
+<html> <head> <link rel="stylesheet" type="text/css" href="new.css"> 
+<title>Shallow Assignment Crash</title> </head>
+
+<body>  
+<center><h1>Default Assignment Problems</h1></center>
+
+<!--
+<blockquote>
+<i>
+"The road to hell is paved with global variables"</i> -- Steve McConnell
+</blockquote>
+-->
+
+<blockquote><pre>
+Student constructor for john
+Student constructor for billy
+Student destructor for john
+Student destructor for 
+*** glibc detected *** ./a.out: double free or corruption (fasttop): 0x0000000000dbb010 ***
+======= Backtrace: =========
+/lib/x86_64-linux-gnu/libc.so.6(+0x7eb96)[0x7f68f35deb96]
+./a.out[0x401132]
+./a.out[0x400e72]
+./a.out[0x400ecf]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xed)[0x7f68f358176d]
+./a.out[0x400b19]
+======= Memory map: ========
+00400000-00403000 r-xp 00000000 00:27 23341                              /home/dit1948/data/Courses/Notes/CS170/Code/Classes3/a.out
+00602000-00603000 r--p 00002000 00:27 23341                              /home/dit1948/data/Courses/Notes/CS170/Code/Classes3/a.out
+00603000-00604000 rw-p 00003000 00:27 23341                              /home/dit1948/data/Courses/Notes/CS170/Code/Classes3/a.out
+00dbb000-00ddc000 rw-p 00000000 00:00 0                                  [heap]
+7f68f3264000-7f68f335f000 r-xp 00000000 08:31 136152                     /lib/x86_64-linux-gnu/libm-2.15.so
+7f68f335f000-7f68f355e000 ---p 000fb000 08:31 136152                     /lib/x86_64-linux-gnu/libm-2.15.so
+7f68f355e000-7f68f355f000 r--p 000fa000 08:31 136152                     /lib/x86_64-linux-gnu/libm-2.15.so
+7f68f355f000-7f68f3560000 rw-p 000fb000 08:31 136152                     /lib/x86_64-linux-gnu/libm-2.15.so
+7f68f3560000-7f68f3715000 r-xp 00000000 08:31 136144                     /lib/x86_64-linux-gnu/libc-2.15.so
+7f68f3715000-7f68f3914000 ---p 001b5000 08:31 136144                     /lib/x86_64-linux-gnu/libc-2.15.so
+7f68f3914000-7f68f3918000 r--p 001b4000 08:31 136144                     /lib/x86_64-linux-gnu/libc-2.15.so
+7f68f3918000-7f68f391a000 rw-p 001b8000 08:31 136144                     /lib/x86_64-linux-gnu/libc-2.15.so
+7f68f391a000-7f68f391f000 rw-p 00000000 00:00 0 
+7f68f391f000-7f68f3934000 r-xp 00000000 08:31 134983                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f68f3934000-7f68f3b33000 ---p 00015000 08:31 134983                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f68f3b33000-7f68f3b34000 r--p 00014000 08:31 134983                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f68f3b34000-7f68f3b35000 rw-p 00015000 08:31 134983                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f68f3b35000-7f68f3c17000 r-xp 00000000 08:31 2109334                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.16
+7f68f3c17000-7f68f3e16000 ---p 000e2000 08:31 2109334                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.16
+7f68f3e16000-7f68f3e1e000 r--p 000e1000 08:31 2109334                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.16
+7f68f3e1e000-7f68f3e20000 rw-p 000e9000 08:31 2109334                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.16
+7f68f3e20000-7f68f3e35000 rw-p 00000000 00:00 0 
+7f68f3e35000-7f68f3e57000 r-xp 00000000 08:31 136158                     /lib/x86_64-linux-gnu/ld-2.15.so
+7f68f4022000-7f68f4027000 rw-p 00000000 00:00 0 
+7f68f4053000-7f68f4057000 rw-p 00000000 00:00 0 
+7f68f4057000-7f68f4058000 r--p 00022000 08:31 136158                     /lib/x86_64-linux-gnu/ld-2.15.so
+7f68f4058000-7f68f405a000 rw-p 00023000 08:31 136158                     /lib/x86_64-linux-gnu/ld-2.15.so
+7fff79421000-7fff79442000 rw-p 00000000 00:00 0                          [stack]
+7fff79534000-7fff79535000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+Aborted
+</pre></blockquote>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

@@ -1,0 +1,36 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c.html</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>int</b> strtoint(<b>const</b> <b>char</b> string[]);
+
+<b>void</b> test1(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;0&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;1&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;12&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;123&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;1234&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;1234567890&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;-0&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;-12&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;-123&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;-124&quot;</font>));
+  printf(<font color="#9933CC">&quot;%i&#92;n&quot;</font>, strtoint(<font color="#9933CC">&quot;-1234567890&quot;</font>));
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  test1();  
+
+  <b>return</b> 0;
+}
+</code></pre>

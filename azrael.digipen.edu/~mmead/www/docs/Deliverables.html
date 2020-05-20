@@ -1,0 +1,115 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Deliverables</title>
+</head>
+<body>  
+
+<center>
+<h1>Deliverables</h1>
+</center>
+
+<p class="SectionHeader">
+What are Deliverables?
+</p>
+
+Quite simply put, deliverables are those tangible items that are to be delivered to the client upon completion of work. 
+This may include things like source code, compiled executable code, help files, test results, product designs, 
+documentation, training, and just about anything else a client may request. The important thing to remember is that
+the <i>client</i> specifies the deliverables, not the developer. How the items are delivered can be negotiated (e.g. submit
+source code on a CD or via email.)
+<p>
+In our classes, I (the instructor) am the client and you (the student) are the hired developer. As the client, I specify what
+the deliverables are, how they are to be delivered, and when they are to be delivered. Once the items are delivered, you will
+get paid. Of course, as the Dalai Lama <a href="http://www.carlspackler.com/verbatim.html">said</a>
+to Carl Spackler "Oh, uh, there won't be any money..." Instead, you will be compensated with
+a grade for the assignment. The size of your "paycheck" (the grade you receive) will be proportional to the degree in which
+you have met the requirements. So, if you only meet a portion of the requirements satisfactorily, 
+you'll only receive a portion of a "paycheck" (a score less than 100%).
+<p>
+In the "Real World", you usually don't get "partial" credit, meaning that you get paid only if 100% of the
+items are delivered to the client's satisfaction. This means that if you only finish 95% of the project, you don't get 95% of your 
+pay. You get nothing until all of it is finished. Since we can't work quite that way here (due to time constraints), 
+you will get partial "pay" for submitting partially completed/satisfactory work.
+<p>
+For each programming exercise, most of the information regarding deliverables is specified in the handout for the assignment. 
+Most of the criteria is the same from assignment to assignment, with the exception of the task (algorithm, program) being
+developed. Exactly what needs to be delivered will be specified on the the handout. The common criteria for deliverables
+are discussed in this document.
+
+
+<p class="SectionHeader">
+Hardcopy Requirements (if required)
+</p>
+The hardcopy must be printed in portrait mode (no landscape) using a <b>fixed-pitch font</b> (e.g. Courier). 
+The size of the font should be between 7 and 10 points.
+This is to help ensure that there is no wordwrapping in the output (and also to help keep the number of pages to a minimum.)
+Word-wrap is great for word-processing, but it is totally unacceptable for source code. 
+(Ever notice that there is no capability to enable word-wrap in a programmer's editor like Visual Studio or SynEdit?) 
+Of course, if you like to type very long lines in your programs, your lines may still word-wrap even when printed in 
+a small point size. You will have to be aware of this before you print it out because you may end up having to edit 
+your source code and re-print the entire program if any lines word-wrap. (Or, leave the word-wrapped lines and then
+receive a lower score due to failure to meet the client's requirements as specified.)
+If you want to have long lines in your source, it is up to you to make sure you can print without the lines wrapping.
+Also, watch out for large tab sizes and large margins. These attributes are probably the cause of most 
+word-wrapping during printing. If you can't get Visual Studio (or whatever you use to write code) to 
+format your output properly, use some other software that will allow you to control all aspects of the output. There
+are tons of free tools out on the Internet for formatting source code. You just need to look for it. Here are a few
+that may help:
+<p>
+<ul>
+<li><a href="http://notepad-plus.sourceforge.net/uk/site.htm">Notepad++</a>
+	is a free source code editor (and Notepad replacement), which supports several programming languages, running under the MS Windows environment.
+    It also works very well on Linux under Wine.
+<li><a href="http://www.sublimetext.com/">Sublime</a>
+	is a really nice source code editor (not free), which supports several programming languages, and is cross-platform (Windows, Mac, Linux).
+<li><a href="http://www.jedit.org/">jEdit</a>
+	is a mature programmer's text editor with hundreds (counting the time developing plugins) of person-years of development behind it.
+	Written in Java so it runs on Windows, Linux, and Mac at least.
+<li><a href="https://www.geany.org/">Geany</a> A full-blown cross-platform (Windows, Mac, Linux) programmer's editor.
+<!--
+<li><a href="http://www.ultraedit.com/">UltraEdit</a>. An extremely powerful text editor.<br>
+<li><a href="http://www.editpadlite.com/index.html">EditPad Lite</a>
+	is a general-purpose text editor, designed to be small and compact, yet offer all the functionality you expect from a basic text editor.
+	Windows-only.
+<li><a href="http://www.crimsoneditor.com">Crimson Editor</a>
+	is a simple source code editor for Windows.
+-->
+
+</ul>
+
+<p>
+<p class="SectionHeader">
+Use of Doxygen
+</p>
+Doxygen tags must be used to markup your internal documentation (comments). For details on Doxygen and an example of a <i>Doxygenized</i> source file, 
+look <a href="doxygen/index.html">here</a>. The <i>minimum</i> tags required are:
+
+<ul>
+<li><b>file</b> - Used in the file header comment to name the source file.
+<li><b>author</b> - Used in the file header comment for your name.
+<li><b>date</b> - Used in the file header comment for the date the assignment is due.
+<li><b>brief</b> - Used in the file header comment to list the contents of the file (usually the functions/methods in the file). This 
+is also used in a function header comment to describe the purpose of the function.
+<li><b>param</b> - Used in a function header comment for each parameter. (Omit if there are no parameters).
+<li><b>return</b> - Used in a function header comment to document the return value. (Omit if there is no return).
+<li><b>exception</b> - Used in a function header comment to document the exceptions that are thrown. (C++ only).
+<li><b>par</b> - Used for free-form information (e.g. Course, section, assignment #, etc.)
+</ul>
+
+To include other pieces of information that don't have specific tags (e.g. the course name), you can use a <b>par</b> tag (paragraph)
+in the file header comment. The examples show how to do this.
+<p>
+
+Note that in C++ code, it may be cleaner to describe the class using a <b>class</b> tag, rather than to put the information in the
+file header comment. This <a href="doxygen/stack.h.html">header file</a> demonstrates the <b>class</b> tag. The HTML generated from
+the <b>class</b> tag is <a href="doxygen/html/classStack.html">here</a> (under the Detailed Description section). Also note that these
+tags listed above are the <i>minimum</i> requirements. For example, it is common to markup the text with HTML tags within the comments. 
+<p>
+Doxygen includes an excellent and exhaustive compiled help file that describes all of the commands 
+and tags that are available and how to use them. It is installed with Doxygen on your computers.
+
+<hr>
+
+</body>
+</html>

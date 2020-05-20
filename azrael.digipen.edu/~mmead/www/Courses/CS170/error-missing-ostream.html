@@ -1,0 +1,97 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Error message.cpp</title>
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+
+main-overload-members.cpp: In function `void f4()':
+main-overload-members.cpp:65: error: no match for 'operator<<' in 'std::cout << sw1'
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:63: note: candidates are: std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>&(*)(std::basic_ostream<_CharT, _Traits>&)) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:74: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ios<_CharT, _Traits>&(*)(std::basic_ios<_CharT, _Traits>&)) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:86: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::ios_base&(*)(std::ios_base&)) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:121: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(long int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:155: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(long unsigned int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:98: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(bool) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:178: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(short int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:189: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(short unsigned int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:193: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:204: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(unsigned int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:179: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(long long int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:214: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(long long unsigned int) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:238: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(double) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:219: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(float) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:261: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(long double) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:284: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(const void*) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:307: note:  std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_streambuf<_CharT, _Traits>*) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/iomanip:261: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setw) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/iomanip:227: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setprecision) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/iomanip:154: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setbase) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/iomanip:116: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Setiosflags) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/iomanip:82: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::_Resetiosflags) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:504: note:  std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const unsigned char*) [with _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:499: note:  std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const signed char*) [with _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:612: note:  std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const char*) [with _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:567: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const char*) [with _CharT = char, _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:465: note:  std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, unsigned char) [with _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:460: note:  std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, signed char) [with _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/bits/ostream.tcc:505: note:  std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, char) [with _Traits = std::char_traits<char>]
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/ostream:449: note:  std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, char) [with _CharT = char, _Traits = std::char_traits<char>]
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

@@ -1,0 +1,1844 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Fundamentals</title>
+</head>
+
+<body>  
+<center><h1>Fundamentals</h1></center>
+
+<blockquote>
+<i>
+"Anyone can write code which a machine can understand - the trick is to
+write code which another human can understand." -- Martin Fowler
+</i>
+</blockquote>
+
+<blockquote>
+<i>
+  
+</i>
+</blockquote>
+
+<!--
+<ul>
+<li><a href="#INTRO">Introduction</a>
+<li><a href="#FIRSTPROGRAM">First C Program</a>
+<li><a href="#CONTRAST">Contrasting Languages at 3 Levels</a>
+<li><a href="#TOGETHER">Putting it all Together</a>
+<li><a href="#MARATHONC">Another Example</a>
+<li><a href="#STORAGE">Data Storage</a>
+<li><a href="#LEXICAL">Lexical Conventions</a>
+<li><a href="#ALGORITHMS">Algorithms</a>
+</ul>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Introduction</p>
+
+
+<ul>
+<li>What is computer programming?
+<li>What is a computer program?
+<li>What is a programming language?
+<li>Differences between languages (<a href="https://www.tiobe.com/tiobe-index/">Currently popular languages</a> 
+	Don't take it too seriously!)
+  <ul>
+    <li><a href="https://spectrum.ieee.org/computing/software/the-2018-top-programming-languages">The 2018 Top Programming Languages</a>
+      (<a href="https://spectrum.ieee.org/static/interactive-the-top-programming-languages-2018">Interactive</a>)</li>
+    <li><a href="http://pypl.github.io/PYPL.html">PYPL</a> PopularitY of Programming Language</li>
+    <li><a href="https://redmonk.com/sogrady/2019/07/18/language-rankings-6-19/">The RedMonk Programming Language Rankings: June 2019</a></li>
+  </ul>
+<li>Compilers vs. Interpreters
+<li>Creating a program
+<ol>
+  <li>Editing source (text) files
+  <li>Compiling source files into object (binary) files
+  <li>Linking object files into executable (binary) files
+</ol>
+<li>Executing the program
+<li>Central Processing Unit (CPU)
+<ul>
+<li>Arithmetic and Logic Units
+<li>Registers
+<li>Cache memory
+</ul>
+<li>Main memory
+</ul>
+
+
+<a name="FIRSTPROGRAM"></a>
+<p class="SectionHeader">
+First C Programs (The Chicken and The Egg)
+</p>
+
+
+<ul>
+<li>A C program is essentially a collection of one or more functions.
+<li>There must be a function named <tt><b>main</b></tt>; it must be in all lowercase.
+<li><tt><b>main</b></tt> is the program's starting point; it can call other functions by name
+<li>There must be <i>exactly</i> one function named <tt><b>main</b></tt> in every program.
+</ul>
+
+The general form of a C program looks like this: (The parts in <b>bold</b> are required)
+
+<blockquote><pre>
+include files
+
+function declarations (prototypes)
+
+function definitions (implentations)
+
+data declarations/definitions (global)
+
+<b><big>main function header</big></b>
+<b><big>{</big></b>
+  data declarations/definitions (local)
+  statements
+<b><big>}</big></b>
+
+other functions
+</pre></blockquote>
+
+Therefore, the simplest C program you can write:
+
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+}
+</code></pre>
+
+Technically, you should have a <b><tt>return</tt></b> statement:
+
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+It looks simple because it is. It does nothing of interest. But, nevertheless, it produces a "functional" program. This
+simple program demonstrates many characteristics of a C program.
+<p>
+
+<blockquote>
+<p class="technote">
+Students that think that <tt><b>int</b> main(<b>void</b>)</tt> can be changed to <tt><b>int</b> main()</tt> are required
+<a href="http://faq.cprogramming.com/cgi-bin/smartfaq.cgi?answer=1044841143&id=1043284376">to read this</a>, as I'm not going to spend any more
+time on it. (Yes, I know that <a href="http://knking.com/books/c2/index.html">our textbook</a> interchanges them, but you shouldn't.)
+</p>
+</blockquote>
+<p>
+A second program in C that actually does something:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;<a href="stdio.h.html">stdio.h</a>&gt;
+
+<font color="#003399"><i>/* Say hi to the world */</i></font>
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Hello, World!\n&quot;</font>);
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>Output:</b>
+
+<blockquote><pre>
+Hello, World!
+</pre></blockquote>
+
+Adding line numbers for clarity. They are not (and cannot be) present in the actual code.
+
+<pre class="sourcecode"><code>1. <b>#include</b> &lt;<a href="stdio.h.html">stdio.h</a>&gt;
+2.
+3. <font color="#003399"><i>/* Say hi to the world */</i></font>
+4. <b>int</b> main(<b>void</b>)
+5. {
+6.   printf(<font color="#9933CC">&quot;Hello, World!\n&quot;</font>);
+7.   <b>return</b> 0;
+8. }
+</code></pre>
+
+Each non-blank line above has significant meaning to the C compiler. Look at <a href="stdio.h.html">stdio.h</a> to see what the pre-processor 
+adds.
+
+<p>
+<hr width="90%">
+<p>
+  
+<a name="EDITCOMPILELOOP">
+<h2>Editing, Preprocessing, Compiling, Linking, and Executing</h2>
+</a>
+
+<p>
+<blockquote>
+<table cellpadding=5 cellspacing=5>
+<tr><th>Edit/Preprocess/Compile/Execute Loop</th><th></th><th>Edit/Preprocess/Compile/Execute Loop <font color="blue"><b>Extended</b></font></th></tr>
+<tr valign="bottom">
+<td><img src="Edit-Compile-Execute-Loop-1c.png"></th>
+<td width=70></td>
+<td valign="top"><img src="Edit-Compile-Execute-Loop-2c.png"></th>
+</tr></table>
+</blockquote>
+<p>
+
+<a name="CONTRAST"></a>
+<p class="SectionHeader">
+Contrasting Languages at 3 Levels
+</p>
+
+Let's say we have 4 variables (just like in algebra), where <i> a = 1, b = 2, c = 3, d = 4</i>. 
+We want to set a fifth one, <i>e</i>, to <i>ab(c + d)</i>. We can rewrite the multiplication explicitly as<p>
+<blockquote>
+<i>a &sdot; b &sdot; (c + d)</i>
+</blockquote>
+
+This will result in <i>e</i> having the value <i>14</i>. 
+
+<!--
+<h2>C code</h2>
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a = 1;
+  <b>int</b> b = 2;
+  <b>int</b> c = 3;
+  <b>int</b> d = 4;
+  <b>int</b> e = a * b * (c + d);
+  <b>return</b> 0;
+}
+</code></pre>
+-->
+
+<h2>C code (partial program)</h2>
+<blockquote><pre>
+<b>int</b> a = 1;
+<b>int</b> b = 2;
+<b>int</b> c = 3;
+<b>int</b> d = 4;
+<b>int</b> e = a * b * (c + d);
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+  
+<h2>Assembly language (16-bit Intel x86)</h2>
+<table cellpadding=10 cellspacing=0 border=1>
+<tr><th>Assembly language (compiler-generated)</th><th>Same Assembly language with comments</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+_main proc  far
+   mov word ptr [bp-2],1  
+   mov word ptr [bp-4],2  
+   mov word ptr [bp-6],3  
+   mov word ptr [bp-8],4  
+   mov ax,word ptr [bp-2] 
+   imul  word ptr [bp-4]  
+   mov dx,word ptr [bp-6] 
+   add dx,word ptr [bp-8] 
+   imul  dx               
+   mov word ptr [bp-10],ax 
+_main endp
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+_main proc  far
+   mov word ptr [bp-2],1  ;the address of a is bp-2
+                          ;the value is 1
+
+   mov word ptr [bp-4],2  ;the address of b is bp-4
+                          ;the value is 2
+
+   mov word ptr [bp-6],3  ;the address of c is bp-6
+                          ;the value is 3
+
+   mov word ptr [bp-8],4  ;the address of d is bp-8  
+                          ;the value is 4 
+
+   mov ax,word ptr [bp-2] ;put a's value in ax reg
+
+   imul  word ptr [bp-4]  ;multiply ax reg by b, 
+                          ;put result back in ax
+
+   mov dx,word ptr [bp-6] ;put c's value in dx reg 
+                     
+   add dx,word ptr [bp-8] ;add d to the dx reg
+                          ;put result back in dx
+
+   imul  dx               ;multiply ax reg by dx
+                          ;put result back in ax
+
+   mov word ptr [bp-10],ax ;the address of e is bp-10
+                           ;the value of e is 14
+_main endp
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+  
+Hand-coded assembler (32-bit 80386 using GNU's assembler, comments start with # and are in <b>bold</b>)
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+.section .data
+a: .long 1
+b: .long 2
+c: .long 3
+d: .long 4
+e: .long
+
+.section .text
+.globl _start
+
+_start:
+  movl a, %eax      <b>#     a -> %eax</b>
+  movl b, %ebx      <b>#     b -> %ebx</b>
+  imull %eax, %ebx  <b># a * b -> %ebx</b>
+
+  movl c, %eax      <b>#     c -> %eax</b>
+  movl d, %ecx      <b>#     d -> %ecx</b>
+  addl %eax, %ecx   <b># c + d -> %ecx</b>
+
+  imull %ebx, %ecx  <b># (a * b) * (c + d) -> %ecx</b>
+  movl %ecx, e      <b># put result in e</b>
+</pre></blockquote>
+
+  
+  
+Here are <a href="Simple-Assembly-MS-GNU.html">two other assembler samples</a> output from Microsoft's compiler and GNU's compiler.
+<p>
+  
+<p>
+<hr width="90%">
+<p>
+  
+<h2>Machine language (Intel 80386)</h2>
+
+
+<table>
+<tr><th>Hexadecimal dump (base 16)</th><th>Octal dump (base 8)</th></tr>
+<tr>
+<td>
+<blockquote><pre>
+014c 0003 0000 0000 0110 0000 000c 0000
+0000 0104 742e 7865 0074 0000 0000 0000
+0000 0000 0070 0000 008c 0000 00fc 0000
+0000 0000 0002 0000 0020 6000 642e 7461
+0061 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0040 c000 622e 7373 0000 0000 0000 0000
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 0000 0000 0000 0080 c000 8955 83e5
+18ec e483 b8f0 0000 0000 c083 830f 0fc0
+e8c1 c104 04e0 4589 8be8 e845 00e8 0000
+e800 0000 0000 45c7 01fc 0000 c700 f845
+0002 0000 45c7 03f4 0000 c700 f045 0004
+0000 458b 89fc 0fc2 55af 8bf8 f045 4503
+0ff4 c2af 4589 b8ec 0000 0000 c3c9 9090
+9090 9090 9090 9090 9090 9090 0021 0000
+000b 0000 0014 0026 0000 0009 0000 0014
+662e 6c69 0065 0000 0000 0000 fffe 0000
+0167 6973 706d 656c 632e 0000 0000 0000
+0000 0000 6d5f 6961 006e 0000 0000 0000
+0001 0020 0002 742e 7865 0074 0000 0000
+0000 0001 0000 0103 0062 0000 0002 0000
+0000 0000 0000 0000 0000 642e 7461 0061
+0000 0000 0000 0002 0000 0103 0000 0000
+0000 0000 0000 0000 0000 0000 0000 622e
+7373 0000 0000 0000 0000 0003 0000 0103
+0000 0000 0000 0000 0000 0000 0000 0000
+0000 5f5f 6d5f 6961 006e 0000 0000 0000
+0020 0102 0000 0000 0000 0000 0000 0000
+0000 0000 0000 5f5f 6c61 6f6c 6163 0000
+0000 0000 0000 0002 0004 0000
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+000514 000003 000000 000000 000420 000000 000014 000000
+000000 000404 072056 074145 000164 000000 000000 000000
+000000 000000 000160 000000 000214 000000 000374 000000
+000000 000000 000002 000000 000040 060000 062056 072141
+000141 000000 000000 000000 000000 000000 000000 000000
+000000 000000 000000 000000 000000 000000 000000 000000
+000100 140000 061056 071563 000000 000000 000000 000000
+000000 000000 000000 000000 000000 000000 000000 000000
+000000 000000 000000 000000 000200 140000 104525 101745
+014354 162203 134360 000000 000000 140203 101417 007700
+164301 140404 002340 042611 105750 164105 000350 000000
+164000 000000 000000 042707 000774 000000 143400 174105
+000002 000000 042707 001764 000000 143400 170105 000004
+000000 042613 104774 007702 052657 105770 170105 042403
+007764 141257 042611 134354 000000 000000 141711 110220
+110220 110220 110220 110220 110220 110220 000041 000000
+000013 000000 000024 000046 000000 000011 000000 000024
+063056 066151 000145 000000 000000 000000 177776 000000
+000547 064563 070155 062554 061456 000000 000000 000000
+000000 000000 066537 064541 000156 000000 000000 000000
+000001 000040 000002 072056 074145 000164 000000 000000
+000000 000001 000000 000403 000142 000000 000002 000000
+000000 000000 000000 000000 000000 062056 072141 000141
+000000 000000 000000 000002 000000 000403 000000 000000
+000000 000000 000000 000000 000000 000000 000000 061056
+071563 000000 000000 000000 000000 000003 000000 000403
+000000 000000 000000 000000 000000 000000 000000 000000
+000000 057537 066537 064541 000156 000000 000000 000000
+000040 000402 000000 000000 000000 000000 000000 000000
+000000 000000 000000 057537 066141 067554 060543 000000
+000000 000000 000000 000002 000004 000000
+</pre></blockquote>
+</td></tr></table>
+<p>
+
+
+<table>
+<tr><th>Binary dump (base 2)</th></tr>
+<tr>
+<td>
+<blockquote><pre>
+01001100000000010000001100000000000000000000000000000000000000000001000000000001000000000000000000001100000000000000000000000000
+00000000000000000000010000000001001011100111010001100101011110000111010000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000011100000000000000000000000000001000110000000000000000000000000011111100000000000000000000000000
+00000000000000000000000000000000000000100000000000000000000000000010000000000000000000000110000000101110011001000110000101110100
+01100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+01000000000000000000000011000000001011100110001001110011011100110000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000001000000000000000000000001100000001010101100010011110010110000011
+11101100000110001000001111100100111100001011100000000000000000000000000000000000100000111100000000001111100000111100000000001111
+11000001111010000000010011000001111000000000010010001001010001011110100010001011010001011110100011101000000000000000000000000000
+00000000111010000000000000000000000000000000000011000111010001011111110000000001000000000000000000000000110001110100010111111000
+00000010000000000000000000000000110001110100010111110100000000110000000000000000000000001100011101000101111100000000010000000000
+00000000000000001000101101000101111111001000100111000010000011111010111101010101111110001000101101000101111100000000001101000101
+11110100000011111010111111000010100010010100010111101100101110000000000000000000000000000000000011001001110000111001000010010000
+10010000100100001001000010010000100100001001000010010000100100001001000010010000100100001001000000100001000000000000000000000000
+00001011000000000000000000000000000101000000000000100110000000000000000000000000000010010000000000000000000000000001010000000000
+00101110011001100110100101101100011001010000000000000000000000000000000000000000000000000000000011111110111111110000000000000000
+01100111000000010111001101101001011011010111000001101100011001010010111001100011000000000000000000000000000000000000000000000000
+00000000000000000000000000000000010111110110110101100001011010010110111000000000000000000000000000000000000000000000000000000000
+00000001000000000010000000000000000000100000000000101110011101000110010101111000011101000000000000000000000000000000000000000000
+00000000000000000000000100000000000000000000000000000011000000010110001000000000000000000000000000000010000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000001011100110010001100001011101000110000100000000
+00000000000000000000000000000000000000000000000000000010000000000000000000000000000000110000000100000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010111001100010
+01110011011100110000000000000000000000000000000000000000000000000000000000000000000000110000000000000000000000000000001100000001
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000101111101011111010111110110110101100001011010010110111000000000000000000000000000000000000000000000000000000000
+00100000000000000000001000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000001011111010111110110000101101100011011000110111101100011011000010000000000000000
+00000000000000000000000000000000000000000000000000000010000000000000010000000000000000000000000011111111
+</pre></blockquote>
+</td></tr></table>
+<p>
+
+<!--
+0100110000000001000000110000000000000000000000000000000000000000
+0001000000000001000000000000000000001100000000000000000000000000
+0000000000000000000001000000000100101110011101000110010101111000
+0111010000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000001110000000000000000000000000000
+1000110000000000000000000000000011111100000000000000000000000000
+0000000000000000000000000000000000000010000000000000000000000000
+0010000000000000000000000110000000101110011001000110000101110100
+0110000100000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0100000000000000000000001100000000101110011000100111001101110011
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+1000000000000000000000001100000001010101100010011110010110000011
+1110110000011000100000111110010011110000101110000000000000000000
+0000000000000000100000111100000000001111100000111100000000001111
+1100000111101000000001001100000111100000000001001000100101000101
+1110100010001011010001011110100011101000000000000000000000000000
+0000000011101000000000000000000000000000000000001100011101000101
+1111110000000001000000000000000000000000110001110100010111111000
+0000001000000000000000000000000011000111010001011111010000000011
+0000000000000000000000001100011101000101111100000000010000000000
+0000000000000000100010110100010111111100100010011100001000001111
+1010111101010101111110001000101101000101111100000000001101000101
+1111010000001111101011111100001010001001010001011110110010111000
+0000000000000000000000000000000011001001110000111001000010010000
+1001000010010000100100001001000010010000100100001001000010010000
+1001000010010000100100001001000000100001000000000000000000000000
+0000101100000000000000000000000000010100000000000010011000000000
+0000000000000000000010010000000000000000000000000001010000000000
+0010111001100110011010010110110001100101000000000000000000000000
+0000000000000000000000000000000011111110111111110000000000000000
+0110011100000001011100110110100101101101011100000110110001100101
+0010111001100011000000000000000000000000000000000000000000000000
+0000000000000000000000000000000001011111011011010110000101101001
+0110111000000000000000000000000000000000000000000000000000000000
+0000000100000000001000000000000000000010000000000010111001110100
+0110010101111000011101000000000000000000000000000000000000000000
+0000000000000000000000010000000000000000000000000000001100000001
+0110001000000000000000000000000000000010000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000001011100110010001100001011101000110000100000000
+0000000000000000000000000000000000000000000000000000001000000000
+0000000000000000000000110000000100000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000010111001100010
+0111001101110011000000000000000000000000000000000000000000000000
+0000000000000000000000110000000000000000000000000000001100000001
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000010111110101111101011111011011010110000101101001
+0110111000000000000000000000000000000000000000000000000000000000
+0010000000000000000000100000000100000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000101111101011111
+0110000101101100011011000110111101100011011000010000000000000000
+0000000000000000000000000000000000000000000000000000001000000000
+0000010000000000000000000000000011111111
+-->
+
+  
+<b>Now, which language would you rather work with?</b>
+<p>
+
+Simple calculation:
+<blockquote><pre>
+<b>int</b> x = 5;
+<b>int</b> y = 3;
+<b>int</b> z = x + y;
+</pre></blockquote>
+
+Simplified view at runtime showing 3 variables in memory, a CPU with 4 registers and an Arithmetic-Logic Unit:
+<blockquote><pre>
+<table cellspacing=10>
+<tr>
+<td>
+<img src="Memory-CPU-1.png">
+</td>
+<td>or possibly like this: </td>
+<td>
+<img src="Memory-CPU-1b.png">
+</td>
+</tr></table>
+</pre></blockquote>
+
+Assembly code (generated by the GNU C compiler, comments added):
+<blockquote><pre>
+movl  $5, -12(%rbp)    ; put 5 into memory location x
+movl  $3, -8(%rbp)     ; put 3 into memory location y
+movl  -12(%rbp), %eax  ; put contents of x into eax register
+movl  -8(%rbp), %ebx   ; put contents of y into ebx register
+addl  %ebx, %eax       ; add ebx and eax registers, put result in eax register
+movl  %eax, -4(%rbp)   ; put contents of eax register into memory location z
+</pre></blockquote>
+<p>
+
+Hopefully, you can see why people prefer to program in C rather than assembly. The end result is the
+same, but the amount of effort required from the C programmer is <em>significantly</em> less.
+
+<a name="TOGETHER"></a>
+<p class="SectionHeader">
+Putting It All Together 
+</p>
+
+<h3>Step 1: Edit</h3>
+<blockquote>
+Create a text file for this C code named <tt><b>simple.c</b></tt>. The size of this file is about 120 
+bytes (although this depends on the operating system and the type of whitespace used). 
+You can use any text editor like, such as <a href="http://notepad-plus-plus.org/">Notepad++</a>  
+(Windows only) or <a href="https://www.geany.org/">Geany</a> (Windows, OS X, Linux, and others).
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a = 1;
+  <b>int</b> b = 2;
+  <b>int</b> c = 3;
+  <b>int</b> d = 4;
+  <b>int</b> e = a * b * (c + d);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</blockquote>
+
+<h3>Step 2: Compile (with Preprocess)</h3>
+<blockquote>
+The <i>source</i> code (text) is compiled into <i>object</i> or <i>machine</i> code (binary) and saved in a file named <tt><b>simple.o</b></tt>. 
+The size of this file will probably be between 500 and 2000 bytes (depends on the compiler, version, and options used).
+Using 
+
+<blockquote><pre>
+gcc -c simple.c -o simple.o
+</pre></blockquote>
+</blockquote>
+
+<h3>Step 3: Link</h3>
+<blockquote>
+The object file is linked (combined) with other object code and saved in a file named <tt><b>simple.exe</b></tt>. 
+(The <tt><b>.exe</b></tt> is a Windows requirement as other operating systems don't require it.)
+The size of this file is going to be tens of thousands of bytes. (Again, depends on the compiler.)
+
+<blockquote><pre>
+gcc simple.o -o simple.exe
+</pre></blockquote>
+</blockquote>
+  
+<h3>Step 3: Execute</h3>
+<blockquote>
+Run the executable file by simply typing the name of the executable file 
+(providing the <tt><b>.exe</b></tt> extension when executing it is optional under Windows):
+
+<blockquote><pre>
+simple
+</pre></blockquote>
+</blockquote>
+
+Of course, nothing <i>appears</i> to happen. The program <i>did</i> run and it <i>did</i> perform the calculations. There
+just aren't any instructions in the program that display anything for you to see.
+<p>
+We can modify it to use the <tt><b>printf</b></tt> (<b>print f</b>ormatted) function and display the value of <i>e</i> after the calculations:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;<a href="stdio.h.html">stdio.h</a>&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<font color="#003399"><i>/* Calculate some values */</i></font> 
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a = 1;
+  <b>int</b> b = 2;
+  <b>int</b> c = 3;
+  <b>int</b> d = 4;
+  <b>int</b> e = a * b * (c + d);
+
+    <font color="#003399"><i>/* Display the result as an integer value */</i></font> 
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, e);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+The C program above is a complete program that, when executed, will print the value <tt>14</tt> on the screen.
+
+
+<a name="STEPBYSTEP"></a>
+<p class="SectionHeader">
+Step-by-Step
+</p>
+
+
+The commands above were really shortcuts for the entire process. Let's look at each step individually
+to gain a clearer understanding of what is actually taking place. Remember that the C programming
+language (and all of its associated tools) are case sensitive. 99% of the time, everything should
+be in lowercase. Exceptions will be noted below.
+
+<p>
+<h3>Step 1 - Creating/Editing the source file (<tt>.c</tt>):</h3>
+<blockquote>
+From the command line, invoke a text editor (e.g. notepad++) and create/edit the source file: 
+<blockquote><pre>
+<font color="blue"><b>notepad++</b></font> <a href="simple.c.txt">simple.c</a>
+</pre></blockquote>    
+Just type the code above (or copy/paste) and save the file.          
+</blockquote>
+
+<h3>Step 2 - Preprocessing the source file (<tt>.i</tt>):</h3>
+<blockquote>
+<blockquote><pre>
+<font color="blue"><b>cpp</b></font> simple.c -o <a href="simple.i.txt">simple.i</a>
+</pre></blockquote>
+The output file (<tt>simple.i</tt>) contains the original source code, plus a lot of 
+code from the <i>stdio.h</i> header file. The <tt>-o</tt> option tells <tt>cpp</tt> what
+to name the output file. The output file, <tt>simple.i</tt> must follow immediately after the
+<tt>-o</tt> option. (The file extension <tt>.i</tt> is the conventional way to name a preprocessed
+file.)
+
+<p class="technote">
+<strong>Note</strong>: The <em>cpp</em> command above stands for <strong>C</strong> <strong>p</strong>re-<strong>p</strong>rocessor, 
+NOT <strong>C</strong> <strong>p</strong>lus <strong>p</strong>lus.
+</p>
+
+</blockquote>
+
+<h3>Step 3 - Compiling to an assembly file (<tt>.s</tt>):</h3>
+<blockquote>
+Use the GNU C compiler, <i>gcc</i>, to translate the preprocessed file into assembly code.
+<blockquote><pre>
+<font color="blue"><b>gcc</b></font> -fpreprocessed -S simple.i -o <a href="simple.s.txt">simple.s</a>
+</pre></blockquote>
+Notes:
+<ul>
+  <li>The <tt>-fpreprocessed</tt> option tells <tt>gcc</tt> not to run the preprocessor because 
+    the file has already been preprocessed.</li>
+  <li>The <tt>-S</tt> option (that's an uppercase 'S') tells <tt>gcc</tt> to only produce 
+    an assembly file instead of creating an object file.</li>
+    <!--
+  <li>The <tt>-xc</tt> option tells <tt>gcc</tt> that the file is a C file. (<tt>gcc</tt> normally
+    looks at the file extension, <tt>.c</tt> to determine this.) The input file, <tt>simple.pp</tt>
+    must follow immediately after this option.</li>
+  -->
+  <li>The <tt>-o</tt> option tells <tt>gcc</tt> what to name the output file. The output file,
+    <tt>simple.s</tt> must follow immediately after this option.
+     (The file extension <tt>.s</tt> is the conventional way to name an assembly file.)
+  </li>
+</ul>
+</blockquote>
+
+<h3>Step 4 - Assembling into an object file (<tt>.o</tt>):</h3>
+<blockquote>
+Use the GNU assembler (<tt>as</tt>) to assemble/convert the assembly file to object code.
+<blockquote><pre>
+<font color="blue"><b>as</b></font> simple.s -o <a href="simple.o.txt">simple.o</a>
+</pre></blockquote>
+The <tt>-o</tt> option tells the assembler, <tt>as</tt>, to name the object file <tt>simple.o</tt>
+(The file extension <tt>.o</tt> is the conventional way to name an object file.) To view the
+disassembled code, use either of these:
+<blockquote><pre>
+<a href="http://man7.org/linux/man-pages/man1/objdump.1.html">objdump</a> -d simple.o
+<a href="https://msdn.microsoft.com/en-us/library/c1h23y6c.aspx">dumpbin</a> /disasm simple.o
+</pre></blockquote>
+</blockquote>
+
+<h3>Step 5 - Linking to an executable file (<tt>.exe</tt>):</h3>
+<blockquote>
+Use the GNU linker, <tt>ld</tt> (that's a lowercase 'L'), to link the object file with code from
+the standard libraries and create an executable named <tt>simple.exe</tt>
+
+<blockquote>
+<p class="technote">
+Do NOT copy and paste the text below. The command that you type must be on a single line and
+the text below is broken into multiple lines. This link here:
+<a href="link-command-win64a.txt">linker command on one line</a>, has the command
+as one long line. Copy that text instead.
+</p>
+</blockquote>
+
+<!--
+<b>ld</b> -m i386pep --wrap _Znwm --wrap _Znam --wrap _ZdlPv --wrap _ZdaPv --wrap 
+_ZnwmRKSt9nothrow_t --wrap _ZnamRKSt9nothrow_t --wrap _ZdlPvRKSt9nothrow_t 
+--wrap _ZdaPvRKSt9nothrow_t -Bdynamic --dll-search-prefix=cyg --tsaware 
+/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/../../../../lib/crt0.o 
+/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/crtbegin.o -L/usr/lib/gcc/x86_64-pc-cygwin/4.8.3 
+-L/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/../../../../lib -L/lib/../lib -L/usr/lib/../lib 
+-L/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/../../.. <b>simple.o</b> -lgcc_s -lgcc -lcygwin
+-ladvapi32 -lshell32 -luser32 -lkernel32 -lgcc_s 
+-lgcc /usr/lib/gcc/x86_64-pc-cygwin/4.8.3/crtend.o <b>-o <a href="simple.exe.txt">simple.exe</a></b>
+-->
+<blockquote><pre>
+<b>ld</b> -plugin C:/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/8.1.0/liblto_plugin-0.dll
+-plugin-opt=C:/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/8.1.0/lto-wrapper.exe
+-plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh
+-plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt
+-plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32
+-plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-liconv
+-plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh
+-plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt
+--sysroot=C:/mingw710/x86_64-710-posix-seh-rt_v5-rev1/mingw64 -m i386pep
+-Bdynamic C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o
+C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/crtbegin.o
+-LC:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0 -LC:/mingw64/bin/../lib/gcc
+-LC:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/lib/../lib
+-LC:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../lib
+-LC:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/lib
+-LC:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../.. <b>simple.o</b> -lmingw32 -lgcc
+-lgcc_eh -lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -liconv -lmingw32 -lgcc
+-lgcc_eh -lmoldname -lmingwex -lmsvcrt C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/crtend.o <b>-o <a href="simple.exe.txt">simple.exe</a></b>
+</pre></blockquote>
+
+<!--
+<blockquote><pre>
+<b>ld</b> -plugin C:/mingw/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/7.1.0/liblto_plugin-0.dll 
+-plugin-opt=C:/mingw/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/7.1.0/lto-wrapper.exe 
+-plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh 
+-plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt 
+-plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-ladvapi32 -plugin-opt=-pass-through=-lshell32
+-plugin-opt=-pass-through=-luser32 -plugin-opt=-pass-through=-lkernel32 -plugin-opt=-pass-through=-liconv
+-plugin-opt=-pass-through=-lmingw32 -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh
+-plugin-opt=-pass-through=-lmoldname -plugin-opt=-pass-through=-lmingwex -plugin-opt=-pass-through=-lmsvcrt 
+--sysroot=C:/mingw710/x86_64-710-posix-seh-rt_v5-rev1/mingw64 -m i386pep 
+-Bdynamic C:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/../../../../x86_64-w64-mingw32/lib/../lib/crt2.o 
+C:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/crtbegin.o 
+-LC:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0 -LC:/mingw/mingw64/bin/../lib/gcc 
+-LC:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/../../../../x86_64-w64-mingw32/lib/../lib 
+-LC:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/../../../../lib 
+-LC:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/../../../../x86_64-w64-mingw32/lib 
+-LC:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/../../.. <b>simple.o</b> -lmingw32 -lgcc -lgcc_eh 
+-lmoldname -lmingwex -lmsvcrt -lpthread -ladvapi32 -lshell32 -luser32 -lkernel32 -liconv -lmingw32 -lgcc 
+-lgcc_eh -lmoldname -lmingwex -lmsvcrt C:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/crtend.o <b>-o <a href="simple.exe.txt">simple.exe</a></b>
+</pre></blockquote>
+-->
+
+Notes:
+<ul>
+      <!--
+  <li>The lines above should all be on a single line at the command prompt.
+    <ul>
+      <li><a href="link-command-win.txt">linker command</a> (If installed to <tt>C:\mingw\mingw64\</tt>, version 7.1.0)</li>
+      <li><a href="link-command-win64.txt">linker command 64</a> (If installed to <tt>C:\mingw64\mingw64\</tt>, version 7.1.0)</li>
+      <li><a href="link-command-win64a.txt">linker command 64</a> (If installed to <tt>C:\mingw64\</tt>, version 8.1.0)</li>
+    </ul>
+    -->
+  <li>The exact command will depend on the version and location of the GCC C compiler on 
+    your computer. (This example is using version 8.1.0 of the compiler which is installed
+    in <tt>C:\mingw64</tt>.)</li>
+  <li>This command is Windows-specific and is different on other operating systems.</li>
+  <li>You will rarely, if ever, need to type this cryptic line manually. (I've only 
+    done it once in my long career, and it was for this example!)</li>
+  <li>The output shown from <a href="simple.c.txt">simple.c</a> (<a href="simple.i.txt">simple.i</a>
+    <a href="simple.s.txt">simple.s</a>, 
+    <a href="simple.o.txt">simple.o</a>, 
+    and <a href="simple.exe.txt">simple.exe</a>) was generated under
+    Linux using version 7.1.0 of the GCC C compiler. The output generated from Mac OS X and Windows would not be exactly the same, but 
+    would be similar.</li>
+  <li>You can clearly see why some files are called <i>text</i> files and others
+    are called <i>binary</i> files.</li>
+</ul>
+</blockquote>
+
+<h3>Step 6 - Executing the program:</h3>
+<blockquote>
+At the command prompt you just need to type the name of the executable file. On Windows type:
+<blockquote><pre>
+simple
+</pre></blockquote>
+or
+<blockquote><pre>
+simple.exe
+</pre></blockquote>
+On Mac or Linux type (or if you're using the Windows Power Shell):
+<blockquote><pre>
+./simple
+</pre></blockquote>
+Usually, you don't need to supply the <tt>.exe</tt> file extension. The linker will add that
+automatically (on Windows) and leave it off for Mac and Linux. By omitting the extension:
+<blockquote><pre>
+-o simple
+</pre></blockquote>
+the linker will "do the right thing" based on the operating system.
+</blockquote>
+
+<h3>Conclusion</h3>
+The above step-by-step tutorial was just to show you what's going on behind-the-scenes. Normally
+for a simple project (meaning 99% of the time) you will simply do this:
+<blockquote><pre>
+gcc simple.c -o simple
+</pre></blockquote>
+and that will perform all of the steps above.
+</blockquote>
+
+<!--
+From here: https://groups.google.com/forum/#!msg/microsoft.public.win2000.cmdprompt.admin/XHeUq8oe2wk/LIEViGNmkK0J
+
+Mark Zbikowski (MSFT)   7/21/03
+The differences between .CMD and .BAT as far as CMD.EXE is concerned are:
+
+With extensions enabled, PATH/APPEND/PROMPT/SET/ASSOC in .CMD
+files will set ERRORLEVEL regardless of error. .BAT sets ERRORLEVEL
+only on errors.
+
+
+Search order is EXE COM BAT CMD
+
+-->
+
+<p>
+  <hr width="90%">
+</p>
+
+<h3>Additional Compile Options</h3>
+<blockquote>
+To enable the compiler to perform a more thorough check of your source code, use the <tt><b>-Wall</b></tt> <i>command
+line option</i> like so:
+
+<blockquote><pre>
+gcc <b>-Wall</b> -c simple.c -o simple.o
+</pre></blockquote>
+
+Now, if the compiler detects any potential problems or misuse of the C language, it will alert you with a 
+warning message. For example, if I add the variable <i>f</i> like this:
+
+<blockquote><pre>
+  <b>int</b> a = 1;
+  <b>int</b> b = 2;
+  <b>int</b> c = 3;
+  <b>int</b> d = 4;
+  <b>int</b> f = 5; <font color="#003399"><i>/* Add this variable, but don't use it anywhere */</i></font> 
+
+  <b>int</b> e = a * b * (c + d);
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, e);
+  <b>return</b> 0;
+</pre></blockquote>
+
+I get this warning from the compiler:
+
+<blockquote><pre>
+simple.c: In function 'main':
+simple.c:10: warning: unused variable 'f'
+</pre></blockquote>
+
+or, if I add something like this:
+
+<blockquote><pre>
+a + b - c;   <font color="#003399"><i>/* Perform some calculation, but discard the value */</i></font> 
+</pre></blockquote>
+
+I get this warning from the compiler:
+
+<blockquote><pre>
+simple.c: In function 'main':
+simple.c:11: warning: statement with no effect</pre></blockquote>
+</blockquote>
+
+<h3>Compile and Link in One Step</h3>
+<blockquote>
+If you want to perform both compile and link steps with one command, don't provide the <tt><b>-c</b></tt> option. This
+will compile and then link the program:
+<blockquote><pre>
+gcc simple.c -o simple.exe
+</pre></blockquote>
+
+However, if the compile step fails for any reason, the link step is skipped.
+</blockquote>
+
+<h3>Other Useful Options</h3>
+<blockquote>
+
+If you want to generate the assembly output as above, use <tt><b>-S</b></tt> option:
+<blockquote><pre>
+gcc -S simple.c 
+</pre></blockquote>
+
+This will produce a text file called <tt>simple.s</tt> which you can view with any text editor.
+<p>
+
+If you want to generate the preprocessor output directly from <b>gcc</b>, use <tt><b>-E</b></tt> option:
+<blockquote><pre>
+gcc -E simple.c 
+</pre></blockquote>
+
+This will produce a ton of information to the screen. To capture the output so you can view it
+more easily, redirect the output to a file:
+
+<blockquote><pre>
+gcc -E simple.c > simple.out
+</pre></blockquote>
+
+The
+<blockquote><pre>
+  <b><tt>&gt; simple.out</tt></b> 
+</pre></blockquote>
+ 
+causes the output to be written to a file (named <tt>simple.out</tt>) instead of
+to the screen. This file is a text file that you can view with any text editor.
+
+</blockquote>
+
+<b>Note:</b>
+<blockquote>
+<p class="technote">
+Modern compilers have two primary goals:<br><br>
+1. To verify that your code is valid C code<br>
+2. To convert/translate the C (text) code into machine (binary) code
+</p>
+</blockquote>
+
+The compiler will verify that this code is valid, legal C code, although it is incorrect:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="990099">#define PI 3.1415926</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> radius = 2;
+  <b>double</b> volume = 4 / 3 * PI * radius * radius * radius;
+
+  printf(<font color="#9933CC">&quot;The volume of a sphere with radius %i is %f&#92;n&quot;</font>, radius, volume);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+The expected output is:
+<blockquote><pre>
+33.510321
+</pre></blockquote>
+
+but the actual output is 
+<blockquote><pre>
+25.132741
+</pre></blockquote>
+
+As far as the compiler is concerned, there is nothing wrong with the code. But, the use of
+the data is incorrect. That's because the compiler sees this:
+
+<blockquote><pre>
+1 * 3.1415926 * 8
+</pre></blockquote>
+
+when it should see this:
+
+<blockquote><pre>
+1.333333 * 3.1415926 * 8
+</pre></blockquote>
+
+
+
+It's kind of like doing this:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;The sum of 3 and 4 is %i&#92;n&quot;</font>, 3 - 4);
+                                     ^^^^^
+                                     Oops!
+</pre></blockquote>
+
+The compiler can't check that you are subtracting when you meant to be adding.
+<p>
+So, the moral of the story is:
+
+<blockquote>
+<p class="technote">
+<b>Just because your code compiles, (and even runs), doesn't mean it is correct.</b>
+</p>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<a name="MARATHONC"></a>
+<p class="SectionHeader">
+Another Example
+</p>
+This example will show constructs such as identifiers, literal constants, defines, expressions, and several others.
+<p>
+<a name="MARATHONLINES">
+<b>The C code: <tt>marathon.c</tt></b>: (with line numbers for clarity)
+</a>  
+
+<pre class="sourcecode"><code> 1. <b>#include</b> &lt;<a href="stdio.h.html">stdio.h</a>&gt; <font color="#003399"><i>/* printf */</i></font>
+ 2.
+ 3. <font color="#003399"><i>/* Convenient definitions */</i></font>
+ 4. <b>#define</b> YARDS_PER_MILE 1760
+ 5. <b>#define</b> KILOS_PER_MILE 1.609
+ 6.
+ 7. <font color="#003399"><i>/* A marathon is 26 miles, 385 yards               */</i></font>
+ 8. <font color="#003399"><i>/* Prints the distance of a marathon in kilometers */</i></font>
+ 9. <b>int</b> main(<b>void</b>)
+10. {
+11.   <b>int</b> miles = 26;    <font color="#003399"><i>/* Miles in a marathon                 */</i></font>
+12.   <b>int</b> yards = 385;   <font color="#003399"><i>/* Yards in a marathon                 */</i></font>
+13.   <b>double</b> kilometers; <font color="#003399"><i>/* Calculated kilometers in a marathon */</i></font>
+14.  
+15.     <font color="#003399"><i>/* Convert miles and yards into kilometers */</i></font>
+16.   kilometers = (miles + (<b>double</b>)yards / YARDS_PER_MILE) * KILOS_PER_MILE;
+17.
+18.     <font color="#003399"><i>/* Display the result on the screen */</i></font>
+19.   printf(<font color="#9933CC">&quot;A marathon is %f kilometers\n&quot;</font>, kilometers);
+20.  
+21.     <font color="#003399"><i>/* Return successful value to OS */</i></font>
+22.   <b>return</b> 0;
+23. }
+24.
+</code></pre>
+
+
+<a name="MARATHON">The program will output: <tt>A marathon is 42.185969 kilometers</tt></a>
+<p>
+Without line numbers (to copy and paste):
+<pre class="sourcecode"><code><b>#include</b> &lt;<a href="stdio.h.html">stdio.h</a>&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<font color="#003399"><i>/* Convenient definitions */</i></font>
+<b>#define</b> YARDS_PER_MILE 1760
+<b>#define</b> KILOS_PER_MILE 1.609
+
+<font color="#003399"><i>/* A marathon is 26 miles, 385 yards               */</i></font>
+<font color="#003399"><i>/* Prints the distance of a marathon in kilometers */</i></font>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> miles = 26;    <font color="#003399"><i>/* Miles in a marathon                 */</i></font>
+  <b>int</b> yards = 385;   <font color="#003399"><i>/* Yards in a marathon                 */</i></font>
+  <b>double</b> kilometers; <font color="#003399"><i>/* Calculated kilometers in a marathon */</i></font>
+  
+    <font color="#003399"><i>/* Convert miles and yards into kilometers */</i></font>
+  kilometers = (miles + (<b>double</b>)yards / YARDS_PER_MILE) * KILOS_PER_MILE;
+
+    <font color="#003399"><i>/* Display the result on the screen */</i></font>
+  printf(<font color="#9933CC">&quot;A marathon is %f kilometers\n&quot;</font>, kilometers);
+  
+    <font color="#003399"><i>/* Return successful value to OS */</i></font>
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+<a href="marathon.i.txt">The preprocessed file</a> named <tt>marathon.i</tt> (generated by: <b><tt>gcc -E marathon.c -o marathon.i</tt></b>)
+<p>
+<a href="marathon.s.txt">The assembly file</a> named <tt>marathon.s</tt>  (generated by: <b><tt>gcc -S marathon.c -o marathon.s</tt></b>)
+<p>
+The code above uses a few arithmetic operators. Many operators correspond with the ones you've seen in algebra. Here are a few
+<i>binary</i> operators:
+
+<p>
+<blockquote>
+<table style="text-align: left; width: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Operator</td>
+      <td style="text-align: center; font-weight: bold;">Meaning</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>+</big></big></td>
+      <td style="text-align: center;">Add</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>-</big></big></td>
+      <td style="text-align: center;">Subtract</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>*</big></big></td>
+      <td style="text-align: center;">Multiply</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>/</big></big></td>
+      <td style="text-align: center;">Divide</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>%</big></big></td>
+      <td style="text-align: center;">Modulo<br>
+(Remainder)</td>
+    </tr>
+  </tbody>
+
+</table>
+</blockquote>
+
+A full <a href="../../docs/OperatorPrecedence.html">list of operators</a> including their
+<i>precedence</i> and <i>associativity</i>.
+
+<a name="STORAGE"></a>
+<p class="SectionHeader">
+Computer Data Storage (Refresher)
+</p>
+
+This section is just a short refresher on the binary, decimal, and hexadecimal number systems.
+
+<ul>
+<li>Computers represent information as patterns of bits (0's and 1's), known as base 2; e.g. 1011101000010101000111100011
+<li>People use base 10; doesn't translate well into base 2
+<li>Hexadecimal (base 16) works well with binary; computer programmers often work in base 16
+<li>Group the bits into sets of 4 and translate into hexadecimal using the chart below
+</ul>
+
+Relationship between hex and binary numbers:
+<blockquote>  
+<table style="text-align: left; width: 100px;" border="1" cellpadding="9" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">0</td>
+      <td>0000</td>
+      <td style="font-weight: bold;">4</td>
+      <td>0100</td>
+      <td style="font-weight: bold;">8</td>
+      <td>1000</td>
+      <td style="font-weight: bold;">C</td>
+      <td>1100</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">1</td>
+      <td>0001</td>
+      <td style="font-weight: bold;">5</td>
+      <td>0101</td>
+      <td style="font-weight: bold;">9</td>
+      <td>1001</td>
+      <td style="font-weight: bold;">D</td>
+      <td>1101</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">2</td>
+      <td>0010</td>
+      <td style="font-weight: bold;">6</td>
+      <td>0110</td>
+      <td style="font-weight: bold;">A</td>
+      <td>1010</td>
+      <td style="font-weight: bold;">E</td>
+      <td>1110</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">3</td>
+      <td>0011</td>
+      <td style="font-weight: bold;">7</td>
+      <td>0111</td>
+      <td style="font-weight: bold;">B</td>
+      <td>1011</td>
+      <td style="font-weight: bold;">F</td>
+      <td>1111</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote> 
+
+<p> 
+<a href="../../docs/ASCII-binary-hex-chart.html">Character representations</a>
+<p>
+  
+The number above, 1011101000010101000111100011, translates into hex (BA151E3) and decimal (195,121,635) as:
+<p>
+    
+<blockquote>  
+<table style="text-align: left; width: 100px;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: right;">Binary</td>
+      <td style="text-align: center;">1011</td>
+      <td style="text-align: center;">1010</td>
+      <td style="text-align: center;">0001</td>
+      <td style="text-align: center;">0101</td>
+      <td style="text-align: center;">0001</td>
+      <td style="text-align: center;">1110</td>
+      <td style="text-align: center;">0011</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; text-align: right;">Hexadecimal</td>
+      <td style="text-align: center;">B</td>
+      <td style="text-align: center;">A</td>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">5</td>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">E</td>
+      <td style="text-align: center;">3</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; text-align: right;">Decimal</td>
+      <td style="text-align: center;" colspan="7" rowspan="1">195121635</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote> 
+
+More information on <a href="Binary-Decimal-Numbers.html">Binary numbers</a>.
+<p>
+<a href="BinConverter.exe">Binary/Decimal converter</a> (BinConverter.exe)
+<p>
+
+
+
+<a name="LEXICAL"></a>
+<p class="SectionHeader">
+Lexical Conventions
+</p>
+
+C programs are typically stored in one or more files on the disk. These files are given a rather fancy name: <i>translation units</i>. 
+After the pre-processor has removed the directives and performed the appropriate action, the compiler starts its job. The
+first thing the compiler needs to do is to <i>parse</i> through all of the <i>tokens</i> in the files.
+<p>
+There are different classes of tokens (lexical elements). In no particular order they are:
+<ol>
+<li>keywords
+<li>identifiers
+<li>constants
+	<ul>
+		<li>integers</li>
+		<li>characters</li>
+		<li>floating point</li>
+		<li>enumerations</li>
+		<li>string literals (NUL-terminated character arrays)</li>
+	</ul>
+<li>operators (<a href="../../docs/OperatorPrecedence.html">Lots!</a>)
+<li>puncuators and separators
+</ol>
+
+The standard actually names these 6:
+<ol>
+<li>keywords
+<li>identifiers
+<li>constants
+<li>string literals
+<li>operators
+<li>puncuators
+</ol>
+
+
+<i>White space</i> includes things like blank spaces, tab, newlines, etc. Comments are a form of whitespace since they 
+are stripped out (by the preprocessor) and replaced by a single space.
+<p>
+We will spend the entire course studying these aspects of the C language.
+<p>
+
+<a name="IDENTIFIERS"></a>
+<h2>Identifiers</h2>
+
+
+<ul>
+<li>Variables, constants, function names, and other elements of a C program are called <i>identifiers</i>; they are used to name (i.e. identify) things.
+<li>There are only two rules that must be followed:</li>
+<ol>
+  <li><font color="blue"><b>Identifiers may only contain letters (upper- or lower-case), digits (0-9), and underscores ( _ ).</b></font></li>
+  <li><font color="blue"><b>Identifiers must begin with a letter or underscore. (Not a digit)</b></font></li>
+</ol>
+<li>There are certain words in C that have special meanings (keywords) and can't be used as identifiers. (e.g. <b>int, float, const</b>)
+<li>C is a case sensitive language; upper- and lower-case letters are considered to be different. (e.g. <tt>SUM, Sum, sum</tt> are all different identifiers)
+<li>Most compilers allow identifiers to be 31 characters or more in length. (You probably won't need more than that.)
+<li>Use meaningful names, you will be glad you did (and your grade in this course will reflect it!)
+</ul>
+
+Some examples:
+<!--
+<blockquote>
+<table style="text-align: left; xwidth: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: center;">Valid</td>
+      <td style="font-weight: bold; text-align: center;">Invalid</td>
+      <td style="font-weight: bold; text-align: center;">Invalid Reason</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">foo1</td>
+      <td style="text-align: center;">1foo</td>
+      <td style="text-align: left;">Doesn't start with a letter or underscore</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">_foo</td>
+      <td style="text-align: center;">$foo</td>
+      <td style="text-align: left;">1. Doesn't start with a letter or underscore<br>2. $ is illegal character</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">foo</td>
+      <td style="text-align: center;">foo$</td>
+      <td style="text-align: left;">$ is an illegal character</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">valid_identifier</td>
+      <td style="text-align: center;">invalid-identifier</td>
+      <td style="text-align: left;"><tt>-</tt> is an illegal character</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">a_long_and_valid_name</td>
+      <td style="text-align: center;">foo&nbsp; bar</td>
+      <td style="text-align: left;">Can't have spaces in identifier names</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">Int</td>
+      <td style="text-align: center;">int</td>
+      <td style="text-align: left;"><b>int</b> is a keyword</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+-->
+<blockquote>
+<table style="text-align: left; width: 833px; height: 280px;"
+ border="1" cellpadding="8" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: center;">Valid</td>
+      <td style="font-weight: bold; text-align: center;">Invalid</td>
+      <td style="text-align: center;"><span
+ style="font-weight: bold;">Invalid Reason</span></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+      <pre><big>foo1</big></pre>
+      </td>
+      <td style="text-align: center;">
+      <pre><big>1foo</big></pre>
+      </td>
+      <td>Doesn't start with a letter or underscore</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+      <pre><big>_foo</big></pre>
+      </td>
+      <td style="text-align: center;">
+      <pre><big>$foo</big></pre>
+      </td>
+      <td>1. Doesn't start with a letter or underscore<br>
+2. $ is illegal character</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+      <pre><big>foo</big></pre>
+      </td>
+      <td style="text-align: center;">
+      <pre><big>foo$</big></pre>
+      </td>
+      <td>$ is an illegal character</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+      <pre><big>valid_identifier</big></pre>
+      </td>
+      <td style="text-align: center;">
+      <pre><big>invalid-identifier</big></pre>
+      </td>
+      <td>- is an illegal character</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+      <pre><big>a_long_and_valid_name</big></pre>
+      </td>
+      <td style="text-align: center;">
+      <pre><big>foo bar</big></pre>
+      </td>
+      <td>Can't have spaces in identifier names</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+      <pre><big>Int</big></pre>
+      </td>
+      <td style="text-align: center;">
+      <pre><big>int</big></pre>
+      </td>
+      <td><span style="font-weight: bold;">int</span>
+is a keyword</td>
+    </tr>
+  </tbody>
+</table>
+
+</blockquote>
+
+
+Examples:
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr valign="top">
+      <td style="font-weight: bold; text-align: center;">Good Identifier Names</td>
+      <td style="font-weight: bold; text-align: center;">Bad Identifiier Names</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">&nbsp; int
+rate;<br>
+&nbsp; int time;<br>
+&nbsp; int distance;<br>
+      <br>
+&nbsp; rate = 60;<br>
+&nbsp; time = 20;<br>
+&nbsp; distance = rate * time;<br>
+      </td>
+      <td style="font-family: monospace;">&nbsp; int x;<br>
+&nbsp; int y;<br>
+&nbsp; int z;<br>
+      <br>
+&nbsp; x = 60;<br>
+&nbsp; y = 20;<br>
+&nbsp; z = x * y;<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">&nbsp;
+#define PI 3.1416F<br>
+&nbsp; float radius = 5.25F;<br>
+&nbsp; float sphere_volume;<br>
+&nbsp; sphere_volume = 4.0F / 3.0F * PI * radius * radius * radius;<br>
+      </td>
+      <td style="font-family: monospace;">&nbsp;
+#define A 3.1416F<br>
+&nbsp; float id1 = 5.25F;<br>
+&nbsp; float id2;<br>
+&nbsp; id2 = 4.0F / 3.0F * A * id1 * id1 *id1;<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">&nbsp;
+double base = 2.75;<br>
+&nbsp;&nbsp;double height = 4.8;<br>
+&nbsp; double area_of_triangle = 0.5 * base * height; &nbsp;
+&nbsp;<br>
+      </td>
+      <td style="font-family: monospace;">&nbsp;
+double table = 2.75;<br>
+&nbsp;&nbsp;double chair = 4.8;<br>
+&nbsp; double couch = 0.5 * table * chair; &nbsp; <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+<p>
+<a name="KEYWORDS">
+<h2>Keywords</h2>
+Keywords are identifiers that are reserved for the compiler. You can't use any of these
+as identifiers:
+</a>
+
+<blockquote>
+<table style="text-align: left; width: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-family: monospace;"><font color="red"><b><strike>auto</strike></b></font></td>
+      <td style="font-family: monospace;"><b>const</b></td>
+      <td style="font-family: monospace;"><b>double</b></td>
+      <td style="font-family: monospace;"><b>float</b></td>
+      <td style="font-family: monospace;"><b>int</b></td>
+      <td style="font-family: monospace;"><b>short</b></td>
+      <td style="font-family: monospace;"><b>struct</b></td>
+      <td style="font-family: monospace;"><b>unsigned</b></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;"><b>break</b></td>
+      <td style="font-family: monospace;"><b>continue</b></td>
+      <td style="font-family: monospace;"><b>else</b></td>
+      <td style="font-family: monospace;"><b>for</b></td>
+      <td style="font-family: monospace;"><b>long</b></td>
+      <td style="font-family: monospace;"><b>signed</b></td>
+      <td style="font-family: monospace;"><b>switch</b></td>
+      <td style="font-family: monospace;"><b>void</b></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;"><b>case</b></td>
+      <td style="font-family: monospace;"><b>default</b></td>
+      <td style="font-family: monospace;"><b>enum</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>goto</b></font></td>
+      <td style="font-family: monospace;"><font color="black"><b>register</b></font></td>
+      <td style="font-family: monospace;"><b>sizeof</b></td>
+      <td style="font-family: monospace;"><b>typedef</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>volatile</b></font></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;"><b>char</b></td>
+      <td style="font-family: monospace;"><b>do</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>extern</b></font></td>
+      <td style="font-family: monospace;"><b>if</b></td>
+      <td style="font-family: monospace;"><b>return</b></td>
+      <td style="font-family: monospace;"><b>static</b></td>
+      <td style="font-family: monospace;"><font color="red"><b>union</b></font></td>
+      <td style="font-family: monospace;"><b>while</b></td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+The keywords in <font color="red"><b>red</b></font> will not be used in this course as they are
+somewhat more advanced. (The <tt>auto</tt> keyword is deprecated and shouldn't be used at all.
+The meaning of <tt>auto</tt> means something completely different in modern C++.
+There are also about 92 keywords in C++, which is an enormous language!)
+<p>
+Also, remember that C is <i>case-sensitive</i> so these keywords must be typed exactly as shown. <b><tt>int</tt></b> is not the same as <b><tt>Int</tt></b>
+or <b><tt>INT</tt></b>.
+
+<p>
+<h2>Constants</h2>
+A literal value is a constant just as you type it in the code:
+
+<blockquote><pre>
+ <b>int</b> a = <font color="red"><b>1</b></font>;
+ <b>float</b> f = <font color="red"><b>3.14F</b></font>;
+ <b>double</b> d = <font color="red"><b>23.245</b></font>;
+</pre></blockquote>
+
+Examples:
+<blockquote>
+<table style="text-align: left; xwidth: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Constant</td>
+      <td style="font-weight: bold;">Type</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">5</td>
+      <td style="text-align: center;">int</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">3.14</td>
+      <td style="text-align: center;">double</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">3.14F</td>
+      <td style="text-align: center;">float</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">'A'</td>
+      <td style="text-align: center;">int</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">"hello"</td>
+      <td style="text-align: center;">string</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+
+Note that the literal character <tt>'A'</tt> is of type <b><tt>int</tt></b> and not <b><tt>char</tt></b>.
+(<tt>'A'</tt> is just an alias for the value 65. <a href="../../docs/OperatorPrecedence.html">ASCII chart</a> near the bottom)
+
+<p>
+The <a href="Fundamentals-1.html#MARATHONC"><b><tt>marathon.c</tt></b></a> program has 6 literal values. There are 4 integers, 1 double, and 1 string.
+
+<divclass="hidden">
+
+<a name="ALGORITHMS"></a>
+<p class="SectionHeader">
+Algorithms
+</p>
+
+
+A large part of your programming career will deal with <i>algorithms</i>.
+
+<ul>
+<LI>One of the most fundamental concepts in computer programming 
+<LI>A set a steps that defines how a task is accomplished; a recipe 
+<LI>A computer program represents an algorithm 
+<LI>Programs = software
+<LI>Algorithms have been known and studied for centuries; they were not invented by computer scientists 
+<LI>Algorithms <I>do not</I> require computers, although computers require algorithms
+<LI>There are many famous algorithms; Euclid's Greatest Common Divisor (GCD) is a simple one (e.g. the GCD of 27 and 12 is 3, the GCD of 68 and 12 is 4)
+</UL>
+
+<p>
+
+Euclid's algorithm in English (with some algebra thrown in):
+
+<blockquote><pre>
+<table cellpadding=10 cellspacing=0 border=1>
+<tr><th>Step</th><th>Actions to be Performed</th></tr>
+<tr>
+<td align="center">1</td>
+<td>Assign the larger number to M, and the smaller number to N.</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td>Divide M by N (M/N) and assign the remainder to R.</td>
+</tr>
+<tr>
+<td align="center" valign="top">3</td>
+<td>If R is not 0, then assign the value of N to M, assign the value of R to N, and return to step 2.
+<br>
+If R = 0, then the GCD is N and the algorithm terminates.
+</td>
+</tr></table>
+<p>
+</pre></blockquote>
+  
+Notice that in Step 3 there are two different possibilities. This is typically how algorithms work. 
+There usually needs to be some <i>terminating condition</i>, otherwise the algorithm (program) runs forever.
+<p>
+How about the numbers 101 and 27?
+<p>
+
+Here is how we might write the algorithm in <i>pseudo-code</i>:
+<ol>
+<li>Assign larger value to M
+<li>Assign smaller value to N
+<li>Divide M by N and assign remainder to R
+<li>While remainder, R, is not 0
+	<ol>
+		<li>Assign N to M
+		<li>Assign R to N
+		<li>Divide M by N and assign remainder to R
+	</ol>
+<li>End While
+<li>The algorithm has terminated and the GCD is N
+</ol>
+  
+Coding this algorithm in an assembler language might look like the code below. This version is using memory
+locations that are named <b><tt>M</tt></b> and <b><tt>N</tt></b> for easier understanding.
+
+<blockquote><pre>
+.section .data
+<xfont color="blue">M: .long 45        # put 45 in location named M
+N: .long 12        # put 12 in location named N</font>
+
+.section .text
+.globl main
+<xfont color="blue">
+main:
+  movl M, %eax     # put M in %eax
+  movl N, %ecx     # put N in %ecx
+  movl $0, %edx    # zero out for idivl
+  idivl %ecx       # divide M/N, (%edx:%eax/%ecx)
+                   # result -> %eax, remainder -> %edx
+
+start_loop:
+  cmpl $0, %edx    # is remainder 0?
+  je loop_exit     # if 0, we're done
+
+  movl %ecx, %eax  # put N in M
+  movl %edx, %ecx  # put R in N
+  movl $0, %edx    # zero out for idivl
+  idivl %ecx       # divide M/N, (%edx:%eax/%ecx)
+                   # result -> %eax, remainder -> %edx
+  jmp start_loop   # check again
+loop_exit:</font>
+</pre></blockquote>
+
+<!--
+  # put this below loop_exit: to be able to use echo $? from command line
+  movl %ecx, %eax  # this is GCD
+  ret
+
+-->
+
+This second version doesn't use any memory locations (like M and N above). All values are stored directly in the
+registers on the CPU.<!--(The interesting code is in <font color="blue"><b>bold</b></font>).-->
+
+<blockquote><pre>
+.section .data
+.section .text
+.globl main
+
+<font color="black">main:
+  movl $45, %eax    # put 45 in eax (M)
+  movl $0, %edx     # set to 0 (high word of divisor)
+  movl $12, %ecx    # put 12 in ecx (N)
+  idivl %ecx        # divide M/N, (%edx:%eax/%ecx)
+                    # result -> %eax, remainder -> %edx
+
+start_loop:
+  cmpl $0, %edx     # Is remainder 0?
+  je loop_exit      # if 0, we're done
+
+  movl %ecx, %eax   # put N into M
+  movl %edx, %ecx   # put R into N
+  movl $0, %edx     # set high word
+  idivl %ecx        # divide M/N, (%edx:%eax/%ecx)
+                    # result -> %eax, remainder -> %edx
+  jmp start_loop    # continue algorithm
+loop_exit:
+</pre></blockquote>
+
+<p>
+
+Euclid's GCD algorithm as high-level computer programs 
+(assuming that m and n are integers and already have values and that m > n)
+<p>
+
+<a name="GCD"></a>
+<p>  
+<blockquote>
+<table cellpadding=5 cellspacing=0 border=1>
+<tr><th>C/C++/C#/D/Java</th><th>Perl</th><th>Python</th><th>Pascal</th><th>BASIC</th><!--<th>Lisp</th>--></tr>
+<tr>
+<td valign="top">
+<blockquote><pre>
+r = m % n;
+<b>while</b> (r != 0)
+{
+  m = n;
+  n = r;
+  r = m % n;
+}
+</pre></blockquote>
+</td>
+
+<td valign="top">
+<blockquote><pre>
+$r = $m % $n;
+<b>while</b> ($r != 0)
+{
+  $m = $n;
+  $n = $r;
+  $r = $m % $n;
+}
+</pre></blockquote>
+</td>
+
+
+<td valign="top">
+<blockquote><pre>
+r = m % n
+<b>while</b> r != 0:
+  m = n
+  n = r
+  r = m % n
+</pre></blockquote>
+</td>
+
+<td valign="top">
+<blockquote><pre>
+r := m <b>Mod</b> n;
+<b>While</b> r <> 0 <b>Do</b> 
+<b>Begin</b>
+  m := n;
+  n := r;
+  r := m <b>Mod</b> n;
+<b>End</b>;
+</pre></blockquote>
+</td>
+
+<td valign="top">
+<blockquote><pre>
+r = m <b>MOD</b> n
+<b>WHILE</b> r <> 0
+  m = n
+  n = r
+  r = m <b>MOD</b> n
+<b>WEND</b>
+</pre></blockquote>
+</td>
+
+<!--
+<td valign="top">
+<blockquote><pre>
+(<b>defun</b> gcd (a b)
+(<b>if</b> (= b 0)
+a
+(gcd b (<b>mod</b> a b))))
+</pre></blockquote>
+</td>
+-->
+
+
+</tr></table>
+</pre></blockquote>
+</a>
+<p>
+
+The algorithm reprinted:
+
+<blockquote><pre>
+<table cellpadding=10 cellspacing=0 border=1>
+<tr><th>Step</th><th>Actions to be Performed</th></tr>
+<tr>
+<td align="center">1</td>
+<td>Assign the larger number to M, and the smaller number to N.</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td>Divide M by N (M/N) and assign the remainder to R.</td>
+</tr>
+<tr>
+<td align="center" valign="top">3</td>
+<td>If R is not 0, then assign the value of N to M, assign the value of R to N, and return to step 2.
+<br>
+If R = 0, then the GCD is N and the algorithm terminates.
+<br><br>
+<font color="blue">Another way to state step #3:</font><br>
+<font color="black">
+<b>While</b> R is not 0, assign the value of N to M, assign the value of R to N, and go to step 2.
+<br>
+If R = 0, then the GCD is N and the algorithm terminates.</font>
+</td>
+</tr></table>
+</pre></blockquote>
+<p>
+
+
+	
+
+</xdiv>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

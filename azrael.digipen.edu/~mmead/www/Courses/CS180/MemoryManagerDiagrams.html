@@ -1,0 +1,341 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Memory Manager Diagrams</title>
+
+
+</head>
+
+<body>  
+
+<center><h1>
+Memory Manager Diagrams
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Heap Management
+</p>
+
+<b>Implementing a heap using a linked list</b>
+<ul>
+	<li>The heap is allocated as a single contiguous chunk of memory</li>
+	<li>To keep track of allocated and unallocated blocks within the heap, we maintain a list that stores the following information about each block:</li>
+	<ul>
+		<li>Allocation flag: 0 if unallocated, 1 if allocated</li>
+		<li>Address: beginning address of the block</li>
+		<li>Size: number of bytes in the block</li>
+	</ul>
+	<li>List items are ordered by start address.</li>
+	<ul>
+		<li>An alternate scheme is to order the blocks by size.</li>
+	</ul>
+	<li>To allocate a block of memory of <i>size</i> bytes:</li>
+	<ol>
+		<li>Search list for available hole (unallocated block) that is at least <i>size</i> bytes long (see later)</li>
+		<li>Remove the item from the list and replace it with two list items:</li>
+		<ul>
+			<li>First item represents an allocated block of <i>size</i> bytes, with same start address as original block</li>
+			<li>Second item represents an unallocated block (hole) for the remaining unused bytes of the original block</li>
+		</ul>
+	</ol>
+	<li>Return:</li>
+	<ul>
+		<li>NULL pointer, if no block found in list</li>
+		<li>Start address of allocated block, if block is found in list</li>
+	</ul>
+	<li>To deallocate (free) a block:</li>
+	<ol>
+		<li>Search for item in the list whose start address is the specified address</li>
+		<li>Mark item as unallocated</li>
+		<li>Consolidate adjacent unallocated memory into a single unallocated block</li>
+		<ul>
+			<li>Merge with the preceding memory block if it is currently unallocated</li>
+			<li>Merge with the succeeding memory block if it is currently unallocated</li>
+		</ul>
+	</ol>
+</ul>
+
+<ul>
+	<li>We keep track of each block of memory using a structure:
+
+
+
+<blockquote><pre>
+<b>struct</b> block_info 
+{
+  <b>int</b> allocated;
+  <b>char</b> *address;
+  <b>int</b> size;
+  <b>struct</b> block_info *next;
+};
+</pre></blockquote>
+
+<li>Visually (assume 32-bit computer):</li>
+<blockquote>
+<img src="Memory-memmgr-0a.jpg">
+</blockquote>
+<p>
+
+
+	
+<li>Creating the first <tt>block_info</tt> and allocating memory:</li>
+
+<blockquote><pre>
+<b>#define</b> HEAP_SIZE 2000
+<b>struct</b> block_info *Heap_blocks;
+
+Heap_blocks = malloc(<b>sizeof</b>(block_info));
+
+Heap_blocks-&gt;allocated = 0;
+Heap_blocks-&gt;address = malloc(HEAP_SIZE);
+Heap_blocks-&gt;size = HEAP_SIZE;
+Heap_blocks-&gt;next = NULL;
+
+</pre></blockquote>
+		
+		
+	
+	<li>Initial heap. This example shows that the heap starts at address 0. In practice, the memory would not be located at address 0,
+		but some arbitrary address much farther away. It starts at 0 to make the example easier to follow.</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-1.jpg">
+</blockquote>
+
+	<li>After allocating a block of 300 bytes:</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-2.jpg">
+</blockquote>
+
+	<li>After allocating a block of 200 bytes:</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-3.jpg">
+</blockquote>
+
+
+	<li>After allocating a block of 400 bytes:</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-4.jpg">
+</blockquote>
+
+	<li>After freeing the block at address 300:</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-5.jpg">
+</blockquote>
+
+	<li>After freeing the block at address 0: (step 1)</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-6.jpg">
+</blockquote>
+
+	<li>After merging the two smaller adjacent free blocks into one large free block: (step 2)</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-7.jpg">
+</blockquote>
+
+
+	<li>After allocating a block of 700 bytes:</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-8.jpg">
+</blockquote>
+
+	<li>After allocating a block of 300 bytes:</li>
+	
+<blockquote>
+	<img src="Memory-memmgr-9.jpg">
+</blockquote>
+
+<br><br><br><br><br><br>
+
+	<li>More details about the structure layout in memory (comparing 32-bit with 64-bit computers):</li>
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=15>
+<tr valign="top"><th>32-bit system<br>(logical view)</th><th>32-bit system<br>(physical view)<br>16 bytes</th><th>64-bit system<br>(logical view)</th><th>64-bit system<br>(physical view)<br>32 bytes</th></tr>
+<tr valign="top">
+
+<td align="center">
+<img src="Memory-memmgr-0a.jpg">
+</td>
+
+<td align="center">
+<img src="Memory-memmgr-0a.jpg">
+</td>
+
+<td align="center">
+<img src="Memory-memmgr-0b.jpg">
+</td>
+
+<td align="center">
+<img src="Memory-memmgr-0c.jpg">
+</td>
+
+</tr></table>
+</blockquote>
+
+Given this information, a more efficient way to layout the structure is like this:
+<blockquote><pre>
+<b>struct</b> block_info 
+{
+  <b>int</b> allocated;
+  <b>int</b> size;
+  <b>char</b> *address;
+  <b>struct</b> block_info *next;
+};
+</pre></blockquote>
+
+Visually (24 bytes):	
+<blockquote>
+<img src="Memory-memmgr-0d.jpg">
+</blockquote>
+
+
+
+<p class="technote">
+You can have <i>gcc</i> alert (warn) you when the compiler is adding padding
+between the fields of a struct. Just use the <tt>-Wpadded</tt> option when 
+compiling the code. The message from <i>gcc</i> when compiling the original struct
+above looks like this:
+</p>
+
+<blockquote><pre>
+struct.c:4:9: warning: padding struct to align 'address' [-Wpadded]
+   char *address;
+         ^~~~~~~
+struct.c:6:22: warning: padding struct to align 'next' [-Wpadded]
+   struct block_info *next;
+                      ^~~~
+</pre></blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+</ul>
+
+<b>Strategies for handling memory requests</b>
+<ul>
+	<li>It's possible that we have many different sized blocks on our list</li>
+	<li>When allocating a block of <i>size</i> bytes, we may have a choice among various unallocated blocks of size at least <i>size</i> bytes</li>
+	<li><b>First fit</b> - choose the first available hole</li>
+	<ul>
+		<li>Fast.</li>
+		<li>May lead to fragmentation.</li>
+	</ul>
+	<li><b>Best fit</b> - choose the smallest hole</li>
+	<ul>
+		<li>Produces smallest remaining hole.</li>
+		<li>Entire list must be searched.</li>
+	</ul>
+	<li><b>Worst fit</b> - choose the largest hole</li>
+	<ul>
+		<li>Produces the largest remaining hole.</li>
+		<li>Entire list must be searched.</li>
+	</ul>
+	<li><b>Next fit</b> - like first fit but starts where last search left off.</li>
+  <ul>
+    <li>Likely to find an available block more quickly.</li>
+  </ul>
+  <li><b>Quick fit</b> - uses multiple lists</li>
+  <ul>
+    <li>Each list contains blocks of the same size.</li>
+    <li>No need to search for a fit.</li>
+  </ul>
+	<!--
+	<li><b>Quick-fit</b> - maintains separate lists for some of the more common sizes requested.</li>
+	<ul>
+		<li>It is maintained by having an array of pointers to the head of each list.</li>
+		<li>Quick fit is fast</li>
+		<li>However, this strategy requires lists to be sorted by size</li>
+	</ul>
+	-->
+</ul>
+
+	
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+
+<big>&rarr;</big>
+
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="ComputerComponents-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+	
+-->

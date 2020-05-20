@@ -1,0 +1,286 @@
+# macros =======================================================
+
+cc=g++
+cflags=-wall -wextra -ansi -pedantic -werror
+exe=program.exe
+outdir=gnu/
+objs=$(outdir)driver.o $(outdir)scantext.o $(outdir)jumble.o
+erase=rm
+
+# targets ======================================================
+
+$(outdir)$(exe) : $(objs)
+	$(cc) $(objs) -o $(outdir)$(exe)
+
+$(outdir)driver.o : driver.cpp scantext.h jumble.h
+	$(cc) $(cflags) -c driver.cpp -o driver.o
+
+$(outdir)jumble.o : jumble.cpp jumble.h
+	$(cc) $(cflags) -c jumble.cpp -o jumble.o
+
+$(outdir)scantext.o : scantext.cpp
+	$(cc) $(cflags) -c scantext.cpp -o scantext.o
+
+clean : 
+	$(erase) $(objs) $(outdir)$(exe)
+
+rebuild :
+	$(make) clean
+	$(make)
+
+
+when in the course of human events, it becomes necessary for one people to
+dissolve the political bands which have connected them with another, and to
+assume among the powers of the earth, the separate and equal station to which
+the laws of nature and of nature's god entitle them, a decent respect to the
+opinions of mankind requires that they should declare the causes which impel
+them to the separation.
+# MACROS =======================================================
+
+CC=G++
+CFLAGS=-WALL -WEXTRA -ANSI -PEDANTIC -WERROR
+EXE=PROGRAM.EXE
+OUTDIR=GNU/
+OBJS=$(OUTDIR)DRIVER.O $(OUTDIR)SCANTEXT.O $(OUTDIR)JUMBLE.O
+ERASE=RM
+
+# TARGETS ======================================================
+
+$(OUTDIR)$(EXE) : $(OBJS)
+	$(CC) $(OBJS) -O $(OUTDIR)$(EXE)
+
+$(OUTDIR)DRIVER.O : DRIVER.CPP SCANTEXT.H JUMBLE.H
+	$(CC) $(CFLAGS) -C DRIVER.CPP -O DRIVER.O
+
+$(OUTDIR)JUMBLE.O : JUMBLE.CPP JUMBLE.H
+	$(CC) $(CFLAGS) -C JUMBLE.CPP -O JUMBLE.O
+
+$(OUTDIR)SCANTEXT.O : SCANTEXT.CPP
+	$(CC) $(CFLAGS) -C SCANTEXT.CPP -O SCANTEXT.O
+
+CLEAN : 
+	$(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+
+REBUILD :
+	$(MAKE) CLEAN
+	$(MAKE)
+
+
+WHEN IN THE COURSE OF HUMAN EVENTS, IT BECOMES NECESSARY FOR ONE PEOPLE TO
+DISSOLVE THE POLITICAL BANDS WHICH HAVE CONNECTED THEM WITH ANOTHER, AND TO
+ASSUME AMONG THE POWERS OF THE EARTH, THE SEPARATE AND EQUAL STATION TO WHICH
+THE LAWS OF NATURE AND OF NATURE'S GOD ENTITLE THEM, A DECENT RESPECT TO THE
+OPINIONS OF MANKIND REQUIRES THAT THEY SHOULD DECLARE THE CAUSES WHICH IMPEL
+THEM TO THE SEPARATION.
+# Macros =======================================================
+
+CC=g++
+CFLAGS=-Wall -WXxtra -ansi -pXdantic -WXrror
+EXE=program.XxX
+OUTDIR=gnu/
+OBJS=$(OUTDIR)drivXr.o $(OUTDIR)scantXxt.o $(OUTDIR)jumblX.o
+ERASE=rm
+
+# TARGETS ======================================================
+
+$(OUTDIR)$(EXE) : $(OBJS)
+	$(CC) $(OBJS) -o $(OUTDIR)$(EXE)
+
+$(OUTDIR)drivXr.o : drivXr.cpp scantXxt.h jumblX.h
+	$(CC) $(CFLAGS) -c drivXr.cpp -o drivXr.o
+
+$(OUTDIR)jumblX.o : jumblX.cpp jumblX.h
+	$(CC) $(CFLAGS) -c jumblX.cpp -o jumblX.o
+
+$(OUTDIR)scantXxt.o : scantXxt.cpp
+	$(CC) $(CFLAGS) -c scantXxt.cpp -o scantXxt.o
+
+clXan : 
+	$(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+
+rXbuild :
+	$(MAKE) clXan
+	$(MAKE)
+
+
+WhXn in thX CoursX of human XvXnts, it bXcomXs nXcXssary for onX pXoplX to
+dissolvX thX political bands which havX connXctXd thXm with anothXr, and to
+assumX among thX powXrs of thX Xarth, thX sXparatX and Xqual station to which
+thX Laws of NaturX and of NaturX's God XntitlX thXm, a dXcXnt rXspXct to thX
+opinions of mankind rXquirXs that thXy should dXclarX thX causXs which impXl
+thXm to thX sXparation.
+# Macros =======================================================
+
+CC=g++
+CFLAGS=-Wall -Wxtra -ansi -pdantic -Wrror
+EXE=program.x
+OUTDIR=gnu/
+OBJS=$(OUTDIR)drivr.o $(OUTDIR)scantxt.o $(OUTDIR)jumbl.o
+ERASE=rm
+
+# TARGETS ======================================================
+
+$(OUTDIR)$(EXE) : $(OBJS)
+	$(CC) $(OBJS) -o $(OUTDIR)$(EXE)
+
+$(OUTDIR)drivr.o : drivr.cpp scantxt.h jumbl.h
+	$(CC) $(CFLAGS) -c drivr.cpp -o drivr.o
+
+$(OUTDIR)jumbl.o : jumbl.cpp jumbl.h
+	$(CC) $(CFLAGS) -c jumbl.cpp -o jumbl.o
+
+$(OUTDIR)scantxt.o : scantxt.cpp
+	$(CC) $(CFLAGS) -c scantxt.cpp -o scantxt.o
+
+clan : 
+	$(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+
+rbuild :
+	$(MAKE) clan
+	$(MAKE)
+
+
+Whn in th Cours of human vnts, it bcoms ncssary for on popl to
+dissolv th political bands which hav connctd thm with anothr, and to
+assum among th powrs of th arth, th sparat and qual station to which
+th Laws of Natur and of Natur's God ntitl thm, a dcnt rspct to th
+opinions of mankind rquirs that thy should dclar th causs which impl
+thm to th sparation.
+# Macros =======================================================
+CC=g++
+CFLAGS=-Wall -Wextra -ansi -pedantic -Werror
+EXE=program.exe
+OUTDIR=gnu/
+OBJS=$(OUTDIR)driver.o $(OUTDIR)scantext.o $(OUTDIR)jumble.o
+ERASE=rm
+# TARGETS ======================================================
+$(OUTDIR)$(EXE) : $(OBJS)
+	$(CC) $(OBJS) -o $(OUTDIR)$(EXE)
+$(OUTDIR)driver.o : driver.cpp scantext.h jumble.h
+	$(CC) $(CFLAGS) -c driver.cpp -o driver.o
+$(OUTDIR)jumble.o : jumble.cpp jumble.h
+	$(CC) $(CFLAGS) -c jumble.cpp -o jumble.o
+$(OUTDIR)scantext.o : scantext.cpp
+	$(CC) $(CFLAGS) -c scantext.cpp -o scantext.o
+clean : 
+	$(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+rebuild :
+	$(MAKE) clean
+	$(MAKE)
+When in the Course of human events, it becomes necessary for one people to
+dissolve the political bands which have connected them with another, and to
+assume among the powers of the earth, the separate and equal station to which
+the Laws of Nature and of Nature's God entitle them, a decent respect to the
+opinions of mankind requires that they should declare the causes which impel
+them to the separation.
+     1  # Macros =======================================================
+     2  
+     3  CC=g++
+     4  CFLAGS=-Wall -Wextra -ansi -pedantic -Werror
+     5  EXE=program.exe
+     6  OUTDIR=gnu/
+     7  OBJS=$(OUTDIR)driver.o $(OUTDIR)scantext.o $(OUTDIR)jumble.o
+     8  ERASE=rm
+     9  
+    10  # TARGETS ======================================================
+    11  
+    12  $(OUTDIR)$(EXE) : $(OBJS)
+    13  	$(CC) $(OBJS) -o $(OUTDIR)$(EXE)
+    14  
+    15  $(OUTDIR)driver.o : driver.cpp scantext.h jumble.h
+    16  	$(CC) $(CFLAGS) -c driver.cpp -o driver.o
+    17  
+    18  $(OUTDIR)jumble.o : jumble.cpp jumble.h
+    19  	$(CC) $(CFLAGS) -c jumble.cpp -o jumble.o
+    20  
+    21  $(OUTDIR)scantext.o : scantext.cpp
+    22  	$(CC) $(CFLAGS) -c scantext.cpp -o scantext.o
+    23  
+    24  clean : 
+    25  	$(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+    26  
+    27  rebuild :
+    28  	$(MAKE) clean
+    29  	$(MAKE)
+    30  
+    31  
+    32  When in the Course of human events, it becomes necessary for one people to
+    33  dissolve the political bands which have connected them with another, and to
+    34  assume among the powers of the earth, the separate and equal station to which
+    35  the Laws of Nature and of Nature's God entitle them, a decent respect to the
+    36  opinions of mankind requires that they should declare the causes which impel
+    37  them to the separation.
+# Macros =======================================================
+
+CC=g++
+CFLAGS=-Wall -Wextra -ansi -pedantic -Werror
+EXE=program.exe
+OUTDIR=gnu/
+OBJS=$(OUTDIR)driver.o $(OUTDIR)scantext.o $(OUTDIR)jumble.o
+ERASE=rm
+
+# TARGETS ======================================================
+
+$(OUTDIR)$(EXE) : $(OBJS)
+    $(CC) $(OBJS) -o $(OUTDIR)$(EXE)
+
+$(OUTDIR)driver.o : driver.cpp scantext.h jumble.h
+    $(CC) $(CFLAGS) -c driver.cpp -o driver.o
+
+$(OUTDIR)jumble.o : jumble.cpp jumble.h
+    $(CC) $(CFLAGS) -c jumble.cpp -o jumble.o
+
+$(OUTDIR)scantext.o : scantext.cpp
+    $(CC) $(CFLAGS) -c scantext.cpp -o scantext.o
+
+clean : 
+    $(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+
+rebuild :
+    $(MAKE) clean
+    $(MAKE)
+
+
+When in the Course of human events, it becomes necessary for one people to
+dissolve the political bands which have connected them with another, and to
+assume among the powers of the earth, the separate and equal station to which
+the Laws of Nature and of Nature's God entitle them, a decent respect to the
+opinions of mankind requires that they should declare the causes which impel
+them to the separation.
+     1  # MACROS =======================================================
+     2  
+     3  CC=G++
+     4  CFLAGS=-WALL -WEXTRA -ANSI -PEDANTIC -WERROR
+     5  EXE=PROGRAMZEXE
+     6  OUTDIR=GNU/
+     7  OBJS=$(OUTDIR)DRIVERZO $(OUTDIR)SCANTEXTZO $(OUTDIR)JUMBLEZO
+     8  ERASE=RM
+     9  
+    10  # TARGETS ======================================================
+    11  
+    12  $(OUTDIR)$(EXE) : $(OBJS)
+    13    $(CC) $(OBJS) -O $(OUTDIR)$(EXE)
+    14  
+    15  $(OUTDIR)DRIVERZO : DRIVERZCPP SCANTEXTZH JUMBLEZH
+    16    $(CC) $(CFLAGS) -C DRIVERZCPP -O DRIVERZO
+    17  
+    18  $(OUTDIR)JUMBLEZO : JUMBLEZCPP JUMBLEZH
+    19    $(CC) $(CFLAGS) -C JUMBLEZCPP -O JUMBLEZO
+    20  
+    21  $(OUTDIR)SCANTEXTZO : SCANTEXTZCPP
+    22    $(CC) $(CFLAGS) -C SCANTEXTZCPP -O SCANTEXTZO
+    23  
+    24  CLEAN : 
+    25    $(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+    26  
+    27  REBUILD :
+    28    $(MAKE) CLEAN
+    29    $(MAKE)
+    30  
+    31  
+    32  WHEN IN THE COURSE OF HUMAN EVENTS, IT BECOMES NECESSARY FOR ONE PEOPLE TO
+    33  DISSOLVE THE POLITICAL BANDS WHICH HAVE CONNECTED THEM WITH ANOTHER, AND TO
+    34  ASSUME AMONG THE POWERS OF THE EARTH, THE SEPARATE AND EQUAL STATION TO WHICH
+    35  THE LAWS OF NATURE AND OF NATURE'S GOD ENTITLE THEM, A DECENT RESPECT TO THE
+    36  OPINIONS OF MANKIND REQUIRES THAT THEY SHOULD DECLARE THE CAUSES WHICH IMPEL
+    37  THEM TO THE SEPARATIONZ

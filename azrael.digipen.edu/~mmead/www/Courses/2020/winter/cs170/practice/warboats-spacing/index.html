@@ -1,0 +1,239 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>warboats-spacing</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(warboats-spacing)
+<br>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+This practice assignment extends the previous practice assignment that allows for boats of variable sizes. You
+must use that as the starting point for this practice. It also supports diagonal boat placement, but you 
+don't have to run those tests if you haven't implemented that functionality yet.
+</p>
+
+
+<ol>
+<li>This practice assignment is a modification of the WarBoatsOO (Object-oriented WarBoats)
+	assignment. In the original WarBoats program, all of the boats were placed anywhere inside
+  the Ocean as long as they didn't overlap with any other boats. Obviously, this makes sense.
+  <p>
+  The modification you are going to make for this practice is that you will not allow any
+  boat to "touch" any other boat. This means that the boats must have at least one "space"
+  or "cell" between themselves and other boats. 
+
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>Boats "touching"</th><th width="20"></th><th>Spacing between boats</th></tr>
+<tr>
+
+<td>
+<pre>
+0   0   0   0   0   0   0   0   0   0
+0   0   <b>4</b>   0   0   0   0   0   0   0
+0   0   <b>4</b>   0   0   0   0   0   0   0
+0   0   <b>4</b>   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   <b>1</b>   0   <b>3</b>
+0   0   0   0   0   0   0   <b>1   5   3</b>
+0   0   0   0   0   0   0   <b>1   5   3</b>
+0   <b>2   2   2   2   2   2   1   5   3</b>
+0   0   0   0   0   0   0   <b>1   5   3</b>
+0   0   0   0   0   0   0   <b>1   5   3</b>
+</pre>
+</td>
+<td></td>
+<td>
+<pre>
+0   0   0   0   0   0   0   0   0   0
+0   0   <b>3</b>   0   0   0   0   0   0   0
+0   0   <b>3</b>  0   0   <b>5   5   5</b>   0   0
+0   0   <b>3</b>   0   0   0   0   0   0   0
+0   0   0   0   0   0   0   <b>1</b>   0   <b>2</b>
+0   0   0   0   0   0   0   <b>1</b>   0   <b>2</b>
+0   <b>4   4   4   4   4</b>   0   <b>1</b>   0   <b>2</b>
+0   0   0   0   0   0   0   <b>1</b>   0   <b>2</b>
+0   0   0   0   0   0   0   <b>1</b>   0   <b>2</b>
+0   0   0   0   0   0   0   <b>1</b>   0   <b>2</b>
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+With diagonal boat placement:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>Boats "touching"</th><th>&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Spacing between boats</th></tr>
+<tr>
+
+<td>
+<pre>
+ 0  <b>14</b>   0   0   <b>7</b>   0  <b>15  15  15</b>   0   0   0   0   0   <b>9</b>
+ 0  <b>14</b>   0   0   <b>7</b>   0   0   0  <b>13  13  13</b>   0   0   <b>9</b>   0
+ 0  <b>14</b>   0   0   <b>7</b>   0   <b>2   2   2   2   2</b>   0   <b>9</b>   0   0
+<b>10</b>   0   0   0   <b>7</b>   0  <b>11   5   5   5   5   9</b>   0   0   0
+<b>10</b>   0   0   0   0  <b>11</b>   0   <b>3</b>   0   0   <b>9</b>   0   0   0   0
+<b>10</b>   0   0   0  <b>11</b>   0   <b>3</b>   0   0   0   <b>4</b>   0   0   0   0
+ 0   0   0  <b>11</b>   0   <b>3</b>   0   0   0   0   0   <b>4</b>   0   0   0
+ 0   0  <b>11</b>   0   <b>3</b>   0   0   0   0   0   0   0   <b>4</b>   0   0
+ 0  <b>11</b>   0   <b>3</b>   0   0   0   0   0   0   0   0   0   <b>4</b>   0
+<b>12</b>   0   0   0   <b>6</b>   0   0   0   0   0   0   0   0   <b>1</b>   0
+<b>12</b>   0   0   0   <b>6</b>   0   0   0   0   0   0   0   0   <b>1</b>   0
+<b>12</b>   0   0   0   <b>6</b>   0   0   0   0   0   0   0   0   <b>1</b>   0
+<b>12</b>   0   0   0   <b>6</b>   0   0   0   0   0   <b>8   8   8   1</b>   0
+ 0   0   0   0   <b>6</b>   0   0   0   0   0   0   0   0   <b>1</b>   0
+ 0   0   0   0   <b>6</b>   0   0   0   0   0   0   0   0   <b>1</b>   0
+</pre>
+</td>
+<td></td>
+<td>
+<pre>
+0   0   0   0   <b>5</b>   0   <b>9   9   9</b>   0   0  <b>14  14  14  14</b>
+0   0  <b>10</b>   0   <b>5</b>   0   0   0   0   0   0   0   0   0   0
+0   0  <b>10</b>   0   <b>5</b>   0   <b>2   2   2   2   2</b>   0   0   0  <b>13</b>
+<b>6</b>   0  <b>10</b>   0   <b>5</b>   0   0   0   0   0   0   0   0  <b>13</b>   0
+<b>6</b>   0  <b>10</b>   0   0   0   0   <b>3</b>   0   0   0   0  <b>13</b>   0   0
+<b>6</b>   0  <b>10</b>   0   0   0   <b>3</b>   0   0   0   0   0   0   0   0
+0   0  <b>10</b>   0   0   <b>3</b>   0   0   0   0   0   0   0   0   0
+0   0   0   0   <b>3</b>   0   0   0  <b>11  11  11  11  11  11  11</b>
+0   0   0   <b>3</b>   0   0   0   0   0   0   0   0   0   0   0
+<b>7</b>   0   0   0   0   0   <b>8</b>   0   0   0   0   0   0   <b>1</b>   0
+<b>7</b>   0   0   0   0   <b>8</b>   0   0   <b>4</b>   0  <b>15</b>   0   0   <b>1</b>   0
+<b>7</b>   0   0   0   <b>8</b>   0   0   <b>4</b>   0   0  <b>15</b>   0   0   <b>1</b>  0
+<b>7</b>   0   0   <b>8</b>   0   0   <b>4</b>   0   0   0  <b>15</b>   0   0   <b>1</b>   0
+0   0   <b>8</b>   0   0   <b>4</b>   0   0   0   0   0   0   0   <b>1</b>   0
+0   <b>8</b>   0   0   <b>4</b>   0   0   0  <b>12  12  12  12</b>   0   <b>1</b>   0
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+<p>
+To support this feature, the constructor for the <i>Ocean</i> class has changed to this in
+the header file:
+
+<blockquote><pre>
+Ocean(<b>int</b> num_boats, <b>int</b> x_quadrants, <b>int</b> y_quadrants<font color="blue">, <b>bool</b> force_space = <b>false</b></font>);  
+</pre></blockquote>
+
+The third parameter will determine if you should leave a space between the boats. You'll need to add a private
+boolean member variable that holds the value of <i>force_space</i> so that you can reference it in your
+<i>PlaceBoat</i> method. The reason for the default value is for backward-compatibility with the
+original class.
+
+<p>
+See the sample driver for examples.
+<p>
+
+
+</ol>
+
+<p>
+<hr width="95%">
+<p>
+
+Files:
+<ul>
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a> 
+<p>
+There are 6 tests in the driver and you need to provide the test number you wish to run on the command line. There
+is also a second command line option that lets you specify whether or not to have spacing between the boats.
+<p>
+Examples:
+<p>
+This will run test #2 without forced spacing:
+
+<blockquote><pre>
+warboats-spacing 2 0
+</pre></blockquote>
+
+<p>
+This will run test #4 with forced spacing:
+
+<blockquote><pre>
+warboats-spacing 4 1
+</pre></blockquote>
+
+</li>
+  <p>
+<li>Outputs from the tests:
+	<ul>
+		<li><a href="output1.txt">test 1</a> Simple placement test with and without spacing</li>
+  </ul>
+  <p>
+<li>Tests without spacing: (command line option is 0)</li>
+  <ul>
+    <p>
+		<li><a href="output2-stress.txt">test 2</a> Stress placement</li>
+		<li><a href="output3-stress-attempts.txt">test 3</a> Stress placement with attempts</li>
+    <li><a href="output4-stress-diagonals.txt">test 4</a> Stress placement with diagonals</li>
+    <li><a href="output5-stress-attempts-diagonals.txt">test 5</a> Stress placement with attempts and diagonals</li>
+    <li><a href="output6-stress-play.txt">test 6</a> Stress placement with "game play"</li>
+	</ul>
+  <p>
+<li>Tests with spacing: (command line option is 1)</li>
+  <ul>
+    <p>
+    <li><a href="output2-stress-spacing.txt">test 2</a> Stress placement</li>
+    <li><a href="output3-stress-attempts-spacing.txt">test 3</a> Stress placement with attempts</li>
+    <li><a href="output4-stress-diagonals-spacing.txt">test 4</a> Stress placement with diagonals</li>
+    <li><a href="output5-stress-attempts-diagonals-spacing.txt">test 5</a> Stress placement with attempts and diagonals</li>
+    <li><a href="output6-stress-play-spacing.txt">test 6</a> Stress placement with "game play"</li>
+  </ul>
+
+  <p>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+	</ul>
+  <p>
+<li>Sample command lines for compiling
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o warboats-spacing driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+
+
+</ul>
+</ol>
+
+
+<p>
+<hr width=100%>
+<p>
+<br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

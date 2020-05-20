@@ -1,0 +1,686 @@
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc: In instantiation of ‘void std::list<_Tp, _Alloc>::merge(std::list<_Tp, _Alloc>&&) [with _Tp = Employee; _Alloc = std::allocator<Employee>]’:
+/usr/include/c++/5/bits/stl_list.h:1610:14:   required from ‘void std::list<_Tp, _Alloc>::merge(std::list<_Tp, _Alloc>&) [with _Tp = Employee; _Alloc = std::allocator<Employee>]’
+/usr/include/c++/5/bits/list.tcc:423:3:   required from ‘void std::list<_Tp, _Alloc>::sort() [with _Tp = Employee; _Alloc = std::allocator<Employee>]’
+main.cpp:352:15:   required from here
+/usr/include/c++/5/bits/list.tcc:348:20: error: no match for ‘operator<’ (operand types are ‘Employee’ and ‘Employee’)
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:64:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_pair.h:220:5: note: candidate: template<class _T1, class _T2> constexpr bool std::operator<(const std::pair<_T1, _T2>&, const std::pair<_T1, _T2>&)
+     operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+     ^
+/usr/include/c++/5/bits/stl_pair.h:220:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::pair<_T1, _T2>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:298:5: note: candidate: template<class _Iterator> bool std::operator<(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_Iterator>&)
+     operator<(const reverse_iterator<_Iterator>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:298:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::reverse_iterator<_Iterator>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:348:5: note: candidate: template<class _IteratorL, class _IteratorR> bool std::operator<(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_IteratorR>&)
+     operator<(const reverse_iterator<_IteratorL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:348:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::reverse_iterator<_Iterator>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:1089:5: note: candidate: template<class _IteratorL, class _IteratorR> bool std::operator<(const std::move_iterator<_Iterator>&, const std::move_iterator<_IteratorR>&)
+     operator<(const move_iterator<_IteratorL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:1089:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::move_iterator<_Iterator>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:1095:5: note: candidate: template<class _Iterator> bool std::operator<(const std::move_iterator<_Iterator>&, const std::move_iterator<_Iterator>&)
+     operator<(const move_iterator<_Iterator>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:1095:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::move_iterator<_Iterator>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/basic_string.h:4989:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const std::basic_string<_CharT, _Traits, _Alloc>&, const std::basic_string<_CharT, _Traits, _Alloc>&)
+     operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:4989:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::basic_string<_CharT, _Traits, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/basic_string.h:5001:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const std::basic_string<_CharT, _Traits, _Alloc>&, const _CharT*)
+     operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:5001:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::basic_string<_CharT, _Traits, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/basic_string.h:5013:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const _CharT*, const std::basic_string<_CharT, _Traits, _Alloc>&)
+     operator<(const _CharT* __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:5013:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   mismatched types ‘const _CharT*’ and ‘Employee’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/ios_base.h:46:0,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/system_error:200:3: note: candidate: bool std::operator<(const std::error_code&, const std::error_code&)
+   operator<(const error_code& __lhs, const error_code& __rhs) noexcept
+   ^
+/usr/include/c++/5/system_error:200:3: note:   no known conversion for argument 1 from ‘Employee’ to ‘const std::error_code&’
+/usr/include/c++/5/system_error:274:3: note: candidate: bool std::operator<(const std::error_condition&, const std::error_condition&)
+   operator<(const error_condition& __lhs,
+   ^
+/usr/include/c++/5/system_error:274:3: note:   no known conversion for argument 1 from ‘Employee’ to ‘const std::error_condition&’
+In file included from /usr/include/c++/5/tuple:39:0,
+                 from /usr/include/c++/5/bits/unique_ptr.h:37,
+                 from /usr/include/c++/5/bits/locale_conv.h:41,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/array:250:5: note: candidate: template<class _Tp, long unsigned int _Nm> bool std::operator<(const std::array<_Tp, _Nm>&, const std::array<_Tp, _Nm>&)
+     operator<(const array<_Tp, _Nm>& __a, const array<_Tp, _Nm>& __b)
+     ^
+/usr/include/c++/5/array:250:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::array<_Tp, _Nm>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/unique_ptr.h:37:0,
+                 from /usr/include/c++/5/bits/locale_conv.h:41,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/tuple:928:5: note: candidate: template<class ... _TElements, class ... _UElements> constexpr bool std::operator<(const std::tuple<_Elements ...>&, const std::tuple<_Elements ...>&)
+     operator<(const tuple<_TElements...>& __t,
+     ^
+/usr/include/c++/5/tuple:928:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::tuple<_Elements ...>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/bits/unique_ptr.h:658:5: note: candidate: template<class _Tp, class _Dp, class _Up, class _Ep> bool std::operator<(const std::unique_ptr<_Tp, _Dp>&, const std::unique_ptr<_Up, _Ep>&)
+     operator<(const unique_ptr<_Tp, _Dp>& __x,
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:658:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/bits/unique_ptr.h:669:5: note: candidate: template<class _Tp, class _Dp> bool std::operator<(const std::unique_ptr<_Tp, _Dp>&, std::nullptr_t)
+     operator<(const unique_ptr<_Tp, _Dp>& __x, nullptr_t)
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:669:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/bits/unique_ptr.h:675:5: note: candidate: template<class _Tp, class _Dp> bool std::operator<(std::nullptr_t, const std::unique_ptr<_Tp, _Dp>&)
+     operator<(nullptr_t, const unique_ptr<_Tp, _Dp>& __x)
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:675:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   cannot convert ‘__first2.std::_List_iterator<_Tp>::operator*<Employee>()’ (type ‘Employee’) to type ‘std::nullptr_t’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/vector:64:0,
+                 from main.cpp:3:
+/usr/include/c++/5/bits/stl_vector.h:1528:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::vector<_Tp, _Alloc>&, const std::vector<_Tp, _Alloc>&)
+     operator<(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
+     ^
+/usr/include/c++/5/bits/stl_vector.h:1528:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::vector<_Tp, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/list:63:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/stl_list.h:1836:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::list<_Tp, _Alloc>&, const std::list<_Tp, _Alloc>&)
+     operator<(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+     ^
+/usr/include/c++/5/bits/stl_list.h:1836:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::list<_Tp, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/set:60:0,
+                 from main.cpp:8:
+/usr/include/c++/5/bits/stl_tree.h:1283:5: note: candidate: template<class _Key, class _Val, class _KeyOfValue, class _Compare, class _Alloc> bool std::operator<(const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&, const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&)
+     operator<(const _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_tree.h:1283:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/set:61:0,
+                 from main.cpp:8:
+/usr/include/c++/5/bits/stl_set.h:859:5: note: candidate: template<class _Key, class _Compare, class _Alloc> bool std::operator<(const std::set<_Key, _Compare, _Alloc>&, const std::set<_Key, _Compare, _Alloc>&)
+     operator<(const set<_Key, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_set.h:859:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::set<_Key, _Compare, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/set:62:0,
+                 from main.cpp:8:
+/usr/include/c++/5/bits/stl_multiset.h:842:5: note: candidate: template<class _Key, class _Compare, class _Alloc> bool std::operator<(const std::multiset<_Key, _Compare, _Alloc>&, const std::multiset<_Key, _Compare, _Alloc>&)
+     operator<(const multiset<_Key, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_multiset.h:842:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::multiset<_Key, _Compare, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/map:61:0,
+                 from main.cpp:9:
+/usr/include/c++/5/bits/stl_map.h:1090:5: note: candidate: template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator<(const std::map<_Key, _Tp, _Compare, _Alloc>&, const std::map<_Key, _Tp, _Compare, _Alloc>&)
+     operator<(const map<_Key, _Tp, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_map.h:1090:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::map<_Key, _Tp, _Compare, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/map:62:0,
+                 from main.cpp:9:
+/usr/include/c++/5/bits/stl_multimap.h:991:5: note: candidate: template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator<(const std::multimap<_Key, _Tp, _Compare, _Alloc>&, const std::multimap<_Key, _Tp, _Compare, _Alloc>&)
+     operator<(const multimap<_Key, _Tp, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_multimap.h:991:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/list:64:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/list.tcc:348:20: note:   ‘Employee’ is not derived from ‘const std::multimap<_Key, _Tp, _Compare, _Alloc>’
+      if (*__first2 < *__first1)
+                    ^
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h: In instantiation of ‘bool std::less<_Tp>::operator()(const _Tp&, const _Tp&) const [with _Tp = Employee]’:
+/usr/include/c++/5/bits/stl_tree.h:1810:11:   required from ‘std::pair<std::_Rb_tree_node_base*, std::_Rb_tree_node_base*> std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_get_insert_unique_pos(const key_type&) [with _Key = Employee; _Val = Employee; _KeyOfValue = std::_Identity<Employee>; _Compare = std::less<Employee>; _Alloc = std::allocator<Employee>; std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::key_type = Employee]’
+/usr/include/c++/5/bits/stl_tree.h:1863:28:   required from ‘std::pair<std::_Rb_tree_iterator<_Val>, bool> std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_insert_unique(_Arg&&) [with _Arg = const Employee&; _Key = Employee; _Val = Employee; _KeyOfValue = std::_Identity<Employee>; _Compare = std::less<Employee>; _Alloc = std::allocator<Employee>]’
+/usr/include/c++/5/bits/stl_set.h:485:29:   required from ‘std::pair<typename std::_Rb_tree<_Key, _Key, std::_Identity<_Key>, _Compare, typename __gnu_cxx::__alloc_traits<_Allocator>::rebind<_Key>::other>::const_iterator, bool> std::set<_Key, _Compare, _Alloc>::insert(const value_type&) [with _Key = Employee; _Compare = std::less<Employee>; _Alloc = std::allocator<Employee>; typename std::_Rb_tree<_Key, _Key, std::_Identity<_Key>, _Compare, typename __gnu_cxx::__alloc_traits<_Allocator>::rebind<_Key>::other>::const_iterator = std::_Rb_tree_const_iterator<Employee>; std::set<_Key, _Compare, _Alloc>::value_type = Employee]’
+main.cpp:321:22:   required from here
+/usr/include/c++/5/bits/stl_function.h:387:20: error: no match for ‘operator<’ (operand types are ‘const Employee’ and ‘const Employee’)
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:64:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_pair.h:220:5: note: candidate: template<class _T1, class _T2> constexpr bool std::operator<(const std::pair<_T1, _T2>&, const std::pair<_T1, _T2>&)
+     operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+     ^
+/usr/include/c++/5/bits/stl_pair.h:220:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::pair<_T1, _T2>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:298:5: note: candidate: template<class _Iterator> bool std::operator<(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_Iterator>&)
+     operator<(const reverse_iterator<_Iterator>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:298:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::reverse_iterator<_Iterator>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:348:5: note: candidate: template<class _IteratorL, class _IteratorR> bool std::operator<(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_IteratorR>&)
+     operator<(const reverse_iterator<_IteratorL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:348:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::reverse_iterator<_Iterator>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:1089:5: note: candidate: template<class _IteratorL, class _IteratorR> bool std::operator<(const std::move_iterator<_Iterator>&, const std::move_iterator<_IteratorR>&)
+     operator<(const move_iterator<_IteratorL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:1089:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::move_iterator<_Iterator>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_iterator.h:1095:5: note: candidate: template<class _Iterator> bool std::operator<(const std::move_iterator<_Iterator>&, const std::move_iterator<_Iterator>&)
+     operator<(const move_iterator<_Iterator>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:1095:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::move_iterator<_Iterator>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/basic_string.h:4989:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const std::basic_string<_CharT, _Traits, _Alloc>&, const std::basic_string<_CharT, _Traits, _Alloc>&)
+     operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:4989:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::basic_string<_CharT, _Traits, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/basic_string.h:5001:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const std::basic_string<_CharT, _Traits, _Alloc>&, const _CharT*)
+     operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:5001:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::basic_string<_CharT, _Traits, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/basic_string.h:5013:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const _CharT*, const std::basic_string<_CharT, _Traits, _Alloc>&)
+     operator<(const _CharT* __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:5013:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   mismatched types ‘const _CharT*’ and ‘Employee’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/ios_base.h:46:0,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/system_error:200:3: note: candidate: bool std::operator<(const std::error_code&, const std::error_code&)
+   operator<(const error_code& __lhs, const error_code& __rhs) noexcept
+   ^
+/usr/include/c++/5/system_error:200:3: note:   no known conversion for argument 1 from ‘const Employee’ to ‘const std::error_code&’
+/usr/include/c++/5/system_error:274:3: note: candidate: bool std::operator<(const std::error_condition&, const std::error_condition&)
+   operator<(const error_condition& __lhs,
+   ^
+/usr/include/c++/5/system_error:274:3: note:   no known conversion for argument 1 from ‘const Employee’ to ‘const std::error_condition&’
+In file included from /usr/include/c++/5/tuple:39:0,
+                 from /usr/include/c++/5/bits/unique_ptr.h:37,
+                 from /usr/include/c++/5/bits/locale_conv.h:41,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/array:250:5: note: candidate: template<class _Tp, long unsigned int _Nm> bool std::operator<(const std::array<_Tp, _Nm>&, const std::array<_Tp, _Nm>&)
+     operator<(const array<_Tp, _Nm>& __a, const array<_Tp, _Nm>& __b)
+     ^
+/usr/include/c++/5/array:250:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::array<_Tp, _Nm>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/unique_ptr.h:37:0,
+                 from /usr/include/c++/5/bits/locale_conv.h:41,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/tuple:928:5: note: candidate: template<class ... _TElements, class ... _UElements> constexpr bool std::operator<(const std::tuple<_Elements ...>&, const std::tuple<_Elements ...>&)
+     operator<(const tuple<_TElements...>& __t,
+     ^
+/usr/include/c++/5/tuple:928:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::tuple<_Elements ...>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/bits/unique_ptr.h:658:5: note: candidate: template<class _Tp, class _Dp, class _Up, class _Ep> bool std::operator<(const std::unique_ptr<_Tp, _Dp>&, const std::unique_ptr<_Up, _Ep>&)
+     operator<(const unique_ptr<_Tp, _Dp>& __x,
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:658:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/bits/unique_ptr.h:669:5: note: candidate: template<class _Tp, class _Dp> bool std::operator<(const std::unique_ptr<_Tp, _Dp>&, std::nullptr_t)
+     operator<(const unique_ptr<_Tp, _Dp>& __x, nullptr_t)
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:669:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from main.cpp:2:
+/usr/include/c++/5/bits/unique_ptr.h:675:5: note: candidate: template<class _Tp, class _Dp> bool std::operator<(std::nullptr_t, const std::unique_ptr<_Tp, _Dp>&)
+     operator<(nullptr_t, const unique_ptr<_Tp, _Dp>& __x)
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:675:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   cannot convert ‘__x’ (type ‘const Employee’) to type ‘std::nullptr_t’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/vector:64:0,
+                 from main.cpp:3:
+/usr/include/c++/5/bits/stl_vector.h:1528:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::vector<_Tp, _Alloc>&, const std::vector<_Tp, _Alloc>&)
+     operator<(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
+     ^
+/usr/include/c++/5/bits/stl_vector.h:1528:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::vector<_Tp, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/list:63:0,
+                 from main.cpp:6:
+/usr/include/c++/5/bits/stl_list.h:1836:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::list<_Tp, _Alloc>&, const std::list<_Tp, _Alloc>&)
+     operator<(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+     ^
+/usr/include/c++/5/bits/stl_list.h:1836:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::list<_Tp, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/set:60:0,
+                 from main.cpp:8:
+/usr/include/c++/5/bits/stl_tree.h:1283:5: note: candidate: template<class _Key, class _Val, class _KeyOfValue, class _Compare, class _Alloc> bool std::operator<(const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&, const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&)
+     operator<(const _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_tree.h:1283:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/set:61:0,
+                 from main.cpp:8:
+/usr/include/c++/5/bits/stl_set.h:859:5: note: candidate: template<class _Key, class _Compare, class _Alloc> bool std::operator<(const std::set<_Key, _Compare, _Alloc>&, const std::set<_Key, _Compare, _Alloc>&)
+     operator<(const set<_Key, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_set.h:859:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::set<_Key, _Compare, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/set:62:0,
+                 from main.cpp:8:
+/usr/include/c++/5/bits/stl_multiset.h:842:5: note: candidate: template<class _Key, class _Compare, class _Alloc> bool std::operator<(const std::multiset<_Key, _Compare, _Alloc>&, const std::multiset<_Key, _Compare, _Alloc>&)
+     operator<(const multiset<_Key, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_multiset.h:842:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::multiset<_Key, _Compare, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/map:61:0,
+                 from main.cpp:9:
+/usr/include/c++/5/bits/stl_map.h:1090:5: note: candidate: template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator<(const std::map<_Key, _Tp, _Compare, _Alloc>&, const std::map<_Key, _Tp, _Compare, _Alloc>&)
+     operator<(const map<_Key, _Tp, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_map.h:1090:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::map<_Key, _Tp, _Compare, _Alloc>’
+       { return __x < __y; }
+                    ^
+In file included from /usr/include/c++/5/map:62:0,
+                 from main.cpp:9:
+/usr/include/c++/5/bits/stl_multimap.h:991:5: note: candidate: template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator<(const std::multimap<_Key, _Tp, _Compare, _Alloc>&, const std::multimap<_Key, _Tp, _Compare, _Alloc>&)
+     operator<(const multimap<_Key, _Tp, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_multimap.h:991:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/string:48:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/ostream:38,
+                 from /usr/include/c++/5/iostream:39,
+                 from main.cpp:1:
+/usr/include/c++/5/bits/stl_function.h:387:20: note:   ‘const Employee’ is not derived from ‘const std::multimap<_Key, _Tp, _Compare, _Alloc>’
+       { return __x < __y; }
+                    ^

@@ -1,0 +1,320 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>stdint.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* Copyright (C) 1997-2014 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   &lt;http://www.gnu.org/licenses/&gt;.  */</i></font>
+
+<font color="#003399"><i>/*
+ *  ISO C99: 7.18 Integer types &lt;stdint.h&gt;
+ */</i></font>
+
+<font color="990099">#ifndef _STDINT_H</font>
+<font color="990099">#define _STDINT_H  1</font>
+
+<font color="990099">#include &lt;features.h&gt;</font>
+<font color="990099">#include &lt;bits/wchar.h&gt;</font>
+<font color="990099">#include &lt;bits/wordsize.h&gt;</font>
+
+<font color="#003399"><i>/* Exact integral types.  */</i></font>
+
+<font color="#003399"><i>/* Signed.  */</i></font>
+
+<font color="#003399"><i>/* There is some amount of overlap with &lt;sys/types.h&gt; as known by inet code */</i></font>
+<font color="990099">#ifndef __int8_t_defined</font>
+<font color="990099"># define __int8_t_defined</font>
+<b>typedef</b> <b>signed</b> <b>char</b>    int8_t;
+<b>typedef</b> <b>short</b> <b>int</b>    int16_t;
+<b>typedef</b> <b>int</b>     int32_t;
+<font color="990099"># if __WORDSIZE == 64</font>
+<b>typedef</b> <b>long</b> <b>int</b>   int64_t;
+<font color="990099"># else</font>
+__extension__
+<b>typedef</b> <b>long</b> <b>long</b> <b>int</b>   int64_t;
+<font color="990099"># endif</font>
+<font color="990099">#endif</font>
+
+<font color="#003399"><i>/* Unsigned.  */</i></font>
+<b>typedef</b> <b>unsigned</b> <b>char</b>    uint8_t;
+<b>typedef</b> <b>unsigned</b> <b>short</b> <b>int</b>  uint16_t;
+<font color="990099">#ifndef __uint32_t_defined</font>
+<b>typedef</b> <b>unsigned</b> <b>int</b>   uint32_t;
+<font color="990099"># define __uint32_t_defined</font>
+<font color="990099">#endif</font>
+<font color="990099">#if __WORDSIZE == 64</font>
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uint64_t;
+<font color="990099">#else</font>
+__extension__
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>long</b> <b>int</b> uint64_t;
+<font color="990099">#endif</font>
+
+
+<font color="#003399"><i>/* Small types.  */</i></font>
+
+<font color="#003399"><i>/* Signed.  */</i></font>
+<b>typedef</b> <b>signed</b> <b>char</b>    int_least8_t;
+<b>typedef</b> <b>short</b> <b>int</b>    int_least16_t;
+<b>typedef</b> <b>int</b>     int_least32_t;
+<font color="990099">#if __WORDSIZE == 64</font>
+<b>typedef</b> <b>long</b> <b>int</b>   int_least64_t;
+<font color="990099">#else</font>
+__extension__
+<b>typedef</b> <b>long</b> <b>long</b> <b>int</b>   int_least64_t;
+<font color="990099">#endif</font>
+
+<font color="#003399"><i>/* Unsigned.  */</i></font>
+<b>typedef</b> <b>unsigned</b> <b>char</b>    uint_least8_t;
+<b>typedef</b> <b>unsigned</b> <b>short</b> <b>int</b>  uint_least16_t;
+<b>typedef</b> <b>unsigned</b> <b>int</b>   uint_least32_t;
+<font color="990099">#if __WORDSIZE == 64</font>
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uint_least64_t;
+<font color="990099">#else</font>
+__extension__
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>long</b> <b>int</b> uint_least64_t;
+<font color="990099">#endif</font>
+
+
+<font color="#003399"><i>/* Fast types.  */</i></font>
+
+<font color="#003399"><i>/* Signed.  */</i></font>
+<b>typedef</b> <b>signed</b> <b>char</b>    int_fast8_t;
+<font color="990099">#if __WORDSIZE == 64</font>
+<b>typedef</b> <b>long</b> <b>int</b>   int_fast16_t;
+<b>typedef</b> <b>long</b> <b>int</b>   int_fast32_t;
+<b>typedef</b> <b>long</b> <b>int</b>   int_fast64_t;
+<font color="990099">#else</font>
+<b>typedef</b> <b>int</b>     int_fast16_t;
+<b>typedef</b> <b>int</b>     int_fast32_t;
+__extension__
+<b>typedef</b> <b>long</b> <b>long</b> <b>int</b>   int_fast64_t;
+<font color="990099">#endif</font>
+
+<font color="#003399"><i>/* Unsigned.  */</i></font>
+<b>typedef</b> <b>unsigned</b> <b>char</b>    uint_fast8_t;
+<font color="990099">#if __WORDSIZE == 64</font>
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uint_fast16_t;
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uint_fast32_t;
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uint_fast64_t;
+<font color="990099">#else</font>
+<b>typedef</b> <b>unsigned</b> <b>int</b>   uint_fast16_t;
+<b>typedef</b> <b>unsigned</b> <b>int</b>   uint_fast32_t;
+__extension__
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>long</b> <b>int</b> uint_fast64_t;
+<font color="990099">#endif</font>
+
+
+<font color="#003399"><i>/* Types for `void *' pointers.  */</i></font>
+<font color="990099">#if __WORDSIZE == 64</font>
+<font color="990099"># ifndef __intptr_t_defined</font>
+<b>typedef</b> <b>long</b> <b>int</b>   intptr_t;
+<font color="990099">#  define __intptr_t_defined</font>
+<font color="990099"># endif</font>
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uintptr_t;
+<font color="990099">#else</font>
+<font color="990099"># ifndef __intptr_t_defined</font>
+<b>typedef</b> <b>int</b>     intptr_t;
+<font color="990099">#  define __intptr_t_defined</font>
+<font color="990099"># endif</font>
+<b>typedef</b> <b>unsigned</b> <b>int</b>   uintptr_t;
+<font color="990099">#endif</font>
+
+
+<font color="#003399"><i>/* Largest integral types.  */</i></font>
+<font color="990099">#if __WORDSIZE == 64</font>
+<b>typedef</b> <b>long</b> <b>int</b>   intmax_t;
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>int</b> uintmax_t;
+<font color="990099">#else</font>
+__extension__
+<b>typedef</b> <b>long</b> <b>long</b> <b>int</b>   intmax_t;
+__extension__
+<b>typedef</b> <b>unsigned</b> <b>long</b> <b>long</b> <b>int</b> uintmax_t;
+<font color="990099">#endif</font>
+
+
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define __INT64_C(c) c ## L</font>
+<font color="990099">#  define __UINT64_C(c)  c ## UL</font>
+<font color="990099"># else</font>
+<font color="990099">#  define __INT64_C(c) c ## LL</font>
+<font color="990099">#  define __UINT64_C(c)  c ## ULL</font>
+<font color="990099"># endif</font>
+
+<font color="#003399"><i>/* Limits of integral types.  */</i></font>
+
+<font color="#003399"><i>/* Minimum of signed integral types.  */</i></font>
+<font color="990099"># define INT8_MIN    (-128)</font>
+<font color="990099"># define INT16_MIN   (-32767-1)</font>
+<font color="990099"># define INT32_MIN   (-2147483647-1)</font>
+<font color="990099"># define INT64_MIN   (-__INT64_C(9223372036854775807)-1)</font>
+<font color="#003399"><i>/* Maximum of signed integral types.  */</i></font>
+<font color="990099"># define INT8_MAX    (127)</font>
+<font color="990099"># define INT16_MAX   (32767)</font>
+<font color="990099"># define INT32_MAX   (2147483647)</font>
+<font color="990099"># define INT64_MAX   (__INT64_C(9223372036854775807))</font>
+
+<font color="#003399"><i>/* Maximum of unsigned integral types.  */</i></font>
+<font color="990099"># define UINT8_MAX   (255)</font>
+<font color="990099"># define UINT16_MAX    (65535)</font>
+<font color="990099"># define UINT32_MAX    (4294967295U)</font>
+<font color="990099"># define UINT64_MAX    (__UINT64_C(18446744073709551615))</font>
+
+
+<font color="#003399"><i>/* Minimum of signed integral types having a minimum size.  */</i></font>
+<font color="990099"># define INT_LEAST8_MIN    (-128)</font>
+<font color="990099"># define INT_LEAST16_MIN (-32767-1)</font>
+<font color="990099"># define INT_LEAST32_MIN (-2147483647-1)</font>
+<font color="990099"># define INT_LEAST64_MIN (-__INT64_C(9223372036854775807)-1)</font>
+<font color="#003399"><i>/* Maximum of signed integral types having a minimum size.  */</i></font>
+<font color="990099"># define INT_LEAST8_MAX    (127)</font>
+<font color="990099"># define INT_LEAST16_MAX (32767)</font>
+<font color="990099"># define INT_LEAST32_MAX (2147483647)</font>
+<font color="990099"># define INT_LEAST64_MAX (__INT64_C(9223372036854775807))</font>
+
+<font color="#003399"><i>/* Maximum of unsigned integral types having a minimum size.  */</i></font>
+<font color="990099"># define UINT_LEAST8_MAX (255)</font>
+<font color="990099"># define UINT_LEAST16_MAX  (65535)</font>
+<font color="990099"># define UINT_LEAST32_MAX  (4294967295U)</font>
+<font color="990099"># define UINT_LEAST64_MAX  (__UINT64_C(18446744073709551615))</font>
+
+
+<font color="#003399"><i>/* Minimum of fast signed integral types having a minimum size.  */</i></font>
+<font color="990099"># define INT_FAST8_MIN   (-128)</font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define INT_FAST16_MIN (-9223372036854775807L-1)</font>
+<font color="990099">#  define INT_FAST32_MIN (-9223372036854775807L-1)</font>
+<font color="990099"># else</font>
+<font color="990099">#  define INT_FAST16_MIN (-2147483647-1)</font>
+<font color="990099">#  define INT_FAST32_MIN (-2147483647-1)</font>
+<font color="990099"># endif</font>
+<font color="990099"># define INT_FAST64_MIN    (-__INT64_C(9223372036854775807)-1)</font>
+<font color="#003399"><i>/* Maximum of fast signed integral types having a minimum size.  */</i></font>
+<font color="990099"># define INT_FAST8_MAX   (127)</font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define INT_FAST16_MAX (9223372036854775807L)</font>
+<font color="990099">#  define INT_FAST32_MAX (9223372036854775807L)</font>
+<font color="990099"># else</font>
+<font color="990099">#  define INT_FAST16_MAX (2147483647)</font>
+<font color="990099">#  define INT_FAST32_MAX (2147483647)</font>
+<font color="990099"># endif</font>
+<font color="990099"># define INT_FAST64_MAX    (__INT64_C(9223372036854775807))</font>
+
+<font color="#003399"><i>/* Maximum of fast unsigned integral types having a minimum size.  */</i></font>
+<font color="990099"># define UINT_FAST8_MAX    (255)</font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define UINT_FAST16_MAX  (18446744073709551615UL)</font>
+<font color="990099">#  define UINT_FAST32_MAX  (18446744073709551615UL)</font>
+<font color="990099"># else</font>
+<font color="990099">#  define UINT_FAST16_MAX  (4294967295U)</font>
+<font color="990099">#  define UINT_FAST32_MAX  (4294967295U)</font>
+<font color="990099"># endif</font>
+<font color="990099"># define UINT_FAST64_MAX (__UINT64_C(18446744073709551615))</font>
+
+
+<font color="#003399"><i>/* Values to test for integral types holding `void *' pointer.  */</i></font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define INTPTR_MIN   (-9223372036854775807L-1)</font>
+<font color="990099">#  define INTPTR_MAX   (9223372036854775807L)</font>
+<font color="990099">#  define UINTPTR_MAX    (18446744073709551615UL)</font>
+<font color="990099"># else</font>
+<font color="990099">#  define INTPTR_MIN   (-2147483647-1)</font>
+<font color="990099">#  define INTPTR_MAX   (2147483647)</font>
+<font color="990099">#  define UINTPTR_MAX    (4294967295U)</font>
+<font color="990099"># endif</font>
+
+
+<font color="#003399"><i>/* Minimum for largest signed integral type.  */</i></font>
+<font color="990099"># define INTMAX_MIN    (-__INT64_C(9223372036854775807)-1)</font>
+<font color="#003399"><i>/* Maximum for largest signed integral type.  */</i></font>
+<font color="990099"># define INTMAX_MAX    (__INT64_C(9223372036854775807))</font>
+
+<font color="#003399"><i>/* Maximum for largest unsigned integral type.  */</i></font>
+<font color="990099"># define UINTMAX_MAX   (__UINT64_C(18446744073709551615))</font>
+
+
+<font color="#003399"><i>/* Limits of other integer types.  */</i></font>
+
+<font color="#003399"><i>/* Limits of `ptrdiff_t' type.  */</i></font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define PTRDIFF_MIN    (-9223372036854775807L-1)</font>
+<font color="990099">#  define PTRDIFF_MAX    (9223372036854775807L)</font>
+<font color="990099"># else</font>
+<font color="990099">#  define PTRDIFF_MIN    (-2147483647-1)</font>
+<font color="990099">#  define PTRDIFF_MAX    (2147483647)</font>
+<font color="990099"># endif</font>
+
+<font color="#003399"><i>/* Limits of `sig_atomic_t'.  */</i></font>
+<font color="990099"># define SIG_ATOMIC_MIN    (-2147483647-1)</font>
+<font color="990099"># define SIG_ATOMIC_MAX    (2147483647)</font>
+
+<font color="#003399"><i>/* Limit of `size_t' type.  */</i></font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define SIZE_MAX   (18446744073709551615UL)</font>
+<font color="990099"># else</font>
+<font color="990099">#  define SIZE_MAX   (4294967295U)</font>
+<font color="990099"># endif</font>
+
+<font color="#003399"><i>/* Limits of `wchar_t'.  */</i></font>
+<font color="990099"># ifndef WCHAR_MIN</font>
+<font color="#003399"><i>/* These constants might also be defined in &lt;wchar.h&gt;.  */</i></font>
+<font color="990099">#  define WCHAR_MIN    __WCHAR_MIN</font>
+<font color="990099">#  define WCHAR_MAX    __WCHAR_MAX</font>
+<font color="990099"># endif</font>
+
+<font color="#003399"><i>/* Limits of `wint_t'.  */</i></font>
+<font color="990099"># define WINT_MIN    (0u)</font>
+<font color="990099"># define WINT_MAX    (4294967295u)</font>
+
+<font color="#003399"><i>/* Signed.  */</i></font>
+<font color="990099"># define INT8_C(c) c</font>
+<font color="990099"># define INT16_C(c)  c</font>
+<font color="990099"># define INT32_C(c)  c</font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define INT64_C(c) c ## L</font>
+<font color="990099"># else</font>
+<font color="990099">#  define INT64_C(c) c ## LL</font>
+<font color="990099"># endif</font>
+
+<font color="#003399"><i>/* Unsigned.  */</i></font>
+<font color="990099"># define UINT8_C(c)  c</font>
+<font color="990099"># define UINT16_C(c) c</font>
+<font color="990099"># define UINT32_C(c) c ## U</font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define UINT64_C(c)  c ## UL</font>
+<font color="990099"># else</font>
+<font color="990099">#  define UINT64_C(c)  c ## ULL</font>
+<font color="990099"># endif</font>
+
+<font color="#003399"><i>/* Maximal type.  */</i></font>
+<font color="990099"># if __WORDSIZE == 64</font>
+<font color="990099">#  define INTMAX_C(c)  c ## L</font>
+<font color="990099">#  define UINTMAX_C(c) c ## UL</font>
+<font color="990099"># else</font>
+<font color="990099">#  define INTMAX_C(c)  c ## LL</font>
+<font color="990099">#  define UINTMAX_C(c) c ## ULL</font>
+<font color="990099"># endif</font>
+
+<font color="990099">#endif /* stdint.h */</font>
+</code></pre>
+
+
+</body>
+</html>

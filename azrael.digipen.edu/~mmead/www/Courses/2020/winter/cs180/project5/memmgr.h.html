@@ -1,0 +1,51 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>memmgr.h</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<pre class="sourcecode"><code><font color="990099">#ifndef MEMMGR_H</font>
+<font color="990099">#define MEMMGR_H</font>
+
+<font color="990099">#include &lt;stddef.h&gt; /* size_t */</font>
+
+<font color="990099">#define LABEL_SIZE 16</font>
+
+<b>typedef</b> <b>struct</b> block_info
+{
+  <b>int</b> allocated;
+  size_t size;
+  <b>char</b> *address;
+  <b>char</b> label[LABEL_SIZE];
+  <b>struct</b> block_info *next;
+}block_info;
+
+<font color="990099">#define false 0</font>
+<font color="990099">#define true 1</font>
+
+<font color="990099">#define SUCCESS 0</font>
+<font color="990099">#define FAILURE -1</font>
+
+<b>typedef</b> <b>enum</b> MMPolicy {mmpFirstFit, mmpBestFit} MMPolicy;
+
+block_info *mm_create(size_t bytes, <b>enum</b> MMPolicy policy);
+<b>void</b> *mm_allocate(block_info *heap, size_t bytes, <b>const</b> <b>char</b> *label);
+<b>int</b> mm_deallocate(block_info *heap, <b>void</b> *address);
+<b>void</b> mm_destroy(block_info *heap);
+
+<font color="990099">#endif</font>
+</code></pre>
+
+
+</body>
+</html>

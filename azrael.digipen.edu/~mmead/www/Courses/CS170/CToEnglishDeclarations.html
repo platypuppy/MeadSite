@@ -1,0 +1,72 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>C to English Declarations</title>
+</head>
+
+<body>  
+<center><h1>C to English Declarations</h1></center>
+
+<pre class="sourcecode"><code>
+<b>int</b> f1;             <font color="#003399"><i>/* an int                                                                        */</i></font>
+<b>int</b> *f2;            <font color="#003399"><i>/* a pointer to an int                                                           */</i></font>
+<b>int</b> f3[3];          <font color="#003399"><i>/* an array of 3 ints                                                            */</i></font>
+<b>int</b> *f4[3];         <font color="#003399"><i>/* an array of 3 pointers to int                                                 */</i></font>
+<b>int</b> (*f5)[3];       <font color="#003399"><i>/* a pointer to an array of 3 ints                                               */</i></font>
+<b>int</b> *(*f6)[3];      <font color="#003399"><i>/* a pointer to an array of 3 pointers to int                                    */</i></font>
+<b>int</b> f7[3][4];       <font color="#003399"><i>/* an array of 3 arrays of 4 ints (a 3x4 array of int)                           */</i></font>
+<b>int</b> *f8[3][4];      <font color="#003399"><i>/* an array of 3 arrays of 4 pointers to int (a 3x4 array of pointer to int)     */</i></font>
+<b>int</b> (*f9)[3][4];    <font color="#003399"><i>/* a pointer to an array of 3 arrays of 4 ints (a pointer to 2 above)            */</i></font>       
+<b>int</b> *(*f10)[3][4];  <font color="#003399"><i>/* a pointer to an array of 3 arrays of 4 pointers to int (a pointer to 2 above) */</i></font>
+<b>int</b> (*f11[3])[4];   <font color="#003399"><i>/* an array of 3 pointers to an array of 4 ints                                  */</i></font>
+<b>int</b> *(*f12[3])[4];  <font color="#003399"><i>/* an array of 3 pointers to an array of 4 pointers to int                       */</i></font>
+
+<b>void</b> f21(<b>void</b>);                <font color="#003399"><i>/* a function taking nothing and returning nothing             */</i></font>
+<b>void</b> f22(<b>int</b>, <b>float</b>);          <font color="#003399"><i>/* a function taking an int and a float and returning nothing  */</i></font>
+<b>void</b> f23(<b>int</b> i, <b>float</b> f);      <font color="#003399"><i>/* a function taking an int and a float and returning nothing  */</i></font>
+<b>int</b> *f24(<b>void</b>);                <font color="#003399"><i>/* a function taking nothing and returning a pointer to an int */</i></font>
+<b>int</b> (*f25)(<b>void</b>);              <font color="#003399"><i>/* a pointer to a function taking nothing and returning an int */</i></font>
+<b>int</b> **f26(<b>void</b>);               <font color="#003399"><i>/* a function taking nothing and returning a pointer to a pointer to an int */</i></font>
+<b>int</b> *(*f27)(<b>void</b>);             <font color="#003399"><i>/* a pointer to a function taking nothing and returning a pointer to an int */</i></font>
+<b>double</b> *(*f28)(<b>int</b>, <b>float</b> *);  <font color="#003399"><i>/* a pointer to a function taking an int and a pointer to a float and returning a pointer to a double */</i></font>
+<b>int</b> **(**f29)(<b>void</b>);           <font color="#003399"><i>/* a pointer to a pointer to a function taking nothing and returning a pointer to a pointer to an int */</i></font>
+
+<b>int</b> f31()[5];     <font color="#003399"><i>/* error: function returns array                              */</i></font>
+<b>int</b> *f31a[5]();   <font color="#003399"><i>/* error: array element type cannot be function               */</i></font>
+<b>int</b> (*f31b[5])(); <font color="#003399"><i>/* correct, an array of 5 pointers to functions returning int */</i></font>
+
+<b>int</b> f32()();      <font color="#003399"><i>/* error: function returns function                                       */</i></font>
+<b>int</b> *f32a()();    <font color="#003399"><i>/* error: function returns function                                       */</i></font>
+<b>int</b> (*f32b())();  <font color="#003399"><i>/* correct, a function returning a pointer to a function returning an int */</i></font>
+
+<b>int</b> f33[5]();     <font color="#003399"><i>/* error: array element type cannot be function (array of funtions) */</i></font>
+<b>int</b> *f33a[5]();   <font color="#003399"><i>/* error: array element type cannot be function (array of funtions) */</i></font>
+<b>int</b> (*f33b[5])(); <font color="#003399"><i>/* correct, an array of 5 pointers to functions returning an int    */</i></font>
+
+<font color="#003399"><i>/* a pointer to an array of 5 pointers to functions taking a pointer to a const char and an int  */</i></font>
+<font color="#003399"><i>/* and returning a pointer to a BITMAP struct */</i></font>
+<b>struct</b> BITMAP *(*(*f41)[5])(<b>const</b> <b>char</b> *, <b>int</b>);
+
+<font color="#003399"><i>/* a function taking a pointer to a pointer to a BITMAP struct and returning a pointer to an array  */</i></font>
+<font color="#003399"><i>/* of 5 pointers to unsigned int */</i></font>
+<b>unsigned</b> <b>int</b> *(*f42(<b>struct</b> BITMAP **))[5];
+
+<font color="#003399"><i>/* a function taking a pointer to a char and an int and returning a pointer to an array of 5 pointers to int */</i></font>
+<b>int</b> *(*foo(<b>char</b> *, <b>int</b>))[5];
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+

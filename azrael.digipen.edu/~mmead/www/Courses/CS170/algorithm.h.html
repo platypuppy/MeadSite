@@ -1,0 +1,1500 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>algorithm.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>// algorithm standard header</i></font>
+
+<b>#if</b>     _MSC_VER &gt; 1000
+<b>#pragma</b> once
+<b>#endif</b>
+
+<b>#ifndef</b> _ALGORITHM_
+<b>#define</b> _ALGORITHM_
+<b>#include</b> &lt;iterator&gt;
+<b>#include</b> &lt;memory&gt;
+<b>#include</b> &lt;<a href="xutility.h.html">xutility</a>&gt;
+
+<b>#ifdef</b>  _MSC_VER
+<b>#pragma</b> pack(push,8)
+<b>#endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+_STD_BEGIN
+<b>const</b> <b>int</b> _CHUNK_SIZE = 7;
+<b>const</b> <b>int</b> _SORT_MAX = 16;
+		<font color="#003399"><i>// TEMPLATE FUNCTION _Median</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+	_Ty _Median(_Ty _X, _Ty _Y, _Ty _Z)
+		{<b>if</b> (_X &lt; _Y)
+			<b>return</b> (_Y &lt; _Z ? _Y : _X &lt; _Z ? _Z : _X);
+		<b>else</b>
+			<b>return</b> (_X &lt; _Z ? _X : _Y &lt; _Z ? _Z : _Y); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION _Median WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_Ty _Median(_Ty _X, _Ty _Y, _Ty _Z, _Pr _P)
+		{<b>if</b> (_P(_X, _Y))
+			<b>return</b> (_P(_Y, _Z) ? _Y : _P(_X, _Z) ? _Z : _X);
+		<b>else</b>
+			<b>return</b> (_P(_X, _Z) ? _X : _P(_Y, _Z) ? _Z : _Y); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION for_each</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _Fn&gt; <b>inline</b>
+	_Fn for_each(_II _F, _II _L, _Fn _Op)
+	{<b>for</b> (; _F != _L; ++_F)
+		_Op(*_F);
+	<b>return</b> (_Op); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION find</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _Ty&gt; <b>inline</b>
+	_II find(_II _F, _II _L, <b>const</b> _Ty&amp; _V)
+	{<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (*_F == _V)
+			<b>break</b>;
+	<b>return</b> (_F); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION find_if</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _Pr&gt; <b>inline</b>
+	_II find_if(_II _F, _II _L, _Pr _P)
+	{<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (_P(*_F))
+			<b>break</b>;
+	<b>return</b> (_F); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION adjacent_find</i></font>
+<b>template</b>&lt;<b>class</b> _FI&gt; <b>inline</b>
+	_FI adjacent_find(_FI _F, _FI _L)
+	{<b>for</b> (_FI _Fb; (_Fb = _F) != _L &amp;&amp; ++_F != _L; )
+		<b>if</b> (*_Fb == *_F)
+			<b>return</b> (_Fb);
+	<b>return</b> (_L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION adjacent_find WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI adjacent_find(_FI _F, _FI _L, _Pr _P)
+	{<b>for</b> (_FI _Fb; (_Fb = _F) != _L &amp;&amp; ++_F != _L; )
+		<b>if</b> (_P(*_Fb, *_F))
+			<b>return</b> (_Fb);
+	<b>return</b> (_L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION count</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _Ty&gt; <b>inline</b>
+	_CNTSIZ(_II) count(_II _F, _II _L, <b>const</b> _Ty&amp; _V)
+	{_CNTSIZ(_II) _N = 0;
+	<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (*_F == _V)
+			++_N;
+	<b>return</b> (_N); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION count_if</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _Pr&gt; <b>inline</b>
+	_CNTSIZ(_II) count_if(_II _F, _II _L, _Pr _P)
+	{_CNTSIZ(_II) _N = 0;
+	<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (_P(*_F))
+			++_N;
+	<b>return</b> (_N); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION search</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2&gt; <b>inline</b>
+	_FI1 search(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2)
+	{<b>return</b> (_Search(_F1, _L1, _F2, _L2,
+		_Dist_type(_F1), _Dist_type(_F2))); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pd1, <b>class</b> _Pd2&gt; <b>inline</b>
+	_FI1 _Search(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2,
+		_Pd1 *, _Pd2 *)
+	{_Pd1 _D1 = 0;
+	_Distance(_F1, _L1, _D1);
+	_Pd2 _D2 = 0;
+	_Distance(_F2, _L2, _D2);
+	<b>for</b> (; _D2 &lt;= _D1; ++_F1, --_D1)
+		{_FI1 _X1 = _F1;
+		<b>for</b> (_FI2 _X2 = _F2; ; ++_X1, ++_X2)
+			<b>if</b> (_X2 == _L2)
+				<b>return</b> (_F1);
+			<b>else</b> <b>if</b> (!(*_X1 == *_X2))
+				<b>break</b>; }
+	<b>return</b> (_L1); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION search WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 search(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2, _Pr _P)
+	{<b>return</b> (_Search(_F1, _L1, _F2, _L2, _P,
+		_Dist_type(_F1), _Dist_type(_F2))); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pd1, <b>class</b> _Pd2,
+	<b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 _Search(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2,
+		_Pr _P, _Pd1 *, _Pd2 *)
+	{_Pd1 _D1 = 0;
+	_Distance(_F1, _L1, _D1);
+	_Pd2 _D2 = 0;
+	_Distance(_F2, _L2, _D2);
+	<b>for</b> (; _D2 &lt;= _D1; ++_F1, --_D1)
+		{_FI1 _X1 = _F1;
+		<b>for</b> (_FI2 _X2 = _F2; ; ++_X1, ++_X2)
+			<b>if</b> (_X2 == _L2)
+				<b>return</b> (_F1);
+			<b>else</b> <b>if</b> (!_P(*_X1, *_X2))
+				<b>break</b>; }
+	<b>return</b> (_L1); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION search_n</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _Pd2, <b>class</b> _Ty&gt; <b>inline</b>
+	_FI1 search_n(_FI1 _F1, _FI1 _L1, _Pd2 _N, <b>const</b> _Ty&amp; _V)
+	{<b>return</b> (_Search_n(_F1, _L1, _N, _V, _Dist_type(_F1))); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _Pd2, <b>class</b> _Ty, <b>class</b> _Pd1&gt; <b>inline</b>
+	_FI1 _Search_n(_FI1 _F1, _FI1 _L1,
+		_Pd2 _N, <b>const</b> _Ty&amp; _V, _Pd1 *)
+	{_Pd1 _D1 = 0;
+	_Distance(_F1, _L1, _D1);
+	<b>for</b> (; _N &lt;= _D1; ++_F1, --_D1)
+		{_FI1 _X1 = _F1;
+		<b>for</b> (_Pd2 _D2 = _N; ; ++_X1, --_D2)
+			<b>if</b> (_D2 == 0)
+				<b>return</b> (_F1);
+			<b>else</b> <b>if</b> (!(*_X1 == _V))
+				<b>break</b>; }
+	<b>return</b> (_L1); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION search_n WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _Pd2, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 search_n(_FI1 _F1, _FI1 _L1,
+		_Pd2 _N, <b>const</b> _Ty&amp; _V, _Pr _P)
+	{<b>return</b> (_Search_n(_F1, _L1,
+		_N, _V, _P, _Dist_type(_F1))); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _Pd2,
+	<b>class</b> _Ty, <b>class</b> _Pd1, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 _Search_n(_FI1 _F1, _FI1 _L1,
+		_Pd2 _N, <b>const</b> _Ty&amp; _V, _Pr _P, _Pd1 *)
+	{_Pd1 _D1 = 0;
+	_Distance(_F1, _L1, _D1);
+	<b>for</b> (; _N &lt;= _D1; ++_F1, --_D1)
+		{_FI1 _X1 = _F1;
+		<b>for</b> (_Pd2 _D2 = _N; ; ++_X1, --_D2)
+			<b>if</b> (_D2 == 0)
+				<b>return</b> (_F1);
+			<b>else</b> <b>if</b> (!_P(*_X1, _V))
+				<b>break</b>; }
+	<b>return</b> (_L1); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION find_end</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2&gt; <b>inline</b>
+	_FI1 find_end(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2)
+	{<b>return</b> (_Find_end(_F1, _L1, _F2, _L2,
+		_Dist_type(_F1), _Dist_type(_F2))); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pd1, <b>class</b> _Pd2&gt; <b>inline</b>
+	_FI1 _Find_end(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2,
+		_Pd1 *, _Pd2 *)
+	{_Pd1 _D1 = 0;
+	_Distance(_F1, _L1, _D1);
+	_Pd2 _D2 = 0;
+	_Distance(_F2, _L2, _D2);
+	_FI1 _Ans = _L1;
+	<b>if</b> (0 &lt; _D2)
+		<b>for</b> (; _D2 &lt;= _D1; ++_F1, --_D1)
+			{_FI1 _X1 = _F1;
+			<b>for</b> (_FI2 _X2 = _F2; ; ++_X1)
+				<b>if</b> (!(*_X1 == *_X2))
+					<b>break</b>;
+				<b>else</b> <b>if</b> (++_X2 == _L2)
+					{_Ans = _F1;
+					<b>break</b>; }}
+	<b>return</b> (_Ans); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION find_end WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 find_end(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2, _Pr _P)
+	{<b>return</b> (_Find_end(_F1, _L1, _F2, _L2, _P,
+		_Dist_type(_F1), _Dist_type(_F2))); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pd1, <b>class</b> _Pd2,
+	<b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 _Find_end(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2, _Pr _P,
+		_Pd1 *, _Pd2 *)
+	{_Pd1 _D1 = 0;
+	_Distance(_F1, _L1, _D1);
+	_Pd2 _D2 = 0;
+	_Distance(_F2, _L2, _D2);
+	_FI1 _Ans = _L1;
+	<b>if</b> (0 &lt; _D2)
+		<b>for</b> (; _D2 &lt;= _D1; ++_F1, --_D1)
+			{_FI1 _X1 = _F1;
+			<b>for</b> (_FI2 _X2 = _F2; ; ++_X1)
+				<b>if</b> (!_P(*_X1, *_X2))
+					<b>break</b>;
+				<b>else</b> <b>if</b> (++_X2 == _L2)
+					{_Ans = _F1;
+					<b>break</b>; }}
+	<b>return</b> (_Ans); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION find_first_of</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2&gt; <b>inline</b>
+	_FI1 find_first_of(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2)
+	{<b>for</b> (; _F1 != _L1; ++_F1)
+		<b>for</b> (_FI2 _X2 = _F2; _X2 != _L2; ++_X2)
+			<b>if</b> (*_F1 == *_X2)
+				<b>return</b> (_F1);
+	<b>return</b> (_F1); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION find_first_of WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI1 find_first_of(_FI1 _F1, _FI1 _L1, _FI2 _F2, _FI2 _L2,
+		_Pr _P)
+	{<b>for</b> (; _F1 != _L1; ++_F1)
+		<b>for</b> (_FI2 _X2 = _F2; _X2 != _L2; ++_X2)
+			<b>if</b> (_P(*_F1, *_X2))
+				<b>return</b> (_F1);
+	<b>return</b> (_F1); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION iter_swap</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2&gt; <b>inline</b>
+	<b>void</b> iter_swap(_FI1 _X, _FI2 _Y)
+	{_Iter_swap(_X, _Y, _Val_type(_X)); }
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Iter_swap(_FI1 _X, _FI2 _Y, _Ty *)
+	{_Ty _Tmp = *_X;
+	*_X = *_Y, *_Y = _Tmp; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION swap_ranges</i></font>
+<b>template</b>&lt;<b>class</b> _FI1, <b>class</b> _FI2&gt; <b>inline</b>
+	_FI2 swap_ranges(_FI1 _F, _FI1 _L, _FI2 _X)
+	{<b>for</b> (; _F != _L; ++_F, ++_X)
+		iter_swap(_F, _X);
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION transform WITH UNARY OP</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Uop&gt; <b>inline</b>
+	_OI transform(_II _F, _II _L, _OI _X, _Uop _U)
+	{<b>for</b> (; _F != _L; ++_F, ++_X)
+		*_X = _U(*_F);
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION transform WITH BINARY OP</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI, <b>class</b> _Bop&gt; <b>inline</b>
+	_OI transform(_II1 _F1, _II1 _L1, _II2 _F2, _OI _X, _Bop _B)
+	{<b>for</b> (; _F1 != _L1; ++_F1, ++_F2, ++_X)
+		*_X = _B(*_F1, *_F2);
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION replace</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> replace(_FI _F, _FI _L, <b>const</b> _Ty&amp; _Vo, <b>const</b> _Ty&amp; _Vn)
+	{<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (*_F == _Vo)
+			*_F = _Vn; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION replace_if</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> replace_if(_FI _F, _FI _L, _Pr _P, <b>const</b> _Ty&amp; _V)
+	{<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (_P(*_F))
+			*_F = _V; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION replace_copy</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Ty&gt; <b>inline</b>
+	_OI replace_copy(_II _F, _II _L, _OI _X,
+		<b>const</b> _Ty&amp; _Vo, <b>const</b> _Ty&amp; _Vn)
+	{<b>for</b> (; _F != _L; ++_F, ++_X)
+		*_X = *_F == _Vo ? _Vn : *_F;
+		<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION replace_copy_if</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Pr, <b>class</b> _Ty&gt; <b>inline</b>
+	_OI replace_copy_if(_II _F, _II _L, _OI _X,
+		_Pr _P, <b>const</b> _Ty&amp; _V)
+	{<b>for</b> (; _F != _L; ++_F, ++_X)
+		*_X = _P(*_F) ? _V : *_F;
+		<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION generate</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Gen&gt; <b>inline</b>
+	<b>void</b> generate(_FI _F, _FI _L, _Gen _G)
+	{<b>for</b> (; _F != _L; ++_F)
+		*_F = _G(); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION generate_n</i></font>
+<b>template</b>&lt;<b>class</b> _OI, <b>class</b> _Pd, <b>class</b> _Gen&gt; <b>inline</b>
+	<b>void</b> generate_n(_OI _F, _Pd _N, _Gen _G)
+	{<b>for</b> (; 0 &lt; _N; --_N, ++_F)
+		*_F = _G(); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION remove</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	_FI remove(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V)
+	{_F = find(_F, _L, _V);
+	<b>if</b> (_F == _L)
+		<b>return</b> (_F);
+	<b>else</b>
+		{_FI _Fb = _F;
+		<b>return</b> (remove_copy(++_F, _L, _Fb, _V)); }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION remove_if</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI remove_if(_FI _F, _FI _L, _Pr _P)
+	{_F = find_if(_F, _L, _P);
+	<b>if</b> (_F == _L)
+		<b>return</b> (_F);
+	<b>else</b>
+		{_FI _Fb = _F;
+		<b>return</b> (remove_copy_if(++_F, _L, _Fb, _P)); }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION remove_copy</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Ty&gt; <b>inline</b>
+	_OI remove_copy(_II _F, _II _L, _OI _X, <b>const</b> _Ty&amp; _V)
+	{<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (!(*_F == _V))
+			*_X++ = *_F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION remove_copy_if</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI remove_copy_if(_II _F, _II _L, _OI _X, _Pr _P)
+	{<b>for</b> (; _F != _L; ++_F)
+		<b>if</b> (!_P(*_F))
+			*_X++ = *_F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION unique</i></font>
+<b>template</b>&lt;<b>class</b> _FI&gt; <b>inline</b>
+	_FI unique(_FI _F, _FI _L)
+	{_F = adjacent_find(_F, _L);
+	<b>return</b> (unique_copy(_F, _L, _F)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION unique WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI unique(_FI _F, _FI _L, _Pr _P)
+	{_F = adjacent_find(_F, _L, _P);
+	<b>return</b> (unique_copy(_F, _L, _F, _P)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION unique_copy</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI&gt; <b>inline</b>
+	_OI unique_copy(_II _F, _II _L, _OI _X)
+	{<b>return</b> (_F == _L ? _X :
+		_Unique_copy(_F, _L, _X, _Iter_cat(_F))); }
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI&gt; <b>inline</b>
+	_OI _Unique_copy(_II _F, _II _L, _OI _X, input_iterator_tag)
+	{<b>return</b> (_Unique_copy(_F, _L, _X, _Val_type(_F))); }
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Ty&gt; <b>inline</b>
+	_OI _Unique_copy(_II _F, _II _L, _OI _X, _Ty *)
+	{_Ty _V = *_F;
+	<b>for</b> (*_X++ = _V; ++_F != _L; )
+		<b>if</b> (!(_V == *_F))
+			_V = *_F, *_X++ = _V;
+	<b>return</b> (_X); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _OI&gt; <b>inline</b>
+	_OI _Unique_copy(_FI _F, _FI _L, _OI _X, forward_iterator_tag)
+	{_FI _Fb = _F;
+	<b>for</b> (*_X++ = *_Fb; ++_F != _L; )
+		<b>if</b> (!(*_Fb == *_F))
+			_Fb = _F, *_X++ = *_Fb;
+	<b>return</b> (_X); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _OI&gt; <b>inline</b>
+	_OI _Unique_copy(_BI _F, _BI _L, _OI _X,
+		bidirectional_iterator_tag)
+	{<b>return</b> (_Unique_copy(_F, _L, _X, forward_iterator_tag())); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _OI&gt; <b>inline</b>
+	_OI _Unique_copy(_RI _F, _RI _L, _OI _X,
+		random_access_iterator_tag)
+	{<b>return</b> (_Unique_copy(_F, _L, _X, forward_iterator_tag())); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION unique_copy WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI unique_copy(_II _F, _II _L, _OI _X, _Pr _P)
+	{<b>return</b> (_F == _L ? _X :
+		_Unique_copy(_F, _L, _X, _P, _Iter_cat(_F))); }
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI _Unique_copy(_II _F, _II _L, _OI _X, _Pr _P,
+		input_iterator_tag)
+	{<b>return</b> (_Unique_copy(_F, _L, _X, _P, _Val_type(_F))); }
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _OI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI _Unique_copy(_II _F, _II _L, _OI _X, _Pr _P, _Ty *)
+	{_Ty _V = *_F;
+	<b>for</b> (*_X++ = _V; ++_F != _L; )
+		<b>if</b> (!_P(_V, *_F))
+			_V = *_F, *_X++ = _V;
+	<b>return</b> (_X); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI _Unique_copy(_FI _F, _FI _L, _OI _X, _Pr _P,
+		forward_iterator_tag)
+	{_FI _Fb = _F;
+	<b>for</b> (*_X++ = *_Fb; ++_F != _L; )
+		<b>if</b> (!_P(*_Fb, *_F))
+			_Fb = _F, *_X++ = *_Fb;
+	<b>return</b> (_X); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI _Unique_copy(_BI _F, _BI _L, _OI _X, _Pr _P,
+		bidirectional_iterator_tag)
+	{<b>return</b> (_Unique_copy(_F, _L, _X, _P,
+		forward_iterator_tag())); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI _Unique_copy(_RI _F, _RI _L, _OI _X, _Pr _P,
+		random_access_iterator_tag)
+	{<b>return</b> (_Unique_copy(_F, _L, _X, _P,
+		forward_iterator_tag())); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION reverse</i></font>
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>void</b> reverse(_BI _F, _BI _L)
+	{_Reverse(_F, _L, _Iter_cat(_F)); }
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>void</b> _Reverse(_BI _F, _BI _L, bidirectional_iterator_tag)
+	{<b>for</b> (; _F != _L &amp;&amp; _F != --_L; ++_F)
+		iter_swap(_F, _L); }
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> _Reverse(_RI _F, _RI _L, random_access_iterator_tag)
+	{<b>for</b> (; _F &lt; _L; ++_F)
+		iter_swap(_F, --_L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION reverse_copy</i></font>
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _OI&gt; <b>inline</b>
+	_OI reverse_copy(_BI _F, _BI _L, _OI _X)
+	{<b>for</b> (; _F != _L; ++_X)
+		*_X = *--_L;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION rotate</i></font>
+<b>template</b>&lt;<b>class</b> _FI&gt; <b>inline</b>
+	<b>void</b> rotate(_FI _F, _FI _M, _FI _L)
+	{<b>if</b> (_F != _M &amp;&amp; _M != _L)
+		_Rotate(_F, _M, _L, _Iter_cat(_F)); }
+<b>template</b>&lt;<b>class</b> _FI&gt; <b>inline</b>
+	<b>void</b> _Rotate(_FI _F, _FI _M, _FI _L,
+		forward_iterator_tag)
+	{<b>for</b> (_FI _X = _M; ; )
+		{iter_swap(_F, _X);
+		<b>if</b> (++_F == _M)
+			<b>if</b> (++_X == _L)
+				<b>break</b>;
+			<b>else</b>
+				_M = _X;
+		<b>else</b> <b>if</b> (++_X == _L)
+			_X = _M; }}
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>void</b> _Rotate(_BI _F, _BI _M, _BI _L,
+		bidirectional_iterator_tag)
+	{reverse(_F, _M);
+	reverse(_M, _L);
+	reverse(_F, _L); }
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> _Rotate(_RI _F, _RI _M, _RI _L,
+			random_access_iterator_tag)
+	{_Rotate(_F, _M, _L, _Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Rotate(_RI _F, _RI _M, _RI _L, _Pd *, _Ty *)
+	{_Pd _D = _M - _F;
+	_Pd _N = _L - _F;
+	<b>for</b> (_Pd _I = _D; _I != 0; )
+		{_Pd _J = _N % _I;
+		_N = _I, _I = _J; }
+	<b>if</b> (_N &lt; _L - _F)
+		<b>for</b> (; 0 &lt; _N; --_N)
+			{_RI _X = _F + _N;
+			_RI _Y = _X;
+			_Ty _V = *_X;
+			_RI _Z = _Y + _D == _L ? _F : _Y + _D;
+			<b>while</b> (_Z != _X)
+				{*_Y = *_Z;
+				_Y = _Z;
+				_Z = _D &lt; _L - _Z ? _Z + _D
+					: _F + (_D - (_L - _Z)); }
+			*_Y = _V; }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION rotate_copy</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _OI&gt; <b>inline</b>
+	_OI rotate_copy(_FI _F, _FI _M, _FI _L, _OI _X)
+	{<b>return</b> (copy(_F, _M, copy(_M, _L, _X))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION random_shuffle</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> random_shuffle(_RI _F, _RI _L)
+	{<b>if</b> (_F != _L)
+		_Random_shuffle(_F, _L, _Dist_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd&gt; <b>inline</b>
+	<b>void</b> _Random_shuffle(_RI _F, _RI _L, _Pd *)
+	{<b>const</b> <b>int</b> _RBITS = 15;
+	<b>const</b> <b>int</b> _RMAX = (1U &lt;&lt; _RBITS) - 1;
+	_RI _X = _F;
+	<b>for</b> (_Pd _D = 1; ++_X != _L; ++_D)
+		{<b>unsigned</b> <b>long</b> _Rm = _RMAX;
+		<b>unsigned</b> <b>long</b> _Rn = rand() &amp; _RMAX;
+		<b>for</b> (; _Rm &lt; _D &amp;&amp; _Rm != ~0UL;
+			_Rm = _Rm &lt;&lt; _RBITS | _RMAX)
+			_Rn = _Rn &lt;&lt; _RBITS | _RMAX;
+		iter_swap(_X, _F + _Pd(_Rn % _D)); }}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pf&gt; <b>inline</b>
+	<b>void</b> random_shuffle(_RI _F, _RI _L, _Pf&amp; _R)
+	{<b>if</b> (_F != _L)
+		_Random_shuffle(_F, _L, _R, _Dist_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pf, <b>class</b> _Pd&gt; <b>inline</b>
+	<b>void</b> _Random_shuffle(_RI _F, _RI _L, _Pf&amp; _R, _Pd *)
+	{_RI _X = _F;
+	<b>for</b> (_Pd _D = 1; ++_X != _L; ++_D)
+		iter_swap(_X, _F + _Pd(_R(_D))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION partition</i></font>
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pr&gt; <b>inline</b>
+	_BI partition(_BI _F, _BI _L, _Pr _P)
+	{<b>for</b> (; ; ++_F)
+		{<b>for</b> (; _F != _L &amp;&amp; _P(*_F); ++_F)
+			;
+		<b>if</b> (_F == _L)
+			<b>break</b>;
+		<b>for</b> (; _F != --_L &amp;&amp; !_P(*_L); )
+			;
+		<b>if</b> (_F == _L)
+			<b>break</b>;
+		iter_swap(_F, _L); }
+	<b>return</b> (_F); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION stable_partition</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI stable_partition(_FI _F, _FI _L, _Pr _P)
+	{<b>return</b> (_F == _L ? _F : _Stable_partition(_F, _L, _P,
+		_Dist_type(_F), _Val_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	_FI _Stable_partition(_FI _F, _FI _L, _Pr _P, _Pd *, _Ty *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	_Temp_iterator&lt;_Ty&gt; _Xb(_N);
+	<b>return</b> (_Stable_partition(_F, _L, _P, _N, _Xb)); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	_FI _Stable_partition(_FI _F, _FI _L, _Pr _P, _Pd _N,
+		_Temp_iterator&lt;_Ty&gt;&amp; _Xb)
+	{<b>if</b> (_N == 1)
+		<b>return</b> (_P(*_F) ? _L : _F);
+	<b>else</b> <b>if</b> (_N &lt;= _Xb._Maxlen())
+		{_FI _X = _F;
+		<b>for</b> (_Xb._Init(); _F != _L; ++_F)
+			<b>if</b> (_P(*_F))
+				*_X++ = *_F;
+			<b>else</b>
+				*_Xb++ = *_F;
+		copy(_Xb._First(), _Xb._Last(), _X);
+		<b>return</b> (_X); }
+	<b>else</b>
+		{_FI _M = _F;
+		advance(_M, _N / 2);
+		_FI _Lp = _Stable_partition(_F, _M, _P, _N / 2, _Xb);
+		_FI _Rp = _Stable_partition(_M, _L, _P, _N - _N / 2, _Xb);
+		_Pd _D1 = 0;
+		_Distance(_Lp, _M, _D1);
+		_Pd _D2 = 0;
+		_Distance(_M, _Rp, _D2);
+		<b>return</b> (_Buffered_rotate(_Lp, _M, _Rp, _D1, _D2, _Xb)); }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION sort</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> sort(_RI _F, _RI _L)
+	{_Sort_0(_F, _L, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Sort_0(_RI _F, _RI _L, _Ty *)
+	{<b>if</b> (_L - _F &lt;= _SORT_MAX)
+		_Insertion_sort(_F, _L);
+	<b>else</b>
+		{_Sort(_F, _L, (_Ty *)0);
+		_Insertion_sort(_F, _F + _SORT_MAX);
+		<b>for</b> (_F += _SORT_MAX; _F != _L; ++_F)
+			_Unguarded_insert(_F, _Ty(*_F)); }}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Sort(_RI _F, _RI _L, _Ty *)
+	{<b>for</b> (; _SORT_MAX &lt; _L - _F; )
+		{_RI _M = _Unguarded_partition(_F, _L, _Median(_Ty(*_F),
+			_Ty(*(_F + (_L - _F) / 2)), _Ty(*(_L - 1))));
+		<b>if</b> (_L - _M &lt;= _M - _F)
+			_Sort(_M, _L, _Val_type(_F)), _L = _M;
+		<b>else</b>
+			_Sort(_F, _M, _Val_type(_F)), _F = _M; }}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty&gt; <b>inline</b>
+	_RI _Unguarded_partition(_RI _F, _RI _L, _Ty _Piv)
+	{<b>for</b> (; ; ++_F)
+		{<b>for</b> (; *_F &lt; _Piv; ++_F)
+			;
+		<b>for</b> (; _Piv &lt; *--_L; )
+			;
+		<b>if</b> (_L &lt;= _F)
+			<b>return</b> (_F);
+		iter_swap(_F, _L); }}
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> _Insertion_sort(_RI _F, _RI _L)
+	{_Insertion_sort_1(_F, _L, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Insertion_sort_1(_BI _F, _BI _L, _Ty *)
+	{<b>if</b> (_F != _L)
+		<b>for</b> (_BI _M = _F; ++_M != _L; )
+			{_Ty _V = *_M;
+			<b>if</b> (!(_V &lt; *_F))
+				_Unguarded_insert(_M, _V);
+			<b>else</b>
+				{copy_backward(_F, _M, _M + 1);
+				*_F = _V; }}}
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Unguarded_insert(_BI _L, _Ty _V)
+	{<b>for</b> (_BI _M = _L; _V &lt; *--_M; _L = _M)
+		*_L = *_M;
+	*_L = _V; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION sort WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> sort(_RI _F, _RI _L, _Pr _P)
+	{_Sort_0(_F, _L, _P, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Sort_0(_RI _F, _RI _L, _Pr _P, _Ty *)
+	{<b>if</b> (_L - _F &lt;= _SORT_MAX)
+		_Insertion_sort(_F, _L, _P);
+	<b>else</b>
+		{_Sort(_F, _L, _P, (_Ty *)0);
+		_Insertion_sort(_F, _F + _SORT_MAX, _P);
+		<b>for</b> (_F += _SORT_MAX; _F != _L; ++_F)
+			_Unguarded_insert(_F, _Ty(*_F), _P); }}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Sort(_RI _F, _RI _L, _Pr _P, _Ty *)
+	{<b>for</b> (; _SORT_MAX &lt; _L - _F; )
+		{_RI _M = _Unguarded_partition(_F, _L, _Median(_Ty(*_F),
+			_Ty(*(_F + (_L - _F) / 2)), _Ty(*(_L - 1)), _P), _P);
+		<b>if</b> (_L - _M &lt;= _M - _F)
+			_Sort(_M, _L, _P, _Val_type(_F)), _L = _M;
+		<b>else</b>
+			_Sort(_F, _M, _P, _Val_type(_F)), _F = _M; }}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_RI _Unguarded_partition(_RI _F, _RI _L, _Ty _Piv, _Pr _P)
+	{<b>for</b> (; ; ++_F)
+		{<b>for</b> (; _P(*_F, _Piv); ++_F)
+			;
+		<b>for</b> (; _P(_Piv, *--_L); )
+			;
+		<b>if</b> (_L &lt;= _F)
+			<b>return</b> (_F);
+		iter_swap(_F, _L); }}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Insertion_sort(_RI _F, _RI _L, _Pr _P)
+	{_Insertion_sort_1(_F, _L, _P, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Insertion_sort_1(_RI _F, _RI _L, _Pr _P, _Ty *)
+	{<b>if</b> (_F != _L)
+		<b>for</b> (_RI _M = _F; ++_M != _L; )
+			{_Ty _V = *_M;
+			<b>if</b> (!_P(_V, *_F))
+				_Unguarded_insert(_M, _V, _P);
+			<b>else</b>
+				{copy_backward(_F, _M, _M + 1);
+				*_F = _V; }}}
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Unguarded_insert(_RI _L, _Ty _V, _Pr _P)
+	{<b>for</b> (_RI _M = _L; _P(_V, *--_M); _L = _M)
+		*_L = *_M;
+	*_L = _V; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION stable_sort</i></font>
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>void</b> stable_sort(_BI _F, _BI _L)
+	{<b>if</b> (_F != _L)
+		_Stable_sort(_F, _L, _Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Stable_sort(_BI _F, _BI _L, _Pd *, _Ty *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	_Temp_iterator&lt;_Ty&gt; _Xb(_N);
+	_Stable_sort(_F, _L, _N, _Xb); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Stable_sort(_BI _F, _BI _L, _Pd _N,
+		_Temp_iterator&lt;_Ty&gt;&amp; _Xb)
+	{<b>if</b> (_N &lt;= _SORT_MAX)
+		_Insertion_sort(_F, _L);
+	<b>else</b>
+		{_Pd _N2 = (_N + 1) / 2;
+		_BI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (_N2 &lt;= _Xb._Maxlen())
+			{_Buffered_merge_sort(_F, _M, _N2, _Xb);
+			_Buffered_merge_sort(_M, _L, _N - _N2, _Xb); }
+		<b>else</b>
+			{_Stable_sort(_F, _M, _N2, _Xb);
+			_Stable_sort(_M, _L, _N - _N2, _Xb); }
+		_Buffered_merge(_F, _M, _L, _N2, _N - _N2, _Xb); }}
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Buffered_merge_sort(_BI _F, _BI _L, _Pd _N,
+		_Temp_iterator&lt;_Ty&gt;&amp; _Xb)
+	{_BI _M = _F;
+	<b>for</b> (_Pd _I = _N; _CHUNK_SIZE &lt;= _I; _I -= _CHUNK_SIZE)
+		{_BI _Mn = _M;
+		advance(_Mn, (<b>int</b>)_CHUNK_SIZE);
+		_Insertion_sort(_M, _Mn);
+		_M = _Mn; }
+	_Insertion_sort(_M, _L);
+	<b>for</b> (_Pd _D = _CHUNK_SIZE; _D &lt; _N; _D *= 2)
+		{_BI _Ft = _F;
+		_Chunked_merge(_F, _L, _Xb._Init(), _D, _N);
+		_Chunked_merge(_Xb._First(), _Xb._Last(), _Ft,
+			_D *= 2, _N); }}
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _OI, <b>class</b> _Pd&gt; <b>inline</b>
+	<b>void</b> _Chunked_merge(_BI _F, _BI _L, _OI&amp; _X, _Pd _D, _Pd _N)
+	{_Pd _D2 = _D * 2;
+	<b>for</b> (; _D2 &lt;= _N; _N -= _D2)
+		{_BI _F1 = _F;
+		advance(_F1, _D);
+		_BI _F2 = _F1;
+		advance(_F2, _D);
+		_X = merge(_F, _F1, _F1, _F2, _X);
+		_F = _F2; }
+	<b>if</b> (_N &lt;= _D)
+		copy(_F, _L, _X);
+	<b>else</b>
+		{_BI _F1 = _F;
+		advance(_F1, _D);
+		merge(_F, _F1, _F1, _L, _X); }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION stable_sort WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> stable_sort(_BI _F, _BI _L, _Pr _P)
+	{<b>if</b> (_F != _L)
+		_Stable_sort(_F, _L,
+			_Dist_type(_F), _Val_type(_F), _P); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Stable_sort(_BI _F, _BI _L, _Pd *, _Ty *, _Pr _P)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	_Temp_iterator&lt;_Ty&gt; _Xb(_N);
+	_Stable_sort(_F, _L, _N, _Xb, _P); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Stable_sort(_BI _F, _BI _L, _Pd _N,
+		_Temp_iterator&lt;_Ty&gt;&amp; _Xb, _Pr _P)
+	{<b>if</b> (_N &lt;= _SORT_MAX)
+		_Insertion_sort(_F, _L, _P);
+	<b>else</b>
+		{_Pd _N2 = (_N + 1) / 2;
+		_BI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (_N2 &lt;= _Xb._Maxlen())
+			{_Buffered_merge_sort(_F, _M, _N2, _Xb, _P);
+			_Buffered_merge_sort(_M, _L, _N - _N2, _Xb, _P); }
+		<b>else</b>
+			{_Stable_sort(_F, _M, _N2, _Xb, _P);
+			_Stable_sort(_M, _L, _N - _N2, _Xb, _P); }
+		_Buffered_merge(_F, _M, _L, _N2, _N - _N2, _Xb, _P); }}
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Buffered_merge_sort(_BI _F, _BI _L, _Pd _N,
+		_Temp_iterator&lt;_Ty&gt;&amp; _Xb, _Pr _P)
+	{_BI _M = _F;
+	<b>for</b> (_Pd _I = _N; _CHUNK_SIZE &lt;= _I; _I -= _CHUNK_SIZE)
+		{_BI _Mn = _M;
+		advance(_Mn, (<b>int</b>)_CHUNK_SIZE);
+		_Insertion_sort(_M, _Mn, _P);
+		_M = _Mn; }
+	_Insertion_sort(_M, _L, _P);
+	<b>for</b> (_Pd _D = _CHUNK_SIZE; _D &lt; _N; _D *= 2)
+		{_BI _Ft = _F;
+		_Chunked_merge(_F, _L, _Xb._Init(), _D, _N, _P);
+		_Chunked_merge(_Xb._First(), _Xb._Last(), _Ft,
+			_D *= 2, _N, _P); }}
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _OI, <b>class</b> _Pd, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Chunked_merge(_BI _F, _BI _L, _OI&amp; _X,
+		_Pd _D, _Pd _N, _Pr _P)
+	{_Pd _D2 = _D * 2;
+	<b>for</b> (; _D2 &lt;= _N; _N -= _D2)
+		{_BI _F1 = _F;
+		advance(_F1, _D);
+		_BI _F2 = _F1;
+		advance(_F2, _D);
+		_X = merge(_F, _F1, _F1, _F2, _X, _P);
+		_F = _F2; }
+	<b>if</b> (_N &lt;= _D)
+		copy(_F, _L, _X);
+	<b>else</b>
+		{_BI _F1 = _F;
+		advance(_F1, _D);
+		merge(_F, _F1, _F1, _L, _X, _P); }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION partial_sort</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> partial_sort(_RI _F, _RI _M, _RI _L)
+	{_Partial_sort(_F, _M, _L, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Partial_sort(_RI _F, _RI _M, _RI _L, _Ty *)
+	{make_heap(_F, _M);
+	<b>for</b> (_RI _I = _M; _I &lt; _L; ++_I)
+		<b>if</b> (*_I &lt; *_F)
+			_Pop_heap(_F, _M, _I, _Ty(*_I), _Dist_type(_F));
+	sort_heap(_F, _M); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION partial_sort WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> partial_sort(_RI _F, _RI _M, _RI _L, _Pr _P)
+	{_Partial_sort(_F, _M, _L, _P, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Partial_sort(_RI _F, _RI _M, _RI _L, _Pr _P, _Ty *)
+	{make_heap(_F, _M, _P);
+	<b>for</b> (_RI _I = _M; _I &lt; _L; ++_I)
+		<b>if</b> (_P(*_I, *_F))
+			_Pop_heap(_F, _M, _I, _Ty(*_I), _P, _Dist_type(_F));
+	sort_heap(_F, _M, _P); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION partial_sort_copy</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _RI&gt; <b>inline</b>
+	_RI partial_sort_copy(_II _F1, _II _L1, _RI _F2, _RI _L2)
+	{<b>return</b> (_Partial_sort_copy(_F1, _L1, _F2, _L2,
+		_Dist_type(_F2), _Val_type(_F1))); }
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	_RI _Partial_sort_copy(_II _F1, _II _L1, _RI _F2, _RI _L2,
+		_Pd *, _Ty *)
+	{_RI _X = _F2;
+	<b>if</b> (_X != _L2)
+		{<b>for</b> (; _F1 != _L1 &amp;&amp; _X != _L2; ++_F1, ++_X)
+			*_X = *_F1;
+		make_heap(_F2, _X);
+		<b>for</b> (; _F1 != _L1; ++_F1)
+			<b>if</b> (*_F1 &lt; *_F2)
+				_Adjust_heap(_F2, _Pd(0), _Pd(_X - _F2),
+					_Ty(*_F1));
+		sort_heap(_F2, _X); }
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION partial_sort_copy WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	_RI partial_sort_copy(_II _F1, _II _L1, _RI _F2, _RI _L2,
+		_Pr _P)
+	{<b>return</b> (_Partial_sort_copy(_F1, _L1, _F2, _L2, _P,
+		_Dist_type(_F2), _Val_type(_F1))); }
+<b>template</b>&lt;<b>class</b> _II, <b>class</b> _RI, <b>class</b> _Pd,
+	<b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_RI _Partial_sort_copy(_II _F1, _II _L1, _RI _F2, _RI _L2,
+		_Pr _P, _Pd *, _Ty *)
+	{_RI _X = _F2;
+	<b>if</b> (_X != _L2)
+		{<b>for</b> (; _F1 != _L1 &amp;&amp; _X != _L2; ++_F1, ++_X)
+			*_X = *_F1;
+		make_heap(_F2, _X, _P);
+		<b>for</b> (; _F1 != _L1; ++_F1)
+			<b>if</b> (_P(*_F1, *_F2))
+				_Adjust_heap(_F2, _Pd(0), _Pd(_X - _F2),
+					_Ty(*_F1), _P);
+		sort_heap(_F2, _X, _P); }
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION nth_element</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> nth_element(_RI _F, _RI _Nth, _RI _L)
+	{_Nth_element(_F, _Nth, _L, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Nth_element(_RI _F, _RI _Nth, _RI _L, _Ty *)
+	{<b>for</b> (; _SORT_MAX &lt; _L - _F; )
+		{_RI _M = _Unguarded_partition(_F, _L, _Median(_Ty(*_F),
+			_Ty(*(_F + (_L - _F) / 2)), _Ty(*(_L - 1))));
+		<b>if</b> (_M &lt;= _Nth)
+			_F = _M;
+		<b>else</b>
+			_L = _M; }
+	_Insertion_sort(_F, _L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION nth_element WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> nth_element(_RI _F, _RI _Nth, _RI _L, _Pr _P)
+	{_Nth_element(_F, _Nth, _L, _P, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Nth_element(_RI _F, _RI _Nth, _RI _L, _Pr _P, _Ty *)
+	{<b>for</b> (; _SORT_MAX &lt; _L - _F; )
+		{_RI _M = _Unguarded_partition(_F, _L, _Median(_Ty(*_F),
+			_Ty(*(_F + (_L - _F) / 2)), _Ty(*(_L - 1)), _P), _P);
+		<b>if</b> (_M &lt;= _Nth)
+			_F = _M;
+		<b>else</b>
+			_L = _M; }
+	_Insertion_sort(_F, _L, _P); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION lower_bound</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	_FI lower_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V)
+	{<b>return</b> (_Lower_bound(_F, _L, _V, _Dist_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pd&gt; <b>inline</b>
+	_FI _Lower_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pd *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	<b>for</b> (; 0 &lt; _N; )
+		{_Pd _N2 = _N / 2;
+		_FI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (*_M &lt; _V)
+			_F = ++_M, _N -= _N2 + 1;
+		<b>else</b>
+			_N = _N2; }
+	<b>return</b> (_F); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION lower_bound WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI lower_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pr _P)
+	{<b>return</b> (_Lower_bound(_F, _L, _V, _P, _Dist_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pd, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI _Lower_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pr _P, _Pd *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	<b>for</b> (; 0 &lt; _N; )
+		{_Pd _N2 = _N / 2;
+		_FI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (_P(*_M, _V))
+			_F = ++_M, _N -= _N2 + 1;
+		<b>else</b>
+			_N = _N2; }
+	<b>return</b> (_F); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION upper_bound</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	_FI upper_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V)
+	{<b>return</b> (_Upper_bound(_F, _L, _V, _Dist_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pd&gt; <b>inline</b>
+	_FI _Upper_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pd *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	<b>for</b> (; 0 &lt; _N; )
+		{_Pd _N2 = _N / 2;
+		_FI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (!(_V &lt; *_M))
+			_F = ++_M, _N -= _N2 + 1;
+		<b>else</b>
+			_N = _N2; }
+	<b>return</b> (_F); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION upper_bound WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI upper_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pr _P)
+	{<b>return</b> (_Upper_bound(_F, _L, _V, _P, _Dist_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pd, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI _Upper_bound(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pr _P, _Pd *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	<b>for</b> (; 0 &lt; _N; )
+		{_Pd _N2 = _N / 2;
+		_FI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (!_P(_V, *_M))
+			_F = ++_M, _N -= _N2 + 1;
+		<b>else</b>
+			_N = _N2; }
+	<b>return</b> (_F); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION equal_range</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	pair&lt;_FI, _FI&gt; equal_range(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V)
+	{<b>return</b> (_Equal_range(_F, _L, _V, _Dist_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pd&gt; <b>inline</b>
+	pair&lt;_FI, _FI&gt; _Equal_range(_FI _F, _FI _L,
+		<b>const</b> _Ty&amp; _V, _Pd *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	<b>for</b> (; 0 &lt; _N; )
+		{_Pd _N2 = _N / 2;
+		_FI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (*_M &lt; _V)
+			_F = ++_M, _N -= _N2 + 1;
+		<b>else</b> <b>if</b> (_V &lt; *_M)
+			_N = _N2;
+		<b>else</b>
+			{_FI _F2 = lower_bound(_F, _M, _V);
+			advance(_F, _N);
+			_FI _L2 = upper_bound(++_M, _F, _V);
+			<b>return</b> (pair&lt;_FI, _FI&gt;(_F2, _L2)); }} 
+	<b>return</b> (pair&lt;_FI, _FI&gt;(_F, _F)); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION equal_range WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	pair&lt;_FI, _FI&gt; equal_range(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V,
+		_Pr _P)
+	{<b>return</b> (_Equal_range(_F, _L, _V, _P, _Dist_type(_F))); }
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pd, <b>class</b> _Pr&gt; <b>inline</b>
+	pair&lt;_FI, _FI&gt; _Equal_range(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V,
+		_Pr _P, _Pd *)
+	{_Pd _N = 0;
+	_Distance(_F, _L, _N);
+	<b>for</b> (; 0 &lt; _N; )
+		{_Pd _N2 = _N / 2;
+		_FI _M = _F;
+		advance(_M, _N2);
+		<b>if</b> (_P(*_M, _V))
+			_F = ++_M, _N -= _N2 + 1;
+		<b>else</b> <b>if</b> (_P(_V, *_M))
+			_N = _N2;
+		<b>else</b>
+			{_FI _F2 = lower_bound(_F, _M, _V, _P);
+			advance(_F, _N);
+			_FI _L2 = upper_bound(++_M, _F, _V, _P);
+			<b>return</b> (pair&lt;_FI, _FI&gt;(_F2, _L2)); }}
+	<b>return</b> (pair&lt;_FI, _FI&gt;(_F, _F)); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION binary_search</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>bool</b> binary_search(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V)
+	{_FI _I = lower_bound(_F, _L, _V);
+	<b>return</b> (_I != _L &amp;&amp; !(_V &lt; *_I)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION binary_search WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>bool</b> binary_search(_FI _F, _FI _L, <b>const</b> _Ty&amp; _V, _Pr _P)
+	{_FI _I = lower_bound(_F, _L, _V, _P);
+	<b>return</b> (_I != _L &amp;&amp; !_P(_V, *_I)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION merge</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI&gt; <b>inline</b>
+	_OI merge(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _OI _X)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; ++_X)
+		<b>if</b> (*_F2 &lt; *_F1)
+			*_X = *_F2++;
+		<b>else</b>
+			*_X = *_F1++;
+	<b>return</b> (copy(_F2, _L2, copy(_F1, _L1, _X))); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION merge WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI merge(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _OI _X,
+		_Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; ++_X)
+		<b>if</b> (_P(*_F2, *_F1))
+			*_X = *_F2++;
+		<b>else</b>
+			*_X = *_F1++;
+	<b>return</b> (copy(_F2, _L2, copy(_F1, _L1, _X))); } 
+		<font color="#003399"><i>// TEMPLATE FUNCTION inplace_merge</i></font>
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>void</b> inplace_merge(_BI _F, _BI _M, _BI _L)
+	{<b>if</b> (_F != _L)
+		_Inplace_merge(_F, _M, _L,
+			_Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Inplace_merge(_BI _F, _BI _M, _BI _L, _Pd *, _Ty *)
+	{_Pd _D1 = 0;
+	_Distance(_F, _M, _D1);
+	_Pd _D2 = 0;
+	_Distance(_M, _L, _D2);
+	_Temp_iterator&lt;_Ty&gt; _Xb(_D1 &lt; _D2 ? _D1 : _D2);
+	_Buffered_merge(_F, _M, _L, _D1, _D2, _Xb); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Buffered_merge(_BI _F, _BI _M, _BI _L,
+		_Pd _D1, _Pd _D2, _Temp_iterator&lt;_Ty&gt;&amp; _Xb)
+	{<b>if</b> (_D1 == 0 || _D2 == 0)
+		;
+	<b>else</b> <b>if</b> (_D1 + _D2 == 2)
+		{<b>if</b> (*_M &lt; *_F)
+			iter_swap(_F, _M); }
+	<b>else</b> <b>if</b> (_D1 &lt;= _D2 &amp;&amp; _D1 &lt;= _Xb._Maxlen())
+		{copy(_F, _M, _Xb._Init());
+		merge(_Xb._First(), _Xb._Last(), _M, _L, _F); }
+	<b>else</b> <b>if</b> (_D2 &lt;= _Xb._Maxlen())
+		{copy(_M, _L, _Xb._Init());
+		_Merge_backward(_F, _M, _Xb._First(), _Xb._Last(), _L); }
+	<b>else</b>
+		{_BI _Fn, _Ln;
+		_Pd _D1n = 0;
+		_Pd _D2n = 0;
+		<b>if</b> (_D2 &lt; _D1)
+			{_D1n = _D1 / 2;
+			_Fn = _F;
+			advance(_Fn, _D1n);
+			_Ln = lower_bound(_M, _L, _Ty(*_Fn));
+			_Distance(_M, _Ln, _D2n); }
+		<b>else</b>
+			{_D2n = _D2 / 2;
+			_Ln = _M;
+			advance(_Ln, _D2n);
+			_Fn = upper_bound(_F, _M, _Ty(*_Ln));
+			_Distance(_F, _Fn, _D1n); }
+		_BI _Mn = _Buffered_rotate(_Fn, _M, _Ln,
+			_D1 - _D1n, _D2n, _Xb);
+		_Buffered_merge(_F, _Fn, _Mn, _D1n, _D2n, _Xb);
+		_Buffered_merge(_Mn, _Ln, _L,
+			_D1 - _D1n, _D2 - _D2n, _Xb); }}
+<b>template</b>&lt;<b>class</b> _BI1, <b>class</b> _BI2, <b>class</b> _BI3&gt; <b>inline</b>
+	_BI3 _Merge_backward(_BI1 _F1, _BI1 _L1, _BI2 _F2, _BI2 _L2,
+		_BI3 _X)
+	{<b>for</b> (; ; )
+		<b>if</b> (_F1 == _L1)
+			<b>return</b> (copy_backward(_F2, _L2, _X));
+		<b>else</b> <b>if</b> (_F2 == _L2)
+			<b>return</b> (copy_backward(_F1, _L1, _X));
+		<b>else</b> <b>if</b> (*--_L2 &lt; *--_L1)
+			*--_X = *_L1, ++_L2;
+		<b>else</b>
+			*--_X = *_L2, ++_L1; }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	_BI _Buffered_rotate(_BI _F, _BI _M, _BI _L,
+		_Pd _D1, _Pd _D2, _Temp_iterator&lt;_Ty&gt;&amp; _Xb)
+	{<b>if</b> (_D1 &lt;= _D2 &amp;&amp; _D1 &lt;= _Xb._Maxlen())
+		{copy(_F, _M, _Xb._Init());
+		copy(_M, _L, _F);
+		<b>return</b> (copy_backward(_Xb._First(), _Xb._Last(), _L)); }
+	<b>else</b> <b>if</b> (_D2 &lt;= _Xb._Maxlen())
+		{copy(_M, _L, _Xb._Init());
+		copy_backward(_F, _M, _L);
+		<b>return</b> (copy(_Xb._First(), _Xb._Last(), _F)); }
+	<b>else</b>
+		{rotate(_F, _M, _L);
+		advance(_F, _D2);
+		<b>return</b> (_F); }}
+		<font color="#003399"><i>// TEMPLATE FUNCTION inplace_merge WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> inplace_merge(_BI _F, _BI _M, _BI _L, _Pr _P)
+	{<b>if</b> (_F != _L)
+		_Inplace_merge(_F, _M, _L, _P,
+			_Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Inplace_merge(_BI _F, _BI _M, _BI _L, _Pr _P,
+		_Pd *, _Ty *)
+	{_Pd _D1 = 0;
+	_Distance(_F, _M, _D1);
+	_Pd _D2 = 0;
+	_Distance(_M, _L, _D2);
+	_Temp_iterator&lt;_Ty&gt; _Xb(_D1 &lt; _D2 ? _D1 : _D2);
+	_Buffered_merge(_F, _M, _L, _D1, _D2, _Xb, _P); }
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Buffered_merge(_BI _F, _BI _M, _BI _L,
+		_Pd _D1, _Pd _D2, _Temp_iterator&lt;_Ty&gt;&amp; _Xb, _Pr _P)
+	{<b>if</b> (_D1 == 0 || _D2 == 0)
+		;
+	<b>else</b> <b>if</b> (_D1 + _D2 == 2)
+		{<b>if</b> (_P(*_M, *_F))
+			iter_swap(_F, _M); }
+	<b>else</b> <b>if</b> (_D1 &lt;= _D2 &amp;&amp; _D1 &lt;= _Xb._Maxlen())
+		{copy(_F, _M, _Xb._Init());
+		merge(_Xb._First(), _Xb._Last(), _M, _L, _F, _P); }
+	<b>else</b> <b>if</b> (_D2 &lt;= _Xb._Maxlen())
+		{copy(_M, _L, _Xb._Init());
+		_Merge_backward(_F, _M, _Xb._First(), _Xb._Last(),
+			_L, _P); }
+	<b>else</b>
+		{_BI _Fn, _Ln;
+		_Pd _D1n = 0;
+		_Pd _D2n = 0;
+		<b>if</b> (_D2 &lt; _D1)
+			{_D1n = _D1 / 2;
+			_Fn = _F;
+			advance(_Fn, _D1n);
+			_Ln = lower_bound(_M, _L, _Ty(*_Fn), _P);
+			_Distance(_M, _Ln, _D2n); }
+		<b>else</b>
+			{_D2n = _D2 / 2;
+			_Ln = _M;
+			advance(_Ln, _D2n);
+			_Fn = upper_bound(_F, _M, _Ty(*_Ln), _P);
+			_Distance(_F, _Fn, _D1n); }
+		_BI _Mn = _Buffered_rotate(_Fn, _M, _Ln,
+			_D1 - _D1n, _D2n, _Xb);
+		_Buffered_merge(_F, _Fn, _Mn, _D1n, _D2n, _Xb, _P);
+		_Buffered_merge(_Mn, _Ln, _L,
+			_D1 - _D1n, _D2 - _D2n, _Xb, _P); }}
+<b>template</b>&lt;<b>class</b> _BI1, <b>class</b> _BI2, <b>class</b> _BI3, <b>class</b> _Pr&gt; <b>inline</b>
+	_BI3 _Merge_backward(_BI1 _F1, _BI1 _L1, _BI2 _F2, _BI2 _L2,
+		_BI3 _X, _Pr _P)
+	{<b>for</b> (; ; )
+		<b>if</b> (_F1 == _L1)
+			<b>return</b> (copy_backward(_F2, _L2, _X));
+		<b>else</b> <b>if</b> (_F2 == _L2)
+			<b>return</b> (copy_backward(_F1, _L1, _X));
+		<b>else</b> <b>if</b> (_P(*--_L2, *--_L1))
+			*--_X = *_L1, ++_L2;
+		<b>else</b>
+			*--_X = *_L2, ++_L1; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION includes</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2&gt; <b>inline</b>
+	<b>bool</b> includes(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (*_F2 &lt; *_F1)
+			<b>return</b> (<b>false</b>);
+		<b>else</b> <b>if</b> (*_F1 &lt; *_F2)
+			++_F1;
+		<b>else</b>
+			++_F2;
+	<b>return</b> (_F2 == _L2); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION includes WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>bool</b> includes(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (_P(*_F2, *_F1))
+			<b>return</b> (<b>false</b>);
+		<b>else</b> <b>if</b> (_P(*_F1, *_F2))
+			++_F1;
+		<b>else</b>
+			++_F2;
+	<b>return</b> (_F2 == _L2); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_union</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI&gt; <b>inline</b>
+	_OI set_union(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _OI _X)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (*_F1 &lt; *_F2)
+			*_X++ = *_F1++;
+		<b>else</b> <b>if</b> (*_F2 &lt; *_F1)
+			*_X++ = *_F2++;
+		<b>else</b>
+			*_X++ = *_F1++, ++_F2;
+	<b>return</b> (copy(_F2, _L2, copy(_F1, _L1, _X))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_union WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI set_union(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _OI _X,
+		_Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (_P(*_F1, *_F2))
+			*_X++ = *_F1++;
+		<b>else</b> <b>if</b> (_P(*_F2, *_F1))
+			*_X++ = *_F2++;
+		<b>else</b>
+			*_X++ = *_F1++, ++_F2;
+	<b>return</b> (copy(_F2, _L2, copy(_F1, _L1, _X))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_intersection</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI&gt; <b>inline</b>
+	_OI set_intersection(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2,
+		_OI _X)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (*_F1 &lt; *_F2)
+			++_F1;
+		<b>else</b> <b>if</b> (*_F2 &lt; *_F1)
+			++_F2;
+		<b>else</b>
+			*_X++ = *_F1++, ++_F2;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_intersection WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI set_intersection(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2,
+		_OI _X, _Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (_P(*_F1, *_F2))
+			++_F1;
+		<b>else</b> <b>if</b> (_P(*_F2, *_F1))
+			++_F2;
+		<b>else</b>
+			*_X++ = *_F1++, ++_F2;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_difference</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI&gt; <b>inline</b>
+	_OI set_difference(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2,
+		_OI _X)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (*_F1 &lt; *_F2)
+			*_X++ = *_F1++;
+		<b>else</b> <b>if</b> (*_F2 &lt; *_F1)
+			++_F2;
+		<b>else</b>
+			++_F1, ++_F2;
+	<b>return</b> (copy(_F1, _L1, _X)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_difference WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI set_difference(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2,
+		_OI _X, _Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (_P(*_F1, *_F2))
+			*_X++ = *_F1++;
+		<b>else</b> <b>if</b> (_P(*_F2, *_F1))
+			++_F2;
+		<b>else</b>
+			++_F1, ++_F2;
+	<b>return</b> (copy(_F1, _L1, _X)); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_symmetric_difference</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI&gt; <b>inline</b>
+	_OI set_symmetric_difference(_II1 _F1, _II1 _L1, _II2 _F2,
+		_II2 _L2, _OI _X)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (*_F1 &lt; *_F2)
+			*_X++ = *_F1++;
+		<b>else</b> <b>if</b> (*_F2 &lt; *_F1)
+			*_X++ = *_F2++;
+		<b>else</b>
+			++_F1, ++_F2;
+	<b>return</b> (copy(_F2, _L2, copy(_F1, _L1, _X))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION set_symmetric_difference WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _II1, <b>class</b> _II2, <b>class</b> _OI, <b>class</b> _Pr&gt; <b>inline</b>
+	_OI set_symmetric_difference(_II1 _F1, _II1 _L1, _II2 _F2,
+		_II2 _L2, _OI _X, _Pr _P)
+	{<b>for</b> (; _F1 != _L1 &amp;&amp; _F2 != _L2; )
+		<b>if</b> (_P(*_F1, *_F2))
+			*_X++ = *_F1++;
+		<b>else</b> <b>if</b> (_P(*_F2, *_F1))
+			*_X++ = *_F2++;
+		<b>else</b>
+			++_F1, ++_F2;
+	<b>return</b> (copy(_F2, _L2, copy(_F1, _L1, _X))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION push_heap</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> push_heap(_RI _F, _RI _L)
+	{_Push_heap_0(_F, _L, _Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Push_heap_0(_RI _F, _RI _L, _Pd *, _Ty *)
+	{_Push_heap(_F, _Pd(_L - _F - 1), _Pd(0), _Ty(*(_L - 1))); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Push_heap(_RI _F, _Pd _H, _Pd _J, _Ty _V)
+	{<b>for</b> (_Pd _I = (_H - 1) / 2; _J &lt; _H &amp;&amp; *(_F + _I) &lt; _V;
+		_I = (_H - 1) / 2)
+		*(_F + _H) = *(_F + _I), _H = _I;
+	*(_F + _H) = _V; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION push_heap WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> push_heap(_RI _F, _RI _L, _Pr _P)
+	{_Push_heap_0(_F, _L, _P,
+		_Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Push_heap_0(_RI _F, _RI _L, _Pr _P, _Pd *, _Ty *)
+	{_Push_heap(_F, _Pd(_L - _F - 1), _Pd(0),
+		_Ty(*(_L - 1)), _P); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Push_heap(_RI _F, _Pd _H, _Pd _J, _Ty _V, _Pr _P)
+	{<b>for</b> (_Pd _I = (_H - 1) / 2; _J &lt; _H &amp;&amp; _P(*(_F + _I), _V);
+		_I = (_H - 1) / 2)
+		*(_F + _H) = *(_F + _I), _H = _I;
+	*(_F + _H) = _V; }
+		<font color="#003399"><i>// TEMPLATE FUNCTION pop_heap</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> pop_heap(_RI _F, _RI _L)
+	{_Pop_heap_0(_F, _L, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Pop_heap_0(_RI _F, _RI _L, _Ty *)
+	{_Pop_heap(_F, _L - 1, _L - 1, _Ty(*(_L - 1)),
+		_Dist_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Pop_heap(_RI _F, _RI _L, _RI _X, _Ty _V, _Pd *)
+	{*_X = *_F;
+	_Adjust_heap(_F, _Pd(0), _Pd(_L - _F), _V); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Adjust_heap(_RI _F, _Pd _H, _Pd _N, _Ty _V)
+	{_Pd _J = _H;
+	_Pd _K = 2 * _H + 2;
+	<b>for</b> (; _K &lt; _N; _K = 2 * _K + 2)
+		{<b>if</b> (*(_F + _K) &lt; *(_F + (_K - 1)))
+			--_K;
+		*(_F + _H) = *(_F + _K), _H = _K; }
+	<b>if</b> (_K == _N)
+		*(_F + _H) = *(_F + (_K - 1)), _H = _K - 1;
+	_Push_heap(_F, _H, _J, _V); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION pop_heap WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> pop_heap(_RI _F, _RI _L, _Pr _P)
+	{_Pop_heap_0(_F, _L, _P, _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Pop_heap_0(_RI _F, _RI _L, _Pr _P, _Ty *)
+	{_Pop_heap(_F, _L - 1, _L - 1, _Ty(*(_L - 1)), _P,
+		_Dist_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Pop_heap(_RI _F, _RI _L, _RI _X, _Ty _V, _Pr _P, _Pd *)
+	{*_X = *_F;
+	_Adjust_heap(_F, _Pd(0), _Pd(_L - _F), _V, _P); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Adjust_heap(_RI _F, _Pd _H, _Pd _N, _Ty _V, _Pr _P)
+	{_Pd _J = _H;
+	_Pd _K = 2 * _H + 2;
+	<b>for</b> (; _K &lt; _N; _K = 2 * _K + 2)
+		{<b>if</b> (_P(*(_F + _K), *(_F + (_K - 1))))
+			--_K;
+		*(_F + _H) = *(_F + _K), _H = _K; }
+	<b>if</b> (_K == _N)
+		*(_F + _H) = *(_F + (_K - 1)), _H = _K - 1;
+	_Push_heap(_F, _H, _J, _V, _P); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION make_heap</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> make_heap(_RI _F, _RI _L)
+	{<b>if</b> (2 &lt;= _L - _F)
+		_Make_heap(_F, _L, _Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty&gt; <b>inline</b>
+	<b>void</b> _Make_heap(_RI _F, _RI _L, _Pd *, _Ty *)
+	{_Pd _N = _L - _F;
+	<b>for</b> (_Pd _H = _N / 2; 0 &lt; _H; )
+		--_H, _Adjust_heap(_F, _H, _N, _Ty(*(_F + _H))); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION make_heap WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> make_heap(_RI _F, _RI _L, _Pr _P)
+	{<b>if</b> (2 &lt;= _L - _F)
+		_Make_heap(_F, _L, _P,
+			_Dist_type(_F), _Val_type(_F)); }
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pd, <b>class</b> _Ty, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> _Make_heap(_RI _F, _RI _L, _Pr _P, _Pd *, _Ty *)
+	{_Pd _N = _L - _F;
+	<b>for</b> (_Pd _H = _N / 2; 0 &lt; _H; )
+		--_H, _Adjust_heap(_F, _H, _N, _Ty(*(_F + _H)), _P); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION sort_heap</i></font>
+<b>template</b>&lt;<b>class</b> _RI&gt; <b>inline</b>
+	<b>void</b> sort_heap(_RI _F, _RI _L)
+	{<b>for</b> (; 1 &lt; _L - _F; --_L)
+		pop_heap(_F, _L); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION sort_heap WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _RI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>void</b> sort_heap(_RI _F, _RI _L, _Pr _P)
+	{<b>for</b> (; 1 &lt; _L - _F; --_L)
+		pop_heap(_F, _L, _P); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION max_element</i></font>
+<b>template</b>&lt;<b>class</b> _FI&gt; <b>inline</b>
+	_FI max_element(_FI _F, _FI _L)
+	{_FI _X = _F;
+	<b>if</b> (_F != _L)
+		<b>for</b> (; ++_F != _L; )
+			<b>if</b> (*_X &lt; *_F)
+				_X = _F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION max_element WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI max_element(_FI _F, _FI _L, _Pr _P)
+	{_FI _X = _F;
+	<b>if</b> (_F != _L)
+		<b>for</b> (; ++_F != _L; )
+			<b>if</b> (_P(*_X, *_F))
+				_X = _F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION min_element</i></font>
+<b>template</b>&lt;<b>class</b> _FI&gt; <b>inline</b>
+	_FI min_element(_FI _F, _FI _L)
+	{_FI _X = _F;
+	<b>if</b> (_F != _L)
+		<b>for</b> (; ++_F != _L; )
+			<b>if</b> (*_F &lt; *_X)
+				_X = _F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION min_element WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _FI, <b>class</b> _Pr&gt; <b>inline</b>
+	_FI min_element(_FI _F, _FI _L, _Pr _P)
+	{_FI _X = _F;
+	<b>if</b> (_F != _L)
+		<b>for</b> (; ++_F != _L; )
+			<b>if</b> (_P(*_F, *_X))
+				_X = _F;
+	<b>return</b> (_X); }
+		<font color="#003399"><i>// TEMPLATE FUNCTION next_permutation</i></font>
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>bool</b> next_permutation(_BI _F, _BI _L)
+	{_BI _I = _L;
+	<b>if</b> (_F == _L || _F == --_I)
+		<b>return</b> (<b>false</b>);
+	<b>for</b> (; ; )
+		{_BI _Ip = _I;
+		<b>if</b> (*--_I &lt; *_Ip)
+			{_BI _J = _L;
+			<b>for</b> (; !(*_I &lt; *--_J); )
+				;
+			iter_swap(_I, _J);
+			reverse(_Ip, _L);
+			<b>return</b> (true); }
+		<b>if</b> (_I == _F)
+			{reverse(_F, _L);
+			<b>return</b> (<b>false</b>); }}}
+		<font color="#003399"><i>// TEMPLATE FUNCTION next_permutation WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>bool</b> next_permutation(_BI _F, _BI _L, _Pr _P)
+	{_BI _I = _L;
+	<b>if</b> (_F == _L || _F == --_I)
+		<b>return</b> (<b>false</b>);
+	<b>for</b> (; ; )
+		{_BI _Ip = _I;
+		<b>if</b> (_P(*--_I, *_Ip))
+			{_BI _J = _L;
+			<b>for</b> (; !_P(*_I, *--_J); )
+				;
+			iter_swap(_I, _J);
+			reverse(_Ip, _L);
+			<b>return</b> (true); }
+		<b>if</b> (_I == _F)
+			{reverse(_F, _L);
+			<b>return</b> (<b>false</b>); }}}
+		<font color="#003399"><i>// TEMPLATE FUNCTION prev_permutation</i></font>
+<b>template</b>&lt;<b>class</b> _BI&gt; <b>inline</b>
+	<b>bool</b> prev_permutation(_BI _F, _BI _L)
+	{_BI _I = _L;
+	<b>if</b> (_F == _L || _F == --_I)
+		<b>return</b> (<b>false</b>);
+	<b>for</b> (; ; )
+		{_BI _Ip = _I;
+		<b>if</b> (!(*--_I &lt; *_Ip))
+			{_BI _J = _L;
+			<b>for</b> (; *_I &lt; *--_J; )
+				;
+			iter_swap(_I, _J);
+			reverse(_Ip, _L);
+			<b>return</b> (true); }
+		<b>if</b> (_I == _F)
+			{reverse(_F, _L);
+			<b>return</b> (<b>false</b>); }}}
+		<font color="#003399"><i>// TEMPLATE FUNCTION prev_permutation WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _BI, <b>class</b> _Pr&gt; <b>inline</b>
+	<b>bool</b> prev_permutation(_BI _F, _BI _L, _Pr _P)
+	{_BI _I = _L;
+	<b>if</b> (_F == _L || _F == --_I)
+		<b>return</b> (<b>false</b>);
+	<b>for</b> (; ; )
+		{_BI _Ip = _I;
+		<b>if</b> (!_P(*--_I, *_Ip))
+			{_BI _J = _L;
+			<b>for</b> (; _P(*_I, *--_J); )
+				;
+			iter_swap(_I, _J);
+			reverse(_Ip, _L);
+			<b>return</b> (true); }
+		<b>if</b> (_I == _F)
+			{reverse(_F, _L);
+			<b>return</b> (<b>false</b>); }}}
+_STD_END
+<b>#ifdef</b>  _MSC_VER
+<b>#pragma</b> pack(pop)
+<b>#endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+
+<b>#endif</b> <font color="#003399"><i>/* _ALGORITHM_ */</i></font>
+
+<font color="#003399"><i>/*
+ * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
+ * Consult your license regarding permissions and restrictions.
+ */</i></font>
+
+<font color="#003399"><i>/*
+ * This file is derived from software bearing the following
+ * restrictions:
+ *
+ * Copyright (c) 1994
+ * Hewlett-Packard Company
+ *
+ * Permission to use, copy, modify, distribute and sell this
+ * software and its documentation for any purpose is hereby
+ * granted without fee, provided that the above copyright notice
+ * appear in all copies and that both that copyright notice and
+ * this permission notice appear in supporting documentation.
+ * Hewlett-Packard Company makes no representations about the
+ * suitability of this software for any purpose. It is provided
+ * &quot;as is&quot; without express or implied warranty.
+ */</i></font>
+
+</code></pre>
+
+
+</body>
+</html>
+

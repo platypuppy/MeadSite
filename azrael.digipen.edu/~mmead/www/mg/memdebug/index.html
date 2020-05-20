@@ -1,0 +1,838 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide Memory Debuggers</title>
+</head>
+
+<style>
+</style>
+
+<body>  
+<center>
+<h1>Mead's (Brief) Guide To Memory Debuggers<p></h1>
+(An Introduction to Dr. Memory and Valgrind)
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<a href="index.html#DRMEM">Dr. Memory examples</a>
+<br>
+<a href="index.html#VALGRIND">Valgrind examples</a>
+<br> 
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p class="SectionHeader">
+Background
+</p>
+
+There are several tools available to help you find memory bugs in your programs.
+This document will discuss two of them: Dr. Memory and Valgrind.
+<ol>
+  <li><a href="http://www.drmemory.org/">Dr. Memory</a> &mdash;
+<i>"Dr. Memory is a memory monitoring tool capable of identifying memory-related
+ programming errors such as accesses of uninitialized memory, accesses to 
+ unaddressable memory (including outside of allocated heap units and heap 
+ underflow and overflow), accesses to freed memory, double frees, memory leaks,
+  and (on Windows) handle leaks, GDI API usage errors, and accesses to 
+  un-reserved thread local storage slots."</i>
+  <p>
+  Dr. Memory operates on unmodified application binaries running on Windows, 
+  Linux, Mac, or Android on commodity IA-32, AMD64, and ARM hardware.
+  <p>
+  <b>Pros:</b>
+  <ul>
+    <li>Available for Windows, Mac, and Linux.</li>
+    <li>Easy to use (no source code changes).</li>
+    <li>Faster than other memory debuggers.</li>
+    <li>Freely available.</li>
+  </ul>
+<p>
+  <b>Cons:</b>
+  <ul>
+    <li>Some functionality missing with 64-bit Windows.</li>
+    <li>Doesn't work well with Windows 10.</li>
+    <li>Doesn't work with Cygwin's gcc/g++ compilers.</li>
+    <!--<li>Must be manually installed.</li>-->
+    <li>May require special compiler options to work properly.</li>
+    <li>Only detects memory-related bugs.</li>
+  </ul>
+  
+  </li>
+  <p>
+  <li><a href="http://www.valgrind.org/">Valgrind</a> &mdash;
+<i>"Valgrind is a GPL'd system for debugging and profiling Linux and Mac programs. 
+With Valgrind's tool suite you can automatically detect many memory management
+and threading bugs, avoiding hours of frustrating bug-hunting, making your
+ programs more stable. You can also perform detailed profiling to help speed
+  up your programs."</i>
+<p>
+Valgrind runs on several popular platforms, such as x86, AMD64 and PPC32.
+Read more about the benefits of using Valgrind <a href="http://www.valgrind.org/info/about.html">here</a>.
+
+  <p>
+  <b>Pros:</b>
+  <ul>
+    <li>Easy to use (no source code changes).</li>
+    <li>Easy to install.</li>
+    <li>Generally doesn't need any special compiler options.</li>
+    <li>Works well with 32-bit and 64-bit.</li>
+    <li>Includes an entire suite of debugging tools (not just memory debugging.)</li>
+    <li>Freely available.</li>
+  </ul>
+<p>
+  <b>Cons:</b>
+  <ul>
+    <li>Not available for Windows.</li>
+    <li>Can be slower than other memory debuggers.</li>
+  </ul>
+  </li>
+</ol>
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<a name="DRMEM">
+<p class="SectionHeader">
+Dr. Memory
+</p>
+</a>
+
+On Windows, you can use either MinGW or Microsoft's compiler to build programs
+that Dr. Memory can check. In order for Dr. Memory to work correctly, you may need to
+compile your program with special command line options. 
+Refer to <a href="http://drmemory.org/docs/page_prep.html">
+Preparing Your Application</a> on their website for detailed information.
+<blockquote>
+<p class="technote">
+Although Dr. Memory will work with Windows, Mac, and Linux, I'm only going to 
+show how to use it under Windows because Valgrind is a better choice if you're
+running Mac or Linux. Also, the version of Dr. Memory used for these examples is <b>1.11.0 -- build 2</b>.
+(Current version is 2.2.0 -- build 1)
+</p>
+</blockquote>
+
+We're going to use this file: <a href="mem.bugs.cpp">mem.bugs.cpp</a>
+(<a href="mem.bugs.cpp.html">HTML</a>),
+that has several memory-related bugs:
+<p>
+
+<ol>
+  <li>test1 - simple memory leak</li>
+  <li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i></li>
+  <li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i></li>
+  <li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i></li>
+  <li>test5 - allocate with <i>new</i>, deallocate with <i>free</i></li>
+  <li>test6 - buffer overflow</li>
+  <li>test7 - unitialized read (unsupported on 64-bit Windows)</li>
+</ol>
+
+Both memory debuggers can detect more errors than the ones listed, but this
+should give you an idea of how to use them. To experiment with code that has
+more errors, try this one: 
+<a href="mem.leaks.cpp">mem.leaks.cpp</a> (<a href="mem.leaks.cpp.html">HTML</a>).
+<ul>
+
+<li>
+<b>MinGW</b> (gcc/g++)
+<p>
+First, we need to compile <i>mem.bugs.cpp</i> with the
+appropriate options:
+<p>
+<blockquote><pre>
+g++ <b>-ggdb</b> mem.bugs.cpp -o mingw64.exe
+</pre></blockquote>
+
+The <i>-ggdb</i> option adds additional debugging information (e.g. filenames
+and line numbers) to the executable so the debugger can tell you where the 
+problems are located.
+<p>
+Running the program under Dr. Memory (test #1, memory leak):
+
+<blockquote><pre>
+<b>drmemory</b> -batch -no_summary -- mingw64.exe 1
+</pre></blockquote>
+
+and the output (I've highlighted the important lines)
+
+<blockquote><pre>
+~~Dr.M~~
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x0000000003220a50-0x0000000003220acb + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ # 1 libwinpthread-1.dll!?                   +0x0      (0x0000000064944d85 <libwinpthread-1.dll+0x4d85>)
+~~Dr.M~~ # 2 msvcrt.dll!_threadid                    +0x259    (0x00007ff90456a5da &lt;msvcrt.dll+0x3a5da&gt;)
+~~Dr.M~~ # 3 msvcrt.dll!errno                        +0x8      (0x00007ff904537cd9 &lt;msvcrt.dll+0x7cd9&gt;)
+~~Dr.M~~ # 4 msvcrt.dll!strtoui64_l                  +0x83     (0x00007ff904534424 &lt;msvcrt.dll+0x4424&gt;)
+~~Dr.M~~ # 5 msvcrt.dll!onexit                       +0xf5     (0x00007ff90455a686 &lt;msvcrt.dll+0x2a686&gt;)
+~~Dr.M~~ # 6 msvcrt.dll!strtol                       +0x63     (0x00007ff904534714 &lt;msvcrt.dll+0x4714&gt;)
+<b>~~Dr.M~~ # 7 test1                                    [c:\Users\mmead\drmem/mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 8 main                                     [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+
+The <i>-no_summary</i> option tells Dr. Memory to only output information when there are problems.
+Without the option, Dr. Memory will display several lines of output, even if there were no
+problems. Like most <i>good</i> command line tools, silence (no output) indicates success.
+<p>
+You can see by the output that Dr. Memory has detected the memory leak of 
+123 bytes at line #7 in the source file: 
+
+<blockquote><pre>
+1  <font color="990099">#include &lt;iostream&gt;</font>
+2  <font color="990099">#include &lt;cstdlib&gt;</font>
+3  <font color="990099">#include &lt;cstring&gt;</font>
+4
+5  <b>void</b> test1()
+6  {
+7    <b>new</b> <b>char</b>[123];
+8  }
+9
+</pre></blockquote>
+
+The output shows that on line #72 (in the function <i>main</i>), there is a call
+to a function (<i>test1</i>). The memory was allocated on line #7 in function
+<i>test1</i>. All of the lines above <i>test1</i> can be ignored as they are
+functions in the runtime libraries.
+<p>
+If you were to compile the program using the 32-bit MinGW compiler, you would
+see this output similar to this:
+
+
+<blockquote><pre>
+~~Dr.M~~
+~~Dr.M~~ Error #1: POSSIBLE LEAK 28 direct bytes 0x02db00f8-0x02db0114 + 0 indirect bytes
+~~Dr.M~~ # 0 replace_malloc                    [d:\drmemory_package\common\alloc_replace.c:2576]
+~~Dr.M~~ # 1 msvcrt.dll!realloc               +0x40a    (0x762c770b &lt;msvcrt.dll+0x4770b&gt;)
+~~Dr.M~~ # 2 msvcrt.dll!unlock                +0x3c7    (0x762e70c8 &lt;msvcrt.dll+0x670c8&gt;)
+~~Dr.M~~ # 3 msvcrt.dll!_getmainargs          +0x18     (0x762b57c9 &lt;msvcrt.dll+0x357c9&gt;)
+~~Dr.M~~ # 4 pre_cpp_init
+~~Dr.M~~ # 5 __tmainCRTStartup
+~~Dr.M~~ # 6 KERNEL32.dll!BaseThreadInitThunk +0x23     (0x75df8484 &lt;KERNEL32.dll+0x18484&gt;)
+~~Dr.M~~
+<b>~~Dr.M~~ Error #2: LEAK 123 direct bytes 0x02db0310-0x02db038b + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ # 1 test1                                    [c:\Users\mmead\drmem/mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 2 main                                     [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+
+Again, I've highlighted the important lines. You'll also see that there is 
+a <i>POSSIBLE LEAK</i> of 28 bytes that is shown. Since none of the lines 
+regarding that leak contain references
+to the code in <i>mem.bugs.cpp</i>, you can ignore them. (You may or may not see
+the possible leak.)
+
+<p class="technote">
+<b>Note:</b> If Dr. Memory fails to detect errors with your 64-bit MinGW programs, you should rebuild
+them as 32-bit MinGW programs, instead. There are known problems with some Windows 10 computers and 
+Dr. Memory running 64-bit programs. If that still doesn't work on your computer, then
+you should use Microsoft's compiler, which is detailed next.
+
+<!--
+<blockquote><pre>
+~~Dr.M~~ Fetching 2 symbol files...
+~~Dr.M~~ [1/2] Fetching symbols for C:\Windows\System32\msvcp_win.dll
+~~Dr.M~~ [2/2] Fetching symbols for C:\Windows\System32\msvcrt.dll
+~~Dr.M~~ Fetched 0 symbol files successfully
+</pre></blockquote>
+-->
+<p>
+</li>
+
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+
+<li>
+<b>Microsoft</b> (cl)
+<p>
+First, we need to compile <i>mem.bugs.cpp</i> with the
+appropriate options:
+<p>
+
+<blockquote><pre>
+cl <b>/Zi /MT /EHsc /Oy- /Ob0</b> /Fems64.exe mem.bugs.cpp  
+</pre></blockquote>
+
+The command line options are explained
+<a href="http://drmemory.org/docs/page_prep.html#sec_prep_windows">here</a>.
+<p>
+Running the program under Dr. Memory (test #1, memory leak):
+
+<blockquote><pre>
+<b>drmemory</b> -batch -no_summary -- ms64.exe 1
+</pre></blockquote>
+
+and the output (I've highlighted the important lines)
+
+<blockquote><pre>
+~~Dr.M~~
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x0000026f8a203e70-0x0000026f8a203eeb + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array                           [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ # 1 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ # 2 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ # 3 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ # 4 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ # 5 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ # 6 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ # 7 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ # 8 test1                                                [c:\users\mmead\drmem\mem.bugs.cpp:7]</b>
+~~Dr.M~~ # 9 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ #10 atexit                                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ #11 __scrt_common_main_seh                               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+</pre></blockquote>
+
+You can see by the output that Dr. Memory has detected the memory leak of 
+123 bytes at line #7 in the source file, just as it did with the MinGW executable.
+<p>
+If you were to compile the program using Microsoft's 32-bit compiler, you would
+see this output similar to this:
+
+<blockquote><pre>
+~~Dr.M~~
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x00cbcce8-0x00cbcd63 + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ # 1 test1                                    [c:\users\mmead\drmem\mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 2 main                                     [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<p class="technote">
+<b>Note:</b> To compile with Microsoft's compilers from the command line, 
+you must enable the developer environment at the command
+prompt. For the 64-bit developer environment, you would type <tt><b>setvc17-64</b></tt>
+in a command prompt. To enable the 32-bit environment, you would type
+<tt><b>setvc17-32</b></tt> at the command line. The commands are custom-made
+batch files.
+<br><br>
+For best results, you should open two command windows and type the 32-bit
+command (<tt><b>setvc17-32</b></tt>) in one and the 64-bit command (<tt><b>setvc17-64</b></tt>)
+in the other. Typing both in the same
+command prompt can lead to problems with the environment. You should only type
+the command <b>once</b> when you open the command prompt. You have to do this
+each time you open a command prompt as the settings are not persisted across
+command sessions.
+<br><br>
+<font color="black"><b>These batch files have been setup on the computers at school. If you are working
+on your own personal computer, you'll have to figure out how to configure
+it to run Microsoft's compiler from the command line. If you can't get it working,
+then you should use one of the computers here at school.</b></font>
+</p>
+
+</ul>
+
+You can see all of the output from both Microsoft (32-bit and 64-bit) and MinGW
+(32-bit and 64-bit) <a href="memory-debugging-output.html">here</a>.
+<p>
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<a name="VALGRIND">
+<p class="SectionHeader">
+Valgrind
+</p>
+</a>
+
+<a href="http://www.valgrind.org/">Valgrind</a> is only available for Linux and Mac, and I will be showing it on Linux. Valgrind
+is also a suite of tools that can look for problems other than memory. Read the documentation
+to see all of the things that it can do. The version of Valgrind used for these examples
+is <b>3.10.1</b>.
+<p>
+The first thing is to compile. The recommended options are <tt>-g</tt>
+(include debugging information) and <tt>-O0</tt>
+(disable optimizations, that's an uppercase letter 'O' followed by a zero):
+
+<blockquote><pre>
+g++ <b>-g -O0</b> -o gnu64 mem.bugs.cpp
+</pre></blockquote>
+
+Valgrind works the same way in both 32-bit and 64-bit programs, so I'm just going
+to show the 64-bit output.
+<p>
+
+Running the program (test #1, memory leak) under Valgrind:
+
+<blockquote><pre>
+valgrind ./gnu64 1
+</pre></blockquote>
+
+produces this output:
+
+<blockquote><pre>
+==25831== Memcheck, a memory error detector
+==25831== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==25831== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==25831== Command: ./gnu64 1
+==25831== 
+==25831== 
+==25831== HEAP SUMMARY:
+==25831==     in use at exit: 72,827 bytes in 2 blocks
+==25831==   total heap usage: 2 allocs, 0 frees, 72,827 bytes allocated
+==25831== 
+==25831== LEAK SUMMARY:
+==25831==    <b>definitely lost: 123 bytes in 1 blocks</b>
+==25831==    indirectly lost: 0 bytes in 0 blocks
+==25831==      possibly lost: 0 bytes in 0 blocks
+==25831==    still reachable: 72,704 bytes in 1 blocks
+==25831==         suppressed: 0 bytes in 0 blocks
+==25831== Rerun with --leak-check=full to see details of leaked memory
+==25831== 
+==25831== For counts of detected and suppressed errors, rerun with: -v
+==25831== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+</pre></blockquote>
+
+I highlighted the important part which shows the 123 bytes of memory that was
+not deallocated. There's also a false-positive leak of 72,827 bytes. I'll show
+how to suppress that later. 
+There is a lot of "noise" being output, so we're going to suppress
+a lot of that. Do that with the <tt>--quiet</tt> option:
+
+<blockquote><pre>
+valgrind <b>--quiet</b> ./gnu64 1
+</pre></blockquote>
+
+Unfortunately, this has suppressed all of the output so we need to enable some
+of it:
+
+<blockquote><pre>
+valgrind --quiet <b>--leak-check=full</b> ./gnu64 1
+</pre></blockquote>
+
+Now the output looks like this:
+
+<blockquote><pre>
+<b>==26112== 123 bytes in 1 blocks are definitely lost in loss record 1 of 2</b>
+==26112==    at 0x4C2B800: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==26112==    by 0x400AA4: test1() (mem.bugs.cpp:7)</b>
+<b>==26112==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==26112== 
+==26112== 72,704 bytes in 1 blocks are still reachable in loss record 2 of 2
+==26112==    at 0x4C2AB80: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==26112==    by 0x4E9FC25: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==26112==    by 0x40101D9: call_init.part.0 (dl-init.c:78)
+==26112==    by 0x40102C2: call_init (dl-init.c:36)
+==26112==    by 0x40102C2: _dl_init (dl-init.c:126)
+==26112==    by 0x4001299: ??? (in /lib/x86_64-linux-gnu/ld-2.19.so)
+==26112==    by 0x1: ???
+==26112==    by 0xFFEFFFD46: ???
+==26112==    by 0xFFEFFFD4E: ???
+==26112== 
+</pre></blockquote>
+
+It shows exactly what we wanted, including the filename and line numbers where to 
+look.
+<p>
+Ok, let's suppress the false-positive since it's going to show up in every
+test. I'm just going to give a quick
+overview of how to do that. For more details, read
+<a href="http://www.valgrind.org/docs/manual/manual-core.html#manual-core.suppress">Suppressing errors</a>
+and <a href="http://valgrind.org/docs/manual/mc-manual.html#mc-manual.suppfiles">Writing suppression files</a>.
+<p>
+First, you have to generate a suppression file:
+
+<blockquote><pre>
+valgrind --quiet --leak-check=full <nobr><b>--gen-suppressions=yes</b></nobr> ./gnu64 1
+</pre></blockquote>
+
+Now, when you run it you'll see this:
+
+<blockquote><pre>
+==26594== 123 bytes in 1 blocks are definitely lost in loss record 1 of 2
+==26594==    at 0x4C2B800: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==26594==    by 0x400AA4: test1() (mem.bugs.cpp:7)
+==26594==    by 0x400C88: main (mem.bugs.cpp:72)
+==26594== 
+==26594== 
+==26594== ---- Print suppression ? --- [Return/N/n/Y/y/C/c] ---- 
+</pre></blockquote>
+
+Valgrind has paused and the last line is prompting you to 
+answer the question <i>Print suppression ?</i> Since the
+memory leak being shown is an actual memory leak, you DO NOT want to suppress that. If you
+do, Valgrind will not report it as a leak anymore, which is not what we want. 
+Press <i>n</i> to skip the suppression.
+<p>
+
+Now, Valgrind displays the false-postive and asks again if you want to suppress this:
+
+<blockquote><pre>
+==26894== 72,704 bytes in 1 blocks are still reachable in loss record 2 of 2
+==26894==    at 0x4C2AB80: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==26894==    by 0x4E9FC25: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+==26894==    by 0x40101D9: call_init.part.0 (dl-init.c:78)
+==26894==    by 0x40102C2: call_init (dl-init.c:36)
+==26894==    by 0x40102C2: _dl_init (dl-init.c:126)
+==26894==    by 0x4001299: ??? (in /lib/x86_64-linux-gnu/ld-2.19.so)
+==26894==    by 0x1: ???
+==26894==    by 0xFFEFFFD46: ???
+==26894==    by 0xFFEFFFD4E: ???
+==26894== 
+==26894== 
+==26894== ---- Print suppression ? --- [Return/N/n/Y/y/C/c] ---- 
+</pre></blockquote>
+
+You'll notice that none of the lines reference our source code (<i>mem.bugs.cpp</i>), which
+is a good sign that the leak is not in our code.
+<p>
+
+This time, type <i>y</i> to generate the suppression output. This is what Valgrind
+displays on my computer:
+
+<blockquote><pre>
+{
+   &lt;insert_a_suppression_name_here&gt;
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/x86_64-linux-gnu/ld-2.19.so
+   obj:*
+   obj:*
+   obj:*
+}
+</pre></blockquote>
+
+You need to copy the text (including the curly braces) and paste it into a text
+file that will be used as the suppression file. You can name the text file
+anything you want. I usually name my suppression files <tt><b>false.supp</b></tt>, but you
+can name it anything.
+
+<blockquote>
+<p class="technote">
+<b>Note:</b> Do <b>NOT</b> copy the text from this web page. Every system produces
+a different suppression file. If you just copy the one from this web page, it
+won't work. You must generate the file on your particular computer.
+</p>
+</blockquote>
+
+<p>
+Now, when you run Valgrind, you will specify this suppression file on the command
+line so that Valgrind will ignore (suppress) the false-positive:
+
+<blockquote><pre>
+valgrind --quiet --leak-check=full <b>--suppressions=false.supp</b> ./gnu64 1
+</pre></blockquote>
+
+This assumes that you put the suppression file in the same directory that you
+are running in. Now, the output looks like this:
+
+<blockquote><pre>
+<b>==27200== 123 bytes in 1 blocks are definitely lost in loss record 1 of 2</b>
+==27200==    at 0x4C2B800: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==27200==    by 0x400AA4: test1() (mem.bugs.cpp:7)</b>
+<b>==27200==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==27200== 
+</pre></blockquote>
+
+which contains just the memory leak that we put in the code.
+
+
+
+
+<blockquote>
+<p class="technote">
+<b>Pro Tip:</b> Since this false-positive will show up in <i>every</i> program
+you run, you'll want to put this file in some other location and refer to that
+location. You don't want to have dozens (or hundreds) of these files around
+because, as you'll shortly see, when the suppression file needs to be updated,
+you don't want to have to update 100 of them. You could put the file in your
+<tt>bin</tt> directory in your home directory
+(for example: <tt>/home/user/bin/false.supp</tt>).
+Yeah, it's not a binary file (executable), but the <tt>bin</tt> directory in my
+home directory is a convenient location and exists on all systems I use.
+</p>
+</blockquote>
+
+Now, run Valgrind like this:
+<blockquote><pre>
+valgrind --quiet --leak-check=full <b>--suppressions=/home/user/bin/false.supp</b> ./gnu64 1
+</pre></blockquote>
+
+Now, you can use this suppression file for all of your programs, regardless of
+where they are on your computer.
+
+<blockquote>
+<p class="technote">
+<b>Note:</b> The suppression files are specific to the versions of the operating
+system, compiler, libraries, and Valgrind. You may find that, if you update any of these
+things that you will have to re-generate the suppression file. You can see this
+in the suppression file as it references version 6.0.25 of <i>libstdc++.so</i>. If this
+library gets updated, the suppression file will no longer work.
+</blockquote>
+
+This is the only false-positive that Valgrind is showing and it's coming from the
+standard C++ library <i>libstdc++.so</i>. Depending on what kinds of other libraries/code
+you include in your program, you may get more, sometimes <i>MANY</i> more, false-positives.
+You would simply run Valgrind with the <nobr><tt><b>--gen-suppressions=yes</b></tt></nobr> option
+and copy/paste the output into the same suppression file. That's why there are curly
+braces in the output. The lines of text between each pair of curly braces refers
+to one false-positive. There is no limit to how many of these suppression lines
+can be put into the file. (I've got suppression files that have over 5,000 lines in them!
+Thank you, Qt libraries...)
+<p>
+Finally, you'll notice that the first line of the suppression text was this:
+
+<blockquote><pre>
+{
+   <b>&lt;insert_a_suppression_name_here&gt;</b>
+   Memcheck:Leak
+   . . .
+}
+</pre></blockquote>
+
+This is so you can give a name to the suppression block. It's unused by Valgrind,
+but it allows you to document what the block is suppressing. I usually change it
+to this:
+
+</pre></blockquote>
+<blockquote><pre>
+{
+   <b>[false positive from libstdc++]</b>
+   Memcheck:Leak
+   . . .
+}
+</pre></blockquote>
+
+It doesn't matter what you call it but it must be present. Valgrind skips the
+first non-blank line of each block, so if it's not there, the suppression won't 
+work.
+<p>
+I've just scratched the surface of what Valgrind can do. For more information,
+consult the <a href="http://www.valgrind.org/docs/manual/manual.html">Valgrind User Manual</a>.
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+You can see all of the output from Valgrind using GNU's 64-bit compiler
+with the test file <i>mem.bugs.cpp</i> 
+<a href="memory-debugging-output.html#VALGRIND64">here</a>.
+
+<p>
+<hr width="95%">
+<p>
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p>
+<b>Tracking File Descriptors with Valgrind</b>
+<p>
+Valgrind can do a lot more than just detect memory bugs. I'm going to show one more
+thing that Valgrind can detect. Many beginning programmers fail to close files when
+they are done with them. This can lead to problems.
+<p>
+Tracking file descriptors is a fancy way of saying that you can detect files that
+were not closed (e.g. via <i>fclose</i>). File handles (descriptors) are a finite resource just
+like memory, and if you fail to close them, you can run out of them (just like memory).
+Valgrind has an option that enables this check. Here's a starting place (<tt>fd.c</tt>):
+
+<blockquote><pre>
+<b>int</b> main()
+{
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+This is a complete program that doesn't do anything. Or does it?
+
+Build it:
+<blockquote><pre>
+gcc fd.c -g -o fd
+</pre></blockquote>
+
+and run Valgrind on it with the appropriate option:
+
+<blockquote><pre>
+valgrind -q <b>--track-fds=yes</b> ./fd
+</pre></blockquote>
+
+and this is the output:
+
+<blockquote><pre>
+==31318== FILE DESCRIPTORS: 3 open at exit.
+==31318== Open file descriptor 2: /dev/pts/2
+==31318==    &lt;inherited from parent&gt;
+==31318== 
+==31318== Open file descriptor 1: /dev/pts/2
+==31318==    &lt;inherited from parent&gt;
+==31318== 
+==31318== Open file descriptor 0: /dev/pts/2
+==31318==    &lt;inherited from parent&gt;
+</pre></blockquote>
+
+Valgrind is saying that we have 3 leaks. They are not memory leaks, they are
+resource leaks, file descriptors, to be exact. But the code didn't open any files!
+Think back to your beginning C/C++ programming course and you'll remember that when
+your program runs, three "files" are opened for you:
+
+<ol>
+  <li><i>stdin</i> - By default, this is the keyboard (opened for input, fd 0).</li>
+  <li><i>stdout</i> - By default, this is the screen (opened for output, fd 1).</li>
+  <li><i>stderr</i> - By default, this is the screen (opened for output, fd 2).</li>
+</ol>
+
+<blockquote>
+<p class="technote">
+These three files are also referenced as file descriptors 0, 1, and 2. 
+(Sometimes refered to as <i>file handles</i>.)
+The operating systems keeps
+track of open files using integers. File descriptors 0, 1, and 2 are generally reserved
+for those three files. When a file is opened, the lowest unused integer (i.e. 3) is used.
+That's why when you open the first file in your program, it will
+<i>always</i> be file descriptor 3. If you open a second file, it will be file descriptor 4,
+and so on.
+</p>
+</blockquote>
+
+You don't have to open these files, as they are already opened for you. You also don't have
+to close them, as the system will close them when the program ends. They show up
+as being still open because they aren't closed until long after <i>main</i> finishes.
+That means these are false-positives that we can ignore. (Also, notice that
+they were </i>inherited from the parent</i>.)
+<p>
+OK, let's open a file and "forget" to close it:
+
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt; /* FILE, fopen */</font>
+
+<b>void</b> test1()
+{
+    <font color="990099">/* Open a file, but don't close it. */</font>
+  FILE *fp = fopen(<font color="#9933CC">&quot;foo.txt&quot;</font>, <font color="#9933CC">&quot;wt&quot;</font>);
+}
+
+<b>int</b> main()
+{
+  test1();
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Now, running it under Valgrind produces this output:
+
+<blockquote><pre>
+==4960== FILE DESCRIPTORS: 4 open at exit.
+<b>==4960== Open file descriptor 3: foo.txt</b>
+==4960==    at 0x4F26170: __open_nocancel (syscall-template.S:81)
+==4960==    by 0x4EB0ED7: _IO_file_open (fileops.c:228)
+==4960==    by 0x4EB0ED7: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:333)
+==4960==    by 0x4EA53D3: __fopen_internal (iofopen.c:90)
+<b>==4960==    by 0x40052D: test1 (fd.c:5)</b>
+<b>==4960==    by 0x400542: main (fd.c:10)</b>
+==4960== 
+==4960== Open file descriptor 2: /dev/pts/2
+==4960==    &lt;inherited from parent&gt;
+==4960== 
+==4960== Open file descriptor 1: /dev/pts/2
+==4960==    &lt;inherited from parent&gt;
+==4960== 
+==4960== Open file descriptor 0: /dev/pts/2
+==4960==    &lt;inherited from parent&gt;
+</pre></blockquote>
+
+You can see that there is a fourth file descriptor shown (file descriptor 3) which is the
+file that our program opened for writing. It also shows you the line number that
+opened the file. This makes it pretty easy to locate bugs (file leaks) in your program.
+<p>
+One last thing to mention. You'll see that the first 3 file descriptors don't reference
+any filenames (they use pseudo-terminals). If you were to redirect <i>stdin</i>, 
+<i>stdout</i>, and <i>stderr</i> (assume <tt>in.txt</tt> exists):
+
+<blockquote><pre>
+valgrind -q --track-fds=yes ./fd <b>&lt; in.txt &gt; out.txt 2&gt; err.txt</b>
+</pre></blockquote>
+
+you would see something like this output from Valgrind:
+
+<blockquote><pre>
+==10412== FILE DESCRIPTORS: 3 open at exit.
+==10412== Open file descriptor 2: /home/user/data/courses/notes/code/drmem/err.txt
+==10412==    &lt;inherited from parent&gt;
+==10412== 
+==10412== Open file descriptor 1: /home/user/data/courses/notes/code/drmem/out.txt
+==10412==    &lt;inherited from parent&gt;
+==10412== 
+==10412== Open file descriptor 0: /home/user/data/courses/notes/code/drmem/in.txt
+==10412==    &lt;inherited from parent&gt;
+</pre></blockquote>
+
+Valgrind shows the actual names of the files that are used with the redirection.
+Pretty cool!
+<p>
+<b>Summary:</b>
+<P>
+As was mentioned at the top of this webpage, Valgrind can do much more than just
+check for memory misuse. It includes an entire
+<a href="http://www.valgrind.org/info/tools.html">suite of tools</a>:
+<ul>
+  <li><i><a href="http://www.valgrind.org/docs/manual/mc-manual.html">Memcheck</a></i> - Detects memory-management problems (default behavior)</li>
+  <li><i><a href="http://www.valgrind.org/docs/manual/cg-manual.html">Cachegrind</a></i> - A cache profiler</li>
+  <li><i><a href="http://www.valgrind.org/docs/manual/cl-manual.html">Callgrind</a></i> - An extension to Cachegrind</li>
+  <li><i><a href="http://www.valgrind.org/docs/manual/ms-manual.html">Massif</a></i> - A heap profiler</li>
+  <li><i><a href="http://www.valgrind.org/docs/manual/hg-manual.html">Helgrind</a></i> - A thread debugger to detect data races</li>
+  <li><i><a href="http://www.valgrind.org/docs/manual/drd-manual.html">DRD</a></i> - A thread debugger for various thread errors</li>
+  <li>Other tools - There are a few other experimental tools.</li>
+</ul>
+
+Check out the <a href="http://www.valgrind.org/docs/manual/manual.html">Valgrind User Manual</a>
+for all of the details on using the suite. However, be warned, once you start
+using Valgrind, you won't be able to program without it!
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!--  
+There's one caveat to watch out for, though. If you redirect the output from the program
+to a file, Valgrind will detect yet-another file that is opened. It doesn't even matter
+that our program isn't outputting anything. Going back to the original do-nothing program:
+
+<b>int</b> main()
+{
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+and running it like this:
+
+<blockquote><pre>
+./
+</pre></blockquote>
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

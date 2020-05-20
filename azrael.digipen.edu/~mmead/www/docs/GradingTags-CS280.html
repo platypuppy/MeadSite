@@ -1,0 +1,128 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Grading Tags</title>
+</head>
+
+<body>  
+
+<center><h1></h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Grading Tags
+</p>
+
+Since you're no longer turning in a hard copy, here's an example of the additional lines you need 
+to add to your File Header Comments in your .cpp files.
+
+Make sure you add the lines in <font color="blue">BLUE</font> <b>even if you didn't have
+any problems</b>. If you had no problems, just write: NONE
+
+<blockquote><pre>
+/******************************************************************************/
+/*!
+\file   foobar.cpp
+\author Master Shake
+\par    email: master.shake\@digipen.edu
+\par    DigiPen login: shakemaster
+\par    Course: CS399
+\par    Assignment #9
+\date   2/19/2019
+\brief  
+    This file contains the implementation of the following functions for the 
+    FooBar class:
+      
+    Public Operations include:
+        Constructor
+        Destructor
+        blah, blah, blah,
+        yada, yada, yada,
+    
+        other stuff here....
+    
+    
+  <font color="blue"><b>Hours spent on this assignment: 
+
+  Specific portions that gave you the most trouble: 
+</b></font>
+  
+  
+  
+*/
+/******************************************************************************/
+</pre></blockquote>
+
+
+
+Also, now that there are no hardcopies on which the graders write feedback, this information will
+be added in a comment to the top of one of the source files. This will usually be the .cpp file.
+
+<blockquote>
+<table cellpadding=5 cellspacing=5>
+<tr><td align="right"><b>      $CW:</b></td><td> Compiler Warnings (Unused now that the submission server rejects code that doesn't compile cleanly.)</td></tr>
+<tr><td align="right"><b>      $NC:</b></td><td> No Compile (errors, Unused now that the submission server rejects code that doesn't compile cleanly.)</td></tr>
+<tr><td align="right"><b>     $OUT:</b></td><td> Output problems (failed tests)</td></tr>
+<tr><td align="right"><b>    $LEAK:</b></td><td> Memory leaks</td></tr>
+<tr><td align="right"><b>     $FHC:</b></td><td> File Header Comments are deficient</td></tr>
+<tr><td align="right"><b>     $FNC:</b></td><td> Function Header Comments are deficient</td></tr>
+<tr><td align="right"><b>   $CRASH:</b></td><td> The program crashed or threw an unexpected exception</td></tr>
+<tr><td align="right"><b>    $HANG:</b></td><td> The program was way too slow or in an infinite loop.</td></tr>
+<tr><td align="right"><b>      $ID:</b></td><td> Internal Documentation (comments)</td></tr>
+<tr><td align="right"><b>      $CQ:</b></td><td> Code Quality (Style Guide, etc.) </td></tr>
+<!--<tr><td align="right"><b>      $CG:</b></td><td> Code Guard problems (leaks, buffer overruns, bad pointer arithmetic, etc.)</td></tr>-->
+<tr><td align="right"><b> $MEMBUGS:</b></td><td> Dr. Memory or Valgrind problems (buffer overruns, bad pointer arithmetic, etc.)</td></tr>
+<tr><td align="right"><b>      $EC:</b></td><td> Extra Credit</td></tr>
+<tr><td align="right"><b>   $SCORE:</b></td><td> Your score on the assignment</td></tr>
+<tr><td align="right"><b>   $OUTOF:</b></td><td> How much the assignment was worth.</td></tr>
+<tr><td align="right"><b>   $HOURS:</b></td><td> Hours spent working on the assignment.</td></tr>
+<tr><td align="right"><b>  $ISSUES:</b></td><td> Any problems or issues encountered by the student.</td></tr>
+<tr><td align="right"><b>$COMMENTS:</b></td><td> Comments and suggestions from the graders.</td></tr>
+</table>
+<p>
+</blockquote>
+
+Here's an example:
+
+<blockquote><pre>
+/*******************************************************************************
+//<<
+
+      $CW: -15 (using uninitialized variable)
+      $NC: 
+     $OUT: -8 (Test1, Test5)
+    $LEAK: 
+     $FHC: -5 (Missing)
+     $FNC: 
+   $CRASH: -10 (Stress)
+    $HANG: 
+      $ID: 
+      $CQ: -5 (Too much copy/paste)
+ $MEMBUGS: 
+      $EC: 
+
+   $SCORE: 78
+   $OUTOF: 120
+
+   $HOURS: 6
+  $ISSUES: This assignment was easy. 
+
+$COMMENTS:
+     - find, remove, and insert are about 80% the same. Make helper functions.
+     - The compiler warning tells you why the stress test crashed.
+     - Your out-of-bounds checking was incorrect, causing you to fail 2 tests.
+
+>>//
+*******************************************************************************/
+
+
+
+</pre></blockquote>
+
+     
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>

@@ -1,0 +1,504 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Thread example dividing up a range</title>
+
+</head>
+
+<body>
+
+<center><h1>
+Thread example dividing up a range
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Another Approach
+</p>
+
+To run the program, you can supply two command line options. The first is the number of threads
+to create and the second is the number of iterations (times 1,000,000), e.g.:
+
+<blockquote><pre>
+./pi-atan 8 4000
+</pre></blockquote>
+
+Will create 8 threads, giving each thread 500,000,000 iterations (1 billion in total). The results and timings
+are shown at the bottom of this page. You should run this program on any computers that
+you have access to. The more cores you have, the more interesting the results, I'd imagine.
+
+<p>
+
+<tt><b>pi-atan.c</b></tt>:
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* pi-atan.c  uses long long, so no -ansi, compile with -O2          */</i></font>
+<font color="#003399"><i>/* gcc -Wall -Wextra -pedantic -O2 pi-atan.c -pthread -lm -o pi-atan */</i></font>
+
+<font color="990099">#include &lt;stdio.h&gt;   /* printf                  */</font>
+<font color="990099">#include &lt;stdlib.h&gt;  /* exit, atoi              */</font>
+<font color="990099">#include &lt;pthread.h&gt; /* thread create/join/exit */</font>
+<font color="990099">#include &lt;unistd.h&gt;  /* getpid                  */</font>
+<font color="990099">#include &lt;math.h&gt;    /* sqrt                    */</font>
+
+<font color="#003399"><i>/* Thread data */</i></font>
+<b>struct</b> pi_data
+{
+  <b>long</b> <b>long</b> start; <font color="#003399"><i>/* Starting value for thread  */</i></font>
+  <b>long</b> <b>long</b> end;   <font color="#003399"><i>/* Ending value for thread    */</i></font>
+  <b>long</b> <b>long</b> total; <font color="#003399"><i>/* Total number of iterations */</i></font>
+  <b>double</b> result;   <font color="#003399"><i>/* The approximation of pi    */</i></font>
+  <b>double</b> (*threadFn)(<b>long</b> <b>long</b>, <b>long</b> <b>long</b>, <b>long</b> <b>long</b>); <font color="#003399"><i>/* PI function */</i></font>
+};
+
+<b>double</b> atan_pi2(<b>long</b> <b>long</b> start, <b>long</b> <b>long</b> end, <b>long</b> <b>long</b> total)
+{
+  <b>double</b> width = 1.0 / total;
+  <b>double</b> midpoint = (start * width) + width / 2;
+  <b>double</b> area = 0.0;
+  <b>long</b> <b>long</b> i;
+
+  <b>for</b> (i = start; i &lt; end; i++)
+  {
+    <b>double</b> area_of_rectangle;
+
+    midpoint = (i * width) + width / 2;
+    <b>double</b> length = 4.0 / (1 + midpoint * midpoint);
+    area_of_rectangle = length * width;
+    area += area_of_rectangle;
+    <font color="#003399"><i>/*midpoint += width;*/</i></font>
+  }
+
+  <b>return</b> area;
+}
+
+<b>void</b> *threadFn(<b>void</b> *p)
+{
+  <b>struct</b> pi_data *data = (<b>struct</b> pi_data *)p;
+
+<font color="990099">#ifdef DEBUG</font>
+  printf(<font color="#9933CC">&quot;pid: %i, tid: %u&#92;n&quot;</font>, getpid(), (<b>unsigned</b>)pthread_self());
+  printf(<font color="#9933CC">&quot;start: %lli, end: %lli, total: %lli&#92;n&quot;</font>, data-&gt;start, data-&gt;end, data-&gt;total);
+  <font color="#003399"><i>/*sleep(3);*/</i></font>
+<font color="990099">#endif</font>
+
+    <font color="#003399"><i>/* Each thread will send the result back through the structure */</i></font>
+  data-&gt;result = data-&gt;threadFn(data-&gt;start, data-&gt;end, data-&gt;total);
+  <b>return</b> NULL;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> i;
+  <b>int</b> count = 1;        <font color="#003399"><i>/* Number of threads, default is 1 */</i></font>
+  <b>long</b> <b>long</b> start = 0;  <font color="#003399"><i>/* Range start                     */</i></font>
+  <b>long</b> <b>long</b> range;      <font color="#003399"><i>/* Range end                       */</i></font>
+  <b>double</b> result = 0;    <font color="#003399"><i>/* Result of calculation (PI)      */</i></font>
+  pthread_t *threads;   <font color="#003399"><i>/* The array of threads            */</i></font>
+  <b>struct</b> pi_data *data; <font color="#003399"><i>/* The array of params to threadFn */</i></font>
+  <b>long</b> <b>long</b> iterations; <font color="#003399"><i>/* Number of total iterations      */</i></font>
+
+    <font color="#003399"><i>/* Default number of iterations */</i></font>
+  iterations = 1000LL * 1000LL * 100LL;
+
+    <font color="#003399"><i>/* If user provided the number of threads to run */</i></font>
+  <b>if</b> (argc &gt; 1)
+    count = atoi(argv[1]);
+
+    <font color="#003399"><i>/* If the user provided the number of iterations */</i></font>
+  <b>if</b> (argc &gt; 2)
+    iterations = 1000LL * 1000LL * atoi(argv[2]);
+
+    <font color="#003399"><i>/* The size (range) of each thread's data */</i></font>
+  range = iterations / count;
+
+    <font color="#003399"><i>/* Threads and data structures for Pthread API */</i></font>
+  threads = malloc(count * <b>sizeof</b>(pthread_t));
+  data = malloc(count * <b>sizeof</b>(<b>struct</b> pi_data));
+
+    <font color="#003399"><i>/* For each thread */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>int</b> result;
+
+    data[i].start = start;
+    data[i].end = start + range;
+    data[i].total = iterations;
+    data[i].threadFn = atan_pi2;
+
+    result = pthread_create(&amp;threads[i], NULL, threadFn, &amp;data[i]);
+    <b>if</b> (result == -1)
+    {
+      printf(<font color="#9933CC">&quot;Thread #%i failed. &quot;</font>, i);      
+      perror(<font color="#9933CC">&quot;pthread_create&quot;</font>);
+    }
+    start += range;
+  }
+
+    <font color="#003399"><i>/* Wait on the threads, order is unimportant */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    pthread_join(threads[i], NULL);
+    result += data[i].result;
+  }
+
+    <font color="#003399"><i>/* Show results */</i></font>
+  printf(<font color="#9933CC">&quot;   Threads: %2i&#92;n&quot;</font>, count);
+  printf(<font color="#9933CC">&quot;Iterations: %10lli&#92;n&quot;</font>, iterations);
+  printf(<font color="#9933CC">&quot;      atan: %14.12f&#92;n&quot;</font>, result);
+
+    <font color="#003399"><i>/* Clean up */</i></font>
+  free(threads);
+  free(data);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+<b>Output:</b> (Using <a href="computer-specs.html#MAYA">Maya</a>)
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>1 Thread</th><th></th><th>2 Threads</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+   Threads:  1
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m14.377s
+user  0m14.357s
+sys    0m0.008s
+</pre></blockquote>
+</td>
+<td></td>
+<td>
+<blockquote><pre>
+   Threads:  2
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m7.253s
+user  0m14.476s
+sys    0m0.008s
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>4 Threads</th><th></th><th>8 Threads</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+   Threads:  4
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m3.788s
+user  0m15.108s
+sys    0m0.008s
+</pre></blockquote>
+</td>
+<td></td>
+<td>
+<blockquote><pre>
+   Threads:  8
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m3.785s
+user  0m29.897s
+sys    0m0.019s
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p>
+<hr width="95%">
+<p>
+
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>1 Thread</th><th></th><th>2 Threads</th><th></th><th>3 Threads</th><th></th><th>4 Threads</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+   Threads:  1
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m14.377s
+user  0m14.357s
+sys    0m0.008s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads:  2
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m7.253s
+user  0m14.476s
+sys    0m0.008s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads:  3
+Iterations: 4000000000
+      atan: 3.141592653090
+
+real  0m4.933s
+user  0m14.760s
+sys    0m0.007s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads:  4
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m3.788s
+user  0m15.108s
+sys    0m0.008s
+</pre></blockquote>
+</td>
+
+
+</tr></table>
+
+
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>5 Threads</th><th></th><th>6 Threads</th><th></th><th>7 Threads</th><th></th><th>8 Threads</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+   Threads:  5
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m4.567s
+user  0m18.176s
+sys    0m0.010s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads:  6
+Iterations: 4000000000
+      atan: 3.141592651590
+
+real  0m4.240s
+user  0m22.706s
+sys    0m0.016s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads:  7
+Iterations: 4000000000
+      atan: 3.141592652090
+
+real  0m4.292s
+user  0m26.174s
+sys    0m0.017s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads:  8
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m3.784s
+user  0m29.924s
+sys    0m0.020s
+</pre></blockquote>
+</td>
+
+
+</tr></table>
+
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>9 Threads</th><th></th><th>10 Threads</th><th></th><th>11 Threads</th><th></th><th>12 Threads</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+   Threads:  9
+Iterations: 4000000000
+      atan: 3.141592651590
+
+real  0m4.023s
+user  0m29.745s
+sys    0m0.020s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads: 10
+Iterations: 4000000000
+      atan: 3.141592653590
+
+real  0m3.854s
+user  0m29.755s
+sys    0m0.020s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads: 11
+Iterations: 4000000000
+      atan: 3.141592650090
+
+real  0m3.869s
+user  0m29.786s
+sys    0m0.020s
+</pre></blockquote>
+</td>
+
+<td></td>
+
+<td>
+<blockquote><pre>
+   Threads: 12
+Iterations: 4000000000
+      atan: 3.141592651590
+
+real  0m3.802s
+user  0m29.766s
+sys    0m0.020s
+</pre></blockquote>
+</td>
+
+
+</tr></table>
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+</body>
+</html>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

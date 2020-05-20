@@ -1,0 +1,66 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>memmgr.h</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<pre class="sourcecode"><code>
+<font color="990099">#ifndef SHARED_H</font>
+<font color="990099">#define SHARED_H</font>
+
+<font color="990099">#include &quot;memmgr.h&quot; /* block_info, MMPolicy */</font>
+
+<font color="#003399"><i>/* conveniences for casting and declarations */</i></font>
+<b>typedef</b> block_info* (*MM_CREATE)(size_t, MMPolicy);
+<b>typedef</b> <b>void</b>* (*MM_ALLOCATE)(block_info *, size_t, <b>char</b> *);
+<b>typedef</b> <b>int</b> (*MM_DEALLOCATE)(block_info *, <b>void</b> *);
+<b>typedef</b> <b>void</b> (*MM_DESTROY)(block_info *);
+
+<font color="#003399"><i>/* Function pointers retrieved from the shared library */</i></font>
+<b>typedef</b> <b>struct</b> LibraryFunctions
+{
+  MM_CREATE create;
+  MM_DESTROY destroy;
+  MM_ALLOCATE allocate;
+  MM_DEALLOCATE deallocate;
+}LibraryFunctions;
+
+<font color="#003399"><i>/* Loads a shared library and returns a pointer to it in libhandle */</i></font>
+<font color="#003399"><i>/* Returns SUCCESS, if it successful, otherwise, FAILURE           */</i></font>
+<b>int</b> load_library(<b>const</b> <b>char</b> *libname, <b>void</b> **libhandle);
+
+<font color="#003399"><i>/*******************************************************************************
+  The function names in the fn_names array correspond to the functions in
+  this <b>strict order</b>:
+
+    mm_create
+    mm_destroy
+    mm_allocate
+    mm_deallocate
+
+  Make sure to set the corresponding function pointer in the LibraryFunctions
+  struct to the appropriate value (address).
+
+  Returns SUCCESS, if it successfully retrieves all function pointers. 
+  Otherwise, it returns FAILURE. If any one of the functions can't be found, 
+  you must return FAILURE immediately. DO NOT CALL ANY OTHER FUNCTION UPON A 
+  FAILURE!!
+*******************************************************************************/</i></font>
+<b>int</b> get_functions(<b>void</b> *libhandle, 
+                  LibraryFunctions *functions, 
+                  <b>const</b> <b>char</b> **fn_names);
+
+<font color="990099">#endif</font>
+</code></pre>
+</body>
+</html>

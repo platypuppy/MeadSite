@@ -1,0 +1,14 @@
+Usage: filter [options] [file1 file2 ...] 
+
+Options:
+ -b  --remove-blank-lines  removes empty lines.
+ -d  --delete=X[...]       deletes all occurrences of char X.
+ -h  --help                display this information.
+ -l  --tolower             convert all characters to lower case.
+ -n  --line-numbers[=Xs]   prepend line numbers to each line. X is
+                           an integer specifying to number every X lines.
+                           A trailing 's' means to skip blank lines.
+ -r  --replace=XY[...]     replace all char X with char Y.
+ -u  --toupper             convert all characters to upper case.
+ -x  --expand-tabs[=X]     convert tabs to X spaces (default is 8).
+

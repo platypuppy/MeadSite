@@ -1,0 +1,48 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi   */</font>
+
+<font color="#003399"><i>/* Prototype */</i></font>
+<b>int</b> magic_square(<b>int</b> size, <b>int</b> showall);
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> size = 5;    <font color="#003399"><i>/* Default size of the square */</i></font>
+  <b>int</b> showall = 0; <font color="#003399"><i>/* Show every square?         */</i></font>
+  <b>int</b> magic_sum;   <font color="#003399"><i>/* The &quot;Magic Sum&quot; returned   */</i></font>
+
+    <font color="#003399"><i>/* First arg is the size */</i></font>
+  <b>if</b> (argc &gt; 1)
+    size = atoi(argv[1]);
+
+    <font color="#003399"><i>/* Second arg determines which boards to show */</i></font>
+  <b>if</b> (argc &gt; 2)
+    showall = atoi(argv[2]);
+
+    <font color="#003399"><i>/* Size must be positive and odd */</i></font>
+  <b>if</b> (size &lt; 1 || !(size % 2))
+  {
+    printf(<font color="#9933CC">&quot;Size must be an odd integer.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+  printf(<font color="#9933CC">&quot;Size: %i&#92;n&quot;</font>, size);
+  magic_sum = magic_square(size, showall);
+  printf(<font color="#9933CC">&quot;The magic sum is %i&#92;n&quot;</font>, magic_sum);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,94 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+ sortwords.h
+*******************************************************************************/</i></font>
+<b>#define</b> FILE_OK       -1 <font color="#003399"><i>/* If the file was opened successfully */</i></font>
+<b>#define</b> FILE_ERR_OPEN -2 <font color="#003399"><i>/* If the file was unable to be opened */</i></font>
+
+<b>#define</b> MAX_WORDS 200000 <font color="#003399"><i>/* Maximum number of words in the file */</i></font>
+<b>#define</b> LONGEST_WORD 50  <font color="#003399"><i>/* Longest word in the file            */</i></font>
+
+<b>int</b> get_words(<b>const</b> <b>char</b> *filename, <b>char</b> *words[]);
+<b>void</b> sort_words(<b>char</b> *words[], <b>int</b> count);
+<b>void</b> print_words(<b>char</b> *words[], <b>int</b> count);
+<b>void</b> free_words(<b>char</b> *words[], <b>int</b> count);
+</code></pre>
+
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+ main.c
+*******************************************************************************/</i></font>
+<b>#include</b> &lt;stdio.h&gt; 
+<b>#include</b> <font color="#9933CC">&quot;sortwords.h&quot;</font>
+
+<b>void</b> test_sort(<b>void</b>)
+{
+  <b>int</b> array[] = {5, 6, 2, 7, 3, 9, 3, 1, 6, 4, 5, 0, 2, 4};
+  <b>int</b> size = <b>sizeof</b>(array) / <b>sizeof</b>(*array);
+  <b>int</b> i, j;
+
+  <font color="#003399"><i>/* 
+   * Write code to sort the array by comparing each element 
+   * to every other element (in a nested loop).
+   */</i></font>
+
+  <font color="#003399"><i>/* 
+    For each element in the array (call it X)
+      For each element to the right of X (call it Y)
+        If X &gt; Y Then
+          swap X and Y
+        End If
+      End For
+    End For
+   */</i></font>
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+  <b>const</b> <b>char</b> *filename;   <font color="#003399"><i>/* The file to open        */</i></font>
+  <b>char</b> *words[MAX_WORDS]; <font color="#003399"><i>/* All of the words read in */</i></font>
+  <b>int</b> count;              <font color="#003399"><i>/* How many words read in   */</i></font>
+
+    <font color="#003399"><i>/* Make sure the user specified an argument on the command line */</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Please specify a file of words to sort.\n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+    <font color="#003399"><i>/* The parameter is our file to sort */</i></font>
+  filename = argv[1]; 
+
+    <font color="#003399"><i>/* Read in all of the words from the file      */</i></font>
+  count = get_words(filename, words);
+  <b>if</b> (count == FILE_ERR_OPEN)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s\n&quot;</font>, filename);
+    <b>return</b> -1;
+  }
+    
+  sort_words(words, count);  <font color="#003399"><i>/* Sort the words in alphabetical order    */</i></font>
+  print_words(words, count); <font color="#003399"><i>/* Print the sorted words                  */</i></font>
+  free_words(words, count);  <font color="#003399"><i>/* Free the memory allocated for the words */</i></font>
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

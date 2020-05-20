@@ -1,0 +1,235 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+ driver-dev.c.cpp
+*******************************************************************************/</i></font>
+<font color="990099">#include &lt;stdio.h&gt;      /* printf                           */</font>
+<font color="990099">#include &lt;string.h&gt;     /* strcpy                           */</font>
+
+<font color="#003399"><i>/* check, info, words_starting_with, word_lengths, mystrupr */</i></font>
+<font color="#003399"><i>/* FILE_OK, FILE_ERR_OPEN, WORD_OK, WORD_BAD, LONGEST_WORD  */</i></font>
+<font color="990099">#include &quot;spellcheck.h&quot; </font>
+
+<b>static</b> <b>void</b> test1(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;score&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;seven&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;our&quot;</font>,
+                         <font color="#9933CC">&quot;fathers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;forth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>,
+                         <font color="#9933CC">&quot;continent&quot;</font>, <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;new&quot;</font>, <font color="#9933CC">&quot;NATION&quot;</font>, <font color="#9933CC">&quot;fast123&quot;</font>,
+                         <font color="#9933CC">&quot;123  abc&quot;</font>, <font color="#9933CC">&quot;Hello!!&quot;</font>, <font color="#9933CC">&quot;&quot;</font>, <font color="#9933CC">&quot;*&amp;^%$#8UPPERlower&quot;</font>
+                        };
+
+  <b>int</b> num_words = <b>sizeof</b>(words) / <b>sizeof</b>(*words);
+
+  printf(<font color="#9933CC">&quot;&#92;nTest1--------------------------------------------------------&#92;n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; num_words; i++)
+  {
+    <b>char</b> buffer[LONGEST_WORD + 1];
+    strcpy(buffer, words[i]);
+    mystrupr(buffer);
+    printf(<font color="#9933CC">&quot;Word: %s (%s)&#92;n&quot;</font>, words[i], buffer);
+  }
+}
+
+<b>static</b> <b>void</b> test2(<b>const</b> <b>char</b> *dictionary)
+{
+  <b>struct</b> DICTIONARY_INFO dinfo; <font color="#003399"><i>/* To hold the info from the dictionary */</i></font>
+  <b>int</b> file_result;              <font color="#003399"><i>/* For file errors                      */</i></font>
+
+  printf(<font color="#9933CC">&quot;&#92;nTest2--------------------------------------------------------&#92;n&quot;</font>);
+  file_result = info(dictionary, &amp;dinfo);
+  <b>if</b> (file_result == FILE_ERR_OPEN)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s&#92;n&quot;</font>, dictionary);
+    <b>return</b>;
+  }
+
+  printf(<font color="#9933CC">&quot;Dictionary: %s&#92;n&quot;</font>, dictionary);
+  printf(<font color="#9933CC">&quot;Number of words: %i&#92;n&quot;</font>, dinfo.count);
+  printf(<font color="#9933CC">&quot;Shortest word: %i letters&#92;n&quot;</font>, dinfo.shortest);
+  printf(<font color="#9933CC">&quot;Longest word: %i letters&#92;n&quot;</font>, dinfo.longest);
+}
+
+<b>static</b> <b>void</b> test3(<b>const</b> <b>char</b> *dictionary, <b>char</b> letter)
+{
+  <b>int</b> file_result;
+
+  printf(<font color="#9933CC">&quot;&#92;nTest3--------------------------------------------------------&#92;n&quot;</font>);
+  file_result = words_starting_with(dictionary, letter);
+
+  <b>if</b> (file_result == FILE_ERR_OPEN)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s&#92;n&quot;</font>, dictionary);
+    <b>return</b>;
+  }
+
+  printf(<font color="#9933CC">&quot;Dictionary: %s&#92;n&quot;</font>, dictionary);
+  printf(<font color="#9933CC">&quot;Number of words starting with %c: %i&#92;n&quot;</font>, letter, file_result);
+}
+
+<b>static</b> <b>void</b> test4(<b>const</b> <b>char</b> *dictionary, <b>const</b> <b>char</b> *word)
+{
+  <b>int</b> file_result;
+
+  printf(<font color="#9933CC">&quot;&#92;nTest4--------------------------------------------------------&#92;n&quot;</font>);
+  file_result = spell_check(dictionary, word);
+  <b>if</b> (file_result == FILE_ERR_OPEN)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s&#92;n&quot;</font>, dictionary);
+    <b>return</b>;
+  }
+
+  <b>if</b> (file_result == WORD_OK)
+    printf(<font color="#9933CC">&quot;The word %s is spelled correctly.&#92;n&quot;</font>, word);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;The word %s is misspelled.&#92;n&quot;</font>, word);
+}
+
+<b>static</b> <b>void</b> test5(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> file_result;
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;score&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;seven&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;our&quot;</font>,
+                   <font color="#9933CC">&quot;fathers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;forth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>, <font color="#9933CC">&quot;continent&quot;</font>,
+                   <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;new&quot;</font>, <font color="#9933CC">&quot;nation&quot;</font>
+                  };
+
+  <b>int</b> num_misspelled = 0;
+  <b>int</b> num_words = <b>sizeof</b>(words) / <b>sizeof</b>(*words);
+
+    <font color="#003399"><i>/* Name of the dictionary file */</i></font>
+  <b>const</b> <b>char</b> *dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;&#92;nTest5--------------------------------------------------------&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Misspelled words: &quot;</font>);
+  <b>for</b> (i = 0; i &lt; num_words; i++)
+  {
+    file_result = spell_check(dictionary, words[i]);
+    <b>if</b> (file_result == FILE_ERR_OPEN)
+    {
+      printf(<font color="#9933CC">&quot;Can't open %s&#92;n&quot;</font>, dictionary);
+      <b>return</b>;
+    }
+
+    <b>if</b> (file_result == WORD_BAD)
+    {
+      printf(<font color="#9933CC">&quot;%s &quot;</font>, words[i]);
+      num_misspelled++;
+    }
+  }
+  <b>if</b> (!num_misspelled)
+    printf(<font color="#9933CC">&quot;*** None ***&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>static</b> <b>void</b> test6(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> file_result;
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;SCORE&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;sevn&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;ar&quot;</font>,
+                   <font color="#9933CC">&quot;fawthers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;foarth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>, <font color="#9933CC">&quot;contnent&quot;</font>,
+                   <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;gnu&quot;</font>, <font color="#9933CC">&quot;nashun&quot;</font>
+                  };
+
+  <b>int</b> num_misspelled = 0;
+  <b>int</b> num_words = <b>sizeof</b>(words) / <b>sizeof</b>(*words);
+
+    <font color="#003399"><i>/* Name of the dictionary file */</i></font>
+  <b>const</b> <b>char</b> *dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;&#92;nTest6--------------------------------------------------------&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Misspelled words: &quot;</font>);
+  <b>for</b> (i = 0; i &lt; num_words; i++)
+  {
+    file_result = spell_check(dictionary, words[i]);
+    <b>if</b> (file_result == FILE_ERR_OPEN)
+    {
+      printf(<font color="#9933CC">&quot;Can't open %s&#92;n&quot;</font>, dictionary);
+      <b>return</b>;
+    }
+
+    <b>if</b> (file_result == WORD_BAD)
+    {
+      printf(<font color="#9933CC">&quot;%s &quot;</font>, words[i]);
+      num_misspelled++;
+    }
+  }
+  <b>if</b> (!num_misspelled)
+    printf(<font color="#9933CC">&quot;*** None ***&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>static</b> <b>void</b> test7(<b>int</b> max_length)
+{
+  <b>int</b> file_result; <font color="#003399"><i>/* For file errors                       */</i></font>
+  <b>int</b> total = 0;
+  <b>int</b> length;
+  <b>int</b> lengths[21] = {0};
+
+    <font color="#003399"><i>/* Name of the dictionary file */</i></font>
+  <b>const</b> <b>char</b> *dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+
+  printf(<font color="#9933CC">&quot;&#92;nTest7--------------------------------------------------------&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Dictionary: %s&#92;n&quot;</font>, dictionary);
+  file_result = word_lengths(dictionary, lengths, max_length);
+  <b>if</b> (file_result == FILE_ERR_OPEN)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s&#92;n&quot;</font>, dictionary);
+    <b>return</b>;
+  }
+  <b>for</b> (length = 1; length &lt;= max_length; length++)
+  {
+    printf(<font color="#9933CC">&quot;Number of words of length %2i is %6i&#92;n&quot;</font>, length, lengths[length]);
+    total += lengths[length];
+  }
+  printf(<font color="#9933CC">&quot;Total number of words counted: %i&#92;n&quot;</font>, total);
+}
+
+
+<b>int</b> main(<b>void</b>)
+{
+  test1();
+
+  test2(<font color="#9933CC">&quot;lexicon.txt&quot;</font>);
+  test2(<font color="#9933CC">&quot;small.txt&quot;</font>);
+  test2(<font color="#9933CC">&quot;allwords.txt&quot;</font>);
+
+  test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'a'</font>);
+  test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'A'</font>);
+  test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'l'</font>);
+  test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'$'</font>);
+  test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'e'</font>);
+
+  test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'M'</font>);
+  test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'q'</font>);
+  test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'5'</font>);
+
+  test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;APPLE&quot;</font>);
+  test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;Apple&quot;</font>);
+  test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;apple&quot;</font>);
+  test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;appl&quot;</font>);
+  test4(<font color="#9933CC">&quot;small.txt&quot;</font>, <font color="#9933CC">&quot;abalone&quot;</font>);
+  test4(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">&quot;interdigitation&quot;</font>);
+  test4(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">&quot;interdigalizing&quot;</font>);
+
+  test5();
+  test6();
+  test7(5);
+  test7(20);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

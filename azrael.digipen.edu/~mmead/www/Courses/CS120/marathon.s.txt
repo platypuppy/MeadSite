@@ -1,0 +1,46 @@
+	.file	"marathon.c"
+	.section	.rodata
+.LC2:
+	.string	"A marathon is %f kilometers\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	subq	$32, %rsp
+	movl	$26, -16(%rbp)
+	movl	$385, -12(%rbp)
+	pxor	%xmm1, %xmm1
+	cvtsi2sd	-16(%rbp), %xmm1
+	pxor	%xmm0, %xmm0
+	cvtsi2sd	-12(%rbp), %xmm0
+	movsd	.LC0(%rip), %xmm2
+	divsd	%xmm2, %xmm0
+	addsd	%xmm1, %xmm0
+	movsd	.LC1(%rip), %xmm1
+	mulsd	%xmm1, %xmm0
+	movsd	%xmm0, -8(%rbp)
+	movq	-8(%rbp), %rax
+	movq	%rax, -24(%rbp)
+	movsd	-24(%rbp), %xmm0
+	movl	$.LC2, %edi
+	movl	$1, %eax
+	call	printf
+	movl	$0, %eax
+	leave
+	ret
+.LFE0:
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC0:
+	.long	0
+	.long	1083932672
+	.align 8
+.LC1:
+	.long	3367254360
+	.long	1073331830
+	.ident	"GCC: (Ubuntu 5.3.0-3ubuntu1~14.04) 5.3.0 20151204"
+	.section	.note.GNU-stack,"",@progbits

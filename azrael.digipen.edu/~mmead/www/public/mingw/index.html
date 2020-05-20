@@ -1,0 +1,581 @@
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Installing MinGW</title>
+
+<style>
+pre.black
+{
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 14px;
+  color: #ffffff;
+  background-color: #000000;
+  padding: 5px 5px 5px 5px;
+  margin-left: 2px;
+  border: #000000;
+  border-style: solid;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p.box
+{
+  margin-left: 0;
+  border-style: solid;
+  border-color: blue;
+  border-width: thin;
+  background-color: LightGoldenrodYellow;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+pre.console {
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 16px;
+  color: #000000;
+  background-color: #ffffdd;
+  padding: 8px 16px 8px 8px;
+  margin-left: 20px;
+  border: #000000;
+  border-style: dashed;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+</style>
+
+</head>
+
+<body>  
+
+<CENTER>
+<h1>Installing the 32-bit and 64-bit C (gcc) and C++ (g++) Compilers on Windows</h1>
+<h3>(These are different than the compilers included with Cygwin)</h3>
+</CENTER>
+<p>
+
+<a href="https://en.wikipedia.org/wiki/MinGW">MinGW</a> (<i>Minimalist GNU for Windows</i>), formerly mingw32, is a free and open source
+software development environment for creating Microsoft Windows applications.
+<p>
+
+
+<a href="index.html#64BIT">Installing the 64-bit compiler</a>
+<br>
+<a href="index.html#32BIT">Installing the 32-bit compiler</a>
+<p>
+
+Download the installer for MinGW from here:
+<p>
+<a href="https://sourceforge.net/projects/mingw-w64/files/latest/download">
+https://sourceforge.net/projects/mingw-w64/files/latest/download</a>
+<p>
+
+<p class="technote">
+The instructions on this page refer to version 7.1.0, build revision 1 of the
+MinGW tools. This is an older version than what we are currently using. 
+As of September, 2019, the version that we are using is 8.1.0, build revision 0.
+So, if you see any screenshots below that refer to the older version, just
+substitute the newer version and everything should work fine.
+</p>
+
+
+<a name="64BIT"></a>
+<p class="SectionHeader">
+Installing the 64-bit Version
+</p>
+
+<p>
+<p>
+<!--********************************************************************************-->
+<!--********************************************************************************-->
+<!--********************************************************************************-->
+
+Once you've downloaded the installer, follow the steps below to install and configure
+the tools.
+<p>
+
+<ol>
+<li>Navigate to the folder that contains the MinGW-64 installer <b>mingw-w64-install.exe</b>.
+This will probably be your Downloads folder.</li>
+
+<p>
+<br>	
+<li>Run the installer. The initial screen of the installer is shown. Click <b>Next</b>
+<blockquote>
+<img src="mingw64-install-1.png">
+</blockquote>
+
+<br><br>
+<li>Make sure you select <i>exactly</i> what is shown below. If you choose a different configuration,
+there is no guarantee that your compiler will work correctly, causing you to receive a 0 on your
+assignments. Click <b>Next</b> to continue.
+<blockquote>
+<img src="mingw64-install-2.png">
+</blockquote>
+
+<br><br>
+<li>Change the destination folder to <tt>c:\mingw</tt> as shown below.
+	What ever you do,
+<b>DO NOT</b> put any spaces in the folder names. Ever. Period. You can select 
+<i>Create shortcuts in Start Menu</i>, but you will likely never use them.
+ Click <b>Next</b> to continue.
+<blockquote>
+<img src="mingw64-install-3.png">
+</blockquote>
+
+<br><br>
+<li>At this point, the installer is downloading the necessary files. Once the files have
+	been downloaded, they will be put into the location you specified above.
+<p>
+<blockquote>
+<img src="mingw64-install-4.png">
+</blockquote>
+
+<br><br>
+<li>The installer is now extracting files from the downloaded file and placing them
+	into the installation directory.
+<blockquote>
+<img src="mingw64-install-5.png">
+</blockquote>
+
+<br><br>
+<li>When all of the files have been installed, you will see this dialog. Click <b>Next</b>
+	to continue.
+<blockquote>
+<img src="mingw64-install-6.png">
+</blockquote>
+
+<br><br>
+<li>If the installation was successful, you will see this final dialog. Click <b>Finish</b>
+	to complete the installation.
+<blockquote>
+<img src="mingw64-install-7.png">
+</blockquote>
+
+Done. Almost.
+
+<br><br>
+<li>Unfortunately, the hardest part for most students is this last step and 99% of the time
+	that students have a problem, it is because they didn't configure their computers
+	properly after installing the software.
+<p>
+	If you want to be able to use the gcc/g++ compilers from any command prompt (which you most <b>definitely</b> do!),
+	you'll need to add the location of the <i>bin</i> folder to the path. Assuming that you have installed MinGW
+	in <tt>c:\mingw</tt> as instructed above, you need to add:
+<p>
+<blockquote><pre>
+	 <big>c:\mingw\mingw64\bin</big>
+</pre></blockquote>	 
+to the beginning of your PATH.
+	If you don't know how to modify the <tt><b>PATH</b></tt> in Windows, you can 
+	find out how
+	 <a href="http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx">here</a>
+	 , or ask a student that is familiar with Windows.
+<!--	
+	In Windows 7, from the command prompt, you can do this:
+<blockquote><pre>
+setx PATH c:\mingw\mingw64bin;%PATH%"
+</pre></blockquote>
+ This assumes that you installed MinGW into <tt>c:\mingw</tt> and that you have admin
+ access on the computer.
+-->
+<p>
+When adding <tt>c:\mingw\mingw64\bin</tt> to your PATH, it <b>MUST</b> be the first entry in the PATH.
+Putting it somewhere else may cause the wrong compilers to be used (probably the compilers from 
+the Cygwin utilities). Once you've modified your PATH,
+you should logout and log back in to Windows.
+<p>
+When you log back in, open a command prompt. 
+You should now be able to type <tt>gcc</tt> or <tt>g++</tt> from any command window
+and get the later version of the compilers.
+<p>
+To verify that you have correctly installed and configured your computer, open a command prompt and
+type this:
+
+<blockquote><pre>
+gcc --version
+</pre></blockquote>
+
+You should see this displayed:
+
+<p class="console">gcc (x86_64-posix-seh-rev1, Built by MinGW-W64 project) 7.1.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+
+Also, if you have already installed and configured the Cygwin utilities, if you type
+this at the prompt:
+
+<blockquote><pre>
+which gcc
+</pre></blockquote>
+
+You should see this:
+
+<p class="console">/cygdrive/c/mingw/mingw64/bin/gcc
+</p>
+
+If you see this instead:
+
+<p class="console">'which' is not recognized as an internal or external command,
+operable program or batch file.
+</p>
+
+it means that you have not installed the Cygwin utilities, or haven't set the PATH
+for Cygwin correctly.
+<blockquote><pre>
+</pre></blockquote>
+
+<b>Note:</b>
+<p class="technote">
+For students that are less experienced working with computers (e.g. installing developer software, configuring
+the PATH, working from the command prompt, etc.) you may need to visit the Academic Support Center for
+more help. The students working there can help you ensure that your computer is configured properly.
+Or, you can just ask a student that is more familiar with Windows.
+</ol>
+
+<a name="32BIT"></a>
+<p class="SectionHeader">
+Installing the 32-bit Version
+</p>
+You will use the same installer that you used to install the 64-bit version. However, you
+will choose the 32-bit version instead of the 64-bit version.
+
+<ol>
+<li>Run the installer as before and click <b>Next</b>:
+
+<blockquote>
+<img src="mingw64-install-1.png">
+</blockquote>
+
+<br><br>
+<li>Make sure you select <i>exactly</i> what is shown below. If you choose a different configuration,
+there is no guarantee that your compiler will work correctly. Basically, you want
+to choose the same configuration that you chose for the 64-bit version above.
+
+The most important choice is the
+<i>Architecture</i>. Choose <i>i686</i>. This is the 32-bit compiler. After setting the selections
+as shown below, click <b>Next</b> to continue.
+<blockquote>
+<img src="mingw32-install-2.png">
+</blockquote>
+
+<br><br>
+<li>Change the destination folder to <tt>c:\mingw32</tt> as shown below.
+  What ever you do,
+<b>DO NOT</b> put any spaces in the folder names. Ever. Period. You can select 
+<i>Create shortcuts in Start Menu</i>, but you will likely never use them.
+Click <b>Next</b> to continue.
+<blockquote>
+<img src="mingw32-install-3.png">
+</blockquote>
+
+<br><br>
+<li>At this point, the installer is downloading the necessary files. Once the files have
+  been downloaded, they will be extracted and put into the location you specified above.
+<p>
+<blockquote>
+<img src="mingw32-install-4.png">
+</blockquote>
+
+<br><br>
+<li>When all of the files have been installed, you will see this dialog. Click <b>Next</b>
+  to continue.
+<blockquote>
+<img src="mingw32-install-6.png">
+</blockquote>
+
+<br><br>
+<li>If the installation was successful, you will see this final dialog. Click <b>Finish</b>
+  to complete the installation.
+<blockquote>
+<img src="mingw32-install-7.png">
+</blockquote>
+
+Done. Again, almost.
+
+<br><br>
+<li>Unfortunately, just as with the 64-bit installation above, the hardest part is 
+  configuring Windows to use the compiler. If you are having problems,
+  it is likely because you haven't set up things properly after the installation.
+<p>
+
+<!--
+<blockquote>
+<p class="technote">
+<b>IMPORTANT!</b> Unlike the 64-bit version above, you <b>DO NOT</b> want to add this compiler
+to your PATH. If you do, there will be conflicts between the 64-bit version and this 32-bit
+version. In order to be able to use both, you will need to set things up a little 
+differently.
+</p>
+</blockquote>
+-->
+
+The rest of this guide assumes that you installed the compiler to <tt>c:\mingw32</tt>
+during the installation.
+
+<p>
+Currently, when you type <tt>g++</tt> from the command line, you will run the 64-bit
+version of the MinGW g++ compiler. You want to continue to do that. To run the 32-bit
+version, you will need to create a batch file called <tt>g++32.bat</tt> and put it
+in your PATH somewhere. (You should have created a <tt>C:\utils</tt> directory
+on your computer to put your add-on programs. This directory should be the first 
+directory in your PATH.) The contents of the batch
+file should look like this:
+
+<pre class="console">
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+: This batch file only handles 20 options for the compiler. This should
+: be sufficient. You can figure out how to add more, if necessary.
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+@echo off
+
+set /a count=1
+
+:BEGIN
+if "%1"=="" goto END
+set arg%count%=%1
+shift
+set /a count=%count%+1
+goto BEGIN
+
+:END
+c:\mingw32\mingw32\bin\g++.exe %arg1% %arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% ^
+%arg9% %arg10% %arg11% %arg12% %arg13% %arg14% %arg15% %arg16% ^
+%arg17% %arg18% %arg19% %arg20%
+
+set arg1=
+set arg2=
+set arg3=
+set arg4=
+set arg5=
+set arg6=
+set arg7=
+set arg8=
+set arg9=
+set arg10=
+set arg11=
+set arg12=
+set arg13=
+set arg14=
+set arg15=
+set arg16=
+set arg17=
+set arg18=
+set arg19=
+set arg20=
+</pre>
+
+<p>
+You can create the batch file with any text editor (e.g. notepad++) or, you can download
+the batch file here: <a href="g++32.bat">g++32.bat</a> (recommended). You need to download this file, not click
+on it and run it (the default in some versions of Windows). There is also a batch file
+for gcc here: <a href="gcc32.bat">gcc32.bat</a>. Use this to compile 32-bit C programs.
+<p>
+Once you've downloaded the batch to (or created it in) some directory in your PATH, you
+can check that it's correct by typing this from any directory:
+<p>
+
+<blockquote><pre>
+g++32 --version
+</pre></blockquote>  
+<p>
+
+If everything was setup properly, you should see this message in the console:
+
+<p>
+<blockquote><pre class=black>
+g++.exe (i686-posix-dwarf-rev1, Built by MinGW-W64 project) 7.1.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</blockquote>
+</p>
+
+
+<!--<img src="mingw32-install-8.png">-->
+
+Now, when building 32-bit programs, you type <tt>g++32</tt> instead of <tt>g++</tt>.
+For example, to build a 64-bit program (assume all of the usual command line options)
+
+<blockquote><pre>
+<b>g++</b> file1.cpp file2.cpp file3.cpp -o prog64.exe
+</pre></blockquote>  
+
+To build a 32-bit program:
+<blockquote><pre>
+<b>g++32</b> file1.cpp file2.cpp file3.cpp -o prog32.exe
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<b>IMPORTANT NOTE #1:</b>
+<blockquote>
+<p class="box">
+When running the executable program, if you get an error saying something like:<br><br>
+<i>"The program can't start because &lt;some_dll_file&gt;" is missing from your
+  computer..."</i> 
+  <br><br>
+  or
+<br><br>
+ <i>"The application was unable to start correctly (0xc000007b)..."</i>
+ <br><br>
+
+   then you will need to put the <i>bin</i> directory of the 32-bit MinGW 
+  compiler <b>at the end</b> of your PATH. If you installed it to the location
+  recommended in these notes, that directory is
+  <tt>C:\mingw32\mingw32\bin</tt>.
+
+   The name of the missing DLL file may
+  be something like <tt>libwinpthread-1.dll</tt>, or <tt>libgcc_s_dw2-1.dll</tt>,
+  or some other file.
+<br><br>
+<b>Note:</b> If you put the <i>bin</i> directory somewhere other than
+  the end of your PATH, it may interfere with your 64-bit compiler causing it
+  to no longer work.
+</p>
+</blockquote>
+
+
+<b>IMPORTANT NOTE #2:</b>
+<blockquote>
+<p class="box">
+When running the executable program, if you get an error message that looks
+like this:<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="mingw-dll-error1.png">
+<br><br>
+Then you need to statically link the executable. Add this option (in bold) to the command
+line:
+<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>g++32 file1.cpp file2.cpp file3.cpp -o prog32.exe <b>-static</b></tt>
+<br><br>
+
+This will make the executable much bigger, but it should avoid the error.
+</blockquote>
+</p>
+
+<!--
+<b>IMPORTANT NOTE #2:</b>
+<p class="box">
+<blockquote>
+When running the executable program, if you get an error message that looks
+like this:
+<blockquote>
+<img src="mingw-dll-error1.png">
+</blockquote>
+
+Then you need to statically link the executable. Add this option (in bold):
+
+<blockquote><pre>
+g++32 file1.cpp file2.cpp file3.cpp -o prog32.exe <b>-static</b>
+</pre></blockquote>  
+
+This will make the executable much bigger, but it should avoid the error.
+</blockquote>
+</p>
+-->
+
+This is also trivial to override the compiler in your <tt>makefile</tt>. If your
+<tt>makefile</tt> has a macro like this (which all of your makefiles should have)
+
+<blockquote><pre>
+CC=g++
+</pre></blockquote>  
+
+You can simply run <i>make</i> like this:
+
+<blockquote><pre>
+make CC=g++32.bat
+</pre></blockquote>  
+
+and it will build a 32-bit executable instead of a 64-bit executable. 
+<font color="red"><b>Note that you must provide the <tt>.bat</tt> file extension for the <tt>makefile</tt>.</b></font>
+<p>
+To verify that your program is really a 32-bit executable, use the 
+<a href="http://man7.org/linux/man-pages/man1/file.1.html">file</a>
+command (part of the Cygwin utilities). For example, this command:
+
+<blockquote><pre>
+<b>file</b> prog32.exe prog64.exe
+</pre></blockquote>  
+
+will display this in the console:
+
+<blockquote><pre>
+prog32.exe: PE32 executable (console) Intel 80386, for MS Windows
+prog64.exe: PE32+ executable (console) x86-64, for MS Windows
+</pre></blockquote>  
+
+<b>PE32</b> is a 32-bit (Intel 80386) executable.
+<br>
+<b>PE32+</b> is a 64-bit (x86-64) executable.
+
+
+
+<p class="technote">
+<b>Note to Linux and Mac users:</b> Building a 32-bit program under Mac or
+Linux is trivial. You simply add a <tt>-m32</tt> option to the command line. For example:
+
+<blockquote><pre>
+g++ -Wall -Wextra -ansi -pedantic <b>-m32</b> foo.c
+</pre></blockquote>
+
+That's it!
+<p>
+Incidentally, to create a 64-bit executable, you can use <tt>-m64</tt>, but since
+this is the default, you don't have to provide it to the compiler. If you run
+the <i>file</i> command on Linux, you would see something like this
+(with possibly more information displayed)
+
+<blockquote><pre>
+prog32: ELF 32-bit LSB  executable, Intel 80386, version 1 (SYSV)
+prog64: ELF 64-bit LSB  executable, x86-64, version 1 (SYSV)
+</pre></blockquote>  
+
+And on macOS you would see this:
+
+<blockquote><pre>
+prog32: Mach-O executable i386
+prog64: Mach-O 64-bit executable x86_64
+
+</pre></blockquote>  
+
+<p>
+<hr>
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+<blockquote><pre>
+</pre></blockquote>  
+
+
+
+</body>
+</html>

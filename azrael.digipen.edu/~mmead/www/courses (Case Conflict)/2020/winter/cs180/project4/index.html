@@ -1,0 +1,259 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 180 - Assignment #4</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 180 - Assignment #4</h1>
+<!--Due Thursday, June 23, 2016 at 11:59 pm<br>-->
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+<blockquote>
+<p class="technote">
+Do not use <tt>pthread_exit()</tt> in your code. There is a known issue with <b>valgrind</b> 
+and it causes problems with leak checking. Instead of <tt>pthread_exit()</tt>, just use 
+a <tt>return</tt> statement in your code. If you fail to follow these instructions, you will 
+lose points when <b>valgrind</b> complains. Also, make sure you check the return values of the 
+pthreads functions to make sure they were successful. The grader will deduct points if you 
+haven't checked the return values (regardless of whether or not they succeeded).
+</p>
+</blockquote>
+
+<ul>
+
+<li><a href="cs180-programming-assignment-POSIX-threads.pdf">Handout</a></li>
+<p>
+<li><a href="main-thread-skeleton.c">main-thread.c</a> (<a href="main-thread-skeleton.c.html">HTML</a>) 
+  This is a skeleton to get you started. You'll need to modify it. You can change most anything 
+  you want but don't change the print_array function because you won't diff correctly if you do. 
+  <b>Also, you must document (Doxygenize) all functions, including main, even if you didn't 
+    write the functions.</b>
+	<p>
+	<li>Command line to compile the program:
+<blockquote><pre>
+gcc -g -O -Wall -Wextra -std=c11 -pedantic <b><font color="blue">-pthread</font></b> main-thread.c matrix-thread.c -o matrix-threads
+clang -g -O -Wall -Wextra -std=c11 -pedantic <b><font color="blue">-pthread</font></b> main-thread.c matrix-thread.c -o matrix-threads
+</pre></blockquote>
+
+<li>To run the program, type this at the command line:
+<blockquote><pre>
+./matrix-threads <font color="blue"><b>matrix.txt</b></font>
+</pre></blockquote>
+
+where the parameter is the name of a text file that has the matrix in it
+<p>
+	
+
+<li>Sample <a href="output3.txt">output</a> for a small 3x3 matrix:
+<blockquote><pre>
+       1       2       3
+       4       5       6
+       7       8       9
+
+      30      36      42
+      66      81      96
+     102     126     150	
+</pre></blockquote>
+<li>Here is a program to <a href="gen_matrix.c">generate random matrices</a> for use as 
+  input for this assignment. For example, if you want a 5x5 matrix with values ranging from -20 to +20, 
+  you would run it like this:
+<blockquote><pre>
+./gen_matrix 5 -20 20
+</pre></blockquote>
+
+and you would see something like this:
+<blockquote><pre>
+5
+      16      14      16      12      15
+       8       8     -16     -19      -6
+     -17      -2      20      11       5
+     -15      -6     -10       5      19
+      16      -4      16      10       5
+</pre></blockquote>
+
+You would redirect the output into a file for use by the program:
+<blockquote><pre>
+./gen_matrix 5 -20 20 > mat5.txt
+</pre></blockquote>
+
+<li>Sample <a href="output5.txt">output</a> for the above matrix by running: <tt>parent-matrix mat5.txt</tt>
+	
+<blockquote><pre>
+      16      14      16      12      15
+       8       8     -16     -19      -6
+     -17      -2      20      11       5
+     -15      -6     -10       5      19
+      16      -4      16      10       5
+
+     156     172     472     312     539
+     653     346    -226    -387    -399
+    -713    -380     130     159      91
+     111    -344     -90      39     -49
+    -118      80     620     544     559
+</pre></blockquote>
+
+<li>Sample <a href="output16.txt">output</a> for a random <a href="mat16.txt">16x16 matrix</a>
+<li>Random <a href="mat20.txt">20x20 matrix</a>
+
+	
+<li>Matrix references:</li>
+<ul>
+<li>Refresher on <a href="http://en.wikipedia.org/wiki/Matrix_multiplication">matrix multiplication</a></li>
+<li>Another <a href="http://mathworld.wolfram.com/MatrixMultiplication.html">refresher</a>.
+	<li><a href="http://www.easycalculation.com/matrix/matrix-multiplication.php">Online matrix multiplier</a></li>
+</ul>
+
+<p>
+<li><b>Using <tt>script</tt></b></li>
+<p>
+You need to show me that you actually compiled and ran your program, and used <b>diff</b> to 
+make sure your output is correct. After you've finished coding and testing everything and are 
+sure everything is correct, use the <b>script</b> command to make a text file of your session. 
+From the bash shell in the directory you've setup to test with, run these commands:
+
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+gcc -g -O -Wall -Wextra -std=c11 -pedantic -pthread main-thread.c matrix-thread.c -o matrix-threads
+clang -g -O -Wall -Wextra -std=c11 -pedantic -pthread main-thread.c matrix-thread.c -o matrix-threads
+./matrix-threads mat16.txt | tee output.txt
+diff --strip-trailing-cr output16.txt output.txt
+valgrind -q --leak-check=full --show-reachable=yes --trace-children=yes --tool=memcheck ./matrix-threads mat16.txt
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> 
+was created with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first 
+name and last name. This is how you get your name in the typescript file. Consult the man pages if 
+you want more information on <b>script</b>.
+
+
+
+</ul>
+
+<p class="SectionHeader">
+Additional information
+</p>
+
+<ul>
+<p>
+<li>Example for a 3x3 matrix:</li>
+<p>
+Squaring this:
+<blockquote><pre>
+1       2       3
+4       5       6
+7       8       9
+</pre></blockquote>
+
+Results in this:
+<blockquote><pre>
+ 30      36      42
+ 66      81      96
+102     126     150
+</pre></blockquote>
+
+Aftering the main thread allocates the memory and reads the input matrix from the file 
+into the memory:
+<blockquote>
+<img src="Thread-Memory-1.png">
+</blockquote>
+
+After the main thread allocates memory for the resulting matrix:
+<blockquote>
+<img src="Thread-Memory-2.png">
+</blockquote>
+
+This is the how the first thread calculates the value:
+<p>
+Row 0:
+<blockquote>
+<img src="Thread-Memory-A.png">
+</blockquote>
+
+Column 0:
+<blockquote>
+<img src="Thread-Memory-B.png">
+</blockquote>
+
+Writes to first integer in the result matrix:
+<blockquote>
+<img src="Thread-Memory-C.png">
+</blockquote>
+
+This is how the 6th thread calculates the value:
+<p>
+Row 1:
+<blockquote>
+<img src="Thread-Memory-D.png">
+</blockquote>
+
+Column 2:
+<blockquote>
+<img src="Thread-Memory-E.png">
+</blockquote>
+
+Writes to 6th integer in the result matrix:
+<blockquote>
+<img src="Thread-Memory-F.png">
+</blockquote>
+
+Aftering each thread has written its result to the matrix:
+<blockquote>
+<img src="Thread-Memory-3.png">
+</blockquote>
+
+</ul>
+
+
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br><br><br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

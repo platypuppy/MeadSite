@@ -1,0 +1,180 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Practice with diff</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Practice with diff<p></h1>
+There is nothing to submit. This is just for practice.
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<!--===============================================================-->
+<!--===============================================================-->
+<!--===============================================================-->
+<b>Experimenting with the command-line <tt>diff</tt> and visual diff tools:</b>
+<p>
+<ol>
+<li>Below are several <i>text</i> files for you
+	to use. Each pair has a "correct" output and a student's output. Look at each pair of files to see
+	if you can spot the differences with your eyes. You'll find that it can be very difficult to
+	spot the differences.
+
+<p>
+<blockquote>
+<a href="output.master1.txt">Correct output #1</a>&nbsp;&nbsp;&nbsp;
+<a href="student-output1.txt">Student output #1</a>
+<p>
+<a href="output.master2.txt">Correct output #2</a>&nbsp;&nbsp;&nbsp;
+<a href="student-output2.txt">Student output #2</a>
+<p>
+<a href="output.master3.txt">Correct output #3</a>&nbsp;&nbsp;&nbsp;
+<a href="student-output3.txt">Student output #3</a>
+</blockquote>
+<p>
+All output in one zip file: <a href="alloutput.zip">alloutput.zip</a>
+<p>
+
+Then, compare them using the <tt>diff</tt> program, which is part of the Cygwin utilities
+on Windows, but is built-in to Linux and Mac.
+For example, to compare the first set of files, you would type this at the command prompt:
+
+<big><blockquote><pre>
+diff output.master1.txt student-output1.txt
+</pre></blockquote></big>
+
+This will display the differences to the screen. If you want to capture the differences in
+a file (for later viewing), you need to use <b>output redirection</b> so the output will be placed
+into a file like this:
+
+<big><blockquote><pre>
+diff output.master1.txt student-output1.txt <b>&gt; differences.txt</b>
+</pre></blockquote></big>
+
+The greater-than symbol, <tt><b>&gt;</b></tt>, is the output redirection operator used
+by the command window.
+<p>
+This will place the output in a file called <tt>differences.txt</tt>. You can choose to name
+the file anything you like. This is exactly how I can tell if you did your programming assignments
+correctly.
+
+<p>
+At this point, it's not important that you understand exactly how <tt>diff</tt> works. You should,
+however, be able to see where the lines are different. Using Notepad++ (or any text editor),
+modify the student output file (add lines, remove lines, change lines) and see how <tt>diff</tt> reacts.
+<p>
+
+<big>
+Note: You may need to use the <tt>--strip-trailing-cr</tt> option with <tt><b>diff</b></tt> if your
+end-of-line characters are different.
+</big>
+
+<big><blockquote><pre>
+diff <b>--strip-trailing-cr</b> output.master1.txt student-output1.txt &gt; differences.txt 
+</pre></blockquote></big>
+
+
+<blockquote>
+<p class="technote">
+If you're an advanced student, you may want to learn more about <tt>diff</tt> by reading
+<a href="../../../../../../docs/DiffAndPatch.pdf">Comparing and Merging Files with GNU diff and patch</a>,
+which contains detailed information about this program. 
+<!--<tt><b>diff</b></tt> can be a complex tool, so you might only get through the first 2 chapters.-->
+</p>
+</blockquote>
+</li>
+
+<li>After you've seen how <tt>diff</tt> works, compare the files using <tt>WinMerge</tt>. <tt>WinMerge</tt>
+is a graphical program for Windows that displays the files side-by-side and highlights the lines that are different.
+The program is installed on the computers at Digipen.
+
+<!--
+<blockquote>
+<p class="technote">
+If you can't get WinMerge to work on the computers at Digipen, it's because there may be some configuration
+issues. I've talked with IT and they are aware of it and are working on it. Hopefully, it will be
+fixed soon.
+</blockquote>  
+-->
+
+You can download it from the <a href="http://winmerge.org/">WinMerge Website</a> if you'd
+like to run it on your own computer.
+
+<p>
+Run <tt>WinMergeU</tt> (from the Start menu, choose Run... and type <tt>winmergeu</tt>) and drag and drop 
+the two files onto the program.  (The actual name of the executable in Windows is 
+<b><tt>WinMergeU.exe</tt></b>. The <b><tt>U</tt></b> means it supports 
+<a href="https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/">Unicode</a>.
+<a href="http://kunststube.net/encoding/">More</a> 
+and <a href="http://www.teknically-speaking.com/2014/02/unicode-utf-8-and-character-encodings_23.html">more</a>.)
+Or, you can select two files in Explorer, right-click on one of them and choose <tt>WinMerge</tt>.
+It will be obvious where the differences are.
+<p>
+If you have put WinMerge in your path (the installer will do this automatically for you), 
+you could compare them by typing this at the command prompt:
+
+<big><blockquote><pre>
+winmergeu output.master1.txt student-output1.txt
+</pre></blockquote></big>
+
+Use the "up" and "down" arrows at the top of the program to navigate between differences in the files.
+<p>
+
+If you're working on a Mac, you can read about different tools here:
+<p>
+<blockquote>
+<a href="https://www.git-tower.com/blog/diff-tools-mac">Diff Tools on macOS</a>
+and
+<a href="https://apple.stackexchange.com/questions/3653/whats-a-good-mac-equivalent-of-winmerge">Mac equivalents of WinMerge</a>
+</blockquote>
+<p>
+
+If you're working under Linux, there are several similar tools available, such as
+<tt>meld</tt>, <tt>kdiff3</tt>, <tt>diffuse</tt> and <tt>kompare</tt> and you should
+be able to install them from your distribution's package manager.
+<p>
+These are all free, cross-platform and should work with Windows, macOS, and Linux:
+<p>
+<blockquote>
+<a href="http://meldmerge.org/">meld</a><br>
+<a href="https://sourcegear.com/diffmerge/">diffmerge</a><br>
+<a href="https://www.fosshub.com/KDiff3.html">kdiff3</a>
+</blockquote>
+
+<p>
+Personally, I use <a href="http://www.scootersoftware.com/">Beyond Compare</a>. It supports Linux,
+Mac, and Windows. However, it's not free.
+<p class="technote">
+If you need help with any of these diff programs, please ask on the 
+Miscellaneous Topics forum in Moodle. There may be other students that are more
+familiar with other operating systems that can help you.
+</li>
+
+</ol>
+
+
+<br><br>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

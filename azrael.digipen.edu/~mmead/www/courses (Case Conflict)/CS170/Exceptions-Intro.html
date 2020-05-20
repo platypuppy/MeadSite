@@ -1,0 +1,1408 @@
+<html>
+<head>
+
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+
+</script>
+
+
+
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Exceptions - Part 1</title>
+
+</head>
+
+<body>  
+<center>
+<h1>Exceptions - Part 1</h1>
+(Nine days to better error handling)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Error Handling</p>
+
+<ul>
+<li>"Real" programs need to detect and, if possible, recover from error situations.</li>
+<li>Bad data, logic errors, "user" error, etc.</li>
+<li>These "exceptional" situations are called <i>exceptions</i> in C++.</li>
+<li>An exception is something that must be <i>handled</i>, or the program will be terminated.</li>
+<li>Exceptions in C++ let us handle errors in a more unified and object-oriented way.</li>
+<li>Until now, for simplicity, we've ignored the possibility of (many) errors occurring.</li>
+</ul>
+
+Recall that given a quadratic equation of the form:
+<blockquote>
+<!--<img src="Quadratic-1.gif">-->
+<!--$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$-->
+
+\(ax^2 + bx + c = 0\)
+</blockquote>
+
+<p>
+
+We can solve the equation for its roots with this formula:
+<!--<p><img src="QuadraticFormula-1.gif"><p>-->
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr>
+  <td>
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+</td>
+</tr></table>
+</blockquote>
+<!--\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)-->
+
+<!--
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mmultiscripts>
+    <mi>R</mi><mi>i</mi> <none/> <none/> <mi>j</mi> <mi>k</mi> <none/> <none/> <mi>l</mi>
+  </mmultiscripts>
+</math>
+-->
+
+<!--
+<p>What is the name(s) of your browser?</p>
+    <button onclick="myFunction()">Try it</button>
+    <p id="demo"></p>
+    <script>
+
+    function myFunction() { 
+     if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) 
+    {
+        alert('Opera');
+    }
+    else if(navigator.userAgent.indexOf("Chrome") != -1 )
+    {
+        alert('Chrome');
+    }
+    else if(navigator.userAgent.indexOf("Safari") != -1)
+    {
+        alert('Safari');
+    }
+    else if(navigator.userAgent.indexOf("Firefox") != -1 ) 
+    {
+         alert('Firefox');
+    }
+    else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
+    {
+      alert('IE'); 
+    }  
+    else 
+    {
+       alert('unknown');
+    }
+    }
+    </script>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day One</p>
+<p>
+
+For simplicity, we will only calculate one root (the "+" portion of the equation).
+<p>
+
+The <i>QRoot</i> function (for <i>Q</i>uadratic <i>Root</i>) looks like:
+<blockquote><pre>
+<b>double</b> QRoot(<b>double</b> a, <b>double</b> b, <b>double</b> c)
+{
+  <b>double</b> determinant = (b * b) - (4 * a * c);
+  <b>return</b> (-b + std::sqrt(determinant)) / (2 * a);
+}
+</pre></blockquote>
+
+We would use it something like this:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;iostream&gt;
+<b>#include</b> &lt;cmath&gt;
+
+<b>double</b> QRoot(<b>double</b> a, <b>double</b> b, <b>double</b> c)
+{
+  <b>double</b> determinant = (b * b) - (4 * a * c);
+  <b>return</b> (-b + std::sqrt(determinant)) / (2 * a);
+}
+
+<b>int</b> main()
+{
+    <font color="#003399"><i>// -0.438447</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=1, b=5, c=2: &quot;</font> &lt;&lt; QRoot(1, 5, 2) &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Error, taking square root of negative number (-nan)</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=1, b=2, c=5: &quot;</font> &lt;&lt; QRoot(1, 2, 5) &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Error, divide by 0 (-nan)</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=0, b=2, c=5: &quot;</font> &lt;&lt; QRoot(0, 2, 5) &lt;&lt; std::endl;
+  
+  <b>return</b> 0;
+}</code></pre>
+
+The output
+<blockquote><pre>
+QRoot a=1, b=5, c=2: -0.438447
+QRoot a=1, b=2, c=5: -nan
+QRoot a=0, b=2, c=5: -nan
+</pre></blockquote>
+
+What are the pros and cons of this approach?
+<p>
+
+<!--
+  It's easy, no extra work
+
+  It produces the wrong output.
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Two</p>
+<p>
+
+<ul>
+<li>Check the data <i>before</i> using it, and if it's bad:
+<ul>
+<li>Issue an error message
+<li>Terminate the program
+</ul>
+<li>Otherwise continue as normal
+</ul>
+
+<pre class="sourcecode"><code><b>double</b> QRoot(<b>double</b> a, <b>double</b> b, <b>double</b> c)
+{
+  <b>double</b> determinant = (b * b) - (4 * a * c);
+
+  <b>if</b> (determinant &lt; 0) <font color="#003399"><i>// protected against: std::sqrt(-x)</i></font>
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't take square root of a negative number.&quot;</font> &lt;&lt; std::endl;
+    std::abort();
+  }
+  <b>else</b> <b>if</b> (a == 0)     <font color="#003399"><i>// protected against: x / 0</i></font>
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Division by 0.&quot;</font> &lt;&lt; std::endl;
+    std::abort();
+  }
+
+  <b>return</b> (-b + std::sqrt(determinant)) / (2 * a);
+}</code></pre>
+
+
+Note: The client code is unchanged. Output from the <tt>abort()</tt> function (depends on the
+version of the compiler.)
+<p>
+  
+GNU (on Cygwin):  
+<blockquote><pre>
+Can't take square root of a negative number.
+    160 [sig] a 1716 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+    160 [sig] a 1716 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+1572257 [sig] a 1716 E:\Data\Courses\Notes\CS170\Code\Exceptions\a.exe: *** fatal error - 
+E:\Data\Courses\Notes\CS170\Code\Exceptions\a.exe: *** called with threadlist_ix -1
+</pre></blockquote>
+  
+Microsoft:
+<blockquote><pre>
+Can't take square root of a negative number.
+
+This application has requested the Runtime to terminate it in an unusual way.
+Please contact the application's support team for more information. 
+</pre></blockquote>
+
+Borland:
+<blockquote><pre>
+Can't take square root of a negative number.
+
+Abnormal program termination
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+  
+<!--
+  
+The result when running in debug mode:
+<blockquote><pre>
+<img src="ExceptionDialog-1.gif">
+</pre></blockquote>
+
+The result when running in Release mode:
+
+<blockquote><pre>
+QRoot a=1, b=5, c=2: -0.438447
+Can't take square root of a negative number.
+
+abnormal program termination
+</pre></blockquote>
+-->
+
+What are the pros and cons of this approach?
+<p>
+
+<!--
+  Bad data won't get through
+
+  More code, termination may be harsh.
+
+  Detection but no real recovery.
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Three</p>
+<p>
+
+<ul>
+<li>Check the data <i>before</i> using it, and if it's bad:
+<ul>
+<li>Don't use the data
+<li>Set the output to some "safe" value
+<li>Return immediately with a status of "FAIL"
+</ul>
+<li>Otherwise continue as normal
+<li>Return a status of "OK"
+</ul>
+
+<pre class="sourcecode"><code><b>bool</b> QRoot(<b>double</b> a, <b>double</b> b, <b>double</b> c, <b>double</b> *result)<font color="#003399"> <i>// Could use a reference as well</i></font>
+{
+  <b>double</b> determinant = (b * b) - (4 * a * c);
+
+    <font color="#003399"><i>// protected against: std::sqrt(-x), x / 0</i></font>
+  <b>if</b> ( (determinant &lt; 0) || (a == 0) ) 
+  {
+    *result = 0.0;  <font color="#003399"><i>// return something safe</i></font>
+    <b>return</b> <b>false</b>; <font color="#003399"><i>// indicates there was a problem</i></font>
+  }
+
+  *result = (-b + std::sqrt(determinant)) / (2 * a);
+  <b>return</b> <b>true</b>;  <font color="#003399"><i>// indicates all is well</i></font>
+}
+
+<b>int</b> main()
+{
+  <b>double</b> answer;
+  <b>bool</b> success = QRoot(1, 5, 2, &amp;answer);
+  <b>if</b> (success)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=1, b=5, c=2: &quot;</font> &lt;&lt; answer &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot failed for some reason&quot;</font> &lt;&lt; std::endl;
+    
+  <b>return</b> 0;
+}</code></pre>
+
+What are the pros and cons of this approach?
+<p>
+
+<!--
+  Bad data won't terminate the program.
+
+  The user must check the return value.
+  Out params are required.
+  Can't use this in an expression.
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Four (read all about exceptions)</p>
+<p>
+
+<ul>
+<li>There's a better way: exceptions
+<li>It's built into the language
+<li>More powerful and flexible, but also more complex
+<li>Can start off simple and then grow into complex
+</ul>
+
+<ul>
+<li>When you detect an exceptional situation, you <b><i>throw</i></b> an exception.
+<li>When you want to handle the exception, you <b><i>catch</i></b> it.
+<li>Program code that wants to <b>catch</b> an exception must be placed in a <b><i>try</i></b> block.
+<li>These three facilities, <b>try, throw,</b> and <b>catch</b> are the foundation of the C++ exception mechanism.
+<li>Also, the curly braces are required, even if there is only one statement.
+</ul>
+
+<blockquote>
+<p class="technote">
+These examples use simple built-in data types for the exception types. You will likely never
+do that. This is to keep the examples very simple while focusing on the "exceptional" part
+of the discussion. Proper use of <i>exception classes</i> will be shown near the end.
+</p>
+</blockquote>
+
+
+A format of the <tt><b>try...catch</b></tt> mechanism:
+
+<blockquote><pre>
+<b>int</b> main()
+{
+  . . .
+   
+  <b>try</b>
+  {
+    <font color="#003399"><i>// code that might cause an exception (throw) and needs</i></font>
+    <font color="#003399"><i>// to be protected</i></font>
+  }
+  <b>catch</b> (???)  <font color="#003399"><i>// which type of exception to catch?</i></font>
+  {
+    <font color="#003399"><i>// code that will handle the exception (catch) from</i></font>
+    <font color="#003399"><i>// the try block above</i></font>
+  }
+
+  . . .
+  
+}
+</pre></blockquote>
+
+You can catch multiple exceptions thrown from a <b>try</b> block:
+
+<blockquote><pre>
+<b>int</b> main()
+{
+  . . .
+  
+  <b>try</b>
+  {
+    <font color="#003399"><i>// code that might cause an exception (throw) and needs</i></font>
+    <font color="#003399"><i>// to be protected</i></font>
+  }
+  <b>catch</b> (<b>const char</b> *p) <font color="#003399"><i>// catch a const char pointer</i></font>
+  {
+    <font color="#003399"><i>// code that will handle the char pointer exception from</i></font>
+    <font color="#003399"><i>// the try block above</i></font>
+  }
+  <b>catch</b> (<b>int</b> i) <font color="#003399"><i>// catch an integer</i></font>
+  {
+    <font color="#003399"><i>// code that will handle the integer exception from</i></font>
+    <font color="#003399"><i>// the try block above</i></font>
+  }
+  <b>catch</b> (std::exception e) <font color="#003399"><i>// catch an &quot;exception&quot; object</i></font>
+  {
+    <font color="#003399"><i>// code that will handle the &quot;exception&quot; object from</i></font>
+    <font color="#003399"><i>// the try block above</i></font>
+  }
+  
+  . . .
+  
+}
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>The <tt><b>catch</b></tt> block looks like a function with a parameter declaration, but it's not.</li>
+  <li>The type of the exception thrown must match the type that is caught. (No implicit conversions.)</li>
+  <ul>
+    <li>Pointers to objects of a derived class can be caught via a pointer to the base class. (A derived type <i>is a</i> base type.)</li>
+  </ul>
+  <li>The scope of the caught exception is limited to the curly braces that follow it.</li>
+  <li>The <tt><b>catch</b></tt> blocks will be searched in the order defined in the code.</li>
+</ul>
+
+<!--
+  <b>catch</b> (...) <font color="#003399"><i>// catch any type (wild card)</i></font>
+  {
+    <font color="#003399"><i>// code that will handle any other exception from</i></font>
+    <font color="#003399"><i>// the try block above</i></font>
+  }
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Five (Use exceptions)</p>
+<p>
+
+<ul>
+<li>In client code: (<tt>main</tt>)
+<ul>
+<li>Protect potential "bad" code by placing a <b>try</b> block around it.
+<li>Provide a <b>catch</b> block that will handle any exceptions thrown in the <b>try</b> block.
+</ul>
+<li>In the non-client code: (<tt>QRoot</tt>)
+<ul>
+<li>Check the data <i>before</i> using it
+<li>If it's bad, <b>throw</b> an exception that identifies the problem
+<li>If it's good, use it as normal
+</ul>
+</ul>
+
+The client and non-client code has been modified now:
+
+<pre class="sourcecode"><code><b>double</b> QRoot(<b>double</b> a, <b>double</b> b, <b>double</b> c)
+{
+  <b>double</b> determinant = (b * b) - (4 * a * c);
+
+    <font color="#003399"><i>// protected against std::sqrt(-x) and division by 0</i></font>
+  <b>if</b> (determinant &lt; 0) 
+    <b>throw</b>(<font color="#9933CC">&quot;Can't take square root of a negative number.&quot;</font>);
+  <b>else</b> <b>if</b> (a == 0)     
+    <b>throw</b>(<font color="#9933CC">&quot;Division by 0.&quot;</font>);
+
+    <font color="#003399"><i>// We only reach this point if no exception was thrown</i></font>
+  <b>return</b> (-b + std::sqrt(determinant)) / (2 * a);
+}
+
+<b>int</b> main()
+{
+  <b>try</b>  <font color="#003399"><i>// protect code</i></font>
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=0, b=5, c=2: &quot;</font> &lt;&lt; QRoot(0, 5, 2) &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>const char</b> *message)  <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+Division by 0.
+</code></pre>
+
+<ul>
+<li>When an exception is thrown, the program "jumps" out of the block immediately (almost)</li>
+<li>Where does it "jump" to? One of the <b>catch</b> blocks.
+<li>Which <b>catch</b> block? The one associated with the most recent enclosing <b>try</b> block. 
+(The exception type must match the type in the <b>catch</b> block.)
+<li>Exceptions that are not caught end up calling the <b>abort()</b> method and terminating the program.</li>
+<li>You can kind of (only <i>kind of</i>) think of a <b>try/catch</b> as like an <b>if/then</b>
+  construct:
+  <ul>
+    <li><b>IF</b> the code in the <b>try</b> block throws an exception, <b>THEN</b> the
+      code in the <b>catch</b> block will be executed.</li>
+    <li><b>IF</b> the code in the <b>try</b> block DOES NOT throw an exception, <b>THEN</b> the
+      code in the <b>catch</b> block will NOT be executed.</li>
+    <li>These are mutually exclusive. It's exactly one or the other, not both or neither.</li>
+    </ul>
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Six</p>
+<p>
+
+<blockquote>
+<p class="technote">
+Exception specifications have been deprecated in C++11 so you won't use them. They have been replaced with
+the <b><tt>noexcept</tt></b> specifier, which is covered later. It's still worthwhile to see
+why they were invented and why they've changed. 
+
+<!--
+I've just left these notes
+here for historical reasons.
+-->
+</p>
+</blockquote>
+
+<ul>
+<li>You can "tag" a function with an exception specification.</li>
+<li>It makes it <i>very</i> clear to the user what to expect.</li>
+<li>It isn't foolproof as you can still throw other exceptions.</li>
+<li>Because of this, exception specifications never really became what they were intended to become.</li>
+<li>In generally, we don't care <i>what kind</i> of exception is thrown, we just need to know
+  if it throws <i>any kind</i> of exception. That's more important and is easier to quantify.</li>
+<li>The new <b><tt>noexcept</tt></b> mechanism provides what is really needed.</li>
+<li>With that said, let's look at the exception specifications</li>
+</ul>
+
+
+<pre class="sourcecode"><code><font color="#003399"><i>// This function promises to <b>only</b> throw a const char * or a double, nothing else</i></font>
+<b>double</b> QRoot(<b>double</b> a, <b>double</b> b, <b>double</b> c) <font color="blue"><b>throw</b>(<b>const char</b> *, <b>double</b>)</font>
+{
+  <b>double</b> determinant = (b * b) - (4 * a * c);
+
+    <font color="#003399"><i>// protected against std::sqrt(-x) and division by 0</i></font>
+  <b>if</b> (determinant &lt; 0) 
+    <b>throw</b>(determinant);       <font color="#003399"><i>// throw double</i></font>
+  <b>else</b> <b>if</b> (a == 0)     
+    <b>throw</b>(<font color="#9933CC">&quot;Division by 0.&quot;</font>);  <font color="#003399"><i>// throw const char *</i></font>
+
+    <font color="#003399"><i>// We only reach this point if no exception was thrown</i></font>
+  <b>return</b> (-b + std::sqrt(determinant)) / (2 * a);
+}
+
+<b>int</b> main()
+{
+  <b>try</b>  <font color="#003399"><i>// protect code</i></font>
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=3, b=2, c=1: &quot;</font> &lt;&lt; QRoot(3, 2, 1) &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>const char</b> *message)  <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>double</b> value)  <font color="#003399"><i>// catch a double exception</i></font>
+  {
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+-8
+</code></pre>
+
+To indicate that a function doesn't throw any exceptions, use empty parentheses:
+
+<blockquote><pre>
+<b>double</b> SomeFun(<b>double</b> a, <b>double</b> b, <b>double</b> c) <b>throw</b>()
+{
+  ...
+}
+</pre></blockquote>
+
+What does the following output?
+<!--
+  -8
+  Division by zero
+-->
+
+<pre class="sourcecode"><code><b>int</b> main()
+{
+    <font color="#003399"><i>// protect code</i></font>
+  <b>try</b> 
+  { 
+      <font color="#003399"><i>// Determinant will be negative</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=3, b=2, c=1: &quot;</font> &lt;&lt; QRoot(3, 2, 1) &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>const char</b> *message) <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {  
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>double</b> value) <font color="#003399"><i>// catch a double exception</i></font>
+  {   
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+  }
+
+    <font color="#003399"><i>// protect code</i></font>
+  <b>try</b> 
+  { 
+      <font color="#003399"><i>// a is 0 (divide by 0)</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=0, b=2, c=1: &quot;</font> &lt;&lt; QRoot(0, 2, 1) &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>const char</b> *message) <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {  
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>double</b> value) <font color="#003399"><i>// catch a double exception</i></font>
+  {   
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}</code></pre>
+
+What does the following output?
+
+<pre class="sourcecode"><code><b>int</b> main()
+{
+    <font color="#003399"><i>// protect code</i></font>
+  <b>try</b> { 
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=3, b=2, c=1: &quot;</font> &lt;&lt; QRoot(3, 2, 1) &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;QRoot a=0, b=2, c=1: &quot;</font> &lt;&lt; QRoot(0, 2, 1) &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>const char</b> *message) <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {  
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>double</b> value) <font color="#003399"><i>// catch a double exception</i></font>
+  {   
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}</code></pre>
+
+<!--
+  -8 (the second statement in the try block never executes)
+-->
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Day Six and a half
+</p>
+
+Previous versions of C++ have had <i>exception specifications</i>. This was a mechanism
+that allowed the programmer to "tag" functions with the types of exceptions that might
+be thrown. For example, this <i>lookup</i> function can potentially throw an exception
+if the index is out of range:
+
+<blockquote><pre>
+<b>int</b> lookup(<b>const</b> vector&lt;<b>int</b>&gt;&amp; v, <b>int</b> index) <font color="blue"><b>throw</b>(std::out_of_range)</font>
+{
+  <b>return</b> v.at(index); <font color="#003399"><i>// This method does range checking</i></font>
+}
+</pre></blockquote>
+
+The code at the end:
+
+<blockquote><pre>
+<font color="blue"><b>throw</b> (std::out_of_range)</font>
+</pre></blockquote>
+
+is the exception specification and informs the programmer what may be thrown from the function. It
+also tells the compiler to prevent any other exceptions from being thrown. If any exception, other
+than <tt>std::out_of_range</tt> is thrown, the entire program is terminated.
+<p>This is sample code that calls the function above:
+
+<!--vector&lt;<b>int</b>&gt; v {10, 20, 30};-->
+<blockquote><pre>
+vector&lt;<b>int</b>&gt; v;
+v.push_back(10);
+v.push_back(20);
+v.push_back(30);
+<b>try</b>
+{
+  cout &lt;&lt; lookup(v, 2) &lt;&lt; endl; <font color="#003399"><i>// Prints 30</i></font>
+  cout &lt;&lt; lookup(v, 5) &lt;&lt; endl; <font color="#003399"><i>// Throws a std::out_of_range exception</i></font>
+}
+<b>catch</b> (<b>const</b> std::out_of_range&amp; ex)
+{
+  cout &lt;&lt; ex.what() &lt;&lt; endl; <font color="#003399"><i>// Display details about the exception</i></font>
+}
+</pre></blockquote>
+
+Output:
+
+<a name="STLEXCEPT"></a>
+<blockquote><pre>
+30
+vector::_M_range_check: __n (which is 5) >= this->size() (which is 3)
+</pre></blockquote>
+
+
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+There are 3 varieties of exception specifications:
+
+<blockquote><pre>
+<font color="#003399"><i>// foo1 will throw no exceptions</i></font>
+<b>int</b> foo1() <b>throw</b>();
+
+<font color="#003399"><i>// foo2 will only throw std::out_of_range or std:bad_alloc</i></font>
+<b>int</b> foo2() <b>throw</b> (std::out_of_range, std::bad_alloc);
+
+<font color="#003399"><i>// foo3 may thrown any exception</i></font>
+<b>int</b> foo3();
+</pre></blockquote>
+
+<ol>
+  <li><i>foo1</i> - An empty exception specification may not throw any exception.</li>
+  <li><i>foo2</i> - A non-empty exception specification may only throw the exceptions listed.</li>
+  <li><i>foo3</i> - A missing exception specification may throw any exception.</li>
+</ol>
+
+For various reasons, exception specifications never worked out as intended and have been deprecated 
+for several years. Now, with C++11, there is a replacement. As it turns out, the important information
+that the compiler wants to know is if the function throws an exception or not. The compiler doesn't
+care about which exception is thrown. The new technique reflects this change:
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+<font color="#003399"><i>// Function will not throw an exception</i></font>
+<b>void</b> foobar1() <b>noexcept</b>(<b>true</b>)
+{
+  <font color="#003399"><i>// do something safe</i></font>
+}
+
+<font color="#003399"><i>// Function may throw an exception</i></font>
+<b>void</b> foobar2() <b>noexcept</b>(<b>false</b>)
+{
+  <font color="#003399"><i>// do something possibly unsafe</i></font>
+}
+
+<font color="#003399"><i>// foobar3 may throw an exception only if foobar2 may throw an exception</i></font>
+<b>void</b> foobar3() <b>noexcept</b>(<b>noexcept</b>(foobar2()))  
+{
+  foobar2(); <font color="#003399"><i>// call possibly unsafe function</i></font>
+}
+
+<font color="#003399"><i>// foobar4 will not throw an exception (protects unsafe call to foobar2)</i></font>
+<b>void</b> foobar4() <b>noexcept</b>(<b>true</b>)  
+{
+  <b>try</b>
+  {
+    foobar2(); <font color="#003399"><i>// call possibly unsafe function</i></font>
+  }
+  <b>catch</b> (<font color="#003399"><i>/* whatever foobar2 throws */</i></font>)
+  {
+    <font color="#003399"><i>// do something with the exception</i></font>
+  }
+
+  <font color="#003399"><i>// safely continue excecuting...</i></font>
+}
+</pre></blockquote>
+
+
+When declaring a function to be <i>noexcept</i>, these both mean the same thing:
+
+<blockquote><pre>
+<b>void</b> foobar() <b>noexcept</b>(<b>true</b>) <font color="#003399"><i>// explicit</i></font>
+<b>void</b> foobar() <b>noexcept</b>       <font color="#003399"><i>// implicit</i></font>
+</pre></blockquote>
+
+On a side note, it's a little unfortunate that the terminology kind of reverses the definition of
+<i>on/true/enabled</i> with <i>off/false/disabled</i>. By setting <i>noexcept</i> to true, you are disabling the
+ability to throw exceptions. It has always seemed strange to me when you "turn something off" by
+answering in the affirmative:
+
+<blockquote>
+Q: <i>"Do you want me to not turn the lights off?"</i><br>
+A: <i>Yes, please do not turn them off.</i>
+</blockquote>
+
+Most English speakers will ask in the affirmative:
+<blockquote>
+Q: <i>"Do you want me to turn the lights off?"</i><br>
+A: <i>No, please do not turn them off.</i>
+</blockquote>
+
+This would mean we would have <i>except(true)</i> to allow exceptions and <i>except(false)</i>
+to not allow them. Anyhoo...
+<p>
+<b>Notes:</b>
+<ul>
+  <li>Destructors are now noexcept by default unless a member or base class
+    has a destructor marked as <tt><b>noexcept(false)</b></tt>.</li>
+  <li>C++11 (and later) refers to the old style <tt><b>throw(...)</b></tt> as
+    <i>dynamic exception specifications</i> and the newer one as just
+    <i>exception specifications</i>.</li>
+  <li>The exception specification is part of the function's type, but not part
+    of the function's signature (can't overload on it). This is since C++17.</li>
+</ul>
+
+
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Seven</p>
+<p>
+
+<b>Unwinding the Stack after an Exception</b>
+<p>
+
+
+Assuming the same code for the <i>QRoot</i> function, what will this code do
+<ol>
+<li>assuming <i>QRoot</i> does not throw an exception?
+<li>assuming <i>QRoot</i> throws an exception? (<b>const char</b> *)
+</ol>
+
+<pre class="sourcecode"><code><b>void</b> f1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Starting f1...&quot;</font> &lt;&lt; std::endl;
+  QRoot(...);  <font color="#003399"><i>// program flow depends on this call</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Ending f1...&quot;</font> &lt;&lt; std::endl;
+}
+
+<b>void</b> f2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Starting f2...&quot;</font> &lt;&lt; std::endl;
+  f1();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Ending f2...&quot;</font> &lt;&lt; std::endl;
+}
+
+<b>int</b> main()
+{
+    <font color="#003399"><i>// protect code</i></font>
+  <b>try</b> { 
+    f2();
+  }
+  <b>catch</b> (<b>const char</b> *message) <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {  
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>double</b> value) <font color="#003399"><i>// catch a double exception</i></font>
+  {   
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}</code></pre>
+
+Assuming this call in <b>f1</b>: (no exception is thrown)
+<blockquote><pre>
+QRoot(1, 5, 3);  
+</pre></blockquote>
+
+We get
+
+<blockquote><pre>
+Starting f2...
+Starting f1...
+Ending f1...
+Ending f2...
+
+</pre></blockquote>
+
+Assuming this call in <b>f1</b>: (division by zero)
+<blockquote><pre>
+QRoot(0, 5, 3);  
+</pre></blockquote>
+
+We get
+
+<blockquote><pre>
+Starting f2...
+Starting f1...
+Division by 0.
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+<b>Re-throwing Exceptions</b> 
+<p>
+
+<!--
+<ul>
+<li>You can propagate exceptions from where they are (first) caught
+<li>Just use the keyword <b>throw</b> by itself to re-throw the same (current) exception
+</ul>
+
+<pre class="sourcecode"><code>
+<b>void</b> f1()
+{
+  <b>try</b> {
+    QRoot(0, 5, 3);  <font color="#003399"><i>// division by 0</i></font>
+  }
+  <b>catch</b> (<b>const char</b> *s) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Caught error in f1: &quot;</font> &lt;&lt; s &lt;&lt; std::endl;
+    <b>throw</b>;
+  }
+}
+
+<b>int</b> main()
+{
+    <font color="#003399"><i>// protect code</i></font>
+  <b>try</b> { 
+    f1();
+  }
+  <b>catch</b> (<b>const char</b> *message) {  <font color="#003399"><i>// catch a const char pointer exception</i></font>
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  <b>catch</b> (<b>double</b> value) {   <font color="#003399"><i>// catch a double exception</i></font>
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+Caught error in f1: Division by 0.
+Division by 0.
+</code></pre>
+-->
+
+<ul>
+<li>You can catch one type of exception and throw another
+</ul>
+
+<pre class="sourcecode"><code>
+<b>void</b> f1()
+{
+  <b>try</b> 
+  {
+    QRoot(0, 5, 3);  <font color="#003399"><i>// division by 0</i></font>
+  }
+  <b>catch</b> (<b>const char</b> *s) 
+  {
+    <b>throw</b>(<font color="#9933CC">&quot;Error! Please call 1-800-DIV-ZERO for help&quot;</font>);
+  }
+}
+
+<b>int</b> main()
+{
+    <font color="#003399"><i>// protect code</i></font>
+  <b>try</b> 
+  { 
+    f1();
+  }
+  <b>catch</b> (<b>const char</b> *message) <font color="#003399"><i>// catch a const char pointer exception</i></font>
+  {  
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+Error! Please call 1-800-DIV-ZERO for help
+</code></pre>
+
+<b>Remember this rule:</b>
+<blockquote>
+<p class="technote">  
+<b>NEVER</b> catch an exception that you do not intend to do anything about. If you don't know what to do with
+the exception that you catch, DO NOT CATCH IT! It is meant for some other part of the program to handle.
+If you have code that catches an exception and just re-throws the exception just caught, you are
+guilty of ignoring this rule.
+</p>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Eight (Exception Classes)</p>
+<p>
+
+<ul>
+<li>Typically, <i>exception objects</i> are thrown, not simple types.</li>
+<li>Objects are much more flexible (can contain lots of information).</li>
+<li>Compiler deals with creating/destroying the exception objects automatically.</li>
+</ul>
+
+
+<pre class="sourcecode"><code><b>class</b> SomeClass
+{
+  <font color="#003399"><i>// code here</i></font>
+};
+
+<b>void</b> f1()
+{
+  <b>throw</b> SomeClass(); <font color="#003399"><i>// construct and throw SomeClass object</i></font>
+}
+
+<b>int</b> main()
+{
+  <b>try</b> 
+  { 
+    f1();
+  }
+  <b>catch</b> (<b>const</b> SomeClass &amp;s) 
+  {  
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Caught an exception of type SomeClass&quot;</font> &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}</code></pre>
+
+
+<p class="SectionHeader">
+Modifying our String Class
+</p>
+
+Recall the String class we developed:
+
+<blockquote><pre>
+<b>class</b> String
+{
+  <b>private</b>:
+    <b>char</b> *string_;     <font color="#003399"><i>// the &quot;real&quot; string</i></font>
+
+  <b>public</b>:
+
+      <font color="#003399"><i>// Constructors, destructor, etc...</i></font>
+
+      <font color="#003399"><i>// overloaded [] operators for subscripting</i></font>
+    <b>char</b> &amp; <b>operator</b>[](<b>int</b> index);
+    <b>const</b> <b>char</b> &amp; <b>operator</b>[](<b>int</b> index) <b>const</b>;
+};
+</pre></blockquote>
+
+Our original "error handling":
+
+
+<blockquote><pre>
+<b>char</b> &amp; String::<b>operator</b>[](<b>int</b> index)
+{
+  <b>int</b> len = strlen(string_);     <font color="#003399"><i>// Get length of internal string</i></font>
+  <b>if</b> (index &lt; 0 || index &gt;= len) <font color="#003399"><i>// Make sure the index is valid</i></font>
+  {
+    cerr &lt;&lt; <font color="#9933CC">&quot;Bad index&quot;</font> &lt;&lt; std::endl; <font color="#003399"><i>// If bad, print message</i></font>
+    abort();                          <font color="#003399"><i>//   terminate program</i></font>
+  }
+  <b>else</b>
+    <b>return</b> string_[index]; <font color="#003399"><i>// Return the char at index</i></font>
+}
+</pre></blockquote>
+
+<!--
+<b>const</b> <b>char</b> &amp; String::<b>operator</b>[](<b>int</b> index) <b>const</b>
+{
+  <b>int</b> len = strlen(string_);     <font color="#003399"><i>// Get length of internal string</i></font>
+  <b>if</b> (index &lt; 0 || index &gt;= len) <font color="#003399"><i>// Make sure the index is valid</i></font>
+  {
+    cerr &lt;&lt; <font color="#9933CC">&quot;Bad index&quot;</font> &lt;&lt; std::endl; <font color="#003399"><i>// If bad, print message</i></font>
+    exit(-1);                         <font color="#003399"><i>//   terminate program</i></font>
+  }
+  <b>else</b>
+    <b>return</b> string_[index]; <font color="#003399"><i>// Return the char at index</i></font>
+}
+-->
+
+<b>Adding an Exception Class</b>
+<p>
+
+<ol>
+<li>Create a class that will be used to "announce" subscript exceptions.
+<!--<li>Add an exception specification to the functions that will <b>throw</b> this exception.-->
+<li>Write code to <b>throw</b> the exception, if necessary. (<tt>String</tt> class)
+<li>Wrap the potentially "unsafe" code in a <b>try</b> block. (Client code)
+<li>Include a <b>catch</b> block in the client to handle the exception. (Client code)
+</ol>
+
+<pre class="sourcecode"><code><font color="blue"><b>class</b> SubscriptError
+{
+  <b>public</b>:
+    SubscriptError(<b>int</b> Subscript) : subscript_(Subscript) {};
+    <b>int</b> GetSubscript() <b>const</b> { <b>return</b> subscript_; }
+
+  <b>private</b>:
+    <b>int</b> subscript_;
+};</font>
+</code></pre>
+<!--
+<b>class</b> String
+{
+  <b>public</b>:
+
+      <font color="#003399"><i>// Constructors, destructor, etc...</i></font>
+
+      <font color="#003399"><i>// overloaded [] operators for subscripting</i></font>
+    <b>char</b> &amp; <b>operator</b>[](<b>int</b> index) <b>throw</b>(SubscriptError);
+    <b>const</b> <b>char</b> &amp; <b>operator</b>[](<b>int</b> index) <b>const</b> <b>throw</b>(SubscriptError);
+    
+  <b>private</b>:
+    <b>char</b> *string_;     <font color="#003399"><i>// the &quot;real&quot; string</i></font>
+};
+-->
+Implementation:
+
+<pre class="sourcecode"><code><b>char</b>&amp; String::<b>operator</b>[](<b>int</b> index) <!--<b>throw</b>(SubscriptError)-->
+{
+  <b>int</b> len = strlen(string_);     <font color="#003399"><i>// Get length of internal string</i></font>
+  <b>if</b> (index &lt; 0 || index &gt;= len) <font color="#003399"><i>// Make sure the index is valid</i></font>
+    <b>throw</b> SubscriptError(index); <font color="#003399"><i>// Throw exception if invalid</i></font>
+
+  <b>return</b> string_[index];         <font color="#003399"><i>// Return the char at index</i></font>
+}
+</code></pre>
+
+
+We would code the client like this:
+
+<pre class="sourcecode"><code>
+<b>int</b> main()
+{
+  String s(<font color="#9933CC">&quot;Hello&quot;</font>); <font color="#003399"><i>// Create string &quot;Hello&quot;</i></font>
+  <b>try</b> 
+  {
+    std::cout &lt;&lt; s[0] &lt;&lt; std::endl; <font color="#003399"><i>// Get the first character and print it</i></font>
+    s[9] = <font color="#9933CC">'C'</font>;                     <font color="#003399"><i>// Attempt to change tenth character</i></font>
+    std::cout &lt;&lt; s &lt;&lt; std::endl;     
+  }
+  <b>catch</b> (<b>const</b> SubscriptError &amp;se) 
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+H
+Bad subscript: 9
+</code></pre>
+
+
+<ul>
+<li>Exceptions are classes just like any other class in C++.
+<li>There are standard exceptions in the STL. (<tt><b>class</b> exception</tt>, need to include <tt>exception</tt>)
+<ul>
+<li>You can derive exception classes from other exception classes.
+<li>It is common to have an <a href="../CS270/ExceptionHierarchy.gif">exception hierarchy</a>.
+</ul>
+<li>One of the necessary places for catching exceptions is with the <b>new</b> operator as it does not
+return NULL like <tt>malloc</tt> does.</li>  
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Handling Memory Allocation Failure</p>
+<p>
+
+Now that we know how to deal with out-of-memory errors in C++, we can deal with them.
+
+<blockquote><pre>
+List::Node *List::new_node(<b>int</b> data) <b>const</b>
+{
+  Node *node;
+
+  <b>try</b>
+  {
+    node = <b>new</b> Node(data); <font color="#003399"><i>// create the node</i></font>
+  }
+  <b>catch</b> (<b>const</b> std::bad_alloc&amp; ex)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;New failed&quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; ex.what() &lt;&lt; std::endl;
+    std::abort(); <font color="#003399"><i>// Maybe do something better?</i></font>
+  }
+
+  <b>return</b> node;
+}
+</pre></blockquote>
+
+
+Modified example from <a href="http://en.cppreference.com/w/cpp/memory/new/set_new_handler">cppreference.com</a>:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;new&gt;      // set_new_handler</font>
+<font color="#003399"><i>//#include &lt;unistd.h&gt; // sleep</i></font>
+
+<b>static</b> <b>int</b> allocs = 0;
+
+<b>void</b> handler()
+{
+  <font color="#003399"><i>//sleep(2);</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Memory allocation failed, terminating. [&quot;</font> 
+            &lt;&lt; allocs &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Reset new handler (will throw std::bad_alloc)</i></font>
+  std::set_new_handler(0);
+}
+ 
+<b>int</b> main()
+{
+    <font color="#003399"><i>// Install new handler (no exception will be thrown)</i></font>
+  std::set_new_handler(handler);
+
+  <b>try</b> 
+  {
+      <font color="#003399"><i>// Consume all memory</i></font>
+    <b>while</b> (<b>true</b>) 
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Allocating... &quot;</font> &lt;&lt; ++allocs &lt;&lt; std::endl;
+      <b>new</b> <b>double</b>[100000000]; <font color="#003399"><i>// 800,000,000 bytes</i></font>
+    }
+  } 
+  <b>catch</b> (<b>const</b> std::bad_alloc&amp; e) 
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Allocation failed: &quot;</font> &lt;&lt; e.what() &lt;&lt; <font color="#9933CC">'&#92;n'</font>;
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+Example showing recovery from out-of-memory errors:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;new&gt;      // set_new_handler</font>
+<font color="#003399"><i>//#include &lt;unistd.h&gt; // sleep</i></font>
+
+<b>static</b> <b>int</b> allocs = 0;
+<b>static</b> <b>double</b>* memory[200000]; <font color="#003399"><i>// Magic number! Make sure you don't allocate more than this.</i></font>
+
+<b>static</b> <b>int</b> errors = 1;
+
+<b>void</b> handler()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Memory allocation failed, terminating. [&quot;</font> 
+            &lt;&lt; allocs &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Out of memory: &quot;</font> &lt;&lt; errors &lt;&lt; std::endl;
+  <font color="#003399"><i>//sleep(1);</i></font>
+
+    <font color="#003399"><i>// Release all of the memory</i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; allocs; i++)
+    <b>delete</b> [] memory[i];
+
+  allocs = 0;
+  errors++;
+
+    <font color="#003399"><i>// Reset new handler (will throw std::bad_alloc)</i></font>
+  <font color="#003399"><i>//std::set_new_handler(0);</i></font>
+}
+ 
+<b>int</b> main()
+{
+    <font color="#003399"><i>// Install new handler (no exception will be thrown)</i></font>
+  std::set_new_handler(handler);
+  <b>try</b> 
+  {
+      <font color="#003399"><i>// Consume all memory</i></font>
+    <b>while</b> (<b>true</b>) 
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Allocating... &quot;</font> &lt;&lt; allocs &lt;&lt; std::endl;
+      memory[allocs++] = <b>new</b> <b>double</b>[100000000]; <font color="#003399"><i>// 800,000,000 bytes</i></font>
+    }
+  } 
+  <b>catch</b> (<b>const</b> std::bad_alloc&amp; e) 
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Allocation failed: &quot;</font> &lt;&lt; e.what() &lt;&lt; <font color="#9933CC">'&#92;n'</font>;
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Note: There is actually a potential bug in the code above.
+
+<!--
+The bug is this: 
+
+  memory[allocs++] = new double[100000000]; // 800,000,000 bytes
+
+When new fails, has allocs been incremented? If yes, we'll free too many above.
+
+
+
+From here:
+https://stackoverflow.com/questions/4571666/nothrow-or-exception
+
+Finally, it usually is possible to throw an exception even if memory is scarce. 
+Many C++ implementations reserve some space in the stack (or some other non-heap memory segment)
+for exceptions, so even if the heap runs out of space it can be possible to find memory for exceptions.
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Day Nine (Derived exception Classes)</p>
+<p>
+
+It is common to derive all exception objects from the exception class:
+
+<pre class="sourcecode"><code><b>class</b> exception 
+{
+  <b>public</b>:
+    exception() <b>throw</b>();
+    exception(<b>const</b> exception&amp; rhs) <b>throw</b>();
+    exception&amp; <b>operator</b>=(<b>const</b> exception&amp; rhs) <b>throw</b>();
+    <b>virtual</b> ~exception() <b>throw</b>();
+    <b>virtual</b> <b>const</b> <b>char</b> *what() <b>const</b> <b>throw</b>();
+};</code></pre>
+
+Deriving SubscriptError from exception:
+
+<pre class="sourcecode"><code><b>class</b> SubscriptError : <b>public</b> std::exception
+{
+  <b>private</b>:
+    <b>int</b> subscript_;
+
+  <b>public</b>:
+    SubscriptError(<b>int</b> Subscript) : subscript_(Subscript) {};
+    <b>int</b> GetSubscript() <b>const</b> { <b>return</b> subscript_; }
+    <b>virtual const</b> <b>char</b> *what() <b>const</b> <b>throw</b>();
+    {
+      <b>static</b> <b>char</b> buff[80];
+      sprintf(buff, <font color="#9933CC">&quot;Subscript error at index: %d&quot;</font>, subscript_);
+      <b>return</b> buff;
+    }
+};</code></pre>
+
+Now, the client should call the <b>what()</b> method instead:
+
+<pre class="sourcecode"><code>
+<b>int</b> main()
+{
+  String s(<font color="#9933CC">&quot;Hello&quot;</font>); <font color="#003399"><i>// Create string &quot;Hello&quot;</i></font>
+  <b>try</b>
+  {
+    std::cout &lt;&lt; s[0] &lt;&lt; std::endl; <font color="#003399"><i>// Get the first character and print it</i></font>
+    s[9] = <font color="#9933CC">'C'</font>;                     <font color="#003399"><i>// Attempt to change ninth character</i></font>
+    std::cout &lt;&lt; s &lt;&lt; std::endl;     
+  }
+  <b>catch</b> (<b>const</b> SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; se.what() &lt;&lt; std::endl;
+  }
+  
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+H
+Subscript error at index: 9
+</code></pre>
+
+Suppose you wanted to be more like the <a href="Exceptions-Intro.html#STLEXCEPT">error emitted</a> from
+STL's vector class
+
+and provide the length
+of the String in the error message:
+
+<pre class="sourcecode"><code><b>class</b> SubscriptError : <b>public</b> std::exception
+{
+  <b>private</b>:
+    <b>int</b> subscript_;
+    <font color="blue"><b>int</b> length_;</font>
+
+  <b>public</b>:
+    SubscriptError(<b>int</b> Subscript, <font color="blue"><b>int</b> len</font>) : subscript_(Subscript)<font color="blue">, length(len)</font> {};
+    <b>int</b> GetSubscript() <b>const</b> { <b>return</b> subscript_; }
+    <b>virtual const</b> <b>char</b> *what() <b>const</b> <b>throw</b>();
+    {
+      <b>static</b> <b>char</b> buff[80];
+      sprintf(buff, <font color="#9933CC">&quot;Subscript error at index: %i<font color="blue">, length is %i</font>&quot;</font>, subscript_<font color="blue">, length_</font>);
+      <b>return</b> buff;
+    }
+};</code></pre>
+
+<pre class="sourcecode"><code><b>char</b>&amp; String::<b>operator</b>[](<b>int</b> index) <!--<b>throw</b>(SubscriptError)-->
+{
+  <b>int</b> len = strlen(string_);           <font color="#003399"><i>// Get length of internal string</i></font>
+  <b>if</b> (index &lt; 0 || index &gt;= len)       <font color="#003399"><i>// Make sure the index is valid</i></font>
+    <b>throw</b> SubscriptError(index<font color="blue">, len</font>);  <font color="#003399"><i>// Throw exception if invalid</i></font>
+
+  <b>return</b> string_[index];               <font color="#003399"><i>// Return the char at index</i></font>
+}
+</code></pre>
+
+<blockquote><pre>
+<b>Output:</b>
+H
+Subscript error at index: 9, length is 5
+</pre></blockquote>
+
+<p>
+
+
+Note that the <i>dynamic throw specification</i>, <tt><b>throw()</b></tt>, is deprecated in C++11
+in favor of <i>exception specifications</i>, <tt><b>noexcept</b></tt>.
+<p>
+Question: What happens if a constructor throws an exception?
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<br><br>

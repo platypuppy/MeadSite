@@ -1,0 +1,680 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Formatted Input/Output</title>
+</head>
+
+<body>  
+<center><h1>Formatted Input/Output</h1></center>
+
+
+<blockquote>
+<i>
+  
+</i>
+</blockquote>
+
+<p class="technote">
+The input and output facilities provided by <tt><b>printf</b></tt> and <tt><b>scanf</b></tt> are both
+simple and powerful. You will <b>NOT</b> learn these functions by reading and taking notes alone. You <b>MUST</b>
+practice with examples on your own. Also, there are many different ways to format output. If you 
+are interested in finding out, then <b>YOU</b> must experiment with them. (I'm not going to play the <i>what if...</i>
+game.)
+</p>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Simple Formatted Output</p>
+
+The most common facility used to output information is the <tt><b>printf</b></tt> function (<tt><b>print f</b></tt>ormatted).
+The general form of the function is:
+
+<blockquote><pre>
+<b>int</b> printf(<b>const</b> <b>char</b> *format_string, ...);
+</pre></blockquote>
+
+where:
+
+<blockquote>
+<table style="text-align: left; xwidth: 398px; xheight: 80px;"
+ border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-style: italic;">format_string</td>
+      <td>A string (character array)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-style: italic;"><big><big>...</big></big></td>
+      <td>An optional list of expressions to print.</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Another look at the general form:
+
+<blockquote><pre>
+<b>int</b> printf(<i>string</i>, <i>expression<sub>1</sub>, expression<sub>2</sub>, expression<sub>3</sub></i>, ...  );
+</pre></blockquote>
+
+<p>
+
+<tt><b>printf</b></tt> can only print strings (characters/words). If you wish to print a number, you have to convert it to a string first. Fortunately,
+<tt><b>printf</b></tt> makes this very easy. Within <i>string</i>, there are usually one or more <i>conversion specifiers</i> that 
+determine how to print numeric values. You can think of these specifiers as placeholders for the actual
+value that will be formatted and printed.
+<p>
+Examples:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> age = 18;           <font color="#003399"><i>/* Some student's age     */</i></font>
+  <b>float</b> gpa = 3.78F;      <font color="#003399"><i>/* Some student's GPA     */</i></font>
+  <b>double</b> pi = 3.14159265; <font color="#003399"><i>/* PI to 8 decimal places */</i></font>
+
+    <font color="#003399"><i>/* Print out the values in various formats */</i></font>
+  printf(<font color="#9933CC">&quot;Hello\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;John's age is %i\n&quot;</font>, age);
+  printf(<font color="#9933CC">&quot;John's age is %d\n&quot;</font>, age);
+  printf(<font color="#9933CC">&quot;His GPA is %f\n&quot;</font>, gpa);
+  printf(<font color="#9933CC">&quot;The value of PI is %f\n&quot;</font>, pi);
+  printf(<font color="#9933CC">&quot;John is %i years old and his GPA is %f\n&quot;</font>, age, gpa);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Output:
+
+<blockquote><pre>
+Hello
+John's age is 18
+John's age is 18
+His GPA is 3.780000
+The value of PI is 3.141593
+John is 18 years old and his GPA is 3.780000
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+Incorrect usage:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;John is %i years old and his GPA is <b><big>%f</big></b>\n&quot;</font>, age);
+printf(<font color="#9933CC">&quot;John is %i years old\n&quot;</font>, age, <b><big>gpa</big></b>);
+printf(<font color="#9933CC">&quot;John is <b><big>%f</big></b> years old\n&quot;</font>, <b><big>age</big></b>);
+printf(<font color="#9933CC">&quot;His GPA is <b><big>%i</big></b>\n&quot;</font>, <b><big>gpa</big></b>);
+</pre></blockquote>
+<br>
+Output when compiled with gcc:
+<blockquote><pre>
+John is 18 years old and his GPA is 0.000000
+John is 18 years old
+John is -0.000000 years old
+His GPA is -1610612736
+</pre></blockquote>
+
+<br>
+Output from Borland's C compiler:
+<blockquote><pre>
+John is 18 years old and his GPA is 0.000000
+John is 18 years old
+John is +NAN years old
+His GPA is -1610612736
+</pre></blockquote>
+
+<br>
+Output when compiled with Microsoft's C compiler:
+<blockquote><pre>
+John is 18 years old and his GPA is 7978913599429028900000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000000000000000000000000.000000
+John is 18 years old
+John is 79648294434967839000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000.000000 years old
+His GPA is -1610612736
+</pre></blockquote>
+
+Fortunately, some compilers (gcc) will alert you to these errors:
+<p>
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;John is %i years old and his GPA is <b><big>%f</big></b>\n&quot;</font>, age); <font color="#003399"><i>/* warning: too few arguments for format              */</i></font>
+printf(<font color="#9933CC">&quot;John is %i years old\n&quot;</font>, age, <b><big>gpa</big></b>); <font color="#003399"><i>             /* warning: too many arguments for format             */</i></font>
+printf(<font color="#9933CC">&quot;John is <b><big>%f</big></b> years old\n&quot;</font>, <b><big>age</big></b>); <font color="#003399"><i>                 /* warning: double format, different type arg (arg 2) */</i></font>
+printf(<font color="#9933CC">&quot;His GPA is <b><big>%i</big></b>\n&quot;</font>, <b><big>gpa</big></b>); <font color="#003399"><i>                        /* warning: int format, double arg (arg 2)            */</i></font>
+</pre></blockquote>
+<p>
+	
+An example using a larger expression:
+<blockquote><pre>
+<b>int</b> a = 3;  
+<b>int</b> b = 5;
+
+printf(<font color="#9933CC">&quot;The sum of a and b is %i\n&quot;</font>, a + b);
+printf(<font color="#9933CC">&quot;a = %i and b = %i, so 2 * (a + b) - 3 = %i\n&quot;</font>, a, b, 2 * (a + b) - 3);
+</pre></blockquote>
+
+<blockquote><pre>
+The sum of a and b is 8
+a = 3 and b = 5, so 2 * (a + b) - 3 = 13
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+More examples:
+<blockquote><pre>
+<b>float</b> gpa = 3.78F;
+<b>double</b> pi = 3.14159265;
+
+printf(<font color="#9933CC">&quot;GPA is %g\n&quot;</font>, gpa); <font color="#003399"><i>/* Significant digits                     */</i></font>
+printf(<font color="#9933CC">&quot;GPA is %e\n&quot;</font>, gpa); <font color="#003399"><i>/* Scientific notation (default 6 places) */</i></font>
+printf(<font color="#9933CC">&quot;PI is %g\n&quot;</font>, pi);   <font color="#003399"><i>/* Significant digits (default 6 digits)  */</i></font>
+printf(<font color="#9933CC">&quot;PI is %e\n&quot;</font>, pi);   <font color="#003399"><i>/* Scientific notation (default 6 places) */</i></font>
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+GPA is 3.78
+GPA is 3.780000e+000
+PI is 3.14159
+PI is 3.141593e+000
+</pre></blockquote>
+
+
+Common <tt><b>printf</b></tt> conversion specifiers:
+<blockquote><pre>
+%c - characters
+%s - strings (NUL terminated C strings)
+<b>%d</b> - integers
+<b>%i</b> - integers
+<b>%f</b> - floating point (float and double)
+<b>%e</b> - scientific notation
+<b>%g</b> - floating point (minimum digits)
+%p - pointers (displays in hex)
+%x - hexadecimal integers
+%u - unsigned
+%ld, %li - long integers
+%lu - unsigned long integers
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Controlling Size and Precision</p>
+
+The conversion specifiers determine the type of the data to display. If you want to have more control
+over the output, you need to specify additional information in the format string.
+<p>
+The general form is this:
+
+<blockquote><pre>
+%[<i>flags</i>][<i>width</i>][.<i>precision</i>]type
+</pre></blockquote>
+
+where
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr>
+<td><i>flags</i></td><td>Optional characters to control justification (left/right) and characters used for padding.<br>
+	Default is right justification. A minus sign indicates left justification.</td>
+</tr>
+<tr>
+<td><i>width</i></td><td>Optional number that controls the minimum number of <i>characters</i> to output.</td>
+</tr>
+<tr>
+<td><i>.precision</i></td><td>Optional number that controls whether or not to print a decimal point and
+how many digits to the right of the point to print.<br><b>For integers, it specifies the minimum number of <i>digits</i> to print.</b></td>
+</tr></table>
+</blockquote>
+<p>
+	
+A few examples will explain this better:
+
+<blockquote><pre>
+<b>int</b> age = 21;
+<b>float</b> wt = 165.89F;
+
+printf(<font color="#9933CC">&quot;|%i|%5i|%-5i|%5.4i|\n&quot;</font>, age, age, age, age);
+printf(<font color="#9933CC">&quot;|%f|%10.3f|%10.3e|%-10g|%-10.3g|\n&quot;</font>, wt, wt, wt, wt, wt);
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+|21|   21|21   | 0021|
+|165.889999|   165.890| 1.659e+02|165.89    |166       |
+</pre></blockquote>
+
+Showing with a dot <big><big>&middot;</big></big> for each space:
+
+<blockquote><pre>
+|21|&middot;&middot;&middot;21|21&middot;&middot;&middot;|&middot;0021|
+|165.889999|&middot;&middot;&middot;165.890|&middot;1.659e+02|165.89&middot;&middot;&middot;&middot;|166&middot;&middot;&middot;&middot;&middot;&middot;&middot;|
+</pre></blockquote>
+
+By default, if the width is greater than the number of digits printed, the field is
+padded with leading spaces. If you want to pad with leading zeros, you can use the 
+precision (as shown above) or you can use a leading zero
+in the format specifier.
+<p>
+The first two format specifiers below use the precision for leading zeros
+and the second two use a leading zero in the format specifier:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;"|%5.3i|%5.5i|%03i|%05i|\n&quot;</font>, age, age, age, age);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+|  021|00021|021|00021|
+</pre></blockquote>
+
+It will also work with floating point numbers:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;"|%010.3f|%010.3e|\n&quot;</font>, wt, wt);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+|000165.890|01.659e+02|
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Escape Sequences</p>
+
+Certain characters are not printable, meaning nothing is displayed on the screen (or printer) when
+you output them with <tt><b>printf</b></tt>. Some of them are print control codes (special values that
+the display or printer interpret differently).
+
+
+
+Common non-printing control characters
+<blockquote><pre>
+ASCII
+Value   Sequence       Meaning
+-----------------------------------
+  7        \a         bell (alarm)
+  8        \b         backspace
+  9        \t         horiz. tab
+ 10        \r         line feed
+ 11        \v         vert. tab
+ 12        \f         form feed
+ 13        \n         new line 
+</pre></blockquote>
+
+Other escape sequences:
+
+<blockquote><pre>
+Sequence     Meaning 
+-------------------------
+  \0       NUL character
+  \"       double quote
+  \\       backslash
+</pre></blockquote>
+Keep in mind these sequences are considered <i>single characters</i>. 
+<p>
+The percent sign is special. To display that, you must use two of them: <tt>%%</tt>
+<p>
+	
+Example:
+
+<blockquote><pre>
+<big>printf(&quot;\&quot;\\%%\t%%\t%%\\\&quot;\n&quot;);</big>
+</pre></blockquote>
+
+Output: (10 characters. There is a TAB character between each percent sign and depending on the
+environment that's printing the characters, the output may look different.)
+<blockquote><pre>
+"\%     %       %\"
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+The TAB character may seem to exhibit unusual behavior. The distance between the percent
+symbols above is the not the same. This is the difference between a TAB character
+expanding to a fixed number of spaces and the TAB character moving to the next TAB stop.
+</p>
+</blockquote>
+
+<!--
+http://www.c-faq.com/stdio/printfpercent.html
+
+Long story short from here: 
+https://stackoverflow.com/questions/17774821/how-do-i-print-the-percent-sign-in-c/25199213)
+
+so the reason why one must type printf("%%"); to print single % is that's what
+is defined in printf function. % is an escape character of printf's, and \ of the compiler.  
+
+Q: Why is the percent sign treated differently. In other words, why don't we escape 
+it (\%) like the other special characters?
+
+A: The backslash is for the compiler. The compiler removes the escape sequences and 
+replaces them with their actual values. So, for example, \n is replaced with the
+ASCII code for a newline (10, 13, or both, depending on the OS), and \t is
+replaced with the ASCII code for a tab (9). The printf function never sees the
+escape sequences since the compiler has already replaced them before printf
+sees them. printf uses the percent sign as it's own "escape sequence". That's
+why printf doesn't literally print %d, or %i, or %f. When printf sees %%, it
+ a single percent. Looking at the object file for this string:
+
+"foo\t%%\\\nbar"
+
+we see this:
+
+In hex:
+66 6F 6F 09 25 25 5C 0A 62 61 72
+f  o  o  .  %  %  \  .  b  a  r
+
+\t becomes 09, \n becomes 0A, \\ becomes 5C (a single backslash)
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Simple Input</p>
+
+A common way to input information is the <tt><b>scanf</b></tt> function (<tt><b>scan f</b></tt>ormatted).
+The general form of the function is very similar to <tt><b>printf</b></tt>:
+
+<blockquote><pre>
+<b>int</b> scanf(<b>const</b> <b>char</b> *format_string, ...);
+</pre></blockquote>
+
+where:
+
+<blockquote>
+<table style="text-align: left; xwidth: 398px; xheight: 80px;"
+ border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-style: italic;">format_string</td>
+      <td>A string (character array)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-style: italic;"><big><big>...</big></big></td>
+      <td>A list of memory locations (addresses) to store the values that were read in (from the keyboard).</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Another look at the general form:
+
+<blockquote><pre>
+<b>int</b> scanf(<i>string</i>, <i>location<sub>1</sub>, location<sub>2</sub>, location<sub>3</sub></i>, ...  );
+</pre></blockquote>
+
+and an example. After the value is input into <tt><b>age</b></tt>, it is displayed by the <tt><b>printf</b></tt> function:
+
+<blockquote><pre>
+<b>int</b> age;
+scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;age);
+printf(<font color="#9933CC">&quot;Your age is %d\n&quot;</font>, age);
+</pre></blockquote>
+
+Although <tt><b>scanf</b></tt> looks a lot like <tt><b>printf</b></tt>, their behavior is quite different. 
+
+<ul>
+<li>The first thing to note is the special character, &amp;, that is placed before each argument in the list.
+<li><tt><b>printf</b></tt> is used to format an entire string of characters, <tt><b>scanf</b></tt> isn't really formatting a string.
+<li>Often, <tt><b>printf</b></tt> will end with a newline character; <tt><b>scanf</b></tt> shouldn't.
+<li>Putting whitespace around the conversion specifiers in a <tt><b>scanf</b></tt> can lead to different results than without spaces.
+</ul>
+
+Any of these characters are considered whitespace characters:
+<ul>
+<li>space 
+<li>newline 
+<li>horizontal tab
+<li>vertical tab
+<li>carriage return
+<li>formfeed
+</ul>
+
+Reading in four integers and printing them out to the screen:
+<blockquote><pre>
+<b>int</b> a, b, c, d;
+scanf(<font color="#9933CC">&quot;%d%d%d%d&quot;</font>, &amp;a, &amp;b, &amp;c, &amp;d);
+printf(<font color="#9933CC">&quot;%d %d %d %d\n&quot;</font>, a, b, c, d);
+</pre></blockquote>
+
+Incorrect way to read in the same four integers:
+<blockquote><pre>
+scanf(<font color="#9933CC">&quot;%d%d%d%d&quot;</font>, a, b, c, d);
+</pre></blockquote>
+
+Fortunately, most compilers today will recognize the fatal mistake and warn you about it:
+<blockquote><pre>
+main.c:30: warning: format argument is not a pointer (arg 2)
+main.c:30: warning: format argument is not a pointer (arg 3)
+main.c:30: warning: format argument is not a pointer (arg 4)
+main.c:30: warning: format argument is not a pointer (arg 5)
+</pre></blockquote>
+
+You might see this with Microsoft's compilers:
+<blockquote><pre>
+main.c(30) : warning C4700: local variable 'd' used without having been initialized
+main.c(30) : warning C4700: local variable 'c' used without having been initialized
+main.c(30) : warning C4700: local variable 'b' used without having been initialized
+main.c(30) : warning C4700: local variable 'a' used without having been initialized
+</pre></blockquote>
+
+
+Another example:
+<blockquote><pre>
+<b>int</b> i1, i2;
+<b>float</b> f1, f2;
+scanf(<font color="#9933CC">&quot;%d%f%d%f&quot;</font>, &amp;i1, &amp;f1, &amp;i2, &amp;f2);
+</pre></blockquote>
+
+The user could enter the data in this fashion:
+<blockquote><pre>
+1 3.14   -15     2.71e2        (with dots showing the spaces: 1&middot;3.14&middot;&middot;&middot;-15&middot;&middot;&middot;&middot;&middot;2.71e2)
+</pre></blockquote>
+
+or like this:
+<blockquote><pre>
+1 3.14-15 2.71e2       (with dots showing the spaces: 1&middot;3.14-15&middot;2.71e2)
+</pre></blockquote>
+
+or this:
+<blockquote><pre>
+1
+3.14
+-15
+2.71e2       
+</pre></blockquote>
+
+or this:
+<blockquote><pre>
+1
+  3.14-15
+  
+  
+    2.71e2       
+</pre></blockquote>
+
+
+Another example:
+<blockquote><pre>
+<b>int</b> i1, i2;
+<b>float</b> f1, f2;
+scanf(<font color="#9933CC">&quot;%d%d%f%f&quot;</font>, &amp;i1, &amp;i2, &amp;f1, &amp;f2);
+</pre></blockquote>
+
+Input:
+<blockquote><pre>
+5-30.7-3.14e2
+</pre></blockquote>
+
+The program will print this:
+<blockquote><pre>
+5 -30 0.700000 -314.000000	
+</pre></blockquote>
+
+Usually, you will pair up calls to <tt><b>scanf</b></tt> and <tt><b>printf</b></tt>. Otherwise, the 
+user has no idea what the computer is waiting for.
+<p>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf, scanf */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> age;   <font color="#003399"><i>/* Student's age */</i></font>
+  <b>float</b> gpa; <font color="#003399"><i>/* Student's GPA */</i></font>
+
+    <font color="#003399"><i>/* Ask for and read in student's age */</i></font>
+  printf(<font color="#9933CC">&quot;What is your age? &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;age);
+
+    <font color="#003399"><i>/* Ask for and read in student's GPA */</i></font>
+  printf(<font color="#9933CC">&quot;What is your GPA? &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%f&quot;</font>, &amp;gpa);
+
+    <font color="#003399"><i>/* Format and print out both values */</i></font>
+  printf(<font color="#9933CC">&quot;Your age is %d and your GPA is %.2f\n&quot;</font>, age, gpa);
+
+  <b>return</b> 0;
+}
+</code></pre>	
+
+Sample session: (The characters in <font color="red"><b>red</b></font> were typed in by the user.)
+<blockquote><pre>
+What is your age? <font color="red"><b>21</b></font>
+What is your GPA? <font color="red"><b>3.478</b></font>
+Your age is 21 and your GPA is 3.48
+</pre></blockquote>
+
+A full example with proper documentation (comments):
+
+<table cellpadding=5 cellspacing=5>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf, scanf */</i></font>
+	
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> celsius;    <font color="#003399"><i>/* To hold the original celsius value      */</i></font>
+  <b>float</b> fahrenheit; <font color="#003399"><i>/* To hold the converted fahrenheit value. */</i></font>
+
+    <font color="#003399"><i>/* Ask user for the Celsius temperature */</i></font>
+  printf(<font color="#9933CC">&quot;Enter a temperature in Celsius: &quot;</font>);
+
+    <font color="#003399"><i>/* Read the input into the variable */</i></font>
+  scanf(<font color="#9933CC">&quot;%f&quot;</font>, &amp;celsius);
+
+    <font color="#003399"><i>/* Calculate fahrenheit from celsius. */</i></font>
+  fahrenheit = (9.0F * celsius / 5.0F) + 32;
+
+    <font color="#003399"><i>/* Display fahrenheit with 2 decimal places. */</i></font>
+  printf(<font color="#9933CC">&quot;The temperature in Fahrenheit is %.2f\n&quot;</font>, fahrenheit);
+  
+    <font color="#003399"><i>/* Return value to the OS. */</i></font>
+  <b>return</b> 0;
+}</code></pre>
+</td>
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf, scanf */</i></font>
+	
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> celsius;    <font color="#003399"><i>/* To hold the original celsius value      */</i></font>
+  <b>float</b> fahrenheit; <font color="#003399"><i>/* To hold the converted fahrenheit value. */</i></font>
+
+    <font color="#003399"><i>/* Ask user for the Celsius temperature and save it */</i></font>
+  printf(<font color="#9933CC">&quot;Enter a temperature in Celsius: &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%f&quot;</font>, &amp;celsius);
+
+    <font color="#003399"><i>/* Calculate fahrenheit from celsius. */</i></font>
+  fahrenheit = (9.0F * celsius / 5.0F) + 32;
+
+    <font color="#003399"><i>/* Display fahrenheit with 2 decimal places. */</i></font>
+  printf(<font color="#9933CC">&quot;The temperature in Fahrenheit is %.2f\n&quot;</font>, fahrenheit);
+  
+    <font color="#003399"><i>/* Return value to the OS. */</i></font>
+  <b>return</b> 0;
+}</code></pre>
+</td>
+</tr></table>
+<p>
+	
+Sample runs:
+<blockquote><pre>
+Enter a temperature in Celsius: <font color="red"><b>41.5</b></font>
+The temperature in Fahrenheit is 106.70
+
+Enter a temperature in Celsius: <font color="red"><b>100</b></font>
+The temperature in Fahrenheit is 212.00
+
+Enter a temperature in Celsius: <font color="red"><b>0</b></font>
+The temperature in Fahrenheit is 32.00
+
+Enter a temperature in Celsius: <font color="red"><b>-40</b></font>
+The temperature in Fahrenheit is -40.00
+</pre></blockquote>
+
+<p>
+<b>Side Question:</b> Why were these numbers chosen to "test" the program?
+<p>
+
+Additional points:
+<ul>
+<li>With <tt><b>printf</b></tt>, both format specifiers <tt>%d</tt> and <tt>%i</tt> do the exact
+  same thing. However, with <tt><b>scanf</b></tt>, <tt>%d</tt> will only read integers in base 10 (decimal),
+  while <tt>%i</tt> will allow you to read integers in base 10, base 8 (octal) and base 16 (hexadecimal).</li>
+<li>Both <tt><b>printf</b></tt> and <tt><b>scanf</b></tt> use <i>buffered I/O</i>, which increases 
+performance compared to non-buffered I/O.
+<li>By default, C programs have 3 files (streams) that are available for input and output:
+  <ul>
+    <li><tt><b>stdout</b></tt> - (Standard Output) This is where output functions like <tt><b>printf</b></tt> send their output (by default, the screen).
+    <li><tt><b>stdin</b></tt> - (Standard Input) This is where input functions like <tt><b>scanf</b></tt> get their input (by default, the keyboard).
+    <li><tt><b>stderr</b></tt> - (Standard Error) This is where errors are usually sent (by default, the screen).
+  </ul>
+<li>You can change where these streams read/write. (e.g. you can <i>redirect</i> <tt><b>stdout</b></tt> to go to a file instead of the screen).
+<li>There are several other input/output facilities available:
+	<ul>
+		<li><tt><b>putchar</b></tt>, <tt><b>puts</b></tt>, <tt><b>fwrite</b></tt> are examples of other output functions.
+	  <li><tt><b>getchar</b></tt>, <tt><b>gets</b></tt>, <tt><b>fread</b></tt> are examples of other input functions.
+  </ul>
+<li>Flushing <tt><b>stdin</b></tt>: Calling <a href="http://c-faq.com/stdio/stdinflush.html">fflush(stdin)</a> is not standard. Also,
+	<a href="http://c-faq.com/stdio/stdinflush2.html">alternative ways</a> to discard the input.
+</ul>
+
+	
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<font color="red"><b></b></font>
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<tt><b></b></tt>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

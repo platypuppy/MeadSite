@@ -1,0 +1,5 @@
+Assume that a student is typing his final report for english class
+into a text file. After completing the report, he realized that
+he mistakenly had the caps lock key on throughout the typing process. He said
+oh my gosh! What have i done? How am i going to fix this? But then he knew c.
+So he said "i will write me a c program".

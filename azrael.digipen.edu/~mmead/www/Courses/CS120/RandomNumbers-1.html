@@ -1,0 +1,632 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Random Numbers</title>
+</head>
+
+<body>  
+<center><h1>Random Numbers</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<p class="technote">
+Random numbers are an important topic in computer science, especially with respect to game
+programming. Without them, games would always make the same move every time you played them.
+Needless to say, it would be no fun if they always reacted in the exact same way each time
+you played them. Imagine a simple game like poker where the computer always dealt the
+same hand every game. After playing the first game, you would have figured out
+what cards the computer had and you would never lose (or have any fun!)
+</p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Generating Random Numbers in C
+</p>
+
+
+<li>Computers can't generate truly random numbers; they generate pseudo-random numbers.
+<ul>
+	<li>They use what's called a Pseudo-Random Number Generator 
+    (<a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">PRNG</a>)
+</ul>
+<li>Random numbers are used extensively to test programs; easier than typing input from the 
+  keyboard all day.
+<li>Used in many simulations (e.g. games) to add a sense of "chance" to the program.
+<li>Computers have built-in algorithms that produce pseudo-random numbers for programs to use.
+<li>One method of accessing these numbers is to call the C library function <tt>rand()</tt> 
+  which will return a random integer between 0 and 32,767 (or larger, depending on the compiler).
+<ul>
+	<li>The PRNGs are unique to each compiler, so there's no guarantee you'll get the same "random" numbers from 
+    different compilers.
+	<li>The upper-bound on some PRNGs may be larger than 32,767.
+	<li>Borland, Microsoft and GCC on Windows both use 32,767 (2<sup>16</sup>-1) as the upper-bound, but 
+    gcc/clang on Linux use 2,147,483,647 (2<sup>32</sup>-1).
+</ul>
+<li>To use the <a href="http://www.cplusplus.com/reference/cstdlib/rand/"><tt>rand</tt></a> function, you need to include 
+  <a href="http://www.cplusplus.com/reference/cstdlib/"><tt>stdlib.h</tt></a>.
+</ul>
+
+Example:
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf */</i></font>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* rand   */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i\n&quot;</font>, rand());
+    
+  <b>return</b> 0;
+}</code></pre>
+
+Output:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>Microsoft<br>(Windows)</th><th>Borland<br>(Windows)</th><th>GNU gcc<br>(Linux)</th></tr>
+<tr valign="top">
+<td>
+<pre>
+41
+18467
+6334
+26500
+19169
+15724
+11478
+29358
+26962
+24464
+</pre>
+</td>
+<td>
+<pre>
+130
+10982
+1090
+11656
+7117
+17595
+6415
+22948
+31126
+9004
+</pre>
+</td>
+<td>
+<pre>
+1804289383
+846930886
+1681692777
+1714636915
+1957747793
+424238335
+719885386
+1649760492
+596516649
+1189641421
+</pre>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Constraining and Seeding the Pseudo-Random Number Generator
+</p>
+
+
+Usually, we want to generate random numbers within a specific range, rather than between 0 and 32,767 (or 2,147,483,647). 
+The modulus operator, <tt>%</tt>, is very handy for this. This example generates 5 numbers between 1 and 10:
+<p>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf */</i></font>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* rand   */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i\n&quot;</font>, rand() % 10 + 1);
+    
+  <b>return</b> 0;
+}</code></pre>
+
+Output:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr><th>Microsoft</th><th>Borland</th><th>GNU gcc</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+2
+8
+5
+1
+10
+5
+9
+9
+3
+5
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+1
+3
+1
+7
+8
+6
+6
+9
+7
+5
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+4
+7
+8
+6
+4
+6
+7
+3
+10
+2
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+Notice that some numbers are duplicated. This is normal and is what <i>random</i> means.
+<p>
+
+If I run the program 5 times, this is the output of the 5 runs: (each column is a run). See a problem?
+
+<blockquote><pre>
+ 2    2    2    2    2
+ 8    8    8    8    8
+ 5    5    5    5    5
+ 1    1    1    1    1
+10   10   10   10   10
+ 5    5    5    5    5
+ 9    9    9    9    9
+ 9    9    9    9    9
+ 3    3    3    3    3
+ 5    5    5    5    5
+</pre></blockquote>
+
+Issues with the pseudo-random number generator:
+<ul>
+<li>Each time this program is run, the same 10 numbers will be generated; not very random
+<li>As before, the numbers are not truly random; there is list of "random" integers that provides numbers for each call to <tt>rand()</tt>
+<li>If you always "start from the beginning" of the list, you will get the same numbers each time
+<li>The idea is to start drawing numbers from a different starting position in the list each time the program runs; this is called <i>seeding</i> the random number generator
+<li>There is a function in the standard C library to seed random numbers. 
+
+The function is <a href="http://www.cplusplus.com/reference/cstdlib/srand/"><tt>srand</tt></a>, and it's declaration looks like this:
+
+<blockquote><pre>
+<b>void</b> srand(<b>int</b> seed);
+</pre></blockquote>
+<li>The parameter seed is used to "shuffle" the list of random numbers by starting somewhere in the middle of the list. 
+<li>To use <tt>srand</tt>, you need to include <tt>stdlib.h</tt> (which is already included for <tt>rand</tt>)
+</ul>
+
+
+<table border=0 cellspacing=10 cellpadding=0>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf      */</i></font>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* rand, srand */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i; 
+  
+  srand(0);
+  printf(<font color="#9933CC">&quot;srand(0): &quot;</font>);
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, rand());
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+  srand(1);
+  printf(<font color="#9933CC">&quot;srand(1): &quot;</font>);
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, rand());
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+  srand(2);
+  printf(<font color="#9933CC">&quot;srand(2): &quot;</font>);
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, rand());
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+  srand(2);
+  printf(<font color="#9933CC">&quot;srand(2): &quot;</font>);
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, rand());
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+  srand(1);
+  printf(<font color="#9933CC">&quot;srand(1): &quot;</font>);
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, rand());
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+  <b>return</b> 0;
+}</code></pre>
+</td>
+<td>
+Compiled with Microsoft's compiler:
+<pre>
+srand(0): 38  7719  21238  2437  8855  11797  8365  32285  10450  30612
+srand(1): 41  18467  6334  26500  19169  15724  11478  29358  26962  24464
+srand(2): 45  29216  24198  17795  29484  19650  14590  26431  10705  18316
+srand(2): 45  29216  24198  17795  29484  19650  14590  26431  10705  18316
+srand(1): 41  18467  6334  26500  19169  15724  11478  29358  26962  24464
+</pre>
+<!--
+gcc on Linux: (notice that the first two lines are the same)
+<pre>
+srand(0): 1804289383  846930886  1681692777  1714636915  1957747793  424238335  719885386  1649760492  596516649  1189641421  
+srand(1): 1804289383  846930886  1681692777  1714636915  1957747793  424238335  719885386  1649760492  596516649  1189641421  
+srand(2): 1505335290  1738766719  190686788  260874575  747983061  906156498  1502820864  142559277  1261608745  1380759627  
+srand(2): 1505335290  1738766719  190686788  260874575  747983061  906156498  1502820864  142559277  1261608745  1380759627  
+srand(1): 1804289383  846930886  1681692777  1714636915  1957747793  424238335  719885386  1649760492  596516649  1189641421  
+</pre>
+-->
+</pre>
+</td>
+</tr></table>
+<p>
+
+Of course, this leads to the same problem: how do we <i>randomly</i> choose the position in the list? 
+The computer doesn't really do anything randomly. So we improvise:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf      */</i></font>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* rand, srand */</i></font>
+<b>#include</b> &lt;time.h&gt;   <font color="#003399"><i>/* time        */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  
+  srand(time(NULL));
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, rand());
+    
+  <b>return</b> 0;
+}</code></pre>
+
+Running the program 5 times gives these outputs: (compiled with gcc on Linux)
+
+<blockquote><pre>
+1384334524  735471424  1860098722  694496962  1657646138  301995943  1803857288  1201859531  1067245105  2108720089
+2135987043  1232099519  337709210  1659609624  271785989  709050360  181970958  1810020192  440129707  1154963843
+1470269329  835711329  522547729  1580784891  2040547807  449856168  73845202  562074047  1973143356  89221058
+804551614  439323139  707386248  1501960159  1661825977  190661976  2113203095  1461611550  1358673356  1170961921
+954882118  1397642217  1261901805  1265485962  525660488  1560563048  1788825829  2012740412  1662747006  121217212
+</pre></blockquote>
+
+A note about the <a href="http://www.cplusplus.com/reference/ctime/time/"><tt>time</tt></a> function:
+<ul>
+<li>You have to include <a href="http://www.cplusplus.com/reference/ctime"><tt>time.h</tt></a> to use it.
+<li>It returns the number of seconds that have elapsed since January 1, 1970.
+<li>If you run the program twice in a row, and you wait less than 1 second between the runs, you may find that 
+	you get the same set of random numbers:
+<p>
+This was run on Linux 3 times very quickly:
+<blockquote><pre>
+1752971591  885825227  1897503914  506494125  570682061  812192660  684485179  1706390114  1643637072  1332816372
+1752971591  885825227  1897503914  506494125  570682061  812192660  684485179  1706390114  1643637072  1332816372
+1752971591  885825227  1897503914  506494125  570682061  812192660  684485179  1706390114  1643637072  1332816372
+</pre></blockquote>  
+
+<li>The <tt>time</tt> function takes a parameter (pointer) that it uses to store additional information about
+	the time. If you pass it a NULL pointer, it will skip this part. (We don't need it to seed the pseudo-random number generator.)</li>
+<li>There are ways to obtain <i>microseconds</i> in the time, so you could at least prevent the situation of running
+  the program multiple times very quickly.</li>
+<li>The header file <tt>time.h</tt> includes a lot of useful functions for dealing with dates and times.</li>
+</ul>
+
+<p class="technote">
+<b>Note</b>: Generally speaking, if you truly want a pseudo-random sequence, you should only seed the random number generator once at the beginning of the program
+(e.g. the first line in <tt><b>main</b></tt>), and never seed it again. If you seed it multiple times,
+you are actually <i>biasing</i> the sequence, causing the distribution of numbers to be <i>less</i>
+random.
+</p>
+
+<!--
+Nice explanation how to crack a password if you knew when they generated it:
+https://www.guyrutenberg.com/2007/09/03/seeding-srand/
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Putting a "Wrapper" Function Around <tt>rand()</tt>
+</p>
+
+Although using the modulo operator, <tt>%</tt>, is simple and effective, it can be tedious and error-prone
+to use it to constrain the random numbers. A better solution is to write your own function that does
+all of the work for you.
+<p>
+This simple function takes two parameters which specify a range (inclusive) that the random number should be within:
+(Plug in some numbers for <i>low</i> and <i>high</i> to convince yourself that the formula does work.)
+<p>
+
+<blockquote><pre>
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+</pre></blockquote>
+
+Sample program:
+
+<table border=0 cellspacing=10 cellpadding=0>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf      */</i></font>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* rand, srand */</i></font>
+<b>#include</b> &lt;time.h&gt;   <font color="#003399"><i>/* time        */</i></font>
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number;
+  number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  
+  srand(time(0)); <font color="#003399"><i>/* seed PRNG */</i></font>
+
+    <font color="#003399"><i>/* 10 numbers between 10 and 20   */</i></font>
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%3i  &quot;</font>, RandomInt(10, 20));
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+    <font color="#003399"><i>/* 10 numbers between 100 and 200 */</i></font>
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%3i  &quot;</font>, RandomInt(100, 200));
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+    <font color="#003399"><i>/* 10 numbers between -10 and 10  */</i></font>
+  <b>for</b> (i = 0; i &lt; 10; i++)
+    printf(<font color="#9933CC">&quot;%3i  &quot;</font>, RandomInt(-10, 10));
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+  <b>return</b> 0;
+}</code></pre>
+</td>
+<td>
+Output from running the program 5 times:
+<pre>
+ 19   14   17   15   11   19   11   19   13   14
+138  140  140  106  134  115  118  182  155  101
+  6   -9   -7   -7   -9    6    5    7    5    2
+
+
+ 12   16   16   14   11   14   16   13   14   18
+152  148  165  176  180  130  121  119  187  193
+ -6   -7   -2   -6    2    4   -4    7    1    6
+
+
+ 12   14   10   16   13   12   17   13   19   12
+157  143  199  159  132  193  163  136  131  178
+  9   -2   -2   10   -5   -9    5   -7    2   -2
+
+
+ 12   14   10   16   13   12   17   13   19   12
+157  143  199  159  132  193  163  136  131  178
+  9   -2   -2   10   -5   -9    5   -7    2   -2
+
+
+ 20   14   18   18   10   19   15   19   20   17
+169  128  197  118  144  172  189  129  190  168
+ -9   -8  -10   10   -2    6    2    4    6   -4
+</pre>
+</td>
+</tr></table>
+<p>
+
+Notice that the 3rd and 4th runs are the same. This is because the 4th run was run
+immediately after the 3rd run and the time hadn't changed.
+<p>
+Interactive example:
+<p>
+<table border=0 cellspacing=10 cellpadding=0>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf, scanf */</i></font>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* rand, srand   */</i></font>
+<b>#include</b> &lt;time.h&gt;   <font color="#003399"><i>/* time          */</i></font>
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number;
+  number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> low, high, count, i;
+
+  srand(time(0));
+
+  printf(<font color="#9933CC">&quot;Enter lowest value: &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;low);
+
+  printf(<font color="#9933CC">&quot;Enter highest value: &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;high);
+
+  printf(<font color="#9933CC">&quot;How many numbers? &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;count);
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, RandomInt(low, high));
+<!--  fflush(stdout);-->
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+  <b>return</b> 0;
+}</code></pre>
+</td>
+<td>
+Output from running the program 4 times:
+<pre>
+Enter lowest value: <font color="red"><b>10</b></font>
+Enter highest value: <font color="red"><b>20</b></font>
+How many numbers? <font color="red"><b>10</b></font>
+10  20  20  17  19  17  13  11  19  18
+
+<hr>
+Enter lowest value: <font color="red"><b>-100</b></font>
+Enter highest value: <font color="red"><b>100</b></font>
+How many numbers? <font color="red"><b>100</b></font>
+-100  64  -46  79  -92  68  -1  -18  -25  40  -93  -13  
+7  89  79  20  -98  -76  56  61  -44  81  1  -29  -44  
+-21  -99  -82  -58  7  7  -12  -94  -38  75  98  53  19
+-59  34  -84  10  41  17  95  17  -51  -70  -85  99  -3  
+68  -56  2  92  57  23  32  -28  -29  26  -84  -70  9  
+4  37  30  -65  51  40  33  22  61  17  17  -59  8  9  
+16  22  2  -91  22  1  41  62  -18  -50  -38  13  60  
+-89  88  -88  27  -69  -100  -57  69  48  -11
+
+<hr>
+Enter lowest value: <font color="red"><b>0</b></font>
+Enter highest value: <font color="red"><b>50</b></font>
+How many numbers? <font color="red"><b>10</b></font>
+0  50  27  11  11  0  48  4  18  50
+
+<hr>
+Enter lowest value: <font color="red"><b>10</b></font>
+Enter highest value: <font color="red"><b>99</b></font>
+How many numbers? <font color="red"><b>200</b></font>
+10  93  73  12  69  40  88  62  76  36  29  91  51  13  
+75  88  33  40  76  39  72  47  27  12  18  20  53  79  
+22  34  29  31  87  80  64  85  90  54  90  92  54  43  
+61  10  46  56  91  19  77  35  31  30  64  34  95  49  
+40  67  36  73  44  64  80  69  60  56  42  62  33  80  
+39  69  85  55  99  97  59  57  54  76  79  36  54  13  
+55  47  66  69  84  32  15  63  58  41  20  70  77  35  
+56  63  81  97  62  36  18  92  91  30  60  68  31  61  
+84  77  74  67  55  58  61  88  37  31  17  73  39  55  
+10  60  33  62  24  53  57  11  70  30  67  98  26  13  
+87  88  13  68  48  35  43  88  40  81  96  97  60  29  
+47  38  43  33  10  24  75  33  62  50  17  62  50  25  
+40  10  66  22  65  10  97  24  81  28  66  39  40  95  
+85  32  44  71  36  62  48  35  10  18  13  69  96  39  
+90  35  82  63
+</pre>
+</td>
+</tr></table>
+<p>
+
+<p>
+Here is an example of a simple pseudo-random number generator:
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/Courses/CS120/PRNG.h.html">PRNG.h</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/Courses/CS120/PRNG.c.html">PRNG.c</a></li>
+</ul>
+
+<b>Notes</b>:
+<ul>
+  <li>The pseudo-random number generator that is included with the C library
+    is generally not a very good generator. However, for simple use-cases
+    like ours, it is adequate.</li>
+  <li>More powerful PRNGs are available and are used when an industrial-strength
+    PRNG is required. Applications that may require these include:
+    <ul>
+      <li>Cryptography (passwords, public/private key encryption)</li>
+      <li>HSM (Hardware Security Modules with good entropy)</li>
+      <li>Passports and electronic ID cards</li>
+      <li>Lotteries and Gambling (Think video slot machines in Las Vegas)</li>
+      <li>Anything that, if cracked, causes loss of life, money, etc.</li>
+      <li>This
+        <a href="http://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-22r1a.pdf">
+           document</a>
+           explains (in significantly advanced terms) what the goverment's
+           National Institute of Standards and Technology
+        considers a strong PRNG.</li>
+    </ul>
+  <li>Modern C++ now 
+    <a href="https://isocpp.org/files/papers/n3551.pdf">includes several libraries</a>
+     for more robust random number generation.</li>
+</ul>  
+
+</body>
+</html>
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<center>
+<blockquote>	
+</blockquote>
+</center>
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

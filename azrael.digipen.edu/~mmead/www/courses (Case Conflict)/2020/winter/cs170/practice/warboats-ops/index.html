@@ -1,0 +1,142 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>warboats-ops</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(warboats-ops)
+<br>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+
+This practice assignment is a modification of the WarBoatsOO (Object-oriented WarBoats)
+	assignment. This practice adds several <i>public</i> operations to the original <i>Ocean</i> class.
+  You only need to modify <i>Ocean.h</i> and <i>Ocean.cpp</i>.
+  <p>
+  <ol>
+    <li><i>Copy constructor</i> - This will be used to make copies of existing Oceans.
+      The default copy constructor provided by the compiler is insufficient and will
+      result in crashes.</li>
+      <p>
+    <li><i>Copy assignment operator</i> - This will allow for proper assignment. The
+      default copy assignment operator provided by the compiler is insufficient and will result 
+      in crashes and memory leaks.</li>
+      <p>
+    <li><i>Equality operator</i> - This will allow you to compare two Oceans for equality. For purposes
+      of this practice,
+      two Oceans are identical if they have the same dimensions, the same number of boats placed, and
+      all of the entries in the grid array are the same. Nothing else is considered when comparing them.
+
+
+    </li>
+      <p>
+    <li><i>Insertion (output) operator</i> - This will allow you to print the Ocean using
+      the <tt>&lt;&lt;</tt> operator instead of the <i>DumpOcean</i> function. This is
+      a more natural way of producing output in C++.
+      <p>
+      You should use the <i>Dump</i> function from the assignment's driver as a starting point for this
+      function. You'll need to modify it as appropriate. There will be no "customizing" the output
+      like in the previous assignment. Make sure your output matches the output that is posted.
+    </li>
+    <p>
+    <li><i>GetNumBoats</i> - This is a public method that the driver will call to get the number
+      of boats that have been placed in the Ocean. This helps the driver to determine when
+      all of the boats have been sunk.
+  </ol>
+
+See the driver for details of how these are used.
+
+<p>
+
+
+<p>
+<hr width="95%">
+<p>
+
+Files:
+<ul>
+<li>Interface: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/WarBoats.h.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/WarBoats.h">Text</a> This file remains unchanged from before.</li>
+<!--
+<li>Partial Ocean definitions:  <a href="Ocean.h.html">HTML</a>  <a href="Ocean.h">Text</a> You have to modify this header file.</li>
+<li>Partial Ocean implementations:  <a href="Ocean.cpp.html">HTML</a> <a href="Ocean.cpp">Text</a> 
+-->
+<li>Sample driver program: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/driver-sample.cpp.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/driver-sample.cpp">Text</a> 
+<li>Outputs from the tests: (you have to provide the test number on the command line, e.g. <i>warboats-ops 3</i>)
+	<ol>
+    <p>
+    These are from the original tests:
+
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test0.txt">test 0</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test1.txt">test 1</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test2.txt">test 2</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test3.txt">test 3</a><br>
+
+<p>
+    These test the new functionality:
+
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test4.txt">test 4</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test5.txt">test 5</a><br> 
+    <br>
+    These tests need 2 command line arguments, 6 for the test, and 0-4 for the seed, e.g. <i>warboats-ops 6 2</i>
+    <br><br>
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test6-0.txt">test 6-0</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test6-1.txt">test 6-1</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test6-2.txt">test 6-2</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test6-3.txt">test 6-3</a><br> 
+    <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/test6-4.txt">test 6-4</a><br> 
+	</ol>
+<p>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/PRNG.h.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/PRNG.cpp.html">HTML</a> <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice/warboats-ops/PRNG.cpp">Text</a>
+	</ul>
+<li>Sample command lines for compiling
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o warboats-ops driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+
+
+You will most definitely need to run under Dr. Memory and/or Valgrind to make sure that there are no leaks
+or memory bugs in your code.
+
+</ul>
+</ol>
+
+
+<p>
+<hr width=100%>
+<p>
+<br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

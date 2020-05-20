@@ -1,0 +1,61 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main-stress.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;time.h&gt;   /* time     */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* atoi     */</font>
+<font color="990099">#include &quot;PRNG.h&quot;   /* ut_srand */</font>
+
+<b>void</b> random_walk(<b>int</b> showall);
+
+<b>void</b> test1(<b>int</b> showall, <b>int</b> count)
+{
+  <b>int</b> i;
+
+  count = -count;
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    random_walk(showall);
+  }
+
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> show = 0;          <font color="#003399"><i>/* Show all boards? */</i></font>
+  <b>int</b> seed = time(NULL); <font color="#003399"><i>/* Make it random   */</i></font>
+
+    <font color="#003399"><i>/* First arg is to show all boards or not */</i></font>
+  <b>if</b> (argc &gt; 1)
+    show = atoi(argv[1]);
+
+    <font color="#003399"><i>/* Second arg is the seed (for debugging) */</i></font>
+  <b>if</b> (argc &gt; 2)
+    seed = atoi(argv[2]);
+
+  <b>if</b> (seed &lt; 0)
+  {
+    ut_srand(1, 1); 
+    test1(show, seed);
+  }
+  <b>else</b>
+  {
+    <b>return</b> 0;
+    ut_srand(seed, seed); <font color="#003399"><i>/* Seed the PRNG */</i></font>
+    random_walk(show);    <font color="#003399"><i>/* Do the walk   */</i></font>
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

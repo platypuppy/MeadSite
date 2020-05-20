@@ -1,0 +1,92 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Student.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<b>class</b> Student           
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Constructor</i></font>
+    Student(<b>const</b> <b>char</b> * login, <b>int</b> age, <b>int</b> year, <b>float</b> GPA);
+
+      <font color="#003399"><i>// Destructor</i></font>
+    ~Student();
+
+      <font color="#003399"><i>// Mutators (settors/writing) are rarely const</i></font>
+    <b>void</b> set_login(<b>const</b> <b>char</b>* login);
+    <b>void</b> set_age(<b>int</b> age);
+    <b>void</b> set_year(<b>int</b> year);
+    <b>void</b> set_GPA(<b>float</b> GPA);
+
+      <font color="#003399"><i>// Accessor (gettors/reading) are const</i></font>
+    <b>int</b> get_age() <b>const</b>;
+    <b>int</b> get_year() <b>const</b>;
+    <b>float</b> get_GPA() <b>const</b>;
+    <b>const</b> <b>char</b> *get_login() <b>const</b>;
+
+      <font color="#003399"><i>// Print the Student to the screen</i></font>
+    <b>void</b> display() <b>const</b>;
+
+  <b>private</b>:
+    <b>char</b> *login_; 
+    <b>int</b> age_;
+    <b>int</b> year_;
+    <b>float</b> GPA_;
+};
+
+</code></pre>	
+
+	
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

@@ -1,0 +1,115 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>pymain.py</title>
+
+</head>
+<body>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<tt><b>pymain.py</b></tt>:
+<p>
+Install Python:
+<blockquote><pre>
+sudo apt-get install python
+</pre></blockquote>
+
+Run:
+<blockquote><pre>
+python ./pymain.py
+</pre></blockquote>
+
+<pre class="sourcecode"><code><font color="#003399"><i># Example adapted from https://en.wikipedia.org/wiki/Dynamic-link_library#Python</i></font>
+
+<b>import</b> ctypes
+ 
+my_dll = ctypes.cdll.LoadLibrary(<font color="#9933CC">&quot;./libhello.so&quot;</font>)
+ 
+<font color="#003399"><i># The following "restype" method specification is needed to make</i></font>
+<font color="#003399"><i># Python understand what type is returned by the function.</i></font>
+my_dll.add.restype = ctypes.c_int
+ 
+p = my_dll.add(ctypes.c_int(5), ctypes.c_int(10))
+ 
+<b>print</b> <font color="#9933CC">&quot;The result is:&quot;</font>, p
+
+my_dll.printme(ctypes.c_char_p(<font color="#9933CC">&quot;Hello from Python!&quot;</font>))
+</code></pre>
+
+Output:
+<blockquote><pre>
+The result is: 15
+Hello from library: Hello from Python!
+</pre></blockquote>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

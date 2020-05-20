@@ -1,0 +1,64 @@
+Supplemental Questions for Lab Week 2
+(You are NOT submitting this document)
+
+For these questions, you are asked to make changes to the code and observe the
+warning/error messages that are generated. If a change causes a warning/error,
+write the message into the space provided. If the change does not cause any
+warnings or errors, just write No change. After answering the question, be sure
+to undo your changes before going to the next question. For easier completion,
+you may copy/paste the warning/error messages into another document, instead of
+writing them by hand. 
+
+Although I'm not asking you (at this time) to explain why the changes cause
+warnings/errors, you should try to understand why they occur. For this
+assignment ONLY, you are allowed to work with one or two other students. This
+should help you to "brainstorm" about what is going on with the program.
+
+
+1. What happens when you remove the first line from the program?
+
+2. What happens if you add a semi-colon at the end of line #4?
+
+3. What happens if you change main to Main in line #9?
+
+4. What happens if you change int main(void) to int main(int a) in line #9?
+
+5. What happens if you remove the semi-colon at the end of line #13?
+
+6. What happens if you remove line #22?
+
+7. What happens if you change return 0; to return 0.0; in line #22?
+
+8. What happens if you change return 0; to return; in line #22?
+
+9. What happens if you change int main(void) to int main(int a, char** b) in
+   line #9?
+
+10. What happens if you remove 1760 from line #4?
+
+
+Each of the modifications below will still allow the program to compile and
+link, although some will cause warnings. You are to execute the program (by
+typing marathon at the command line) and write the results into the answer
+spaces. In order for these to compile and link, you must remove the -Werror
+from the command line.
+
+11. What is the output of the unchanged (correct) program?
+
+12. What is the output if you remove the (double) from line #16?
+
+13. What is the output if you remove the left and right parentheses (from before
+    miles and after YARDS_PER_MILE) from line #16?
+
+14. What is the warning and output if you change %f to %d in line #19?
+
+15. What is the warning and output if you change %f to %d and remove
+    , kilometers from line #19?
+
+16. What is the warning and output if you add , yards, miles after kilometers in
+    line #19?
+
+17. What is the output if you change 26 to 26.99 in line #11?
+
+18. What is the output if you change line #13 to int miles;? (You're removing
+    the = 26)

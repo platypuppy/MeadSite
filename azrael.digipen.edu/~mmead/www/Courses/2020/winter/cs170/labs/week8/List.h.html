@@ -1,0 +1,98 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef LIST_H</font>
+<font color="990099">#define LIST_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> ListLab
+  {
+    <b>struct</b> Node
+    {
+      <b>int</b> number; <font color="#003399"><i>// data portion</i></font>
+      Node *next; <font color="#003399"><i>// pointer portion</i></font>
+
+        <font color="#003399"><i>// Conversion constructor</i></font>
+      Node(<b>int</b> value)
+      {
+        number = value;
+        next = 0;
+      }
+    };
+
+    <b>class</b> List
+    {
+      <b>public</b>:
+
+          <font color="#003399"><i>// Default constructor</i></font>
+        List();
+
+          <font color="#003399"><i>// Destructor</i></font>
+        ~List();
+
+          <font color="#003399"><i>// Adds a node to the front of the list</i></font>
+        <b>void</b> AddToEnd(<b>int</b> value);
+
+          <font color="#003399"><i>// Adds a node to the end of the list</i></font>
+        <b>void</b> AddToFront(<b>int</b> value);
+
+          <font color="#003399"><i>// Returns the number of nodes in the list</i></font>
+        <b>int</b> Count() <b>const</b>;
+
+          <font color="#003399"><i>// Finds an item and returns the node that contains it</i></font>
+        Node *FindItem(<b>int</b> value) <b>const</b>;
+
+          <font color="#003399"><i>// Inserts a new node at the specified position</i></font>
+        <b>void</b> Insert(<b>int</b> value, <b>int</b> position);
+
+          <font color="#003399"><i>// Deletes a node with the specified value (first occurrence)</i></font>
+        <b>void</b> Delete(<b>int</b> value);
+
+          <font color="#003399"><i>// Concatenates two lists</i></font>
+        <b>void</b> Concat(<b>const</b> List&amp; Source);
+
+          <font color="#003399"><i>// Deletes all of the values in ppList that are it Items</i></font>
+        <b>void</b> Delete(<b>const</b> List&amp; Items);
+
+          <font color="#003399"><i>// Inserts a new node in the correct position (sorted small to large)</i></font>
+        <b>void</b> Insert(<b>int</b> value);
+
+          <font color="#003399"><i>// Takes a sorted list and merges the items into the correct locations</i></font>
+          <font color="#003399"><i>// The lhs (*this) must also be sorted. The rhs list is empty afterwards.</i></font>
+        <b>void</b> Merge(List&amp; rhs);
+
+          <font color="#003399"><i>// Takes a sorted list and removes all of the duplicates. In other words,</i></font>
+          <font color="#003399"><i>// it removes all but the first element in every consecutive group of </i></font>
+          <font color="#003399"><i>// equal elements. Returns number of elements that were removed.</i></font>
+        <b>int</b> RemoveDuplicates();
+
+          <font color="#003399"><i>// Displays the list</i></font>
+        <b>friend</b> std::ostream&amp; <b>operator</b>&lt;&lt;(std::ostream &amp;os, <b>const</b> List&amp; list);
+
+      <b>private</b>:
+        Node *head_;
+        Node* MakeNode(<b>int</b> value) <b>const</b>;   
+
+          <font color="#003399"><i>// Other private methods you may need</i></font>
+
+    };
+  } <font color="#003399"><i>// namespace ListLab</i></font>
+} <font color="#003399"><i>// namespace CS170</i></font>
+<font color="990099">#endif // LIST_H</font>
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

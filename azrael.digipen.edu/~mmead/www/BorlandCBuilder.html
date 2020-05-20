@@ -1,0 +1,184 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Borland C++ Builder</title>
+</head>
+
+<body>  
+<center><h1>Graphical Driver Programs and GUI Utilities</h1></center>
+
+<!--
+<blockquote>
+<p class="technote">
+If you are interested in attending an informal presentation, please 
+<a href="mailto:mmead@digipen.edu?subject=Borland C++ Builder Presentation">send me an email</a>
+to let me know. I will give the presentation on a Friday<sup>*</sup> (sometime after Spring break), 
+since that's the day during the week that I have the time. 
+Indicate in your email the time on a Friday that works best for you.
+<br><br>
+(<sup>*</sup><b>This is subject to change. I may give multiple sessions to accommodate as 
+many students as I can, which may include Saturdays as well.</b>)
+
+</p>
+</blockquote>
+-->
+
+<p>
+
+<p class="SectionHeader">Overview</p>
+During the development process, it is not uncommon to spend more time testing the functionality of a 
+particular implementation than actually implementing it. We often refer to these test programs as 
+<i>driver programs</i> or simply, <i>drivers</i>. A driver, then, is a program that we construct to verify some 
+other code. (Old-timers might refer to these driver programs as <i>scaffolds</i>, like those platforms that 
+you find surrounding new buildings during construction.)
+
+<p>
+
+During my classes, I've demonstrated several "graphical driver programs"
+that tested my implementations of various assignments (e.g. the Shape class, Eight Queens, Knight's Tour, WarBoats, Hashtables, etc.) 
+I've also used these programs to demonstrate various algorithms and data structures. 
+(e.g. Object Allocator, Hash Tables, etc.) 
+These driver programs are different from the ones I distribute in that they have a 
+GUI (<b>G</b>raphical <b>U</b>ser <b>I</b>nterface) instead of the simple text-based console interface. 
+The GUI drivers are much more flexible and easier to use than console applications and significantly
+easier to build and modify than any MFC-based program. This flexibility promotes 
+further testing, since once the “framework” is in place, you can easily test unlimited cases. The most 
+intriguing quality of the GUI driver is that it is relatively simple and quick to implement. Also, 
+both the console driver and the GUI driver use the same interface and implementation files, so no 
+modifications are required to the any of the files of the homework assignments.
+
+<p>
+<p class="SectionHeader">The Plan</p>
+Several students have inquired about learning how to develop GUI driver programs so that they, too, can 
+enjoy the benefits of a more flexible testing platform. In response to this, I am giving 
+a sort of presentation/seminar/discussion on how you can create GUI driver programs for your own 
+implementations. Since the presentation will be held outside of our normal meeting hours, I need to 
+schedule a time and place for the event(s). 
+
+<p>
+
+The tool that we will use is called <b>Borland C++ Builder</b>, (BCB) and it allows you to create GUI applications with very
+little effort. C++ Builder is a modern, powerful, C++ <b>Integrated Development Environment</b> (IDE) from Borland Software 
+Corp. and is similar to Microsoft's Visual C++. C++ Builder is newer and much more visual than Visual C++ 
+and requires less training and knowledge of Windows. Experienced GUI developers can readily distinguish 
+the differences. Borland's C++ Builder is somewhat of a <b>Rapid Application Development</b> (RAD) tool, at least 
+as far as C++ development can be called “rapid”. The current version of C++ Builder is 6.0, and is more 
+than adequate for our needs. 
+
+<p>
+You won't need to have BCB installed to benefit from the presentation, as it is primarily meant as a way
+to introduce you to the tool. Once you've seen the tool, you can decide for yourself if it is something 
+that you would like to investigate further. To evaluate BCB, you can download a 
+<a href="http://www.borland.com/products/downloads/download_cbuilder.html">60-day free trial</a>
+of the full-blown Enterprise version from Borland's website. There are also trial CDs floating around
+DigiPen that can be used to install the software. (See me if you need one.) You can check out the
+<a href="http://www.borland.com/cbuilder/pdf/cb6_feamatrix.pdf">feature matrix</a> which explains
+the differences between the three editions, Enterprise, Professional, and Personal. (I recommend the
+Professional Edition.)
+
+<p>
+
+Note that Borland also distributes a free C++ Builder Compiler. This is just the C++ compiler that is 
+part of the C++ Builder IDE. (It's like the command-line version of Microsoft's C++ compiler, cl.exe). 
+Many DigiPen students have been using this compiler for a while. 
+The compiler alone is not adequate for GUI work. You must use the full-blown IDE (which is essentially 
+what a RAD tool is.)
+
+<p>
+
+Visit their websites to get more information about 
+<a href="http://www.borland.com/products/index.html">Borland's developer tools</a> and 
+<a href="http://www.borland.com/bcppbuilder">C++ Builder</a> in particular.
+<p>
+
+<blockquote>
+<p class="technote">
+<b>Update</b><br>
+My primary goal for introducing BCB to students was simply to make them aware of it. 
+After the introduction, students quickly
+discovered that building sophisticated, professional-looking Windows GUI applications doesn't require a major
+portion of their development time. 
+Now, I'm seeing students building tile editors, map editors, and network test 
+harnesses, among other peripheral components necessary to support their game projects. And make no mistake about
+it: supporting tools and utilities <i>are</i> an essential part of any project (game-related or not).
+
+<br><br>
+Once the supporting tools are in place, students are then able to spend more time working on 
+the logic of their game projects, which is what the end-user sees.
+They can do this because they spend less time worrying about the irrelevant minutiae that underlies the Windows operating system. 
+Borland has always been the leader in abstracting the complexities into an intuitive object-oriented interface
+while at the same time providing access to the
+lowest level procedural API interface (e.g. WinProcs, PeekMessage, etc.). In time, as you learn more about 
+interacting with the OS and become comfortable with its APIs
+and low-level interfaces, you will be able explore those as well with BCB. In the mean time, while you're mastering
+those concepts, you can still develop real-world applications and tools in a fraction of the time it would
+take with MFC or a similar framework (ala Petzold).
+</p>
+</blockquote>
+
+<p>
+<p class="SectionHeader">Independent Study</p>
+
+The <a href="http://info.borland.com/techpubs/bcppbuilder/v5/index1024x768.html">online manuals</a> are from
+the previous version (5), but they are a good place to start. These guides explain the fundamentals of using
+BCB and how the IDE works. The IDE in version 5 is very similar to the one in version 6 so you shouldn't have
+too much trouble. Also, you should read <a href="https://azrael.digipen.edu/~mmead/www/Files/Borland/C++Builder6_SampleFiles.pdf">this excerpt</a>
+about the VCL (<b>V</b>isual <b>C</b>omponent <b>L</b>ibrary) to help you to understand it better.
+<p>
+Also, probably one of the best things to do to get started (which tends to go unused by people new to BCB) is to
+look at the example projects that come with BCB. The \Examples directory (where you installed BCB 6) has about 75 MB 
+of source code that include all kinds of different programs (GUI controls, Internet components, MFC, OpenGL, DirectDraw, etc.)
+I don't mind helping you, but please look here first to see if your "question" can be answered. 
+You'll save yourself a lot of time and get your questions answered sooner.
+<p>
+Finally, (well, not really), almost all of your questions have been asked many, many times by others and answered on
+Borland's newsgroups. You can access and search this plethora of information in several ways:
+
+<ul>
+<li>Web interface to <a href="http://newsgroups.borland.com/cgi-bin/dnewsweb?cmd=listall&group=borland.public.&utag=">all Borland newsgroups</a>.
+<li>Web interface to <a href="http://newsgroups.borland.com/cgi-bin/dnewsweb?cmd=listall&group=borland.public.cppbuilder.&utag=">Borland BCB newsgroup</a>.
+<li><a href="http://www.tamaracka.com/">Search Borland and Microsoft newsgroups</a> to find answers to most of your questions. (Tamaracka)
+<li>Search <a href="http://groups.google.com">groups.google.com</a>, a massive archive of newsgroup conversations. 
+</ul>
+
+For the best use of Borland's newsgroups (or any newsgroup for that matter), you should really use a <i>real</i> newsreader, not a web 
+browser or plug-in to some other application. (Remember: <b>Best Tool/Language for the Job</b>)
+The best newsreader is <a href="http://lightning.prohosting.com/~tbates/gravity/">Microplanet's Gravity</a> and it's now FREE! It used to cost
+money, but they decided to start giving it away.  (It was also voted <i>"Cool Software of the Month"</i> in July, 2002.)  
+
+<p>
+<p class="SectionHeader">Other Links of Interest</p>
+
+The first two links are a couple of years old and discuss version 4.0 of BCB. Interestingly, the comparison is
+with Visual C++ 6.0, which until recently, was the latest version. The shipping version of BCB is now 6.0
+and contains many more features not mentioned in these articles.
+<ul>
+<li><a href="http://community.borland.com/article/0,1410,10121,00.html">Four reasons why every Visual C++ developer should own Borland C++Builder™</a>
+<li><a href="http://community.borland.com/article/0,1410,10109,00.html">High-performance Rapid Application Development with Borland C++Builder™</a>
+<li><a href="http://community.borland.com/article/0,1410,28992,00.html">Alternatives in C++ Development</a>
+
+</ul>
+
+A few more links
+<ul>
+<li><a href="http://www.mulroy.org/borland.htm">A plethora of BCB links</a> from a TeamB member.
+<li><a href="http://bcbdev.com/">BCBDev</a> A site by a BCB guru and author also of TeamB.
+<li><a href="http://www.bridgespublishing.com/">C++ Builder Developer's Journal</a> A magazine devoted to BCB.
+<li><a href="http://www.wischik.com/lu/programmer/index.html">Some BCB components</a> including OpenGL and DX, among others.
+<li><a href="http://bcb-tools.com/Welcome.htm">BCB Tools</a> A site with a lot of DirectX components for BCB.
+<li><a href="http://c.webring.com/hub?sid=&ring=cbuilder&id=&list">More BCB links</a> A Webring of links
+<li>Even <a href="http://www.buddydog.org/C++Builder/c++builder.html">more BCB links</a> from a BCB developer.
+<li><a href="http://www.techtricks.com/delphi/noclxhelp.php">Removing CLX Help Topics from Builder's Help file</a>
+This is actually targetted at Delphi, but the same files are use in C++ Builder 6.0.
+</ul>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+

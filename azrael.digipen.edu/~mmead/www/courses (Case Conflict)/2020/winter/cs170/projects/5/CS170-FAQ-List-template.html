@@ -1,0 +1,77 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - FAQ for the List Template Assignment</title>
+</head>
+
+<body>  
+
+<center><H1>
+<A HREF="cs170-programming-assignment-list-template.pdf">Programming Assignment #5</A> FAQ
+<p>
+<h2>(Frequently Asked Questions)</h2>
+</H1>
+</center>
+
+<br>
+
+<p>
+
+Here are some popular Questions and Answers for the List assignment.<BR>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<ol>
+
+<li><b>Question:<br>
+Doxygen is complaing that the templated friend function <tt>operator<<()</tt> is not documented. How do I 
+fix that?
+</b>
+<p>
+<b>Answer:</b><br>
+If Doxygen complains about that, it may give a warning similar to this:
+
+<blockquote><pre>
+warning: Member operator(std::ostream &os, const List &list) (friend) of class CS170::List is not documented.
+</pre></blockquote>
+
+The way we will solve this is to put a copy of the Doxygen function header comment above
+the declaration in <tt>List.h</tt>. In the header file, you'll have something like this:
+
+<blockquote><pre>
+<font color="#003399"><i>/*!**********************************************************************
+  Outputs all of the data in a list to an output stream.
+
+  &#92;param os
+    The stream to output the list to.
+
+  &#92;param list
+    The list to output to the stream.
+
+  &#92;return
+    The ouput stream (ref) that was passed in (for chaining)
+************************************************************************/</i></font>  
+<b>friend</b> std::ostream&amp; <b>operator</b>&lt;&lt; &lt;T&gt;(std::ostream &amp; os, <b>const</b> List &amp;list);
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+
+</ol>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+</body>
+</html>

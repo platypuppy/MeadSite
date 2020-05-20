@@ -1,0 +1,265 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Using fread and fwrite</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &lt;string.h&gt;</font>
+
+<b>const</b> <b>char</b> *p = <font color="#9933CC">&quot;This is some text and a number: 12345678&quot;</font>;
+<b>const</b> <b>char</b> *filename = <font color="#9933CC">&quot;somefile.bin&quot;</font>;
+<font color="990099">#define MAX_LENGTH 80</font>
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofwriteChars(<b>void</b>)
+{
+  FILE *outfile;
+
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  outfile = fopen(filename, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (outfile)
+  {
+      <font color="#003399"><i>/* Write characters to the file */</i></font>
+    <b>int</b> count = fwrite(p, <b>sizeof</b>(<b>char</b>), strlen(p), outfile);
+    printf(<font color="#9933CC">&quot;%i elements written&#92;n&quot;</font>, count);
+
+      <font color="#003399"><i>/* Close the file */</i></font>
+    fclose(outfile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofreadChars(<b>void</b>)
+{
+  FILE *infile;
+
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  infile = fopen(filename, <font color="#9933CC">&quot;rb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (infile)
+  {
+    <b>char</b> buffer[MAX_LENGTH];
+
+      <font color="#003399"><i>/* Read in a max of MAX_LENGTH - 1 characters */</i></font>
+    <b>int</b> count = fread(buffer, <b>sizeof</b>(<b>char</b>), MAX_LENGTH - 1, infile);
+    printf(<font color="#9933CC">&quot;%i elements read&#92;n&quot;</font>, count);
+
+      <font color="#003399"><i>/* fread does NOT automatically append a NUL byte */</i></font>
+    buffer[count] = 0;
+    printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, buffer);
+
+      <font color="#003399"><i>/* Close the file */</i></font>
+    fclose(infile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+
+<font color="990099">#define NUM_INTS 5</font>
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofwriteInts(<b>void</b>)
+{
+  FILE *outfile;
+
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  outfile = fopen(filename, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (outfile)
+  {
+    <b>int</b> i, count = 0;
+
+      <font color="#003399"><i>/* Write some integers to the file */</i></font>
+    <b>for</b> (i = 0x12345678; i &lt; 0x12345678 + NUM_INTS; i++)
+       count += fwrite(&amp;i, <b>sizeof</b>(<b>int</b>), 1, outfile);
+
+    printf(<font color="#9933CC">&quot;%i elements written&#92;n&quot;</font>, count);
+
+      <font color="#003399"><i>/* Close the file */</i></font>
+    fclose(outfile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofreadInts(<b>void</b>)
+{
+  FILE *infile;
+
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  infile = fopen(filename, <font color="#9933CC">&quot;rb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (infile)
+  {
+    <b>int</b> i, x;
+
+      <font color="#003399"><i>/* Read integers from file */</i></font>
+    <b>for</b> (i = 0; i &lt; NUM_INTS; i++)
+    {
+      fread(&amp;x, <b>sizeof</b>(<b>int</b>), 1, infile);
+      printf(<font color="#9933CC">&quot;%X&#92;n&quot;</font>, x);
+    }
+
+      <font color="#003399"><i>/* Close the file */</i></font>
+    fclose(infile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+<font color="#003399"><i>/*
+The above function prints out:
+12345678
+12345679
+1234567A
+1234567B
+1234567C
+*/</i></font>
+
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/* structs */</i></font>
+
+<b>struct</b> INFO
+{
+  <b>int</b> i;
+  <b>char</b> c;
+  <b>double</b> d;
+};
+
+<font color="990099">#define NUM_DATA 4</font>
+<b>struct</b> INFO Data[NUM_DATA] = {{ 1, <font color="#9933CC">'A'</font>, 1.1},
+                              {11, <font color="#9933CC">'B'</font>, 2.2},
+                              {22, <font color="#9933CC">'C'</font>, 3.3},
+                              {33, <font color="#9933CC">'D'</font>, 4.4}
+                             };
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofwriteStruct1(<b>void</b>)
+{
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  FILE *outfile = fopen(filename, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (outfile)
+  {
+      <font color="#003399"><i>/* Write each field individually to the file */</i></font>
+    fwrite(&amp;Data[0].i , <b>sizeof</b>(<b>int</b>), 1, outfile);
+    fwrite(&amp;Data[0].c , <b>sizeof</b>(<b>char</b>), 1, outfile);
+    fwrite(&amp;Data[0].d , <b>sizeof</b>(<b>double</b>), 1, outfile);
+    fclose(outfile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofwriteStruct2(<b>void</b>)
+{
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  FILE *outfile = fopen(filename, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (outfile)
+  {
+      <font color="#003399"><i>/* Write the entire struct to the file */</i></font>
+    fwrite(&amp;Data[0], <b>sizeof</b>(<b>struct</b> INFO), 1, outfile);
+    fclose(outfile); 
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofwriteStructs(<b>void</b>)
+{
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  FILE *outfile = fopen(filename, <font color="#9933CC">&quot;wb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (outfile)
+  {
+      <font color="#003399"><i>/* The array of structs to the file */</i></font>
+    fwrite(Data, <b>sizeof</b>(<b>struct</b> INFO), NUM_DATA, outfile);
+    fclose(outfile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+<font color="#003399"><i>/********************************************************************/</i></font>
+<font color="#003399"><i>/********************************************************************/</i></font>
+<b>void</b> DofreadStructs(<b>void</b>)
+{
+    <font color="#003399"><i>/* Open the binary file */</i></font>
+  FILE *infile = fopen(filename, <font color="#9933CC">&quot;rb&quot;</font>);
+
+    <font color="#003399"><i>/* Opened OK */</i></font>
+  <b>if</b> (infile)
+  {
+    <b>int</b> i, count;
+    <b>struct</b> INFO Data[4];
+
+      <font color="#003399"><i>/* Read structs from the file into the array */</i></font>
+    count = fread(Data, <b>sizeof</b>(<b>struct</b> INFO), NUM_DATA, infile);
+    printf(<font color="#9933CC">&quot;%i structs read&#92;n&quot;</font>, count);
+
+      <font color="#003399"><i>/* Display them */</i></font>
+    <b>for</b> (i = 0; i &lt; count; i++)
+      printf(<font color="#9933CC">&quot;struct #%i: i=%i, c=%c, d=%g&#92;n&quot;</font>, i, Data[i].i, Data[i].c, Data[i].d);
+
+      <font color="#003399"><i>/* Close the file */</i></font>
+    fclose(infile);
+  }
+  <b>else</b>
+    perror(filename);  <font color="#003399"><i>/* Couldn't open the file */</i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  DofwriteChars();
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>File Contents</b>
+<p>
+
+Individual fields (DofwriteStruct1)
+<blockquote><pre>
+01 00 00 00 41 9A 99 99 99 99 99 F1 3F  ....Aš™™™™™ñ?
+</pre></blockquote>
+
+Entire struct (DofwriteStruct2)
+<blockquote><pre>
+01 00 00 00 41 00 00 00 9A 99 99 99 99 99 F1 3F  ....A...š™™™™™ñ?
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+</body>
+</html>
+

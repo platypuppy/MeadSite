@@ -1,0 +1,397 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #1</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 1</h1>
+Overview of the IDE, building from the command line, simple Windows application
+</center>
+
+<p>
+	
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #1
+</p>
+</a>
+
+The main topic of this session was to present the IDE environment and show how a minimal windows application is built.
+<p>
+
+A "bare-bones" Windows application:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual1/Manual1.cpp">Manual1.cpp</a></th><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual1/Form1.cpp">Form1.cpp</a></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;vcl.h&gt;</font>
+USEFORM(<font color="#9933CC">&quot;Form1.cpp&quot;</font>, theForm);
+WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, <b>int</b>)
+{
+  Application-&gt;Initialize();
+  Application-&gt;CreateForm(<b>__classid</b>(TForm), &amp;theForm);
+  Application-&gt;Run();
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;vcl.h&gt;</font>
+TForm *theForm;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+  
+Compile (You can compile both at the same time as well):
+<blockquote><pre>
+bcc32 -c Manual1.cpp
+bcc32 -c Form1.cpp
+</pre></blockquote>
+
+Link (all on one line):
+<blockquote><pre>
+ilink32 -x -L"C:\Program Files (x86)\Borland\BDS\4.0\lib\debug;C:\Program Files (x86)\Borland\BDS\4.0\lib;C:\Program Files (x86)\Borland\BDS\4.0\lib\obj" 
+c0w32.obj Manual1.obj Form1.obj,Manual1.exe,,rtl.lib vcl.lib import32.lib cp32mt.lib,, 
+</pre></blockquote>
+
+<!--
+ilink32 -x -L"C:\program files\borland\bds\4.0\lib\debug;C:\program files\borland\bds\4.0\lib;C:\program files\borland\bds\4.0\lib\obj" 
+c0w32.obj memmgr.lib sysinit.obj Manual.obj MyForm.obj,Manual.exe,,rtl.lib vcl.lib import32.lib cp32mt.lib,, 
+-->
+
+The application at runtime: (Exciting, eh?)
+<blockquote>
+<img src="manual1/EmptyForm1.png">
+</blockquote>
+
+There are batch files to <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual1/build.bat">build everything</a> and to <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual1/lnk.bat">just link</a> the program. You can
+download all of the files in <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual1/manual1.zip">this zip</a>.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p>
+<hr width="90%">
+<p>
+A slightly more complicated application. It demonstrates deriving a form from the base class TForm and creating components (objects) at runtime in the constructor.
+
+<p>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual2/Manual2.cpp">Manual2.cpp</a></th><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual2/MyForm2.cpp">MyForm2.cpp</a></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;vcl.h&gt;</font>
+USEFORM(<font color="#9933CC">&quot;MyForm2.cpp&quot;</font>, MyForm2);
+WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, <b>int</b>)
+{
+  Application-&gt;Initialize();
+  Application-&gt;CreateForm(<b>__classid</b>(TMyForm2), &amp;MyForm2);
+  Application-&gt;Run();
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+
+<td rowspan=5>
+<blockquote><pre>
+<font color="990099">#include &lt;vcl.h&gt;</font>
+<font color="990099">#include &quot;MyForm2.h&quot;</font>
+<font color="990099">#pragma resource &quot;*.dfm&quot;</font>
+
+TMyForm2 *MyForm2;
+
+<b>__fastcall</b> TMyForm2::TMyForm2(TComponent* Owner) : TForm(Owner)
+{
+  AddText = <b>new</b> TButton(<b>this</b>);
+  AddText-&gt;Parent = <b>this</b>;
+  AddText-&gt;Left = 20;
+  AddText-&gt;Top = 20;
+  AddText-&gt;Caption = <font color="#9933CC">&quot;Add text&quot;</font>;
+
+  Edit = <b>new</b> TEdit(<b>this</b>);
+  Edit-&gt;Parent = <b>this</b>;
+  Edit-&gt;Left = AddText-&gt;Left + AddText-&gt;Width + 5;
+  Edit-&gt;Top = AddText-&gt;Top;
+  Edit-&gt;Width = 150;
+
+  ListBox = <b>new</b> TListBox(<b>this</b>);
+  ListBox-&gt;Parent = <b>this</b>;
+  ListBox-&gt;Left = AddText-&gt;Left;
+  ListBox-&gt;Top = AddText-&gt;Top + AddText-&gt;Height + 5;
+  ListBox-&gt;Width = AddText-&gt;Width + Edit-&gt;Width + 5;
+  ListBox-&gt;Height = 100;
+
+  AddText-&gt;OnClick = ClickButton;
+}
+
+<b>void</b> <b>__fastcall</b> TMyForm2::ClickButton(TObject *)
+{
+  ListBox-&gt;Items-&gt;Add(Edit-&gt;Text);
+}
+</pre></blockquote>
+</td>
+</tr>
+
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual2/MyForm2.dfm">MyForm2.dfm (Resource file)</a></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+object MyForm2: TMyForm2
+end
+</pre></blockquote>
+</td>
+</tr>
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual2/MyForm2.h">MyForm2.h</a></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>class</b> TMyForm2 : <b>public</b> TForm
+{
+  <b>private</b>:
+    TButton *AddText;
+    TEdit *Edit;
+    TListBox *ListBox;
+  <b>public</b>:
+    <b>__fastcall</b> TMyForm2(TComponent* Owner);
+    <b>void</b> <b>__fastcall</b> ClickButton(TObject *);
+};
+</pre></blockquote>
+</td>
+</tr>
+
+</table>
+<p>
+	
+The application at runtime:
+<blockquote>
+<img src="manual2/Form2.png">
+</blockquote>
+
+You can download all of the files in <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual2/manual2.zip">this zip</a>.
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p>
+<hr width="90%">
+<p>
+Another slightly more complicated application. It demonstrates creating components in the resource file 
+(and handled in the <b><tt>__published</tt></b> section of the class).
+
+<p>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual3/Manual3.cpp">Manual3.cpp</a></th><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual3/MyForm3.cpp">MyForm3.cpp</a></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="990099">#include &lt;vcl.h&gt;</font>
+USEFORM(<font color="#9933CC">&quot;MyForm3.cpp&quot;</font>, MyForm3);
+WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, <b>int</b>)
+{
+  Application-&gt;Initialize();
+  Application-&gt;CreateForm(<b>__classid</b>(TMyForm3), &amp;MyForm3);
+  Application-&gt;Run();
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+
+<td rowspan=5>
+<blockquote><pre>
+<font color="990099">#include &lt;vcl.h&gt;</font>
+<font color="990099">#include &quot;MyForm.h&quot;</font>
+<font color="990099">#pragma resource &quot;*.dfm&quot;</font>
+
+TMyForm3 *MyForm3;
+
+<b>__fastcall</b> TMyForm3::TMyForm3(TComponent* Owner) : TForm(Owner)
+{
+  AddText = <b>new</b> TButton(<b>this</b>);
+  AddText-&gt;Parent = <b>this</b>;
+  AddText-&gt;Left = 20;
+  AddText-&gt;Top = 20;
+  AddText-&gt;Caption = <font color="#9933CC">&quot;Add text&quot;</font>;
+
+  Edit = <b>new</b> TEdit(<b>this</b>);
+  Edit-&gt;Parent = <b>this</b>;
+  Edit-&gt;Left = AddText-&gt;Left + AddText-&gt;Width + 5;
+  Edit-&gt;Top = AddText-&gt;Top;
+  Edit-&gt;Width = 150;
+
+  ListBox = <b>new</b> TListBox(<b>this</b>);
+  ListBox-&gt;Parent = <b>this</b>;
+  ListBox-&gt;Left = AddText-&gt;Left;
+  ListBox-&gt;Top = AddText-&gt;Top + AddText-&gt;Height + 5;
+  ListBox-&gt;Width = AddText-&gt;Width + Edit-&gt;Width + 5;
+  ListBox-&gt;Height = 100;
+
+  AddText-&gt;OnClick = ClickButton;
+}
+
+<b>void</b> <b>__fastcall</b> TMyForm3::ClickButton(TObject *)
+{
+  ListBox-&gt;Items-&gt;Add(Edit-&gt;Text);
+}
+</pre></blockquote>
+</td>
+</tr>
+
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual3/MyForm3.dfm">MyForm3.dfm (Resource file)</a></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+object MyForm3: TMyForm3
+  object Button: TButton
+    Caption = <font color="#9933CC">'Hello'</font>
+    Left = 200
+    Top = 180
+  end
+  object Scroll: TScrollBar
+    Kind = sbVertical
+    Align = alRight
+    Width = 16
+  end
+end
+</pre></blockquote>
+</td>
+</tr>
+<tr><th><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual3/MyForm3.h">MyForm3.h</a></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>class</b> TMyForm3 : <b>public</b> TForm
+{
+  <b>__published</b>:
+    TButton *Button;
+    TScrollBar *Scroll;
+  <b>private</b>:
+    TButton *AddText;
+    TEdit *Edit;
+    TListBox *ListBox;
+  <b>public</b>:
+    <b>__fastcall</b> TMyForm3(TComponent* Owner);
+    <b>void</b> <b>__fastcall</b> ClickButton(TObject *);
+};
+</pre></blockquote>
+</td>
+</tr>
+
+</table>
+<p>
+	
+The application at runtime:
+<blockquote>
+<img src="manual3/Form3.png">
+</blockquote>
+
+
+You can download all of the files in <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/1/manual3/manual3.zip">this zip</a>.
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+
+
+<ol>
+<li>Try these examples on your own. This will tell you if you have installed the IDE correctly on 
+	your computer.
+<li>I spent some time during the presentation talking about all of the things that are
+	wrong (from a usability perspective) with this <i>very simple</i> application that copies the text from the edit box (TEdit) into the 
+	list box (TListBox) when the user clicks the button (TButton). 
+	I then discussed various ways that these usability problems could be solved and implemented some of them.
+	
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<img src="Usability-1.png">
+</td>
+<td width="20">
+</td>
+<td>
+<img src="Usability-2.png">
+</td>
+</tr></table>
+</blockquote>
+	
+Re-create this application and solve some of the problems any way you see fit. (Note: This is a little challenging since I
+haven't really talked a lot about how to work in the IDE yet. However, some of you might be up for the challenge.) Reminder: Some of the
+issues are that I mentioned:
+<ol type="A">
+<li>You can only copy the text to the list box using the mouse and clicking the button. (Should be able to do it with the keyboard)</li>
+<li>Text persists in the edit box after being copied. (Clear it? Highlight it? Something else?)</li>
+<li>The focus is on the button when the application first starts. (Should be in the edit box)</li>
+<li>Allows empty lines to be copied. (Should this be allowed? Also, think about leading/trailing spaces and if they are desirable.)</li>
+<li>Maybe disable (grey-out) the button when the edit box is empty and enable it if there are characters present.
+(Hint: look at the OnChange event of the edit box)</li>
+<li>Make sure the edit box and list box get properly resized when the window is resized.</li>
+<li>Other things as you see fit...
+</ol>
+
+</ol>
+
+
+
+<blockquote>
+</blockquote>
+	
+	
+	
+<blockquote>
+</blockquote>
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

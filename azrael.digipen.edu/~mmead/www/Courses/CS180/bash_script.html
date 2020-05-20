@@ -1,0 +1,330 @@
+#!/bin/bash
+
+say_hello ()
+{
+  echo "Hello!"
+}
+
+get_date()
+{
+  local dt=`date`
+  echo $dt
+}
+
+count_files ()
+{
+  local count=`ls -l | wc -l`
+  echo $count
+}
+
+print3()
+{
+  echo "Printing: $1 $2 $3"
+}
+
+validate3()
+{
+  echo "params: $#"
+  if [[ -x $1 ]]; then
+    true;
+  else
+    false;
+  fi
+}
+
+
+multiply()
+{
+  local product=$[$1*$2]
+  echo $product
+}
+
+
+
+say_hello
+dt=$(get_date)
+echo $dt
+print3 one two three
+
+num_files=$(count_files)
+echo $num_files
+echo "The number of files is $(count_files)"
+
+total=$(multiply 3 5)
+echo $total
+
+value=3
+if [[ $value -eq 3 ]]; then
+  echo "The value is 3"
+else
+  echo "The value is NOT 3"
+fi
+
+string1="Hello"
+string2="hello"
+if [[ $string1 == $string2 ]]; then
+  echo "Same strings"
+else
+  echo "Different strings"
+fi
+
+filename="foo.txt"
+echo -n "$filename "
+if [[ -e $filename ]]; then
+  echo "exists"
+else
+  echo "does not exist"
+fi
+
+filename="a.exe"
+echo -n "$filename "
+if validate3 $filename; then
+  echo "is executable"
+else
+  echo "is not executable"
+fi
+ 
+for f in *; do 
+  #if validate2 $f; then
+    echo $f
+  #fi
+done
+
+for i in "hello 1 * 2 goodbye" 
+do
+  echo "Looping ... i is set to $i"
+done
+
+echo $@
+echo $#
+
+
+while [[ "$#" -gt "0" ]]
+do
+  echo "\$1 is $1"
+  shift
+done 
+
+file_exists()
+{
+  if [ -e $1 ] ; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+filename="foo.txt"
+if file_exists $filename; then
+  echo "$filename exists"
+else
+  echo "$filename does not exist"
+fi
+
+filename="a.exe"
+res=$(validate3 $filename)
+echo "$res"
+
+filename="a.exe"
+echo -n "$filename "
+if validate3 $filename; then
+  echo "is executable"
+else
+  echo "is not executable"
+fi
+
+
+for (( c = 1; c <= 5; c++ ))
+do
+  echo "Welcome $c times..."
+done
+
+
+for a in 1 2 3 4 5
+do
+  echo -n "$a "
+done  
+echo
+NUMS="1 2 3 4 5"
+for a in $NUMS
+do
+  echo -n "$a "
+done  
+echo
+for a in {1..5}
+do
+  echo -n "$a "
+done  
+echo
+
+for (( a = 1; a <= 5; a++ ))
+do
+  echo -n "$a "
+done
+
+echo
+
+for a in *.cpp
+do
+  echo "$a "
+done  
+
+generate_list()
+{
+  echo "one two three"
+}
+
+for word in $(generate_list)  # Let "word" grab output of function.
+do
+  echo "$word"
+done
+
+
+t=0
+condition()
+{
+  ((t++))
+  #echo "in condition"
+  if [ $t -lt 5 ]
+  then
+    return 0  # true ((1))
+  else
+    return 1  # false ((0))
+  fi
+}
+
+one=1
+two=2
+
+sum=$one+$two
+echo "$sum"
+
+let a="$one + $two"
+echo "$a"
+
+MY_TEST_FLAG=0 
+if [[ $MY_TEST_FLAG == 1 ]]; then
+  echo "MY_TEST_FLAG is ON"
+else
+  echo "MY_TEST_FLAG is OFF"
+fi
+
+while condition
+do
+  echo "Still going: t = $t"
+done
+
+something()
+{
+  ((0))
+}
+
+if something
+then
+  echo "Expression is true"
+else
+  echo "Expression is false"
+fi
+
+a=1+2
+echo $a
+
+
+let a=1+2
+echo $a
+
+#let a = 1 + 2
+echo $a 
+
+
+let a="1 + 2"
+echo $a
+
+echo 
+echo 
+
+a=1
+
+((a=$a+2))         
+echo $a
+
+((a = a + 2))      
+echo $a
+
+((a += 2))         
+echo $a
+
+echo
+
+i=0
+while [ $i -lt 4 ]
+do
+  i=$(($i + 1))
+  echo -n "$i "
+done
+
+echo 
+
+i=0
+while [ $i -lt 4 ]
+do
+  i=$[$i + 1]
+  echo -n "$i "
+done
+
+echo
+echo $(pwd)
+
+print3 apple "banana cherry" dog
+
+for a in *
+do
+  if [ -d "$a" ]
+  then
+    echo "$a "
+  fi
+done
+
+
+for i in *
+do
+  echo "(*) "${i}
+done
+
+echo "*********"
+for i in *
+do
+  if [ -d $i ]
+  then
+    echo "[d] "$i
+  else
+    echo "[f] "$i
+  fi
+done
+
+echo "*********"
+COUNT=0
+for i in *
+do
+  if [ ! -d $i ]
+  then
+    # same as ((COUNT++))
+    let COUNT=COUNT+1
+    echo "("${COUNT}") "${i}
+  fi
+done
+echo $COUNT
+
+fruits=()
+for i in apple banana cherry
+do
+  fruits+=($i)
+done
+
+for j in ${fruits[@]}
+do
+  echo $j
+done
+
+echo
+echo "Bash version ${BASH_VERSION}..."

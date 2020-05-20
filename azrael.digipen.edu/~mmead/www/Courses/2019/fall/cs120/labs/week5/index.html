@@ -1,0 +1,386 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Please read this entire page before starting to write code. You'll be glad you did.
+(You are instructed to do something before starting this lab. <b>NEVER</b> ignore
+any instructions given.)
+<br><br>
+<b>Part 1 of this lab requires about 12 lines of code.</b><br>
+<b>Part 2 of this lab requires about 8 lines of code.</b><br>
+<br>
+This does not count variable declarations, comments, or curly braces. 
+</p>
+
+
+You will be creating two functions during this lab: <tt><b>print_cubes</b></tt> and
+<tt><b>print_pythagorean_triples</b></tt>
+<ol>
+	
+<li>Write a function called <tt><b>print_cubes</b></tt> that will print all  
+  <i>3-digit integers</i> that have the <i>cube</i> property. 
+
+The prototype looks like this:
+
+<blockquote><pre>
+<b>void</b> print_cubes(<b>void</b>);
+</pre></blockquote>
+
+  An integer has this property if the cube of its digits add up to the number itself. 
+  For example, 153 has this property:
+	
+<blockquote><pre>
+<big>153 = 1<sup>3</sup> + 5<sup>3</sup> + 3<sup>3</sup> = 1 + 125 + 27 = 153</big>
+</pre></blockquote>
+
+The output of the program should look like this:
+<blockquote><pre>
+153 has the cube property. (1 + 125 + 27)
+370 has the cube property. (27 + 343 + 0)
+
+etc...
+</pre></blockquote>
+
+Hint: To extract the digits of the number, use the division and/or the 
+modulus operators: <tt><big>/  %</big></tt>
+<p>
+	
+<table cellspacing=0 cellpadding=0 border=0>
+<tr><th>Pseudo-code</th><th></th><th>More detailed pseudocode</th></tr>
+<tr>
+<td valign="top">
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* For each 3-digit number                 */</i></font>
+<font color="#003399"><i>/*   Extract the three digits              */</i></font>
+<font color="#003399"><i>/*   If the sum of the cubes of the digits */</i></font>
+<font color="#003399"><i>/*     equals the number, print the number */</i></font>
+</code></pre>
+</td>
+<td></td>
+<td>
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* For each 3-digit number                      */</i></font>
+<font color="#003399"><i>/*   Extract and save the the first digit       */</i></font>
+<font color="#003399"><i>/*   Extract and save the second digit          */</i></font>
+<font color="#003399"><i>/*   Extract and save the third digit           */</i></font>
+<font color="#003399"><i>/*   Cube first digit                           */</i></font>
+<font color="#003399"><i>/*   Cube second digit                          */</i></font>
+<font color="#003399"><i>/*   Cube third digit                           */</i></font>
+<font color="#003399"><i>/*   Add up the cubes                           */</i></font>
+<font color="#003399"><i>/*   If the sum equals the number then          */</i></font>
+<font color="#003399"><i>/*     Print the number                         */</i></font>
+</code></pre>
+</td>
+</tr></table>
+<p>
+
+Remember that integer arithmetic will always truncate the result if it is not an 
+integer. 
+<p>
+To test all 3-digit numbers, you will need to loop from 100 up to and including
+999. (That's all of the 3-digit numbers.)
+<p>
+The easiest way to extract the last digit of a number is to use the modulo
+operator with the value 10. For example, <tt>123 % 10</tt> is 3, which is the last digit in
+the number. This technique will always give you the last digit of any integer.
+<p>
+To extract the first digit, just divide the number by 100, so 
+<tt>123 / 100</tt> is 1. 
+<p>
+Extracting the middle digit is only slightly more involved using both operators,
+but you should be able to figure out a way to do that. 
+
+
+<p>
+<hr width="90%">
+<p>
+
+<li>Write a function that finds 
+  <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triples</a>. 
+
+The prototype looks like this:
+<blockquote><pre>
+<b>void</b> print_pythagorean_triples(<b>int</b> low, <b>int</b> high);
+</pre></blockquote>
+The inputs are the range [low, high) of values that you should try. For example, this 
+call:
+<blockquote><pre>
+print_pythagorean_triples(1, 100);
+</pre></blockquote>
+would try all of the integers from 1 up to 99. The range includes the low number,
+but not the high number, hence the range: [low, high)
+<p>
+
+  Three integers are Pythagorean triples if they have the property that the square of 
+  the largest value is equal to the sum of the squares of the two smaller values.
+	For example, the integers (3, 4, and 5) are triples as well as others:
+	
+<blockquote><pre>
+<big>3<sup>2</sup> +   4<sup>2</sup> =  5<sup>2</sup>  (  9 +   16 =   25)</big>
+<big>5<sup>2</sup> +  12<sup>2</sup> = 13<sup>2</sup>  ( 25 +  144 =  169)</big>
+<big>28<sup>2</sup> + 45<sup>2</sup> = 53<sup>2</sup>  (784 + 2025 = 2809)</big>
+</pre></blockquote>
+
+There are an infinite number of Pythagorean triples and many ways to calculate them. 
+The purpose of this assignment is to practice your coding with for loops, so that's how 
+you should do it. (Hint: you will use 3 nested for-loops. Use <i>i</i>, <i>j</i>, and <i>k</i> 
+for the loop counters.) The output of the program should look like this:
+
+<blockquote><pre>
+Triple #  1:   3,  4,  5 -->    9 +   16 =   25
+Triple #  2:   5, 12, 13 -->   25 +  144 =  169
+Triple #  3:   6,  8, 10 -->   36 +   64 =  100
+Triple #  4:   7, 24, 25 -->   49 +  576 =  625
+Triple #  5:   8, 15, 17 -->   64 +  225 =  289
+Triple #  6:   9, 12, 15 -->   81 +  144 =  225
+Triple #  7:   9, 40, 41 -->   81 + 1600 = 1681
+Triple #  8:  10, 24, 26 -->  100 +  576 =  676
+Triple #  9:  11, 60, 61 -->  121 + 3600 = 3721
+Triple # 10:  12, 16, 20 -->  144 +  256 =  400
+Triple # 11:  12, 35, 37 -->  144 + 1225 = 1369
+Triple # 12:  13, 84, 85 -->  169 + 7056 = 7225
+Triple # 13:  14, 48, 50 -->  196 + 2304 = 2500
+Triple # 14:  15, 20, 25 -->  225 +  400 =  625
+Triple # 15:  15, 36, 39 -->  225 + 1296 = 1521
+
+etc...
+</pre></blockquote>
+
+Use this format string so that you get the exact output:
+<blockquote><pre>
+"Triple #%3i: %3i,%3i,%3i --> %4i + %4i = %4i\n" 
+</pre></blockquote>
+
+Notice that the 3 numbers are in increasing order. The first number is the smallest, 
+the third number is the largest, and the second number is in between. This means 
+that each loop starts on 1 plus the previous number. You'll be doing a sequence 
+like this: (The 3 numbers are <i>i</i>, <i>j</i>, and <i>k</i>)
+
+<blockquote><pre>
+i j k
+-----
+1 2 3
+1 2 4 
+1 2 5
+1 2 6
+...
+1 2 99
+1 3 4
+1 3 5
+1 3 6
+...
+1 3 99
+1 4 5
+1 4 6
+1 4 7
+...
+1 4 99
+1 5 6
+1 5 7
+
+etc...
+</pre></blockquote>
+
+For each triple, <i>i</i>, <i>j</i>, and <i>k</i>, 
+if <tt><i>i</i><sup>2</sup> + <i>j</i><sup>2</sup> = <i>k</i><sup>2</sup></tt>,
+you will print those values.
+
+
+<hr width="90%">
+
+Here is the <tt>main</tt> function for you to use. Copy and paste it in a file 
+called <tt>main.c</tt>. Note that you don't need to include <tt>&lt;stdio.h&gt;</tt>
+because the <tt><b>main</b></tt> function isn't printing anything. 
+(Your code is doing the printing this time.) 
+
+<blockquote><pre>
+</pre></blockquote>
+
+<table>
+<tr>
+<td>
+<!--<b>#include</b> &lt;stdio.h&gt;-->
+<pre class="sourcecode"><code><font color="#003399"><i>/* Function declarations */</i></font>
+<b>void</b> print_cubes(<b>void</b>);
+<b>void</b> print_pythagorean_triples(<b>int</b> low, <b>int</b> high);
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Print all of the integers with the cube property */</i></font>
+  print_cubes();
+
+    <font color="#003399"><i>/* Print all of the triples from 1 up to 100        */</i></font>
+    <font color="#003399"><i>/* but not including 100  [1, 100)                  */</i></font>
+  print_pythagorean_triples(1, 100);
+
+  <b>return</b> 0;
+}
+</code></pre>
+</td>
+</tr></table>
+<p>
+
+This is the start of the file <tt>triple_cube.c</tt> where you will implement the two
+functions:
+<p>
+<table>
+<tr>
+<td>
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+<b>void</b> print_cubes(<b>void</b>)
+{
+}
+
+<b>void</b> print_pythagorean_triples(<b>int</b> low, <b>int</b> high)
+{
+}
+</code></pre>
+</td>
+</tr></table>
+<p>
+
+The command line to build the program:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -Werror -O2 main.c triple_cube.c -o triple_cube
+</pre></blockquote>
+
+Note that the only header file you are to include in your C file is <tt>stdio.h</tt> 
+(you don't need any others).
+
+<p class="technote">
+<b>You are only allowed to include stdio.h in your code. Including any other header
+  file will cause you to receive a 0 on the lab.</b>
+</p>
+
+
+<p>
+Download (<b>DO NOT SAVE THE WEB PAGE</b>) the output from the program: 
+<a href="output.txt">output.txt</a>  
+<p>
+Don't forget that you may need to use the <tt>--strip-trailing-cr</tt> switch with <tt><b>diff</b></tt>.
+<p>
+<b>Notes:</b>
+<ul>
+  <li>Notice that you are not prompting the user for anything. The driver file (<tt>main.c</tt>) is
+    calling your function with the appropriate values (if any).</li>
+  <li>Most labs from now on will not require you to ask the user for any input. The input required
+    for your functions will come from the driver.</li>
+  <li>You should never assume that the values shown in these examples will be the same values that
+    you will be given when your program is run. Often, I will provide a different driver file when
+    I compile and run your code.</li>
+</ul>
+<p>
+
+<b>BEFORE</b> starting the lab, try to figure out what this code prints:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i, j, k;
+  <b>int</b> size = 3;
+
+  <b>for</b> (i = 0; i &lt; size; i++)
+    <b>for</b> (j = 0; j &lt; size; j++)
+      <b>for</b> (k = 0; k &lt; size; k++)
+        printf(<font color="#9933CC">&quot;%i, %i, %i&#92;n&quot;</font>, i, j, k);
+}
+</code></pre>
+
+Compile and run this code to check yourself. Change the <i>size</i> variable and observe
+what is printed. What would happen if you added another nested loop after the <i>k</i> loop?
+(Try it.)
+
+Use this as a model for nested loops.
+
+<hr>
+
+</ol>
+
+<b>Timing your code</b>
+<p>
+The algorithm that I suggested (3 nested for-loops for the Pythagorean triples), 
+will provide efficient run-time behavior of your program. If you choose to do it some other way
+(not recommended), you may find that your program is inefficient.
+<p>
+There is a program that comes with Cygwin (it's built-in to Linux and Mac) called <b>time</b>. It allows
+you to time the running of programs. It's very easy to use. If you want to see how long it takes your
+program to run, do this (on Windows):
+
+<blockquote><pre>
+c:\cygwin64\bin\time -p ./triple_cube.exe
+</pre></blockquote>
+
+This assumes you installed Cygwin into the recommended directory. You MUST provide the entire
+PATH. Simply typing just <tt>time</tt>, will not work.
+
+On Mac and Linux, you just need to run (from a bash shell):
+
+<blockquote><pre>
+time ./triple_cube
+</pre></blockquote>
+
+to see your times. 
+
+
+On the submission server (pontus.digipen.edu), my program produces this output:
+
+<blockquote><pre>
+real  0m0.007s
+user  0m0.000s
+sys   0m0.005s
+</pre></blockquote>
+
+The <i>real</i> time is what you're looking at. It says my program took 0.007 seconds 
+(that's 7/1000ths of a second)
+to run. Your time should be similar in that it should run faster than 0.01 seconds. I'm giving you 0.500
+seconds, which is over <i>50 times slower than the average!</i> If you finish within that time, you'll get
+credit, otherwise you won't. 
+<p>
+There is NOTHING you need to do to get your program running in this time
+except to follow the instructions. Failure to follow the instructions may lead you to get very
+poor performance.
+<p>
+
+<blockquote>
+<p class="technote">
+Realize, of course, that if you have a faster computer, your programs will run faster. If you have a
+slower computer, your programs will run slower. It really depends. But, since everyone is running
+on pontus.digipen.edu, everyone's program will be timed the same way. 
+<br><br>
+In CS180, we'll see how different CPU architectures can make programs run faster or slower.
+Hope to see some of you there next semester!
+</blockquote>
+<br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

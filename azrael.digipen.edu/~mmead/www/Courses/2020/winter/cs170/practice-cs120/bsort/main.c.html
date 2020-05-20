@@ -1,0 +1,153 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt; /* printf              */</font>
+<font color="990099">#include &quot;PRNG.h&quot;  /* RandomInt, ut_srand */</font>
+
+<b>void</b> bsort(<b>int</b> array[], <b>int</b> size);
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>int</b> count)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; count; i += 1)
+  {
+    <b>int</b> r = RandomInt(0, count - 1);
+    <b>int</b> temp = array[i];
+    array[i] = array[r];
+    array[r] = temp;
+  }
+}
+
+<b>void</b> GetValues(<b>int</b> *array, <b>int</b> size)
+{
+  <b>int</b> i;
+
+  ut_srand(1, 2);
+  <b>for</b> (i = 0; i &lt; size; i++)
+    array[i] = i;
+
+  Shuffle(array, size);
+}
+
+
+<b>void</b> print_array(<b>int</b> array[], <b>int</b> size)
+{
+  <b>int</b> i;
+
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%i &quot;</font>, array[i]);
+
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test1(<b>void</b>)
+{
+  <b>int</b> array[] = {7, 4, 1, 3, 8, 6, 9, 5, 2};
+  <b>int</b> size = <b>sizeof</b>(array) / <b>sizeof</b>(array[0]);
+
+  printf(<font color="#9933CC">&quot;Original array:&#92;n&quot;</font>);
+  print_array(array, size);
+
+  bsort(array, size);
+
+  printf(<font color="#9933CC">&quot;Sorted array:&#92;n&quot;</font>);
+  print_array(array, size);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test2(<b>void</b>)
+{
+  <b>int</b> array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  <b>int</b> size = <b>sizeof</b>(array) / <b>sizeof</b>(array[0]);
+
+  printf(<font color="#9933CC">&quot;Original array:&#92;n&quot;</font>);
+  print_array(array, size);
+
+  bsort(array, size);
+
+  printf(<font color="#9933CC">&quot;Sorted array:&#92;n&quot;</font>);
+  print_array(array, size);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test3(<b>void</b>)
+{
+  <b>int</b> array[] = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+  <b>int</b> size = <b>sizeof</b>(array) / <b>sizeof</b>(array[0]);
+
+  printf(<font color="#9933CC">&quot;Original array:&#92;n&quot;</font>);
+  print_array(array, size);
+
+  bsort(array, size);
+
+  printf(<font color="#9933CC">&quot;Sorted array:&#92;n&quot;</font>);
+  print_array(array, size);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test4(<b>void</b>)
+{
+  <b>int</b> array[] = {6};
+  <b>int</b> size = <b>sizeof</b>(array) / <b>sizeof</b>(array[0]);
+
+  printf(<font color="#9933CC">&quot;Original array:&#92;n&quot;</font>);
+  print_array(array, size);
+
+  bsort(array, size);
+
+  printf(<font color="#9933CC">&quot;Sorted array:&#92;n&quot;</font>);
+  print_array(array, size);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test5(<b>void</b>)
+{
+  <font color="990099">#define SIZE0 100</font>
+  <b>int</b> array[SIZE0];
+  GetValues(array, SIZE0);
+
+  printf(<font color="#9933CC">&quot;Original array:&#92;n&quot;</font>);
+  print_array(array, SIZE0);
+
+  bsort(array, SIZE0);
+
+  printf(<font color="#9933CC">&quot;Sorted array:&#92;n&quot;</font>);
+  print_array(array, SIZE0);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> test6(<b>void</b>)
+{
+  <font color="990099">#define SIZE1 1000</font>
+  <b>int</b> array[SIZE1];
+  GetValues(array, SIZE1);
+
+  printf(<font color="#9933CC">&quot;Original array:&#92;n&quot;</font>);
+  print_array(array, SIZE1);
+
+  bsort(array, SIZE1);
+
+  printf(<font color="#9933CC">&quot;Sorted array:&#92;n&quot;</font>);
+  print_array(array, SIZE1);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  test1();
+  <font color="#003399"><i>/*
+  test2();
+  test3();
+  test4();
+  test5();
+  test6();
+  */</i></font>
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

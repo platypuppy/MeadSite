@@ -1,0 +1,284 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>C Runtime Library</title>
+</head>
+
+<body>  
+<center><h1>Runtime Library Functions</h1></center>
+
+
+<blockquote><i>
+"Never put off until run time what you can do at compile time."</i>
+-- David Gries, in "Compiler Construction for Digital Computers",
+  circa 1969.
+</blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>The C RunTime Library</h2>
+
+There are thousands of references relating to the Standard C RunTime Library. The two links below are the
+main links to Microsoft's documentation on their implementation of the Standard C Runtime Library.
+<p>
+
+<a href="http://msdn.microsoft.com/en-us/library/abx4dbyh.aspx">
+C Runtime Library Reference</a>
+<br>
+<a href="http://msdn.microsoft.com/en-us/library/2aza74he.aspx">
+Routines by category</a>
+
+<p>
+The descriptions below relate to some of the more popular functions of the runtime library. Details on
+each category of functions can be viewed by following the links to the online documentation. Most of the 
+functions are ANSI compatible, but a few are OS (Windows) specific. 
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Argument Access (Function Parameters)</h2>
+<blockquote><pre>
+<b>#include</b> &lt;stdarg.h&gt; 
+</pre></blockquote>
+The va_arg, va_end, and va_start macros provide access to function arguments when the number of arguments 
+is variable. These macros are defined in STDARG.H for ANSI C compatibility, and in VARARGS.H for 
+compatibility with UNIX System V. 
+<p>
+<a href="http://www.cplusplus.com/reference/cstdarg/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Buffer Manipulation</h2>
+<blockquote><pre>
+<b>#include</b> &lt;string.h&gt;
+</pre></blockquote>
+These routines work with areas of memory on a byte-by-byte basis. You can copy blocks of memory from
+one buffer to another, search through memory, set entire blocks of memory to a specific value, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/cstring/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Character Classification</h2>
+<blockquote><pre>
+<b>#include</b> &lt;ctype.h&gt;
+</pre></blockquote>
+Each of these routines tests a specified single-byte character, wide character, or multibyte character for satisfaction of a condition. (By definition, the ASCII character set is a subset of all multibyte-character sets. For example, Japanese katakana includes ASCII as well as non-ASCII characters.) Generally these routines execute faster than tests you might write.
+<p>
+Functionality includes: testing characters to see if they are numbers, lowercase, uppercase, whitespace,
+punctuation, hexadecimal, etc.
+
+<p>
+<a href="http://www.cplusplus.com/reference/cctype/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Data conversion</h2>
+<blockquote><pre>
+<b>#include</b> &lt;stdlib.h&gt;
+</pre></blockquote>
+These routines convert data from one form to another. Generally these routines execute faster than conversions you might write. <!--Each routine that begins with a to prefix is implemented as a function and as a macro. -->
+<p>
+Funtionality includes: converting numbers to strings, strings to numbers, converting letters/strings to upper/lower case,
+converting characters to ASCII codes, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/cstdlib/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Directory control</h2>
+<blockquote><pre>
+<b>#include</b> &lt;direct.h&gt;
+</pre></blockquote>
+These routines access, modify, and obtain information about the directory structure. That is, you can
+create directories, remove directories, change directories, search directories, get free disk space, etc.
+<p>
+<font color="RED">This is not part of the ANSI Standard.</font> (OS-specific routines.)
+<p>
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_directory_control.asp">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>File handling</h2>
+<blockquote><pre>
+<b>#include</b> &lt;io.h&gt;
+<b>#include</b> &lt;stdio.h&gt;
+<b>#include</b> &lt;sys/types.h&gt;
+<b>#include</b> &lt;sys/stat.h&gt;
+</pre></blockquote>
+Use these routines to create, delete, and manipulate files and to set and check file-access permissions. 
+<p>
+Functionality includes: getting/setting a file's time and date, renaming files, deleting files, parsing
+paths into components, opening files for reading/writing, getting/setting file permissions, etc.
+<p>
+<font color="RED">Some routines are not part of the ANSI Standard.</font> (OS-specific routines.)
+
+<p>
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_file_handling.asp">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Floating-point support</h2>
+<blockquote><pre>
+<b>#include</b> &lt;math.h&gt;
+</pre></blockquote>
+These library routines provide support for math related functions such as: sin, cos, exp, floor, sqrt,
+log, rand, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/cmath/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Input and output</h2>
+<blockquote><pre>
+<b>#include</b> &lt;io.h&gt;
+<b>#include</b> &lt;stdio.h&gt;
+<b>#include</b> &lt;conio.h&gt;
+</pre></blockquote>
+The I/O functions read and write data to and from files and devices. File I/O operations take place in text mode or binary mode. 
+The functions from <i>conio.h</i> are Microsoft-specific functions.
+<p>
+Functionality includes: open/close files, seek, read/write characters or blocks, binary/text support, reading/writing to
+stdin, stdout, sterr, flushing files, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/cstdio/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Memory allocation</h2>
+<blockquote><pre>
+<b>#include</b> &lt;stdlib.h&gt;
+</pre></blockquote>
+These routines allocate, free, and reallocate memory.
+<p>
+Functionality includes: allocating, freeing (deallocating), initializing, reallocating, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/cstdlib/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Process and environment control</h2>
+<blockquote><pre>
+<b>#include</b> &lt;stdlib.h&gt;
+</pre></blockquote>
+These routines start, stop, and manage processes from within a program. Use the environment-control routines to 
+get and change information about the operating-system environment. 
+<p>
+Functionality includes: aborting programs, exiting from processes, executing other programs, handling signals,
+etc.
+
+<p>
+<a href="http://www.cplusplus.com/reference/cstdlib/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Searching and sorting</h2>
+<blockquote><pre>
+<b>#include</b> &lt;stdlib.h&gt;
+</pre></blockquote>
+Functions for searching and sorting.
+<p>
+Functionality includes: linear search, binary search, and quick sort.
+<p>
+<a href="http://www.cplusplus.com/reference/cstdlib/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>String manipulation</h2>
+<blockquote><pre>
+<b>#include</b> &lt;string.h&gt;
+</pre></blockquote>
+Functions that operate on NUL-terminated single-byte character, wide-character, and multibyte-character strings. Use the buffer-manipulation routines to work with character arrays that do not end with a NUL character
+<p>
+Functionality includes: searching strings for substrings and characters, concatenating strings, finding string lengths,
+comparing strings, setting characters of a string, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/cstring/">
+Online documentation</a>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<h2>Time management</h2>
+<blockquote><pre>
+<b>#include</b> &lt;time.h&gt;
+</pre></blockquote>
+Use these functions to get the current time and convert, adjust, and store it as necessary. The current time is the system time. 
+<p>
+Functions include: getting the current system time, formatting data and time values, converting time formats, computing
+difference between two times, etc.
+<p>
+<a href="http://www.cplusplus.com/reference/ctime/">
+Online documentation</a>
+<p>
+
+<!--
+<p>
+<hr width="90%">
+<p>
+<h3>Use at your own risk</h3>
+<a href="rtl.c">RTL code</a> <b>WARNING: This code only works with Microsoft compilers on Windows.</b>
+<p>
+-->
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

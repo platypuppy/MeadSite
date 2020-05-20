@@ -1,0 +1,45 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>wmutex-child.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="#003399"><i>/* wmutex-child.c */</i></font>
+<b>#include</b> &lt;windows.h&gt;
+
+<b>int</b> main(<b>void</b>) 
+{
+  <b>int</b> i;
+  
+    <font color="#003399"><i>/* Get shared memory created by the parent (by name) */</i></font>
+  HANDLE shmem = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366537(v=vs.85).aspx">CreateFileMapping</a>(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, <b>sizeof</b>(<b>unsigned</b>), <font color="#9933CC">&quot;share_data&quot;</font>);
+  
+    <font color="#003399"><i>/* Attach to it */</i></font>
+  <b>unsigned</b> *value = (<b>unsigned</b> *)<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366761(v=vs.85).aspx">MapViewOfFile</a>(shmem, FILE_MAP_ALL_ACCESS, 0, 0, <b>sizeof</b>(<b>unsigned</b>));
+  
+    <font color="#003399"><i>/* Get mutex created by the parent (by name) */</i></font>
+  HANDLE mutex = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms684315(v=vs.85).aspx">OpenMutex</a>(MUTEX_ALL_ACCESS, <b>FALSE</b>, <font color="#9933CC">&quot;share_mutex&quot;</font>);
+  
+  <b>for</b> (i = 0; i &lt; 1000 * 100; i++)
+  {
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms687032(v=vs.85).aspx">WaitForSingleObject</a>(mutex, INFINITE);
+      (*value)++;
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms685066(v=vs.85).aspx">ReleaseMutex</a>(mutex);
+  }
+
+    <font color="#003399"><i>/* Cleanup */</i></font>
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366882(v=vs.85).aspx">UnmapViewOfFile</a>(value);
+  CloseHandle(shmem);
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

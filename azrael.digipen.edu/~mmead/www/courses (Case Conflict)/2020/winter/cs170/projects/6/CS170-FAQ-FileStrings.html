@@ -1,0 +1,366 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - FAQ for Assignment #6</title>
+</head>
+ 
+<body>  
+
+<center><H1>
+<A HREF="cs170-programming-assignment-file-strings.pdf">Programming Assignment #6</A> FAQ
+<p>
+<h2>(Frequently Asked Questions)</h2>
+</H1>
+</center>
+
+<br>
+
+<p>
+
+Here are some popular Questions and Answers for assignment #6.<BR>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<ol>
+	
+<li><b>
+Question:<br>
+I seem to have a lot of <tt>if</tt> statements in my <i>WordWrap</i> function. Am I doing something
+wrong?
+</b>
+
+<p>
+
+<b>Answer:</b><br>
+Probably not. There are some special cases that you need to handle and I'm not expecting that you 
+handle all of them in one loop with no conditionals. Unless you have way too many conditions (meaning
+that you have many redundant conditions), you'll be fine. However, you do need to document your
+<i>WordWrap</i> function heavily. You will certainly lose points if you don't. Not only that,
+if you don't document it heavily, when you go back to it next semester to make it work for
+all strings, you'll have no clue how it works. Trust me. You won't.
+<p>
+In fact, the more flow-control statements you have in your code, the more comments you need. Think
+about it. If your code has no <tt>if</tt>, <tt>for</tt>, <tt>while</tt>, <tt>switch</tt>, etc. 
+statements, then it's pretty easy to follow the logic. But, if you are making many decisions and 
+changing the flow in several places in the code, you need to state why you are making those decisions.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+Can I just call <i>Tokenize</i> in the <i>WordWrap</i> method?</b>
+</b>
+
+<p>
+
+<b>Answer:</b><br>
+No. Tokenizing a string removes extraneous spaces and you need 
+to preserve the spaces when doing the word wrap. 
+<!--Even though
+I'm not going to give you a string with extraneous spaces to wrap, you should still be able to
+handle that in the future.
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+What is the maximum length of a word in the dictionary? In CS120, this was given in the header file.
+Why isn't it specified now?
+</b>
+
+<p>
+
+<b>Answer:</b><br>
+Because you're reading the words with <tt>std::string</tt> and not character arrays. You don't need
+to know the maximum size of the word as the <tt>std::string</tt> will automatically be the right size, 
+regardless of how big the word is. That's the Power of Objects<sup>&trade;</sup>.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+When I read in a word as a string, the newline is not being stripped off by GNU's compiler? 
+What's wrong?</b>
+</b>
+<p>
+
+<b>Answer:</b><br>
+The problem is likely that you are using <tt>std::getline(...)</tt>. Although this function is supposed to
+remove the newline, there is a problem when using <tt><b>g++</b></tt> under Windows. GNU compilers come
+from the UNIX world where lines are terminated with a line-feed (LF) only. In Windows, they are terminated
+with a carriage return and line-feed (CR/LF). This causes a problem with <tt>std::getline(...)</tt>. 
+<p>
+There is a way around it, and it's the preferred method. Don't use <tt>std::getline(...)</tt>. Read from
+the file stream into a string as demonstrated in class: (assume <tt>infile</tt> is an <i>ifstream</i>)
+
+<blockquote><pre>
+std::string str;
+infile >> str; // newline will be stripped, regardless of the operating system
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+Can I just read the entire dictionary into memory one time instead of opening it and closing it in each method?</b>
+</b>
+<p>
+
+<b>Answer:</b><br>
+Short answer: No.
+<p>
+Longer answer: No. One of the goals of this assignment is for you to practice opening and (optionally!) closing files
+in methods. It is true that loading the entire dictionary into memory will cause word lookups to be faster, since
+you don't have to go to the disk for each word. However, for this assignment, the time is negligible. 
+<p>
+In a real spell-checker, you would read the dictionary into memory, but you wouldn't use an array or linked list. You 
+would use some sort of balanced tree or hash table, which would speed up the searches dramatically. This topic is beyond
+the scope of this assignment. You will learn about more efficient approaches to using dictionaries
+in a course specifically about data structures (CS 280).
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+What is <tt>size_t</tt>? I've seen it in the sample code.</b>
+</b>
+<p>
+
+<b>Answer:</b><br>
+Technically, <tt>size_t</tt> is the type of the value returned by the <tt>sizeof</tt> operator. In practice, it is
+an unsigned integral type and usually a <tt><b>typedef</b></tt> and may look something like:
+
+<blockquote><pre>
+<b>typedef unsigned int</b> size_t;
+</pre></blockquote>
+
+
+You don't have to worry about how large the value is; just know that it will do the right
+thing. The reason you see it in this code is because many methods in the C++ library return <tt>size_t</tt> instead of 
+a simple integer. This is usually the case when the return value represents things that can only be positive, for 
+example, the size of an object, the length of a string, the number of elements in a vector, etc. These values can never
+be negative, so <tt>size_t</tt> is the type returned. Some (many, most, all?) compilers will give you a warning if
+you mix integer values with <tt>size_t</tt> values. Make sure you don't mix them.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+Do I have to look through the entire dictionary to find a particular word?</b>
+</b>
+<p>
+
+<b>Answer:</b><br>
+No. Since the dictionary is sorted, you will know if a word is present or not before reaching the end. 
+For example, if the word you are looking for is <b>postak</b>, you may see these words in a dictionary:
+
+<blockquote><pre>
+.
+.
+.
+postage
+postages
+        <font color="gray"><----- (If the word <b>postak</b> existed, it would be here.)</font>
+postal 
+postally
+postals
+postamputation
+.
+.
+.
+</pre></blockquote>
+
+<b>postak</b> belongs between <b>postages</b> and <b>postal</b>. Once you reach <b>postal</b>, you can stop
+searching. This is simply because <b>postal</b> comes after <b>postak</b>, so <b>postak</b> can't possibly be in the
+dictionary. This is why dictionaries are sorted! Of course, if the word you are looking for is that last one in
+the dictionary (zyzzyvas), then you have no choice but to look at every single word.
+<p>
+Hint: If you don't stop searching when a word can't possibly show up later in the dictionary, you will fail
+the test for that because your program will take too long to complete. I will test your code to make sure 
+you are following these instructions. 
+<p>
+<b>Failure to follow these instructions will likely cost you
+a letter grade on the assignment.</b>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+I'm trying to initialize my <tt>shortest</tt> variable to the largest possible unsigned value by doing
+this:
+
+<blockquote><pre>
+info.shortest = -1;
+</pre></blockquote>
+
+but Clang and Microsoft's compiler give me a warning similar to this:
+
+<blockquote><pre>
+warning C4245: '=' : conversion from 'int' to 'size_t', signed/unsigned mismatch
+</pre></blockquote>
+
+But, if I cast it to unsigned, the GNU compiler says this:
+
+<blockquote><pre>
+warning: use of old-style cast [-Wold-style-cast]
+</pre></blockquote>
+
+How are we supposed to do this?
+</b>
+<p>
+
+<b>Answer:</b><br>
+You have to use the C++-style named cast, and not the C-everything-including-the-kitchen-sink-style cast.
+
+<blockquote><pre>
+info.shortest = <b>static_cast</b>&lt;size_t&gt;(-1);
+</pre></blockquote>
+
+This will satisfy all of the compilers and is the correct way to do it. Using a magic number will cause
+you to lose points.
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>
+Question:<br>
+I'm not clear on what the <i>AcronymToWord</i> function is supposed to do. 
+</b>
+
+<p>
+
+<b>Answer:</b><br>
+Well, that's not really a question, but I'll answer it anyway.
+<p>
+Let's look at an example from the driver that demonstrates the behavior:
+<blockquote><pre>
+Acronym: ASAP, Words (7): airscape airscapes ascocarp ascocarpic ascocarps asynapses asynapsis 
+</pre></blockquote>
+
+The acronym is just a bunch of letters. They may or may not have any <i>real</i> meaning for
+this assignment. (In Real Life<sup>TM</sup>, acronyms always have a meaning.) Some examples:
+<blockquote>
+<ul>
+  <li><i>SCUBA</i> - <b>S</b>elf-<b>C</b>ontained <b>U</b>nderwater <b>B</b>reathing <b>A</b>pparatus</li>
+  <li><i>NASA</i> - <b>N</b>ational <b>A</b>eronautics and <b>S</b>pace <b>A</b>dministration</li>
+  <li><i>RAM</i> - <b>R</b>andom <b>A</b>ccess <b>M</b>emory</li>
+</blockquote>
+
+
+In the example, the acronym is <i>ASAP</i>.
+This is simply short for <i>As Soon As Possible</i>. We are not interested in the meaning. We are
+interested in finding words in the dictionary that contain the letters: <i>A S A P</i>, in that
+<b>exact</b> order. You'll notice that there are 7 words in the (sample) dictionary that contain those
+letters in that order:
+
+<big>
+<blockquote><pre>
+<b><u>a</u></b>ir<b><u>s</u></b>c<b><u>a</u></b><b><u>p</u></b>e
+<b><u>a</u></b>ir<b><u>s</u></b>c<b><u>a</u></b><b><u>p</u></b>es
+<b><u>a</u></b><b><u>s</u></b>coc<b><u>a</u></b>r<b><u>p</u></b>
+<b><u>a</u></b><b><u>s</u></b>coc<b><u>a</u></b>r<b><u>p</u></b>ic
+<b><u>a</u></b><b><u>s</u></b>coc<b><u>a</u></b>r<b><u>p</u></b>s
+<b><u>a</u></b><b><u>s</u></b>yn<b><u>a</u></b><b><u>p</u></b>ses
+<b><u>a</u></b><b><u>s</u></b>yn<b><u>a</u></b><b><u>p</u></b>sis
+</pre></blockquote>
+</big></big>
+
+The rules are that all words must start with the first letter of the acronym. So, in the
+example, all words must start with the letter <i>A</i>. Then, there may be zero or more
+letters between the first <i>A</i> and the <i>S</i>, then zero or more letters between
+the <i>S</i> and the second <i>A</i>, then zero or more letters between the second
+<i>A</i> and the <i>P</i>, and then zero or more letters until the end of the word.
+(The word from the dictionary does NOT have to end with <i>P</i>).
+<p>
+There is a short-hand notation for this and it's related to 
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>, which are used for <i>pattern matching</i>
+in strings and are found everywhere in computer science. Here's one way that the above acronym
+might be shown using a regular expression notation:
+
+<blockquote><pre>
+^A.*S.*A.*P.*
+</pre></blockquote>
+
+Briefly:
+<ul>
+  <li>The caret ( ^ ) means that the word must start with <i>A</i>.
+    (i.e. there can be no characters before the first <i>A</i>).</li>
+  <li>The period ( . ) says what character must follow. The period is a <i>wildcard</i>,
+    meaning that <i>any</i> character can follow the <i>A</i>.</li>
+
+  <li>The asterisk ( * ) tells us <i>how many</i> characters can follow. The asterisk
+    means <i>zero or more</i>.</li>
+  <li>This means that the pattern: <tt>.*</tt> can match zero or more of any character.</li>
+
+  <li>So, all of these strings match the pattern above:
+<blockquote><pre>
+asap
+axsap
+asxap
+asaxxxpxx
+axxxsap
+axsxxaxxxpxxxx
+</pre></blockquote>
+
+</ul>
+
+There are several different notations for regular expressions. The one shown above
+is just one of them. Oh, and incidentally, C++11 now includes a 
+<a href="https://en.cppreference.com/w/cpp/regex">regex</a> library. 
+But, unfortunately, you can't use it!
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</ol>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+</body>
+</html>

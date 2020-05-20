@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Vector.h</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef VECTOR_H</font>
+<font color="990099">#define VECTOR_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>namespace</b> CS170
+{
+
+<b>class</b> SubscriptError
+{
+  <b>public</b>:
+    SubscriptError(<b>int</b> Subscript) : subscript_(Subscript) {};
+    <b>int</b> GetSubscript() <b>const</b> { <b>return</b> subscript_; }
+
+  <b>private</b>:
+    <b>int</b> subscript_;
+};
+
+<b>class</b> Vector
+{
+  <b>public</b>:
+
+      <font color="#003399"><i>// Default constructor</i></font>
+    Vector();
+
+      <font color="#003399"><i>// Destructor</i></font>
+    ~Vector();
+
+      <font color="#003399"><i>// Adds an element to the back of the array. If there is</i></font>
+      <font color="#003399"><i>// not enough room in the array, it will be grown to</i></font>
+      <font color="#003399"><i>// handle more items.</i></font>
+    <b>void</b> push_back(<b>int</b> value);
+
+      <font color="#003399"><i>// Adds an element to the front of the array. If there is</i></font>
+      <font color="#003399"><i>// not enough room in the array, it will be grown to</i></font>
+      <font color="#003399"><i>// handle more items. All items to the right must be</i></font>
+      <font color="#003399"><i>// shifted over one element to the right.</i></font>
+    <b>void</b> push_front(<b>int</b> value);
+
+      <font color="#003399"><i>// Subscript operators for const and non-const</i></font>
+    <b>int</b> <b>operator</b>[](<b>unsigned</b> index) <b>const</b>;
+    <b>int</b>&amp; <b>operator</b>[](<b>unsigned</b> index);
+
+      <font color="#003399"><i>// Deletes the underlying array and sets size_ and capacity_ to 0.</i></font>
+      <font color="#003399"><i>// Note that this behavior is different than how std::vector</i></font>
+      <font color="#003399"><i>// implements clear. std::vector does not delete[] the array.</i></font>
+    <b>void</b> clear();
+
+      <font color="#003399"><i>// Return true if the vector is empty, otherwise, false</i></font>
+    <b>bool</b> empty() <b>const</b>;
+
+      <font color="#003399"><i>// Returns the number of elements in the vector.</i></font>
+    <b>unsigned</b> size() <b>const</b>;
+
+      <font color="#003399"><i>// Returns the size of the underlying array</i></font>
+    <b>unsigned</b> capacity() <b>const</b>;
+
+      <font color="#003399"><i>// The number of memory allocations that have occurred</i></font>
+    <b>unsigned</b> allocations() <b>const</b>;
+
+      <font color="#003399"><i>// Copy constructor</i></font>
+    Vector(<b>const</b> Vector&amp; rhs);
+
+      <font color="#003399"><i>// Constructor to create a Vector from an array</i></font>
+    Vector(<b>const</b> <b>int</b> array[], <b>unsigned</b> size);
+
+      <font color="#003399"><i>// Removes the last element. Does nothing if empty.</i></font>
+    <b>void</b> pop_back();
+
+      <font color="#003399"><i>// Removes the first element. Does nothing if empty.</i></font>
+    <b>void</b> pop_front();
+
+      <font color="#003399"><i>// Inserts a new element at the specified position. Causes an</i></font>
+      <font color="#003399"><i>// exception if the position is invalid. (Calls check_bounds)</i></font>
+    <b>void</b> insert(<b>int</b> value, <b>unsigned</b> position);
+
+      <font color="#003399"><i>// Removes an element with the specified value (first occurrence)</i></font>
+    <b>void</b> remove(<b>int</b> value);
+
+      <font color="#003399"><i>// Assignment operator</i></font>
+    Vector&amp; <b>operator</b>=(<b>const</b> Vector&amp; rhs);
+
+      <font color="#003399"><i>// Concatenates a vector onto the end of this vector.</i></font>
+    Vector&amp; <b>operator</b>+=(<b>const</b> Vector&amp; rhs);
+
+      <font color="#003399"><i>// Concatenates two Vectors.</i></font>
+    Vector <b>operator</b>+(<b>const</b> Vector&amp; rhs) <b>const</b>;
+
+      <font color="#003399"><i>// Swaps the contents of other with this Vector (Constant time)</i></font>
+    <b>void</b> swapv(Vector &amp;other);
+
+      <font color="#003399"><i>// Reverses the order of the elements (Linear time)</i></font>
+    <b>void</b> reverse();
+
+      <font color="#003399"><i>// Equality operator (Linear time)</i></font>
+      <font color="#003399"><i>// Both vectors must be the same size.</i></font>
+    <b>bool</b> <b>operator</b>==(<b>const</b> Vector&amp; rhs) <b>const</b>;
+
+      <font color="#003399"><i>// Reallocates an array to match the size of the number</i></font>
+      <font color="#003399"><i>// of elements. If size == capacity, does nothing.</i></font>
+    <b>void</b> shrink_to_fit();
+
+  <b>private</b>:
+    <b>int</b> *array_;        <font color="#003399"><i>// The dynamically allocated array</i></font>
+    <b>unsigned</b> size_;     <font color="#003399"><i>// The number of elements in the array</i></font>
+    <b>unsigned</b> capacity_; <font color="#003399"><i>// The allocated size of the array</i></font>
+    <b>unsigned</b> allocs_;   <font color="#003399"><i>// Number of allocations (resizes)</i></font>
+
+    <font color="#003399"><i>// Private methods</i></font>
+    <b>void</b> check_bounds(<b>unsigned</b> index) <b>const</b>;
+    <b>void</b> grow();
+
+    <font color="#003399"><i>// Other private methods...</i></font>
+};
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="990099">#endif // VECTOR_H</font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

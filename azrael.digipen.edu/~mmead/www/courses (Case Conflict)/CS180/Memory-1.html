@@ -1,0 +1,1709 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Memory</title>
+
+
+</head>
+
+<body>  
+
+<center><h1>
+Memory
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Overview
+</p>
+
+Memory is one of the most important parts of a computer and without it computers would be very limited.
+<p>
+<ul>
+	<li>There is a part of the operating system called the memory manager, which, obviously, managers all of the computer's memory</li>
+	<ul>
+		<li>Keep track of all of the memory (in-use and available)</li>
+		<li>Allocate and deallocate memory for processes</li>
+		<li>Swap data in and out of memory (from memory to disk and disk to memory)</li>
+		<li>Programs must be in memory to execute (the disk is strictly to store the program until execution time)</li>
+	</ul>
+	<li>As with most topics in operating systems, it's all about efficiency.</li>
+	<ul>
+		<li>We want to keep the CPU busy at all times.</li>
+		<li>To keep the CPU busy, we need to run multiple programs.</li>
+		<li>To run multiple programs we need lots of memory.</li>
+		<li>We'll likely never have enough memory for all processes to have exclusive use, so we'll need to <i>share</i>
+			the memory</li>
+	</ul>
+	<li>Memory is much more expensive than disk storage</li>
+	<ul>
+		<li>Disk storage is cheap and very large</li>
+		<li>Memory is expensive and very small (in relation to disk storage)</li>
+		<li>The faster the device, the more expensive it is and the less of it there is</li>
+		<li>The slower the device, the cheaper it is and the more of it there is</li>
+	</ul>
+</ul>
+
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="StorageHierarchy.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+<tr><th>Some Numbers Regarding Memory</th></tr>
+	<tr><td><img src="StorageLevels-1.png" width=812 height=340></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><th>Reading an integer from disk</th></tr>
+	<tr><td><img src="MemoryChain-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+
+<a name="CACHE">
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+The Importance of Cache
+</p>
+</a>
+<ul>
+	<li>2-dimensional arrays in C are laid out in 
+<span id=wpurl><a class=wplabel>row major</a></span><a class=wplink href="https://en.wikipedia.org/wiki/Row-major_order">row major</a>		
+		
+		 ordering (as opposed to <b>column major</b> ordering, e.g. Fortran, OpenGL).</li>
+	<!--
+	OpenGL uses column-major notation, but the data is physically laid out in row-major order
+	so there is no performance problem. At 9.005 below
+	https://www.opengl.org/archives/resources/faq/technical/transformations.htm 
+	-->	
+	<ul>
+	<li>This is just for notation and means that, for performance reasons, you should traverse
+	the array in the order the language says it is ordered.</li>
+	</ul> 
+	<li>This has a significant effect on the performance of memory.</li>
+	<li>The effect of cache memory can be seen in the example below.</li>
+	<li>Here are two matrices (2-dimensional array) and their layouts:</li>
+
+<blockquote>
+	<table border=1 cellpadding=10 cellspacing=0>
+	<tr><th>Row major</th><th>Column major</th></tr>
+	<tr><td>
+	<pre>
+  <font color="blue"><xb>0   1   2   3   4   5   6   7   8   9 </xb></font>
+ 10  11  12  13  14  15  16  17  18  19 
+ 20  21  22  23  24  25  26  27  28  29 
+ 30  31  32  33  34  35  36  37  38  39 
+ 40  41  42  43  44  45  46  47  48  49 
+ 50  51  52  53  54  55  56  57  58  59 
+ 60  61  62  63  64  65  66  67  68  69 
+ 70  71  72  73  74  75  76  77  78  79 
+ 80  81  82  83  84  85  86  87  88  89 
+ 90  91  92  93  94  95  96  97  98  99 
+</pre></td>
+<td><pre>
+  <font color="blue"><b>0</b></font>  10  20  30  40  50  60  70  80  90 
+  <font color="blue"><b>1</b></font>  11  21  31  41  51  61  71  81  91 
+  <font color="blue"><b>2</b></font>  12  22  32  42  52  62  72  82  92 
+  <font color="blue"><b>3</b></font>  13  23  33  43  53  63  73  83  93 
+  <font color="blue"><b>4</b></font>  14  24  34  44  54  64  74  84  94 
+  <font color="blue"><b>5</b></font>  15  25  35  45  55  65  75  85  95 
+  <font color="blue"><b>6</b></font>  16  26  36  46  56  66  76  86  96 
+  <font color="blue"><b>7</b></font>  17  27  37  47  57  67  77  87  97 
+  <font color="blue"><b>8</b></font>  18  28  38  48  58  68  78  88  98 
+  <font color="blue"><b>9</b></font>  19  29  39  49  59  69  79  89  99 
+</pre></td>
+</tr></table>
+</blockquote>
+<p>
+
+<li>However, we know that memory isn't 2D, so it's really laid out more like this:</li>
+<blockquote><pre>
+Row: <font color="blue"><b>0   1   2   3   4   5   6   7   8   9</b></font>  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29 etc...
+
+Col: <font color="blue"><b>0</b></font>   10  20  30  40  50  60  70  80  90 <font color="blue"><b>1</b></font>   11  21  31  41  51  61  71  81  91  <font color="blue"><b>2</b></font>   12  22  32  42  52  62  72  82  92 etc...
+</pre></blockquote>
+
+<li>This program is going to show that all memory accesses are <font color="red">not equal</font>:</li>
+
+
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Access row-at-a-time</th><th>Access column-at-a-time</th></tr>
+<tr valign="top">
+<td>
+<pre>
+<b>int</b> row_major(<b>int</b> *array, <b>int</b> stride)
+{
+  <b>int</b> i, j, index = 0, count = 0;
+  
+  printf(<font color="#9933CC">&quot;Row major:&#92;n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; stride; i++)
+  {
+    <b>for</b> (j = 0; j &lt; stride; j++)
+    {
+      <font color="red">index = i * stride + j;</font>
+      array[index] = count++;
+    }
+  }
+  <b>return</b> index;
+}
+</pre>
+</td>
+<td>
+<pre>
+<b>int</b> col_major(<b>int</b> *array, <b>int</b> stride)
+{
+  <b>int</b> i, j, index = 0, count = 0;
+  
+  printf(<font color="#9933CC">&quot;Col major:&#92;n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; stride; i++)
+  {
+    <b>for</b> (j = 0; j &lt; stride; j++)
+    {
+      <font color="red">index = j * stride + i;</font>
+      array[index] = count++;
+    }
+  }
+  <b>return</b> index;
+}
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+<li>Here's the program <a href="mem1.c.html">(mem1.c)</a> in one file. (<tt>gcc mem1.c</tt>)</li>
+
+<li><b>Output:</b></li>
+
+
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Access row-at-a-time</th><th>Access column-at-a-time</th></tr>
+<tr valign="top">
+<td>
+<pre>
+time ./mem1 30000 0
+stride = 30000, total = 900000000, fn = 0
+Row major:
+
+real    0m5.406s
+user    0m4.080s
+sys     0m1.290s
+</pre>
+</td>
+<td>
+<pre>
+time ./mem1 30000 1
+stride = 30000, total = 900000000, fn = 1
+Column major:
+
+real    0m29.360s
+user    0m27.850s
+sys     0m1.460s
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+With optimization (<tt>gcc -O2 mem1.c</tt>)
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Access row-at-a-time</th><th>Access column-at-a-time</th></tr>
+<tr valign="top">
+<td>
+<pre>
+time ./mem1 30000 0
+stride = 30000, total = 900000000, fn = 0
+Row major:
+
+real    0m1.500s
+user    0m0.340s
+sys     0m1.140s
+</pre>
+</td>
+<td>
+<pre>
+time ./mem1 30000 1
+stride = 30000, total = 900000000, fn = 1
+Column major:
+
+real    0m28.022s
+user    0m26.560s
+sys     0m1.420s
+</pre>
+</td>
+</tr></table>
+
+</blockquote>
+
+<li>It should be very apparent why Mead is always saying that <i>"Cache is King"<sup>&trade;</sup></i>.
+
+</ul>
+
+
+<b>
+	
+<span id=wpurl><a class=wplabel>Cache</a></span><a class=wplink href="https://en.wikipedia.org/wiki/CPU_cache">Cache</a>
+	 
+	performance</b>
+<ul>
+	<li>Cache exploits a process'
+<span id=wpurl><a class=wplabel>locality of reference</a></span><a class=wplink href="https://en.wikipedia.org/wiki/Locality_of_reference">locality of reference</a>		
+by assuming the process' next memory access will be near the previous one.</li>
+
+
+	<li>Searching through the caches looking for code/data takes time.</li>
+	<li>If the code/data is in the cache, it's called a <i>cache hit</i>. (Many cache hits increase the performance of programs a lot.)</li>
+
+	<li>If the code/data is NOT in the cache, it's called a 
+<span id=wpurl><a class=wplabel><i>cache miss</i></a></span><a class=wplink href="https://en.wikipedia.org/wiki/CPU_cache#Cache_miss"><i>cache miss</i></a>. (Many cache misses can decrease the performance of programs a lot.)</li>
+	<li>Some (many/most?) CPU architectures separate the instruction cache from the data cache.
+		<ul>
+			<li>This can have significant impact.</li>
+			<li>Think: loops (which form the backbone of most programs.)</li>
+		</ul>
+	<li>When the CPU requests a byte of memory from main memory, it needs to first determine:</li>
+	<ol>
+		<li>if the block of memory is currently in the cache (a cache hit or miss)</li>
+		<li>if the block is in the cache, where in the cache it is</li>
+		<li>where the byte is within the block</li>
+	</ol>
+	<li>These operations must be performed extremely quickly or else the cache mechanism is going to make things worse.</li>
+	<li>A special kind of very fast (and very expensive) memory is used to build caches.</li>
+	<li>The larger the cache:</li>
+		<ul>
+			<li>the more code/data can be stored, but that also means that it takes longer to search for the code/data.</li>
+			<li>the more expensive it is in both cost and CPU real estate. (CPUs have limited space.)</li>
+		</ul>
+
+	<li>CPU/cache diagrams for 
+		<ul>
+			<li><a href="cpu-cores-cache-graphics.html#SERVER">server</a> (AMD FX-8120 quad-core)</li>
+			<li><a href="cpu-cores-cache-graphics.html#VERONICA">veronica</a> (Intel i7-3517UE dual-core)</li>
+			<li><a href="cpu-cores-cache-graphics.html#CLARA">clara</a> (Intel i5-2500K quad-core)</li>
+		</ul>
+	<li>Why is cache so important (possibly, <i>the</i> most important factor) in today's computers?
+		<ul>
+			<li>CPU speeds are getting faster and faster, while (main) memory speeds
+				are not.</li>
+			<li>A CPU can execute hundreds of instructions while waiting for data from the cache.</li>
+			<li>Retrieving data from main memory is glacially slower yet.</li>
+			<li>The bottleneck in modern computers is main memory.</li>
+		</ul>
+
+</ul>
+
+<a href="http://www.overbyte.com.au/misc/Lesson3/CacheFun.html">Fun with cache</a>
+
+<p>
+<b>Data structures performance comparison</b>
+<p>
+
+<blockquote><pre>
+<font color="#003399"><i>/* 4 million (2<sup>22</sup>) */</i></font>
+<font color="990099">#define SIZE 1024 * 1024 * 4</font>
+
+<font color="#003399"><i>/* All data together */</i></font>
+<b>struct</b> GRAPHICS_DATA
+{
+  <b>int</b> red;
+  <b>int</b> green;
+  <b>int</b> blue;
+  <b>int</b> alpha;
+};
+
+<font color="#003399"><i>/* Array of structs containing all data */</i></font>
+<b>struct</b> GRAPHICS_DATA data[SIZE];
+
+<font color="#003399"><i>/* Colors in separate arrays */</i></font>
+<b>int</b> reds[SIZE];
+<b>int</b> greens[SIZE];
+<b>int</b> blues[SIZE];
+<b>int</b> alphas[SIZE];
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+<font color="990099">#if 1</font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    data[i].red = i % 255;
+<font color="990099">#else</font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    reds[i] = i % 255;
+<font color="990099">#endif</font>
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Timings (your numbers may vary with CPU/memory speed, cache architecture):
+<blockquote><pre>
+Array of structs: 0.033s
+   Array of ints: 0.015s
+</pre></blockquote>
+
+Suppose we added more data to the structure (not uncommon)
+<blockquote><pre>
+<b>struct</b> GRAPHICS_DATA
+{
+  <b>int</b> red;
+  <b>int</b> green;
+  <b>int</b> blue;
+  <b>int</b> alpha;
+  <b>double</b> x, y, z; <font color="#003399"><i>/* add more data */</i></font>
+};
+</pre></blockquote>
+
+Now running it:
+<blockquote><pre>
+Array of structs: 0.064s
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+These times are directly related to memory and cache access times. It demonstrates that,
+if your code requires top performance, you need to understand how your data is structured. You don't just
+want to blindly lump all data together, unless it's absolutely necessary.
+</p>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+  
+-->
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Physical vs. Logical Addresses
+</p>
+
+
+<b>Physical memory</b>
+<ul>
+	<li>Consists of the actual memory (hardware) available and uses <span id=wpurl><a class=wplabel>physical addresses</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Physical_address">physical addresses</a>. </li>
+	<ul>
+		<li>RAM (<span id=wpurl><a class=wplabel>random access memory</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Random_access_memory">random access memory</a>) 
+			chips/packages on <span id=wpurl><a class=wplabel>motherboard</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Motherboard">motherboard</a></li>
+		<li>Device memory</li>
+		<ul>
+			<li><span id=wpurl><a class=wplabel>Video card</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Video_card">Video card</a> memory</li>
+			<li>Audio card (<span id=wpurl><a class=wplabel>sound card</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Sound_card">sound card</a>) memory</li>
+			<li>Other devices (network cards, hard drives, etc.)</li>
+		</ul>
+		<li>Not to be confused with disk storage.</li>
+	</ul>
+	<li>Not necessarily organized contiguously</li>
+	<li>We (users and programmers) almost never deal with physical memory/addresses.</li>
+	<li>We deal with <i>logical memory</i>.</li>
+</ul>
+	
+<b>Logical memory</b>
+<ul>
+	<li>Relabels, or maps, physical memory into <span id=wpurl><a class=wplabel>logical addresses</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Logical_address">logical addresses</a> (also called virtual addresses).</li>
+	<li>Memory addresses generated by the CPU are logical memory addresses.</li>
+	<li>Addresses returned by <b>new</b> and <b>malloc</b> are logical memory addresses.</li>
+	<li>Logical memory must be translated (mapped) into physical memory to be used.</li>
+	<ul>
+		<li>This translation is done by the hardware for <i>every</i> memory access.</li>
+	</ul>
+</ul>
+
+<b>Address binding</b>
+
+<ul>
+	<li>Variables and functions (including main) within a program are ultimately represented by addresses in memory.</li>
+	<li>The compiler/linker must assign logical addresses to the variables and functions.</li>
+	<li>These logical addresses must be mapped (bound) to physical memory, at some point.</li>
+	<p>
+	<li><b>Compile time binding</b></li>
+	<ul>
+		<li>Absolute code can be generated (the addresses are fixed and known in advance).</li>
+		<li>Actual physical memory addresses are used</li>
+		<ul>
+			<li>(physical address) = (logical address)</li>
+		</ul>
+		<li>The program must always be loaded at the same address in physical memory.</li>
+		<ul>
+			<li>DOS .COM programs worked this way (always loaded the program at address 0x100).</li>
+		</ul>
+		<li>Okay for single-task operating systems.</li>
+		<li>Unsuitable for multitasking operating systems.</li>
+	
+<p>
+
+	</ul>
+	<li><b>Load time binding</b></li>
+	<ul>
+		<li>Addresses are relative (offset) to some base address in physical memory.</li>
+		<li>(physical address) = (base) + (offset)</li>
+		<li>Programs can be loaded anywhere in physical memory. (Relocatable code)</li>
+		<li>Once the program is loaded, the addresses are assigned and will remain the same for the rest of the execution.</li>
+		<li>Program can only be loaded if there is a contiguous block of free memory available large enough to hold the program and data.</li>
+	</ul>
+	<p>
+	<li><b>Execution time binding</b></li>
+	<ul>
+		<li>The physical address is computed (from the logical address) in hardware at runtime by the 
+			<span id=wpurl><a class=wplabel>memory management unit</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Memory_management_unit">memory management unit</a> (MMU).</li>
+		<ul>
+			<li>(logical address) <big>&rarr;</big> (physical address)</li>
+			<li>The mapping is not necessarily linear (details will be given later).</li>
+		</ul>
+		<li>Program may be relocated during execution (even after it is loaded).</li>
+		<li>Program does not require contiguous physical memory.</li>
+		<li>It is the most flexible and is used by most modern operating systems today.</li>
+	<p>
+
+	<li>Recall <a href="Single-Multi-task-OS.html#MULTIPLE_TASKS">this program</a> that demonstrated where data was laid out in memory.</li>
+		<li>Or this simple example:</li>
+		<p>		
+			<table border=1 cellpadding=10 cellspacing=0>
+			<tr valign="top"><td>
+			<pre><font color="#003399"><i>/* address.c */</i></font>
+<b>#include</b> &lt;stdio.h&gt;
+
+<b>int</b> global = 5;
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> local = 10;
+  <b>static</b> <b>int</b> st = 20;
+  
+  printf(<font color="#9933CC">&quot;address of global is %p, value is %i&#92;n&quot;</font>, (<b>void</b>*)&amp;global, global);
+  printf(<font color="#9933CC">&quot;address of local is %p, value is %i&#92;n&quot;</font>, (<b>void</b>*)&amp;local, local);
+  printf(<font color="#9933CC">&quot;address of static is %p, value is %i&#92;n&quot;</font>, (<b>void</b>*)&amp;st, st);
+  
+  getchar(); <font color="#003399"><i>/* poor man's pause */</i></font>
+  
+  <b>return</b> 0;
+}</pre></td>
+</tr></table>
+<p>
+	
+<b>Output:</b>
+
+			<table border=0 cellpadding=10 cellspacing=0>
+			<tr valign="top">
+			<th>3 instances running on Windows XP (32-bit)</th><th></th><th>3 instances running on Linux (64-bit)</th></tr>
+				<tr valign="top">
+<td>
+<pre>
+address of global is 0040D000, value is 5
+address of local is 0012FF74, value is 10
+address of static is 0040D004, value is 20
+
+address of global is 0040D000, value is 5
+address of local is 0012FF74, value is 10
+address of static is 0040D004, value is 20
+
+address of global is 0040D000, value is 5
+address of local is 0012FF74, value is 10
+address of static is 0040D004, value is 20
+</pre></td>
+<td width=10></td>
+<td><pre>
+address of global is 0x601028, value is 5
+address of local is 0x7fff039dd77c, value is 10
+address of static is 0x60102c, value is 20
+
+address of global is 0x601028, value is 5
+address of local is 0x7fff8cdabdfc, value is 10
+address of static is 0x60102c, value is 20
+
+address of global is 0x601028, value is 5
+address of local is 0x7fffb193203c, value is 10
+address of static is 0x60102c, value is 20
+</pre></td>
+</tr></table>
+
+<li>How can this be? It appears that all 3 processes are using the same memory.</li>
+<li>Notice the address of the stack in the Linux output.
+<ul>
+<li>Linux is employing Address Space Layout Randomization or 
+	
+<span id=wpurl><a class=wplabel>ASLR</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Address_space_layout_randomization">ASLR</a>,
+which was created by the Linux 
+<span id=wpurl><a class=wplabel>PaX</a></span><a class=wplink href="https://en.wikipedia.org/wiki/PaX">Pax</a>
+
+
+
+project in 2001 to help prevent security exploits.</li>
+<li>Windows 7 (2009) and later employ it as well. (The output above left is from Windows XP.)</li>
+<li>Mac OS X since version 10.5 (2007) has had some version of it. iOS since version 4.3 (~2011) also has it.</li>
+<li>Android has had it since version 4.0 (2011).</li>
+</ul>
+
+<p>
+			<table border=0 cellpadding=10 cellspacing=0>
+			<tr valign="top">
+			<th>3 instances running on Windows 7 (64-bit)</th>
+			<th>3 instances running on Windows 10 (64-bit)</th>
+		  </tr>
+				<tr valign="top">
+<td>
+<pre>
+address of global is 000000013FCF5000, value is 5
+address of local is 000000000017F9E0, value is 10
+address of static is 000000013FCF5004, value is 20
+
+address of global is 000000013F175000, value is 5
+address of local is 00000000001AFA80, value is 10
+address of static is 000000013F175004, value is 20
+
+address of global is 000000013F685000, value is 5
+address of local is 00000000002AF7C0, value is 10
+address of static is 000000013F685004, value is 20
+</pre></td>
+
+<td>
+<pre>
+address of global is 00007FF663715000, value is 5
+address of local is 000000F5E930F8D0, value is 10
+address of static is 00007FF663715004, value is 20
+
+address of global is 00007FF6DD465000, value is 5
+address of local is 0000009B2CB4FE80, value is 10
+address of static is 00007FF6DD465004, value is 20
+
+address of global is 00007FF6AA0C5000, value is 5
+address of local is 00000041A52FFAC0, value is 10
+address of static is 00007FF6AA0C5004, value is 20
+</pre></td>
+
+</tr></table>
+
+Windows 7/10 is randomizing global/static as well as the stack.
+
+
+
+</ul>
+
+</ul>
+	
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="DYNAMIC_LOADING">
+<p class="sectionheader">
+Dynamic Loading
+</p>
+</a>
+
+<ul>
+	<li>Don't need to load the entire program into memory.</li>
+	<li>On-demand loading of routines is more efficient when most routines won't be used.</li>
+	<li>Programmer's (tools) responsibility not the OS.</li>
+	<ul>
+		<li>Programmers still have to layout their programs to take advantage. (Minimize inter-dependencies)</li>
+	</ul>
+	<li>Sometimes this was the only solution when computers had limited memory.</li>
+	<ul>
+		<li>Still used with systems with small amounts of memory (e.g. embedded systems).</li>
+	</ul>
+</ul>
+	
+<b>Libraries</b>
+
+<ul>
+	<li>A library is a collection of compiled functions, usually in the form of a single binary file.</li>
+	<ul>
+		<li>Standard C and C++ libraries (<span id=wpurl><a class=wplabel>glibc</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Glibc">glibc</a>, 
+			<span id=wpurl><a class=wplabel>msvcrt</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Microsoft_Windows_library_files">msvcrt</a>, etc.)</li>
+		<li>Win32 API libraries</li>
+		<ul>
+			<li>e.g. user32.lib, gdi32.lib, kernel32.lib, etc.</li>
+		</ul>
+		<li>User created libraries</li>
+	</ul>
+	<li>Two basic types of libraries</li>
+	<ul>
+		<li><span id=wpurl><a class=wplabel>Statically linked</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Static_linking">Statically linked</a></li>
+		<li><span id=wpurl><a class=wplabel>Dynamically linked</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Shared_library#Shared_libraries">Dynamically linked</a></li>
+	</ul>
+</ul>
+
+<b>Statically linked library</b>
+<ul>
+	<li>The compiler generates a <span id=wpurl><a class=wplabel>machine code</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Machine_code">machine code</a> image from the user's code, 
+		an <span id=wpurl><a class=wplabel>object file</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Object_code">object file</a>.</li>
+	<ul>
+		<li>usually a <tt>.obj</tt> file extension under MS windows (Microsoft compilers).</li>
+		<li>usually a <tt>.o</tt> file extension under Linux/Mac (GNU/Clang compilers).</li>
+	</ul>
+	<li>The linker obtains the library functions used in the user's code from the library file and links them with the object file to produce an executable file.</li>
+	<li>Two different executables that use the same library function will each have their own copy of the function.</li>
+	<ul>
+		<li>If they are running at the same time, there will be <b>two copies</b> of the function in memory.</li>
+	</ul>
+</ul>
+
+<b>Dynamically linked library (<span id=wpurl><a class=wplabel>DLL</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Dynamic-link_library">DLL</a>) and 
+	<span id=wpurl><a class=wplabel>shared objects</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Shared_object#Shared_libraries">shared objects</a></b>
+<ul>
+	<li>The compiler generates an object file from the user's code.</li>
+	<li>The linker replaces each library function call with a stub function (a function which will locate the function code at runtime), and generates an executable.</li>
+	<li>A library function is loaded into memory only when the stub function is called.</li>
+	<li>Two different executables (processes) will use the same library function code: there is only one copy of the function in memory at runtime.</li>
+	<ul>
+		<li>If they are running at the same time, there will be only <b>one copy</b> of the function in memory.</li>
+	</ul>
+	<li>Example: Creating a dynamic link library and shared-object library from this code:
+		(<tt>hello.c</tt>)
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>void</b> printme(<b>const</b> <b>char</b> *str)
+{
+  printf(<font color="#9933CC">&quot;Hello from library: %s\n&quot;</font>, str);
+}
+
+<b>int</b> add(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a + b;
+}
+</code></pre>		
+
+<p>
+This can easily be statically linked with <tt>main1.c</tt>
+<p>
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>void</b> printme(<b>const</b> <b>char</b> *str);
+<b>int</b> add(<b>int</b> a, <b>int</b> b);
+
+<b>int</b> main(<b>void</b>)
+{
+  printme(<font color="#9933CC">&quot;This function is statically linked.&quot;</font>);
+  printf(<font color="#9933CC">&quot;The sum of 5 and 10 is %i.&#92;n&quot;</font>, add(5, 10));
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<blockquote><pre>
+gcc main1.c hello.c -o hello-static
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+Hello from library: This function is statically linked.
+The sum of 5 and 10 is 15.
+</pre></blockquote>
+
+	<li>Dynamically linking to the functions from <a href="mem-so-main.c.html">POSIX code</a> (<tt>main.c</tt>). Compile and link:
+<blockquote><pre>
+gcc <a href="http://gcc.gnu.org/onlinedocs/gcc-4.6.3/gcc/Code-Gen-Options.html#index-fPIC-2181">-fPIC</a> -c hello.c -o hello.o
+gcc <a href="http://gcc.gnu.org/onlinedocs/gcc-4.6.3/gcc/Link-Options.html#index-shared-984">-shared</a> hello.o -o libhello.so
+gcc main.c -o main -ldl	
+</pre></blockquote>
+</li>
+	<li>Calling the functions from <a href="mem-dll-wmain.c.html">Windows code</a> (<tt>wmain.c</tt>). Compile and link:
+
+<blockquote><pre>
+cl /c hello.c /Fohello.obj
+link /dll hello.obj /out:hello.dll
+</pre></blockquote>
+
+May need the entire path to the linker (if GCC's linker is in the path first). For example:
+<blockquote><pre>
+"C:\Program Files\Microsoft Visual Studio 10.0\vc\bin\link" /dll hello.obj /out:hello.dll
+</pre></blockquote>
+
+Then, create the executable that will use the DLL:
+<blockquote><pre>
+cl wmain.c /Fewmain.exe
+</pre></blockquote>
+
+And run it. It should fail.
+<p>
+
+The <a href="http://msdn.microsoft.com/en-us/library/d91k01sh.aspx">module definition file</a> is a simple text file that looks like this:
+<blockquote><pre>
+EXPORTS
+  printme
+  add
+</pre></blockquote>
+
+And this is the link command:
+<blockquote><pre>
+link /dll <b>/def:hello.def</b> hello.obj /out:hello.dll
+</pre></blockquote>
+
+</li>
+
+<li><a href="http://www.dependencywalker.com/">Dependency Walker</a> This Windows program allows
+	you to peer inside of DLLs to see all kinds of interesting information. It used to be included
+	with Visual Studio, but I don't think it is any longer. It's pretty old and doesn't work
+	well with Windows 10 (what does?), so you may want to try this:
+	<a href="https://github.com/lucasg/Dependencies">Dependencies</a>, which is a 
+	replacement for it. Related information:
+	<a href="https://en.wikipedia.org/wiki/DLL_Hell">DLL Hell</a>.
+
+</li>
+<p>
+
+<li>Calling the functions from <a href="mem-so-main.d.html">D code</a></li>
+<p>
+<li>Calling the functions from <a href="mem-so-main.python.html">Python code</a></li>
+<p>
+<li>Calling the functions from <a href="mem-so-main.freepascal.html">Free Pascal code</a></li>
+<p>
+<li>Calling the functions from <a href="mem-so-main.perl.html">Perl code</a></li>
+
+</ul>	
+
+Some details from one of the devs that created the ELF (Executable and Linkable Format or Extensible Linking Format)
+file format. The articles were written for 
+The Linux Journal in 1995, but they're still very relevant today. 
+<ul>
+<li><a href="http://www.linuxjournal.com/article/1059">The ELF Object File Format: Introduction</a></li>
+<li><a href="http://www.linuxjournal.com/article/1060">The ELF Object File Format by Dissection</a></li>
+<li><a href="https://www.youtube.com/watch?v=JPQWQfDhICA">Everything You Ever Wanted to Know about DLLs</a>
+  This is from CppCon 2017. It gives you all of the gory details about DLLs. The talk is very informative
+  and moves pretty quickly (which I like, so I don't get bored) but is far beyond the scope for
+  CS 180. Great information for those that need to know what's really going on with Windows' DLLs.</li>
+</ul>
+
+<p class="technote"><b>Note:</b>
+The C programming language has been around for a long time and is still one of the most
+popular languages of all time. Though some consider it antiquated, it is unlikely it will
+cease to exist any time soon. DLLs and shared objects are used everywhere and need to have
+a C interface. Almost every program, regardless of the programming language used,
+ on all major platforms (Windows, Linux, Mac OS, Android,
+iOS) use these libraries, even though the programmers may not even be aware of it.
+</p>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Stack and Heap
+</p>
+
+
+<ul>
+	<li>A process has two areas of memory to use for program needs</li>
+	<ul>
+		<li><span id=wpurl><a class=wplabel>Stack</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Stack-based_memory_allocation">Stack</a></li>
+		<ul>
+			<li>Function calls: passed arguments and return address</li>
+			<li>Local and temporary variables</li>
+			<li><span id=wpurl><a class=wplabel>Call stack</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Call_stack">Call stack</a> and 
+				<span id=wpurl><a class=wplabel>stack frame</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Stack_frame#Structure">stack frame</a>.</li>
+		</ul>
+		<li><span id=wpurl><a class=wplabel>Heap</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Dynamic_memory_allocation">Heap</a></li>
+		<ul>
+			<li>Dynamically allocated memory</li>
+		</ul>
+	<li>The stack grows from top down, the heap grows from bottom up (although this is just a conventional way).</li>
+	<li>Enough memory must be allocated to the stack and heap to avoid a collision.</li>
+	<li>The stack is generally much smaller than the heap and is allocated by the linker. (About 1 MB with Microsoft's linker, 8 MB for GNU, but these values can be changed.)</li>
+	<li>Simple example:</li>
+	<blockquote><pre>
+<b>float</b> *foo(<b>int</b> count)		
+{
+  <b>int</b> i;
+  <b>float</b> *array = malloc(count * <b>sizeof</b>(<b>float</b>));
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+    array[i] = sqrt((<b>float</b>)i);
+
+  <b>return</b> array;
+}
+</pre></blockquote>
+		<li>variables <i>i</i>, <i>array</i>, and <i>count</i> are allocated on the stack. (<i>count</i> and <i>i</i> could be in a register)</li>
+		<li>memory pointed to by <i>array</i> is allocated on the heap.</li>
+		<li>argument to <i>sqrt</i> is passed on the stack (could be in a register instead).</li>
+		<li>the return address from <i>sqrt</i> is passed on the stack.</li>
+		<li>the return value from <i>foo</i> is passed on the stack (could be in a register instead).</li>
+		<li>What about the address of <i>sqrt</i>? Where is the <i>sqrt</i> function? Refer to <a href="Single-Multi-task-OS.html#MULTIPLE_TASKS">this</a>.</li>
+		<!-- it's in the text or code segment -->
+	</ul>
+</ul>	
+
+<b>Implementing a heap using a linked list</b>
+<ul>
+	<li>The heap is allocated as a single contiguous chunk of memory</li>
+	<li>To keep track of allocated and unallocated blocks within the heap, we maintain a list that stores the following information about each block</li>
+	<ul>
+		<li>Allocation flag: 0 if unallocated, 1 if allocated</li>
+		<li>Address: beginning address of the block</li>
+		<li>Size: number of bytes in the block</li>
+	</ul>
+	<li>List items are ordered by start address</li>
+	<ul>
+		<li>An alternate scheme is to order the blocks by size.</li>
+	</ul>
+	<li>To allocate a block of memory of <i>size</i> bytes:</li>
+	<ol>
+		<li>Search list for available hole (unallocated block) that is at least <i>size</i> bytes long (see later)</li>
+		<li>Remove the item from the list and replace it with two list items:</li>
+		<ul>
+			<li>First item represents an allocated block of <i>size</i> bytes, with same start address as original block</li>
+			<li>Second item represents an unallocated block (hole) for the remaining unused bytes of the original block</li>
+		</ul>
+	</ol>
+	<li>Return:</li>
+	<ul>
+		<li>NULL pointer, if no block found in list</li>
+		<li>Start address of allocated block, if block is found in list</li>
+	</ul>
+	<li>To deallocate (free) a block:</li>
+	<ol>
+		<li>Search for item in the list whose start address is the specified address</li>
+		<li>Mark item as unallocated</li>
+		<li>Consolidate adjacent unallocated memory into a single unallocated block</li>
+		<ul>
+			<li>Merge with the preceding memory block if it is currently unallocated</li>
+			<li>Merge with the succeeding memory block if it is currently unallocated</li>
+		</ul>
+	</ol>
+	<p>
+	<li><a href="MemoryManagerDiagrams.html">Diagrams and details</a></li>
+</ul>
+
+
+<b>Strategies for handling memory requests</b>
+<ul>
+	<li>It's possible that we have many different sized blocks on our list</li>
+	<li>When allocating a block of <i>size</i> bytes, we may have a choice among various unallocated blocks of size at least <i>size</i> bytes</li>
+	<li><b>First fit</b> - choose the first available hole</li>
+	<ul>
+		<li>Fast.</li>
+		<li>May lead to fragmentation.</li>
+	</ul>
+	<li><b>Best fit</b> - choose the smallest hole</li>
+	<ul>
+		<li>Produces smallest remaining hole.</li>
+		<li>Entire list must be searched.</li>
+	</ul>
+	<li><b>Worst fit</b> - choose the largest hole</li>
+	<ul>
+		<li>Produces the largest remaining hole.</li>
+		<li>Entire list must be searched.</li>
+	</ul>
+	<li><b>Next fit</b> - like first fit but starts where last search left off.</li>
+  <ul>
+    <li>Likely to find an available block more quickly.</li>
+  </ul>
+  <li><b>Quick fit</b> - uses multiple lists</li>
+  <ul>
+    <li>Each list contains blocks of the same size.</li>
+    <li>No need to search for a fit.</li>
+  </ul>
+	<!--
+	<li><b>Quick-fit</b> - maintains separate lists for some of the more common sizes requested.</li>
+	<ul>
+		<li>It is maintained by having an array of pointers to the head of each list.</li>
+		<li>Quick fit is fast</li>
+		<li>However, this strategy requires lists to be sorted by size</li>
+	</ul>
+	-->
+</ul>
+
+<b><span id=wpurl><a class=wplabel>Fragmentation</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Fragmentation_(computer)">Fragmentation</a></b>
+<ul>
+	<li>Two types of fragmentation: External and internal</li>
+	<li><span id=wpurl><a class=wplabel>External fragmentation</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Fragmentation_(computer)#External_fragmentation">External fragmentation</a></li>
+	<ul>
+		<li>The heap is said to have external fragmentation if there are many small holes between allocated blocks.</li>
+		<li>A hole may be smaller than the list item that represents it.</li>
+		<li>A fragmented heap may be compacted:</li>
+		<ul>
+			<li>Move allocated blocks to remove holes.</li>
+			<li>Not always practical, since it is a time consuming process.</li>
+			<ul>
+				<li>Languages with <i>raw</i> pointers, like C/C++, can't do this (easily).</li>
+			</ul>
+			<li>Also known as <span id=wpurl><a class=wplabel>garbage collection</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">garbage collection</a>.</li> 
+			<li><a href="Pointers-Handles.pdf">Pointers vs. Handles</a> for compacting memory.</li>
+		</ul>
+	</ul>
+	<li><span id=wpurl><a class=wplabel>Internal fragmentation</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Fragmentation_(computer)#Internal_fragmentation">Internal fragmentation</a></li>
+	<ul>
+		<li>Happens when we try to avoid many very small blocks.</li>
+		<li>Instead of tracking many very small and almost useless blocks, we allow blocks to have some "wasted" space.</li>
+		<li>Fixed-size blocks can lead to internal fragmentation.</li>
+		<li>This is generally a trade off: faster memory allocation and deallocation at the cost of a small amount of memory.</li>
+	</ul>
+</ul>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Paging
+</p>
+
+<ul>
+	<li>Allows contiguous logical memory to be mapped to noncontiguous physical memory</li>
+	<li>Avoids the problem of finding a block of physical memory large enough to hold a process</li>
+	<!--<li>Avoids (although not completely) memory fragmentation</li>-->
+	<li>Requires hardware support in order to implement</li>
+</ul>
+
+<blockquote>
+<p>
+<img src="VirtualMem-3.jpg">
+<p>
+</blockquote>
+
+
+<b><span id=wpurl><a class=wplabel>Page tables</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Page_table">Page tables</a></b>
+<ul>
+	<li>Memory is divided up into blocks of equal size (usually a power of 2)</li>
+	<ul>
+		<li><b>Page</b> - block of logical memory</li>
+		<li><b>Frame</b> - block of physical memory of the same size</li>
+		<li>Pages are generally 4 KB (4096 bytes) in size</li>
+		<ul>
+			<li>Some systems support larger page sizes (e.g. 1 MB or 4 MB)
+
+
+				using <span id=wpurl><a class=wplabel>page size extension (PSE)</a></span><a class=wplink href="https://en.wikipedia.org/wiki/Page_Size_Extension">page size extension (PSE)</a></li>
+			<li>Like everything else, there are trade-offs such as needing many more smaller pages for an allocation
+				or having internal fragmentation with larger pages.</li>
+		</ul>
+	</ul>
+	
+	<li>A logical memory location has a <i>page number</i> P and a <i>page offset</i> O within that page</li>
+	<ul>
+		<li>Generally, the first few bits of the address are used as a page number.</li>
+		<li>The rest of the bits are the offset.</li>
+	</ul>
+	<li>The offset may also be referred to as the <i>displacement</i>.</li>
+	<li>The page number is used as an index into a page table which contains base address of each page in physical memory.</li>
+	<li>The page offest is combined with base address to define the physical memory address that is sent to the memory unit.</li>
+
+	<ul>
+		<li>(logical address) <big>&rarr;</big> (P,O)</li>
+		<li>Example: logical address 1234 has page number 1 and offset 234</li>
+		<ul>
+			<li>This means that we look in the page table at index 1 to find the start address (frame) and add 234 to that address.</li>
+		</ul>
+		<li>Example: logical address 7A64 has page number 7 and offset A64</li>
+		<ul>
+			<li>This means that we look in the page table at index 7 to find the start address (frame) and add A64 to that address.</li>
+		</ul>
+		<li>Example: logical address 0100 has page number 0 and offset 100</li>
+		<ul>
+			<li>This means that we look in the page table at index 0 to find the start address (frame) and add 100 to that address.</li>
+		</ul>
+
+	<!--<li>The page number is used as an index into a page table, which gives the address F of the corresponding frame in physical memory: <tt>P <big>&rarr;</big> F</tt></li>
+	<li>The physical memory address is computed by adding the page offset to the frame address</li>
+	<li>(logical address) <big>&rarr;</big> (physical address)</li>
+	<li>(physical address) = F + O</li>
+-->
+	<li>For example, a system with 4KB pages (typical) will use only 12 bits for the offset. (2<sup>12</sup> is 4096)</li>
+	<ul>
+		<li>A 32-bit system could have 20 bits for the page number, for a maximum of 2<sup>20</sup> (1,048,576) pages.</li>
+		<li>That's where the magical 4GB limit comes from with 32-bit computers. (4,096 * 1,048,576 = 4GB)</li>
+	</ul>
+</ul>
+<p>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="PageTable-5.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+<br>
+
+The diagram below may represent a 16K array of characters (four 4096-byte pages).
+From the programmer's view, it's contiguous, but physically it may not be.
+<p>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="PageTable-1.jpg"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+<br>
+
+Another view:	
+	
+<p>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="PageTable-4.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+<p>
+
+
+	<li>More page table examples:</li>
+	<ul>
+		<li>Suppose the page size is 4kb = 1000h</li>
+		<li>Assume logical memory starts at address 0</li>
+		<ul>
+			<li>Page 0 contains: <tt>0000h &mdash; 0FFFh</tt></li>
+			<li>Page 1 contains: <tt>1000h &mdash; 1FFFh</tt></li>
+			<li>Page 2 contains: <tt>2000h &mdash; 2FFFh</tt></li>
+			<li>. . .</li>
+		</ul>
+		<li>Suppose the page table is</li>
+<blockquote><pre>
+0 | 1234h
+1 | 0234h
+2 | 8234h
+3 | 4234h	
+</pre></blockquote>
+
+	<li>For (logical address) = 1056h</li>
+	<ul>
+		<li>Page number: P = 1 (index 1 in the page table)</li>
+		<li>Page offset: O = 056h</li>
+		<li>From the page table at index 1, P <big>&rarr;</big> 0234h</li>
+		<li>The physical address of 1056h is then</li>
+		<ul>
+			<li>(physical address) = 0234h + O</li>
+			<li><tt>= 0234h + 056h = 028Ah</tt></li>
+		</ul>
+	</ul>
+	<li>For (logical address) = 317Bh</li>
+	<ul>
+	<li>P = 3, O = 17Bh</li>
+		<li>From the page table at index 3, P <big>&rarr;</big> 4234h</li>
+		<li>Physical address is: <tt>4234h + 17Bh = 43AFh</tt></li>
+	</ul>
+
+	<li>There is overhead incurred by paging</li>
+	<ul>
+		<li>The page table (possibly large) of a process must be stored in the PCB (process control block) of the process.</li>
+		<li>Each logical address must be converted to a physical address (helped by hardware support).</li>
+		<li>A <span id=wpurl><a class=wplabel>translation look-aside buffer</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation look-aside buffer</a>
+			(TLB) is used to speed up the mapping. (It's basically a cache for the page table.)</li>			 
+			<ul>
+				<li>May have multiple levels (like cache).</li>
+				<li>Contains a few dozen to a few thousand entries.</li>
+				<li>Could have separate TLBs for data and instructions. (DTLB and ITLB)</li>
+				<li>Hit times of about 1 cycle, miss times from 10 to 100 cycles.</li>
+				<li>Hit rate is generally greater than 99%.</li>
+				<li>Context switching can be expensive (may flush the TLB).</li>
+				<li>Could fail:</li>
+				<ul>
+					<li>The memory location is invalid (outside of the proceses' address space).</li>
+					<li>The memory location is valid, but the physical frame is not resident in memory.</li>
+				</ul>
+			</ul>
+
+	</ul>
+</ul>
+
+</ul>
+<b>Shared pages</b>
+<ul>
+	<li>It is possible for processes to share pages.</li>
+	<ul>
+		<li>Code pages (dynamic link libraries, shared objects)</li>
+	</ul>
+	<li>This is not the same as shared memory we discussed during IPC (i.e. <tt><b>shmget</b></tt>).</li>
+	<ul>
+		<li>IPC shared memory is mainly for shared data, not code.</li>
+	</ul>
+	<li>Multiple instances of a program can share the code (not the data).</li>
+		<ul>
+			<li>E.g. There may be only one copy of the <tt>printf</tt> function in memory that is
+			used by all running processes.</li>
+		</ul>
+</ul>
+
+</ul>
+<b>Protection</b>
+<ul>
+	<li>Pages can be tagged with special bits:</li>
+	<ul>
+		<li>Read-only (e.g. code or const data)</li>
+		<li>Read-write (e.g. non-const data)</li>
+		<li>Execute or no execute (e.g. code)</li>
+		<li>Invalid (not in physical memory)</li>
+	</ul>
+	<li>Illegal use of memory can be easily detected.</li>
+</ul>
+
+<b>Swapping</b>
+<ul>
+	<li>If a process is not active, its state may be copied from memory to disk (disk swapping).</li>
+	<li>The swap area on the disk is special because it needs high-performance.</li>
+	<li>32-bit and 64-bit Windows (before Windows 8) has one or more files called 
+<span id=wpurl><a class=wplabel>pagefile.sys</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Paging#Windows_NT"><tt>pagefile.sys</tt></a>		
+		 where it stores processes. (Backing store)</li>
+<ul>
+	<li>Windows 8 and 10 also have a swapfile.sys, as well.
+		Some information <a href="http://helpdeskgeek.com/windows-8/hdg-explains-swapfile-sys-hiberfil-sys-and-pagefile-sys-in-windows-8/">here</a>.</li>
+</ul>
+<!--
+Windows 8 and 10 also have swapfile.sys as well
+-->
+	<li>Linux (or a Unix-like system) uses a 
+<span id=wpurl><a class=wplabel>swap partition</a></span><a class=wplink href="https://en.wikipedia.org/wiki/Paging#Swap_files_and_partitions">swap partition</a>		
+		
+		(or file) to manage the processes.</li>
+</ul>
+<!--
+<b>Paging and heaps</b>
+<ul>
+	<li>We may use the paging mechanism to implement a heap for dynamic memory allocation</li>
+	<li>In logical space, an array is allocated as a contiguous block of memory</li>
+	<ul>
+		<li>The memory may span multiple pages</li>
+	</ul>
+	<li>In physical space, the array spans multiple frames</li>
+	<li>A modified page table is used</li>
+	<ul>
+		<li>The page number is used to index into the table</li>
+		<li>At a given index, two pieces of information are stored</li>
+		<ul>
+			<li>Start address of a frame of physical memory</li>
+			<li>A flag, indicating whether or not a page/frame is currently in use</li>
+			<li>(page #)<big>&rarr;</big> [(frame start addr), (used flag)]</li>
+		</ul>
+	</ul>
+	<li>To allocate an array</li>
+	<ul>
+		<li>Compute the number of pages needed</li>
+		<li>Search the (modified) page table for that many pages/frames currently not in use</li>
+	</ul>
+	<li>This method of implementing a heap eliminates external fragmentation</li>
+	<li>However, internal fragmentation may occur</li>
+	<ul>
+		<li>Suppose that the requested array is N bytes</li>
+		<li>Suppose that the array fits into m pages</li>
+		<li>It may happen that</li>
+		<li>d := m * (page size) &mdash; N > 0</li>
+		<li>There are d bytes that are not used</li>
+	</ul>
+</ul>
+-->
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Virtual Memory
+</p>
+
+Virtual memory allows us to pretend that we have (almost) unlimited amounts of memory.
+<p>
+<b>Virtual memory space</b>
+<ul>
+	<li>We allow the logical memory size to exceed  physical memory size.</li>
+	<li>Pages and frames are added to the page table as needed.</li>
+	<li>When physical memory has been exceeded, frames are written (temporarily) to the hard disk to free up physical memory.</li>
+	<li><i>Swap space</i> is used for writing frames: a contiguous block of disk space set aside for this purpose.</li>
+</ul>
+
+
+<b>Freeing physical memory</b>
+<ul>
+	<li><b>Swapping</b> &mdash; an entire process (including data, stack, and code segments) is removed from physical memory and written to disk.</li>
+	<ul>
+		<li>Frees up several frames of physical memory.</li>
+	</ul>
+	<li><b>Paging</b> &mdash; a frame of physical memory is written to disk.</li>
+	<ul>
+		<li>Frees up a single frame of physical memory</li>
+		<li>Several contiguous frames may be written to disk at one time</li>
+	</ul>
+	<li>Swapping and paging are expensive (in terms of time), so should be minimized.</li>
+	<ul>
+		<li>Too much swapping/paging leads to <span id=wpurl><a class=wplabel>thrashing</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Thrashing_%28computer_science%29">thrashing</a>.</li>
+	</ul>
+</ul>
+
+	
+<b>Demand paging</b>
+<ul>
+	<li>Also called <i>lazy swapping</i>.</li>
+	<li>A page in virtual memory is given a physical frame only when memory within that page is accessed.</li>
+	<li>Each entry in the page table contains a bit (flag) to mark the page.</li>
+	<ul>
+		<li>Valid &mdash; the logical page has been assigned a physical frame.</li>
+		<li>Invalid &mdash; the logical page has not been assigned a physical frame.</li>
+	</ul>
+	<li>When a location in logical memory is accessed, the valid/invalid bit of corresponding page is examined.</li>
+	<ul>
+		<li>If the page is valid, process execution continues as normal.</li>
+		<li>If the page is invalid, a <span id=wpurl><a class=wplabel>page fault</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Page_fault">page fault</a> occurs.</li>
+		<ul>
+			<li>The OS finds a free frame in physical memory.</li>
+			<li>The desired page is read into the new frame.</li>
+			<li>The page table is updated with the new page information, and valid/invalid bit is set to valid.</li>
+			<li>Process execution is resumed.</li>
+		</ul>
+	</ul>
+	<li>Demand paging can boost performance when starting a program.</li>
+	<ul>
+		<li>Only the first page that contains the first instruction needs to be loaded.</li>
+		<li>As the code is executed, more pages will be brought in.</li>
+		<li>No need to bring in the entire program to begin execution.</li>
+		<li>As long as the page-fault rate is reasonably low, performance is acceptable.</li>
+		<li>Because of the likelyhood of locality of reference of programs, the worst-case
+			(every instruction causes a page fault) is very rare.</li> 
+	</ul>
+</ul>
+	
+<b>Copy-on-write (COW)</b>
+<ul>
+	<li>Logically, when a process forks another process, each process has its own copy of memory.</li>
+	<ul>
+		<li>The parent and child processes do not share the pages.</li>
+	</ul>
+	<li>With COW, parent-child processes originally share pages (after the fork).</li>
+	<li>Only when one of the processes modifies a page does an actual copy take place.</li>
+	<li>Since many (even most or all) pages are not modified, there is little copying (faster performance).</li>
+	<li>Windows and Linux both use COW to increase performance.</li>
+	<li>Immediately after a <tt>fork</tt> system call: (P<sub>1</sub> is the parent, P<sub>2</sub> is the child)</li>
+	<blockquote>
+	<img src="CopyOnWrite-1.png">
+	</blockquote>	
+	<li>Before P<sub>2</sub> (child) modifies page 1:</li>
+	<blockquote>
+	<img src="CopyOnWrite-2.png">
+	</blockquote>	
+	<li><b>Historical note:</b> The <a href="http://pubs.opengroup.org/onlinepubs/7908799/xsh/vfork.html">vfork</a> system call was invented as an optimization to <tt>fork</tt>.</li>
+	<ul>
+		<li>Useful when the child immediately calls one of the <tt>exec</tt> functions. (No need to duplicate everything.)</li>
+		<ul>
+			<li>The parent process is blocked until the child exits or calls <i>exec</i>.</li>
+		</ul>
+		<li>However, today's implementations of <tt>fork</tt> are quite good. Here are <a href="http://www.unixguide.net/unix/programming/1.1.2.shtml">some caveats</a> to using <tt>vfork</tt> today.</li>
+		<li>This description of <span id=wpurl><a class=wplabel>vfork and page sharing</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Fork_(operating_system)#Vfork">vfork and page sharing</a> is also enlightening.</li>
+		<li>In the end, the copy-on-write semantics of most operating systems (and <tt>fork</tt> implementations) make <tt>vfork</tt> unecessary, yet it's still an interesting approach to the original problem.</li>
+		<li>Bottom line: Don't use <tt>vfork</tt>. (It's usually just an alias to <tt>fork</tt> anyway.)</li>
+	</ul>
+	<p>
+<li>From the man page:
+<p class="technote">
+<b>Historic description</b><br>
+       Under Linux, fork(2) is implemented using copy-on-write pages, so the only penalty incurred by fork(2) is
+       the time and memory required to duplicate the parent's page tables, and to create a unique task structure
+       for  the child.  However, in the bad old days a fork(2) would require making a complete copy of the caller's
+       data space, often needlessly, since usually immediately afterward an exec(3)  is  done.   Thus,  for
+       greater efficiency, BSD introduced the vfork() system call, which did not fully copy the address space of
+       the parent process, but borrowed the parent's memory and thread of control until a call to  execve(2)  or
+       an  exit occurred.  The parent process was suspended while the child was using its resources.  The use of
+       vfork() was tricky: for example, not modifying data in the parent process depended on knowing which variables
+       were held in a register.
+</p>
+
+</ul>
+
+<p>
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="PAGEREPLACE">
+<p class="sectionheader">
+Page replacement
+</p>
+</a>
+
+<ul>
+	<li>When a page fault occurs, but there are no free physical memory frames:</li>
+	<ul>
+		<li>A <b>victim frame</b> must be chosen &mdash; this frame <i>may</i> need to be paged out (written to disk).</li>
+		<li>The page that caused the fault will be assigned to the victim frame and read in from disk.</li>
+		<li>It's possible that an unused frame (least recently used) from the requesting process will be used to satisfy the request
+			rather than "stealing" it from another process.</li>
+	</ul>
+	<li>Optimization: a page that has not been modified since it was first read in (such as a code segment) need not be saved to disk
+		(it is already there, hasn't been modified, and can be paged back in later).</li>
+</ul>
+	
+<b><span id=wpurl><a class=wplabel>Page replacement algorithms</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Page_replacement_algorithm">Page replacement algorithms</a></b>
+<ul>
+	<li><b>FIFO</b> (First-In First-Out) page replacement</li>
+	<ul>
+		<li>This page replacement algorithm chooses the page that has been in physical memory for the longest as the victim frame.</li>
+		<li>Easy to implement using a (FIFO) queue.</li>
+		<li>Often does not yield optimal performance: more than the minimum number of page faults will occur.</li>
+		<ul>
+			<li>All pages are considered of equal importance, which is generally not true. 
+				(Rarely accessed vs. often accessed, high vs. low priority processes.)</li>
+		</ul>
+		<li>Suppose there are 3 frames of physical memory.</li>
+		<li>Suppose we access the following sequence of pages in logical memory:</li>
+		<blockquote><pre>7, 0, 1, 2, 0, 3, 0, 2, 0, 4, 0, 2</pre></blockquote>
+		<li>The queue states are</li>
+		<blockquote><pre>
+7    fault [<font color="red">7</font>    ]
+0    fault [7 <font color="red">0</font>  ]
+1    fault [7 0 <font color="red">1</font>]
+2    fault [0 1 <font color="red">2</font>]
+0     ok   [0 1 2]
+3    fault [1 2 <font color="red">3</font>]
+0    fault [2 3 <font color="red">0</font>]
+2     ok   [2 3 0]
+0     ok   [2 3 0]
+4    fault [3 0 <font color="red">4</font>]
+0     ok   [3 0 4]
+2    fault [0 4 <font color="red">2</font>]
+</pre></blockquote>
+		<li>Total of 8 page faults</li>
+		<li>What if the access pattern was <tt>1 2 3 4 1 2 3 4 1 2 3 4</tt>? (Work it out on your own.)</li>
+		<li>What if there were 4 frames with the original sequence? (Work it out on your own.)</li>
+		<li>Adding more frames does not always result in less page faults 
+			(<span id=wpurl><a class=wplabel>Bélády anomaly</a></span><a class=wplink href="https://en.wikipedia.org/wiki/B%C3%A9l%C3%A1dy%27s_anomaly">B&eacute;l&aacute;dy's anomaly</a>)</li>
+			<ul>
+				<li>To see it, try this pattern <tt>3 	2	1	0	3	2	4	3	2	1 0 4</tt> with 3 frames (9 faults) and then 4 frames (10 faults).</li>
+			</ul>
+			
+	</ul>
+	<p>
+	<li><b>Second chance</b> algorithm (a.k.a. <b>Clock</b>)</li>
+
+
+	<ul>
+		<li>A modification of the FIFO algorithm.</li>
+		<li>Some implementations will distinguish between 
+			<span id=wpurl><a class=wplabel>second chance</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Page_replacement_algorithm#Second-chance">second chance</a>
+			 and <span id=wpurl><a class=wplabel>clock</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Page_replacement_algorithm#Clock">clock</a>, 
+			 but they are logically the same, but the implementations are different (queue vs. circular queue).</li>
+		<li>Each page in memory has a reference bit associated with it.</li>
+		<ul>
+			<li>Whenever a page is referenced (a memory location within the page is accessed), the <b>reference bit</b> is set to 1</li>
+			<ul>
+				<li>If a page is already in memory then no searching is done, as it is at a known location (via the page table) and the reference bit is set.</li>
+				<li>If a page is not in memory and there is no available frame, then a search will occur.</li>
+			</ul>
+
+			<li>During the search as pages are encountered for possible replacement, the value of the reference bit is examined</li>
+			<ul>
+				<li>If it is 0, the page is replaced</li>
+				<li>If it is 1, the bit set to 0, and the next item in the queue is selected in <i>circular queue fashion</i>.</li>
+			</ul>
+			<li>The page replacement policy only kicks in if the page is not present and there aren't any more available frames.</li>
+		</ul>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="clock-algo-1-stallings-1.jpg"></img></td><td width=10></td>
+	<td valign="bottom"><img src="clock-algo-2-stallings-1.jpg"></img></td>
+</tr>
+</table>
+	<span class="attrib">Operating System Internals and Desgin 
+		Principles - 5th Edition William Stallings &copy;2005</span>
+</blockquote>
+
+		
+		
+		<li>3 frames of physical memory (as before)</li>
+		<li>These pages are accessed (as before):</li>
+		<blockquote><pre>7, 0, 1, 2, 0, 3, 0, 2, 0, 4, 0, 2</pre></blockquote>
+		<li>The queue states are <tt>(+ = 1, - = 0)</tt> and the <u>underscore</u> indicates 
+			the position of the "clock hand" after the replacement.</li>
+		<blockquote><pre>
+7    fault [<u><font color="red">7+</font></u>      ]
+0    fault [<u>7+</u> <font color="red">0+</font>   ]
+1    fault [<u>7+</u> 0+ <font color="red">1+</font>]
+2    fault [<font color="red">2+</font> <u>0-</u> 1-]
+0     ok   [2+ <u>0+</u> 1-]
+3    fault [<u>2+</u> 0- <font color="red">3+</font>]
+0     ok   [<u>2+</u> 0+ 3+]
+2     ok   [<u>2+</u> 0+ 3+]
+0     ok   [<u>2+</u> 0+ 3+]
+4    fault [<font color="red">4+</font> <u>0-</u> 3-]
+0     ok   [4+ <u>0+</u> 3-]
+2    fault [<u>4+</u> 0- <font color="red">2+</font>]
+</pre></blockquote>
+
+<!--
+	Old version, not using clock algorithm had 7 faults, always started searching from front of the queue
+-->
+<!--
+<blockquote><pre>
+7    fault [7+      ]
+0    fault [7+ 0+   ]
+1    fault [7+ 0+ 1+]
+2    fault [2+ 0- 1-]
+0     ok   [2+ 0+ 1-]
+3    fault [2- 0- 3+]
+0     ok   [2- 0+ 3+]
+2     ok   [2+ 0+ 3+]
+0     ok   [2+ 0+ 3+]
+4    fault [4+ 0- 3-]
+0     ok   [4+ 0+ 3-]
+2    fault [4- 0- 2+]
+</pre></blockquote>
+-->
+
+
+<!--
+The queue states are (+ = 1, - = 0):
+fault, [7+], fault, [7+,0+], fault,
+[7+,0+,1+], fault, [0-,1-,2+], [0+,1-,2+],
+fault, [2+,0-,3+], [2+,0+,3+], fault,
+[0-,3-,4+], [0+,3-,4+], fault, [4+,0-,2+]
+-->
+		<li>Total of 7 page faults</li>
+		<li>What if there were 4 frames? (Work it out on your own.)</li>
+		<li>There is a simple optimization that can be added to the algorithm with only
+			one additional bit: a <i>dirty</i> bit.</li>
+			<ul>
+				<li>A dirty bit just indicates that the page has been modified.</li>
+				<li>Pages that have been modified will be required to be written back to
+					the disk. This means another I/O operation.</li>
+				<li>Non-dirty pages (i.e. unmodified pages) don't have to be written back
+					to disk so it will be faster to replace those pages.</li>
+				<li>Using 2 bits (accessed and modified) can improve overall performance during
+					the page replacement operation.</li>
+			</ul>
+	</ul>
+	<p>
+	<li><span id=wpurl><a class=wplabel><b>LRU</b></a></span><a class=wplink href="http://en.wikipedia.org/wiki/Page_replacement_algorithm#Least_recently_used"><b>LRU</b></a> 
+		(Least Recently Used) algorithm</li>
+	
+	<ul>
+		<li>The page that has not been used for the longest period of time is selected as victim frame.</li>
+		<li>Implemented in one of two ways:</li>
+		<ul>
+			<li>Time stamp is used - whenever a page is referenced, it is marked with the time.</li>
+			<ul>
+				<li>The victim frame is the page with the smallest (oldest) time stamp value.</li>
+			</ul>
+		<li>Stack-like structure is used &mdash; if a page is referenced, it is removed from the stack and placed on top.</li>
+		<ul>
+			<li>The victim frame is the page at the bottom of the stack</li>
+			<li>The data structure used (stack vs. queue) determines the mechanics.</li>
+			<li>A queue is a more general-purpose structure.</li>
+		</ul>
+	</ul>
+	<li>Generally expensive to implement as it can be a time-consuming task.</li>
+	<li>3 frames of physical memory (as before)</li>
+	<li>These pages are accessed (as before):</li>
+	<blockquote><pre>7, 0, 1, 2, 0, 3, 0, 2, 0, 4, 0, 2</pre></blockquote>
+	<li>Queues states (<tt>(#)</tt> = time stamp):</li>
+
+
+		<blockquote><pre>
+                               Time
+7    fault [<font color="red">7(0)</font>            ]   0
+0    fault [7(0)  <font color="red">0(1)</font>      ]   1
+1    fault [7(0)  0(1)  <font color="red">1(2)</font>]   2
+2    fault [0(1)  1(2)  <font color="red">2(3)</font>]   3
+0     ok   [1(2)  2(3)  0(4)]   4
+3    fault [2(3)  0(4)  <font color="red">3(5)</font>]   5
+0     ok   [2(3)  3(5)  0(6)]   6
+2     ok   [3(5)  0(6)  2(7)]   7
+0     ok   [3(5)  2(7)  0(8)]   8
+4    fault [2(7)  0(8)  <font color="red">4(9)</font>]   9
+0     ok   [2(7)  4(9) 0(10)]  10
+2     ok   [4(9) 0(10) 2(11)]  11
+</pre></blockquote>
+
+	<li>Total of 6 page faults</li>
+	<li>The internal order of the queue doesn't really matter (it's up to the implementation)</li>
+	<ul>
+		<li>Oldest one is replaced (may be sorted by age).</li>
+	</ul>
+	<li>What if there were 4 frames? (Work it out on your own.)</li>
+	<li>This algorithm intuitively makes sense.</li>
+	<ul>
+		<!--<li>Related to the fact that just because your program allocates a lot of memory, doesn't mean you have lots of page faults.</li>-->
+	</ul>
+</ul>
+<p>
+<li><b>Optimal Page Replacement</b></li>
+<ul>
+	<li><i>Replace the page that is the likeliest to not be needed.</i></li>
+	<li>Easier said than done. (Prediction)</li>
+	<ul>
+		<li>The same "problem" is inherent in the SJF scheduling algorithm.</li>
+	</ul>
+	<li>Mainly used as a reference to compare replacement algorithms.</li>
+</ul>
+</ul>
+	
+
+<!--
+fault, [7(0)], fault, [7(0),0(1)], fault,
+[7(0),0(1),1(2)], fault, [2(3),0(1),1(2)],
+[2(3),0(4),1(2)], fault, [2(3),0(4),3(5)],
+[2(3),0(6),3(5)], [2(7),0(6),3(5)], [2(7),0(8),3(5)], fault [2(7),0(8),4(9)],
+[2(7),0(10),4(9)], [2(11),0(10),4(9)]	
+-->
+
+<b><span id=wpurl><a class=wplabel>Thrashing</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Thrashing_%28computer_science%29">Thrashing</a></b>
+<ul>
+	<li>Paging is expensive</li>
+	<ul>
+		<li>Page fault (interrupt) handling: save PCB, put process in Blocked queue</li>
+		<li>Search for a free frame - apply the page replacement algorithm if none are free</li>
+		<li>Copy page to and from disk</li>
+		<li>I/O wait</li>
+		<li>Restore PCB and restart process (put process in Ready queue)</li>
+	</ul>
+	<li>Thrashing occurs when the system spends more time paging than executing processes.</li>
+	<li>May happen if there are many processes running (CPU high utilization).</li>
+	<li>It's generally a good indication that the system needs more physical memory.</li>
+	<li>Your system is thrashing when:</li>
+	<ul>
+		<li>High disk usage when no process is doing I/O</li>
+		<li>CPU activity is low and responsiveness is low</li>
+		<li>Interactions cause lots of unexplained disk I/O</li>
+	</ul>
+</ul>
+
+<b>Avoiding page faults</b>
+<ul>
+	<li>As a programmer, there are some things you can do to decrease the amount of paging that your program will undergo when executing &mdash; thereby reducing the execution time.</li>
+	<li>Localize variable access when possible &mdash; when accessing a set of variables repeatedly, try to keep the variables near each other in memory.</li>
+	<li>When doing two-dimensional array computations, process the array elements by rows. (See <a href="Memory-1.html#CACHE">this example above</a> for details.)</li>
+	<li>If you have to use a linked list with a large number of entries, you can allocate nodes from a contiguous block of memory
+		(e.g. a custom memory manager).</li>
+	<!--<li>If you have use a linked list with a large number of entries, you can either use a cursor-based linked list, or allocate nodes from a contiguous block of memory.</li>-->
+</ul>
+
+<b>Memory Cache (revisited)</b>
+<ul>
+	<li>In addition to RAM, most computers also use a CPU cache: special high speed memory used to temporarily store frequently accessed memory.</li>
+	<ul>
+		<li>When a page of logical memory is accessed, a copy (or more likely, a partial copy) is placed into the cache.</li>
+		<li>As long as the page remains in the cache, memory access is improved.</li>
+	</ul>
+	<li>A cache miss occurs when logical memory is accessed that is not in the cache (even though it may be in physical memory).</li>
+	<!--<li>A program may avoid cache misses by using the same techniques used to avoid page faults.</li>-->
+	<li>A lot of the performance of a CPU comes from the cache implementation (prediction, read-ahead, pre-fetching).</li>
+<li><span id=wpurl><a class=wplabel>Locality of reference</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Locality_of_reference">Locality of reference</a>
+		The concept that objects near to each other in	memory improve overall performance.</li>
+		<ul>
+			<li>Spatial locality - Objects physically next to each other</li>
+			<li>Temporal locality - Objects accessed around the same time</li>
+		</ul>
+	<li><a href="../../docs/Understanding-CPU-Caching-and-Performance.pdf">Understanding CPU Caching and Performance</a>
+		This is an article from Ars Technica. It's a little old, but the information is still very accurate and relevant.
+		This article is kind of like Mead's <i>Coke Story</i>, except it uses a lumberyard/furniture
+		store metaphor instead. If you only read one article on cache, this is it.</li>
+</ul> 
+
+<b>Security Issues</b>
+<ul>
+	<li>Re-using pages from another process?</li>
+	<li>Data must be cleared (set to 0) before giving the page to another process.</li>
+	<li>Generally done by a background thread.</li>
+</ul>
+
+Links:
+<ul>
+  <li><a href="https://people.freebsd.org/~lstewart/articles/cpumemory.pdf">What Every Programmer Should Know About Memory</a>
+This is definitely an advanced read, but if you want all of the gory details, here they are.</li>
+<blockquote>
+<p class="technote">
+<b>Abstract:</b>
+As CPU cores become both faster and more numerous, the limiting factor for most programs is
+now, and will be for some time, memory access. Hardware designers have come up with ever
+more sophisticated memory handling and acceleration techniques&mdash;such as CPU caches&mdash;but
+these cannot work optimally without some help from the programmer. Unfortunately, neither
+the structure nor the cost of using the memory subsystem of a computer or the caches on CPUs
+is well understood by most programmers. This paper explains the structure of memory subsystems
+in use on modern commodity hardware, illustrating why CPU caches were developed, how
+they work, and what programs should do to achieve optimal performance by utilizing them.
+</p>
+</blockquote>
+
+</ul>
+
+	
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+
+<big>&rarr;</big>
+
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="ComputerComponents-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+	
+-->

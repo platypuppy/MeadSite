@@ -1,0 +1,21 @@
+digraph g {
+graph [rankdir = "LR"];
+node [fontsize = "12" shape = "record"];
+edge [arrowhead = "normal"];
+
+node1 [label = "<f1> 0 | <f2> 0xb66050 | <f3> 10 | <f4> one | <f5> 0xb66010" shape=record];
+node1:f5->node2:f1;
+node2 [label = "<f1> 1 | <f2> 0xb6605a | <f3> 20 | <f4> two | <f5> 0xb660c0" shape=record];
+node2:f5->node3:f1;
+node3 [label = "<f1> 0 | <f2> 0xb6606e | <f3> 30 | <f4> three | <f5> 0xb66100" shape=record];
+node3:f5->node4:f1;
+node4 [label = "<f1> 1 | <f2> 0xb6608c | <f3> 15 | <f4> four | <f5> 0xb66140" shape=record];
+node4:f5->node5:f1;
+node5 [label = "<f1> 0 | <f2> 0xb6609b | <f3> 25 | <f4> five | <f5> NULL" shape=record];
+memory [label = "<f1> free|<f2> allocated|<f3> free|<f4> allocated|<f5> free}"];
+node1:f2->memory:f1;
+node2:f2->memory:f2;
+node3:f2->memory:f3;
+node4:f2->memory:f4;
+node5:f2->memory:f5;
+}

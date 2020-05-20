@@ -1,0 +1,24 @@
+This is a simple test.
+Average word length: 3.60
+--------------------------
+one one one one one one
+Average word length: 3.00
+--------------------------
+abcdefghijkl
+Average word length: 12.00
+--------------------------
+ab c de f gh i jk l
+Average word length: 1.50
+--------------------------
+a b c d e f g h i j k l
+Average word length: 1.00
+--------------------------
+   This is   	another   		 test.   
+Average word length: 4.50
+--------------------------
+
+Average word length: 0.00
+--------------------------
+     
+Average word length: 0.00
+--------------------------

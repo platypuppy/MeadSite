@@ -1,0 +1,387 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>mem.leaks.cpp</title>
+</head>
+
+<style>
+</style>
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*
+ * Sun 11 May 2008 09:34:14 PM PDT (dvolper)
+ * Updated: Tue Sep  9 10:18:15 PDT 2014 (mmead, just comments at bottom)
+ * Updated: Wed Jan 13 09:01:33 PDT 2016 (mmead, just comments at bottom)                                                                                                                
+ * ALL tests in this file are BAD: most of them are illegal (from                                                                                                                        
+ * C++ standard point of view at least).                                                                                                                                                 
+ *---------------------------------------------------------------------                                                                                                                  
+ * The really bad news is that most of these tests run without crashing.                                                                                                                 
+ * Therefore these errors may stay un-noticed till later time, usually                                                                                                                   
+ * when you are presenting your program to someone.                                                                                                                                      
+ *                                                                                                                                                                                       
+ *   &quot;...the results are undefined, and we all know what &quot;undefined&quot;                                                                                                                     
+ *    means: it means it works during development, it works during                                                                                                                       
+ *    testing, and it blows up in your most important customers'                                                                                                                         
+ *    faces.&quot; --Scott Meyers                                                                                                                                                             
+ *                                                                                                                                                                                       
+ * So, what is the answer -- memory debuggers.                                                                                                                                           
+ *---------------------------------------------------------------------                                                                                                                  
+ *                                                                                                                                                                                       
+ * File format:                                                                                                                                                                          
+ * each test has a short description, for each test there is                                                                                                                             
+ * a result of running the executable obtained with the following compilers:                                                                                                             
+ * GNU 4.8.2 on Linux Mint 17 &lt;-- updated on Tue 09 Sep 2014                                                                                                                             
+ * Clang 3.6 on Mac OS X &lt;-- updated Tue 12 Jan 2016                                                                                                                                     
+ * Borland 5.82                                                                                                                                                                          
+ * MicroSoft 8.0 (or whatever is VS2005)                                                                                                                                                 
+ * (see Makefile)                                                                                                                                                                        
+ *                                                                                                                                                                                       
+ * +++You can use newer versions of the compilers.                                                                                                                                       
+ *
+ * The result of using memory debuggers is presented at the end of this file.
+ * */</i></font>
+<font color="990099">#include &lt;iostream&gt;</font>
+<font color="990099">#include &lt;cstdlib&gt;</font>
+<font color="990099">#include &lt;stdlib.h&gt; /*free*/</font>
+<font color="990099">#include &lt;string&gt;</font>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>void</b> test0() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test0&quot;</font> &lt;&lt; std::endl;
+    <b>int</b>* pI = <b>new</b> <b>int</b>;
+    *pI=2;
+    <b>delete</b>(pI);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Now deleting a pointer twice...&quot;</font> &lt;&lt; std::endl;
+    <b>delete</b>(pI);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - deleting PODs twice usually doesn't cause any error,
+ * since there is no destructor, which may fail. See test1 - an
+ * example with a non-trivial dtor.
+ * gcc: crashes &quot;*** Error in `./a.out': double free or corruption (fasttop): 0x0000000000679010 ***&quot;
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>class</b> TestDoubleDelete {
+    <b>int</b> * data;
+    <b>public</b>:
+    TestDoubleDelete(<b>int</b> _i) : data(<b>new</b> <b>int</b>(_i)) {}
+    ~TestDoubleDelete() { <b>delete</b> data; }
+};
+
+<b>void</b> test1() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test1&quot;</font> &lt;&lt; std::endl;
+    TestDoubleDelete* p = <b>new</b> TestDoubleDelete(11);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Now deleting a pointer ...&quot;</font> &lt;&lt; std::endl;
+    <b>delete</b> p;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Now deleting a pointer one more time ...&quot;</font> &lt;&lt; std::endl;
+    <b>delete</b> p;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - 
+ * gcc: crashes &quot;*** Error in `./a.out': free(): invalid pointer: 0x000000000139f020 ***&quot;
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>void</b> test2() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test2&quot;</font> &lt;&lt; std::endl;
+    <b>int</b>* pI = <b>new</b> <b>int</b>(2);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Now freeing a pointer instead of deleting it...&quot;</font> &lt;&lt; std::endl;
+    free(pI);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - as we'll discuss in class, delete is actually a &quot;free&quot; + &quot;dtor&quot;,
+ * thus calling free instead of delete skips a dtor, which doesn't 
+ * cause an error, but results in a memory leak.
+ * gcc: OK
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>void</b> test3() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test3&quot;</font> &lt;&lt; std::endl;
+    <b>int</b>* pI = <b>new</b> <b>int</b>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Now reading uninitialized memory&quot;</font> &lt;&lt; std::endl;
+    <b>int</b> j = *pI+2;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice? (value was &quot;</font> &lt;&lt; j &lt;&lt; <font color="#9933CC">&quot;) probably garbage&quot;</font> 
+        &lt;&lt; std::endl;
+    <b>delete</b> pI; <font color="#003399"><i>/*no leaks*/</i></font>
+}
+<font color="#003399"><i>/* Runs - this is not a legal C++ code, C++ standard says that program
+ * is not supposed to use unintialized memory. So memory has to be 
+ * 1) allocated (done in test3)
+ * 2) initialized (not done in test3)
+ *
+ * gcc: OK (value was 0)
+ * msc: OK (value was garbage)
+ * bcc: OK (value was garbage)
+ */</i></font>
+
+<b>void</b> test4() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test4&quot;</font> &lt;&lt; std::endl;
+    <b>int</b>* pJ;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Now writing to uninitialized pointer (un-allocated memory) pJ = &quot;</font> &lt;&lt; pJ &lt;&lt; std::endl;
+    *pJ = 100;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - notice that this is much worse than what we did in test3, 
+ * in test4 memory for the int wasn't even allocated. So what happens is
+ * pJ contains garbage, then this garbage is treated as an address, and we 
+ * attempt to write to that address.
+ * gcc: crashes &quot;Segmentation fault&quot;
+ * msc: crashes (memory could not be written), it also warns at compile time 
+ &quot;mem.leaks.cpp(82) : warning C4700: 
+ uninitialized local variable 'pJ' used&quot;
+ * bcc: OK, but!!! there was a warning 
+ *     &quot;Warning W8013 mem.leaks.cpp 82: 
+ *      Possible use of 'pJ' before definition in function test4()&quot; 
+ */</i></font>
+
+<b>void</b> test5() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test5&quot;</font> &lt;&lt; std::endl;
+    <b>int</b>* pI = <b>new</b> <b>int</b>[10];
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's delete instead of delete [] &quot;</font> &lt;&lt; std::endl;
+    <b>delete</b> pI;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - delete [] is actually quite complicated. It calls a destructor on
+ * each element of the array, and than frees the array itself.  Thus, calling
+ * &quot;delete&quot; instead of &quot;delete []&quot; doesn't produce an error, but it skips all
+ * destructors, which may be a memory leak (if the objects in the array had
+ * dynamically allocated memory) 
+ * gcc: OK 
+ * msc: OK 
+ * bcc: OK 
+ * This particular example doesn't have a leak, since there is no dynamically 
+ * allocated memory inside int objects. But it's still an illegal code.
+ */</i></font>
+
+<b>class</b> CTest1 {
+    <b>int</b> * pi;
+    <b>public</b>:
+    CTest1() : pi(<b>new</b> <b>int</b> (2)) {}
+    ~CTest1() { std::cout &lt;&lt; <font color="#9933CC">&quot;In ~CTest1()&quot;</font> &lt;&lt; std::endl; <b>delete</b> pi; }
+};
+
+<b>void</b> test6() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test6&quot;</font> &lt;&lt; std::endl;
+    CTest1* p = <b>new</b> CTest1[10];
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's free instead of delete [] &quot;</font> &lt;&lt; std::endl;
+    free(p);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - this is a continuation of test5. Again, there MAY be run-time 
+ * crashes, and definitely there is a leak. 
+ * What happens: NO destructor is called, so all 10 dynamically allocated 
+ * integers (pi pointer) are still on the heap 
+ *
+ * Those compilers that pay attention to the type information (array vs.
+ * single) may crash when calling free, others won't (but leak dynamically
+ * allocated memory, if any, from the other 9 objects).
+ * gcc: crashes &quot;*** Error in `./a.out': munmap_chunk(): invalid pointer: 0x0000000001d17018 ***&quot;
+ * msc: OK
+ * bcc: OK
+ * Here is the output that proves that NO destructor is called.
+ * Change &quot;delete&quot; to &quot;delete []&quot; and you'll see 10 destructors.
+ ===================================
+ Let's delete instead of delete []
+ Did you notice?
+ ===================================
+ * Note: gcc on Linux (4.1.3) crashes!!! (CygWin gcc is 3.4.4)
+ */</i></font>
+
+<b>class</b> CTest2 {
+    <b>int</b> i;
+    <b>public</b>:
+    CTest2() : i(2) {}
+    ~CTest2() { std::cout &lt;&lt; <font color="#9933CC">&quot;In ~CTest2()&quot;</font> &lt;&lt; std::endl; }
+};
+
+<b>void</b> test7() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test7&quot;</font> &lt;&lt; std::endl;
+    CTest2* p = <b>new</b> CTest2[10];
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's delete instead of delete [] &quot;</font> &lt;&lt; std::endl;
+    <b>delete</b> p;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - this is a continuation of test5. Again, there MAY be run-time 
+ * crashes, and definitely there is a leak. 
+ * What happens: 
+ * when delete is called, it calls a SINGLE destructor on the 
+ * pointer &quot;p&quot;, and then free.
+ *
+ * Those compilers that pay attention to the type information (array vs.
+ * single) may crash when calling free, others won't (but leak dynamically
+ * allocated memory, if any, from the other 9 objects).
+ * gcc: crashes &quot;*** Error in `./a.out': munmap_chunk(): invalid pointer: 0x000000000126a018 ***&quot;
+ * msc: OK
+ * bcc: OK
+ * Here is the output that proves that only one destructor is called.
+ * Change &quot;delete&quot; to &quot;delete []&quot; and you'll see 10 destructors.
+ ===================================
+ Let's delete instead of delete []
+ In ~CTest2() 
+ Did you notice?
+ ===================================
+ * Note: gcc on Linux (4.1.3) crashes!!! (CygWin gcc is 3.4.4)
+ */</i></font>
+
+
+<b>void</b> test8() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test8&quot;</font> &lt;&lt; std::endl;
+    <b>int</b> ar[10]={0}; <font color="#003399"><i>//array</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's read out of bounds &quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;ar[10] = &quot;</font> &lt;&lt; ar[10] &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - 
+ * gcc: OK
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>void</b> test9() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test9&quot;</font> &lt;&lt; std::endl;
+    <b>int</b> ar[10]={0}; <font color="#003399"><i>//array</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's write out of bounds &quot;</font> &lt;&lt; std::endl;
+    ar[10] = 7;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+}
+<font color="#003399"><i>/* Runs - 
+ * gcc: OK
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>void</b> test10() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test10&quot;</font> &lt;&lt; std::endl;
+    <b>int</b> * ar = <b>new</b> <b>int</b>[3];
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's read out of bounds &quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;ar[3] = &quot;</font> &lt;&lt; ar[3] &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+    <b>delete</b> [] ar;
+}
+<font color="#003399"><i>/* Runs - 
+ * gcc: OK
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>void</b> test11() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test11&quot;</font> &lt;&lt; std::endl;
+    <b>int</b> * ar = <b>new</b> <b>int</b>[3];
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's write out of bounds &quot;</font> &lt;&lt; std::endl;
+    ar[3] = 7;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Did you notice?&quot;</font> &lt;&lt; std::endl;
+    <b>delete</b> [] ar;
+}
+<font color="#003399"><i>/* Runs - 
+ * gcc: OK
+ * msc: OK
+ * bcc: OK
+ */</i></font>
+
+<b>void</b> test12() {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;test12&quot;</font> &lt;&lt; std::endl;
+    <b>int</b>* pI = <b>new</b> <b>int</b>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Let's leak a pointer to int&quot;</font> &lt;&lt; std::endl;
+    *pI = 303;
+}
+<font color="#003399"><i>/* Runs - just a leak, so all 3 OK */</i></font>
+
+<b>void</b> (*pTests[])() = {
+    test0,test1,test2,test3,test4,test5,test6,
+    test7,test8,test9,test10,test11,test12
+};
+
+<font color="990099">#include &lt;cstdio&gt; /* sscanf */</font>
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[] ) {
+    <b>if</b> (argc &gt;1) {
+        <b>int</b> test = 0;
+        std::sscanf(argv[1],<font color="#9933CC">&quot;%i&quot;</font>,&amp;test);
+        <b>try</b> {
+            pTests[test]();
+        } <b>catch</b>( <b>const</b> <b>char</b>* msg) {
+            std::cerr &lt;&lt; msg &lt;&lt; std::endl;
+        }
+    }
+    <b>return</b> 0;
+}
+
+<font color="#003399"><i>/*
+ * Here are results from using:
+ * Borland CodeGuard (Windows only)
+ * Valgrind (Linux/Mac only)
+ * Dr. Memory (Linux/Mac/Windows, 32-bit only)
+ * Rational Purify (Windows only)
+ * =================================================
+ * To use CodeGuard :
+ * 1) This is a one-time step
+ *    a) Run from the command line: cgconfig
+ *    b) in Preferences check &quot;Resource Leaks&quot; and &quot;Repeated Errors&quot;,
+ *       uncheck the rest
+ *    c) in &quot;Error Message Box&quot; - check it if you want a pop-up message box,
+ *       otherwise you'll have to look into &quot;exec_name.cgl&quot; file each time.
+ *    d) in &quot;Debugging Information&quot; check the &quot;Read debug info&quot;
+ *    e) click OK
+ *    f) there are more tabs, you don't modify defaults there to run this code,
+ *       but &quot;Ignored Modules&quot; may be useful when working with STL.
+ * 2) Compile you code with Borland using additional &quot;-v -vG&quot; flags, like
+ *    bcc32.exe -emy.exe -v -vG -w &lt;source files&gt;
+ *    executable &quot;my.exe&quot; is created
+ *    run it normally - if there is an error, a log file will be created named
+ *    &quot;my.cgl&quot; (CodeGuard Log). Read it and weep.
+ * =================================================
+ * To use valgrind:
+ * 1) install valgrind and, optionally, electric fence:
+ *    sudo-apt-get install valgrind electric-fence
+ *    (pretty dumb! - that's why Linux rocks)
+ * 2) compile code using debug information and electric fence's malloc
+ *    g++ -ggdb -pedantic -ansi -Wall -Wextra -lefence &lt;source&gt; -omy.exe
+ * 3) run it
+ *    valgrind -q ./my.exe &lt;test#&gt;
+ *    output will be displayed in the terminal. Read it and weep.
+ * 4) there is a nice add-on to valgrind - kcachegrind
+ * Note: You don't need electric fence, it's just optional.
+ * =================================================
+ * To use Dr. Memory
+ * 1) Compile your program as a 32-bit program (gcc/clang use -m32)
+ * 2) Run it like this: drmemory -- my.exe &lt;test#&gt;
+ * Read the manual that explains all of the options it has.
+ * =================================================
+ * To use Purify: see http://digipen.edu/~dvolper,
+ * search for &quot;Rational Purify&quot; -
+ * close to bottom of the page
+ * =================================================
+ *
+ *          CodeGuard        Valgrind             Dr. Memory             Purify
+ *          Windows          Linux/Mac         Linux/Mac/Windows         Windows       Type of test run  
+ * ================================================================================================================
+ * test0  | caught         caught/caught      caught/caught/caught       caught     | double delete POD
+ * test1  | caught         caught/caught      caught/caught/caught       caught     | double delete user-defined type
+ * test2  | caught         caught/caught      caught/caught/not          caught     | free instead of delete
+ * test3  | not            caught/caught      caught/caught/caught       caught     | read uninitialized data
+ * test4  | not            caught/caught      caught/caught/not (!!)     caught     | write uninitialized data
+ * test5  | caught         caught/not         caught/caught/not          not        | delete instead of delete [] POD
+ * test6  | caught         caught/caught      caught/caught/caught       caught     | free instead of delete []
+ * test7  | caught         caught/caught      caught/caught/caught       caught     | delete instead of delete [] user-defined type
+ * test8  | caught         caught/not         not/not/not                not        | static array, out-of-bound read
+ * test9  | caught         not/caught         not/caught/not (!!)        not        | static array, out-of-bound write
+ * test10 | caught         caught/caught      caught/caught/caught       caught     | dynamic array, out-of-bound read
+ * test11 | caught         caught/caught      caught/caught/caught       caught     | dynamic array, out-of-bound write
+ * test12 | caught         caught/caught      caught/caught/caught       caught     | just a stupid leak
+ *
+ * (!!) The program crashed and Dr. Memory couldn't prevent/detect anything.
+ *
+ */</i></font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

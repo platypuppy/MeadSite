@@ -1,0 +1,250 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Challenges</title>
+</head>
+
+<body>
+
+<center><h1>Over The Break Challenges</h1></center>
+
+<p class="SectionHeader">
+New Stuff
+</p>
+
+<ul>
+	<li><a href="sortwords.html">Fun with sorting</a>&nbsp;&nbsp;&nbsp;&nbsp; Just add <tt>sortwords.c</tt>, compile, and enjoy! (Serves a lot)
+	<a href="sortwords.zip">Data files</a> to get you started.
+<blockquote><pre>
+gcc -Wall -Wextra -Werror -ansi -pedantic main.c sortwords.c -o sortwords
+</pre></blockquote>
+
+For another challenge: Read all of the words into a linked list, keeping the list
+sorted as you go. This means
+that you need to walk the linked list looking for the proper position for the word.
+If you don't keep the list sorted as you go, you will have to sort it later. Efficiently
+sorting an unsorted linked-list is non-trivial.
+
+<p>
+<li>Drunk man on a Pier (<a href="pier1.exe">Windows executable</a>) This is the story:
+
+<blockquote><pre>
+A drunk is standing on a pier that extends from land into the water.
+The distance from the drunk to each edge of the pier is as follows:
+Behind: 2 feet
+In front: 20 feet
+To the left: 5 feet
+To the right: 5 feet
+
+Each step that he takes is 1 foot.
+These are the probabilities of stepping in each direction:
+Back: 10%
+Forward: 50%
+To the left: 20%
+To the right: 20%
+</pre></blockquote>
+
+He starts walking until he either reaches land or falls off the side. Will he make it to land or fall off one of the sides?
+How many steps did it take? There's a GUI version <a href="RandomWalk.exe">here</a>.
+<p>
+BTW, this concept is not new. It's formally known as a Random Walk problem. Find more details
+<a href="http://mathworld.wolfram.com/RandomWalk2-Dimensional.html">here</a> and
+<a href="http://en.wikipedia.org/wiki/Random_walk">here</a>.
+
+</ul>
+</ul>
+
+<p class="SectionHeader">
+Labs and Homework Modifications
+</p>
+
+<p>
+<ol>
+	<li>Add a command line option to the <i>dumpit</i> lab that allows the user to specify the
+		width of the output. Notice that I'm using
+		a <b><tt>-wX</tt></b> where <b><tt>X</tt></b> is the width:</li>
+		<p>
+<blockquote><pre>
+<b>dumpit poem.txt -w8</b>
+
+poem-win.txt:
+       00 01 02 03  04 05 06 07
+------------------------------------------
+000000 52 6F 73 65  73 20 61 72   Roses ar
+000008 65 20 72 65  64 2E 0D 0A   e red...
+000010 56 69 6F 6C  65 74 73 20   Violets 
+000018 61 72 65 20  62 6C 75 65   are blue
+000020 2E 0D 0A 53  6F 6D 65 20   ...Some 
+000028 70 6F 65 6D  73 20 72 68   poems rh
+000030 79 6D 65 2E  0D 0A 42 75   yme...Bu
+000038 74 20 6E 6F  74 20 74 68   t not th
+000040 69 73 20 6F  6E 65 2E 0D   is one..
+000048 0A                         .
+</pre></blockquote>
+
+<blockquote><pre>
+<b>dumpit poem.txt -w24</b>
+
+poem-win.txt:
+       00 01 02 03 04 05 06 07 08 09 0A 0B  0C 0D 0E 0F 10 11 12 13 14 15 16 17
+----------------------------------------------------------------------------------------------------------
+000000 52 6F 73 65 73 20 61 72 65 20 72 65  64 2E 0D 0A 56 69 6F 6C 65 74 73 20   Roses are red...Violets 
+000018 61 72 65 20 62 6C 75 65 2E 0D 0A 53  6F 6D 65 20 70 6F 65 6D 73 20 72 68   are blue...Some poems rh
+000030 79 6D 65 2E 0D 0A 42 75 74 20 6E 6F  74 20 74 68 69 73 20 6F 6E 65 2E 0D   yme...But not this one..
+000048 0A                                                                         .
+</pre></blockquote>
+
+Also, be able to handle multiple files on the command line (hint: use <i>argc</i> and <i>argv</i>)
+<blockquote><pre>
+dumpit foo.txt bar.txt baz.txt
+</pre></blockquote>
+as well as:
+<blockquote><pre>
+dumpit *.txt -w32
+</pre></blockquote>
+
+You can download a compiled version <a href="dumpit.exe">here</a>. It's not super-intelligent,
+as there can be no spaces between the <tt><b>-w</b></tt>
+and the value <tt><b>X</b></tt>.
+<p>
+Much more intelligent ones are here:
+A <a href="dumpit.exe">Windows version (dumpit.exe)</a>, a <a href="dumpit">Linux version (dumpit)</a>,
+and a <a href="https://azrael.digipen.edu/~mmead/www/Courses/2019/fall/cs120/challenges/dumpit-mac">MacOS version (dumpit-mac)</a>. These do multiple files on the command
+line as well as color. 
+
+<p>
+	<blockquote>
+<img src="poem-win.txt.png">
+</blockquote>
+<p>
+
+Just type:
+
+<blockquote><pre>
+dumpit --help
+</pre></blockquote>
+
+to see the options:
+
+<blockquote><pre>
+Usage: dumpit [options] [file1 file2 ...] 
+
+Options:
+ -w  --width    How wide the output is (default is 16 chars).
+ -c  --color    Use colorized output.
+ -h  --help     Display this information.
+
+If no input files are specified, read from stdin.
+</pre></blockquote>
+
+
+
+<p>
+	<li>For the <i>spellcheck</i> assignment, read all of the words into a dynamically-allocated
+		array at startup and use this array to check the words. It will be much faster because
+		you don't have to keep opening/reading/closing the file for each word.
+		
+		Better yet, use a linked-list. You don't know how many words might be in the dictionary.
+		The array and list will be automatically sorted. Use a binary search through the array
+		and a linear search through the linked-list.
+	</li>
+<p>
+	<li>For the <i>palindrome</i> assignment, modify your code to handle punctuation and 
+		upper/lower case
+		characters. For example, you should be able to verify that these are palindromes:
+<blockquote><pre>
+Not a tub, but a ton
+Madam, I'm Adam
+Go hang a salami, I'm a lasagna hog
+</pre></blockquote>
+		</li>
+<p>
+<li>From the <i>calendar</i> lab: In addition to the other suggestions
+	that were given in the lab description, print a whole year instead of
+	just one month:
+
+<blockquote><pre>
+                            2016
+      January               February               March          
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  
+                1  2      1  2  3  4  5  6         1  2  3  4  5  
+ 3  4  5  6  7  8  9   7  8  9 10 11 12 13   6  7  8  9 10 11 12  
+10 11 12 13 14 15 16  14 15 16 17 18 19 20  13 14 15 16 17 18 19  
+17 18 19 20 21 22 23  21 22 23 24 25 26 27  20 21 22 23 24 25 26  
+24 25 26 27 28 29 30  28 29                 27 28 29 30 31        
+31                                                                
+
+       April                  May                   June          
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  
+                1  2   1  2  3  4  5  6  7            1  2  3  4  
+ 3  4  5  6  7  8  9   8  9 10 11 12 13 14   5  6  7  8  9 10 11  
+10 11 12 13 14 15 16  15 16 17 18 19 20 21  12 13 14 15 16 17 18  
+17 18 19 20 21 22 23  22 23 24 25 26 27 28  19 20 21 22 23 24 25  
+24 25 26 27 28 29 30  29 30 31              26 27 28 29 30        
+                                                                  
+
+        July                 August              September        
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  
+                1  2      1  2  3  4  5  6               1  2  3  
+ 3  4  5  6  7  8  9   7  8  9 10 11 12 13   4  5  6  7  8  9 10  
+10 11 12 13 14 15 16  14 15 16 17 18 19 20  11 12 13 14 15 16 17  
+17 18 19 20 21 22 23  21 22 23 24 25 26 27  18 19 20 21 22 23 24  
+24 25 26 27 28 29 30  28 29 30 31           25 26 27 28 29 30     
+31                                                                
+
+      October               November              December        
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  
+                   1         1  2  3  4  5               1  2  3  
+ 2  3  4  5  6  7  8   6  7  8  9 10 11 12   4  5  6  7  8  9 10  
+ 9 10 11 12 13 14 15  13 14 15 16 17 18 19  11 12 13 14 15 16 17  
+16 17 18 19 20 21 22  20 21 22 23 24 25 26  18 19 20 21 22 23 24  
+23 24 25 26 27 28 29  27 28 29 30           25 26 27 28 29 30 31  
+30 31                                                            
+</pre></blockquote>
+<p>
+<li>From the <i>jumble</i> assignment: Given this encrypted string (a quote from a movie), 
+	try to crack the password and figure out the quote:
+
+<blockquote><pre>
+ÉÛÖ™ØÑÚÕ™ÂàÐÞ µÜÂÞŒÈÞÕåÐîÑŒÕèÆœŒÃÞÍÙÑ×ÞÝÑ™µØÑÓÞÑÞÆ™ØÑåÔ¥´áÅÞÅÐîÔÛÏ ÕãÂçÏÑŒÌçÐçŒÂÛÐåàâÕœŒÃÞÍÙÑ×ÞÝÑ	
+</pre></blockquote>
+
+Depending on the browser, you may see different characters here. I've included a <tt>main</tt> file
+called <tt>guessme.c</tt> with this text to get you started: 
+<a href="guessme.c.html">HTML</a> 	<a href="guessme.c">Text</a>.
+<p>
+And not to be repetitive, but you <b>MUST</b> download the text file. Don't copy the text from
+the webpage or you'll be sorry.
+<p>
+<ol>
+<li>Hint: The password contains 5 lower-case characters, <tt>a..z</tt>. (This will make it somewhat easier to figure out.)
+<li>There are 11,881,376 possible passwords. (26<sup>5</sup> = 26 * 26 * 26 * 26 * 26) 
+<li>The number of passes to make is only one.</li>
+<li>Everything you need to know to solve this has been covered in class this semester.
+<li>The truly advanced students will be able to get it with no hints. (You have to be resourceful.) 
+	<ul>
+		<li>How will you know you have cracked it without having to look at every decoded string?</li>
+	</ul>
+<li>For those that want the true challenge, try to solve it without looking at the hint.
+	<ul>
+		<li>If you need a hint, look at <a href="guessme.txt">(SPOILER) this page (SPOILER)</a>.</li>
+	</ul>
+<li>For a non-high-tech challenge, who said it?
+</ol>
+<p>
+<li>Of course, there are many <a href="../practice/practicedata.html">practices</a> that will give you a lot of, well, practice programming
+  in C. If you do all of the practices, you are more than ready for CS170</li>
+
+
+
+</ul>
+
+<br><br><br><br>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

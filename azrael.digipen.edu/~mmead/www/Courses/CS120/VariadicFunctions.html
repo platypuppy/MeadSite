@@ -1,0 +1,743 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Variadic Functions</title>
+</head>
+
+<body>  
+<center><h1>Variadic Functions</h1></center>
+
+<blockquote>
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Function Arguments
+<p>
+
+In the olden days, (K&amp;R C), certain function arguments were <i>promoted</i>:
+<ul>
+<li><b>char</b> (1 byte) and <b>short</b> (2 bytes) were promoted to <b>int</b> (4 bytes, 32-bit machine)
+<li><b>float</b> (4 bytes) was promoted to <b>double</b> (8 bytes)
+</ul>
+
+These are called  the <i>default argument promotions</i>. This was done because you weren't required to 
+prototype your functions before using them. (In C, you still aren't required as it's only a warning if you don't.) 
+So, the rule is:
+
+<blockquote>
+<p class="technote">
+<i>If the compiler doesn't know the type of the formal parameters when it generates code to call a function,
+the default argument promotions are performed.</i>
+</p>
+</blockquote>
+
+Although this is mostly irrelevant for any new code you write, this will become an important issue when you use <i>variable argument lists</i>.
+(like <b><tt>printf</tt></b> or <b><tt>scanf</tt></b>)
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+<b>Function Refresher:</b>
+
+<ul>
+<li>In C, all function arguments are passed by <i>value</i>. (This is somewhat true in C++ as well)
+<li>In this sense, pass-by-value means that a <i>copy</i> of the parameter is passed.
+<li>This means you can freely modify the copy and it will have no effect on the original.
+<li><i>Huh? I thought we could pass some parameters by address/reference and could modify the original?"</i>
+</ul>
+
+Three variations of a <b>swap</b> function:
+<p>
+
+<table border=1 cellpadding=10>
+<tr><td>Swap two integers</td><td>Swap two addresses</td><td>Swap two integers</td></tr>
+<tr><td>
+<pre>
+<b>void</b> swap1(<b>int</b> a, <b>int</b> b)
+{
+  <b>int</b> temp;
+
+  temp = a; 
+  a = b;
+  b = temp;
+}
+</pre>
+</td>
+
+<td>
+<pre>
+<b>void</b> swap2(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> *temp;
+
+  temp = a;
+  a = b;
+  b = temp;
+}
+</pre>
+</td>
+
+<td>
+<pre>
+<b>void</b> swap3(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp;
+
+  temp = *a;
+  *a = *b;
+  *b = temp;
+}
+</pre>
+</td>
+</tr></table>
+<p>
+
+All of the <b>swap</b> functions are passing their arguments by value. How does it work?
+<p>
+
+
+<blockquote><pre>
+<b>int</b> x = 5, y = 8;
+
+swap1(x, y);   <font color="#003399"><i>/* Doesn't work right                                       */</i></font>
+swap1(5, 8);   <font color="#003399"><i>/* Won't work either and would be an abomination if it did! */</i></font>
+swap2(&amp;x, &amp;y); <font color="#003399"><i>/* Still doesn't work quite right                           */</i></font>
+swap2(5, 8);   <font color="#003399"><i>/* Compile error                                            */</i></font>
+swap3(&amp;x, &amp;y); <font color="#003399"><i>/* Ok, works as expected                                    */</i></font>
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+
+What does the following code print out?
+
+<pre class="sourcecode"><code><b>void</b> change_pointer(<b>char</b> *ptr)
+{
+  ptr = <font color="#9933CC">&quot;Bye&quot;</font>;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>char</b> *p = <font color="#9933CC">&quot;Hello&quot;</font>;
+  printf(<font color="#9933CC">&quot;p = %s\n&quot;</font>, p);
+  
+  change_pointer(p);
+  printf(<font color="#9933CC">&quot;p = %s\n&quot;</font>, p);
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+<blockquote>
+<p class="technote">
+It is <b>ABSOLUTELY ESSENTIAL</b> that you understand <b>EXACTLY</b> why the program above works the way it does. This
+is the whole key to understanding pointers and function parameters. Two things that you must master to
+be successful C and C++ programmers.
+</p>
+</blockquote>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Variable Argument Lists
+<p>
+</h2>
+
+How does the compiler deal with <b>printf</b> and these calls. In other words, what is the 
+signature of <b>printf</b>?
+
+<blockquote><pre>
+<b>char</b> c = <font color="#9933CC">'A'</font>;
+<b>int</b> age = 20;
+<b>float</b> pi = 3.1415F;
+
+printf(<font color="#9933CC">&quot;c = %c, &quot;</font>, c);
+printf(<font color="#9933CC">&quot;age = %i, &quot;</font>, age);
+printf(<font color="#9933CC">&quot;pi = %f\n&quot;</font>, pi);
+printf(<font color="#9933CC">&quot;pi = %f, age = %i\n&quot;</font>, pi, age);
+printf(<font color="#9933CC">&quot;c = %c, age = %i, pi = %f\n&quot;</font>, c, age, pi);
+</pre></blockquote>
+
+It seems that <b>printf</b> has multiple signatures. Actually, it has just one (simplified):
+
+<blockquote><pre>
+<b>int</b> printf(<b>const</b> <b>char</b> *format, ...);
+</pre></blockquote>
+
+This syntax is for functions with a <i>variable argument list</i>.
+<ul>
+<li>The ellipsis (...) indicates that there are 0 or more optional arguments.
+<li>The number and type of arguments can change with each call.
+<!--<li>The caller may not have to worry about the arguments.-->
+<li>Note that this is different than default arguments in C++ functions. (For those familiar with C++)
+<li>There must be at least one named argument and then the ellipsis. This is illegal in C:</li>
+<blockquote><pre>
+<b>int</b> fn(...); <font color="#003399"><i>/* Illegal. No named argument. Legal in C++, but can't portably access the args. */</i></font>
+</pre></blockquote>
+
+<li>You will need to include 
+  <tt><b><a href="http://man7.org/linux/man-pages/man3/stdarg.3.html">stdarg.h</a></b></tt> 
+  in order to use this technique.
+</ul> 
+
+An example that takes the average of "a bunch" of integers. The size of "a bunch" can vary with
+each call. Here's what the prototype for our function might look like:
+
+<blockquote><pre>
+<b>double</b> average(<b>int</b> count, ...);
+</pre></blockquote>
+
+We would like to be able to call <b>average</b> like this:
+
+<blockquote><pre>
+<b>double</b> ave1, ave2, ave3;
+
+ave1 = average(5, 1, 2, 3, 9, 10);
+ave2 = average(7, 5, 8, 9, 2, 4, 4, 5);
+ave3 = average(3, 11, 2, 10);
+printf(<font color="#9933CC">&quot;ave1 = %f, ave2 = %f, ave3 = %f\n&quot;</font>, ave1, ave2, ave3);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+ave1 = 5.000000, ave2 = 5.285714, ave3 = 7.666667
+</pre></blockquote>
+
+In the example above, the first argument to the <i>average</i> function was a count of
+how many numbers that the function should expect. So, how do we write such a function?
+<p>
+Here is one way:
+
+<blockquote><pre>
+<b>double</b> average(<b>int</b> count, ...)
+{
+    <font color="#003399"><i>/* va_list is a <b>typedef</b> for <b>char *</b></i> */</font>
+  va_list args;
+  <b>int</b> i, total = 0;
+
+    <font color="#003399"><i>/* Initialize pointer to variable-length list       */</i></font>
+    <font color="#003399"><i>/* args points into the stack after count's address */</i></font>
+  va_start(args, count);
+
+    <font color="#003399"><i>/* Sum all values in list */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>int</b> next = va_arg(args, <b>int</b>); <font color="#003399"><i>/* Next integer */</i></font>
+    total += next;
+  }
+
+    <font color="#003399"><i>/* Reset, required cleanup (may free memory, may do nothing) */</i></font>
+  va_end(args); 
+
+  <b>return</b> (<b>double</b>)total / count;
+}
+</pre></blockquote>
+
+In the example above, we specified the number of arguments that the function should expect.
+<ul>
+  <li>What if the first number was too small?</li>
+  <li>What if the first number was too large?</li>
+  <li>Try it and see what happens!</li>
+</ul>
+
+
+
+We don't have to do it this way. Another way is to use a <i>sentinel</i> value.
+
+We can call <b>sum</b> like this:
+
+<blockquote><pre>
+<b>int</b> sum1, sum2, sum3;
+
+sum1 = sum(2, 4, 5, 7, 8, 0);
+sum2 = sum(12, 17, 28, 0);
+sum3 = sum(21, 41, 25, 17, 18, 3, 8, 23, 0);
+printf(<font color="#9933CC">&quot;sum1 = %i, sum2 = %i, sum3 = %i\n&quot;</font>, sum1, sum2, sum3);
+
+  <font color="#003399"><i>/* Need to be careful! (What if sum1, or sum2, or sum3 is 0?) */</i></font>
+printf(<font color="#9933CC">&quot;sum = %i&#92;n&quot;</font>, sum(sum1, sum2, sum3, 0));
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+sum1 = 26, sum2 = 57, sum3 = 156
+sum = 239
+</pre></blockquote>
+
+Implementation:
+
+<blockquote><pre>
+<b>int</b> sum(<b>int</b> first, ...)
+{
+  va_list args;
+  <b>int</b> total = 0;
+  <b>int</b> next = first;  <font color="#003399"><i>/* first value is now data */</i></font>
+
+    <font color="#003399"><i>/* Initialize pointer to variable-length list */</i></font>
+  va_start(args, first);  
+
+    <font color="#003399"><i>/* Sum all values in the list (0 is the sentinel) */</i></font>
+  <b>while</b> (next != 0)
+  {
+    total += next;
+    next = va_arg(args, <b>int</b>);  <font color="#003399"><i>/* Next value */</i></font>
+  }
+  
+    <font color="#003399"><i>/* Reset, required cleanup */</i></font>
+  va_end(args); 
+
+  <b>return</b> total;
+}
+</pre></blockquote>
+
+Our sentinel value is 0. Choosing a good sentinel value is important and should be
+something that can never be a valid value in the list of args.
+<p>
+Realize also that, the examples used literal constants, but the inputs to the functions
+could have all been variables (that aren't known until runtime).
+
+<p>
+<hr width=90%>
+<p>
+
+Suppose we wanted to write a function to print any number of strings. We'd use it like this:
+
+<blockquote><pre>
+print_strings(<font color="#9933CC">&quot;one&quot;</font>, <font color="#9933CC">&quot;two&quot;</font>, <font color="#9933CC">&quot;three&quot;</font>, <font color="#9933CC">&quot;four&quot;</font>, NULL);
+print_strings(<font color="#9933CC">&quot;one&quot;</font>, NULL);
+print_strings(<font color="#9933CC">&quot;one&quot;</font>, <font color="#9933CC">&quot;two&quot;</font>, NULL, <font color="#9933CC">&quot;four&quot;</font>, NULL);
+print_strings(NULL);
+</pre></blockquote>
+
+And expect to see:
+
+<blockquote><pre>
+one  two  three  four
+one
+one  two
+[empty line here]
+</pre></blockquote>
+
+The code would look something like this:
+<p>
+
+<pre class="sourcecode"><code><b>void</b> print_strings(<b>const</b> <b>char</b> *first, ...)
+{
+  va_list args;
+  <b>const</b> <b>char</b> *next = first;  <font color="#003399"><i>/* first value */</i></font>
+
+    <font color="#003399"><i>/* Initialize pointer to args on the stack */</i></font>
+  va_start(args, first);  
+
+    <font color="#003399"><i>/* Print all strings */</i></font>
+  <b>while</b> (next != NULL)
+  {
+    printf(<font color="#9933CC">&quot;%s  &quot;</font>, next);
+    next = va_arg(args, <b>const</b> <b>char</b> *);  <font color="#003399"><i>/* Next value */</i></font>
+  }
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+  
+    <font color="#003399"><i>/* Reset, required cleanup */</i></font>
+  va_end(args); 
+}</code></pre>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width=90%>
+<p>
+
+The <b>va_</b> macros are defined in <b>stdarg.h</b> and might look like this (32-bit system):
+
+<blockquote><pre>
+<b>typedef</b> <b>char</b> *  va_list;
+
+<b>#define</b> _INTSIZEOF(n)   ( (<b>sizeof</b>(n) + <b>sizeof</b>(<b>int</b>) - 1) &amp; ~(<b>sizeof</b>(<b>int</b>) - 1) )
+
+<b>#define</b> va_start(ap,v)  ( ap = (va_list)&amp;v + _INTSIZEOF(v) )
+<b>#define</b> va_arg(ap,t)    ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
+<b>#define</b> va_end(ap)      ( ap = (va_list)0 )
+</pre></blockquote>
+
+It is not necessary to understand the details in order to use them. They are compiler-dependent,
+so you can't rely on any particular implementation.
+
+<p class="technote">
+Since you use the ellipsis to "prototype" your function, the compiler doesn't know
+the types (sizes) of the parameters. The default argument promotion will occur so you will
+have to remember to retrieve <b>int</b> and <b>double</b> (not <b>char, short</b>, or <b>float</b>) 
+in the function.
+</p>
+
+For example, this function won't work:
+
+<blockquote><pre>
+<b>float</b> f_average(<b>int</b> count, ...)
+{
+  va_list args; <font color="#003399"><i>/* char* */</i></font>
+  <b>int</b> i = 1;
+  <b>float</b> total = 0;
+  <b>float</b> next;
+
+    <font color="#003399"><i>/* Initialize pointer to first parameter in var list */</i></font>
+  va_start(args, count);
+
+    <font color="#003399"><i>/* Sum all values in list */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <font color="red"><b>next = va_arg(args, <b>float</b>); <i>/* Next float (+4 bytes) */</i></font></b>
+    total += next;
+  }
+
+    <font color="#003399"><i>/* Reset, required cleanup */</i></font>
+  va_end(args); 
+
+  <b>return</b> total / count;
+}
+</pre></blockquote>
+
+no matter how you try to use it:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Try to pass floats */</i></font>
+<b>float</b> f1 = f_average(5, 1.0F, 2.0F, 3.0F, 9.0F, 10.0F);
+
+  <font color="#003399"><i>/* Try to pass doubles */</i></font>
+<b>float</b> f2 = f_average(5, 1.0, 2.0, 3.0, 9.0, 10.0);
+
+  <font color="#003399"><i>/* Displays: f1 = 0.775000, f2 = 0.775000 */</i></font>
+printf(<font color="#9933CC">&quot;f1 = %f, f2 = %f\n&quot;</font>, f1, f2);
+</pre></blockquote>
+
+This is because:
+
+<ul>
+<li>In both calls to <tt>f_average</tt> above, the compiler is pushing 8 bytes on the
+stack for each argument because floats are promoted to doubles.
+<li>The code in the <tt>f_average</tt> function <i>must</i> retrieve 8 bytes of data
+for each argument. This means that this:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+next = va_arg(args, <b>float</b>); <font color="#003399"><i>/* Won't work, only retrieves 4 bytes */</i></font>
+</pre></blockquote>
+
+should be this:
+<blockquote><pre>
+next = va_arg(args, <b>double</b>); <font color="#003399"><i>/* Correct, retrieves 8 bytes */</i></font>
+</pre></blockquote>
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+An Example Mixing Types
+<p>
+
+The previous examples all passed the same data types to the functions. 
+Suppose we want to write a function that can calculate the average of bunch of <i>different</i> types.
+We will assume the return value will be a <b>double</b>, since it's likely to include a fractional
+part. We need some way communicating the types of the arguments to the variadic function. Let's
+borrow the idea from <tt>printf</tt>. That is, we will provide a sort of <i>"format string"</i>.
+<p>
+We will be able to pass integral types and floating-point types. For example, this is an example
+of such a call:
+
+<blockquote><pre>
+<b>double</b> ave = average2(<font color="#9933CC">&quot;ifif&quot;</font>, 1, 2.0F, 3L, 4.0);
+printf(<font color="#9933CC">&quot;ave is %f&#92;n&quot;</font>, ave);
+<pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+ave is 2.500000
+<pre></blockquote>
+
+The <i>type string</i> is just a NUL-terminated string of characters. The only valid characters
+are <tt>i</tt>, for integral values and <tt>f</tt> for floating-point values. Notice that we no
+longer need to provide the actual count of arguments. The count is implied by the length of the
+type string. (This is similar to how <tt>printf</tt> knows how many arguments were provided.)
+<p>
+This is what the function might look like:
+
+<blockquote><pre>
+<b>double</b> average2(<b>const</b> <b>char</b> *types, ...)
+{
+  va_list args;
+  <b>double</b> total = 0;
+  <b>int</b> count = 0;
+
+    <font color="#003399"><i>/* Initialize pointer to variable-length list       */</i></font>
+  va_start(args, types);
+
+    <font color="#003399"><i>/* Sum all values in list */</i></font>
+  <b>while</b> (*types)
+  {
+    <b>double</b> next = 0;
+
+      <font color="#003399"><i>/* Only supports two types, no error checking is done */</i></font>
+    <b>if</b> (*types == <font color="#9933CC">'i'</font>)
+      next = va_arg(args, <b>int</b>); 
+    <b>else</b> <b>if</b> (*types == <font color="#9933CC">'f'</font>)
+      next = va_arg(args, <b>double</b>);
+
+    total += next; 
+    count++;      
+
+      <font color="#003399"><i>/* Next format character */</i></font>
+    types++; 
+  }
+
+    <font color="#003399"><i>/* Reset, required cleanup */</i></font>
+  va_end(args); 
+
+    <font color="#003399"><i>/* Prevent divide by 0 (unlikely) */</i></font>
+  <b>if</b> (count)
+    <b>return</b> total / count;
+  <b>else</b>
+    <b>return</b> 0.0;
+}
+<pre></blockquote>
+
+<b>Notes:</b>
+<p>
+On most 32-bit systems, this will work fine because integers and longs are the same size (4 bytes).
+On 64-bit systems, things get more complicated:
+<ul>
+  <li>One issue is that Microsoft's compiler uses 4-byte longs and the rest of the world uses 8-byte longs.</li>
+  <li>GNU's compiler puts integers into 64-bit registers and then promotes integers to longs
+    when passing them via the stack, but this isn't true of all compilers (i.e. Microsoft doesn't promote the integers,
+    at least that's what my experimentation has shown.)
+    <p>
+     Here's a more robust version:</li>
+<blockquote><pre>
+  <font color="#003399"><i>/* Supports three types, no error checking is done */</i></font>
+<b>if</b> (*types == <font color="#9933CC">'i'</font>)
+  next = va_arg(args, <b>int</b>); 
+<b>else if</b> (*types == <font color="#9933CC">'l'</font>)
+  next = va_arg(args, <b>long</b>); <font color="#003399"><i>/* sizeof(long) varies */</i></font>
+<b>else</b> <b>if</b> (*types == <font color="#9933CC">'f'</font>)
+  next = va_arg(args, <b>double</b>);
+</pre></blockquote>
+  <li>You could use a <tt>long long</tt>, but that may not be supported on all compilers:</li>
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Supports three types, no error checking is done */</i></font>
+<b>if</b> (*types == <font color="#9933CC">'i'</font>)
+  next = va_arg(args, <b>int</b>); 
+<b>else if</b> (*types == <font color="#9933CC">'l'</font>)
+  next = va_arg(args, <b>long long</b>); <font color="#003399"><i>/* If long long is available (and is the same size as a long), it will work for GNU and Microsoft */</i></font>
+<b>else</b> <b>if</b> (*types == <font color="#9933CC">'f'</font>)
+  next = va_arg(args, <b>double</b>);
+</pre></blockquote>
+
+
+  <li>Many 64-bit systems use registers to pass the first few arguments and the stack for the rest.</li>
+  <ul>
+    <li>Microsoft passes the first 4 integers in integer registers, the first 4 floating point values 
+      in floating point registers, and uses the stack for the rest.</li>
+    <li>GNU passes the first 6 integers/pointers in registers, the first 8 floating point values
+    in registers, and uses the stack for the rest.</li>
+    <li>Passing arguments via registers (CPU) is faster than using the stack (memory).</li>
+    <li>This is unlikely to cause problems if you use the macros from <tt>stdargs.h</tt>.</li>
+  </ul>
+</ul>
+You can read all about the gory details
+<a href="https://en.wikipedia.org/wiki/X86_calling_conventions#x86-64_calling_conventions">here</a>.
+It's definitely an advanced topic and beyond the scope of an introductory programming course.
+But, some may find it interesting/useful, especially if you want to explore the variadic
+nature of functions. It also makes you glad you're programming in a higher-level language
+than assembler!
+
+<!--
+It appears that gcc passes structs on the stack but Clang uses registers.
+Microsoft also appears to pass structs via registers.
+-->
+
+
+<blockquote><pre>
+<pre></blockquote>
+
+<blockquote><pre>
+<pre></blockquote>
+
+<blockquote><pre>
+<pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Other Uses
+<p>
+
+Suppose you have a variadic function that needs to pass all of the arguments to
+another function. You don't know what the types of the arguments are, nor do
+you care. You just need to <i>forward</i> them to a function that takes a
+variable number of arguments (like <i>printf</i>).
+<p>
+Here's an example of a program that wants to log all kinds of information about
+the state of the program. You may want to log integers, longs, strings, doubles, etc.
+Basically, any number and type of values. This sounds like a perfect case for
+a variadic function.
+<p>
+This is how the program may want to log information. (The <i>sleep</i> function
+just causes the program to pause for the specified number of seconds, simulating
+the time between log events.) Instead of just using <i>printf</i> to print the
+information, we want to put a time and date stamp on the output. 
+In practice, you could add any kind of other information, as well. 
+
+
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;
+
+  /* prototype for logging */</font>
+<b>void</b> logit(<b>const</b> <b>char</b> *fmt_string, ...);
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Fake data */</i></font>
+  <b>int</b> i = 10;
+  <b>char</b> c = 65;
+  <b>float</b> f = 1.24F;
+  <b>double</b> d = 3.14;
+  <b>char</b> *s = <font color="#9933CC">&quot;foobarbaz&quot;</font>;
+
+    <font color="#003399"><i>/* Pretend to do stuff ... */</i></font>
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i, c, f, d, s);
+  sleep(1);
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i * 3, c + 7, f / 1.1, d / 1.2, s + 3);
+  sleep(2);
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i + 8, c + 3, f * 3, d + 6, s + 6);
+  sleep(1);
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i + 9, c + 2, f * 2, d + 5, s + 3);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+The output might look like this:
+
+<blockquote><pre>
+Wednesday, November 27, 2019 12:14:33 PM PST: i is 10, c is A, f is 1.240000, d is 3.140000, s is foobarbaz
+Wednesday, November 27, 2019 12:14:34 PM PST: i is 30, c is H, f is 1.127273, d is 2.616667, s is barbaz
+Wednesday, November 27, 2019 12:14:36 PM PST: i is 18, c is D, f is 3.720000, d is 9.140000, s is baz
+Wednesday, November 27, 2019 12:14:37 PM PST: i is 19, c is C, f is 2.480000, d is 8.140000, s is barbaz
+</pre></blockquote>
+
+Here's what the <i>logit</i> function might look like within the program:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf, vprintf           */</font>
+<font color="990099">#include &lt;stdarg.h&gt; /* va_list, va_start, va_end */</font>
+<font color="990099">#include &lt;time.h&gt;   /* time, strftime, localtime */</font>
+<font color="990099">#include &lt;unistd.h&gt; /* sleep (non-standard)      */</font>
+
+<font color="990099">#define MAX_TIME_LEN 256</font>
+
+<b>void</b> logit(<b>const</b> <b>char</b> *fmt_string, ...)
+{
+  va_list args;           <font color="#003399"><i>/* to access the arguments passed in  */</i></font>
+  <b>struct</b> tm *pt;          <font color="#003399"><i>/* to convert the date/time           */</i></font>
+  time_t now;             <font color="#003399"><i>/* to hold the current date/time      */</i></font>
+  <b>char</b> buf[MAX_TIME_LEN]; <font color="#003399"><i>/* buffer to hold formatted date/time */</i></font>
+
+    <font color="#003399"><i>/* Get the current system time (number of seconds since January 1, 1970) */</i></font>
+  now = <a href="http://www.cplusplus.com/reference/ctime/time/">time</a>(NULL);
+
+    <font color="#003399"><i>/* Convert to local time */</i></font>
+  pt = <a href="http://www.cplusplus.com/reference/ctime/localtime/">localtime</a>(&amp;now);
+
+    <font color="#003399"><i>/* Format: Weekday, Month Day, Year HH:MM:SS AM/PM Timezone */</i></font>
+  <a href="http://www.cplusplus.com/reference/ctime/strftime/">strftime</a>(buf, <b>sizeof</b>(buf), <font color="#9933CC">&quot;%A, %B %d, %Y %I:%M:%S %p %Z&quot;</font>, pt);
+
+    <font color="#003399"><i>/* Print formatted date/time */</i></font>
+  printf(<font color="#9933CC">&quot;%s: &quot;</font>, buf);
+
+    <font color="#003399"><i>/* Fetch the rest of the arguments and print them */</i></font>
+  va_start(args, fmt_string);
+  vprintf(fmt_string, args);
+
+    <font color="#003399"><i>/* Reset, required cleanup */</i></font>
+  va_end(args);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Fake data */</i></font>
+  <b>int</b> i = 10;
+  <b>char</b> c = 65;
+  <b>float</b> f = 1.24F;
+  <b>double</b> d = 3.14;
+  <b>char</b> *s = <font color="#9933CC">&quot;foobarbaz&quot;</font>;
+
+    <font color="#003399"><i>/* Pretend to do stuff ... */</i></font>
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i, c, f, d, s);
+  sleep(1);
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i * 3, c + 7, f / 1.1, d / 1.2, s + 3);
+  sleep(2);
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i + 8, c + 3, f * 3, d + 6, s + 6);
+  sleep(1);
+  logit(<font color="#9933CC">&quot;i is %i, c is %c, f is %f, d is %f, s is %s&#92;n&quot;</font>, i + 9, c + 2, f * 2, d + 5, s + 3);
+
+  <b>return</b> 0;
+}
+</code></pre> 
+
+There are a family of functions for this purpose:
+<ul>
+  <li><i>vprintf</i> - Like <i>printf</i>, but accepts a <i>va_list</i>.</li>
+  <li><i>vfprintf</i> - Like <i>vprintf</i>, but prints to a FILE (think <i>fprintf</i>).</li>
+  <li><i>vsprintf</i> - Like <i>vprintf</i>, but prints to a buffer (think <i>sprintf</i>).</li>
+  <li><i>vsnprintf</i> - Like <i>vsprintf</i>, but you can control the number of characters.</li>
+</ul>
+<a href="http://en.cppreference.com/w/cpp/io/c/vfprintf">References</a> for vprintf, 
+vsprintf, vfprintf, and vsnprintf.
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+

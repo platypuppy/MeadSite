@@ -1,0 +1,40 @@
+/******************************************************************************
+filename    marathon.c
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS120
+section     D
+assignment  1
+due date    9/19/2007
+
+  "This is in a comment"
+
+Brief Description:
+  This program converts the length of a marathon in miles and yards into
+  kilometers.
+******************************************************************************/
+
+#include <stdio.h> /* printf */
+
+
+/* A marathon is 26 miles, 385 yards
+ * Prints the distance of a marathon in kilometers
+ */
+int main(void)
+{
+  int miles = 26;    /* Miles in a marathon                 */
+  int yards = 385;   /* Yards in a marathon                 */
+  double kilometers; /* Calculated kilometers in a marathon */
+
+  /*/ Can you handle a *division* with numbers/code  /  /*/
+  int a = 8/4; /* Some "comment" goes here */
+  /* comment /*/
+
+    /* Convert miles and yards into kilometers */
+  kilometers/* comment */ = /*comment*/(miles + (double)yards / 1760) * 1.609;
+
+    /* Display the result on the screen */
+  printf("A marathon /*is*/ %f kilometers\n", kilometers);
+
+  return 0;/* Return successful value to OS */
+}

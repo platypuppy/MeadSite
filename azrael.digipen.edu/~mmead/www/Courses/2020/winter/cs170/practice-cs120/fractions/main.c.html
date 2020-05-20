@@ -1,0 +1,328 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdlib.h&gt;    /* atoi           */</font>
+<font color="990099">#include &lt;stdio.h&gt;     /* printf         */</font>
+<font color="990099">#include &quot;fractions.h&quot; /* FRACTION stuff */</font>
+
+<b>enum</b> FRACTION_OPERATION {foAdd, foSubtract, foMultiply};
+
+<b>struct</b> FRACTION make_fraction(<b>int</b> numerator, <b>int</b> denominator)
+{
+  <b>struct</b> FRACTION f;
+
+  f.numerator = numerator;
+  f.denominator = denominator;
+
+  <b>return</b> f;
+}
+
+<b>void</b> test_fraction(<b>int</b> numerator1, <b>int</b> denominator1, 
+                   <b>int</b> numerator2, <b>int</b> denominator2,
+                   <b>enum</b> FRACTION_OPERATION operation, 
+                   <b>int</b> mixed)
+{
+  <b>struct</b> FRACTION a = make_fraction(numerator1, denominator1);
+  <b>struct</b> FRACTION b = make_fraction(numerator2, denominator2);
+  <b>struct</b> FRACTION c;
+  <b>char</b> op;
+
+  <b>if</b> (operation == foAdd)
+  {
+    c = add_fractions(&amp;a, &amp;b);
+    op = <font color="#9933CC">'+'</font>;
+  }
+  <b>else</b> <b>if</b> (operation == foSubtract)
+  {
+    c = subtract_fractions(&amp;a, &amp;b);
+    op = <font color="#9933CC">'-'</font>;
+  }
+  <b>else</b>
+  {
+    c = multiply_fractions(&amp;a, &amp;b);
+    op = <font color="#9933CC">'*'</font>;
+  }
+
+  printf(<font color="#9933CC">&quot;%i/%i %c %i/%i = %i/%i&quot;</font>, a.numerator, a.denominator,
+                                   op,
+                                   b.numerator, b.denominator,
+                                   c.numerator, c.denominator);
+  <b>if</b> (mixed)
+  {
+    <b>struct</b> MIXED_FRACTION mixed = reduced_to_mixed(&amp;c);
+
+    printf(<font color="#9933CC">&quot; ==&gt; &quot;</font>);
+      <font color="#003399"><i>/* There's a whole number portion */</i></font>
+    <b>if</b> (mixed.whole_number)
+      printf(<font color="#9933CC">&quot;%i &quot;</font>, mixed.whole_number);
+
+      <font color="#003399"><i>/* There's a proper fraction portion */</i></font>
+    <b>if</b> (mixed.proper_fraction.numerator)
+      printf(<font color="#9933CC">&quot;%i/%i&quot;</font>, mixed.proper_fraction.numerator, 
+                      mixed.proper_fraction.denominator);
+
+    <b>if</b> (!mixed.whole_number &amp;&amp; !mixed.proper_fraction.numerator)
+      printf(<font color="#9933CC">&quot;0&quot;</font>);
+  }
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> testGCD(<b>void</b>)
+{
+  <b>int</b> m, n;
+
+  m = 15; n = 18; <font color="#003399"><i>/* GCD is 3 */</i></font>
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, m, n, GCD(m, n));
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, n, m, GCD(n, m));
+
+  m = 80; n = 20; <font color="#003399"><i>/* GCD is 20 */</i></font>
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, m, n, GCD(m, n));
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, n, m, GCD(n, m));
+
+  m = 21; n = 47; <font color="#003399"><i>/* GCD is 1 */</i></font>
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, m, n, GCD(m, n));
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, n, m, GCD(n, m));
+
+  m = 68; n = 153; <font color="#003399"><i>/* GCD is 17 */</i></font>
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, m, n, GCD(m, n));
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, n, m, GCD(n, m));
+
+  m = 0; n = 18; <font color="#003399"><i>/* GCD is 18 */</i></font>
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, m, n, GCD(m, n));
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, n, m, GCD(n, m));
+
+  m = 0; n = 0; <font color="#003399"><i>/* GCD is 0 */</i></font>
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, m, n, GCD(m, n));
+  printf(<font color="#9933CC">&quot;GCD of %i and %i is %i&#92;n&quot;</font>, n, m, GCD(n, m));
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> test = 0;
+  <b>if</b> (argc &gt; 1)
+    test = atoi(argv[1]);
+
+  <b>switch</b> (test)
+  {
+    <b>case</b> 1:
+      printf(<font color="#9933CC">&quot;===== Testing GCD =====&#92;n&quot;</font>);
+      testGCD();
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+      <b>break</b>;
+
+    <b>case</b> 2:
+      printf(<font color="#9933CC">&quot;===== Testing add =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foAdd, 0);
+      test_fraction(1, 5, 4, 9, foAdd, 0);
+      test_fraction(3, 7, 12, 21, foAdd, 0);
+      test_fraction(5, 8, 3, 16, foAdd, 0);
+      test_fraction(7, 8, 3, 12, foAdd, 0);
+      test_fraction(0, 8, 3, 16, foAdd, 0);
+      test_fraction(1, 1, 3, 16, foAdd, 0);
+      test_fraction(5, 8, -3, 16, foAdd, 0);
+      test_fraction(1, 5, -4, 9, foAdd, 0);
+      test_fraction(-1, 5, -4, 9, foAdd, 0);
+      test_fraction(1, 2, 1, 2, foAdd, 0);
+      test_fraction(5, 5, -5, 5, foAdd, 0);
+      <b>break</b>;
+
+    <b>case</b> 3:
+      printf(<font color="#9933CC">&quot;===== Testing subtract =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foSubtract, 0);
+      test_fraction(1, 5, 4, 9, foSubtract, 0);
+      test_fraction(3, 7, 12, 21, foSubtract, 0);
+      test_fraction(5, 8, 3, 16, foSubtract, 0);
+      test_fraction(7, 8, 3, 12, foSubtract, 0);
+      test_fraction(0, 8, 3, 16, foSubtract, 0);
+      test_fraction(1, 1, 3, 16, foSubtract, 0);
+      test_fraction(5, 8, -3, 16, foSubtract, 0);
+      test_fraction(1, 5, -4, 9, foSubtract, 0);
+      test_fraction(-1, 5, -4, 9, foSubtract, 0);
+      test_fraction(5, 5, 5, 5, foSubtract, 0);
+      <b>break</b>;
+
+    <b>case</b> 4:
+      printf(<font color="#9933CC">&quot;===== Testing multiply =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foMultiply, 0);
+      test_fraction(1, 5, 4, 9, foMultiply, 0);
+      test_fraction(3, 7, 12, 21, foMultiply, 0);
+      test_fraction(5, 8, 3, 16, foMultiply, 0);
+      test_fraction(7, 8, 3, 12, foMultiply, 0);
+      test_fraction(0, 8, 3, 16, foMultiply, 0);
+      test_fraction(1, 1, 3, 16, foMultiply, 0);
+      test_fraction(5, 8, -3, 16, foMultiply, 0);
+      test_fraction(1, 5, -4, 9, foMultiply, 0);
+      test_fraction(-1, 5, -4, 9, foMultiply, 0);
+      test_fraction(5, 5, 5, 5, foMultiply, 0);
+      test_fraction(0, 4, 5, 7, foMultiply, 0);
+      test_fraction(0, 0, 0, 0, foMultiply, 0);
+      <b>break</b>;
+
+    <b>case</b> 5:
+      printf(<font color="#9933CC">&quot;===== Testing add and mixed =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foAdd, 1);
+      test_fraction(1, 5, 4, 9, foAdd, 1);
+      test_fraction(3, 7, 12, 21, foAdd, 1);
+      test_fraction(5, 8, 3, 16, foAdd, 1);
+      test_fraction(7, 8, 3, 12, foAdd, 1);
+      test_fraction(0, 8, 3, 16, foAdd, 1);
+      test_fraction(1, 1, 3, 16, foAdd, 1);
+      test_fraction(5, 8, -3, 16, foAdd, 1);
+      test_fraction(1, 5, -4, 9, foAdd, 1);
+      test_fraction(-1, 5, -4, 9, foAdd, 1);
+      test_fraction(1, 2, 1, 2, foAdd, 1);
+      test_fraction(5, 5, -5, 5, foAdd, 1);
+      <b>break</b>;
+
+    <b>case</b> 6:
+      printf(<font color="#9933CC">&quot;===== Testing subtract and mixed =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foSubtract, 1);
+      test_fraction(1, 5, 4, 9, foSubtract, 1);
+      test_fraction(3, 7, 12, 21, foSubtract, 1);
+      test_fraction(5, 8, 3, 16, foSubtract, 1);
+      test_fraction(7, 8, 3, 12, foSubtract, 1);
+      test_fraction(0, 8, 3, 16, foSubtract, 1);
+      test_fraction(1, 1, 3, 16, foSubtract, 1);
+      test_fraction(5, 8, -3, 16, foSubtract, 1);
+      test_fraction(1, 5, -4, 9, foSubtract, 1);
+      test_fraction(-1, 5, -4, 9, foSubtract, 1);
+      test_fraction(5, 5, 5, 5, foSubtract, 1);
+      <b>break</b>;
+
+    <b>case</b> 7:
+      printf(<font color="#9933CC">&quot;===== Testing multiply and mixed =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foMultiply, 1);
+      test_fraction(1, 5, 4, 9, foMultiply, 1);
+      test_fraction(3, 7, 12, 21, foMultiply, 1);
+      test_fraction(5, 8, 3, 16, foMultiply, 1);
+      test_fraction(7, 8, 3, 12, foMultiply, 1);
+      test_fraction(0, 8, 3, 16, foMultiply, 1);
+      test_fraction(1, 1, 3, 16, foMultiply, 1);
+      test_fraction(5, 8, -3, 16, foMultiply, 1);
+      test_fraction(1, 5, -4, 9, foMultiply, 1);
+      test_fraction(-1, 5, -4, 9, foMultiply, 1);
+      test_fraction(5, 5, 5, 5, foMultiply, 1);
+      test_fraction(0, 4, 5, 7, foMultiply, 1);
+      test_fraction(0, 0, 0, 0, foMultiply, 1);
+      <b>break</b>;
+
+    <b>default</b>:
+      printf(<font color="#9933CC">&quot;===== Testing GCD =====&#92;n&quot;</font>);
+      testGCD();
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+      printf(<font color="#9933CC">&quot;===== Testing add =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foAdd, 0);
+      test_fraction(1, 5, 4, 9, foAdd, 0);
+      test_fraction(3, 7, 12, 21, foAdd, 0);
+      test_fraction(5, 8, 3, 16, foAdd, 0);
+      test_fraction(7, 8, 3, 12, foAdd, 0);
+      test_fraction(0, 8, 3, 16, foAdd, 0);
+      test_fraction(1, 1, 3, 16, foAdd, 0);
+      test_fraction(5, 8, -3, 16, foAdd, 0);
+      test_fraction(1, 5, -4, 9, foAdd, 0);
+      test_fraction(-1, 5, -4, 9, foAdd, 0);
+      test_fraction(1, 2, 1, 2, foAdd, 0);
+      test_fraction(5, 5, -5, 5, foAdd, 0);
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+      printf(<font color="#9933CC">&quot;===== Testing subtract =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foSubtract, 0);
+      test_fraction(1, 5, 4, 9, foSubtract, 0);
+      test_fraction(3, 7, 12, 21, foSubtract, 0);
+      test_fraction(5, 8, 3, 16, foSubtract, 0);
+      test_fraction(7, 8, 3, 12, foSubtract, 0);
+      test_fraction(0, 8, 3, 16, foSubtract, 0);
+      test_fraction(1, 1, 3, 16, foSubtract, 0);
+      test_fraction(5, 8, -3, 16, foSubtract, 0);
+      test_fraction(1, 5, -4, 9, foSubtract, 0);
+      test_fraction(-1, 5, -4, 9, foSubtract, 0);
+      test_fraction(5, 5, 5, 5, foSubtract, 0);
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+      printf(<font color="#9933CC">&quot;===== Testing multiply =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foMultiply, 0);
+      test_fraction(1, 5, 4, 9, foMultiply, 0);
+      test_fraction(3, 7, 12, 21, foMultiply, 0);
+      test_fraction(5, 8, 3, 16, foMultiply, 0);
+      test_fraction(7, 8, 3, 12, foMultiply, 0);
+      test_fraction(0, 8, 3, 16, foMultiply, 0);
+      test_fraction(1, 1, 3, 16, foMultiply, 0);
+      test_fraction(5, 8, -3, 16, foMultiply, 0);
+      test_fraction(1, 5, -4, 9, foMultiply, 0);
+      test_fraction(-1, 5, -4, 9, foMultiply, 0);
+      test_fraction(5, 5, 5, 5, foMultiply, 0);
+      test_fraction(0, 4, 5, 7, foMultiply, 0);
+      test_fraction(0, 0, 0, 0, foMultiply, 0);
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+      printf(<font color="#9933CC">&quot;===== Testing add and mixed =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foAdd, 1);
+      test_fraction(1, 5, 4, 9, foAdd, 1);
+      test_fraction(3, 7, 12, 21, foAdd, 1);
+      test_fraction(5, 8, 3, 16, foAdd, 1);
+      test_fraction(7, 8, 3, 12, foAdd, 1);
+      test_fraction(0, 8, 3, 16, foAdd, 1);
+      test_fraction(1, 1, 3, 16, foAdd, 1);
+      test_fraction(5, 8, -3, 16, foAdd, 1);
+      test_fraction(1, 5, -4, 9, foAdd, 1);
+      test_fraction(-1, 5, -4, 9, foAdd, 1);
+      test_fraction(1, 2, 1, 2, foAdd, 1);
+      test_fraction(5, 5, -5, 5, foAdd, 1);
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+      printf(<font color="#9933CC">&quot;===== Testing subtract and mixed =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foSubtract, 1);
+      test_fraction(1, 5, 4, 9, foSubtract, 1);
+      test_fraction(3, 7, 12, 21, foSubtract, 1);
+      test_fraction(5, 8, 3, 16, foSubtract, 1);
+      test_fraction(7, 8, 3, 12, foSubtract, 1);
+      test_fraction(0, 8, 3, 16, foSubtract, 1);
+      test_fraction(1, 1, 3, 16, foSubtract, 1);
+      test_fraction(5, 8, -3, 16, foSubtract, 1);
+      test_fraction(1, 5, -4, 9, foSubtract, 1);
+      test_fraction(-1, 5, -4, 9, foSubtract, 1);
+      test_fraction(5, 5, 5, 5, foSubtract, 1);
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+      printf(<font color="#9933CC">&quot;===== Testing multiply and mixed =====&#92;n&quot;</font>);
+      test_fraction(2, 3, 1, 6, foMultiply, 1);
+      test_fraction(1, 5, 4, 9, foMultiply, 1);
+      test_fraction(3, 7, 12, 21, foMultiply, 1);
+      test_fraction(5, 8, 3, 16, foMultiply, 1);
+      test_fraction(7, 8, 3, 12, foMultiply, 1);
+      test_fraction(0, 8, 3, 16, foMultiply, 1);
+      test_fraction(1, 1, 3, 16, foMultiply, 1);
+      test_fraction(5, 8, -3, 16, foMultiply, 1);
+      test_fraction(1, 5, -4, 9, foMultiply, 1);
+      test_fraction(-1, 5, -4, 9, foMultiply, 1);
+      test_fraction(5, 5, 5, 5, foMultiply, 1);
+      test_fraction(0, 4, 5, 7, foMultiply, 1);
+      test_fraction(0, 0, 0, 0, foMultiply, 1);
+      <b>break</b>;
+  }
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

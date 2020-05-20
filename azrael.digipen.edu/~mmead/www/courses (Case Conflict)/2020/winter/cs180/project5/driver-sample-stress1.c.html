@@ -1,0 +1,198 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>sample-driver-stress1.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<pre class="sourcecode"><code><font color="#003399"><i>/* sample-driver-stress1.c */</i></font>
+
+<font color="990099">#include &lt;stdio.h&gt;  /* printf, sprintf */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* rand, srand     */</font>
+<font color="990099">#include &lt;string.h&gt; /* memset          */</font>
+<font color="990099">#include &quot;memmgr.h&quot;</font>
+
+<b>static</b> <b>enum</b> MMPolicy gPolicy = mmpFirstFit;
+<b>static</b> <b>int</b> gPrintValues = <b>false</b>;
+
+<b>void</b> mm_dump(block_info *heap, <b>int</b> show_address, <b>int</b> stats_only)
+{
+  <b>int</b> allocated = 0, alloc_blocks = 0;
+  <b>int</b> unallocated = 0, unalloc_blocks = 0;
+
+  <b>if</b> (!heap)
+    <b>return</b>;
+
+  printf(<font color="#9933CC">&quot;=========================================&#92;n&quot;</font>);
+  <b>while</b> (heap)
+  {
+    <b>if</b> (!stats_only)
+    {
+      printf(<font color="#9933CC">&quot;    label: %s&#92;n&quot;</font>, heap-&gt;label);
+      <b>if</b> (show_address)
+        printf(<font color="#9933CC">&quot;  address: %p&#92;n&quot;</font>, heap-&gt;address);
+      <b>else</b>
+        printf(<font color="#9933CC">&quot;  address: 0x000000&#92;n&quot;</font>);
+      printf(<font color="#9933CC">&quot;     size: %lu&#92;n&quot;</font>, heap-&gt;size);
+      printf(<font color="#9933CC">&quot;allocated: %s&#92;n&quot;</font>, heap-&gt;allocated ? <font color="#9933CC">&quot;true&quot;</font> : <font color="#9933CC">&quot;false&quot;</font>);
+      printf(<font color="#9933CC">&quot;--&#92;n&quot;</font>);
+    }
+
+    <b>if</b> (heap-&gt;allocated)
+    {
+      allocated += heap-&gt;size;
+      alloc_blocks++;
+    }
+    <b>else</b>
+    {
+      unallocated += heap-&gt;size;
+      unalloc_blocks++;
+    }
+
+    heap = heap-&gt;next;
+  }
+  printf(<font color="#9933CC">&quot;Allocated bytes: %8i [blocks: %5i]&#92;n&quot;</font>, allocated, alloc_blocks);
+  printf(<font color="#9933CC">&quot;     Free bytes: %8i [blocks: %5i]&#92;n&quot;</font>, unallocated, unalloc_blocks);
+}
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number;
+  number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>void</b> SwapInt(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>int</b> count)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>int</b> r = RandomInt(0, count - 1);
+    SwapInt(&amp;array[i], &amp;array[r]);
+  }
+}
+
+<b>static</b> <b>void</b> *Allocate(block_info *heap, <b>int</b> size, <b>char</b> *label)
+{
+  <b>char</b> *block = mm_allocate(heap, size, label);
+  <b>if</b> (!block)
+  {
+    printf(<font color="#9933CC">&quot;********** Allocation failed. [%s] **********&#92;n&quot;</font>, label);
+    <b>return</b> NULL;
+  }
+
+  memset(block, <font color="#9933CC">'A'</font>, size - 1);
+  block[size - 1] = <font color="#9933CC">'&#92;0'</font>;
+  <b>if</b> (gPrintValues)
+    printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, block);
+
+  <b>return</b> block;
+}
+
+<b>void</b> Deallocate(block_info *heap, <b>void</b> *block)
+{
+  <b>if</b> (mm_deallocate(heap, block) == FAILURE)
+    printf(<font color="#9933CC">&quot;********** Deallocation failed. **********&#92;n&quot;</font>);
+}
+
+<font color="990099">#define VERBOSE</font>
+<b>void</b> stress1(<b>void</b>)
+{
+  block_info *heap;
+  block_info **blocks;
+  <b>int</b> count = 0;
+  <b>int</b> i;
+  <b>int</b> base_count = 10000;
+  <b>int</b> num_allocs = 800;
+  <b>int</b> block_sizes[] = {12, 8, 20, 8};
+  
+  blocks = calloc(base_count * 2, <b>sizeof</b>(block_info));
+
+  gPrintValues = <b>false</b>;
+  heap = mm_create(base_count, gPolicy);
+
+  <b>for</b> (i = 0; i &lt; num_allocs; i++)
+  {
+    <b>int</b> sz = block_sizes[i % 4];
+    <b>char</b> label[LABEL_SIZE];
+
+    sprintf(label, <font color="#9933CC">&quot;%6i:%6i&quot;</font>, count + 1, sz);
+    blocks[count++] = Allocate(heap, sz, label);
+  }
+  <font color="990099">#ifdef VERBOSE</font>
+  printf(<font color="#9933CC">&quot;-------------------- First Allocation --------------------&#92;n&quot;</font>);
+  mm_dump(heap, 0, 0);
+  <font color="990099">#endif</font>
+
+  <b>for</b> (i = 0; i &lt; num_allocs * .5; i++)
+  {
+    <b>int</b> r = i * 2;
+
+    Deallocate(heap, blocks[r]);
+    blocks[r] = NULL;
+    <font color="#003399"><i>/*printf(&quot;freeing %i&#92;n&quot;, r);*/</i></font>
+    <font color="#003399"><i>/*mm_dump(heap, 0, 1);*/</i></font>
+  }
+  <font color="990099">#ifdef VERBOSE</font>
+  printf(<font color="#9933CC">&quot;-------------------- First Deallocation --------------------&#92;n&quot;</font>);
+  mm_dump(heap, 0, 0);
+  <font color="990099">#endif</font>
+
+  <b>for</b> (i = 0; i &lt; num_allocs * .25; i++)
+  {
+    <b>int</b> sz = block_sizes[0];
+    <b>char</b> label[LABEL_SIZE];
+
+    sprintf(label, <font color="#9933CC">&quot;%6i:%6i&quot;</font>, count + 1, sz);
+    blocks[count++] = Allocate(heap, sz, label);
+    <font color="#003399"><i>/*printf(&quot;allocating size %i&#92;n&quot;, sz);*/</i></font>
+    <font color="#003399"><i>/*mm_dump(heap, 0, 1);*/</i></font>
+  }
+  <b>for</b> (i = 0; i &lt; num_allocs * .274; i++)
+  {
+    <b>int</b> sz = block_sizes[2];
+    <b>char</b> label[LABEL_SIZE];
+
+    sprintf(label, <font color="#9933CC">&quot;%6i:%6i&quot;</font>, count + 1, sz);
+    blocks[count++] = Allocate(heap, sz, label);
+    <font color="#003399"><i>/*printf(&quot;allocating size %i&#92;n&quot;, sz);*/</i></font>
+    <font color="#003399"><i>/*mm_dump(heap, 0, 1);*/</i></font>
+  }
+  printf(<font color="#9933CC">&quot;-------------------- Second Allocation --------------------&#92;n&quot;</font>);
+  mm_dump(heap, 0, 0);
+
+  free(blocks);
+  mm_destroy(heap);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  srand(4);
+
+  <b>if</b> (argc &gt; 1)
+    <b>if</b> (atoi(argv[1]))
+      gPolicy = mmpBestFit;
+
+  stress1();
+
+  <b>return</b> 0;
+}
+</code></pre>
+</body>
+</html>

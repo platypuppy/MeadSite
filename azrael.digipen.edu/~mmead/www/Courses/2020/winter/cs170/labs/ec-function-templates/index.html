@@ -1,0 +1,258 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS170 - Lab/Assignment</title>
+</head>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<bodyxx bgcolor="#FFFFFF" background="../../../../../images/notebook.jpg"  leftmargin="50" rightmargin="0">
+
+<center>
+<h1>CS170 - Lab Assignment (Optional Extra Credit)</h1>
+</center>
+
+<p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<!--
+<table border=0>
+<tr><td><img src="../../../../../images/annew3.gif" width="90" height="45"></td>
+<td>
+<p class="technote">
+</p>
+</td>
+</tr></table>	
+-->
+
+<ol>
+  <li>This lab gives you experience with function templates, pointers, 
+and ranges. The goal is to implement several templated functions that work on ranges. You
+ will implement functions that perform operations on ranges such as removing elements
+  within the range, replacing elements within the range, searching for elements, copying
+   one range to another range, etc. Many of these functions mimic how the generic 
+   algorithms in the STL work.
+<p>
+   You will have a header file that looks like this:    
+
+<blockquote><pre>
+<b>namespace</b> CS170
+{
+  <font color="#003399"><i>/* 
+   *  Other template function declarations for count, remove, replace, etc.
+   *  go here. Make sure that you put all of the functions in <b>alphabetical</b>
+   *  order. This will make it easy to find the declarations.
+   *
+   */</i></font> 
+  <b>template</b> &lt;<b>typename</b> T&gt; <b>void</b> swap(T &amp;left, T &amp;right);
+  
+  <font color="990099">#include &quot;Functions.cpp&quot;</font>
+}
+</pre></blockquote>
+
+<p>
+Here's an example: <!--(What are the types of <tt>begin</tt>, <tt>end</tt>, and <tt>value</tt>?)-->
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>int</b> count(<b>const</b> T *begin, <b>const</b> T *end, <b>const</b> T&amp; value)
+{
+  <b>int</b> counter = 0;
+  <b>while</b> (begin != end)
+  {
+    <b>if</b> (*begin == value)
+      ++counter;
+    ++begin;
+  }
+  <b>return</b> counter;
+}
+</pre></blockquote>
+
+What operations must <tt>T</tt> support for the code above to compile?
+<p>
+
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add Doxygen file headers and comments to <tt><b>Functions.h</b></tt> and <tt><b>Functions.cpp</b></tt>. 
+  Make a bullet list of the functions in the .cpp file. Create doxygen function header comments 
+  for each function.
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Here are sample command lines:
+
+g++:
+<blockquote><pre>
+<b>g++</b> -o gnu driver-sample.cpp -g -O2 -Wall -Wextra -ansi -pedantic -Wconversion -Werror
+</pre></blockquote>
+
+<!--
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver-sample.cpp
+</pre></blockquote>
+-->
+
+Additional files and information:
+<p>
+
+<ul>
+<li><a href="cs170-lab-function-templates.pdf">More details</a>
+<li>Partial interface: <a href="Functions.h.html">HTML</a> <a href="Functions.h">Text</a>
+<li>Partial implementation: <a href="Functions.cpp.html">HTML</a> <a href="Functions.cpp">Text</a>
+<li>Sample driver program: <a href="driver-sample-with-stress.cpp.html">HTML</a> <a href="driver-sample-with-stress.cpp">Text</a>
+<li>Sample output: <a href="output-sample.txt">output.txt</a> This is from GNU's compiler (won't match the others due to the random numbers) 
+  <b>If you've implemented your functions properly, you should be able to finish these tests in less than 1 second.</b>
+<li><a href="CS170-FAQ-Functions.html">FAQ</a> for this lab.
+<p>
+
+<!--
+<blockquote><pre>
+real 1.82
+user 1.17
+sys 0.03
+</pre></blockquote>
+-->
+
+<!--
+<li>The English alphabet:
+<blockquote><pre>
+<big><big>a b c d e f g h i j k l m n o p q r s t u v w x y z
+	
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+</big></big></pre></blockquote>
+<br>
+-->
+<p>
+</ul>
+
+More details on the <tt><b>remove</b></tt> function:
+	
+<blockquote><pre>
+<b>void</b> TestRemove(<b>void</b>)
+{
+    <font color="#003399"><i>// Initialize an array with 10 elements</i></font>
+  <b>int</b> i1[] = {1, 50, 50, 4, 5, 50, 7, 8, 50, 10};
+
+    <font color="#003399"><i>// Print all of them</i></font>
+  CS170::display(i1, i1 + 10);
+
+    <font color="#003399"><i>// Remove all occurrences of 50, returns a</i></font>
+    <font color="#003399"><i>// pointer to the new 'end'</i></font>
+  <b>int</b> *newend = CS170::remove(i1, i1 + 10,  50);
+
+    <font color="#003399"><i>// Print out the list (only up to newend)</i></font>
+  cout &lt;&lt; <font color="#9933CC">&quot;remove 50, new list: &quot;</font>;
+  CS170::display(i1, newend);
+
+    <font color="#003399"><i>// Print all items out</i></font>
+  CS170::display(i1, i1 + 10);
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+1, 50, 50, 4, 5, 50, 7, 8, 50, 10
+remove 50, new list: 1, 4, 5, 7, 8, 10
+1, 4, 5, 7, 8, 10, 7, 8, 50, 10
+</pre></blockquote>
+
+A closer look at the modified array:
+
+<font size=+1><blockquote><pre>
+  1  4  5  7  8  10  7  8  50  10
+  ^                  ^            ^
+begin             new end     real end
+</pre></blockquote></font>
+
+Usually, when we remove elements from an array, we must shift all of the elements to the right of the deleted item over to the left.
+Shifting elements (especially in a very large array) is a very expensive operation. It could be worse
+if the elements themselves are very large.
+
+The technique that <b><tt>remove</tt></b> implements
+does not shift any elements. Instead, it just copies a few elements filling in the "holes" that
+were created by removing elements.
+
+
+<!--The number of elements copied is at most the number of elements that were
+removed.-->
+
+<p>
+It's also important to notice that the <b><tt>remove</tt></b> function returns <i>the new end</i> (or logical end). This is important because
+it tells the caller where the end of the remaining elements is. Without that return value, the caller would have no way to know where 
+the "good" elements stop.
+<p>
+It is techniques like this that make the STL such an efficient library for all kinds of tasks. You 
+would do well to learn it and use it as much as possible.
+</ul>
+
+You can watch a demonstration of how the algorithm works
+<a href="https://faculty.digipen.edu/~mmead/www/online-spring2020/cs170/week12/lecture2/remove-algorithm.mp4">here</a>.
+<p>
+<p class="technote">
+<b>Correction</b>: In the video, I say that the maximum number of copies that will be made is
+equal to the number of entries (value of 50) to be removed. That was incorrect. What I meant to say
+was that the max number of copies is equal to the number of entries that will NOT be removed.
+However, it is still the case that each item that is copied will only be copied (shifted) once.
+
+</p>
+
+<!--
+<p>
+<li>Because this is an <b>extra credit</b> (optional) lab, it is a hybrid between a lab and an assignment. This means that the
+  submission server will run many tests on your code (compile, link, run, diff, Valgrind, tablen, Doxygen, etc.)
+  If the server accepts your submission, it will then be sent to the TAs to grade it. They will go over
+  all of your code to ensure that you followed the style guide and used proper programming techniques.
+<p class="technote">
+  This means that if the server accepted your submission, there is no guarantee that you will get 
+  credit for it until the TAs verify your code. If the server accepts it, it just means that you
+  have passed <i>phase one</i> of the grading process. As always, failure to read and follow all of the
+  instructions will lead to a 0.
+</p>  
+-->
+
+<hr>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

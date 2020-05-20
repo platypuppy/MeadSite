@@ -1,0 +1,6 @@
+int main(void) /* help */
+{
+  /*/ Peek ahead to /  *see* / if it is the beginning of a comment /*/
+  int a = 8/4; /* comment */
+  /* comment /*/
+}

@@ -1,0 +1,2 @@
+DEL mystress.txt
+FOR /L %%i IN (1,1,500) DO randwalk 0 %%i >> mystress.txt

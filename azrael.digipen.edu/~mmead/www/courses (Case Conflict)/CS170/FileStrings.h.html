@@ -1,0 +1,72 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>scantext.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<b>#ifndef</b> FILESTRINGS_H
+<b>#define</b> FILESTRINGS_H
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>#include</b> &lt;string&gt; <font color="#003399"><i>// string</i></font>
+<b>#include</b> &lt;vector&gt; <font color="#003399"><i>// vector</i></font>
+
+<b>namespace</b> CS170
+{
+
+<b>const</b> <b>char</b> SPACE = 32;
+
+<b>class</b> StringUtils
+{
+  <b>public</b>:
+    <b>static</b> std::string&amp; UpperCase(std::string&amp; string);
+    <b>static</b> std::vector&lt;std::string&gt; WordWrap(<b>const</b> std::string&amp; words, 
+                                             size_t line_length);
+    <b>static</b> std::vector&lt;std::string&gt; Tokenize(<b>const</b> std::string&amp; words);
+};
+
+<b>class</b> DictionaryInfo
+{
+  <b>public</b>:
+    size_t shortest; <font color="#003399"><i>// Shortest word in the dictionary</i></font>
+    size_t longest;  <font color="#003399"><i>// Longest word in the dictionary</i></font>
+    size_t count;    <font color="#003399"><i>// Number of words in the dictionary</i></font>
+};
+
+<b>class</b> SpellChecker
+{
+  <b>public</b>:
+    <b>enum</b> SCResult { scrFILE_OK = -1,       <font color="#003399"><i>// File was opened successfully </i></font>
+                    scrFILE_ERR_OPEN = -2, <font color="#003399"><i>// File was unable to be opened </i></font>
+                    scrWORD_OK = 1,        <font color="#003399"><i>// Word found in dictionary      </i></font>
+                    scrWORD_BAD = 2        <font color="#003399"><i>// Word not found in dictionary  </i></font>
+                  };
+
+    SpellChecker(<b>const</b> std::string &amp;dictionary);
+    SCResult GetInfo(DictionaryInfo &amp;info) <b>const</b>;
+    SCResult SpellCheck(<b>const</b> std::string&amp; word) <b>const</b>;
+    SCResult WordLengths(std::vector&lt;size_t&gt;&amp; lengths, size_t count) <b>const</b>;
+    SCResult WordsStartingWith(<b>char</b> letter, <b>int</b>&amp; count) <b>const</b>;
+    SCResult AcronymToWord(<b>const</b> std::string&amp; acronym, 
+                           std::vector&lt;std::string&gt;&amp; words, 
+                           size_t maxlen = 0) <b>const</b>;
+
+  <b>private</b>:
+    std::string dictionary_;
+};
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<b>#endif</b>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

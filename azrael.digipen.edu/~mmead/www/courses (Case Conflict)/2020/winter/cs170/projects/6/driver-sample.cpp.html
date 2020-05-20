@@ -1,0 +1,631 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-sample.cp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+ driver-sample.cpp
+*******************************************************************************/</i></font>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+<font color="990099">#include &lt;string&gt;   // string</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+
+<font color="990099">#include &quot;FileStrings.h&quot; </font>
+
+<b>using</b> CS170::SpellChecker;
+
+<b>void</b> test1(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;score&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;seven&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;our&quot;</font>,
+                         <font color="#9933CC">&quot;fathers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;forth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>,
+                         <font color="#9933CC">&quot;continent&quot;</font>, <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;new&quot;</font>, <font color="#9933CC">&quot;NATION&quot;</font>, <font color="#9933CC">&quot;fast123&quot;</font>,
+                         <font color="#9933CC">&quot;123  abc&quot;</font>, <font color="#9933CC">&quot;Hello!!&quot;</font>, <font color="#9933CC">&quot;&quot;</font>, <font color="#9933CC">&quot;*&amp;^%$#8UPPERlower&quot;</font>
+                        };
+
+  <b>int</b> num_words = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(words) / <b>sizeof</b>(*words));
+
+  SpellChecker sc(<font color="#9933CC">&quot;&quot;</font>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest1-----------------------------------------------------&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; num_words; i++)
+  {
+    std::string uword = words[i];
+    CS170::StringUtils::UpperCase(uword);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Word: &quot;</font> &lt;&lt; words[i] &lt;&lt; <font color="#9933CC">&quot; (&quot;</font> &lt;&lt; uword &lt;&lt; <font color="#9933CC">&quot;)&quot;</font> &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> test2(<b>const</b> std::string&amp; dictionary)
+{
+  SpellChecker::SCResult file_result; <font color="#003399"><i>/* For file errors               */</i></font>
+  CS170::DictionaryInfo info;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest2-----------------------------------------------------&#92;n&quot;</font>;
+  SpellChecker sc(dictionary);
+  file_result = sc.GetInfo(info);
+
+  <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+    <b>return</b>;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Dictionary: &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Number of words: &quot;</font> &lt;&lt; info.count &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shortest word: &quot;</font> &lt;&lt; info.shortest &lt;&lt; <font color="#9933CC">&quot; letters&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Longest word: &quot;</font> &lt;&lt; info.longest &lt;&lt; <font color="#9933CC">&quot; letters&quot;</font> &lt;&lt; std::endl;
+}
+
+<b>void</b> test3(<b>const</b> std::string&amp; dictionary, <b>char</b> letter)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest3-----------------------------------------------------&#92;n&quot;</font>;
+  SpellChecker sc(dictionary);
+
+  <b>int</b> count = 0;
+  SpellChecker::SCResult file_result = sc.WordsStartingWith(letter, count);
+  <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+    <b>return</b>;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Dictionary: &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Number of words starting with &quot;</font> &lt;&lt; letter &lt;&lt; <font color="#9933CC">&quot;: &quot;</font>; 
+  std::cout &lt;&lt; count &lt;&lt; std::endl;
+}
+
+<b>void</b> test4(<b>const</b> std::string&amp; dictionary, <b>const</b> <b>char</b> *word)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest4-----------------------------------------------------&#92;n&quot;</font>;
+  SpellChecker sc(dictionary);
+
+  SpellChecker::SCResult file_result = sc.SpellCheck(word);
+  <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+    <b>return</b>;
+  }
+
+  <b>if</b> (file_result == SpellChecker::scrWORD_OK)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;The word &quot;</font> &lt;&lt; word &lt;&lt; <font color="#9933CC">&quot; is spelled correctly.&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;The word &quot;</font> &lt;&lt; word &lt;&lt; <font color="#9933CC">&quot; is misspelled.&#92;n&quot;</font>;
+}
+
+<b>void</b> test5(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;score&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;seven&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;our&quot;</font>,
+                   <font color="#9933CC">&quot;fathers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;forth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>, <font color="#9933CC">&quot;continent&quot;</font>,
+                   <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;new&quot;</font>, <font color="#9933CC">&quot;nation&quot;</font>
+                  };
+
+  <b>int</b> num_misspelled = 0;
+  <b>int</b> num_words = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(words) / <b>sizeof</b>(*words));
+
+    <font color="#003399"><i>/* Name of the dictionary file */</i></font>
+  <b>const</b> std::string&amp; dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest5-----------------------------------------------------&#92;n&quot;</font>;
+  SpellChecker sc(dictionary);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Misspelled words: &quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; num_words; i++)
+  {
+    SpellChecker::SCResult file_result = sc.SpellCheck(words[i]);
+    <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+      <b>return</b>;
+    }
+
+    <b>if</b> (file_result == SpellChecker::scrWORD_BAD)
+    {
+      std::cout &lt;&lt; words[i];
+      num_misspelled++;
+    }
+  }
+  <b>if</b> (!num_misspelled)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;*** None ***&quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test6(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;SCORE&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;sevn&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;ar&quot;</font>,
+                   <font color="#9933CC">&quot;fawthers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;foarth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>, <font color="#9933CC">&quot;contnent&quot;</font>,
+                   <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;gnu&quot;</font>, <font color="#9933CC">&quot;nashun&quot;</font>
+                  };
+
+  <b>int</b> num_misspelled = 0;
+  <b>int</b> num_words = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(words) / <b>sizeof</b>(*words));
+
+    <font color="#003399"><i>/* Name of the dictionary file */</i></font>
+  <b>const</b> std::string&amp; dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest6-----------------------------------------------------&#92;n&quot;</font>;
+  SpellChecker sc(dictionary);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Misspelled words: &quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; num_words; i++)
+  {
+    SpellChecker::SCResult file_result = sc.SpellCheck(words[i]);
+    <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+      <b>return</b>;
+    }
+
+    <b>if</b> (file_result == SpellChecker::scrWORD_BAD)
+    {
+      std::cout &lt;&lt; words[i] &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+      num_misspelled++;
+    }
+  }
+  <b>if</b> (!num_misspelled)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;*** None ***&quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test7(size_t max_length)
+{
+  size_t total = 0;
+  std::vector&lt;size_t&gt; lengths(max_length + 1);
+
+    <font color="#003399"><i>/* Name of the dictionary file */</i></font>
+  <b>const</b> std::string&amp; dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest7-----------------------------------------------------&#92;n&quot;</font>;
+  SpellChecker sc(dictionary);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Dictionary: &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+  SpellChecker::SCResult  file_result = sc.WordLengths(lengths, max_length);
+  <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;;
+    <b>return</b>;
+  }
+  <b>for</b> (size_t i = 1; i &lt;= max_length; i++)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Number of words of length &quot;</font> &lt;&lt; std::setw(2) &lt;&lt; i &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> 
+              &lt;&lt; std::setw(6) &lt;&lt; lengths[i] &lt;&lt; std::endl;
+    total += lengths[i];
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Total number of words counted: &quot;</font> &lt;&lt; total &lt;&lt; std::endl;
+}
+
+<b>void</b> test8(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest8-----------------------------------------------------&#92;n&quot;</font>;
+  <b>const</b> <b>char</b> *p;
+  std::string words;
+  std::vector&lt;std::string&gt; tokens;
+  
+  p = <font color="#9933CC">&quot;When in the Course of human events&quot;</font>;
+  words = p;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;String: |&quot;</font> &lt;&lt; p &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  tokens = CS170::StringUtils::Tokenize(words);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; tokens.size() &lt;&lt; <font color="#9933CC">&quot; tokens&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; tokens.size(); i++)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; tokens[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;----------------------------------&#92;n&quot;</font>;
+
+  p = <font color="#9933CC">&quot;  When    in the    Course of human events    &quot;</font>;
+  words = p;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;String: |&quot;</font> &lt;&lt; p &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  tokens = CS170::StringUtils::Tokenize(words);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; tokens.size() &lt;&lt; <font color="#9933CC">&quot; tokens&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; tokens.size(); i++)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; tokens[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;----------------------------------&#92;n&quot;</font>;
+
+  p = <font color="#9933CC">&quot;WhenintheCourseofhumanevents&quot;</font>;
+  words = p;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;String: |&quot;</font> &lt;&lt; p &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  tokens = CS170::StringUtils::Tokenize(words);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; tokens.size() &lt;&lt; <font color="#9933CC">&quot; tokens&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; tokens.size(); i++)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; tokens[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;----------------------------------&#92;n&quot;</font>;
+
+  p = <font color="#9933CC">&quot;&quot;</font>;
+  words = p;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;String: |&quot;</font> &lt;&lt; p &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  tokens = CS170::StringUtils::Tokenize(words);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; tokens.size() &lt;&lt; <font color="#9933CC">&quot; tokens&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; tokens.size(); i++)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; tokens[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;----------------------------------&#92;n&quot;</font>;
+}
+
+<b>void</b> test9(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest9-----------------------------------------------------&#92;n&quot;</font>;
+  <b>const</b> <b>char</b> *p = <font color="#9933CC">&quot;When in the Course of human events, it becomes necessary &quot;</font> 
+                  <font color="#9933CC">&quot;for one people to dissolve the political bands which have &quot;</font>
+                  <font color="#9933CC">&quot;connected them with another, and to assume among the powers &quot;</font>
+                  <font color="#9933CC">&quot;of the earth, the separate and equal station to which the &quot;</font> 
+                  <font color="#9933CC">&quot;Laws of Nature and of Nature's God entitle them, a decent &quot;</font>
+                  <font color="#9933CC">&quot;respect to the opinions of mankind requires that they &quot;</font>
+                  <font color="#9933CC">&quot;should declare the causes which impel them to the &quot;</font>
+                  <font color="#9933CC">&quot;separation.&quot;</font>;
+
+  std::string words(p);
+  std::vector&lt;std::string&gt; tokens = CS170::StringUtils::Tokenize(words);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; tokens.size() &lt;&lt; <font color="#9933CC">&quot; tokens&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; tokens.size(); i++)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; tokens[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+}
+
+<b>void</b> test10(size_t width)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest10----------------------------------------------------&#92;n&quot;</font>;
+  <b>const</b> <b>char</b> *p = <font color="#9933CC">&quot;When in the Course of human events, it becomes necessary &quot;</font> 
+                  <font color="#9933CC">&quot;for one people to dissolve the political bands which have &quot;</font>
+                  <font color="#9933CC">&quot;connected them with another, and to assume among the powers &quot;</font>
+                  <font color="#9933CC">&quot;of the earth, the separate and equal station to which the &quot;</font> 
+                  <font color="#9933CC">&quot;Laws of Nature and of Nature's God entitle them, a decent &quot;</font>
+                  <font color="#9933CC">&quot;respect to the opinions of mankind requires that they &quot;</font>
+                  <font color="#9933CC">&quot;should declare the causes which impel them to the &quot;</font>
+                  <font color="#9933CC">&quot;separation.&quot;</font>;
+
+  std::string words(p);
+  std::vector&lt;std::string&gt; lines = CS170::StringUtils::WordWrap(words, width);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; lines.size() &lt;&lt; <font color="#9933CC">&quot; lines wrapped at &quot;</font> &lt;&lt; width 
+            &lt;&lt; <font color="#9933CC">&quot; characters:&#92;n&quot;</font>;
+  size_t shortest = 100000, longest = 0;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; lines.size(); i++)
+  {
+    size_t size = lines[i].size();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Line #&quot;</font> &lt;&lt; std::setw(3) &lt;&lt; (i + 1) &lt;&lt; <font color="#9933CC">&quot; [&quot;</font>;
+    std::cout &lt;&lt; std::setw(2) &lt;&lt; size &lt;&lt; <font color="#9933CC">&quot;] &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; lines[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+    <b>if</b> (size &lt; shortest)
+      shortest = size;
+    <b>if</b> (size &gt; longest)
+      longest = size;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shortest line: &quot;</font> &lt;&lt; shortest &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; Longest line: &quot;</font> &lt;&lt; longest &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> SomeWidths(size_t width)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nSomeWidths------------------------------------------------&#92;n&quot;</font>;
+
+
+
+  <b>const</b> <b>char</b> *p = <font color="#9933CC">&quot;When in the Course of human events, it &quot;</font>
+                  <font color="#9933CC">&quot;becomes necessary for&quot;</font>;
+
+  std::string words(p);
+  std::vector&lt;std::string&gt; lines = CS170::StringUtils::WordWrap(words, width);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; lines.size() &lt;&lt; <font color="#9933CC">&quot; lines wrapped at &quot;</font> &lt;&lt; width 
+            &lt;&lt; <font color="#9933CC">&quot; characters:&#92;n&quot;</font>;
+  size_t shortest = 100000, longest = 0;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; lines.size(); i++)
+  {
+    size_t size = lines[i].size();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Line #&quot;</font> &lt;&lt; std::setw(3) &lt;&lt; (i + 1) &lt;&lt; <font color="#9933CC">&quot; [&quot;</font>;
+    std::cout &lt;&lt; std::setw(2) &lt;&lt; size &lt;&lt; <font color="#9933CC">&quot;] &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; lines[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+    <b>if</b> (size &lt; shortest)
+      shortest = size;
+    <b>if</b> (size &gt; longest)
+      longest = size;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shortest line: &quot;</font> &lt;&lt; shortest &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; Longest line: &quot;</font> &lt;&lt; longest &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test11(<b>void</b>)
+{
+  SomeWidths(1);
+  SomeWidths(4);
+  SomeWidths(8);
+  SomeWidths(12);
+  SomeWidths(19);
+  SomeWidths(25);
+  SomeWidths(35);
+  SomeWidths(70);
+  SomeWidths(59);
+  SomeWidths(60);
+  SomeWidths(61);
+}
+
+<b>void</b> AllWidths(size_t width)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nAllWidths-------------------------------------------------&#92;n&quot;</font>;
+  <b>const</b> <b>char</b> *p = <font color="#9933CC">&quot;When in the Course of human events, it becomes necessary &quot;</font> 
+                  <font color="#9933CC">&quot;for one people to dissolve the political bands which have &quot;</font>
+                  <font color="#9933CC">&quot;connected them with another, and to assume among the powers &quot;</font>
+                  <font color="#9933CC">&quot;of the earth, the separate and equal station to which the &quot;</font> 
+                  <font color="#9933CC">&quot;Laws of Nature and of Nature's God entitle them, a decent &quot;</font>
+                  <font color="#9933CC">&quot;respect to the opinions of mankind requires that they &quot;</font>
+                  <font color="#9933CC">&quot;should declare the causes which impel them to the &quot;</font>
+                  <font color="#9933CC">&quot;separation.&quot;</font>;
+
+  std::string words(p);
+  std::vector&lt;std::string&gt; lines = CS170::StringUtils::WordWrap(words, width);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; lines.size() &lt;&lt; <font color="#9933CC">&quot; lines wrapped at &quot;</font> &lt;&lt; width 
+            &lt;&lt; <font color="#9933CC">&quot; characters:&#92;n&quot;</font>;
+  size_t shortest = 100000, longest = 0;
+
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; lines.size(); i++)
+  {
+    size_t size = lines[i].size();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Line #&quot;</font> &lt;&lt; std::setw(3) &lt;&lt; (i + 1) &lt;&lt; <font color="#9933CC">&quot; [&quot;</font>;
+    std::cout &lt;&lt; std::setw(2) &lt;&lt; size &lt;&lt; <font color="#9933CC">&quot;] &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; lines[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+    <b>if</b> (size &lt; shortest)
+      shortest = size;
+    <b>if</b> (size &gt; longest)
+      longest = size;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shortest line: &quot;</font> &lt;&lt; shortest &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; Longest line: &quot;</font> &lt;&lt; longest &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test12(<b>void</b>)
+{
+  <b>for</b> (size_t i = 1; i &lt;= 100; i++)
+    AllWidths(i);
+}
+
+<b>void</b> TestAcronyms(<b>const</b> std::vector&lt;std::string&gt; acronyms, 
+                  <b>const</b> std::string&amp; dictionary, size_t maxlen, 
+                  <b>bool</b> showstrings)
+{
+  SpellChecker::SCResult file_result; <font color="#003399"><i>/* For file errors                      */</i></font>
+
+  SpellChecker sc(dictionary);
+
+  <b>for</b> (size_t i = 0; i &lt; acronyms.size(); i++)
+  {
+    std::vector&lt;std::string&gt; words;
+    file_result = sc.AcronymToWord(acronyms[i], words, maxlen);
+
+    <b>if</b> (file_result == SpellChecker::scrFILE_ERR_OPEN)
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open &quot;</font> &lt;&lt; dictionary &lt;&lt; std::endl;
+      <b>continue</b>;
+    }
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Acronym: &quot;</font> &lt;&lt; acronyms[i] &lt;&lt; <font color="#9933CC">&quot;, Words (&quot;</font> &lt;&lt; words.size() 
+              &lt;&lt; <font color="#9933CC">&quot;): &quot;</font>;
+    <b>if</b> (showstrings)
+    {
+      std::vector&lt;std::string&gt;::iterator it;
+      <b>for</b> (it = words.begin(); it != words.end(); ++it)
+        std::cout &lt;&lt; *it &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+    }
+    std::cout &lt;&lt; std::endl;
+  }
+
+}
+
+<b>void</b> test13(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest13----------------------------------------------------&#92;n&quot;</font>;
+  
+  std::vector&lt;std::string&gt; acronyms;
+  acronyms.push_back(<font color="#9933CC">&quot;GV&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;PAP&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;ABC&quot;</font>);
+  TestAcronyms(acronyms, <font color="#9933CC">&quot;lexicon2.txt&quot;</font>, 0, <b>true</b>);
+}
+
+<b>void</b> test14()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest14----------------------------------------------------&#92;n&quot;</font>;
+
+  std::vector&lt;std::string&gt; acronyms;
+  acronyms.push_back(<font color="#9933CC">&quot;bbq&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;byob&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;ATHF&quot;</font>);
+
+
+
+  acronyms.push_back(<font color="#9933CC">&quot;icbm&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;TCBY&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;bsgd&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;imHO&quot;</font>);
+  TestAcronyms(acronyms, <font color="#9933CC">&quot;allwords.txt&quot;</font>, 0, <b>true</b>);
+}
+
+<b>void</b> test15()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest15----------------------------------------------------&#92;n&quot;</font>;
+
+  std::vector&lt;std::string&gt; acronyms;
+  acronyms.push_back(<font color="#9933CC">&quot;ROYG&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;rofl&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;otoh&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;asap&quot;</font>);
+  TestAcronyms(acronyms, <font color="#9933CC">&quot;allwords.txt&quot;</font>, 10, <b>true</b>);
+}
+
+<b>void</b> test16(<b>bool</b> showstrings = <b>true</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest16----------------------------------------------------&#92;n&quot;</font>;
+
+  std::vector&lt;std::string&gt; acronyms;
+  acronyms.push_back(<font color="#9933CC">&quot;PHAT&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;OTOH&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;fdr&quot;</font>);
+  acronyms.push_back(<font color="#9933CC">&quot;isbn&quot;</font>);
+  TestAcronyms(acronyms, <font color="#9933CC">&quot;allwords.txt&quot;</font>, 0, showstrings);
+}
+
+<b>void</b> test17(size_t width)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nTest17----------------------------------------------------&#92;n&quot;</font>;
+  <b>const</b> <b>char</b> *p = 
+    <font color="#9933CC">&quot;When   in the    Course of  human events, it   becomes necessary &quot;</font> 
+    <font color="#9933CC">&quot;for one    people to dissolve the   political bands   which have     &quot;</font>
+    <font color="#9933CC">&quot;connected   them with     another, and to    assume    among the powers &quot;</font>
+    <font color="#9933CC">&quot;of the earth, the separate and equal station to which the   &quot;</font> 
+    <font color="#9933CC">&quot;Laws of Nature       and         of Nature's God entitle them,     a &quot;</font>
+    <font color="#9933CC">&quot;decent respect to the   opinions of       mankind requires   that they   &quot;</font>
+    <font color="#9933CC">&quot;should    declare     the  causes  which impel them   to the separation.&quot;</font>;
+
+  std::string words(p);
+  std::vector&lt;std::string&gt; lines = CS170::StringUtils::WordWrap(words, width);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;There are &quot;</font> &lt;&lt; lines.size() &lt;&lt; <font color="#9933CC">&quot; lines wrapped at &quot;</font> &lt;&lt; width 
+            &lt;&lt; <font color="#9933CC">&quot; characters:&#92;n&quot;</font>;
+  size_t shortest = 100000, longest = 0;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; lines.size(); i++)
+  {
+    size_t size = lines[i].size();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Line #&quot;</font> &lt;&lt; std::setw(3) &lt;&lt; (i + 1) &lt;&lt; <font color="#9933CC">&quot; [&quot;</font>;
+    std::cout &lt;&lt; std::setw(2) &lt;&lt; size &lt;&lt; <font color="#9933CC">&quot;] &quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; lines[i] &lt;&lt; <font color="#9933CC">&quot;|&quot;</font> &lt;&lt; std::endl;
+    <b>if</b> (size &lt; shortest)
+      shortest = size;
+    <b>if</b> (size &gt; longest)
+      longest = size;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shortest line: &quot;</font> &lt;&lt; shortest &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; Longest line: &quot;</font> &lt;&lt; longest &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> test = 0;
+  <b>if</b> (argc &gt; 1)
+    test = std::atoi(argv[1]);
+
+  <b>if</b> (test == 1)
+  {
+    test1(); <font color="#003399"><i>// Uppercase</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 2)
+  {
+    test2(<font color="#9933CC">&quot;lexicon.txt&quot;</font>);  <font color="#003399"><i>// GetInfo</i></font>
+    test2(<font color="#9933CC">&quot;small.txt&quot;</font>);    <font color="#003399"><i>// GetInfo</i></font>
+    test2(<font color="#9933CC">&quot;allwords.txt&quot;</font>); <font color="#003399"><i>// GetInfo</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 3)
+  {
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'a'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'A'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'l'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'$'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'e'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'M'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'q'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'5'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 4)
+  {
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;APPLE&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;Apple&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;apple&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;appl&quot;</font>);             <font color="#003399"><i>// Spellcheck, incorrect</i></font>
+    test4(<font color="#9933CC">&quot;small.txt&quot;</font>, <font color="#9933CC">&quot;abalone&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">&quot;interdigitation&quot;</font>); <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">&quot;interdigalizing&quot;</font>); <font color="#003399"><i>// Spellcheck, incorrect</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 5)
+  {
+    test5(); <font color="#003399"><i>// Spellcheck, all correct</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 6)
+  {
+    test6(); <font color="#003399"><i>// Spellcheck, some misspelled</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 7)
+  {
+    test7(5);  <font color="#003399"><i>// WordLengths, 1 - 5</i></font>
+    test7(20); <font color="#003399"><i>// WordLengths, 1 - 20</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 8)
+  {
+    test8(); <font color="#003399"><i>// Simple Tokenize</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 9)
+  {
+    test9(); <font color="#003399"><i>// Larger Tokenize</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 10)
+  {
+    test10(20); <font color="#003399"><i>// Wordwrap</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 11)
+  {
+    test11();   <font color="#003399"><i>// Several Wordwrap test</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 12)
+  {
+    test12();   <font color="#003399"><i>// Tons 'O Wordwrap tests</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 13)
+  {
+    test13();   <font color="#003399"><i>// Acronym test, small dictionary</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 14)
+  {
+    test14();   <font color="#003399"><i>// Acronym test, big dictionary</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 15)
+  {
+    test15();   <font color="#003399"><i>// Acronym test, big, maxlen = 10</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 16)
+  {
+    test16();   <font color="#003399"><i>// Acronym test, big, lots of output</i></font>
+  }
+  <b>else</b> <b>if</b> (test == 17)
+  {
+    test17(20); <font color="#003399"><i>// Wordwrap!!!</i></font>
+  }
+  <b>else</b>
+  {
+    test1();                    <font color="#003399"><i>// Uppercase</i></font>
+    test2(<font color="#9933CC">&quot;lexicon.txt&quot;</font>);       <font color="#003399"><i>// GetInfo</i></font>
+    test2(<font color="#9933CC">&quot;small.txt&quot;</font>);         <font color="#003399"><i>// GetInfo</i></font>
+    test2(<font color="#9933CC">&quot;allwords.txt&quot;</font>);      <font color="#003399"><i>// GetInfo</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'a'</font>);  <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'A'</font>);  <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'l'</font>);  <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'$'</font>);  <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">'e'</font>);  <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'M'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'q'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test3(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">'5'</font>); <font color="#003399"><i>// WordsStartingWith</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;APPLE&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;Apple&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;apple&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;lexicon.txt&quot;</font>, <font color="#9933CC">&quot;appl&quot;</font>);             <font color="#003399"><i>// Spellcheck, incorrect</i></font>
+    test4(<font color="#9933CC">&quot;small.txt&quot;</font>, <font color="#9933CC">&quot;abalone&quot;</font>);            <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">&quot;interdigitation&quot;</font>); <font color="#003399"><i>// Spellcheck, correct</i></font>
+    test4(<font color="#9933CC">&quot;allwords.txt&quot;</font>, <font color="#9933CC">&quot;interdigalizing&quot;</font>); <font color="#003399"><i>// Spellcheck, incorrect</i></font>
+    test5();    <font color="#003399"><i>// Spellcheck, all correct</i></font>
+    test6();    <font color="#003399"><i>// Spellcheck, some misspelled</i></font>
+    test7(5);   <font color="#003399"><i>// WordLengths, 1 - 5</i></font>
+    test7(20);  <font color="#003399"><i>// WordLengths, 1 - 20</i></font>
+    test8();    <font color="#003399"><i>// Simple Tokenize</i></font>
+    test9();    <font color="#003399"><i>// Larger Tokenize</i></font>
+    test10(20); <font color="#003399"><i>// Wordwrap</i></font>
+    test11();   <font color="#003399"><i>// Several Wordwrap test</i></font>
+    test12();   <font color="#003399"><i>// Tons 'O Wordwrap tests</i></font>
+    test13();   <font color="#003399"><i>// Acronyms, simple, small lexicon</i></font>
+    test14();   <font color="#003399"><i>// Acronyms, big lexicon, all sizes</i></font>
+    test15();   <font color="#003399"><i>// Acronyms, big lexicon, maxlen=10</i></font>
+    test16();   <font color="#003399"><i>// Acronyms, big lexicon, lots of output</i></font>
+    test17(20); <font color="#003399"><i>// Wordwrap!!!</i></font>
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

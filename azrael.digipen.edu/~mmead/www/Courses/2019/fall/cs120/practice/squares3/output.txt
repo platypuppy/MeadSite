@@ -1,0 +1,18 @@
+Enter two integers greater than 0: Enter two integers greater than 0: Enter two integers greater than 0: Enter two integers greater than 0: Enter two integers greater than 0: Enter two integers greater than 0: Enter two integers greater than 0: 
+ Value     Value^2    Value^3
+-----------------------------
+   13         169        2197
+   26         676       17576
+   39        1521       59319
+   52        2704      140608
+   65        4225      274625
+   78        6084      474552
+   91        8281      753571
+  104       10816     1124864
+  117       13689     1601613
+  130       16900     2197000
+  143       20449     2924207
+  156       24336     3796416
+  169       28561     4826809
+  182       33124     6028568
+  195       38025     7414875

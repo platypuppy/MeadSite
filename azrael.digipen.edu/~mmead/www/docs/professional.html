@@ -1,0 +1,254 @@
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Professional versus Amateur Programming</title>
+</head>
+
+<body>  
+
+<CENTER><h2>Professional versus Amateur Programming</h2></CENTER>
+<p>
+Early-on in their studies, many students often ask me (Matthew Mead) questions such as "<i>why do we need
+to know this?</i>", "<i>when are we going to use this</i>?", or 
+"<i>what good is a stack?</i>" etc.
+Just as a small child must first learn to crawl and then to stand upright before walking,
+students beginning their journey into computer science and the art of computer
+programming must first learn the fundamentals. This can be frustrating to
+new students because they are often familiar with more grand and complex programs 
+and wonders how the trivial, and often contrived, programs they write during 
+the introductory programming courses have any purpose in the "real world." 
+Learning to run is easy if one knows how to walk.<p>
+Aristotle (BC 384-322) said it best:
+<p>
+<blockquote>
+<i>The roots of education are bitter, but the fruit is sweet.</i>
+</blockquote>
+<p>
+Like most disciplines, there is much to be said about experience, and computer
+programming is no exception. There is a major difference between a novice 
+programmer and an experienced programmer. Also, there is generally a fundamental 
+difference between a programmer that is self-taught and one 
+that is formally trained. This is not to say that all programmers that lack formal 
+schooling are somehow less prepared or less qualified than their formally-trained
+counterparts. On the contrary, self-taught people must be highly-motivated and 
+goal-oriented to learn concepts that most people enroll others to teach them. This also
+does not imply that all formally-trained programmers are superior to informally-trained
+programmers. You can make a case for both sides.
+<p>
+In 1971, Gerald M. Weinberg wrote a classic book entitled <i>The Psychology
+of Computer Programming</i>. Although it is now over 30 years old, there is still much
+that one can glean from it. Below is a section from the book in which the author 
+describes the differences between professional programming and amateur programming. 
+In his book, Weinberg makes a few references to out-dated technologies and practices, 
+but you can still understand where he's coming from.
+<p>
+<HR WIDTH="95%">
+<p>
+<b>Professional versus Amateur Programming</b>
+<p>
+
+The high school student and the engineer represent two ends of a rich 
+spectrum of programmers. These ends may or may not be different, but nothing 
+antagonizes the professional programmer more than to hear an amateur&#151having 
+just completed a six-statement program in BASIC to find roots of 
+a quadratic equation&#151discourse on the theory and practice of programming. 
+We know well, of course, that this vehemence could be a symptom of <i>lack</i> of any 
+difference between the two activities, for such a lack would put the professional 
+in a much diminished stature. Although some professional programmers may 
+indeed be no more than hacks camouflaged by esoteric obscurities and some 
+amateurs might be able to gain a deep appreciation of programming through 
+writing of a single short program, there <i>is</i> a difference.
+<p>
+Perhaps the deepest differences emanate from differences in the ultimate 
+user of his program. Almost invariably, the sole intended user of an 
+amateur's program is the amateur himself, whereas the professional is 
+writing programs which other people will use. To be sure, the professional 
+oftentimes finds himself writing a program for his own use&#151to generate 
+test data or to evaluate the performance of an untried algorithm, to name 
+but two instances. And, indeed, when doing this kind of work, the professional 
+commonly slips into amateurish practices. But the main thrust of his work 
+is directed toward use of the program by other people, and this simple 
+fact conditions his work in a number of ways.
+
+<p>
+Because the amateur will be the user of his own program, he has the choice 
+of doing his thinking either before or after programming. Consider, for 
+example, a student who wants to write a program to find roots of 
+quadratic equations. Ideally, he is sitting at a terminal, for terminals 
+are well suited to post-programming thought. He decides that he will 
+probably need some input. This requires that he choose some names 
+for variables. Here the small size of the program and its complete isolation 
+from other programs give him a big boost&#151without his awareness, of 
+course&#151for he may choose whatever names first come to mind, such as a, b, 
+and c. In simply following the notation of high school algebra, he does not 
+think at all about possible conflicts with other symbols, standards which 
+must be observed, or even with declaration attributes. No, he merely types
+something like
+
+<blockquote>
+GET LIST (A, B, C);
+</blockquote>
+
+After adding some other program parts in a similar way, he will be ready 
+to try his program. Upon initiation of processing, the terminal will 
+pause in request for data. Since it is his own program, he does not 
+need any prompting about what data are expected at this time, so 
+he saved at least such coding as a preliminary
+
+<blockquote>
+PUT LIST ('ENTER A, B, AND C');
+</blockquote>
+
+He also knows the order in which things are required, and the 
+simplified input system of his language permits him to enter his 
+data in such diverse forms as
+
+<blockquote>
+1 2 3<br>
+1,2,3<br>
+1, 2, 3<br>
+1.0, 2.0, 3.0<br>
+1E0, 2.0E+0, .3E+1<br>
+
+</blockquote>
+Moreover, if he should happen to slip and enter
+<blockquote>
+1A, 2, 3<br>
+</blockquote>
+
+The system will reject the first value without his having had to 
+program an error-handling routine or document the reasons why such a 
+data item is rejected. He knows what is expected, for he wrote the program.
+<p>
+Even more subtle problems can be handled for him because he can think 
+<i>after</i> programming. When he enters such a case as 1, 2, 3, he will probably 
+find that some later statement coughs up the data because he will be 
+trying to take the square root of a negative number 
+(<i>b<sup>2</sup>-4ac</i>). 
+He gets 
+the diagnostic automatically&#151without any forethought or 
+foreprogramming&#151and probably realizes rather quickly what the problem 
+is. He may then simply decide that he doesn't want complex roots 
+anyway, in which case the problem disappears by definition. Only 
+when the programmer himself is defining the problem is this sort of 
+simplification possible, for the professional programmer would at least 
+have had to leave the terminal and find someone to authorize a 
+change or clarification of specifications.
+<p>
+If the amateur does decide that he needs complex roots, his task is 
+still much simpler than that of the professional in making the necessary 
+modifications. Even when he has finished the program, his job remains 
+simpler, for when he is finished, he merely has to forget about it. 
+The professional, on the other hand, has to put it into a neat package 
+and send it out into the cold world&#151from which it may return to him 
+bearing caustic comments, comments whose sense has to be considered 
+for subsequent modifications. A true professional, of course, would have 
+constructed the program in such a way that modifications will not be 
+overly involved&#151but that was another thing he had to think about when writing.
+<p>
+Even if the program is not intended for other eyes at all, the professional 
+cannot forget about it in the same way as the amateur. For instance, if 
+the program is just stored in the terminal system, the user will eventually 
+receive notification to clean up his storage. The professional has to 
+recall each of the programs in his library, for some will still be 
+needed. That amateur, however, probably has only one program, so he 
+instructs the system to erase it&#151or lets the erasure be done automatically 
+by default. But woebetide the professional who lets the system erase his 
+library! No, he must drop what he is doing and check his long library 
+list before the deadline comes around, or all his work will be gone with 
+the wind.
+<p>
+Many years ago, when programming systems were rudimentary, the difference 
+between the professional and amateur was not nearly so pronounced. 
+Today, however, so many of the things that amateurs want to do have been 
+made implicit in our systems that the gulf is a wide&#151and widening&#151one. 
+Paradoxically, however, as the gulf has widened, the amateurs have become 
+less and less aware of it, for they have become less and less aware of 
+what the system is doing for them. Just as a good manager faces the 
+problem that his employees are unaware of his management, so does the 
+systems designer suffer because the better his system does its job, the 
+less its users know of its existence.
+<p>
+And speaking of managers, they can be the most amateur of amateurs when 
+it comes to programming. A few years ago, one firm decided to try to 
+give its executives a course that would make them appreciate the problems 
+of their professional programmers. Inasmuch as these were <i>executives</i>, each 
+was assigned a professional programmer as "assistant" for the duration 
+of the course, the climax of which was a problem which each executive had 
+to program "for himself."
+<p>
+To enhance the executives' appreciation for the problems faced by 
+programmers, this work session was interrupted by frequent trivial phone 
+calls, meetings, and small changes in specifications. The executives got 
+the point&#151that executives could increase programmer productivity 
+by "sheltering" their staff rather than being the major source of disturbance. 
+But they also took away another&#151deeper rooted&#151idea. After all, in spite 
+of all these disturbances, they <i>had</i> managed to get their program working, 
+hadn't they? Sure, they had a little help from their "assistants", but 
+not much, really. So, if they could get a program done on time, why 
+couldn't their programmers? And what was so hard about programming, anyway, 
+if they could master it in a week?
+<p>
+This entire impression was based on a combination of illusions of the 
+same sort that make any amateur unable to appreciate the abyss which 
+separates him from the professional. First, there was the semantic 
+illusion which equates the "program" they wrote&#151a trivial problem involving 
+compound interest calculation which could have been better solved using 
+a log table or slide rule&#151with the "programs" written by their 
+staff&#151operating systems, compilers, utilities, and the like. Second, 
+there was the illusion that their assistants were "not helping them 
+much"&#151an illusion based on the lack of understanding of the complexities 
+of programming&#151the very complexities which the assistants were supposed 
+to shield them from lest they take away a bad feeling about programming 
+engendered by being unable to complete their little problem. And so, 
+the very efforts directed at giving the executives a better appreciation 
+for the problems of the programmer resulted in precisely the opposite effect.
+<p>
+Better appreciation of programming by managers is needed: a case in point is 
+the fact that a manager could even begin to believe that he could learn 
+in a week what the professional has learned through years of experience. 
+Indeed, it is a homily that the difference between the professional and 
+the amateur programmer lies in the superior past experience of the 
+professional. But one could also contend that an equally important difference 
+lies not in the programs each has previously written, but in those he will 
+write in the future. The amateur, being committed to the results of the 
+particular program for his own purposes, is looking for a way to get the 
+job done. If he runs into difficulty, all he wants is to surmount it&#151the 
+manner of doing so is of little consequence. Not so, however, for the 
+professional. He may well be aware of numerous ways of circumnavigating 
+the problem at hand. He may even employ one of them for the immediate 
+purpose of getting the job done. But his work does not stop there; 
+it begins there. It begins because he must <i>understand</i> why he did not 
+understand, in order that he may prepare himself for the programs he may 
+someday write which will require that understanding.
+<p>
+The amateur, then, is learning about his <i>problem</i>, and any learning about 
+programming he does may be a nice frill or may be a nasty impediment to him. 
+The professional, conversely, is learning about his 
+<i>profession</i>&#151programming&#151and the problem being programmed is only one 
+incidental step in his process of development.
+<p>
+The other side of this observation is that the professional never quite takes 
+any problem as seriously as does the amateur. He has had bugs before, 
+and he will have them again. This difference in attitude is a source of 
+constant friction between the two types: the professional is very tired and 
+a bit irritated by the unending stream of amateurs waving their printouts 
+in his face and condemning the machine, the operator, the system, the 
+keypuncher, the language, or the government. The amateur, on the 
+other hand, can see that the professional does not even <i>care</i> that his means 
+and standard deviations are not going to be ready in time for inclusion 
+in the proceedings of the conference.
+<p>
+
+<HR WIDTH="95%">
+
+This excerpt is from a book by Gerald M. Weinberg entitled 
+<i>The Psychology of Computer Programming</i> 
+published by
+Van Nostrand Reinhold Company Inc., 1971 ISBN 0-442-29264-3
+<p>
+
+<FONT SIZE=3>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# Mcrs =======================================================
+
+CC=g++
+CFLAGS=-Wll -Wxtr -ns -pdntc -Wrrr
+EXE=prgrm.x
+OUTDIR=gn/
+OBJS=$(OUTDIR)drvr. $(OUTDIR)scntxt. $(OUTDIR)jmbl.
+ERASE=rm
+
+# TARGETS ======================================================
+
+$(OUTDIR)$(EXE) : $(OBJS)
+	$(CC) $(OBJS) - $(OUTDIR)$(EXE)
+
+$(OUTDIR)drvr. : drvr.cpp scntxt.h jmbl.h
+	$(CC) $(CFLAGS) -c drvr.cpp - drvr.
+
+$(OUTDIR)jmbl. : jmbl.cpp jmbl.h
+	$(CC) $(CFLAGS) -c jmbl.cpp - jmbl.
+
+$(OUTDIR)scntxt. : scntxt.cpp
+	$(CC) $(CFLAGS) -c scntxt.cpp - scntxt.
+
+cln : 
+	$(ERASE) $(OBJS) $(OUTDIR)$(EXE)
+
+rbld :
+	$(MAKE) cln
+	$(MAKE)
+
+

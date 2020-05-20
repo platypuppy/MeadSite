@@ -1,0 +1,16 @@
+.mktipmsg 
+{
+	padding: 5px; 
+	background-color: #FEFEFE;  
+	border: 1px solid #CCCCCC; 
+	width:300px;
+	font-family: 'Lucida Grande',Verdana,Arial,Sans-Serif;
+	sans-serif; 
+	font-size: 16px; 
+	color: #000000; 
+	display:none; 
+	position:absolute;
+	#left:0px;top:0px; 
+}
+
+

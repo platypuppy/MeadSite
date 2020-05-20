@@ -1,0 +1,254 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>wordlen</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+   
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(wordlen.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<blockquote>
+<p class="technote">
+As always, please be sure to read this entire web page before doing any coding or
+asking any questions. You'll be glad that you did.
+</p>
+</blockquote>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>For this practice assignment, you will write a function that will calculate the average word
+  length for a given sentence or paragraph (or longer). For example, given this text:
+<blockquote><pre>
+This is a simple test.
+</pre></blockquote>
+The average word length is 3.60 characters. This is because there are 5 words and 18 characters and
+<tt>18 / 5 = 3.60</tt>. For this practice, you will distinguish between whitespace and non-whitespace.
+<p>
+Whitespace includes spaces, tabs, and newlines (and a few others). 
+<b>ANY OTHER CHARACTER IS CONSIDERED PART OF A WORD</b>. This
+means that all punctuation (non-whitespace) is valid for part of a word. In the example sentence above,
+the last word is followed by a period. This means that the number of characters in the last word is 
+actually 5.
+Please make sure that you understand this before attempting this program.
+
+<p>
+
+  The prototype for the function looks like this:
+<blockquote><pre>
+<b>double</b> average_word_length(<b>const char</b> *text);
+</pre></blockquote>
+
+You can be guaranteed that you will only be given valid, NUL-terminated character strings.
+<p>
+
+  Here is a driver file: <a href="main.c.html">HTML</a>&nbsp;&nbsp;
+  <a href="main.c">Text</a>
+<p>
+You will also need one these input files:
+<a href="quotes-lf.txt">quotes-lf.txt</a> or <a href="quotes-crlf.txt">quotes-crlf.txt</a> as a source
+of input to the program. Choose the one that matches the end-of-line characters on your system.
+<p>
+Typically, for Mac and Linux, it's the first one (Line Feeds only). Windows uses
+the second one (Carriage Return and Line Feeds). You'll have to rename the file that you download
+to just <i>quotes.txt</i>, as that is what the driver is expecting.
+<p>
+<!--
+<i>"Hey, welcome to the wonderful world of needing-to-understand-how-technical-stuff-works!"</i>
+You can no longer remain clueless about technology.
+-->
+
+<p>
+The name of your implementation file should be <tt>wordlen.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c wordlen.c -o wordlen
+</pre></blockquote>
+<p>
+Here are some sample outputs:
+<ul>
+  <li><a href="output-sample1.txt">output-sample1.txt</a> for test1</li>
+  <li><a href="output-sample2.txt">output-sample2.txt</a> for test2</li>
+  <li><a href="output-sample-both.txt">output-sample-both.txt</a> for both tests</li>
+</ul>
+
+<p>
+<font color="blue">Approximate number of lines of code: 12.</font>
+
+</ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ol>
+  <li>As stated above, there are only a few lines of code required to implement this, as long as
+    you <b>THINK</b> before beginning. Also, <b>DRAW DIAGRAMS</b> of what you're trying to 
+    accomplish.</li>
+  <p>
+  <li>To calculate the average word length, you need to figure out how many non-whitespace characters
+    are in the text and then divide that by the number of words in the text. A word is simply a
+    contiguous sequence of non-whitespace characters.</li>
+  <p>
+  <li>The easiest way to do this is to start with a pointer pointing at the first character in the string.
+    If it is pointing at whitespace, you continuously increment the pointer (so it points at the next
+    character) until you find a non-whitespace character. This is called "skipping over whitespace".</li>
+  <p>
+  <li>When you encounter a non-whitespace character, you know that you've found the beginning of the 
+    next word and will increment your word counter.</li>
+  <p>
+  <li>Now, you will continuously increment the pointer until it points at a whitespace character. While
+    you are "searching" for this whitespace character (and, hence, the end of the word), you will be
+    keeping a count of how many total non-whitespace characters you've found.</li>
+  <p>
+  <li>When you find the end of the word, you will repeat the process for skipping over whitespace
+    while looking for the next word.</li>
+  <p>
+  <li>This process stops when you get to the NUL character at the end of the string.</li>
+  <p>
+  <li>Here's a rudimentary diagram of how a string would be processed.
+    <p>
+    Start by pointing at the first character. There is no leading whitespace, so you know
+    you are at the start of a word:
+
+<blockquote><pre>
+There   are five    words here.
+^
+</pre></blockquote>
+
+Now, increment the pointer until you get to the first space:
+<blockquote><pre>
+There   are five    words here.
+     ^
+</pre></blockquote>
+
+At this point, you've found the end of the first word and 5 non-whitespace characters (5 in total). Continuing by 
+skipping over whitespace:
+<blockquote><pre>
+There   are five    words here.
+        ^
+</pre></blockquote>
+
+Now, we've found the start of the second word. Continue, looking for the end of the word:
+<blockquote><pre>
+There   are five    words here.
+           ^
+</pre></blockquote>
+
+Now we've counted 8 non-whitespace characters. Continuing:
+<blockquote><pre>
+There   are five    words here.
+            ^
+</pre></blockquote>
+
+We've found the start of the third word. Continuing:
+<blockquote><pre>
+There   are five    words here.
+                ^
+</pre></blockquote>
+
+We've found the end of the third word and 4 more non-whitespace characters (12 characters in total).
+Continuing by skipping over whitespace:
+<blockquote><pre>
+There   are five    words here.
+                    ^
+</pre></blockquote>
+
+We've found the start of the fourth word. Continuing:
+<blockquote><pre>
+There   are five    words here.
+                         ^
+</pre></blockquote>
+
+We've found the end of the fourth word and 5 more non-whitespace characters. (17 characters in total)
+Continuing by skipping over whitespace:
+<blockquote><pre>
+There   are five    words here.
+                          ^
+</pre></blockquote>
+We've found the start of the fifth word. Continuing:
+<blockquote><pre>
+There   are five    words here.
+                               ^
+</pre></blockquote>
+We've reached the end of the string and counted 5 more characters which is 22
+non-whitespace characters in total. Dividing 22 by 5 gives us and average 
+of 4.4 characters per word.
+</li>
+<p>
+<li>If you look closely, you'll see that your program is in one of 2 states: It
+  is either in a sequence of whitespace characters OR it is in a sequence of 
+  non-whitespace characters. That's all there is to it.</li>
+<p>
+<li>There is a function in the C standard library called:
+
+<blockquote><pre>
+<b>int</b> isspace(<b>int</b>c);
+</pre></blockquote>
+
+It returns true (non-zero if the character is considered a whitespace character)
+and false, if not. You can see what constitutes a whitespace character 
+<a href="http://www.cplusplus.com/reference/cctype/isspace/">here</a>. You must include
+this:
+<blockquote><pre>
+<b>#include</b> &lt;ctype.h&gt;
+</pre></blockquote>
+which you are allowed (and expected) to do. DO NOT write your own checking function.
+
+
+
+
+</ol>
+
+
+
+
+<p>
+  <hr width="100%">
+<p>
+<br><br><br><br>
+
+
+
+</body>
+</html>
+<b><tt></tt></b>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<b><tt></tt></b>

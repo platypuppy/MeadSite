@@ -1,0 +1,151 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>make examples</title>
+</head>
+<body>  
+
+Online <a href="http://www.gnu.org/software/make/manual/make.html">make manual</a>.
+<p>
+
+A very basic <i>makefile</i>:
+
+<blockquote><pre>
+myprogram.exe : driver.o scantext.o jumble.o
+	gcc driver.o scantext.o jumble.o -o myprogram.exe
+
+driver.o : driver.c scantext.h jumble.h
+	gcc -Wall -Wextra -ansi -pedantic -O -c driver.c -o driver.o
+
+scantext.o : scantext.c
+	gcc -Wall -Wextra -ansi -pedantic -O -c scantext.c -o scantext.o
+
+jumble.o : jumble.c jumble.h
+	gcc -Wall -Wextra -ansi -pedantic -O -c jumble.c -o jumble.o
+
+clean : 
+	rm driver.o scantext.o jumble.o myprogram.exe
+
+rebuild : 
+	-$(MAKE) clean
+	-$(MAKE) 
+</pre></blockquote>
+
+
+Using macros (variables):
+
+<blockquote><pre>
+################################################################################
+# Macros
+
+CC=gcc
+CFLAGS=-Wall -Wextra -ansi -pedantic -O
+OUTDIR=../build/
+OBJECTS=$(OUTDIR)driver.o $(OUTDIR)scantext.o $(OUTDIR)jumble.o
+EXE=$(OUTDIR)program.exe
+ERASE=rm
+################################################################################
+
+$(EXE) : $(OBJECTS)
+	$(CC) -o $(EXE) $(OBJECTS)
+
+$(OUTDIR)driver.o : driver.c scantext.h jumble.h
+	$(CC) -c driver.c -o $(OUTDIR)driver.o $(CFLAGS)
+
+$(OUTDIR)scantext.o : scantext.c
+	$(CC) -c scantext.c -o $(OUTDIR)scantext.o $(CFLAGS)
+
+$(OUTDIR)jumble.o : jumble.c jumble.h
+	$(CC) -c jumble.c -o $(OUTDIR)jumble.o $(CFLAGS)
+
+clean : 
+	$(ERASE) $(OBJECTS) $(EXE)
+
+rebuild : 
+	-$(MAKE) clean
+	-$(MAKE) 
+</pre></blockquote>
+
+If you name your file <i>makefile</i>, then you don't have to tell <i>make</i>
+which file to use. This is the recommended way of doing it.
+<ul>
+	<li>To build the project, just type:
+<blockquote><pre>
+make
+</pre></blockquote>
+</li>
+
+  <li>If the file is named something else, say <i>make-gcc</i>, you would
+  	type this:
+<blockquote><pre>
+make -f make-gcc
+</pre></blockquote>
+
+  <li>By default, <i>make</i> executes the first target, which should be the
+  	ultimate goal. Usually, that means linking the final project.</li>
+<p>
+
+  <li>If you want to execute a different target, you must specify that target
+  	name. For example:
+<blockquote><pre>
+make clean
+</pre></blockquote>
+This would execute the <i>clean</i> target only.
+  </li>
+<p>
+
+  <li>If you want to override a macro in the file, you must specify it on the
+  	command line. For example:
+
+<blockquote><pre>
+make CC=clang
+</pre></blockquote>
+This would use the <i>clang</i> compiler instead of the <i>gcc</i> compiler.
+  </li>
+<p>
+  <li>If you want to perform multiple actions (recipes), you must list each one
+  	on it's own line. For example (modifying the first example above):
+
+<blockquote><pre>
+myprogram.exe : driver.o scantext.o jumble.o
+	gcc driver.o scantext.o jumble.o -o myprogram.exe
+	./myprogram > myoutput.txt
+	diff myoutput.txt output.txt
+	tablen scantext.c
+	tablen jumble.c
+</pre></blockquote>
+
+This will build the program, <i>myprogram.exe</i>, then run it and redirect the
+output to <i>myoutput.txt</i>, then diff it with the master output, <i>output.txt</i>,
+then run <i>tablen</i> on <tt>scantext.c</tt> and then run <i>tablen</i> 
+on <tt>jumble.c</tt>.
+<p>
+You may want to make a separate rule instead for everthing else like this:
+<blockquote><pre>
+run : 
+	./myprogram > myoutput.txt
+	diff myoutput.txt output.txt
+	tablen scantext.c
+	tablen jumble.c
+</pre></blockquote>
+
+and then you would execute it by running make like this:
+
+<blockquote><pre>
+make run
+</pre></blockquote>
+
+
+</li>
+<p>
+<li>Online <a href="http://www.gnu.org/software/make/manual/make.html">make manual</a>.
+</ul>
+
+<br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

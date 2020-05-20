@@ -1,0 +1,235 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>anagram</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: teal;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+</head>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(anagram.c)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Information</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a function that determines whether two words are 
+  <a href="http://en.wikipedia.org/wiki/Anagram">anagrams</a>. Two words are anagrams if they are both
+  permutations of the same letters. For example, here are 3 anagrams:
+  <blockquote><pre>
+  nicest  &lt;--&gt; insect
+  senator &lt;--&gt; treason
+  present &lt;--&gt; serpent
+  </pre></blockquote>
+
+The prototype for the function looks like this:
+
+<blockquote><pre>
+<b>int</b> is_anagram(<b>const char</b> word1[], <b>const char</b> word2[], <b>int</b> size);
+</pre></blockquote>
+
+If the two words are anagrams, you will return 1 (true). If they are not anagrams, you will 
+return 0 (false). There are many ways to implement the solution, and I am going to explain
+3 of them. All of them are different, so you should strive to implement all 3.
+<p>
+<b>Method #1</b> - Use an array to keep track of how many times each letter appears in each
+word. If the counts are the same, then they are anagrams. If the counts differ, they are
+not anagrams. The reason you want to use an array is because you don't want to have 26 separate
+variables (one for each letter). Instead, you'll have an array of 26 integers, one for each letter
+of the alphabet. Element 0 will correspond to the letter <tt>'a'</tt>, element 1 will 
+correspond to the letter <tt>'b'</tt>, etc., with element 25 corresponding with the letter
+<tt>'z'</tt>. (Remember, arrays are zero-based, so our 26 letters will be indexed from 0 to 25.) 
+You will initialize all elements to the value 0 at the start.
+<p>
+For example, the word <tt>pool</tt> and <tt>loop</tt> are anagrams. (<tt>loop</tt> is also
+<tt>pool</tt> spelled backwards, but that's another practice assignment!) The array for both
+words looks like this (the letters below the numbers are just for reference):
+
+<big><blockquote><pre>
+0 0 0 0 0 0 0 0 0 0 0 1 0 0 2 1 0 0 0 0 0 0 0 0 0 0
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+</pre></blockquote></big>
+
+That's because there is one letter <tt>'l'</tt> (lowercase <tt>'L'</tt>) and it corresponds to slot
+12 (index 11) in the array. There are two of the letter <tt>'o'</tt>, corresponding to slot 15
+(index 14). Finally, 
+there is one letter 'p', corresponding to slot 16 (index 15). If you create an array for both words, you
+can just check that the elements are the same in both. If they are the same, they are anagrams.
+<p>
+A variation of this algorithm is to create just one array. You would increment each letter's
+count for the first word, and then decrement each letter's count for the second word. If all
+elements are now zero again, then they are anagrams. You can do it either way. The point is
+to practice with arrays.
+<p>
+<font color="blue">Approximate number of lines of code: 12.</font>
+
+<p>
+<b>Method #2</b> - If you sort the letters in each word (from <tt>a</tt> to <tt>z</tt>) you
+can then just compare the two arrays, element by element. If they are the same, then they are
+anagrams. (Use the sort algorithm you implemented from a previous practice assignment.)
+<p>
+<font color="blue">Approximate number of lines of code: 12.</font>
+<p>
+<b>Method #3</b> - This is similar to Method #2, except that instead of writing your own
+sort routine, you are going to use the <tt><b>qsort</b></tt> (quicksort) function from the C Standard
+Library (You need to include <b>stdlib.h</b>). This is the prototype for <tt><b>qsort</b></tt>:
+<p>
+
+<blockquote><pre>
+<b>void</b> qsort (<b>void</b> *base, size_t num, size_t size, <b>int</b> (*compare)(<b>const void</b> *,<b>const void</b>*));
+</pre></blockquote>
+
+Yeah, it's ugly. Many of you will find that writing your own simple sort algorithm is actually 
+easier and consumes less time than just understanding how to use <tt><b>qsort</b></tt>! However,
+it's very instructional to learn it. That's why I said I'm showing you 3 methods. Two require 
+sorting. One of those requires you to write your own sort routine and the other requires you to
+learn how to use the one in the library. Hint: Google Is Your Friend&trade;. Or, you can just read
+about it in the textbook.
+<p>
+<font color="blue">Approximate number of lines of code: 12.</font>
+<p>
+
+
+<!--
+<font color="red"><b>100</b></font>
+<tt></tt>
+-->
+
+
+
+<p>
+
+The name of the file should be <tt>anagram.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O2 -o anagram main.c anagram.c
+</pre></blockquote>
+
+<b>Files:</b>
+<p>
+<ul>
+<p>
+  <li>Here is a sample driver file 
+    <tt>main.c</tt>: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/anagram/main.c.html">HTML</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/anagram/main.c">Text</a></li>
+    <p>
+  <li>Here is a sample <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/anagram/output.txt">output</a> file for 
+you do diff with.</li>
+  </li>
+</ul>
+
+</ol>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+
+<ul>
+  <li>You can assume that all words will be less than 30 characters. You can set this up in your
+    file:</li>
+<blockquote><pre>
+#define MAXCHARS   30
+#define CHAR_COUNT 26
+#define TRUE        1
+#define FALSE       0
+</pre></blockquote>    
+  <p>
+  <li>You can assume the letters will be all lowercase.</li>
+  <p>
+  <li>You can submit any or all versions, but you will only get credit once.</li>
+
+<p>
+<li><b>DO NOT UPLOAD ANYTHING UNTIL YOU HAVE TESTED YOUR CODE WITH REDIRECTION.</b></li>
+</ul>
+
+
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<!--****************************************************************************************-->
+<p class="Extra">
+<b>For students that would like an additional challenge:</b> (Do not submit this.)
+<br>
+<ol>
+  <li>Handle words that are mixed uppercase and lowercase.</li>
+  <p>
+  <li>Handle words that are of different lengths. This is relatively easy because, if they
+    are different lengths, they can't be anagrams.</li>
+  <p>
+  <li>Handle any length words. This will require dynamic memory allocation (<i>malloc</i>).
+    <b>DO NOT</b> use a static array with an arbitrarily large size, e.g.:
+<blockquote><pre>
+char letters[10000];
+</pre></blockquote>    
+
+  <li>And, of course, implement all 3 methods.</li>
+</ol>
+</p>
+
+<br>
+<p><hr><p>
+
+
+
+
+</ol>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

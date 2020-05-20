@@ -1,0 +1,951 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>2D Arrays</title>
+</head>
+
+<body>  
+<center><h1>Multi-Dimensional Arrays</h1></center>
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Multidimensional Arrays
+</p>
+
+
+An array with more than one <i>dimension</i> is called a <i>multidimensional array</i>. 
+
+<blockquote><pre>
+<b>int</b> matrix[5][10];  <font color="#003399"><i>/* array of 5 arrays of 10 int; a 5x10 array of int */</i></font>
+</pre></blockquote>
+
+Building up multidimensional arrays:
+
+<blockquote><pre>
+<b>int</b> a;            <font color="#003399"><i>/* int                                     */</i></font>
+<b>int</b> b[10];        <font color="#003399"><i>/* array of 10 int                         */</i></font>
+<b>int</b> c[5][10];     <font color="#003399"><i>/* array of 5 arrays of 10 int             */</i></font>
+<b>int</b> d[3][5][10];  <font color="#003399"><i>/* array of 3 arrays of 5 arrays of 10 int */</i></font>
+
+<b>int</b> e[10][5][3];  <font color="#003399"><i>/* array of 10 arrays of 5 arrays of 3 int */</i></font>
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Storage order</b>:
+Arrays in C are stored in <i>row major</i> order. This means that the rightmost subscript varies the
+most rapidly.
+</p>
+</blockquote>
+
+Given this declaration of <i>points</i>:
+
+<blockquote><pre>
+<b>double</b> points[3][4];
+</pre></blockquote>
+
+<ul>
+<li>An array of 3 arrays of 4 doubles
+<li>A 3x4 array of doubles
+</ul>
+
+We could diagram the array like this:
+
+<blockquote><pre>
+<img src="PointsArray-0.gif">
+</pre></blockquote>
+
+With details:
+<blockquote><pre>
+<img src="PointsArray-1.gif">
+</pre></blockquote>
+
+Or draw it contiguously (as it really is in memory):
+
+<blockquote><pre>
+ <img src="PointsArray-2.gif">
+</pre></blockquote>
+
+Or horizontally:
+<blockquote><pre>
+<img src="PointsArray-3.gif">
+</pre></blockquote>
+
+
+<!-- 
+
+We can use <i>points</i> in various expressions. 
+
+<blockquote><pre>
+Expression                   Type                           Description
+------------------------------------------------------------------------------
+points           array of 3 pointers to an array of doubles     entire matrix
+*points          pointer to a double                first row, first column
+**points         double                             first row, second column
+points[1]        pointer to a double                second row, first column
+*points[1]       double                             second row, first column
+points + 1       pointer to an array of 4 doubles   second row
+*points + 1      pointer to a double                first row, second column
+points[1][1]     double                             second row, second column
+points[1] + 1    pointer to a double                second row, second column
+</pre></blockquote>
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p>
+<hr width="90%">
+<p>
+
+Giving concrete values to the 2D array of doubles will help visualize the arrays. Note
+how the initialization syntax helps us visualize the "array of arrays" notion:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+</pre></blockquote>
+
+or even formatted as a 3x4 matrix:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = { 
+                        {1.0,  2.0,  3.0,  4.0}, 
+                        {5.0,  6.0,  7.0,  8.0}, 
+                        {9.0, 10.0, 11.0, 12.0}
+                      };
+</pre></blockquote>
+
+<!--
+This will work in most compilers, but you may get warnings:
+
+<blockquote><pre>
+  <b>double</b> points[3][4] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
+</pre></blockquote>
+-->
+
+Diagram:
+
+
+<blockquote><pre>
+<img src="PointsArray-4.gif">
+</pre></blockquote>
+
+
+Some expressions involving <i>points</i> (on a 64-bit computer):
+
+
+<blockquote><pre>
+Addresses                                   Type
+--------------------------------------------------------------------------------
+points        = 0x7fffa50f0200    An array of 3 arrays of 4 doubles
+&amp;points       = 0x7fffa50f0200    A pointer to an array of 3 arrays of 4 doubles
+points[0]     = 0x7fffa50f0200    An array of 4 doubles
+&amp;points[0]    = 0x7fffa50f0200    A pointer to an array of 4 doubles
+*points       = 0x7fffa50f0200    An array of 4 doubles
+&amp;points[0][0] = 0x7fffa50f0200    A pointer to a double
+
+Contents
+------------------------
+**points      = 1.000000
+*points[0]    = 1.000000
+points[0][0]  = 1.000000
+
+Sizes
+-------------------------
+sizeof(points)       = 96
+sizeof(*points)      = 32
+sizeof(points[0])    = 32
+sizeof(**points)     =  8
+sizeof(points[0][0]) =  8
+sizeof(&amp;points)      =  8
+</pre></blockquote>
+
+
+<a href="https://azrael.digipen.edu/~mmead/www/Courses/CS120/2DCode-1.html">C code</a> to display above tables.
+<p>
+
+<b>Notes:</b>
+<ul>
+  <li>When using just the name <i>points</i>, it is the address of the first element
+    (just like single-dimensional arrays).</li>
+  <li>The first element is an array of 4 doubles (it's the first row).</li>
+  <li>Each element of a 2D array is an array (1D) itself.</li>
+</ul>
+
+
+
+<!--
+<p class="technote">
+Self-check:
+</p>
+
+Given this declaration:
+
+<blockquote><pre>
+<b>double</b> points[3][4];
+</pre></blockquote>
+
+which of the statements are valid? warnings/errors? (You need to look at the types on both sides
+of the assignment)
+
+
+<blockquote><pre>
+<ol>
+<li> <b>double</b> *pd0 = points[0][1];  
+<li> <b>double</b> *pd1 = &amp;points[0][1]; 
+<li> <b>double</b> *pd2 = &amp;points[5][7]; 
+<li> <b>double</b> *pd3 = &amp;**points;     
+<li> <b>double</b> (*p4d0)[4] = points[0]; 
+<li> <b>double</b> (*p4d1)[4] = &amp;points[0];
+<li> <b>double</b> (*p4d2)[4] = (<b>double</b> (*)[4])points[0];    
+<li> <b>double</b> (*p4d3)[4] = (<b>double</b> (*)[4])&amp;points[0][0];
+<li> <b>double</b> (*p4d4)[] = &amp;points[0]; 
+<li> <b>double</b> (*p4d5)[3][4] = points; 
+<li> <b>double</b> (*p4d6)[3][4] = &amp;points;
+<li> <b>double</b> (*p4d7)[][4] = &amp;points; 
+<li> <b>double</b> (*p4d8)[][] = &amp;points;  
+</ol>
+</pre></blockquote>
+-->
+
+<!--
+<blockquote><pre>
+<ol>
+<li>  <b>double</b> *pd0 = points[0][1];  <font color="#003399"><i>// error: illegal indirection (pointer to double != double)</i></font>
+<li>  <b>double</b> *pd1 = &amp;points[0][1]; <font color="#003399"><i>// OK, (pointer to double = pointer to double) </i></font>
+<li>  <b>double</b> *pd2 = &amp;points[5][7]; <font color="#003399"><i>// OK, but runtime problem</i></font>
+<li>  <b>double</b> *pd3 = &amp;**points;     <font color="#003399"><i>// OK</i></font>
+
+<li>  <b>double</b> (*p4d0)[4] = points[0]; <font color="#003399"><i>// warning: different levels of indirection </i></font>
+                                 <font color="#003399"><i>//   pointer to array of 4 doubles != array of 4 doubles</i></font>
+
+<li>  <b>double</b> (*p4d1)[4] = &amp;points[0];                   <font color="#003399"><i>// OK, pointer to an array of 4 doubles</i></font>
+<li>  <b>double</b> (*p4d2)[4] = (<b>double</b> (*)[4])points[0];     <font color="#003399"><i>// OK, cast to pointer to array of 4 doubles</i></font>
+<li>  <b>double</b> (*p4d3)[4] = (<b>double</b> (*)[4])&amp;points[0][0]; <font color="#003399"><i>// OK, cast to pointer to array of 4 doubles</i></font>
+
+<li>  <b>double</b> (*p4d4)[] = &amp;points[0];   <font color="#003399"><i>// warning: suspicious pointer conversion </i></font>
+<li>  <b>double</b> (*p4d5)[3][4] = points;   <font color="#003399"><i>// warning: pointer to 3x4 array != 3x4 array  OR</i></font>
+                                   <font color="#003399"><i>//   pointer to 3x4 array != pointer to array of 4 doubles</i></font>
+
+<li>  <b>double</b> (*p4d6)[3][4] = &amp;points;  <font color="#003399"><i>// OK</i></font>
+<li>  <b>double</b> (*p4d7)[][4] = &amp;points;   <font color="#003399"><i>// warning: different subscripts</i></font>
+<li>  <b>double</b> (*p4d8)[][] = &amp;points;    <font color="#003399"><i>// error: missing subscript</i></font>
+</pre></blockquote>
+-->
+<!--
+
+<p>
+<hr width="90%">
+<p>
+
+<p class="technote">
+Self-check:
+</p>
+
+Given this code:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = { {1.0,  2.0,  3.0,  4.0}, 
+                        {5.0,  6.0,  7.0,  8.0}, 
+                        {9.0, 10.0, 11.0, 12.0}};
+                        
+<b>double</b> *pd = &amp;points[0][1];
+<b>double</b> (*p4d)[4] = &amp;points[0];
+</pre></blockquote>
+
+What does this code display?
+
+<blockquote><pre>
+pd = &amp;points[0][1];
+printf(<font color="#9933CC">&quot;First value is %g\n&quot;</font>, *pd);
+printf(<font color="#9933CC">&quot;Second value is %g\n&quot;</font>, *++pd);
+printf(<font color="#9933CC">&quot;Third value is %g\n\n&quot;</font>, *++pd);
+</pre></blockquote>
+
+What does this code display?
+
+<blockquote><pre>
+p4d = &amp;points[0];
+printf(<font color="#9933CC">&quot;First value is %g\n&quot;</font>, **p4d);
+printf(<font color="#9933CC">&quot;Second value is %g\n&quot;</font>, **++p4d);
+printf(<font color="#9933CC">&quot;Third value is %g\n&quot;</font>, **++p4d);
+</pre></blockquote>
+
+And this?
+
+<blockquote><pre>
+pd = &amp;points[0][1];
+printf(<font color="#9933CC">&quot;First value is %g\n&quot;</font>, *pd);
+printf(<font color="#9933CC">&quot;Second value is %g\n&quot;</font>, ++*pd);
+printf(<font color="#9933CC">&quot;Third value is %g\n&quot;</font>, ++*pd);
+printf(<font color="#9933CC">&quot;points[0][1] is %g\n&quot;</font>, points[0][1]);
+</pre></blockquote>
+
+<xblockquote>
+<p class="technote">
+Traversing multi-dimension <b>static</b> arrays using simple pointers to traverse row boundaries
+is known as <i>flattening</i> the array and is technically illegal according to the Standard. However,
+it usually works, but you should be aware of the non-standard behavior.
+<p>
+</xblockquote>
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Accessing Elements in a 2-D Array
+</p>
+
+<blockquote><pre>
+<b>short</b> matrix[3][8]; <font color="#9933CC">/* 24 shorts, 3x8 array */</font>
+</pre></blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+matrix
+</pre>
+</td>
+<td width=40></td>
+<td>
+<img src="2D-Array-5.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<br>
+
+<blockquote>
+<table>
+<tr valign="top">
+<td>
+<pre>
+  matrix[0]
+*(matrix + 0)
+   *matrix
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-2.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<br>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+  matrix[1]
+*(matrix + 1)
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-3.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<br>
+
+<blockquote>
+<table>
+<tr valign="bottom">
+<td>
+<pre>
+  matrix[2]
+*(matrix + 2)
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-4.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<br>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+     matrix[1][2]
+*(*(matrix + 1) + 2)
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-1.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+Remember the rule:
+
+<blockquote><pre>
+array[i] == *(array + i)
+</pre></blockquote>
+
+where:
+<ul>
+<li><i>array</i> is an array of any type
+<li><i>i</i> is any integer expression
+</ul>
+
+With multidimensional arrays, the rule becomes:
+
+<blockquote><pre>
+array[i][j] == *(*(array + i) + j)
+array[i][j][k] == *(*(*(array + i) + j) + k)
+etc...
+</pre></blockquote>
+
+Pointer arithmetic is used to locate each element (base address + offset) and is
+done by the compiler. If you look at the assembly code that is generated, you will
+see all of the pointer arithmetic that is being done for each access.
+<p>
+Given this declaration:
+
+<blockquote><pre>
+<b>short</b> matrix[3][8];
+</pre></blockquote>
+
+The value of <b>sizeof</b> varies with the argument:
+
+<blockquote><pre>
+Sizes
+-------------------------
+sizeof(matrix)       = 48   ; entire matrix
+sizeof(matrix[0])    = 16   ; first row
+sizeof(matrix[1])    = 16   ; second row
+sizeof(matrix[0][0]) = 2    ; first short element
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="DYNAMIC">
+<p class="SectionHeader">
+Dynamically Allocated 2D Arrays
+</p>
+</a>
+
+
+Recall the 2D points static array and how a dynamically allocated array would look:
+<p>
+
+<table border=0 cellspacing=5>
+<tr>
+<td valign="top">
+<blockquote><pre>
+<b>double</b> points[3][4];
+
+
+<p><font size=+2><br></font>
+<img src="PointsArray-2.gif">
+</pre></blockquote>
+</td>
+<td>
+</td>
+<td valign="top">
+<blockquote><pre>
+<b>double</b> *pd = (<b>double</b> *)malloc(3 * 4 * <b>sizeof</b>(<b>double</b>)); <!--<font color="#003399"><i>/* C or C++ code */</i></font>-->
+<p>
+<img src="PointsArrayDynamic-1.gif">
+</pre></blockquote>
+</td>
+</tr></table>
+<!--<b>double</b> *pd = <b>new double</b>[3 * 4];                         <font color="#003399"><i>// C++ only</i></font>-->
+
+What is <b>sizeof</b> each element in <i>points</i>?
+<!--
+  32, 4 * 8 (sizeof a double). Each element is an array of 4 doubles.
+-->
+<p>
+Given a row and column:
+
+<blockquote><pre>
+<b>int</b> row = 1, column = 2;
+<b>double</b> value;
+</pre></blockquote>
+
+<ul>
+<li>The static 2D array can be accessed using subscripts, but the dynamic "2D array" can 
+only be indexed with a single subscript.
+<blockquote><pre>
+value = points[row][column]; <font color="#003399"><i>/* OK      */</i></font>
+value = pd[row][column];     <font color="#003399"><i>/* ILLEGAL */</i></font>
+</pre></blockquote>
+
+<li>We (the programmers) have to do all of the arithmetic to locate an element using two subscripts:
+<blockquote><pre>
+value = pd[row * 4 + column];
+</pre></blockquote>
+
+<li>The compiler is still doing some of the work for us:
+
+<blockquote><pre>
+value = *(address-of-pd + (row * 4 + column) * sizeof(double));
+</pre></blockquote>
+
+<li>What does the number <b>4</b> in the above calculations represent?
+
+<!--
+The number of elements in each row.
+There are 3 elements in points, each element is an array of 4 doubles.
+-->
+</ul>
+
+
+If we want to use two subscripts on a dynamic 2D array, we have to set things up a little differently.
+<p>
+Why can't we just cast <i>pd</i> to a two-dimensional array and have the compiler do the 
+pointer arithmetic for us?
+
+<!--
+Casting must be done at compile time. You can't cast to an array. Must be a pointer:
+
+  double points[3][4] = { 
+                          {1.0,  2.0,  3.0,  4.0}, 
+                          {5.0,  6.0,  7.0,  8.0}, 
+                          {9.0, 10.0, 11.0, 12.0}
+                        };
+
+  double *pd = (double *)malloc(3 * 4 * sizeof(double));
+  pd = (double *)points;
+
+  printf("points[1][2] = %2.1f\n", points[1][2]);
+  printf("pd[1][2] = %2.1f\n", ((double (*)[4])pd)[1][2]);
+
+-->
+
+<p>
+<hr width=90%>
+<p>
+Using these definitions from above:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Assume these values are chosen at runtime. */</i></font>
+<b>int</b> ROWS = 3;
+<b>int</b> COLS = 4;
+
+  <font color="#003399"><i>/* Dynamically allocate the memory */</i></font>
+<b>double</b> *pd = malloc(ROWS * COLS * <b>sizeof</b>(<b>double</b>)); <!--<font color="#003399"><i>/* C or C++ code */</i></font>-->
+</pre></blockquote>
+<!--<b>double</b> *pd = <b>new double</b>[ROWS * COLS];              <font color="#003399"><i>// C++ only</i></font>-->
+
+Create a variable that is a <i>pointer</i> to a <i>pointer</i> to a <b>double</b>
+
+<blockquote><pre>
+<b>double</b> **ppd;
+</pre></blockquote>
+
+Allocate an array of 3 (ROWS) pointers to doubles and point <i>ppd</i> at it:
+
+<blockquote><pre>
+ppd = malloc(ROWS * <b>sizeof</b>(<b>double</b> *)); <!--<font color="#003399"><i>/* C or C++ code */</i></font>-->
+</pre></blockquote>
+<!--ppd = <b>new double</b>*[ROWS];               <font color="#003399"><i>// C++ only</i></font>-->
+
+<blockquote><pre>
+<img src="PointsArrayDynamic-2.gif">
+</pre></blockquote>
+
+
+
+Point each element of <i>ppd</i> at an array of 4 doubles:
+
+<blockquote><pre>
+ppd[0] = pd;
+ppd[1] = pd + 4;
+ppd[2] = pd + 8;
+</pre></blockquote>
+
+Of course, for a large array, or an array whose size is not known at compile time,
+you would want to set these in a loop:
+
+<blockquote><pre>
+<b>int</b> row;
+<b>for</b> (row = 0; row &lt; ROWS; row++)
+  ppd[row] = pd + (COLS * row);
+</pre></blockquote>
+
+
+
+This yields the diagram (32-bit computer):
+
+<blockquote><pre>
+<img src="PointsArrayDynamic-3.gif">
+</pre></blockquote>
+
+Given a row and column, we can access elements through the single pointer or double pointer variable:
+
+<blockquote><pre>
+<b>int</b> row = 1, column = 3;
+<b>double</b> value;
+
+  <font color="#003399"><i>/* Access via double pointer (array of arrays) using subscripting */</i></font>
+value = ppd[row][column];            
+
+  <font color="#003399"><i>/* Access via single pointer using pointer arithmetic        */</i></font>
+  <font color="#003399"><i>/* and/or subscripting. These statements are all equivalent. */</i></font>
+value = pd[row * COLS + column];
+value = *(pd + row * COLS + column);
+value = (pd + row * COLS)[column];
+</pre></blockquote>
+
+We could make the code easier by creating a helper function that will allocate a 2D
+array of doubles of any size:
+
+
+<pre class="sourcecode"><code><b>double</b> **allocate_2D(<b>int</b> rows, <b>int</b> cols)
+{
+  <b>int</b> i;             <font color="#003399"><i>/* Loop variable              */</i></font>
+  <b>double</b> **pointers; <font color="#003399"><i>/* The pointers for each row  */</i></font>
+  <b>double</b> *array;     <font color="#003399"><i>/* The actually array of ints */</i></font>
+
+    <font color="#003399"><i>/* Allocate memory for the rows X cols array */</i></font>
+  array = (<b>double</b> *) malloc(rows * cols * <b>sizeof</b>(<b>double</b>));
+
+    <font color="#003399"><i>/* Allocate the array of pointers, one per row */</i></font>
+  pointers = malloc(rows * <b>sizeof</b>(<b>double</b> *)); 
+
+    <font color="#003399"><i>/* Point each pointer at its corresponding row */</i></font>
+  <b>for</b> (i = 0; i &lt; rows; i++)
+    pointers[i] = array + (cols * i);
+
+  <b>return</b> pointers;
+}
+
+<b>void</b> print2D(<b>double</b> **ppd, <b>int</b> rows, <b>int</b> cols)
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; rows; i++)
+  {
+    <b>for</b> (j = 0; j &lt; cols; j++)
+      printf(<font color="#9933CC">&quot;%8.2f&quot;</font>, ppd[i][j]);
+    printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  }
+}
+</code></pre>
+
+Using it:
+
+
+<blockquote><pre>
+<b>int</b> i, j;
+<b>int</b> rows = 3, cols = 4;
+
+<b>double</b> **ppd = allocate_2D(3, 4);
+
+  <font color="#003399"><i>/* Do something with the array ... */</i></font>
+<b>for</b> (i = 0; i &lt; rows; i++)
+  <b>for</b> (j = 0; j &lt; cols; j++)
+    ppd[i][j] = i * cols + j + 1;
+
+print2D(ppd, rows, cols);
+
+free(*ppd); <font color="#003399"><i>/* Free the array of 12 doubles (Must do this first!)  */</i></font>
+free(ppd);  <font color="#003399"><i>/* Free the pointers to each row                       */</i></font>
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+    1.00    2.00    3.00    4.00
+    5.00    6.00    7.00    8.00
+    9.00   10.00   11.00   12.00
+</pre></blockquote>
+
+<p class="technote">
+You can't just create a 1D array and then cast it to a 2D array. The reason is that casting
+is done at compile-time, so the compiler needs to know how many columns there are.
+If you don't know the size until run-time, you need to do it this way.
+</p>
+
+
+
+<!--
+This only works if ROWS and COLS are known at compile time.
+
+If you wanted to let the compiler do the work, you could do this:
+
+<blockquote><pre>
+<b>#define</b> ROWS 3
+<b>#define</b> COLS 4
+<b>double</b> *pd = malloc(ROWS * COLS * <b>sizeof</b>(<b>double</b>));
+
+  <font color="#003399"><i>/* ppd is a pointer to an array of 4 doubles (need the cast) on the right */</i></font>
+<b>double</b> (*ppd)[COLS] = (<b>double</b> (*)[COLS]) pd;
+</pre></blockquote>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Passing 2D Arrays to Functions
+</p>
+
+
+Putting values in the matrix and printing it:
+
+<blockquote><pre>
+Fill3x8Matrix(matrix);  <font color="#003399"><i>/* Put values in the matrix */</i></font>
+Print3x8Matrix(matrix); <font color="#003399"><i>/* Print the matrix         */</i></font>
+</pre></blockquote>
+
+
+Implementations:
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      matrix[i][j] = i * 8 + j + 1; 
+}
+
+<b>void</b> Print3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      printf(<font color="#9933CC">&quot;%i &quot;</font>, matrix[i][j]);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+
+These functions could have specified the parameters this way: (<a href="../../docs/OperatorPrecedence.html">precedence chart</a>)
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> (*matrix)[8])
+<b>void</b> Print3x8Matrix(<b>short</b> (*matrix)[8])
+</pre></blockquote>
+
+or (the number 3 in the [] is ignored)
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[3][8]);
+<b>void</b> Print3x8Matrix(<b>short</b> matrix[3][8]);
+</pre></blockquote>
+
+Why are they not declared like this?:
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][]);
+<b>void</b> Print3x8Matrix(<b>short</b> matrix[][]);
+</pre></blockquote>
+
+This is the error from gcc:
+<blockquote><pre>
+error: array type has incomplete element type 'short int[]'
+ void Fill3x8Matrix(short matrix[][])
+                          ^~~~~~
+note: declaration of 'matrix' as multidimensional array must have bounds for all dimensions except the first
+In function 'Fill3x8Matrix':
+</pre></blockquote>
+
+
+<p class="technote">
+The compiler needs to know the size of each <i>element</i> in each dimension. It doesn't need to 
+(and can't) know the number of elements in the first dimension. The size of each element
+in the first dimension is determined by the other dimensions and the <i>type</i> of the elements.
+</p>
+
+
+<blockquote><pre>
+<b>void</b> Test(<b>int</b> a[], <b>int</b> b[][6], <b>int</b> c[][3][5])
+{
+  printf(<font color="#9933CC">&quot;a = %p, b = %p, c = %p\n&quot;</font>, (<b>void</b> *)a, (<b>void</b> *)b, (<b>void</b> *)c);
+  a++;
+  b++;
+  c++;
+  printf(<font color="#9933CC">&quot;a = %p, b = %p, c = %p\n&quot;</font>, (<b>void</b> *)a, (<b>void</b> *)b, (<b>void</b> *)c);
+}
+
+<b>Output:</b>
+a = 0012FEE8, b = 0012FF38, c = 0012FEFC  
+a = 0012FEEC, b = 0012FF50, c = 0012FF38  
+</pre></blockquote>
+
+In decimal:
+
+<blockquote><pre>
+<b>Output:</b>
+a = 1244904, b = 1244984, c = 1244924
+a = 1244908, b = 1245008, c = 1244984
+</pre></blockquote>
+
+The function <b>Test</b> is equivalent to this:
+
+<blockquote><pre>
+<b>void</b> Test(<b>int</b> *a, <b>int</b> (*b)[6], <b>int</b> (*c)[3][5])
+</pre></blockquote>
+
+Other methods for filling the matrix use explicit pointer arithmetic:
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      *(*(matrix + i) + j) = i * 8 + j + 1; 
+}
+
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>short</b> *pmat = *(matrix + i);
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      *pmat++ = i * 8 + j + 1;
+  }
+}
+</pre></blockquote>
+
+How does the compiler calculate the address (offset) for the element below?
+
+<blockquote><pre>
+matrix[1][2];
+</pre></blockquote>
+
+<blockquote><pre>
+<img src="2D-Array-6.gif">
+</pre></blockquote>
+
+Using address offsets we get:
+
+<blockquote><pre>
+&matrix[1][2] ==> &*(*(matrix + 1) + 2) ==> *(matrix + 1) + 2
+</pre></blockquote>
+
+
+<ol>
+<li>First dimension - Each element of matrix is an array of 8 shorts, so each element is 16 bytes.
+<li>Second dimension - Each element of each element of matrix is a short, so it's 2 bytes.
+</ol>
+
+<!--
+So, if <b>matrix</b> is at address 100:
+
+<blockquote><pre>
+==> &matrix[1][2] 
+==> *(matrix + 1) + 2 
+==> *( base address + index1 * sizeof(elements1) ) + index2 * sizeof(elements2) 
+==> *(    100       +   1    *        16         ) +   2    *       2 
+==> 120
+</pre></blockquote>
+
+At compile-time, the compiler can actually reduce this to:
+
+<blockquote><pre>
+*(base-address + 16) + 4
+</pre></blockquote>
+
+-->
+
+Given these declarations:
+
+<blockquote><pre>
+<b>short</b> matrix[3][8]        
+<b>short</b> array[10]
+</pre></blockquote>
+
+We can calculate the size of any portion:
+
+<blockquote><pre>
+Expression             Meaning                 Size (bytes)
+-----------------------------------------------------------
+array                Entire array                  20
+array[N]             Element in 1st dimension       2
+matrix               Entire array                  48
+matrix[N]            Element in 1st dimension      16
+matrix[N][M]         Element in 2nd dimension       2
+</pre></blockquote>
+
+
+Recap:
+
+<ul>
+<li>The compiler needs to know the size of each of the <i>elements</i>, in each dimension.
+<li>Since the size of each dimension relies on the fundamental type (int, double, etc.) of
+the array(s), there is an implicit size specified. 
+<li>In a two-dimensional array, knowing the size of the second dimension (number of columns) and the 
+data type of the array is sufficient to perform pointer arithmetic on the first dimension.
+<li>This seemingly convoluted way of locating array elements is required since memory is
+laid out in one dimension by the compiler. The multiple dimension syntax (e.g. <tt>[][]</tt>) is just a convenience for the programmer.
+
+
+</ul>
+
+<p>
+<a href="https://azrael.digipen.edu/~mmead/www/Courses/CS120/Arrays-2D-with-pointers.html">Details with pointers and arrays</a>
+
+
+
+<br><br>
+</body>
+</html>
+
+<!--
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<tt><b></b></tt>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

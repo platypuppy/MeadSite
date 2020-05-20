@@ -1,0 +1,222 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Extra Credit Programming Assignment #1</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #efefef; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Extra Credit Programming Assignment #1</h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+
+</td>
+</tr></table>	
+
+
+<p class="technote">
+As I had discussed in class last week, I've decided to make the 4 practice assignments
+into an extra credit assignment worth 100 points. This is an opportunity for students
+that may not have done as well as they would have liked on the first two WarBoats 
+assignments to demonstrate that they really can do the work. Or, for those that did do
+well, this is a chance to get over 100% on the assignments. 
+There are no drivers or sample files for the
+assignment because all of that stuff is already available with the 4 practice
+assignments (linked below).
+<br><br>
+In order to receive any extra credit, you MUST at least have a fully-functional
+Assignment #2 (WarBoatsOO). You will use that as a starting point to
+implement all of the additional functionality. Because this is extra credit,
+very little partial credit will be given. If you did "mediocre" work on the
+first two assignments, and then turn in another "mediocre" extra credit, I don't
+intend to give you an "exceptional" score because of that. This extra credit
+assignment is for you to prove to me that, yes, in fact, you actually CAN do the
+work that is specified, given an extra amount of time. This means that any tablen
+problems or Doxygen problems or memory corruption will almost certainly invalidate
+your work. These problems are trivial to detect and trivial to fix. Turning in
+code that contains these problems just shows me that you really don't care and 
+I will disregard your submission.
+<br><br>
+All of Mead's extra credit assignments (in any course) are a way for you to show 
+me that, <i>"Yeah, I may have messed up some things in the past, but now I'm here 
+to show you that I *really* do know how to do this stuff and I'd like you to consider
+giving me a better grade."</i> I've given extra credit in higher-level courses, and
+those assignments are significantly more complicated than this extra credit assignment.
+<br><br>
+The due date/time is Sunday, March 22, 2020 at 10:00 pm. This gives you the entire
+week of Spring Break to work on it, if you so choose.
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+
+<ul>
+
+<li><a href="cs170-programming-assignment-warboats-ec.pdf">Handout</a> 
+<p>
+
+
+<!--<li><a href="CS170-FAQ2.html">FAQ</a> Frequently Asked Questions for this assignment-->
+<li>Interface (<tt>WarBoats.h</tt>): <a href="WarBoats.h.html">HTML</a> <a href="WarBoats.h">Text</a>
+<p>
+<li>Partial Ocean definitions:  <a href="Ocean.h.html">HTML</a>  <a href="Ocean.h">Text</a>
+<p>
+<li>Partial Ocean implementations:  <a href="Ocean.cpp.html">HTML</a> <a href="Ocean.cpp">Text</a> 
+<p>
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a> 
+<p>
+<li>Outputs from the tests: (Run command is parentheses)
+<p> <tt><b>warboats</b> test_num use_diagonals force_space</tt>
+  <ul>
+    <li><a href="output1-copy.txt">output1-copy.txt</a> (<tt>warboats 1 1 1</tt>)</li>
+    <li><a href="output2-assign.txt">output2-assign.txt</a> (<tt>warboats 2 1 1</tt>)</li>
+    <li><a href="output3-compare.txt">output3-compare.txt</a> (<tt>warboats 3 1 1</tt>)</li>
+    <li><a href="output4-0-0.txt">output4-0-0.txt</a> (<tt>warboats 4 0 0</tt>)</li>
+    <li><a href="output4-0-1.txt">output4-0-1.txt</a> (<tt>warboats 4 0 1</tt>)</li>
+    <li><a href="output4-1-0.txt">output4-1-0.txt</a> (<tt>warboats 4 1 0</tt>)</li>
+    <li><a href="output4-1-1.txt">output4-1-1.txt</a> (<tt>warboats 4 1 1</tt>)</li>
+    <li><a href="output5-1-1.txt">output5-1-1.txt</a> (<tt>warboats 5 1 1</tt>)</li>
+    <p>
+    <li><a href="output-99.txt">output-99.txt</a> (<tt>warboats 99</tt>, this is a super stress test)</li>
+  </ul>
+<p>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+	</ul>
+<p>
+<li>Sample command lines for compiling
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o gnu driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+
+<!--
+<blockquote>
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /Za /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+<p>
+<li>Don't forget to run your program under a memory debugger <i>at all times</i>. 
+  Submitting code with memory errors will cause the server to reject your code.</li>	
+<p>
+<!--
+<li><a href="Doxyfile">Doxyfile</a> - This will be used to grade your assignment.
+-->
+
+<li>This extra credit assignment is actually composed of these 4 practice assignments:
+  <p>
+<ol>
+  <li><a href="../../practice/warboats-varsize/index.html">warboats-varsize</a></li>
+  <li><a href="../../practice/warboats-ops/index.html">warboats-ops</a></li>
+  <li><a href="../../practice/warboats-diagonal/index.html">warboats-diagonal</a></li>
+  <li><a href="../../practice/warboats-spacing/index.html">warboats-spacing</a></li>
+</ol>
+<p>
+
+There is much more on those pages including detailed information, driver test cases, and sample output.
+You may want to implement all of the modifications using the practice drivers to begin with.
+<p>
+<li>This extra credit assignment is a hybrid between a lab and an assignment. This means that the
+  submission server will run many tests on your code (compile, link, run, check for memory errors, 
+  diff, tablen, Doxygen, etc.)
+  If the server accepts your submission, it will then be sent to the TAs to grade it. They will go over
+  all of your code to ensure that you followed the style guide and used proper programming techniques.
+<p class="technote">
+  This means that if the server accepted your submission, there is no guarantee that you will get 
+  credit for it until the TAs verify your code. If the server accepts it, it just means that you
+  have passed <i>phase one</i> of the grading process.
+</p>  
+</li>
+</ul>
+
+<p class="SectionHeader">
+Screenshots
+</p>
+
+<p class="Trivia">
+The GUI program below requires a couple of slight modifications to your Extra Credit WarBoats
+assignment. If anyone that has completed the extra credit and would like to attempt to build
+their WarBoats using the GUI "driver" shown below, send me an email with that request.
+Adding the few additional lines of code is not going to be a problem.
+<br><br>
+However, the bigger problem may
+be in your knowledge of Windows (or Linux or Mac for that matter) because you have to install
+and configure a very sophisticated tool called
+<a href="https://www.qt.io/development-tools">QtCreator</a>. It's free for personal use
+and for developing Open Source projects. It's also available on Linux, Mac, and Windows.
+You can download it and install it on your own computer and take a look for yourself.
+<br><br>
+I'm hoping to write up a few notes about it in the not-too-distant future and will
+post them here.
+</p>
+
+Here are a couple of screenshots from my newer GUI version of WarBoats&trade; (Click on the image for a larger view.)
+<p>
+This image below shows 7 boats of various sizes. They are only placed vertically and horizontally.
+There is no extra space required between the boats.
+
+<blockquote>
+<a href="warboats-no-spacing-no-diagonals.png"><img src="warboats-no-spacing-no-diagonals.png" border=0 width="690" height="632"></a>
+</blockquote>
+
+<br>
+<p>
+This image below shows 7 boats of various sizes and includes boats placed diagonally.
+There is also extra space between the boats.
+
+<blockquote>
+<a href="warboats-spacing-diagonals.png"><img src="warboats-spacing-diagonals.png" border=0 width="690" height="632"></a>
+</blockquote>
+
+
+<p>
+<hr width=90%>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,35 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;climits&gt;  // UINT_MAX</font>
+<font color="990099">#include &quot;Stack.h&quot;  // The Stack definition</font>
+
+<b>namespace</b> CS170
+{
+
+Stack::Stack(size_t maxsize) : maxsize_(maxsize), size_(0)
+{
+  <b>if</b> (!maxsize_)
+    maxsize_ = UINT_MAX;
+}
+
+<b>bool</b> Stack::empty() <b>const</b>
+{
+  <b>return</b> size_ == 0;
+}
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

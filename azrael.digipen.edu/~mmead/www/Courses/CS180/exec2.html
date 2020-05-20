@@ -1,0 +1,128 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>exec2</title>
+
+</head>
+
+<body>  
+
+<center><h1>
+Example
+</h1></center>
+
+
+This example shows both the list and vector versions of the <i>exec</i>
+function. (<tt>exec2.c</tt>)
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf, stdout */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* exit           */</font>
+<font color="990099">#include &lt;unistd.h&gt; /* fork, getpid   */</font>
+<font color="990099">#include &lt;wait.h&gt;   /* wait           */</font>
+<font color="990099">#include &lt;errno.h&gt;  /* perror         */</font>
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> pid;
+  <b>int</b> use_list = 1;
+
+    <font color="#003399"><i>/* If any args were given, use vector */</i></font>
+  <b>if</b> (argc &gt; 1)
+    use_list = 0;
+
+   pid = fork();
+
+  <b>if</b> (pid == 0) <font color="#003399"><i>/* child */</i></font>
+  {
+    <b>if</b> (use_list)
+    {
+      printf(<font color="#9933CC">&quot;[%i] child: executing a program...&#92;n&quot;</font>, getpid());
+      <font color="#003399"><i>/*       executable        0        1          2         3          */</i></font>
+      execl(<font color="#9933CC">&quot;/usr/bin/geany&quot;</font>, <font color="#9933CC">&quot;geany&quot;</font>, <font color="#9933CC">&quot;exec.c&quot;</font>, <font color="#9933CC">&quot;child.c&quot;</font>, <font color="#9933CC">&quot;pipe0.c&quot;</font>, NULL);
+    }
+    <b>else</b> <font color="#003399"><i>/* use vector */</i></font>
+    {
+      <font color="#003399"><i>/*                 0         1         2      */</i></font>
+      <b>char</b> *args[] = {<font color="#9933CC">&quot;geany&quot;</font>, <font color="#9933CC">&quot;exec.c&quot;</font>, <font color="#9933CC">&quot;pipe1.c&quot;</font>, NULL};
+
+      printf(<font color="#9933CC">&quot;[%i] child: executing a program...&#92;n&quot;</font>, getpid());
+      execv(<font color="#9933CC">&quot;/usr/bin/geany&quot;</font>, args);
+    }
+
+    printf(<font color="#9933CC">&quot;child: if you see this, the exec failed, errno: %i&#92;n&quot;</font>, errno);
+    perror(<font color="#9933CC">&quot;geany&quot;</font>);
+    exit(10); <font color="#003399"><i>/* arbitrary exit code */</i></font>
+  }
+  <b>else</b> <font color="#003399"><i>/* parent */</i></font>
+  {
+    <b>int</b> code, status;
+
+    printf(<font color="#9933CC">&quot;parent: waiting for child to terminate&#92;n&quot;</font>);
+    wait(&amp;status);
+    printf(<font color="#9933CC">&quot;parent: child terminated with value %08X, %i&#92;n&quot;</font>, status, status); <font color="#003399"><i>/* raw value */</i></font>
+
+    code = WEXITSTATUS(status); <font color="#003399"><i>/* extract exit code */</i></font>
+
+    <b>if</b> (WIFEXITED(status)) <font color="#003399"><i>/* normal exit */</i></font>
+      printf(<font color="#9933CC">&quot;parent: child terminated normally with exit code %i&#92;n&quot;</font>, code);
+    <b>else</b> <font color="#003399"><i>/* abnormal exit */</i></font>
+      printf(<font color="#9933CC">&quot;parent: child terminated abnormally, code: %i&#92;n&quot;</font>, code);
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+<blockquote>
+<b>Output: (normal exit)</b>
+<pre>
+parent: waiting for child to terminate
+[32428] child: executing a program...
+parent: child terminated with value 0
+</pre>
+</blockquote>
+
+<blockquote>
+<b>Output: (abnormal exit)</b>
+<pre>
+parent: waiting for child to terminate
+[32360] child: executing a program...
+parent: child terminated with value 00000009, 9
+parent: child terminated abnormally, code: 0
+</pre>
+</blockquote>
+
+Changing <b><tt>/usr/bin/geany</tt></b> to <b><tt>/usr/bin/foobar</tt></b>
+and
+<tt>perror(<font color="#9933CC">&quot;geany&quot;</font>)</tt> to
+<tt>perror(<font color="#9933CC">&quot;foobar&quot;</font>)</tt>
+
+<blockquote>
+<b>Output:</b>
+<pre>
+parent: waiting for child to terminate
+[32473] child: executing a program...
+child: if you see this, the exec failed, errno: 2
+foobar: No such file or directory
+parent: child terminated with value 00000A00, 2560
+parent: child terminated normally with exit code 10
+</pre>
+</blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

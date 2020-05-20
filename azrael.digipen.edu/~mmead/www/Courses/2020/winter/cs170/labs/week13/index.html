@@ -1,0 +1,164 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Warning
+{
+  margin-left: 0;
+  font-size : 12pt;
+  font-weight : bold;
+  background-color: #FFFF00; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+<body>  
+<center>
+<h1>CS170 - Lab Assignment (Optional Extra Credit)<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<!--
+<p class="technote">
+<b>Note:</b> 
+This lab exercise is extra credit. You are <b>not</b> required to do it. If you are struggling
+in this course, I highly recommend that you <b>DO NOT</b> do this lab. The amount of points
+that you will gain is relatively small compared to the points you can earn on 
+the final exam. Your time is better spent studying for the final exam, rather than
+working on this lab. The main purpose of the lab is to give students that are
+comfortable with the material this semester a chance to challenge themselves. 
+<br><br>
+And like the practice assignments in CS120, this 
+also helps me identify students that wish to be TAs for future courses.
+<p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+<ol>
+<li>You will modify your Vector class that you've been working on for the past
+  several weeks. The modification is to create a templated class (much like
+  you did for the linked list assignment.)
+	<p>
+	You will modify the header file and implementation file from the 
+  <tt><b>Vector4</b></tt> lab. 
+<p>
+  Here is a partial header file for you to complete:
+  <a href="Vector-partial.h">Vector-partial.h</a>
+  (<a href="Vector-partial.h.html">HTML</a>)
+
+
+<p>
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add a Doxygen file header comment to <tt><b>Vector.h</b></tt> and 
+  <tt><b>Vector.cpp</b></tt>. Make a bullet list of the functions in the .cpp file. Create doxygen 
+  function header comments for each function. Most of this work was done for the last lab, so 
+  this should only take a few minutes to update.</li>
+<p class="technote">
+In fact, your Doxygen function header comments shouldn't have to change at all, as there
+is nothing special about the functions being templates.
+</p>
+
+
+<p>
+<hr width="100%">
+<p>
+
+
+
+<li>Here are a couple of drivers:
+<p>
+  <ul>
+    <li>This driver uses integers: <a href="driver-int.cpp">driver-int.cpp</a>
+      (<a href="driver-int.cpp.html">HTML</a>)
+      <a href="output-all-int.txt">output-all-int.txt</a>
+    </li>
+<p>
+    <li>This driver uses structures: <a href="driver-struct.cpp">driver-struct.cpp</a>
+      (<a href="driver-struct.cpp.html">HTML</a>)
+    <a href="output-all-struct.txt">output-all-struct.txt</a>
+    <p>
+      <!--
+    <a href="output-all-struct2.txt">output-all-struct2.txt</a> <b>Updated</b>
+    This is a different set of output. I'm still trying to figure out what happened with the
+    first output.
+  -->
+  </li>
+  </ul>
+
+<p>
+
+ 
+  Command lines: (Substitute the actual name of the driver file.)
+
+<blockquote><pre>
+<b>g++</b> -g -o gnu -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp PRNG.cpp<br>
+</pre></blockquote>
+
+<!--
+<b>cl</b> /W4 /WX /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp PRNG.cpp
+<b>clang++</b> -g -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp PRNG.cpp<br>
+-->
+
+Random number generator files
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+  </ul>
+<p>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the 
+newlines between GNU's
+output and the other compilers. <!--You may want to use WinMerge to diff individual tests.-->
+<p>
+</blockquote>
+
+
+</ol>
+
+
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

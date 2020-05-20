@@ -1,0 +1,234 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver2.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/******************************************************************************
+filename    driver2.c
+author      Bobbi Fleckman
+DP email    hostess@digipen.edu
+course      CS120
+section     B
+assignment  8
+due date    12/11/2036
+
+Brief Description:
+  This file contains another main function for the array assignment.
+
+******************************************************************************/</i></font>
+<font color="990099">#include &lt;stdio.h&gt; /* printf              */</font>
+<font color="990099">#include &quot;PRNG.h&quot;  /* ut_srand, RandomInt */</font>
+
+<font color="#003399"><i>/* Prototypes for array manipulations */</i></font>
+<b>void</b> reverse_array(<b>int</b> a[], <b>int</b> size);
+<b>void</b> add_arrays(<b>const</b> <b>int</b> a[], <b>const</b> <b>int</b> b[], <b>int</b> c[], <b>int</b> size);
+<b>void</b> scalar_multiply(<b>int</b> a[], <b>int</b> size, <b>int</b> multiplier);
+<b>int</b> dot_product(<b>const</b> <b>int</b> a[], <b>const</b> <b>int</b> b[], <b>int</b> size);
+<b>void</b> cross_product(<b>const</b> <b>int</b> a[], <b>const</b> <b>int</b> b[], <b>int</b> c[]);
+
+<font color="#003399"><i>/* print all elements of an array */</i></font>
+<b>void</b> print_array(<b>const</b> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%5i&quot;</font>, a[i]);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<font color="#003399"><i>/* generate random numbers between low and high */</i></font>
+<font color="#003399"><i>/*
+int RandomInt(int low, int high)
+{
+  int number;
+  number = rand() % (high - low + 1) + low;
+  return number;
+}
+*/</i></font>
+
+<b>void</b> reverse_test(<b>void</b>)
+{
+  <font color="#003399"><i>/* What's the largest size that will work? */</i></font>
+  <font color="990099">#define REV_SIZE 100</font>
+
+  <b>int</b> a[] = {8};
+  <b>int</b> b[] = {1, 2, 3};
+  <b>int</b> c[] = {1, 2, 3, 4};
+  <b>int</b> d[REV_SIZE];
+  <b>int</b> i;
+
+  <b>for</b> (i = 0; i &lt; REV_SIZE; i++)
+    d[i] = RandomInt(1, REV_SIZE);
+
+  printf(<font color="#9933CC">&quot;Reverse test =============================&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;The original arrays:&#92;n&quot;</font>);
+  print_array(a, 1);
+  print_array(b, 3);
+  print_array(c, 4);
+  print_array(d, REV_SIZE);
+
+  reverse_array(a, 1);
+  reverse_array(b, 3);
+  reverse_array(c, 4);
+  reverse_array(d, REV_SIZE);
+ 
+  printf(<font color="#9933CC">&quot;The reversed arrays:&#92;n&quot;</font>);
+  print_array(a, 1);
+  print_array(b, 3);
+  print_array(c, 4);
+  print_array(d, REV_SIZE);
+
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> add_test(<b>void</b>)
+{
+  <font color="#003399"><i>/* What's the largest size that will work? */</i></font>
+  <font color="990099">#define ADD_SIZE 100</font>
+
+  <b>int</b> a[ADD_SIZE];
+  <b>int</b> b[ADD_SIZE];
+  <b>int</b> c[ADD_SIZE];
+  <b>int</b> i;
+
+  <b>for</b> (i = 0; i &lt; ADD_SIZE; i++)
+  {
+    a[i] = RandomInt(-100, 100);
+    b[i] = RandomInt(-100, 100);
+  }
+
+  printf(<font color="#9933CC">&quot;Add test =============================&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;The original arrays:&#92;n&quot;</font>);
+  print_array(a, ADD_SIZE);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  print_array(b, ADD_SIZE);
+
+  add_arrays(a, b, c, ADD_SIZE);
+ 
+  printf(<font color="#9933CC">&quot;The sum of the two arrays:&#92;n&quot;</font>);
+  print_array(c, ADD_SIZE);
+
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> scalar_multiply_test(<b>void</b>)
+{
+  <font color="#003399"><i>/* What's the largest size that will work? */</i></font>
+  <font color="990099">#define SCALAR_SIZE 100</font>
+
+  <b>int</b> a[SCALAR_SIZE];
+  <b>int</b> multiplier;
+  <b>int</b> i;
+
+  <b>for</b> (i = 0; i &lt; SCALAR_SIZE; i++)
+    a[i] = RandomInt(-100, 100);
+
+  printf(<font color="#9933CC">&quot;Scalar multiply test =============================&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;The original array:&#92;n&quot;</font>);
+  print_array(a, SCALAR_SIZE);
+
+  multiplier = 2;
+  scalar_multiply(a, SCALAR_SIZE, multiplier);
+
+  printf(<font color="#9933CC">&quot;The array multiplied by %i:&#92;n&quot;</font>, multiplier);
+  print_array(a, SCALAR_SIZE);
+
+  multiplier = 5;
+  scalar_multiply(a, SCALAR_SIZE, multiplier);
+
+  printf(<font color="#9933CC">&quot;And now multiplied by %i:&#92;n&quot;</font>, multiplier);
+  print_array(a, SCALAR_SIZE);
+
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> dot_product_test(<b>void</b>)
+{
+  <font color="#003399"><i>/* What's the largest size that will work? */</i></font>
+  <font color="990099">#define ARRAY_SIZE 100</font>
+
+  <b>int</b> a[ARRAY_SIZE];
+  <b>int</b> b[ARRAY_SIZE];
+  <b>int</b> i;
+  <b>int</b> product;
+
+  <b>for</b> (i = 0; i &lt; ARRAY_SIZE; i++)
+  {
+    a[i] = RandomInt(-10, 10);
+    b[i] = RandomInt(-10, 10);
+  }
+
+  printf(<font color="#9933CC">&quot;Dot product test =============================&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;The original arrays:&#92;n&quot;</font>);
+  print_array(a, ARRAY_SIZE);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  print_array(b, ARRAY_SIZE);
+
+  product = dot_product(a, b, ARRAY_SIZE);
+  printf(<font color="#9933CC">&quot;The dot product of a and b is %i&#92;n&quot;</font>, product);
+
+  product = dot_product(a, a, ARRAY_SIZE);
+  printf(<font color="#9933CC">&quot;The dot product of a and a is %i&#92;n&quot;</font>, product);
+
+  product = dot_product(b, b, ARRAY_SIZE);
+  printf(<font color="#9933CC">&quot;The dot product of b and b is %i&#92;n&quot;</font>, product);
+
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b> cross_product_test(<b>void</b>)
+{
+  <font color="990099">#define ARRAY_SIZE_X  3</font>
+  <font color="990099">#define ITERATIONS   10</font>
+
+  <b>int</b> a[ARRAY_SIZE_X];
+  <b>int</b> b[ARRAY_SIZE_X];
+  <b>int</b> c[ARRAY_SIZE_X];
+  <b>int</b> i, j;
+
+  printf(<font color="#9933CC">&quot;Cross product test =============================&#92;n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; ITERATIONS; i++)
+  {
+    <b>for</b> (j = 0; j &lt; ARRAY_SIZE_X; j++)
+    {
+        <font color="#003399"><i>/* Fill arrays with random values */</i></font>
+      a[j] = RandomInt(-10, 10);
+      b[j] = RandomInt(-10, 10);
+    }
+
+      <font color="#003399"><i>/* Print the arrays               */</i></font>
+    printf(<font color="#9933CC">&quot;The original arrays:&#92;n&quot;</font>);
+    print_array(a, ARRAY_SIZE_X);
+    printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+    print_array(b, ARRAY_SIZE_X);
+
+    cross_product(a, b, c);
+    printf(<font color="#9933CC">&quot;The cross product of a x b is:&quot;</font>);
+    print_array(c, ARRAY_SIZE_X);
+    printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  }
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  ut_srand(0, 1);
+
+  reverse_test();
+  add_test();
+  scalar_multiply_test();
+  dot_product_test();
+  cross_product_test();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,19 @@
+-----------------------------------------------
+TestPushException...
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+Exception thrown in TestPushException.
+Message: Stack Overflow!
+5
+4
+3
+2
+1
+Items in the stack: 5
+

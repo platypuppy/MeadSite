@@ -1,0 +1,187 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/styles.css">
+<title>CS 120 Programming Projects</title>
+</head>
+
+<body>
+
+
+<p>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Programming Projects
+</p>
+
+<a name="CH2">
+Chapter 2
+<ol>
+	<li>Write a program that uses <tt>printf</tt> to display the following picture
+		on the screen:
+<pre>
+        *
+       *
+      *
+*    *
+ *  *
+   *
+</pre>
+</li>
+<li>Write a program that calculates the volume of a sphere with a 10-meter radius,
+	using the formula: <i>v&nbsp;=&nbsp;4/3&pi;r<sup>3</sup></i>. Write the fraction <i>4/3</i>
+	as <tt>4.0f/3.0f</tt>. (Try writing it as <i>4/3</i>. What happens?) <i>Hint:</i> C
+	doesn't have an exponentiation operator, so you'll need to multiply <i>r</i> by itself twice
+	to compute <i>r<sup>3</sup></i>. DO NOT use the <i>pow</i> function in <i>math.h</i>.
+	The volume should be about <tt>4188.666667</tt>, but this will depend on the exact value that
+	you use for <i>&pi;</i>.
+</a>
+</ol>
+
+<p><hr width="95%"><p>
+
+<a name="CH3">
+Chapter 3
+<ol>
+  <li>Write a program that accepts a date from the user in the form <i>mm/dd/yyyy</i> and then 
+    displays it in the form <i>yyyymmdd</i>:
+<blockquote><pre>
+Enter a date (mm/dd/yyyy): <u>2/17/2011</u>
+You entered the date 20110217
+</pre></blockquote>
+</ol>
+
+<p><hr width="95%"><p>
+
+
+<a name="CH4">
+Chapter 4
+<ol>
+  <li>Write a program that asks the user to input a 2-digit integer, then print the number with
+  	its digits reversed. A session with the program should have the following appearance:
+<blockquote><pre>
+Enter a two-digit number: <u>28</u>
+The reversal is: 82
+</pre></blockquote>
+Read the number using %d, then break it into two digits. <i>Hint</i>: If <i>N</i> is an integer,
+then <i>N % 10</i> is the last digit and <i>N / 10</i> is the first digit.</li>
+
+<p>
+<li>Extend the previous program to handle <i>three</i>-digit numbers.</li>
+</ol>
+
+<p><hr width="95%"><p>
+
+<a name="CH13">
+Chapter 13
+<ol>
+  <li>What does the following program print?
+<blockquote><pre>
+#include &lt;stdio.h&gt;
+
+int main(void)
+{
+  char s[] = "Hsjodi", *p;
+
+  for (p = s; *p; p++)
+    --*p;
+
+  puts(s);
+
+  return 0;
+}
+</pre></blockquote>
+
+<li>Let <tt>f</tt> be the following function:
+
+<blockquote><pre>
+int f(char *s, char *t)
+{
+  char *p1, *p2;
+
+  for (p1 = s; *p1; p1++)
+  {
+    for (p2 = t; *p2; p2++)
+      if (*p1 == *p2)
+        break;
+
+    if (*p2 == '\0')
+      break;
+  }
+  return p1 - s;
+}
+</pre></blockquote>
+
+<ol>
+  <li>What is the value of <tt>f("abcd", "babc")</tt>?</li>
+  <li>What is the value of <tt>f("abcd", "bcd")</tt>?</li>
+  <li>In general, what value does <i>f</i> return when passed two strings <i>s</i> and <i>t</i>?</li>
+</ol>
+
+</ol>
+
+<p><hr width="95%"><p>
+
+<a name="CH22">
+Chapter 22
+<ol>
+
+<li>Write the following function:
+<p>
+
+<blockquote><pre>
+int line_length(const char *filename, int n);
+</pre></blockquote>
+The function should return the length of line <i>n</i> in the text file whose
+name is <i>filename</i> (assuming that the first line in the file is line 1).
+If the line doesn't exist, the function should return 0;
+
+</ol>
+
+<p><hr width="95%"><p>
+
+<a name="CH16">
+Chapter 16
+<ol>
+
+<li>Write the following function, assuming that the <tt>time</tt> structure contains
+  three members: <tt>hours</tt>, <tt>minutes</tt>, and <tt>seconds</tt> (all of type <i>int</i>).
+<p>
+
+<blockquote><pre>
+struct time split_time(long total_seconds);
+</pre></blockquote>
+<tt>total_seconds</tt> is a time represented as the number of seconds since midnight.
+The function returns a structure containing the equivalent time in hours (0-23), minutes 
+(0-59), and seconds (0-59).
+</ol>
+
+<p><hr width="95%"><p>
+
+<a name="CH17">
+Chapter 17
+<ol>
+
+<li>Write the following function:
+
+<blockquote><pre>
+int *create_array(int n, int initial_value);
+</pre></blockquote>
+
+The function should return a pointer to a dynamically allocated <i>int</i> array with <i>n</i>
+members, each of which is initialized to <tt>initial_value</tt>. The return value should be NULL
+if the array can't be allocated.
+</ol>
+
+
+
+
+<br><br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

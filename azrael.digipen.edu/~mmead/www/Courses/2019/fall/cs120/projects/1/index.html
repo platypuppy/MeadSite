@@ -1,0 +1,402 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Programming Assignment #1</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Programming Assignment #1<p></h1>
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<!--
+<blockquote>
+<p class="technote">
+If you have any questions about the assignment, please post the questions in the 
+<a href="https://distance.digipen.edu/2014-fall/mod/forum/view.php?id=4937">CS120 Forum</a> on the 
+<a href="https://distance.digipen.edu/2014-fall/course/view.php?id=101">CS120 Moodle website</a>. 
+There are many people that can answer your question. If you
+just send your question to me in an email, it may be a while until (or if) I get back to you. Also,
+if you have a question about the assignment, it's very likely that many other students have the same
+question and they will benefit from the posted answers. 
+</p>
+</blockquote>
+-->
+<p class="technote">
+Please read this entire page before starting to write code. You'll be glad you did.
+<br><br>
+<b>The <tt>circle_pi</tt> function requires about 10 statements.</b><br>
+<b>The <tt>leibniz_pi</tt> function requires about 6 statements.</b><br>
+<br>
+This does not count variable declarations, comments, or curly braces.
+</p>
+
+
+<ul>
+<li><a href="cs120-programming-assignment-pi.pdf">Homework description</a> Read this before
+starting. 
+<li>Why using <tt>pow</tt> is <a href="../../../../../CS120/pow-stuff.html">a bad idea</a>.</li>
+<ul>
+  <li>Sample source code for the <tt>pow</tt> function: <a href="../../../../../CS120/w_pow.c.html">w_pow.c</a> and <a href="../../../../../CS120/e_pow.c.html">e_pow.c</a></li>
+</ul>
+<p>
+
+<li>Here is a <i>sample</i> <tt>driver.c</tt> file for you to use and experiment with: 
+  <a href="driver.c.html">HTML</a> <a href="driver.c">Text</a> 
+<ul>
+  <li>What happens if you change the 1000000 (one million) in the for loop to:
+    <ul>
+      <li>10000000 (10 million)</li>
+      <li>100000000 (100 million)</li>
+      <li>1000000000 (1 billion)</li>
+    </ul>
+  </li>
+</ul>
+<p>
+<li>Sample <a href="output.sample.txt">output</a>.
+<li>Sample command line for Windows:</li>
+<blockquote><pre>
+gcc -Werror -O -Wall -Wextra -ansi -pedantic driver.c pi.c -o pi
+</pre></blockquote>
+For Linux and Mac OS X: (That's a lowercase 'L' and lowercase 'M' at the end)
+<blockquote><pre>
+gcc -Werror -O -Wall -Wextra -ansi -pedantic driver.c pi.c -o pi <b>-lm</b>
+</pre></blockquote>
+
+
+<li>Sample Windows executable: <a href="pi.exe">pi.exe</a></li>
+
+</ul>
+
+<p class="SectionHeader">
+The Circle Method
+</p>
+
+The Circle Method (Sort of like <a href="http://en.wikipedia.org/wiki/Riemann_sum">Riemann sums</a>)
+<p>
+Consider the quarter circle. Assume the circle has a radius <i>r</i> of length 2. 
+(Having a radius of 2 is important.)
+
+<blockquote>
+<p>
+<img src="circle1.gif">
+<p>
+</blockquote>
+
+From the formula for the area of a circle:
+<blockquote><pre>
+Area = PI * r<sup>2</sup>  (with r = 2, Area = 4 * PI)
+</pre></blockquote>
+
+you can easily determine that the area of the quarter circle is pi square units. You can also approximate 
+the area computationally by adding up the areas of a series of rectangles. Each rectangle has a fixed width
+and the height is chosen so that the circle passes through the midpoint of the top of the rectangle. For 
+example:
+
+
+<blockquote>
+<p>
+<img src="circle2.gif">
+<p>
+</blockquote>
+
+We can easily see how we can get a closer approximation by increasing the number of rectangles and at the
+same time, making the rectangles thinner:
+
+<blockquote>
+<p>
+<img src="lab4-3.gif">
+<p>
+</blockquote>
+
+As the number of rectangles goes to infinity and the width goes to zero, we get the value for <i>pi</i>.
+<p>
+For each rectangle, the width, <i>w</i>, is the same, derived by dividing the radius of the circle by 
+the number of rectangles. The height, <i>h</i>, on the other hand, varies depending on the position 
+of the rectangle. Rectangles closer to the center of the circle will be taller than those near the edge. 
+If the midpoint of the rectangle in the horizontal direction is given by x, then the height of the 
+rectangle can be computed using the distance formula:
+
+<blockquote>
+<p>
+<img src="height2.gif">
+<p>
+</blockquote>
+
+The sum of the areas of the rectangles provides an approximation to the area of the quarter circle, 
+hence, it is also an approximation of pi. 
+The more rectangles there are, the closer the approximation.
+<p>
+Here are some results, using a small number of iterations:
+
+<!--
+Approximations for pi
+Iterations      Circle Method   Leibniz Method
+----------------------------------------------
+         1      3.464101615138  4.000000000000
+         2      3.259367328636  2.666666666667
+         3      3.206412665814  3.466666666667
+         4      3.183929220612  2.895238095238
+         5      3.171987823613  3.339682539683
+         6      3.164766816537  2.976046176046
+         7      3.160012188321  3.283738483738
+         8      3.156686931298  3.017071817072
+         9      3.154254281272  3.252365934719
+        10      3.152411433262  3.041839618929
+-->        
+
+<blockquote><pre>
+Approximations for pi
+Iterations      Circle Method   Leibniz Method
+----------------------------------------------
+         1      3.464101615138  4.000000000000
+         2      3.259367328636  2.666666666667
+         3      3.206412665814  3.466666666667
+         4      3.183929220612  2.895238095238
+         5      3.171987823613  3.339682539683
+         6      3.164766816537  2.976046176046
+         7      3.160012188321  3.283738483738
+         8      3.156686931298  3.017071817072
+         9      3.154254281272  3.252365934719
+        10      3.152411433262  3.041839618929
+</pre></blockquote>
+
+Using a lot of iterations:
+<blockquote><pre>
+Approximations for pi
+Iterations      Circle Method   Leibniz Method
+----------------------------------------------
+         1      3.464101615138  4.000000000000
+        10      3.152411433262  3.041839618929
+       100      3.141936857900  3.131592903559
+      1000      3.141603544913  3.140592653840
+     10000      3.141592998025  3.141492653590
+    100000      3.141592664482  3.141582653590
+   1000000      3.141592653934  3.141591653590
+</pre></blockquote>
+
+<br>
+<h3>Pseudo-code for finding the area under the quarter-circle:</h3>
+For each iteration:
+<blockquote>
+  <ol>
+    <li>Calculate the midpoint of the current rectangle</li>
+    <ul>
+      <li><font color="red">Don't use the previous value and add to it, this is what gives you 
+        too many rounding errors, resulting in incorrect output.</font></li>
+    </ul>
+    <li>Calculate the new height based on the radius and midpoint.</li>
+    <li>Calculate the area of the new rectangle using height and width.</li>
+    <li>Add the area of the new rectangle to the total area.</li>
+  </ol>
+</blockquote>
+
+Notice that the width of each rectangle is the same, so you should not be calculating
+the width inside the loop. Just calculate it once before the loop and then use it in the loop.
+<p>
+If you are getting this output (incorrect marked in red):
+<blockquote><pre>
+Approximations for pi
+Iterations      Circle Method   Leibniz Method
+----------------------------------------------
+         1      3.464101615138  4.000000000000
+        10      3.152411433262  3.041839618929
+       100      3.141936857900  3.131592903559
+      1000      3.141603544913  3.140592653840
+     10000      3.141592998025  3.141492653590
+    100000      <font color="red">3.1415926644<u>86</u></font>  3.141582653590
+   1000000      <font color="red">3.1415926539<u>23</u></font>  3.141591653590
+</pre></blockquote>
+
+it's because you are doing it incorrectly and accumulating too many rounding errors. You should read
+item #5 below to see why.
+
+<p class="SectionHeader">
+Other Notes
+</p>
+
+
+<ol>
+<!--<li>If a value in your code is constant, use a <tt><b>#define</b></tt> instead of the literal value.-->
+<li>The only data types you should use are <tt><b>int</b></tt> and <tt><b>double</b></tt>.
+<li>Do not try and "optimize" your code by doing all of the calculations in one statement. 
+  This is <b>not</b> how you optimize.
+You should work to achieve these qualities in <i>this order</i>:
+	<ol>
+		<li>Correctness
+		<li>Readability
+		<li>Compactness
+		<li>Performance
+	</ol>
+	
+<li>Pay attention to <i>scope</i>. Declare your variables in the proper scope (e.g. where they are used.)
+<li>Function header example (from the <a class="pdf-icon" href="../../../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a>)
+	
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/******************************************************************************
+   Function: substitute_char
+
+Description: Given string, substitute old_char with new_char. Kind of like a 
+             search and replace. Returns the number of substitutions.
+
+     Inputs: string   - A pointer to a string that will be operated on. This is
+                        a NUL-terminated character array.
+             old_char - The character to be replaced in the string.
+             new_char - The character that will be substituted into the string.
+
+    Outputs: The number (integer) of substitutions that occurred. 
+******************************************************************************/</i></font>
+<b>int</b> substitute_char(<b>char</b> *string, <b>char</b> old_char, <b>char</b> new_char)
+{
+  /* Function body goes here ... */
+}
+</code></pre>	
+
+<li>File this under <i>"Welcome to the Wonderful World of Computer Error"</i>:
+<p>
+
+<table bgcolor="#EEEEDD" border=1 cellpadding=10 cellspacing=0>
+<tr>
+<td>
+We've only briefly talked about floating point numbers in the context of C programming. One of the 
+"interesting" features of floating point numbers (also known as real numbers) is that the computer 
+cannot represent all of them exactly. If I asked you to write out the exact decimal notation for 1/3, 
+you couldn't. There is an infinite number of threes after the decimal point in that number. Well, 
+the computer doesn't have an infinite set of memory either. So, what to do? Well, the computer will 
+approximate the real values. These approximations are close, but they are not exact. These 
+approximations introduce errors into the calculations. Usually, this isn't a big deal. But, if you 
+introduce many, many errors into the calculations, you will start to notice them.
+<p>
+
+Here's the idea and a way to fix it: 
+<p>
+If I have this:
+
+<blockquote><pre>
+<b>double</b> x = 1.0 / 3.0; 
+</pre></blockquote>
+
+both of these statements are <i>supposed</i> to do the same thing: 
+
+<blockquote><pre>
+x + x + x + x + x + x; 
+6 * x; 
+</pre></blockquote>
+
+However, since the value of x is probably not exact (rounding errors), each time I add it, I introduce 
+a little more rounding error. If I multiply it, I still introduce the error, but only once. If you 
+add enough x's together, you will see that the value diverges from the value you get by multiplying once. 
+
+<!--
+You need to modify your code to not accumulate the errors. 
+Use multiplication instead of adding a little bit every iteration. 
+-->
+<p>
+Also note that this has the same problem, 
+although you may be fooled into thinking that you aren't adding x over and over again:
+
+<blockquote><pre>
+total = 0;
+for (i = 0; i < 6; i++)
+  total += x;
+</pre></blockquote>
+
+Here's a sample program that demonstrates the differences: 
+<table cellspacing=5 cellpadding=5 border=0>
+<tr valign="top">
+<td>
+<pre>
+<b>int</b> count;
+<b>for</b> (count = 10; count &lt;= 100000000; count *= 10)
+{
+  <b>double</b> x = 1.0 / count;
+  <b>double</b> multiplied = x * count;
+  <b>double</b> added = 0;
+  <b>int</b> i;
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+    added += x;
+
+  printf(<font color="#9933CC">&quot;iterations: %i, x = %.8f\n&quot;</font>, count, x);
+  printf(<font color="#9933CC">&quot;    multiplied = %.14f\n&quot;</font>, multiplied);
+  printf(<font color="#9933CC">&quot;         added = %.14f\n&quot;</font>, added);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre>
+</td>
+<td>
+<blockquote><pre>
+iterations: 10, x = 0.10000000
+    multiplied = 1.00000000000000
+         added = 1.00000000000000
+
+iterations: 100, x = 0.01000000
+    multiplied = 1.00000000000000
+         added = 1.00000000000000
+
+iterations: 1000, x = 0.00100000
+    multiplied = 1.00000000000000
+         added = 1.00000000000000
+
+iterations: 10000, x = 0.00010000
+    multiplied = 1.00000000000000
+         added = 0.99999999999991
+
+iterations: 100000, x = 0.00001000
+    multiplied = 1.00000000000000
+         added = 0.99999999999808
+
+iterations: 1000000, x = 0.00000100
+    multiplied = 1.00000000000000
+         added = 1.00000000000792
+
+iterations: 10000000, x = 0.00000010
+    multiplied = 1.00000000000000
+         added = 0.99999999975017
+
+iterations: 100000000, x = 0.00000001
+    multiplied = 1.00000000000000
+         added = 1.00000000228987
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+</td>
+</tr></table>
+<p>
+
+So, if you are getting incorrect values when approximating the value of pi above,
+it may be because you are adding small amounts during each iteration, causing the
+errors to grow.
+
+		
+<blockquote><pre>
+</pre></blockquote>
+
+</ol>
+<br>
+</ul>	 
+
+
+<br><br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

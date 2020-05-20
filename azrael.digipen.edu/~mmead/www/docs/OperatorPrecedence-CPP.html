@@ -1,0 +1,189 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Operator Precedence for the C++ Programming Language</title>
+</head>
+
+<body>  
+
+<p class="SectionHeader">
+Operator Precedence for the C++ Programming Language
+</p>
+
+<a href="OperatorPrecedence-Ranked-CPP.pdf">PDF version</a>
+<p>
+
+
+
+<blockquote><pre>
+<b> Rank   Operator            Description                  Result    Associativity</b>
+-------------------------------------------------------------------------------------
+  A1     ()                  Grouping                        exp          N/A
+  A2     ::                  Scope resolution                             L-R
+-------------------------------------------------------------------------------------
+  B1     ()                  Function call                   rexp         L-R
+  B2     []                  Subscript                       lexp         L-R
+  B3     .                   Structure member                lexp         L-R
+  B4     ->                  Structure pointer member        lexp         L-R
+  B5     ++                  Postfix increment               rexp         L-R
+  B6     --                  Postfix decrement               rexp         L-R
+  B7     typeid              Run-time type information                    L-R
+  B8     dynamic_cast        Type cast                       lexp         L-R
+  B9     static_cast         Type cast                       lexp         L-R
+  B10    const_cast          Type cast                       lexp         L-R
+  B11    reinterpret_cast    Type cast                       lexp         L-R
+-------------------------------------------------------------------------------------
+  C1     !                   Logical negate                  rexp         R-L
+  C2     ~                   One's complement                rexp         R-L
+  C3     +                   Unary plus                      rexp         R-L
+  C4     -                   Unary minus                     rexp         R-L
+  C5     ++                  Prefix increment                <font color="blue"><b>LEXP</b></font>         R-L
+  C6     --                  Prefix decrement                <font color="blue"><b>LEXP</b></font>         R-L
+  C7     *                   Indirection (dereference)       lexp         R-L
+  C8     &                   Address of                      rexp         R-L
+  C9     sizeof              Size in bytes                   rexp         R-L
+  C10    new                 Scalar dynamic mem allocation   lexp         R-L
+  C11    new []              Array dynamic mem allocation    lexp         R-L
+  C12    delete              Scalar mem deallocation         N/A          R-L
+  C13    delete []           Array mem deallocation          N/A          R-L
+  C14    (type)              Type conversion (cast)          rexp         R-L
+-------------------------------------------------------------------------------------
+  D1     .*                  pointer-to-member (objects)                  L-R
+  D2     ->*                 pointer-to-member (pointers)                 L-R
+-------------------------------------------------------------------------------------
+  E1     *                   Multiplication                  rexp         L-R
+  E2     /                   Division                        rexp         L-R
+  E3     %                   Integer remainder (modulo)      rexp         L-R
+-------------------------------------------------------------------------------------
+  F1     +                   Addition                        rexp         L-R
+  F2     -                   Subtraction                     rexp         L-R
+-------------------------------------------------------------------------------------
+  G1     <<                  Left shift                      rexp         L-R
+  G2     >>                  Right shift                     rexp         L-R
+-------------------------------------------------------------------------------------
+  H1     >                   Greater than                    rexp         L-R
+  H2     >=                  Greater than or equal           rexp         L-R
+  H3     <                   Less than                       rexp         L-R
+  H4     <=                  Less than or equal              rexp         L-R
+-------------------------------------------------------------------------------------
+  I1     ==                  Equal to                        rexp         L-R
+  I2     !=                  Not equal to                    rexp         L-R
+-------------------------------------------------------------------------------------
+  J      &                   Bitwise AND                     rexp         L-R
+-------------------------------------------------------------------------------------
+  K      ^                   Bitwise exclusive OR            rexp         L-R
+-------------------------------------------------------------------------------------
+  L      |                   Bitwise inclusive OR            rexp         L-R
+-------------------------------------------------------------------------------------
+  M      &&                  Logical AND                     rexp         L-R
+-------------------------------------------------------------------------------------
+  N      ||                  Logical OR                      rexp         L-R
+-------------------------------------------------------------------------------------
+  O      ?:                  Conditional                     <font color="blue"><b>LEXP</b></font>         R-L
+-------------------------------------------------------------------------------------
+  P1     =                   Assignment                      <font color="blue"><b>LEXP</b></font>         R-L
+  P2     +=                  Add to                          <font color="blue"><b>LEXP</b></font>         R-L
+  P3     -=                  Subtract from                   <font color="blue"><b>LEXP</b></font>         R-L
+  P4     *=                  Multiply by                     <font color="blue"><b>LEXP</b></font>         R-L
+  P5     /=                  Divide by                       <font color="blue"><b>LEXP</b></font>         R-L
+  P6     %=                  Modulo by                       <font color="blue"><b>LEXP</b></font>         R-L
+  P7     <<=                 Shift left by                   <font color="blue"><b>LEXP</b></font>         R-L
+  P8     >>=                 Shift right by                  <font color="blue"><b>LEXP</b></font>         R-L
+  P9     &=                  AND with                        <font color="blue"><b>LEXP</b></font>         R-L
+  P10    ^=                  Exclusive OR with               <font color="blue"><b>LEXP</b></font>         R-L
+  P11    |=                  Inclusive OR with               <font color="blue"><b>LEXP</b></font>         R-L
+-------------------------------------------------------------------------------------
+  Q      throw               throw exception                 rexp         R-L
+-------------------------------------------------------------------------------------
+  R      ,                   Comma                           rexp         L-R
+-------------------------------------------------------------------------------------
+</pre></blockquote>
+
+
+<a name="ASCIICHARS">
+<p class="SectionHeader">
+ASCII Characters
+</p>
+</a>
+
+<blockquote><pre>
+Common non-printing control characters
+----------------------------------------------------
+ 0 NUL
+ 7 Bell
+ 8 Backspace
+ 9 Tab
+10 Line feed
+13 Carriage return
+26 End of file (Ctrl-Z)
+27 [Esc] (Escape key)
+
+ASCII characters (only 32-127 are standard)
+----------------------------------------------------
+32      64 @    96 `   128 Ä   160 †   192 +   224 †
+33 !    65 A    97 a   129 Å   161 °   193 -   225 ·
+34 "    66 B    98 b   130 Ç   162 ¢   194 -   226 A
+35 #    67 C    99 c   131 É   163 £   195 +   227 d
+36 $    68 D   100 d   132 Ñ   164 §   196 -   228 O
+37 %    69 E   101 e   133 Ö   165 •   197 +   229 ¢
+38 &    70 F   102 f   134 Ü   166 ¶   198 ›   230 Ê
+39 '    71 G   103 g   135 á   167 ß   199 ›   231 ì
+40 (    72 H   104 h   136 à   168 ®   200 +   232 ô
+41 )    73 I   105 i   137 â   169 ™   201 +   233 E
+42 *    74 J   106 j   138 ä   170 ™   202 -   234 U
+43 +    75 K   107 k   139 ã   171 ´   203 -   235 Ñ
+44 ,    76 L   108 l   140 å   172 ¨   204 ›   236 8
+45 -    77 M   109 m   141 ç   173 ≠   205 -   237 î
+46 .    78 N   110 n   142 é   174 Æ   206 +   238 Ü
+47 /    79 O   111 o   143 è   175 Ø   207 -   239 n
+48 0    80 P   112 p   144 ê   176 ›   208 -   240 =
+49 1    81 Q   113 q   145 ë   177 ›   209 -   241 Ò
+50 2    82 R   114 r   146 í   178 ›   210 -   242 =
+51 3    83 S   115 s   147 ì   179 ›   211 +   243 =
+52 4    84 T   116 t   148 î   180 ›   212 +   244 (
+53 5    85 U   117 u   149 ï   181 ›   213 +   245 )
+54 6    86 V   118 v   150 ñ   182 ›   214 +   246 ˆ
+55 7    87 W   119 w   151 ó   183 +   215 +   247 ~
+56 8    88 X   120 x   152 ò   184 +   216 +   248 ¯
+57 9    89 Y   121 y   153 ô   185 ›   217 +   249 ˙
+58 :    90 Z   122 z   154 ö   186 ›   218 +   250 ˙
+59 ;    91 [   123 {   155 õ   187 +   219 ›   251 v
+60 <    92 \   124 |   156 ú   188 +   220 _   252 n
+61 =    93 ]   125 }   157 ù   189 +   221 ›   253 ˝
+62 >    94 ^   126 ~   158 P   190 +   222 ›   254 ›
+63 ?    95 _   127 ›   159 ü   191 +   223 _   255
+</pre></blockquote>
+
+
+<a name="PRINTF">
+<p class="SectionHeader">
+Common <tt>printf</tt> formatting codes
+</p>
+</a>
+
+<blockquote><pre>
+%c - characters
+%s - strings (NUL-terminated C strings)
+%d, %i - integers
+%f - floating point (<b>float</b> and <b>double</b>)
+%g - floating point (minimum digits, <b>float</b> and <b>double</b>)
+%e - scientific notation (<b>float</b> and <b>double</b>)
+%p - pointers (displays in hex)
+%x - hexadecimal integers
+%o - octal integers
+%u - unsigned integers
+%ld, %li - long integers
+%lu - unsigned long integers
+%hd, %hi - short integers
+%hu - unsigned short integers
+
+Reading (scanf) double: %lf
+Reading/writing long double: %Lf
+</pre></blockquote>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

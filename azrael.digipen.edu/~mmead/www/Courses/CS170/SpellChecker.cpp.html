@@ -1,0 +1,30 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>SpellChecker.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &quot;FileStrings.h&quot;</font>
+
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> *create_spellchecker(<b>const</b> <b>char</b> *dictionary)
+{
+  <b>return</b> <b>new</b> CS170::SpellChecker(dictionary);
+}
+
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> destroy_spellchecker(<b>void</b> *checker)
+{
+  <b>delete</b> <b>static_cast</b>&lt;CS170::SpellChecker*&gt;(checker);
+}
+
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>int</b> spellcheck(<b>void</b> *checker, <b>const</b> <b>char</b> *word)
+{
+  <b>return</b> <b>static_cast</b>&lt;CS170::SpellChecker*&gt;(checker)-&gt;SpellCheck(word);
+}
+</code></pre>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

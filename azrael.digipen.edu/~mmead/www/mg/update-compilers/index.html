@@ -1,0 +1,1000 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to Updating GCC/Clang</title>
+
+</head>
+
+<body>  
+
+<center><h1>
+Mead's Guide to Upgrading GCC and Clang on Linux<br>
+</h1>
+Last update: May 23, 2019 at 19:41:29
+</center>
+
+<ul>
+  <li><a href="index.html#OVERVIEW">Overview</a></li>
+  <li><a href="index.html#PREP">Preparation</a></li>
+  <li><a href="index.html#INSTALL">Installation</a></li>
+  <li><a href="index.html#MULTIPLE">Managing Versions</a></li>
+  <li><a href="index.html#SUMMARY">Summary (tl;dr)</a></li>
+  <li><a href="index.html#UPDATE">Update (Install v 7.x)</a></li>
+  <li><a href="index.html#UPDATE2">Update all (Install v 6.x, 7.x, 8.x, 9.x)</a></li>
+  <li><a href="index.html#VBOX">VirtualBox Caveat</a></li>
+  <li><a href="index.html#REFERENCES">References</a></li>
+</ul>
+
+If you just want the required commands without having to learn anything, go to the 
+<a href="index.html#SUMMARY">summary</a>.
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="OVERVIEW">
+<p class="sectionheader">
+Overview
+</p>
+</a>
+
+Linux Mint 17 (including 17.1, 17.2, and 17.3) comes with GCC 4.8. To be exact, Linux Mint
+17.3 comes with 4.8.4. If you need a later version of the compilers, you can either upgrade
+the entire distribution to Linux Mint 18.x or install newer versions of GCC alongside 
+of the existing 4.8 version.
+<p>
+Upgrading Mint 17.x to 18.x is straight-forward, although I would recommend a fresh install
+of 18.x as sometimes the upgrade process doesn't work as seamless as it should. Installing
+other versions of the compiler is a little more involved, but it's a good way of keeping
+your existing (and functional) Mint 17.x system going. This page will demonstrate how to
+install newer versions of GCC and Clang.
+<p>
+Most of the work will be done from the command line, as that is the simplest way of doing
+it. You can just simply copy and paste the command lines listed below into a terminal.
+
+This document assumes that you have an up-to-date version of Linux Mint 17.x currently
+running on your system. It also assumes that you have GCC version 4.8.x and Clang version
+3.5. (The default version of Clang is 3.4.) By default <tt><b>gcc</b></tt> is installed
+but you may have to install <tt><b>g++</b></tt> manually:
+
+<blockquote><pre>
+sudo apt-get install g++
+</pre></blockquote>
+
+If you don't have Clang installed and you try to run it, you'll see something like this:
+
+<blockquote><pre>
+The program 'clang' can be found in the following packages:
+ * clang-3.3
+ * clang-3.4
+ * clang-3.5
+Try: sudo apt-get install <selected package>
+</pre></blockquote>
+
+If you just install Clang:
+
+<blockquote><pre>
+sudo apt-get install clang
+</pre></blockquote>
+
+version 3.4 will be installed by default. This has the advantage that you can just type
+<tt>clang</tt> at the command line. If you install another version, say, 3.5, you will have
+to qualify it as <tt>clang-3.5</tt> as that is the name of the executable. There are ways
+to "fix" this, e.g. rename the executable or make a symbolic link (shortcut). Later, I'll show 
+you a better way (<i>update-alternatives</i>) that allows you to have an unlimited number 
+of versions of a particular piece of software installed and available.
+<p>
+I chose version 3.5 because this will co-exist with Clang version 3.8 nicely. I have
+discovered (through trial and error) that earlier versions of Clang are removed when
+installing Clang 3.8. I wanted to keep the older version around because sometimes I like
+to see how newer versions differ from older versions in the warnings they produce.
+<p>
+
+I will be updating GCC and Clang on version 17.3 of Linux Mint. To find out which version
+of GCC is currently enabled, just provide the <tt>--version</tt> option to <tt><b>gcc</b></tt>:
+
+
+<blockquote><pre>
+mmead@rosa:/home/mmead>gcc --version
+gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4
+Copyright (C) 2013 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</pre></blockquote>
+
+To see what files are currently installed:
+
+<p>
+gcc: (shows version 4.8 and support programs)
+<p>
+
+<blockquote><pre>
+mmead@rosa:/home/mmead>ls -l /usr/bin/gcc*
+lrwxrwxrwx 1 root root       7 May 18 21:23 /usr/bin/gcc -> gcc-4.8
+-rwxr-xr-x 1 root root 775,888 May  7 05:30 /usr/bin/gcc-4.8
+lrwxrwxrwx 1 root root      10 May 18 21:23 /usr/bin/gcc-ar -> gcc-ar-4.8
+-rwxr-xr-x 1 root root  26,968 May  7 05:30 /usr/bin/gcc-ar-4.8
+lrwxrwxrwx 1 root root      10 May 18 21:23 /usr/bin/gcc-nm -> gcc-nm-4.8
+-rwxr-xr-x 1 root root  26,968 May  7 05:30 /usr/bin/gcc-nm-4.8
+lrwxrwxrwx 1 root root      14 May 18 21:23 /usr/bin/gcc-ranlib -> gcc-ranlib-4.8
+-rwxr-xr-x 1 root root  26,968 May  7 05:30 /usr/bin/gcc-ranlib-4.8
+</pre></blockquote>
+
+g++: (shows version 4.8)
+<blockquote><pre>
+mmead@rosa:/home/mmead>ls -l /usr/bin/g++*
+lrwxrwxrwx 1 root root       7 Apr  7  2014 /usr/bin/g++ -> g++-4.8
+-rwxr-xr-x 1 root root 775,888 May  7 05:09 /usr/bin/g++-4.8
+</pre></blockquote>
+
+clang: (shows version 3.5, support programs, and clang++)
+<blockquote><pre>
+mmead@rosa:/home/mmead>ls -l /usr/bin/clang*
+lrwxrwxrwx 1 root root 25 Feb 12  2015 /usr/bin/clang-3.5 -> ../lib/llvm-3.5/bin/clang
+lrwxrwxrwx 1 root root 27 Feb 12  2015 /usr/bin/clang++-3.5 -> ../lib/llvm-3.5/bin/clang++
+lrwxrwxrwx 1 root root 44 Feb 12  2015 /usr/bin/clang-apply-replacements-3.5 -> ../lib/llvm-3.5/bin/clang-apply-replacements
+lrwxrwxrwx 1 root root 31 Feb 12  2015 /usr/bin/clang-check-3.5 -> ../lib/llvm-3.5/bin/clang-check
+lrwxrwxrwx 1 root root 31 Feb 12  2015 /usr/bin/clang-query-3.5 -> ../lib/llvm-3.5/bin/clang-query
+lrwxrwxrwx 1 root root 32 Feb 12  2015 /usr/bin/clang-tblgen-3.5 -> ../lib/llvm-3.5/bin/clang-tblgen
+lrwxrwxrwx 1 root root 30 Feb 12  2015 /usr/bin/clang-tidy-3.5 -> ../lib/llvm-3.5/bin/clang-tidy
+</pre></blockquote>
+
+Installing version 3.5 of clang removed version 3.4. I'm not exactly sure why that happened,
+and it may be possible to have both, but I wasn't interested in keeping it around so it's a
+non-issue. You'll notice that the installer gave us links so we can just type <tt><b>gcc</b></tt>
+instead of typing <tt><b>gcc-4.8</b></tt>. The same is true with <tt><b>g++</b></tt>, but
+not so with <tt><b>clang</b></tt>. I'll fix this after I upgrade the compilers.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="PREP">
+<p class="sectionheader">
+Preparation
+</p>
+</a>
+
+OK, so we've got a system that has older versions of the compilers installed. Now, it's time
+to install newer ones, but we also want to keep the older versions. By default, Linux Mint
+(as well as other distributions) tries to keep the major versions of software the same
+throughout the life-cycle of the distribution. This means that, since Mint 17 shipped with
+version 4.8 of GCC, it will stay at that version with the 17.x versions.
+<p>
+Version 5.x of GCC may be radically different than the 4.x series, so it won't go into Mint
+until version 18 of Linux Mint. So, if you want to "get ahead" and install versions that
+are significantly different (newer), you have to do so manually. 
+
+<h3>Adding a repository</h3>
+By default, you can't just type:
+
+<blockquote><pre>
+sudo apt-get install gcc-5
+</pre></blockquote>
+
+or whatever and expect the software to be upgraded. You'll likely see something like this:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+E: Unable to locate package gcc-5
+</pre></blockquote>
+
+
+The default repositories for Linux Mint
+17 contain the <i>current</i> version of the software packages. To gain access to the latest
+versions (sometimes, not so stable), you have to add extra repositories so that programs like
+<tt><b>apt-get</b></tt> can search those repositories, as well. Fortunately, like installing
+programs, this is trivial with Linux Mint (and most distributions). The program is part of the
+<tt><b>APT</b></tt> package management system and it's called <tt><b>add-apt-repository</b></tt>.
+Here's how to add the repository for GCC:
+
+<blockquote><pre>
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+</pre></blockquote>
+
+You'll see something like this:
+
+<blockquote><pre>
+You are about to add the following PPA to your system:
+ Toolchain test builds; see https://wiki.ubuntu.com/ToolChain
+
+ More info: https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test
+Press [ENTER] to continue or ctrl-c to cancel adding it
+</pre></blockquote>
+
+If this is what you intended, then press <tt>ENTER</tt> and you'll see this 
+(output wrapped for easier reading):
+
+<blockquote><pre>
+Executing: gpg --ignore-time-conflict --no-options --no-default-keyring 
+  --homedir /tmp/tmp.ZBVGPqLqwd --no-auto-check-trustdb --trust-model always 
+  --keyring /etc/apt/trusted.gpg --primary-keyring /etc/apt/trusted.gpg 
+  --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA9EF27F
+gpg: requesting key BA9EF27F from hkp server keyserver.ubuntu.com
+gpg: key BA9EF27F: public key "Launchpad Toolchain builds" imported
+gpg: Total number processed: 1
+gpg:               imported: 1  (RSA: 1)
+</pre></blockquote>
+
+This shows that the repository has been successfully added. To add the repository
+for Clang:
+
+<blockquote><pre>
+sudo apt-add-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main"
+</pre></blockquote>
+
+
+Now, before you can access it either of these, 
+you have to update the repository information in the usual fashion:
+
+<blockquote><pre>
+sudo apt-get update
+</pre></blockquote>
+
+That's it! Now you can install GCC version 5 and Clang version 3.8.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="INSTALL">
+  <p class="sectionheader">
+Installation
+</p></a>
+
+You simply install it like any other package:
+
+<blockquote><pre>
+sudo apt-get install gcc-5 g++-5
+</pre></blockquote>
+
+And you'll see something like this:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  cpp-5 gcc-5-base gcc-6-base gcc-6-base:i386 libasan2 libatomic1 libcc1-0
+  libcilkrts5 libgcc-5-dev libgcc1 libgcc1:i386 libgomp1 libisl15 libitm1
+  liblsan0 libmpfr4 libmpx0 libquadmath0 libstdc++-5-dev libstdc++6:i386
+  libstdc++6 libtsan0 libubsan0
+Suggested packages:
+  gcc-5-locales g++-5-multilib gcc-5-doc libstdc++6-5-dbg gcc-5-multilib
+  libgcc1-dbg libgomp1-dbg libitm1-dbg libatomic1-dbg libasan2-dbg
+  liblsan0-dbg libtsan0-dbg libubsan0-dbg libcilkrts5-dbg libmpx0-dbg
+  libquadmath0-dbg libstdc++-5-doc
+The following NEW packages will be installed:
+  cpp-5 g++-5 gcc-5 gcc-5-base gcc-6-base gcc-6-base:i386 libasan2 libcc1-0
+  libcilkrts5 libgcc-5-dev libisl15 liblsan0 libmpx0 libstdc++-5-dev libubsan0
+The following packages will be upgraded:
+  libatomic1 libgcc1 libgcc1:i386 libgomp1 libitm1 libmpfr4 libquadmath0
+  libstdc++6:i386 libstdc++6 libtsan0
+10 upgraded, 15 newly installed, 0 to remove and 14 not upgraded.
+Need to get 84.4 MB of archives.
+After this operation, 407 MB of additional disk space will be used.
+Do you want to continue? [Y/n] 
+</pre></blockquote>
+
+
+Depending on the speed of your computer and, more importantly, the speed of your Internet
+connection, this will take between a few seconds and a few minutes. Checking the files in
+<tt>/usr/bin</tt> you'll see something like this now:
+
+gcc: (shows both 4.8 and 5, with the default being 4.8)
+<blockquote><pre>
+mmead@rosa:/home/mmead>ls -l /usr/bin/gcc*
+lrwxrwxrwx 1 root root       7 May 18 21:23 /usr/bin/gcc -> gcc-4.8
+-rwxr-xr-x 1 root root 775,888 May  7 05:30 /usr/bin/gcc-4.8
+-rwxr-xr-x 1 root root 878,384 Dec  5  2015 /usr/bin/gcc-5
+lrwxrwxrwx 1 root root      10 May 18 21:23 /usr/bin/gcc-ar -> gcc-ar-4.8
+-rwxr-xr-x 1 root root  26,968 May  7 05:30 /usr/bin/gcc-ar-4.8
+-rwxr-xr-x 1 root root  26,976 Dec  5  2015 /usr/bin/gcc-ar-5
+lrwxrwxrwx 1 root root      10 May 18 21:23 /usr/bin/gcc-nm -> gcc-nm-4.8
+-rwxr-xr-x 1 root root  26,968 May  7 05:30 /usr/bin/gcc-nm-4.8
+-rwxr-xr-x 1 root root  26,976 Dec  5  2015 /usr/bin/gcc-nm-5
+lrwxrwxrwx 1 root root      14 May 18 21:23 /usr/bin/gcc-ranlib -> gcc-ranlib-4.8
+-rwxr-xr-x 1 root root  26,968 May  7 05:30 /usr/bin/gcc-ranlib-4.8
+-rwxr-xr-x 1 root root  26,976 Dec  5  2015 /usr/bin/gcc-ranlib-5
+</pre></blockquote>
+
+g++: (shows both 4.8 and 5, with the default being 4.8)
+<blockquote><pre>
+mmead@rosa:/home/mmead>ls -l /usr/bin/g++*
+lrwxrwxrwx 1 root root       7 Apr  7  2014 /usr/bin/g++ -> g++-4.8
+-rwxr-xr-x 1 root root 775,888 May  7 05:09 /usr/bin/g++-4.8
+-rwxr-xr-x 1 root root 882,480 Dec  5  2015 /usr/bin/g++-5
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Starting with version 5 of GCC, the version numbering scheme has changed somewhat. You no 
+longer install gcc-5.1 or gcc-5.2. Instead, you simply install gcc-5, and whichever version
+is the latest one, that's what you get. This means that you won't see a third number in the
+versioning (e.g. 4.8.4). In the old system, going from 4.8.2 to 4.8.4 meant it was a trivial
+update (small changes, no new features). Going from 4.8 to 4.9 was consider non-trivial. In
+the new scheme, going from 5.1 to 5.2 is considered trivial. For non-trivial changes, the
+version will go from 5.x to 6. This means the first number is going to change more rapidly
+now. In fact, version 6 of GCC is already available.
+</p>
+</blockquote>
+
+<h3>Installing Clang 3.8</h3>
+
+<blockquote><pre>
+sudo apt-get install clang-3.8
+</pre></blockquote>
+
+Check the files:
+
+<blockquote><pre>
+mmead@rosa:/home/mmead>ls -l /usr/bin/clang*
+lrwxrwxrwx 1 root root 25 Feb 12  2015 /usr/bin/clang-3.5 -> ../lib/llvm-3.5/bin/clang
+lrwxrwxrwx 1 root root 27 Feb 12  2015 /usr/bin/clang++-3.5 -> ../lib/llvm-3.5/bin/clang++
+lrwxrwxrwx 1 root root 25 Jun 30 00:35 /usr/bin/clang-3.8 -> ../lib/llvm-3.8/bin/clang
+lrwxrwxrwx 1 root root 27 Jun 30 00:35 /usr/bin/clang++-3.8 -> ../lib/llvm-3.8/bin/clang++
+lrwxrwxrwx 1 root root 44 Feb 12  2015 /usr/bin/clang-apply-replacements-3.5 -> ../lib/llvm-3.5/bin/clang-apply-replacements
+lrwxrwxrwx 1 root root 44 Jun 30 00:35 /usr/bin/clang-apply-replacements-3.8 -> ../lib/llvm-3.8/bin/clang-apply-replacements
+lrwxrwxrwx 1 root root 31 Feb 12  2015 /usr/bin/clang-check-3.5 -> ../lib/llvm-3.5/bin/clang-check
+lrwxrwxrwx 1 root root 31 Jun 30 00:35 /usr/bin/clang-check-3.8 -> ../lib/llvm-3.8/bin/clang-check
+lrwxrwxrwx 1 root root 28 Jun 30 00:35 /usr/bin/clang-cl-3.8 -> ../lib/llvm-3.8/bin/clang-cl
+lrwxrwxrwx 1 root root 31 Feb 12  2015 /usr/bin/clang-query-3.5 -> ../lib/llvm-3.5/bin/clang-query
+lrwxrwxrwx 1 root root 31 Jun 30 00:35 /usr/bin/clang-query-3.8 -> ../lib/llvm-3.8/bin/clang-query
+lrwxrwxrwx 1 root root 32 Jun 30 00:35 /usr/bin/clang-rename-3.8 -> ../lib/llvm-3.8/bin/clang-rename
+lrwxrwxrwx 1 root root 32 Feb 12  2015 /usr/bin/clang-tblgen-3.5 -> ../lib/llvm-3.5/bin/clang-tblgen
+lrwxrwxrwx 1 root root 30 Feb 12  2015 /usr/bin/clang-tidy-3.5 -> ../lib/llvm-3.5/bin/clang-tidy
+</pre></blockquote>
+
+Now, we've successfully installed the updates. We have versions 4.8 and 5 installed for 
+<tt><b>gcc</b></tt> and <tt><b>g++</b></tt> and we have versions 3.5 and 3.8 installed for 
+<tt><b>g++</b></tt>. Right now, if you type <tt><b>gcc</b></tt> or <tt><b>g++</b></tt>, you're
+going to get version 3.8. If you just type <tt><b>clang</b></tt>, you'll get an error.
+<p>
+To use version 5 of <tt><b>gcc</b></tt>, you have to type <tt><b>gcc-5</b></tt>. This is all
+fine and good, but it's tedious and if you have makefiles that assume <tt><b>gcc</b></tt>
+(which most do), this won't work very well. 
+We need to do a few things to allow us to easily switch between GCC and Clang versions as
+well as just typing the shorter form without explicitly stating the version. 
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="MULTIPLE">
+  <p class="sectionheader">
+Managing Multiple Versions
+</p></a>
+
+I mentioned above that there are lots of ways that you can manage multiple versions of a
+program. This could be by renaming files (not an ideal solution) or manually creating symbolic 
+links (not a bad idea). Linux has a mechanism already in place to deal with just this
+situation. It calls multiple versions <i>alternatives</i>. All of the details about how
+this mechanism works is well beyond the scope of this little tutorial, but I'll give you
+a brief introduction.
+<p>
+If you look in <tt>/etc/alternatives/</tt> you will probably see lots (maybe hundreds) of
+links. Here are a few from the Linux Mint 17.3 system I've been using for this
+tutorial (there are actually about 200 links):
+
+<blockquote><pre>
+lrwxrwxrwx 1 root root  12 Aug  4 08:49 c++ -> /usr/bin/g++
+lrwxrwxrwx 1 root root  12 May 18 21:23 cc -> /usr/bin/gcc
+lrwxrwxrwx 1 root root   9 May 18 21:23 editor -> /bin/nano
+lrwxrwxrwx 1 root root  17 May 18 21:23 ex -> /usr/bin/vim.tiny
+lrwxrwxrwx 1 root root  19 May 18 21:23 ftp -> /usr/bin/netkit-ftp
+lrwxrwxrwx 1 root root   9 May 18 21:23 pager -> /bin/less
+lrwxrwxrwx 1 root root   9 May 18 21:23 pico -> /bin/nano
+lrwxrwxrwx 1 root root  17 May 18 21:23 vi -> /usr/bin/vim.tiny
+lrwxrwxrwx 1 root root  17 May 18 21:23 view -> /usr/bin/vim.tiny
+</pre></blockquote>
+
+To see which executable programs in <tt>/usr/bin</tt> are using alternatives, just type
+this:
+
+<blockquote><pre>
+ls -l /usr/bin/ | grep alternatives
+</pre></blockquote>
+
+and you will see which programs are just links to alternative programs (or versions). There
+are about 60 files on this Linux Mint 17.3 system and here's a sample:
+
+<blockquote><pre>
+lrwxrwxrwx 1 root  root            21 Aug  4 08:37 c++ -> /etc/alternatives/c++
+lrwxrwxrwx 1 root  root            20 May 18 21:23 cc -> /etc/alternatives/cc
+lrwxrwxrwx 1 root  root            24 May 18 21:23 editor -> /etc/alternatives/editor
+lrwxrwxrwx 1 root  root            20 May 18 21:23 ex -> /etc/alternatives/ex
+lrwxrwxrwx 1 root  root            21 May 18 21:23 ftp -> /etc/alternatives/ftp
+lrwxrwxrwx 1 root  root            23 May 18 21:23 pager -> /etc/alternatives/pager
+lrwxrwxrwx 1 root  root            22 May 18 21:23 pico -> /etc/alternatives/pico
+lrwxrwxrwx 1 root  root            20 May 18 21:23 vi -> /etc/alternatives/vi
+lrwxrwxrwx 1 root  root            22 May 18 21:23 view -> /etc/alternatives/view
+</pre></blockquote>
+
+You can see that these are just links to the corresponding link in <tt>/etc/alternatives/</tt>.
+For those of you that are programmers (likely, all of you), you can think of a link here as a <i>pointer-to-pointer-to-a-file</i>.
+So, if you typed <tt>ftp</tt>, this is what's happening:
+
+<blockquote><pre>
+/usr/bin/ftp ===> /etc/alternatives/ftp ===> /usr/bin/netkit-ftp
+</pre></blockquote>
+
+Also, remember that <tt>/usr/bin/</tt> is in the PATH, but <tt>/etc/alternatives/</tt> is not.
+So, if there was an alternative FTP program installed (say, <tt><b>fast-ftp</b></tt>) and 
+the user wanted to use that instead, the system would just update the link in
+<tt>/etc/alternatives/</tt>, so the chain might look like this:
+
+<blockquote><pre>
+/usr/bin/ftp ===> /etc/alternatives/ftp ===> /usr/local/bin/fast-ftp
+</pre></blockquote>
+
+This is a fictitous program (I think!), but I'm just showing how you could have another FTP
+program installed in a completely different location and then just update the link to point
+to that one. See? It's just like programming with pointers!
+<p>
+Managing all of these alternative links (pointers) is done by a program called, appropriately
+enough, <i>update-alternatives</i>. There are lots of options with this program, but I'm just
+going to cover the basics so you can use it effectively. To see what alternatives are available
+for the FTP program (<tt><b>ftp</b></tt>), just type:
+
+<blockquote><pre>
+update-alternatives --list ftp
+</pre></blockquote>
+
+and you'll see this (on a default Linux Mint 17.3 install)
+
+<blockquote><pre>
+/usr/bin/netkit-ftp
+</pre></blockquote>
+
+What it's telling us is that there is only one "alternative" program for (<tt><b>ftp</b></tt>).
+Most, if not all of the links in <tt>/etc/alternatives/</tt> have only 1 program associated with
+them, so there really is no "alternative". But, they are in place so that <i>when</i> you decide
+to have multiple versions/programs for one command, you can do so easily.
+Let's look at <tt><b>gcc</b></tt>:
+
+<blockquote><pre>
+update-alternatives --list gcc
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+update-alternatives: error: no alternatives for gcc
+</pre></blockquote>
+
+This is telling us that there currently is no alternative for <tt><b>gcc</b></tt>. However, we
+just installed version 5.3 alongside of version 4.8, so we do have an alternative. To set it up,
+do this:
+
+<blockquote><pre>
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+update-alternatives: using /usr/bin/gcc-4.8 to provide /usr/bin/gcc (gcc) in auto mode
+</pre></blockquote>
+
+The general form of the command is:
+
+<blockquote><pre>
+update-alternatives <i>link name path priority</i>
+</pre></blockquote>
+
+where:
+<ul>
+  <li><i>link</i> - the name of the link, usually in <tt>/usr/bin/</tt> (<tt>/usr/bin/gcc</tt>)</li>
+  <li><i>name</i> - the short name for the command (<tt>gcc</tt>)</li>
+  <li><i>path</i> - the actual full pathname of the executable (<tt>/usr/bin/gcc-4.8</tt></li>
+  <li><i>priority</i> - the priority if using <i>auto mode</i> (see the man page for more information)</li>
+</ul>
+
+You probably won't ever need the <i>priority</i>, so just set it to some integer value. I generally
+choose unique values between 20 and 80, with no particular reason why. Now, if you list the alternatives:
+<blockquote><pre>
+update-alternatives --list gcc
+</pre></blockquote>
+
+You'll see this:
+
+<blockquote><pre>
+/usr/bin/gcc-4.8
+</pre></blockquote>
+
+To add version 5 of GCC to the set of alternatives, just do this:
+
+<blockquote><pre>
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60
+</pre></blockquote>
+
+Now, list the alternatives:
+
+<blockquote><pre>
+update-alternatives --list gcc
+</pre></blockquote>
+
+and you'll see this:
+<blockquote><pre>
+/usr/bin/gcc-4.8
+/usr/bin/gcc-5
+</pre></blockquote>
+
+OK, so that's all fine and good. You now know how to add (or install) alternatives. If you
+had another version, say version 6, you would do the same thing for that, changing
+<tt>gcc-5</tt> to <tt>gcc-6</tt> in the above commands.
+<p>
+Now, I could do the same thing with <tt><b>g++</b></tt>, as well. But, I don't <i>really</i>
+want to use two different versions of <tt><b>gcc</b></tt> and <tt><b>g++</b></tt> at the same
+time (e.g. <tt>gcc-4.8</tt> and <tt>g++-5</tt>). I want them to be <i>synchronized</i> so that
+if I change <tt><b>gcc</b></tt>, then <tt><b>g++</b></tt> will also change. This is the command
+to do that:
+
+
+<blockquote><pre>
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+</pre></blockquote>
+
+This ties <tt>gcc-4.8</tt> with <tt>g++-4.8</tt> and <tt>gcc-5</tt> with <tt>g++-5</tt> so when
+we change <tt><b>gcc</b></tt>, then <tt><b>g++</b></tt> will also change. And that's the last 
+step I need to show you: How to switch between the alternatives. Type this:
+
+<blockquote><pre>
+sudo update-alternatives --config gcc
+</pre></blockquote>
+
+and you should see something like this:
+
+<blockquote><pre>
+There are 2 choices for the alternative gcc (providing /usr/bin/gcc).
+
+  Selection    Path              Priority   Status
+------------------------------------------------------------
+* 0            /usr/bin/gcc-5     60        auto mode
+  1            /usr/bin/gcc-4.8   50        manual mode
+  2            /usr/bin/gcc-5     60        manual mode
+
+Press enter to keep the current choice[*], or type selection number: 
+</pre></blockquote>
+
+This tells us that item #0 (with the asterisk) is the current alternative (version 5). 
+If you want to make version 4.8 the current alternative, simply type <tt>1</tt> and hit ENTER.
+To verify the versions of the compilers, type:
+
+<blockquote><pre>
+gcc --version &amp;&amp; g++ --version
+</pre></blockquote>
+
+And you should see:
+<p>
+
+(When configured for version 4.8)
+<blockquote><pre>
+gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) <b>4.8.4</b>
+Copyright (C) 2013 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Ubuntu 4.8.4-2ubuntu1~14.04.3) <b>4.8.4</b>
+Copyright (C) 2013 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</pre></blockquote>
+
+(When configured for version 5)
+<blockquote><pre>
+gcc (Ubuntu 5.3.0-3ubuntu1~14.04) <b>5.3.0</b> 20151204
+Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Ubuntu 5.3.0-3ubuntu1~14.04) <b>5.3.0</b> 20151204
+Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</pre></blockquote>
+
+To setup the two versions of Clang:
+
+<blockquote><pre>
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.5 50 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-3.5
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 60 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-3.8
+</pre></blockquote>
+
+This also ties <tt><b>clang</b></tt> and <tt><b>clang++</b></tt> together for each version. So, to
+configure the system to use a particular version of the compilers, just run:
+
+<blockquote><pre>
+sudo update-alternatives --config <i>compiler</i>
+</pre></blockquote>
+
+where <i>compiler</i> is either <i>gcc</i> or <i>clang</i>. This will persist until you run the
+<i>update-alternatives</i> command again.
+<p>
+
+<b>Note:</b> If you run
+
+<blockquote><pre>
+update-alternatives --config gcc
+</pre></blockquote>
+
+with only one compiler configured, you'll see something like this:
+
+<blockquote><pre>
+There is only one alternative in link group gcc (providing /usr/bin/gcc): /usr/bin/gcc-4.8
+Nothing to configure.
+</pre></blockquote>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="SUMMARY">
+  <p class="sectionheader">
+Summary (tl;dr)
+</p>
+</a>
+
+Steps to install and enable multiple compilers (this assumes GCC version 4.8/5 and Clang
+version 3.5/3.8):
+
+<ol>
+  <li>Add the necessary repositories on Linux Mint 17.x for GCC and Clang:
+<blockquote><pre>
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-add-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main"
+</pre></blockquote>
+</li>
+<li>Update the repositories:
+<blockquote><pre>
+sudo apt-get update
+</pre></blockquote>
+</li>
+<li>Install gcc-5, g++-5, and clang-3.8:
+<blockquote><pre>
+sudo apt-get install gcc-5 g++-5 clang-3.8
+</pre></blockquote>
+</li>
+<li>Add each version of each compiler as an alternative program:
+<blockquote><pre>
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.5 50 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-3.5
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 60 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-3.8
+</pre></blockquote>
+This also ties (synchronizes) <tt><b>gcc</b></tt> with <tt><b>g++</b></tt> and <tt><b>clang</b></tt> with
+<tt><b>clang++</b></tt>
+</li>
+<p>
+<li>To enable a particular version (for the entire system):
+<blockquote><pre>
+sudo update-alternatives --config <i>compiler</i>  
+</pre></blockquote>
+where <i>compiler</i> is either <i>gcc</i> or <i>clang</i>.
+</li>
+</ol>
+
+<b>Notes:</b>
+<ul>
+<li>The exact repositories that you need to add will depend on the distribution and version. I've shown
+the ones for Linux Mint 17.x. If you're using something else, you'll need to Google to find out
+what/where those repositories are. (That's what I did.)</li>
+<p>
+  <li>The <i>update-alternatives</i> program basically just automates the creation and updating of the
+  symbolic links. You could certainly do all of this manually (as it was done before we had
+  <i>update-alternatives</i>).</li>
+<p>
+<li>Use this script: <a href="update-compilers.sh">update-compilers.sh</a> to perform all of the
+  tasks shown above. After downloading it, make sure it's executable:
+<blockquote><pre>
+chmod +x update-compilers.sh
+</pre></blockquote>
+
+and then just run it:
+<blockquote><pre>
+./update-compilers.sh
+</pre></blockquote>
+
+You will be prompted for your password (it requires <b><tt>sudo</tt></b>) and it may ask you
+to respond Y or N (Yes or No) to continue.
+
+<p>
+<li>If you want to support 32-bit programs, run this as well:
+
+<blockquote><pre>
+sudo apt-get install g++-5-multilib gcc-5-multilib
+</pre></blockquote>
+
+
+</ul>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="UPDATE">
+<p class="sectionheader">
+Update - Install GCC 7.x
+</p>
+</a>
+
+If your system already has GCC 5 installed and you'd like to upgrade to GCC 7.x, there is a new script: 
+<a href="install-gcc7.sh">install-gcc7.sh</a>. You will have to download it and make it executable.
+<p>
+It's similar to the script above, but installs version 7.x instead. It also doesn't 
+include Clang in the installation. If you've already run the above script, you don't need
+the first line in the new script:
+
+<blockquote><pre>
+# Add the repositories
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+</pre></blockquote>
+
+because you've already set up the repository. It won't hurt if you try to add it
+again, though.
+<p>
+You can probably use this script to install any version of GCC 
+(6, 7, 8, etc.) in the future simply by changing the appropriate lines.
+<p class="technote">
+<b>Note</b>: This procedure will not remove version 5.x from your computer. It will install version 7.x
+alongside of version 5.x. This means that you can switch between the two versions at any time using
+the command:<br><br> <tt>sudo update-alternatives --config gcc</tt>
+</p>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="UPDATE2">
+<p class="sectionheader">
+Update - Install all newer versions
+</p>
+</a>
+
+The previous section showed you how to install version 7.x of the GNU gcc compiler. It turns out,
+it's trivial to install other later versions as well. I've updated the script:
+<a href="install-gcc-all.sh">install-gcc-all.sh</a> to install versions 6, 7, 8, and 9.
+If you don't want to install and configure all of those compilers, just comment out the lines
+that you don't want. (To comment out a line, just put a # in front of it.)
+<p>
+The script looks like this:
+
+<blockquote><pre>
+#!/bin/bash
+
+# Add the repositories
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+
+# Update the repositories:
+sudo apt-get update
+
+# Install gcc/g++ 5,6,7,8,9 32-bit and 64-bit
+sudo apt-get --assume-yes install gcc-5 g++-5 gcc-5-multilib g++-5-multilib
+sudo apt-get --assume-yes install gcc-6 g++-6 gcc-6-multilib g++-6-multilib
+sudo apt-get --assume-yes install gcc-7 g++-7 gcc-7-multilib g++-7-multilib
+sudo apt-get --assume-yes install gcc-8 g++-8 gcc-8-multilib g++-8-multilib
+sudo apt-get --assume-yes install gcc-9 g++-9 gcc-9-multilib g++-9-multilib
+
+# Add each version of each compiler as an alternative program:
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 50 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+
+# Set the desired compiler versions:
+sudo update-alternatives --config gcc
+
+# Check that the versions are correct:
+gcc --version
+</pre></blockquote>
+
+I've arbitrarily set the priority for each compiler. If you wish to change those, consult
+<a href="http://manpages.ubuntu.com/manpages/precise/man8/update-alternatives.8.html">this reference</a>
+for the meaning of those numbers.
+<p>
+To change the version of the compiler you want to use, just run the command:
+
+<blockquote><pre>
+sudo update-alternatives --config gcc
+</pre></blockquote>
+
+and choose the version from the list. You should see something like this displayed:
+
+<blockquote><pre>
+There are 5 choices for the alternative gcc (providing /usr/bin/gcc).
+
+  Selection    Path            Priority   Status
+------------------------------------------------------------
+* 0            /usr/bin/gcc-9   90        auto mode
+  1            /usr/bin/gcc-5   50        manual mode
+  2            /usr/bin/gcc-6   60        manual mode
+  3            /usr/bin/gcc-7   70        manual mode
+  4            /usr/bin/gcc-8   80        manual mode
+  5            /usr/bin/gcc-9   90        manual mode
+
+Press &lt;enter&gt; to keep the current choice[*], or type selection number: 
+</pre></blockquote>
+
+<!--
+
+g++ -o gnu64 driver-sample.cpp ObjectAllocator.cpp PRNG.cpp -Wall -Wextra -Wconversion -std=c++11 -pedantic -g 
+g++ -m32 -o gnu32 driver-sample.cpp ObjectAllocator.cpp PRNG.cpp -Wall -Wextra -Wconversion -std=c++11 -pedantic -g 
+In file included from driver-sample.cpp:1:0:
+/usr/include/c++/4.8/iostream:38:28: fatal error: bits/c++config.h: No such file or directory
+ #include <bits/c++config.h>
+                            ^
+compilation terminated.
+In file included from ObjectAllocator.cpp:1:0:
+/usr/include/c++/4.8/iostream:38:28: fatal error: bits/c++config.h: No such file or directory
+ #include <bits/c++config.h>
+                            ^
+compilation terminated.
+make: *** [all] Error 1
+
+
+
+<tt><b></b></tt>
+-->
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="VBOX">
+<p class="sectionheader">
+VirtualBox Caveat
+</p>
+
+<center>
+<blockquote>
+<p class="technote">
+<b>If you don't use VirtualBox, you can ignore this section.</b>
+</p>
+</blockquote>
+</center>
+
+There is something peculiar that I have noticed over the last couple of years when
+it comes to updating <a href="https://www.virtualbox.org/">VirtualBox</a>. If you have
+installed a newer compiler than the one that came with your Linux Mint distribution,
+your virtual machines (VMs) will no longer run. Searching the Internet, I've never found any definitive reason why
+this happens. Actually, I've found posts that indicate what the solution is, but none
+of them have ever worked for me.
+However, the fix that I use each time this happens is to revert back to the
+original version of <i>gcc</i> that came with the distribution. 
+<p>
+For example, one of my systems runs Linux Mint 17 (Qiana). It's been running just fine
+for years, although it's getting a little old and at some point it will no longer be supported.
+I update/upgrade my system every so often like this:
+
+<blockquote><pre>
+sudo apt-get update &amp;&amp; sudo apt-get upgrade
+</pre></blockquote>
+
+If VirtualBox happens to be upgraded, when I try to run a virtual machine, it
+fails. Unfortunately, I don't have the exact error message handy, but it said 
+something along these lines:
+
+<blockquote><pre>
+Kernel driver not installed (rc=-1908)
+</pre></blockquote>
+
+You can see a similar error message from Ubuntu 
+<!--<a href="https://i.stack.imgur.com/WKnp1.png">here</a>.-->
+<a href="vbox-error-1.png">here</a>
+
+(Note to self: Post the error message here next time this happens!)
+<p>
+None of the "solutions" I found on the Internet solved the problem. The fix for
+me was to simply switch the version of <i>gcc</i> to the original version temporarily by
+running:
+
+<blockquote><pre>
+sudo update-alternatives --config gcc
+</pre></blockquote>
+
+and choosing the older version. In my case, that version is 4.8. Then I ran the suggested command:
+
+<blockquote><pre>
+sudo /sbin/vboxconfig
+</pre></blockquote>
+
+and now the virtual machines will run again. This may not happen to you,
+but I'm putting this here in case it helps. It helps me, and I sometimes refer
+to this page myself.
+</a>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="REFERENCES">
+<p class="sectionheader">
+References
+</p>
+</a>
+
+This was just a quick introduction to installing newer versions of the compilers, as well
+as using <i>update-alternatives</i> to manage them. For more information, follow these
+links:
+
+<p>
+<ul>
+  <li>The <a href="http://manpages.ubuntu.com/manpages/precise/man8/update-alternatives.8.html">update-alternatives</a> man page.</li>
+  <li><a href="http://clang.llvm.org/cxx_status.html">Clang's</a> support for modern C++ constructs.</li>
+  <li><a href="https://gcc.gnu.org/projects/cxx-status.html">GCC's</a> support for modern C++ constructs.</li>
+  <li>Introduction to <a href="https://www.ibm.com/developerworks/library/l-lpic1-104-6/">links</a> under Linux.
+    (<a href="hard-soft-links-ibm.pdf">PDF</a>)</li>
+</ul>
+You can also <a href="https://www.google.com/#q=update-alternatives">Google for update-alternatives</a>
+ to find more references and information on using it.
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

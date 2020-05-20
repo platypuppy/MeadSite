@@ -1,0 +1,248 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Programming Assignment #1</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Programming Assignment #1</h1>
+</center>
+
+<p class="technote">
+<b>Reminder:</b> The next programming assignment (#2) will build on this assignment. This
+means that you must complete this assignment in order to do the second assignment. Even if
+your implementation is not perfect (many won't be), you still need to submit it and then
+<i>fix it</i> for use with the second assignment. 
+<br><br>
+This should go without saying, but I'm going to say it anyway: CS170 is significantly more
+difficult than CS120. If you were able to wait until the last minute to do a CS120 assignment,
+then good for you! However, if you wait until the last minute for this assignment, you will likely
+get a 0 on it. The amount of time you spend on this assignment is probably going to be
+proportional to your grade in CS120. If you got an A in CS120, you will probably be able to finish
+this assignment with few problems.
+If you got a C-, then you are likely to spend a lot more time. Please keep
+this in mind as you budget your time.
+<br><br>
+<b>Things that will help you:</b> Read all instructions,
+read the handout, read the FAQ, read the sample code, use a makefile, attend
+the lectures and ask questions.
+The resources are there to help you. 
+Failure to use them will result in very poor results.
+</p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+
+
+<li>Below is an <a href="http://dictionary.reference.com/browse/example">example</a> of the additional 
+	lines you need to add to your Doxygenized File Header Comments in your .cpp files.
+
+Make sure you add the lines in <font color="blue">BLUE</font> <b>even if you didn't have
+any problems</b>. If you had no problems, just write: NONE
+
+<blockquote><pre>
+/******************************************************************************/
+/*!
+\file   foobar.cpp
+\author Master Shake
+\par    email: master.shake\@digipen.edu
+\par    DigiPen login: shakemaster
+\par    Course: CS170
+\par    Section: E
+\par    Assignment #9
+\date   2/19/2029
+\brief  
+    This file contains the implementation of the following functions for the 
+    FooBar assignment.
+      
+    Functions include:
+    
+       + Foo
+       + Bar
+       + Baz
+       + blah, blah, blah,
+       + yada, yada, yada,
+    
+        other stuff here....
+    
+    
+  <font color="blue"><b>Hours spent on this assignment: 
+
+  Specific portions that gave you the most trouble: 
+</b></font>
+  
+  
+  
+*/
+/******************************************************************************/
+</pre></blockquote>
+
+<!--
+<p class="technote">
+Before starting this assignment, read parts of Chapter 4. Especially the part about
+using <tt><b>new</b></tt> and <tt><b>delete</b></tt> for single objects and <tt><b>new[]</b></tt> 
+and <tt><b>delete[]</b></tt> for arrays starting on page 160 (page 150 in the 5th 
+edition). If you've forgotten how to use a <tt><b>struct</b></tt> in CS120, you should 
+review your notes about them as well. Also, <b>READ THROUGH THE SAMPLE DRIVER. There is a 
+lot of information to be gained from reading code.</b>
+</p>
+-->
+	
+For an example of how you must format your Doxygen function header comments
+(including all of the asterisks), look 
+<a href="Ocean.cpp.html">here</a>. Failure to follow this format will result in loss of points.
+<p>
+	
+<li><a href="cs170-programming-assignment-warboats.pdf">Handout</a> 
+
+ 
+<li><a href="CS170-FAQ-WarBoats.html">FAQ</a> Frequently Asked Questions for this assignment. 
+	(<b>Please read this before asking questions</b>)
+<li>Warboats interface: <a href="WarBoats.h.html">HTML</a> <a href="WarBoats.h">Text</a>
+<li>Ocean definitions:  <a href="Ocean.h.html">HTML</a>  <a href="Ocean.h">Text</a>
+<li><a href="pseudocode.html">Pseudocode</a> for the TakeShot function. Do not write any code until 
+	you understand this.
+<li>Partial Ocean implementations:  <a href="Ocean.cpp.html">HTML</a> <a href="Ocean.cpp">Text</a>
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a>
+<li>Outputs from the three tests: <a href="test0.txt">test0.txt</a>&nbsp;&nbsp;&nbsp;<a href="test1.txt">test1.txt</a>&nbsp;&nbsp;&nbsp;
+	<a href="test2.txt">test2.txt</a>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+	</ul>
+<li>Sample command lines for compiling
+<blockquote>
+GNU: 
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -Wconversion -O -ansi -pedantic -g -o warboats driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+
+<!--
+<blockquote>
+Clang:
+<blockquote><pre>
+<b>clang++</b> -Wall -Wextra -Werror -O -ansi -pedantic -o clan driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+If Clang won't link on Windows, use this command (compile-only):
+<blockquote><pre>
+<b>clang++</b> -c -Wall -Wextra -Werror -O -ansi -pedantic driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+<!--
+<blockquote>
+Microsoft (optional)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fewarboats driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+</blockquote>
+
+<li>You can "play" the Windows text version <a href="WarBoatsGame.exe">here</a>.
+	(You should download it to run it.)
+  There is also a version for <a href="WarBoatsGame-mac.html">macOS</a> and 
+  <a href="WarBoatsGame.html">Linux</a>.
+<p>
+<li>As with all assignments, the first thing you should do is create a makefile. This will 
+	stream-line the whole processes of completing the assignment.
+<p>
+<li>Here's an example <a href="../../Doxyfile-1.8.15.txt">Doxyfile</a> for you to use with this project. 
+	You'll have to modify it for this assignment. (You also need to rename it to just Doxyfile).
+	You should create a doxygen target in your makefile and add these lines:
+<p>
+
+Windows
+<blockquote><pre>
+rm -rf html/
+( type Doxyfile &amp; echo EXTRACT_ALL=YES ) | doxygen.exe -
+( type Doxyfile &amp; echo EXTRACT_ALL=NO ) | doxygen.exe -
+</pre></blockquote>
+
+Linux/Mac/Cygwin/makefiles
+<blockquote><pre>
+rm -rf html/
+( cat Doxyfile ; echo "EXTRACT_ALL=YES" ) | doxygen -
+( cat Doxyfile ; echo "EXTRACT_ALL=NO" ) | doxygen -
+</pre></blockquote>
+
+<p>
+
+<!--
+<p>
+<li>Don't forget to compile a version with Microsoft's compiler and run your program under
+Dr. Memory. Submitting code with memory errors will lead to a very low score 
+<b>EVEN IF YOUR OUTPUT IS CORRECT</b>.</li>	
+-->
+</ul>
+
+<!--****************************************************************************************************-->
+<!--****************************************************************************************************-->
+<!--****************************************************************************************************-->
+<p class="SectionHeader">
+Additional Sample Program Runs
+</p>
+Be sure that you test your code with this driver as well, especially the 8x12 board. 
+<b>YOU HAVE BEEN WARNED.</b>
+
+<ul>
+<li>Another sample driver: <a href="driver-big.cpp.html">HTML</a> <a href="driver-big.cpp">Text</a> 
+	<ul>
+	<li><a href="out-5-10-10-ff.txt">10x10 with 5 boats, minimum output</a>
+	<li><a href="out-5-10-10-tf.txt">10x10 with 5 boats, medium output</a>
+	<li><a href="out-5-10-10-tt.txt">10x10 with 5 boats, maximum output</a>
+		<p>
+	<li><a href="out-5-8-12-ff.txt">8x12 with 5 boats, minimum output</a>
+	<li><a href="out-5-8-12-tf.txt">8x12 with 5 boats, medium output</a>
+	<li><a href="out-5-8-12-tt.txt">8x12 with 5 boats, maximum output</a>
+		<p>
+	<li><a href="out-99-30-30-ff.txt">30x30 with 99 boats, minimum output</a>
+	<li><a href="out-99-30-30-tf.txt">30x30 with 99 boats, medium output</a>
+	<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/projects/1/out-99-30-30-tt.zip">30x30 with 99 boats, maximum output</a> zip file (output contains over 30,000 lines)
+	</ul>
+</ul>
+
+<p class="SectionHeader">
+Windows GUI Driver</p>
+
+After completing this assignment, you will have the "logic" to create a simple game like this one. 
+<!-- Of course, you need to know how to create a graphical user interface, which is one of the things you'll learn in CS230. -->
+
+<p>
+No installation necessary. Just copy to your hard drive and run it.
+<br>
+<a href="WarBoats.exe">Download the executable</a> &nbsp;&nbsp;&nbsp; 
+<a href="WarBoats2.exe">(with alternate sounds)</a> &nbsp;&nbsp;&nbsp; 
+
+<p>
+<img src="WarBoats-1.png">
+<p>
+
+This Windows executable will also run under Linux and Mac using wine.
+<br><br>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

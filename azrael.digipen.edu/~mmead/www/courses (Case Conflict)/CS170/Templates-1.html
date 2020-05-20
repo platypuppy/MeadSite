@@ -1,0 +1,76 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 170 - Templates</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>// A Stack for ints</i></font>
+<b>class</b> Stack2
+{
+  <b>public</b>:
+    Stack2(<b>int</b> capacity) : items_(<b>new</b> <b>int</b>[capacity]), count_(0) {}
+    ~Stack2() { <b>delete</b>[] items_; }
+    <b>void</b> Push(<b>int</b> item) { items_[count_++] = item; }
+    <b>int</b> Pop() { <b>return</b> items_[--count_]; }
+    <b>bool</b> IsEmpty() { <b>return</b> (count_ == 0); }
+    
+  <b>private</b>:
+    <b>int</b> *items_;
+    <b>int</b> count_;
+};
+
+<font color="#003399"><i>// A Stack for doubles</i></font>
+<b>class</b> Stack2
+{
+  <b>public</b>:
+    Stack2(<b>int</b> capacity) : items_(<b>new</b> <b>double</b>[capacity]), count_(0) {}
+    ~Stack2() { <b>delete</b>[] items_; }
+    <b>void</b> Push(<b>double</b> item) { items_[count_++] = item; }
+    <b>double</b> Pop() { <b>return</b> items_[--count_]; }
+    <b>bool</b> IsEmpty() { <b>return</b> (count_ == 0); }
+    
+  <b>private</b>:
+    <b>double</b> *items_;
+    <b>int</b> count_;
+};
+
+<font color="#003399"><i>// A Stack for char *</i></font>
+<b>class</b> Stack2
+{
+  <b>public</b>:
+    Stack2(<b>int</b> capacity) : items_(<b>new</b> <b>char</b> *[capacity]), count_(0) {}
+    ~Stack2() { <b>delete</b>[] items_; }
+    <b>void</b> Push(<b>char</b> * item) { items_[count_++] = item; }
+    <b>char</b> * Pop() { <b>return</b> items_[--count_]; }
+    <b>bool</b> IsEmpty() { <b>return</b> (count_ == 0); }
+    
+  <b>private</b>:
+    <b>char</b> **items_;
+    <b>int</b> count_;
+};
+
+<font color="#003399"><i>// A Stack for StopWatches</i></font>
+<b>class</b> Stack2
+{
+  <b>public</b>:
+    Stack2(<b>int</b> capacity) : items_(<b>new</b> StopWatch[capacity]), count_(0) {}
+    ~Stack2() { <b>delete</b>[] items_; }
+    <b>void</b> Push(StopWatch item) { items_[count_++] = item; }
+    StopWatch Pop() { <b>return</b> items_[--count_]; }
+    <b>bool</b> IsEmpty() { <b>return</b> (count_ == 0); }
+    
+  <b>private</b>:
+    StopWatch *items_;
+    <b>int</b> count_;
+};
+
+</code></pre>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

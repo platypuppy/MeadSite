@@ -1,0 +1,135 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>squares2</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+</head>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(squares2.c)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Information</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a program that asks the user to input 2 integers that are greater than 0. Let's call these
+  two values <i>range</i> and <i>stride</i>, respectively. Let's assume range is 50 and stride is 3. Now, print
+  the table below. (The user input is in <font color="red"><b>RED</b></font>)
+	
+<blockquote><pre>
+Enter two integers greater than 0: <font color="red"><b>50 3</b></font>
+
+ Value     Value^2    Value^3
+-----------------------------
+    3           9          27
+    6          36         216
+    9          81         729
+   12         144        1728
+   15         225        3375
+   18         324        5832
+   21         441        9261
+   24         576       13824
+   27         729       19683
+   30         900       27000
+   33        1089       35937
+   36        1296       46656
+   39        1521       59319
+   42        1764       74088
+   45        2025       91125
+   48        2304      110592
+</pre></blockquote>
+
+You'll notice that you're printing the stride in the left column, the stride squared in the
+middle column, and the stride cubed in the right column. Then, you increment the stride by itself
+and print out the new values on the next line. Continue until the value in the left column is
+greater than the range that was input.
+Your output must match <i>exactly</i>. 
+<p>	
+<font color="blue">Approximate number of lines of code: 10.</font>
+<p>
+
+The name of the file should be <tt>squares2.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic squares2.c -o squares2 -O2 -Wno-unused-result
+</pre></blockquote>
+
+When you've got it working, use these files to redirect the input into output files. For example:
+
+<blockquote><pre>
+squares2 &lt; input50-3.txt &gt; myoutput50-3.txt
+</pre></blockquote>
+
+Input files:
+<p>
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/input25-1.txt">input25-1.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/input50-3.txt">input50-3.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/input100-10.txt">input100-10.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/input200-7.txt">input200-7.txt</a></li>
+</ul>
+
+<p>
+Output files: (You'll notice that the input numbers are not in the output, nor is the extra
+blank line.)
+<p>
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/output25-1.txt">output25-1.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/output50-3.txt">output50-3.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/output100-10.txt">output100-10.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/squares2/output200-7.txt">output200-7.txt</a></li>
+</ul>
+</ol>
+
+<p>
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+<ul>
+  <li>You don't have to handle ill-formed input (negative numbers or 0, floating point numbers, 
+    strings, etc.)</li>
+  <li>You don't have to handle large numbers where the squares and cubes become incorrect.</li>
+</ul>
+<br>
+
+
+<!--
+Here is an executable for you to observe: <a href="squares1-demo.exe">squares1-demo.exe</a>
+-->
+<p><hr><p>
+
+
+
+
+</ol>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

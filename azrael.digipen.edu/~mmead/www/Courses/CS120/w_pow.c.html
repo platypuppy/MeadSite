@@ -1,0 +1,101 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>w_pow.c.html</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* @(#)w_pow.c 5.2 93/10/01 */</i></font>
+<font color="#003399"><i>/*
+ * ====================================================
+ * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
+ *
+ * Developed at SunPro, a Sun Microsystems, Inc. business.
+ * Permission to use, copy, modify, and distribute this
+ * software is freely granted, provided that this notice
+ * is preserved.
+ * ====================================================
+ */</i></font>
+
+<font color="#003399"><i>/*
+ * wrapper pow(x,y) return x**y
+ */</i></font>
+
+<font color="990099">#include &lt;math.h&gt;</font>
+<font color="990099">#include &quot;math_private.h&quot;</font>
+
+
+<font color="990099">#ifdef __STDC__</font>
+	<b>double</b> __pow(<b>double</b> x, <b>double</b> y)	<font color="#003399"><i>/* wrapper pow */</i></font>
+<font color="990099">#else</font>
+	<b>double</b> __pow(x,y)			<font color="#003399"><i>/* wrapper pow */</i></font>
+	<b>double</b> x,y;
+<font color="990099">#endif</font>
+{
+<font color="990099">#ifdef _IEEE_LIBM</font>
+	<b>return</b>  __ieee754_pow(x,y);
+<font color="990099">#else</font>
+	<b>double</b> z;
+	z=__ieee754_pow(x,y);
+	<b>if</b>(_LIB_VERSION == _IEEE_|| __isnan(y)) <b>return</b> z;
+	<b>if</b>(__isnan(x)) {
+	    <b>if</b>(y==0.0)
+	        <b>return</b> __kernel_standard(x,y,42); <font color="#003399"><i>/* pow(NaN,0.0) */</i></font>
+	    <b>else</b>
+		<b>return</b> z;
+	}
+	<b>if</b>(x==0.0) {
+	    <b>if</b>(y==0.0)
+	        <b>return</b> __kernel_standard(x,y,20); <font color="#003399"><i>/* pow(0.0,0.0) */</i></font>
+	    <b>if</b>(__finite(y)&amp;&amp;y&lt;0.0) {
+	      <b>if</b> (signbit (x) &amp;&amp; signbit (z))
+	        <b>return</b> __kernel_standard(x,y,23); <font color="#003399"><i>/* pow(-0.0,negative) */</i></font>
+	      <b>else</b>
+	        <b>return</b> __kernel_standard(x,y,43); <font color="#003399"><i>/* pow(+0.0,negative) */</i></font>
+	    }
+	    <b>return</b> z;
+	}
+	<b>if</b>(!__finite(z)) {
+	    <b>if</b>(__finite(x)&amp;&amp;__finite(y)) {
+	        <b>if</b>(__isnan(z))
+	            <b>return</b> __kernel_standard(x,y,24); <font color="#003399"><i>/* pow neg**non-int */</i></font>
+	        <b>else</b>
+	            <b>return</b> __kernel_standard(x,y,21); <font color="#003399"><i>/* pow overflow */</i></font>
+	    }
+	}
+	<b>if</b>(z==0.0&amp;&amp;__finite(x)&amp;&amp;__finite(y))
+	    <b>return</b> __kernel_standard(x,y,22); <font color="#003399"><i>/* pow underflow */</i></font>
+	<b>return</b> z;
+<font color="990099">#endif</font>
+}
+weak_alias (__pow, pow)
+<font color="990099">#ifdef NO_LONG_DOUBLE</font>
+strong_alias (__pow, __powl)
+weak_alias (__pow, powl)
+<font color="990099">#endif</font>
+
+</code></pre>
+
+
+
+</body>
+</html>
+
+<sub></sub>
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

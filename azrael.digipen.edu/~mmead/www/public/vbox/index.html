@@ -1,0 +1,407 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../css/styles.css">
+<title>VirtualBox</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Using VirtualBox</h1>
+</center>
+
+<!--
+**********************************************************************************************************
+**********************************************************************************************************
+d**********************************************************************************************************
+-->
+
+<p class="SectionHeader">
+Creating a Virtual Machine
+</p>
+
+<blockquote>
+<p class="info">
+This tutorial is a little old and uses an older version of VirtualBox. It also shows you how to install 
+Linux Mint 12 (Lisa) 32-bit in it. If you are using a newer version of VirtualBox and installing a 
+different version of Mint or a 64-bit version (most likely), 
+all of the information is the same, but instead of seeing "12" and 32-bit, as in the screenshots below, 
+you will be seeing your version number and/or 64-bit.
+<br><br>
+<b>Update:</b> In order to get VirtualBox to work with 64-bit (and some 32-bit) virtual machines,
+you must enable virtualization in the BIOS on the motherboard. How you do that depends on the
+motherboard (vendor) that you have. Here is a 
+<a href="https://www.youtube.com/watch?v=emKQ7MSRit8">video</a> that demonstrates how to do it
+on an Asus motherboard. Your motherboard may be different, but the steps will likely be similar.
+If you don't know what BIOS you have, you may have to Google for your motherboard.
+<!--
+<br><br>
+Remember, for this class, we are using <a href="http://www.linuxmint.com/edition.php?id=158">Linux Mint 17 (Qiana) 64-bit</a>.
+-->
+</p>
+</blockquote>
+
+<ol>
+<li>Launch VirtualBox and click on the <b>New</b> button (the button on the far left) to start the process. You'll
+see this window with an introduction to what's about to happen:
+<blockquote>
+<img src="CreateVM-1.png">
+</blockquote>
+Click <b>Next</b> to move to the next window. 
+</li>
+<p>
+
+<li><b>VM Name and OS Type</b> - Here, you are asked for 3 pieces of information:
+	<p>
+<ol>
+	<li>The name of the virtual machine - This can be almost anything, but since a folder on the disk will be created with this name, don't
+		use any illegal characters. It's safest to stick to letters and numbers only.</li>
+	<li>The operating system type - You can select from predefined types. You should select Linux.</li>
+	<li>The version of the OS - If the exact version is listed, you can select it. If it's not listed, you'll select
+either <i>"Linux 2.6"</i> or <i>"Linux 2.6 64-bit"</i>, for 32-bit and 64-bit, respectively.</li>
+</ol>
+
+<blockquote>
+<img src="CreateVM-2.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Memory</b> - Here you specify how much memory you want the virtual machine to have. Remember, the amount of memory
+	you choose will be taken from the host machine, so don't take too much. In this example, VirtualBox recommends 256 MB
+	of RAM, but I like to give the machine a little more, since I have 2 GB on the host machine. I chose 768 MB.
+<blockquote>
+<img src="CreateVM-3.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Virtual Hard Disk</b> - Here you specify how big the hard disk for the virtual machine is going to be. You can
+	specify any size up to the amount of free space you have on the host machine. This is usually way too much. The recommended
+	amount will depend on the particular version of the OS you are going to install. But, if you plan on installing 
+	additional software in this virtual machine, you'll want to set it higher. I would recommend at least 20 GB.
+	Realize that it won't actually take 20 GB from your hard drive when you create it. It will just limit 
+	the drive's growth up to 20 GB. You probably won't reach that limit unless you install lots of stuff.
+<blockquote>
+<img src="CreateVM-4.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Virtual disk creation wizard</b> - Here you choose the type of virtual disk. Choose VDI. Refer to the VirtualBox documentation to
+	learn more about the different types.
+<blockquote>
+<img src="CreateVM-5.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Virtual disk storage details</b> - Here you choose whether the disk is dynamically allocated, or if it is a fixed size. Choose <b>Dynamically allocated</b>.
+	 Refer to the VirtualBox documentation to	learn about the differences.
+	
+<blockquote>
+<img src="CreateVM-6.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Virtual disk file location and size</b> - Here you choose where you want to store the virtual disk (on the host computer) and the maximum
+	size of the disk. I chose to make the disk 12 GB in size, which will be plenty for the testing I want to do with the machine.
+	<b>2018 Update: I would recommend at least 20 GB.</b>	
+<blockquote>
+<img src="CreateVM-7.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Summary</b> - This tells you that the virtual <i><b>disk</b></i> is going to be created with the specified parameters.
+<blockquote>
+<img src="CreateVM-8.png">
+</blockquote>
+Click <b>Create</b> to create the virtual disk and continue.
+</li>
+<p>
+
+<li><b>Summary</b> - This tells you that the virtual <i><b>machine</b></i> is going to be created with the specified paramters.
+<blockquote>
+<img src="CreateVM-9.png">
+</blockquote>
+Click <b>Create</b> to create the virtual machine and continue.
+</li>
+<p>
+
+<li>The virtual machine has been created and is shown in the VirtualBox Manager's list with other virtual machines. I've created several versions and the latest
+ one is highlighted at the bottom of the list.
+<blockquote>
+<img src="VirtualBoxManager-1.png">
+</blockquote>
+</li>
+<p>
+
+<li>If you'd like to perform more detailed configuration of the virtual machine, click the <b>Settings</b> button to open the Settings window. 
+	There are many components of the virtual machine that you can configure. Refer to the VirualBox documentation to learn about all of the
+	configuration options.
+<blockquote>
+<img src="VMSettings-1.png">
+</blockquote>
+Click <b>OK</b> to save your changes, or <b>Cancel</b> to discard them. 
+</li>
+<p>
+
+</ol>
+
+<!--
+**********************************************************************************************************
+**********************************************************************************************************
+d**********************************************************************************************************
+-->
+
+<p class="SectionHeader">
+Running a Virtual Machine
+</p>
+
+At this point, we've created the virtual machine. Our virtual machine is much like a new computer that doesn't have an operating
+system installed. We can't do anything until we have an OS. So, the next step is to install an operating system on it. In this case, we are going
+to install Linux Mint as our operating system. In the VirtualBox Manager, select the virtual machine to boot, and click the <b>Start</b> button.
+<ol>
+	
+<li><b>First Run Wizard</b> - The first time you "boot" the virtual machine, you will be presented with another "wizard" to help
+	you install an operating system.
+
+<blockquote>
+<img src="FirstRunWizardWelcome.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Select Installation Media</b> - You have to tell the virtual machine how to boot itself. By default, it is going to try to boot
+	off of the host's CD/DVD drive, as that's how most operating systems are installed. However, there is a much easier (and faster) method.
+	We've downloaded an ISO file from the Linux Mint website that is a bootable DVD image. Rather than burn it to a DVD and then install
+	from the DVD, we are just going to tell VirtualBox to "boot" from the file. It's a really cool way of installing Linux.
+	<p>
+	In the example, the host's DVD drive is drive D, but we want to use the .iso file. Click on the folder icon to the right of the drop-down
+	box, and you will be presented with a dialog box that you can use to browse the filesystem and locate the .iso file.
+<blockquote>
+<img src="FirstRunWizardInstall-1.png">
+</blockquote>
+</li>
+<p>
+
+<li>Once you've located the file, select it and click the <b>Open</b> button.
+<blockquote>
+<img src="ChooseVirtualCD.png">
+</blockquote>
+</li>
+<p>
+
+<li>Now the dialog shows the .iso file instead of the DVD drive.
+<blockquote>
+<img src="FirstRunWizardInstall-2.png">
+</blockquote>
+Click <b>Next</b> to continue. 
+</li>
+<p>
+
+<li><b>Summary</b> - Here you are told that the .iso file will be used to boot an installation disk.
+<blockquote>
+<img src="FirstRunWizardSummary.png">
+</blockquote>
+Click <b>Start</b> to boot off of the .iso file.
+</li>
+<p>
+
+<li>The first thing you see is a splash screen for VirtualBox. This will show for about 3 seconds or so.
+<blockquote>
+<img src="VBoxBoot-1.png">
+</blockquote>
+
+<li>Shortly afterwards, you'll see that Linux Mint is going to boot in a few seconds. If you press the <b>Escape</b> at this point,
+	you will be presented with a boot menu to do other things. You won't need that at this point.
+<blockquote>
+<img src="MintBoot-1.png">
+</blockquote>
+
+<li>After 10 seconds, Linux will start to boot and you'll see something like this:
+<blockquote>
+<img src="MintBoot-2.png">
+</blockquote>
+
+<li>After about a minute or so, you'll see that Linux Mint is fully booted and usable. You can use Linux Mint
+	just like any other operating system at this point. But, we don't want to run from the virtual DVD, we want to
+	install Linux Mint onto the virtual disk in our virtual machine.
+	<p>
+		Simply double-click the <i>Install Linux Mint</i> icon and follow the instructions. You can accept all of the defaults.
+				You install it just like 	you would install any operating system onto a physical computer. The installer doesn't know it is installing
+		itself in a virtual machine.
+<blockquote>
+<img src="MintBoot-3.png">
+</blockquote>
+
+</ol>
+
+<!--
+**********************************************************************************************************
+**********************************************************************************************************
+d**********************************************************************************************************
+-->
+<p class="SectionHeader">
+Installing Linux Mint
+</p>
+
+<ol>
+<li>After you double-click on the <i>Install Linux Mint</i> icon, you will need to choose the language:
+<blockquote>
+<img src="Welcome.jpg">
+</blockquote>
+Click <b>Continue</b> to continue. 
+</li>
+<p>
+	
+<li>The installer tells you the two prerequisites for installing Mint (enough space and an Internet connection).
+<blockquote>
+<img src="Preparing.jpg">
+</blockquote>
+Click <b>Continue</b> to continue. 
+</li>
+<p>
+	
+<li>Now you are asked how the virtual hard disk should be partitioned. For now, just accept the first selection. Don't worry, it's not
+	going to erase your "real" hard drive. It's going to erase the virtual disk you made when you created the virtual machine.
+<blockquote>
+<img src="InstallType.jpg">
+</blockquote>
+Click <b>Continue</b> to continue. 
+</li>
+<p>
+	
+<li>The installer tells you which disk is going to be erased (/dev/sda) and the filesystem it will use (ext4).
+<blockquote>
+<img src="EraseInstall-1.jpg">
+</blockquote>
+Click <b>Install Now</b> to continue. 
+</li>
+
+<p>
+<li>The install process is starting. It will erase the disk, format it, and then start copying files to the disk.
+<blockquote>
+<img src="EraseInstall-2.jpg">
+</blockquote>
+</li>
+
+<p>
+<li>While Linux Mint is being installed, you are asked to provide your time zone. If the default time zone is incorrect, just click your
+	location on the world map to change it.
+<blockquote>
+<img src="WhereAreYou.jpg">
+</blockquote>
+Click <b>Continue</b> to continue. 
+</li>
+<p>
+	
+<li>Choose your keyboard layout.
+<blockquote>
+<img src="KeyboardLayout.jpg">
+</blockquote>
+Click <b>Continue</b> to continue. 
+</li>
+
+<p>
+<li>You need to add at least one user (so you can log in when it boots).
+<blockquote>
+<img src="WhoAreYou.jpg">
+</blockquote>
+Click <b>Continue</b> to continue. 
+</li>
+
+<p>
+<li>At this point the installer has all of the information it needs. Depending on the speed of the host computer and
+	the size of the installation (CD or DVD) you will have to wait a few minutes to maybe an hour.
+<blockquote>
+<img src="BeginInstall.jpg">
+</blockquote>
+</li>
+
+<p>
+<li>When the installation is complete, you will be prompted to restart the computer.
+<blockquote>
+<img src="Restart.jpg">
+</blockquote>
+Click <b>Restart Now</b> to reboot the virtual machine.
+</li>
+
+<p>
+<li>Before the new virtual machine will restart, it will ask you to remove the installation media and
+	close the tray. Yes, it really thinks it was installing from a "real" DVD drive.
+<blockquote>
+<img src="PressEnter.png">
+</blockquote>
+Press the Enter key to <i>really</i> reboot the virtual machine.
+<p>
+When it restarts, you will be able to login to the machine using the username and password you created during the installation.
+</li>
+
+</ol>
+
+<a href="https://www.linuxmint.com/documentation.php">Linux Mint User's Manual</a>
+- The documentation contains more details about Linux Mint. Choose the version of the manual
+that coincides with the version of Mint that you are using. 
+It's only 50 pages, so you should sit at your Linux computer and read through it.
+
+</ol>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

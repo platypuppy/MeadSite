@@ -1,0 +1,113 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Overview of File Input and Output</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt;   <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> &lt;iomanip&gt;    <font color="#003399"><i>// setw</i></font>
+<b>#include</b> &lt;vector&gt;     <font color="#003399"><i>// vector</i></font>
+<b>#include</b> &lt;string&gt;     <font color="#003399"><i>// string</i></font>
+<b>#include</b> &lt;fstream&gt;    <font color="#003399"><i>// ifstream</i></font>
+<b>#include</b> &lt;sstream&gt;    <font color="#003399"><i>// stringstream</i></font>
+<b>#include</b> &lt;algorithm&gt;  <font color="#003399"><i>// for_each</i></font>
+
+<font color="#003399"><i>// Print the counts and filename formatted</i></font>
+<b>void</b> print_results(size_t char_count, size_t word_count, 
+                   size_t line_count, <b>const</b> std::string&amp; filename)
+{
+  std::cout &lt;&lt; std::setw(10) &lt;&lt; line_count;
+  std::cout &lt;&lt; std::setw(10) &lt;&lt; word_count;
+  std::cout &lt;&lt; std::setw(10) &lt;&lt; char_count;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; &quot;</font> &lt;&lt; filename &lt;&lt; std::endl;
+}
+
+<b>void</b> CountLWC(<b>const</b> std::string&amp; filename)
+{
+    <font color="#003399"><i>// Open the text file for reading</i></font>
+  std::ifstream infile(filename.c_str());
+  <b>if</b> (!infile.is_open())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file: &quot;</font> &lt;&lt; filename &lt;&lt; std::endl;
+  <b>else</b>
+  {
+      <font color="#003399"><i>// Initialize the counters</i></font>
+    size_t char_count = 0; <font color="#003399"><i>// characters</i></font>
+    size_t word_count = 0; <font color="#003399"><i>// words</i></font>
+    size_t line_count = 0; <font color="#003399"><i>// lines</i></font>
+
+      <font color="#003399"><i>// For each line in the file</i></font>
+    <b>while</b> (!infile.eof())
+    {
+        <font color="#003399"><i>// Read an entire line from the file</i></font>
+      std::string line;
+      <b>if</b> (std::getline(infile, line).eof())
+        <b>break</b>;
+
+        <font color="#003399"><i>// Increment lines and characters</i></font>
+      line_count++;
+      char_count += line.size() + 1; <font color="#003399"><i>// Account for newline</i></font>
+    
+        <font color="#003399"><i>// Count words in the line        </i></font>
+      std::string word;
+      std::stringstream words(line);
+      <b>while</b> (!words.eof())
+      {
+        words &gt;&gt; word;     <font color="#003399"><i>// Try to read next word</i></font>
+        <b>if</b> (!words.fail()) <font color="#003399"><i>// If there was a next word</i></font>
+          word_count++;    <font color="#003399"><i>//   count it</i></font>
+      }
+    }
+      <font color="#003399"><i>// Display the results from this file</i></font>
+    print_results(char_count, word_count, line_count, filename);
+  }
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+    <font color="#003399"><i>// Need at least one file</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Usage: mywc &lt;textfile1&gt; &lt;textfile2&gt; ...\n&quot;</font>;
+    <b>return</b> 1;
+  }
+    <font color="#003399"><i>// Count the chars, words, and lines and print them</i></font>
+  std::for_each(argv + 1, argv + argc, CountLWC);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<!--
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+  <b>if</b> (argc &lt; 2)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Usage: mywc &lt;textfile1&gt; &lt;textfile2&gt; ...\n&quot;</font>;
+    <b>return</b> -1;
+  }
+   
+  std::vector&lt;std::string&gt; filenames;  <font color="#003399"><i>// files to process</i></font>
+  filenames.reserve(argc - 1);         <font color="#003399"><i>// size the vector once (optimization)</i></font>
+
+    <font color="#003399"><i>// Put the filenames into the vector</i></font>
+  <b>for</b> (<b>int</b> i = 1; i &lt; argc; i++)
+    filenames.push_back(argv[i]);
+
+    <font color="#003399"><i>// Count the chars, words, and lines and print them</i></font>
+  std::for_each(filenames.begin(), filenames.end(), CountLWC);
+
+  <b>return</b> 0;
+}
+-->
+
+
+
+
+
+</body>
+</html>
+
+

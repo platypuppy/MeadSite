@@ -1,0 +1,202 @@
+
+test 0..................................................................
+No filenames specified.
+
+Usage: tablen [options] [file1 file2 ...] 
+
+Options:
+ -t   --tabs          look for tabs.
+ -lX  --longlines=X   look for lines longer than X (default X is 80).
+ -c   --color         use ANSI colors.
+ -a   --all           look for tabs and long lines (default).
+ -v   --verbose       show all problems, not just summary.
+ -V   --version       display version and quit.
+ -f   --filename      display filename with output.
+ -h   --help          display this information and quit.
+
+Exit codes: (Only meaningful if processing a single file.)
+  0 - no tabs or long lines in any file
+  1 - 1 or more files had tabs
+  2 - 1 or more files had long lines
+  3 - 1 or more files had tabs and/or long lines
+  4 - trouble (e.g. couldn't open a file)
+  5 - trouble (e.g. couldn't malloc)
+
+To detect which file had issues, process only one file at a time,
+or use the -f option to display the filename with the output.
+
+test 1..................................................................
+Usage: tablen [options] [file1 file2 ...] 
+
+Options:
+ -t   --tabs          look for tabs.
+ -lX  --longlines=X   look for lines longer than X (default X is 80).
+ -c   --color         use ANSI colors.
+ -a   --all           look for tabs and long lines (default).
+ -v   --verbose       show all problems, not just summary.
+ -V   --version       display version and quit.
+ -f   --filename      display filename with output.
+ -h   --help          display this information and quit.
+
+Exit codes: (Only meaningful if processing a single file.)
+  0 - no tabs or long lines in any file
+  1 - 1 or more files had tabs
+  2 - 1 or more files had long lines
+  3 - 1 or more files had tabs and/or long lines
+  4 - trouble (e.g. couldn't open a file)
+  5 - trouble (e.g. couldn't malloc)
+
+To detect which file had issues, process only one file at a time,
+or use the -f option to display the filename with the output.
+
+test 2..................................................................
+0
+
+test 3..................................................................
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+3
+
+test 4..................................................................
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+3
+
+test 5..................................................................
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+1
+
+test 6..................................................................
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+2
+
+test 7..................................................................
+***** LINE TOO LONG *****: 3 lines longer than 60. Longest line is 15 at 85 chars.
+2
+
+test 8..................................................................
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+#  3: ( 29) |			Employee *Next;      //  4|
+#  4: ( 29) |			char lastName[12];   // 12|
+#  5: ( 29) |			char firstName[12];  // 12|
+#  6: ( 29) |			float salary;        //  4|
+#  7: ( 29) |			int years;           //  4|
+# 10: ( 26) |    TestFreeEmptyPages2();|
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 13: ( 25) |    StressFreeChecking();|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 10 lines longer than 20. Longest line is 15 at 85 chars.
+3
+
+test 9..................................................................
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 3 lines longer than 60. Longest line is 15 at 85 chars.
+3
+
+test 10..................................................................
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 3 lines longer than 60. Longest line is 15 at 85 chars.
+3
+
+test 11..................................................................
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+3
+
+test 12..................................................................
+Can't open missing.txt for read.
+4
+
+test 13..................................................................
+input1.txt:
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+input2.txt:
+*****  TABS IN USE  *****: Number of tabs in the file is 17.
+***** LINE TOO LONG *****: 4 lines longer than 80. Longest line is 32 at 102 chars.
+
+test 14..................................................................
+input1.txt:
+#  3: (tabs: 3) |			Employee *Next;      //  4|
+#  4: (tabs: 3) |			char lastName[12];   // 12|
+#  5: (tabs: 3) |			char firstName[12];  // 12|
+#  6: (tabs: 3) |			float salary;        //  4|
+#  7: (tabs: 3) |			int years;           //  4|
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+# 12: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+# 15: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+# 18: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+input2.txt:
+#  2: (tabs: 1) |	{"Faith", "Ian", 80000, 10},|
+#  3: (tabs: 1) |	{"Tufnel", "Nigel", 90000, 12},|
+#  4: (tabs: 1) |	{"Savage", "Viv", 50000, 4},|
+#  5: (tabs: 1) |	{"Shrimpton", "Mick", 50000, 4},|
+#  6: (tabs: 1) |	{"Besser", "Joe", 40000, 1},|
+#  7: (tabs: 1) |	{"Smalls", "Derek", 80000, 10},|
+#  8: (tabs: 1) |	{"St.Hubbins", "David", 90000, 12},|
+#  9: (tabs: 1) |	{"Fleckman", "Bobbi", 120000, 8},|
+# 10: (tabs: 1) |	{"Eton-Hogg", "Denis", 250000, 22},|
+# 11: (tabs: 1) |	{"Upham", "Denny", 60000, 5},|
+# 12: (tabs: 1) |	{"McLochness", "Ross", 60000, 5},|
+# 13: (tabs: 1) |	{"Pudding", "Ronnie", 50000, 2},|
+# 14: (tabs: 1) |	{"Schindler", "Danny", 60000, 3},|
+# 15: (tabs: 1) |	{"Pettibone", "Jeanine", 85000, 3},|
+# 16: (tabs: 1) |	{"Fame", "Duke", 95000, 8},|
+# 17: (tabs: 1) |	{"Fufkin", "Artie", 45000, 1},|
+# 18: (tabs: 1) |	{"DiBergi", "Marty", 15000, 7},|
+*****  TABS IN USE  *****: Number of tabs in the file is 17.
+# 21: ( 94) |    unsigned width = oa->GetStats().ObjectSize_ + 2 * oa->GetConfig().PadBytes_ + header_size;|
+# 26: ( 82) |    cout << "Exception thrown during construction of Student in Stress."  << endl;|
+# 32: (102) |//****************************************************************************************************|
+# 33: (102) |//****************************************************************************************************|
+***** LINE TOO LONG *****: 4 lines longer than 80. Longest line is 32 at 102 chars.
+
+test 15..................................................................
+input1.txt:
+*****  TABS IN USE  *****: Number of tabs in the file is 15.
+***** LINE TOO LONG *****: 3 lines longer than 80. Longest line is 15 at 85 chars.
+input2.txt:
+*****  TABS IN USE  *****: Number of tabs in the file is 17.
+***** LINE TOO LONG *****: 4 lines longer than 80. Longest line is 32 at 102 chars.
+
+test 16..................................................................
+tablen version 1.0

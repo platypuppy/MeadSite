@@ -1,0 +1,84 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>wmutex-parent.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* wmutex-parent.c */</i></font>
+<b>#include</b> &lt;stdio.h&gt;
+<b>#include</b> &lt;string.h&gt;
+<b>#include</b> &lt;windows.h&gt;
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv) 
+{
+  <b>int</b> i;
+  HANDLE *procs, *threads;
+  <b>const</b> <b>char</b> *program = <font color="#9933CC">&quot;wmutex-child.exe&quot;</font>;
+  <b>int</b> count = 4;
+  DWORD word;
+  
+    <font color="#003399"><i>/* Create shared memory area and give it a unique name */</i></font>
+  HANDLE shmem = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366537(v=vs.85).aspx">CreateFileMapping</a>(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, <b>sizeof</b>(<b>unsigned</b>), <font color="#9933CC">&quot;share_data&quot;</font>);
+  
+    <font color="#003399"><i>/* Get a view of the file (can be all or just a part) */</i></font>
+  <b>unsigned</b> *value = (<b>unsigned</b> *)<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366761(v=vs.85).aspx">MapViewOfFile</a>(shmem, FILE_MAP_ALL_ACCESS, 0, 0, <b>sizeof</b>(<b>unsigned</b>));
+    
+    <font color="#003399"><i>/* Create a mutex to share with the other processes */</i></font>
+  HANDLE mutex = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682411(v=vs.85).aspx">CreateMutex</a>(NULL, <b>FALSE</b>, <font color="#9933CC">&quot;share_mutex&quot;</font>);
+  
+    <font color="#003399"><i>/* The user can specify the number of processes */</i></font>
+  <b>if</b> (argc &gt; 1)
+    count = atoi(argv[1]);
+    
+  procs = (HANDLE *)malloc(count * <b>sizeof</b>(HANDLE));
+  threads = (HANDLE *)malloc(count * <b>sizeof</b>(HANDLE));
+    
+  *value = 0; <font color="#003399"><i>/* initialize shared memory */</i></font>
+  
+  <b>for</b> (i = 0; i &lt; count; i++) 
+  {
+    <b>int</b> result;
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms686331(v=vs.85).aspx">STARTUPINFO</a> si;
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms684873(v=vs.85).aspx">PROCESS_INFORMATION</a> pi;
+
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366920(v=vs.85).aspx">ZeroMemory</a>(&amp;si, <b>sizeof</b>(si));
+    ZeroMemory(&amp;pi, <b>sizeof</b>(pi));
+
+    result = <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682425(v=vs.85).aspx">CreateProcess</a> (program, 0, 0, 0, <b>TRUE</b>, 0, 0, 0, &amp;si, &amp;pi);
+
+    procs[i] = pi.hProcess;
+    threads[i] = pi.hThread;
+  }
+
+    <font color="#003399"><i>/* Wait for all processes to finish */</i></font>
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms687025(v=vs.85).aspx">WaitForMultipleObjects</a>(count, procs, <b>TRUE</b>, INFINITE);
+  
+  printf(<font color="#9933CC">&quot;Value is %u\n&quot;</font>, *value);
+  
+    <font color="#003399"><i>/* Cleanup everything */</i></font>
+  <b>for</b> (i = 0; i &lt; count; i++) 
+  {
+    CloseHandle(procs[i]);
+    CloseHandle(threads[i]);
+  }
+
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa366882(v=vs.85).aspx">UnmapViewOfFile</a>(value);
+  CloseHandle(shmem);
+  CloseHandle(mutex);
+  
+  free(procs);
+  free(threads);
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

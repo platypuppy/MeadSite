@@ -1,0 +1,215 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>scrabble1</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+</head>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(scrabble1.c)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Information</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a program that prompts the user for an English word, and then prints out the value of
+  the word based on the game of <a href="https://en.wikipedia.org/wiki/Scrabble">Scrabble</a>.
+  In the game of Scrabble, each letter is worth a certain number of points, based on the 
+  frequency with which it occurs in the language:
+<p>
+<table border=1 cellspacing=0 cellpadding=5>
+  <tr><th>Points</th><th>Letter</th></tr>
+  <tr>
+    <td align="center">1</td>
+    <td>A E I L N O R S T U</td>
+  </tr>
+  <tr>
+    <td align="center">2</td>
+    <td>D G</td>
+  </tr>
+  <tr>
+    <td align="center">3</td>
+    <td>B C M P</td>
+  </tr>
+  <tr>
+    <td align="center">4</td>
+    <td>F H V W Y</td>
+  </tr>
+  <tr>
+    <td align="center">5</td>
+    <td>K</td>
+  </tr>
+  <tr>
+    <td align="center">8</td>
+    <td>J X</td>
+  </tr>
+  <tr>
+    <td align="center">10</td>
+    <td>Q Z</td>
+  </tr>
+</table>
+
+<p>
+Here is the output from the program run multiple times interactively:
+<blockquote><pre>
+Enter a word: <font color="red"><b>apple</b></font>
+Scrabble value is : 9
+
+Enter a word: <font color="red"><b>Apple</b></font>
+Scrabble value is : 9
+
+Enter a word: <font color="red"><b>APPLE</b></font>
+Scrabble value is : 9
+
+Enter a word: <font color="red"><b>banana</b></font>
+Scrabble value is : 8
+
+Enter a word: <font color="red"><b>zebra</b></font>
+Scrabble value is : 16
+
+Enter a word: <font color="red"><b>quizzify</b></font>
+Scrabble value is : 41
+
+Enter a word: <font color="red"><b>Oxyphenbutazone</b></font>
+Scrabble value is : 41
+</pre></blockquote>
+
+<!--
+<font color="red"><b>100</b></font>
+-->
+
+<p>
+The program only prompts for one word, prints the value, and then exits. The output above was 
+produced by running the program 7 times.
+<p>
+
+The name of the file should be <tt>scrabble1.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O2 -Wno-unused-result -o scrabble1 scrabble1.c
+</pre></blockquote>
+
+<b>Files:</b>
+<p>
+<ul>
+  <li>Here's a partial <tt>scrabble.c</tt> file to get you started: 
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/scrabble1-partial.c.html">HTML</a>
+  &nbsp;&nbsp;&nbsp; <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/scrabble1-partial.c">Text</a>. You'll have
+  to rename it if you download it. 
+<p>
+  <li>Here are some sample input files:
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input1.txt">input1.txt</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input2.txt">input2.txt</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input3.txt">input3.txt</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input4.txt">input4.txt</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input5.txt">input5.txt</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input6.txt">input6.txt</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/input7.txt">input7.txt</a>&nbsp;&nbsp;&nbsp;
+
+   and the <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/scrabble1/output.txt">output</a> file from all of them. Run it like this:
+<blockquote><pre>
+scrabble1 &lt; input1.txt &gt; myoutput.txt
+scrabble1 &lt; input2.txt &gt;&gt; myoutput.txt
+scrabble1 &lt; input3.txt &gt;&gt; myoutput.txt
+scrabble1 &lt; input4.txt &gt;&gt; myoutput.txt
+scrabble1 &lt; input5.txt &gt;&gt; myoutput.txt
+scrabble1 &lt; input6.txt &gt;&gt; myoutput.txt
+scrabble1 &lt; input7.txt &gt;&gt; myoutput.txt
+</pre></blockquote>
+Notice the first output redirection is a single &gt;, but the rest are double &gt;&gt;.
+<p>
+</li>
+</ul>
+
+</ol>
+
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+
+<ul>
+  <li><font color="blue">Approximate number of lines of code: 15.</font>
+    There will be many case labels, but the number of executable statements is about 15.</li>
+    <p>
+  <li>You don't have to worry about invalid input. You can assume that the user is only going
+    to type in letters (lowercase a..z and/or uppercase A..Z). Use the 
+    <a href="http://man7.org/linux/man-pages/man3/toupper.3.html">toupper</a> 
+    function from <tt>ctype.h</tt> to convert characters to uppercase.
+    <p>
+  <li>Use a <tt><b>switch</b></tt> statement to select the proper value for each character. 
+    Hint: You will have multiple cases sharing the same code for many of the letters.</li>
+    <p>
+  <li>Use the function <a href="http://man7.org/linux/man-pages/man3/getchar.3.html">getchar</a>
+  from <tt>stdio.h</tt> to read each character. You'll notice that the sample code that is provided
+  is using it to get the first letter of the word.
+   Page 140 in the CS120 textbook shows exactly how
+  you should use this function. Please read that. It will save you a lot of time.</li>
+  <p>
+  <li>You should read characters into an <tt><b>int</b></tt> variable. (<tt>getchar</tt> returns an
+    integer, which is the ASCII value of the character read from the keyboard.)</li>
+  <p>
+  <li>You only need to include two header files (<tt>stdio.h</tt> and <tt>ctype.h</tt>) in your file.</li>
+  <p>
+<li><b>DO NOT UPLOAD ANYTHING UNTIL YOU HAVE TESTED YOUR CODE WITH REDIRECTION.</b></li>
+</ul>
+<p>
+
+
+<p>
+
+</ol>
+
+<br>
+<p><hr><p>
+
+
+
+
+</ol>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

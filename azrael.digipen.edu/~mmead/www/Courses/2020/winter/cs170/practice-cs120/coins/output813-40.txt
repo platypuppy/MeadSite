@@ -1,0 +1,130 @@
+You can make $8.13 with 30 quarters  5 dimes  2 nickels  3 pennies  
+You can make $8.13 with 31 quarters  1 dime  5 nickels  3 pennies  
+You can make $8.13 with 1 half  27 quarters  8 dimes  1 nickel  3 pennies  
+You can make $8.13 with 1 half  28 quarters  4 dimes  4 nickels  3 pennies  
+You can make $8.13 with 1 half  29 quarters  7 nickels  3 pennies  
+You can make $8.13 with 1 half  30 quarters  1 nickel  8 pennies  
+You can make $8.13 with 2 halves  24 quarters  11 dimes  3 pennies  
+You can make $8.13 with 2 halves  25 quarters  7 dimes  3 nickels  3 pennies  
+You can make $8.13 with 2 halves  26 quarters  3 dimes  6 nickels  3 pennies  
+You can make $8.13 with 2 halves  27 quarters  3 dimes  8 pennies  
+You can make $8.13 with 3 halves  22 quarters  10 dimes  2 nickels  3 pennies  
+You can make $8.13 with 3 halves  23 quarters  6 dimes  5 nickels  3 pennies  
+You can make $8.13 with 3 halves  24 quarters  2 dimes  8 nickels  3 pennies  
+You can make $8.13 with 3 halves  25 quarters  2 dimes  2 nickels  8 pennies  
+You can make $8.13 with 4 halves  19 quarters  13 dimes  1 nickel  3 pennies  
+You can make $8.13 with 4 halves  20 quarters  9 dimes  4 nickels  3 pennies  
+You can make $8.13 with 4 halves  21 quarters  5 dimes  7 nickels  3 pennies  
+You can make $8.13 with 4 halves  22 quarters  1 dime  10 nickels  3 pennies  
+You can make $8.13 with 4 halves  22 quarters  5 dimes  1 nickel  8 pennies  
+You can make $8.13 with 4 halves  23 quarters  1 dime  4 nickels  8 pennies  
+You can make $8.13 with 5 halves  16 quarters  16 dimes  3 pennies  
+You can make $8.13 with 5 halves  17 quarters  12 dimes  3 nickels  3 pennies  
+You can make $8.13 with 5 halves  18 quarters  8 dimes  6 nickels  3 pennies  
+You can make $8.13 with 5 halves  19 quarters  4 dimes  9 nickels  3 pennies  
+You can make $8.13 with 5 halves  19 quarters  8 dimes  8 pennies  
+You can make $8.13 with 5 halves  20 quarters  12 nickels  3 pennies  
+You can make $8.13 with 5 halves  20 quarters  4 dimes  3 nickels  8 pennies  
+You can make $8.13 with 5 halves  21 quarters  6 nickels  8 pennies  
+You can make $8.13 with 5 halves  22 quarters  13 pennies  
+You can make $8.13 with 6 halves  14 quarters  15 dimes  2 nickels  3 pennies  
+You can make $8.13 with 6 halves  15 quarters  11 dimes  5 nickels  3 pennies  
+You can make $8.13 with 6 halves  16 quarters  7 dimes  8 nickels  3 pennies  
+You can make $8.13 with 6 halves  17 quarters  3 dimes  11 nickels  3 pennies  
+You can make $8.13 with 6 halves  17 quarters  7 dimes  2 nickels  8 pennies  
+You can make $8.13 with 6 halves  18 quarters  3 dimes  5 nickels  8 pennies  
+You can make $8.13 with 7 halves  11 quarters  18 dimes  1 nickel  3 pennies  
+You can make $8.13 with 7 halves  12 quarters  14 dimes  4 nickels  3 pennies  
+You can make $8.13 with 7 halves  13 quarters  10 dimes  7 nickels  3 pennies  
+You can make $8.13 with 7 halves  14 quarters  6 dimes  10 nickels  3 pennies  
+You can make $8.13 with 7 halves  14 quarters  10 dimes  1 nickel  8 pennies  
+You can make $8.13 with 7 halves  15 quarters  2 dimes  13 nickels  3 pennies  
+You can make $8.13 with 7 halves  15 quarters  6 dimes  4 nickels  8 pennies  
+You can make $8.13 with 7 halves  16 quarters  2 dimes  7 nickels  8 pennies  
+You can make $8.13 with 7 halves  17 quarters  2 dimes  1 nickel  13 pennies  
+You can make $8.13 with 8 halves  8 quarters  21 dimes  3 pennies  
+You can make $8.13 with 8 halves  9 quarters  17 dimes  3 nickels  3 pennies  
+You can make $8.13 with 8 halves  10 quarters  13 dimes  6 nickels  3 pennies  
+You can make $8.13 with 8 halves  11 quarters  9 dimes  9 nickels  3 pennies  
+You can make $8.13 with 8 halves  11 quarters  13 dimes  8 pennies  
+You can make $8.13 with 8 halves  12 quarters  5 dimes  12 nickels  3 pennies  
+You can make $8.13 with 8 halves  12 quarters  9 dimes  3 nickels  8 pennies  
+You can make $8.13 with 8 halves  13 quarters  1 dime  15 nickels  3 pennies  
+You can make $8.13 with 8 halves  13 quarters  5 dimes  6 nickels  8 pennies  
+You can make $8.13 with 8 halves  14 quarters  1 dime  9 nickels  8 pennies  
+You can make $8.13 with 8 halves  14 quarters  5 dimes  13 pennies  
+You can make $8.13 with 8 halves  15 quarters  1 dime  3 nickels  13 pennies  
+You can make $8.13 with 9 halves  6 quarters  20 dimes  2 nickels  3 pennies  
+You can make $8.13 with 9 halves  7 quarters  16 dimes  5 nickels  3 pennies  
+You can make $8.13 with 9 halves  8 quarters  12 dimes  8 nickels  3 pennies  
+You can make $8.13 with 9 halves  9 quarters  8 dimes  11 nickels  3 pennies  
+You can make $8.13 with 9 halves  9 quarters  12 dimes  2 nickels  8 pennies  
+You can make $8.13 with 9 halves  10 quarters  4 dimes  14 nickels  3 pennies  
+You can make $8.13 with 9 halves  10 quarters  8 dimes  5 nickels  8 pennies  
+You can make $8.13 with 9 halves  11 quarters  17 nickels  3 pennies  
+You can make $8.13 with 9 halves  11 quarters  4 dimes  8 nickels  8 pennies  
+You can make $8.13 with 9 halves  12 quarters  11 nickels  8 pennies  
+You can make $8.13 with 9 halves  12 quarters  4 dimes  2 nickels  13 pennies  
+You can make $8.13 with 9 halves  13 quarters  5 nickels  13 pennies  
+You can make $8.13 with 10 halves  3 quarters  23 dimes  1 nickel  3 pennies  
+You can make $8.13 with 10 halves  4 quarters  19 dimes  4 nickels  3 pennies  
+You can make $8.13 with 10 halves  5 quarters  15 dimes  7 nickels  3 pennies  
+You can make $8.13 with 10 halves  6 quarters  11 dimes  10 nickels  3 pennies  
+You can make $8.13 with 10 halves  6 quarters  15 dimes  1 nickel  8 pennies  
+You can make $8.13 with 10 halves  7 quarters  7 dimes  13 nickels  3 pennies  
+You can make $8.13 with 10 halves  7 quarters  11 dimes  4 nickels  8 pennies  
+You can make $8.13 with 10 halves  8 quarters  3 dimes  16 nickels  3 pennies  
+You can make $8.13 with 10 halves  8 quarters  7 dimes  7 nickels  8 pennies  
+You can make $8.13 with 10 halves  9 quarters  3 dimes  10 nickels  8 pennies  
+You can make $8.13 with 10 halves  9 quarters  7 dimes  1 nickel  13 pennies  
+You can make $8.13 with 10 halves  10 quarters  3 dimes  4 nickels  13 pennies  
+You can make $8.13 with 11 halves  26 dimes  3 pennies  
+You can make $8.13 with 11 halves  1 quarter  22 dimes  3 nickels  3 pennies  
+You can make $8.13 with 11 halves  2 quarters  18 dimes  6 nickels  3 pennies  
+You can make $8.13 with 11 halves  3 quarters  14 dimes  9 nickels  3 pennies  
+You can make $8.13 with 11 halves  3 quarters  18 dimes  8 pennies  
+You can make $8.13 with 11 halves  4 quarters  10 dimes  12 nickels  3 pennies  
+You can make $8.13 with 11 halves  4 quarters  14 dimes  3 nickels  8 pennies  
+You can make $8.13 with 11 halves  5 quarters  6 dimes  15 nickels  3 pennies  
+You can make $8.13 with 11 halves  5 quarters  10 dimes  6 nickels  8 pennies  
+You can make $8.13 with 11 halves  6 quarters  2 dimes  18 nickels  3 pennies  
+You can make $8.13 with 11 halves  6 quarters  6 dimes  9 nickels  8 pennies  
+You can make $8.13 with 11 halves  6 quarters  10 dimes  13 pennies  
+You can make $8.13 with 11 halves  7 quarters  2 dimes  12 nickels  8 pennies  
+You can make $8.13 with 11 halves  7 quarters  6 dimes  3 nickels  13 pennies  
+You can make $8.13 with 11 halves  8 quarters  2 dimes  6 nickels  13 pennies  
+You can make $8.13 with 11 halves  9 quarters  2 dimes  18 pennies  
+You can make $8.13 with 12 halves  17 dimes  8 nickels  3 pennies  
+You can make $8.13 with 12 halves  1 quarter  13 dimes  11 nickels  3 pennies  
+You can make $8.13 with 12 halves  1 quarter  17 dimes  2 nickels  8 pennies  
+You can make $8.13 with 12 halves  2 quarters  9 dimes  14 nickels  3 pennies  
+You can make $8.13 with 12 halves  2 quarters  13 dimes  5 nickels  8 pennies  
+You can make $8.13 with 12 halves  3 quarters  5 dimes  17 nickels  3 pennies  
+You can make $8.13 with 12 halves  3 quarters  9 dimes  8 nickels  8 pennies  
+You can make $8.13 with 12 halves  4 quarters  1 dime  20 nickels  3 pennies  
+You can make $8.13 with 12 halves  4 quarters  5 dimes  11 nickels  8 pennies  
+You can make $8.13 with 12 halves  4 quarters  9 dimes  2 nickels  13 pennies  
+You can make $8.13 with 12 halves  5 quarters  1 dime  14 nickels  8 pennies  
+You can make $8.13 with 12 halves  5 quarters  5 dimes  5 nickels  13 pennies  
+You can make $8.13 with 12 halves  6 quarters  1 dime  8 nickels  13 pennies  
+You can make $8.13 with 12 halves  7 quarters  1 dime  2 nickels  18 pennies  
+You can make $8.13 with 13 halves  8 dimes  16 nickels  3 pennies  
+You can make $8.13 with 13 halves  12 dimes  7 nickels  8 pennies  
+You can make $8.13 with 13 halves  1 quarter  4 dimes  19 nickels  3 pennies  
+You can make $8.13 with 13 halves  1 quarter  8 dimes  10 nickels  8 pennies  
+You can make $8.13 with 13 halves  1 quarter  12 dimes  1 nickel  13 pennies  
+You can make $8.13 with 13 halves  2 quarters  22 nickels  3 pennies  
+You can make $8.13 with 13 halves  2 quarters  4 dimes  13 nickels  8 pennies  
+You can make $8.13 with 13 halves  2 quarters  8 dimes  4 nickels  13 pennies  
+You can make $8.13 with 13 halves  3 quarters  16 nickels  8 pennies  
+You can make $8.13 with 13 halves  3 quarters  4 dimes  7 nickels  13 pennies  
+You can make $8.13 with 13 halves  4 quarters  10 nickels  13 pennies  
+You can make $8.13 with 13 halves  4 quarters  4 dimes  1 nickel  18 pennies  
+You can make $8.13 with 13 halves  5 quarters  4 nickels  18 pennies  
+You can make $8.13 with 14 halves  3 dimes  15 nickels  8 pennies  
+You can make $8.13 with 14 halves  7 dimes  6 nickels  13 pennies  
+You can make $8.13 with 14 halves  1 quarter  3 dimes  9 nickels  13 pennies  
+You can make $8.13 with 14 halves  1 quarter  7 dimes  18 pennies  
+You can make $8.13 with 14 halves  2 quarters  3 dimes  3 nickels  18 pennies  
+You can make $8.13 with 15 halves  2 dimes  5 nickels  18 pennies  
+There are 129 possible ways to make $8.13 from 40 coins.

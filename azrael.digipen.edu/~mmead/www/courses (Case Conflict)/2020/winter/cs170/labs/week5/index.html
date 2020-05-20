@@ -1,0 +1,208 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<!--********************************************************************-->
+<!--********************************************************************-->
+<!--********************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+
+For this week's lab, you will take your previous lab implementations for a linked list and 
+create a class out of them. There really isn't much new functionality, so this lab
+won't take you as much time.
+<p>
+Note that all of the
+functions will need to be changed. This is due to the fact that you are no longer passing a List to 
+them. The functions and data (the List) are part of the class. Also, please be sure to use 
+<tt><b>const</b></tt> where appropriate. This means using it for function parameters that won't be 
+modified, as well as marking member functions with <tt><b>const</b></tt> if they are not modifying 
+any of the data in the object.
+
+<ol>
+	
+<li>Create a class called <i>List</i> that contains all of the global functions 
+  (as member functions now) for the lists that you've been writing so far. 
+Take a look at the test driver 
+(<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week5/driver.cpp">driver.cpp</a> &nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week5/driver.cpp.html">HTML</a>) if you want to see how all of the functions are being called.
+Here is a starting point: (<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week5/List.h">List.h</a>) <!-- The lines in <font color="blue">BLUE</font> are new. -->
+<pre>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef LIST_H</font>
+<font color="990099">#define LIST_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<font color="#003399"><i>//! namespace CS170</i></font>
+<b>namespace</b> CS170
+{
+  <font color="#003399"><i>//! namespace ListLab</i></font>
+  <b>namespace</b> ListLab
+  {
+    <font color="#003399"><i>//! Node structure for List class</i></font>
+    <b>struct</b> Node
+    {
+      
+      <b>int</b> number; <font color="#003399"><i>//!&lt; data portion</i></font>
+      Node *next; <font color="#003399"><i>//!&lt; pointer portion </i></font>
+
+      <font color="#003399"><i>/*!*******************************************************************
+        Conversion constructor
+
+        &#92;param value
+          The data for the node
+      **********************************************************************</i></font>
+      Node(<b>int</b> value)
+      {
+        number = value;
+        next = 0;
+      }
+    };
+
+    <font color="#003399"><i>//! Single-linked list class for CS170 labs</i></font>
+    <b>class</b> List
+    {
+      <b>public</b>:
+          <font color="#003399"><i>// Default constructor</i></font>
+        List();
+
+          <font color="#003399"><i>// Destructor</i></font>
+        ~List();
+
+        <font color="#003399"><i>// Other public method declarations here ...</i></font>
+        
+        <font color="#003399"><i>// DO NOT implement any methods here.</i></font>
+        <font color="#003399"><i>// They must be implemented in the .cpp file.</i></font>
+
+      <b>private</b>:
+        Node *head_;  <font color="#003399"><i>//!&lt; Pointer to the front of the list</i></font>
+        Node* MakeNode(<b>int</b> value) <b>const</b>;
+        
+        <font color="#003399"><i>// Any other private helper methods you need...</i></font>
+    };
+  } <font color="#003399"><i>// namespace ListLab</i></font>
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="990099">#endif // LIST_H</font>
+</code></pre>
+
+Implement all of the methods in a file called <b><tt>List.cpp</tt></b>. (Notice the capitalization.) 
+You'll have to remove some methods. For example, since you now have a destructor, you need to remove 
+the <i>FreeList</i> method (or make it private, if you still wish to use it). 
+<p>
+<!--  
+You are given an overloaded <b><tt>operator<< </tt></b> which replaces the <i>PrintList</i> function. 
+We haven't talked about overloading operators yet (or the <tt><b>friend</b></tt> keyword), 
+so the overloaded operator is provided. It is only used by the driver, so you don't even 
+have to understand it at this point.
+-->
+<p>
+Here is the starting point for the implementation file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week5/List.cpp">List.cpp</a>
+
+
+<!--********************************************************************-->
+<!--********************************************************************-->
+<!--********************************************************************-->
+<p>
+<hr width="100%">
+<p>
+
+<li>Add a Doxygen file header comment to <tt><b>List.cpp</b></tt> and <tt><b>List.h</b></tt>. 
+  Make a bullet list of the functions 
+  in the file. Create doxygen function header comments for each function. You already have Doxygen 
+  comments for most of the functions, so it's just a matter of modifying them to match the member 
+  functions. Make sure you document all functions, even ones that were given to you.
+  <!--
+  Use this <a href="Doxyfile">Doxyfile</a> as a reference.
+-->
+
+<p class="technote">
+Notice the Doxygen comments in the header file for the data (struct, class, etc.) You will
+need these or Doxygen will complain. I will not always provide these comments for you and
+you will need to provide them yourselves. Don't wait until the end to add Doxygen comments
+and then find that the submission server rejects your code because you failed to do this.
+<br><br>
+Consult the Doxygen help file if you haven't yet. (It was assigned as homework 4 weeks ago.)
+</p>
+
+<p>
+<hr width="100%">
+<p>
+
+Command lines:
+<p>
+GNU g++:
+<blockquote><pre>
+<b>g++</b> -o gnu -g -O -Wall -Wextra -Werror -ansi -pedantic -Wconversion driver.cpp List.cpp
+</pre></blockquote>
+
+<!--
+Microsoft (in case you want to use it with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp List.cpp
+</pre></blockquote>
+-->
+<!--<b>clang++</b> -c -g -O -Wall -Wextra -Werror -ansi -pedantic -Wconversion driver.cpp List.cpp<br>-->
+
+
+<blockquote>
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week5/output-all.txt">Output from all functions</a>
+</blockquote>
+
+
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the newlines 
+between GNU's output and the other compilers.
+<p>
+Also, be sure to run your program under a memory debugger <b>at all times</b>. Too many students are only 
+do that after "finishing" the assignment/lab only to find out they have many, many bugs
+in their code. It is much easier to fix the bugs as you introduce them, rather than trying to fix
+all of them right before submitting. (The submission server is currently running Valgrind for
+memory debugging on all labs.
+<!--
+Make sure you provide the additional <a href="http://drmemory.org/docs/page_prep.html">options to build</a> 
+your program with Dr. Memory.
+-->
+
+<p>
+<br><br>
+
+<p>
+<hr width="100%">
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

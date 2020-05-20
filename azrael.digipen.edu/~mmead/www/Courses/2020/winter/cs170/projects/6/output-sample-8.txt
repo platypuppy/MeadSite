@@ -1,0 +1,29 @@
+
+Test8-----------------------------------------------------
+String: |When in the Course of human events|
+There are 7 tokens
+|When|
+|in|
+|the|
+|Course|
+|of|
+|human|
+|events|
+----------------------------------
+String: |  When    in the    Course of human events    |
+There are 7 tokens
+|When|
+|in|
+|the|
+|Course|
+|of|
+|human|
+|events|
+----------------------------------
+String: |WhenintheCourseofhumanevents|
+There are 1 tokens
+|WhenintheCourseofhumanevents|
+----------------------------------
+String: ||
+There are 0 tokens
+----------------------------------

@@ -1,0 +1,144 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.pl</title>
+
+</head>
+<body>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<tt><b>main.pl</b></tt>:
+<p>
+Install Perl (probably already installed):
+<blockquote><pre>
+sudo apt-get install perl
+</pre></blockquote>
+
+Need to install the <tt>FFI::Raw</tt> module:
+
+<blockquote><pre>
+sudo perl -MCPAN -e 'install FFI::Raw'
+</pre></blockquote>
+
+Run it
+<blockquote><pre>
+perl main.pl
+</pre></blockquote>
+
+or (if it's executable)
+<blockquote><pre>
+./main.pl
+</pre></blockquote>
+
+<!--
+Syntax highlighter here:
+http://markup.su/highlighter/
+-->
+
+<blockquote>
+<pre style="background:#000;color:#f8f8f8">
+
+<span style="color:#aeaeae;font-style:italic">#!/usr/bin/perl</span>
+
+<span style="color:#e28964">use</span> strict;
+
+<span style="color:#e28964">use</span> FFI::Raw;
+
+<span style="color:#99cf50">my</span> <span style="color:#3e87e3">$add</span> = FFI::Raw<span style="color:#e28964">-></span>new(
+  <span style="color:#65b042">'./libhello.so'</span>, <span style="color:#65b042">'add'</span>,
+  FFI::Raw::<span style="color:#dad085">int</span>, <span style="color:#aeaeae;font-style:italic"># return type</span>
+  FFI::Raw::<span style="color:#dad085">int</span>, <span style="color:#aeaeae;font-style:italic"># first arg type</span>
+  FFI::Raw::<span style="color:#dad085">int</span>  <span style="color:#aeaeae;font-style:italic"># second arg type</span>
+);
+
+<span style="color:#99cf50">my</span> <span style="color:#3e87e3">$printme</span> = FFI::Raw<span style="color:#e28964">-></span>new(
+  <span style="color:#65b042">'./libhello.so'</span>, <span style="color:#65b042">'printme'</span>,
+  FFI::Raw::void, <span style="color:#aeaeae;font-style:italic"># return type</span>
+  FFI::Raw::str   <span style="color:#aeaeae;font-style:italic"># arg type</span>
+);
+
+<span style="color:#dad085">print</span> <span style="color:#65b042">"The result is "</span> . <span style="color:#3e87e3">$add</span><span style="color:#e28964">-></span>call(1, 2) . <span style="color:#65b042">"<span style="color:#ddf2a4">\n</span>"</span>;
+<span style="color:#dad085">print</span> <span style="color:#3e87e3">$printme</span><span style="color:#e28964">-></span>call(<span style="color:#65b042">"Hello from Perl!"</span>);
+
+</pre>
+</blockquote>
+
+Output:
+<blockquote><pre>
+The result is: 3
+Hello from library: Hello from Perl!
+</pre></blockquote>
+
+</body>
+
+
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

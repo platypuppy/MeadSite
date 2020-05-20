@@ -1,0 +1,95 @@
+Usage: drmemory [options] -- <app and args to run>
+  -version                      [ false]  Display Dr. Memory version
+  -dr <string>                  [    ""]  Path to DynamoRIO installation
+  -top_stats                    [ false]  Show time taken and memory usage of whole process
+  -follow_children              [  true]  Monitor child processes
+  -v                            [ false]  Display verbose information in the Dr. Memory front end
+  -brief                        [ false]  Show simplified and easier-to-read error reports
+  -logdir <string>              ["<install>/logs"]  Base directory for result file subdirectories and symbol cache
+  -quiet                        [ false]  Suppress stderr messages and results
+  -prefix_style <int>           [     0]  Adjust the default output per-line prefix
+  -ignore_asserts               [ false]  Do not abort on debug-build asserts
+  -pause_at_error               [ false]  Pause at each reported error of any type
+  -pause_at_uninitialized       [ false]  Pause at each uninitialized read
+  -pause_at_assert              [ false]  Pause at each debug-build assert
+  -crash_at_unaddressable       [ false]  Crash at the first reported unaddressable access
+  -dump_at_error_mask <int>     [     0]  Creates a memory dump file at the specified errors
+  -callstack_max_frames <int>   [    20]  How many call stack frames to record
+  -free_max_frames <int>        [     6]  How many call stack frames to record on each free
+  -callstack_truncate_below <string> ["main,wmain,WinMain,wWinMain,*RtlUserThreadStart,_threadstartex,BaseThreadInitThunk"]  ,-separated list of function names at which to truncate callstacks
+  -callstack_exe_hide           [  true]  Whether to omit the executable name from callstack frames
+  -callstack_srcfile_prefix <string> [    ""]  ,-separated list of path prefixes to remove
+  -lib_blacklist_frames <int>   [     4]  The number of frames to match vs -lib_blacklist
+  -lib_whitelist_frames <int>   [     4]  The number of frames to match vs -lib_whitelist
+  -src_whitelist_frames <int>   [     4]  The number of frames to match vs -src_whitelist
+  -callstack_use_top_fp         [  true]  Use the top-level ebp/rbp register as the first frame pointer
+  -callstack_use_fp             [  true]  Use frame pointers to walk the callstack
+  -callstack_max_scan <int>     [  2048]  How far to scan to locate the first or next stack frame
+  -check_leaks                  [  true]  List details on memory leaks detected
+  -symbol_offsets               [ false]  Deprecated: use -callstack_style flag 0x4
+  -check_leaks_on_destroy       [  true]  Report leaks on heap destruction
+  -check_encoded_pointers       [  true]  Check for encoded pointers
+  -midchunk_new_ok              [  true]  Consider mid-chunk post-new[]-header pointers legitimate
+  -midchunk_string_ok           [  true]  Consider mid-chunk std::string pointers legitimate
+  -strings_vs_pointers          [  true]  Use heuristics to rule out sub-strings as leak scan pointers
+  -suppress <string>            [    ""]  File containing errors to suppress
+  -gen_suppress_offs            [  true]  Generate mod+offs suppressions in the output suppress file
+  -show_threads                 [  true]  Print the callstack of each thread creation point referenced in an error
+  -conservative                 [ false]  Be conservative reading app memory and assuming dead regs
+  -check_uninit_non_moves       [ false]  Check definedness of all non-move instructions
+  -strict_bitops                [ false]  Fully check definedness of bit operations
+  -stack_swap_threshold <int>   [0x9000]  Stack change amount to consider a swap
+  -report_max <int>             [ 20000]  Maximum non-leak errors to report (-1=no limit)
+  -report_write_to_read_only    [  true]  Report writes to read-only memory as unaddressable errors
+  -batch                        [ false]  Do not invoke notepad at the end
+  -use_symcache                 [  true]  Cache results of symbol lookups to speed up future runs
+  -symcache_minsize <int>       [  1000]  Minimum module size to cache symbols for
+  -preload_symbols              [ false]  Preload debug symbols on module load
+  -warn_null_ptr                [ false]  Warn if NULL passed to free/realloc
+  -delay_frees_maxsz <int>      [20000000]  Maximum size of frees to delay before committing
+  -leaks_only                   [ false]  Check only for leaks and not memory access errors
+  -check_uninitialized          [  true]  Check for uninitialized read errors
+  -check_stack_access           [ false]  For -no_check_uninitialized, whether to check for errors on stack or frame references
+  -fault_to_slowpath            [  true]  For -no_check_uninitialized, use faults to exit to slowpath
+  -check_gdi_multithread        [ false]  Check for GDI API usage error of one DC used by multiple threads
+  -check_heap_mismatch          [  true]  Whether to check for Windows API vs C library mismatches
+  -check_prefetch               [  true]  Whether to report unaddressable prefetches as warnings
+  -prctl_whitelist <string>     [    ""]  Disable instrumentation unless PR_SET_NAME is on list
+  -analyze_unknown_syscalls     [  true]  For unknown syscalls use memory comparison to find output params
+  -syscall_sentinels            [ false]  Use sentinels to detect writes on unknown syscalls.
+  -perturb                      [ false]  Perturb thread scheduling to increase chances of catching races
+  -perturb_max <int>            [    50]  Maximum delay added by -perturb
+  -unaddr_only                  [ false]  Enables a lightweight mode that detects only unaddressable errors
+  -persist_code                 [ false]  Cache instrumented code to speed up future runs (light mode only)
+  -soft_kills                   [  true]  Ensure external processes terminated by this one exit cleanly
+  -use_syscall_tables           [  true]  Use Dr. Memory's own syscall tables where possible
+  -coverage                     [ false]  Measure and provide code coverage information
+  -fuzz_module <string>         [    ""]  The fuzz target module name. The application main executable is used by default.
+  -fuzz_offset <int>            [     0]  The fuzz target function offset in the module.
+  -fuzz_data_idx <int>          [     0]  The fuzz data argument index.
+  -fuzz_num_iters <int>         [   100]  The number of times to repeat executing the target function.
+  -fuzz_call_convention <string> [    ""]  The calling convention used by the fuzz target function.
+             arm32    = ARM32
+             fastcall = fastcall
+             stdcall  = cdecl or stdcall
+  -fuzz_dump_on_error           [  true]  Dump the current fuzz input to current log directory on an error report.
+  -fuzz_corpus <string>         [    ""]  Load a corpus of input data files and perform coverage based fuzzing.
+  -fuzz_coverage                [ false]  Enable basic block coverage guided fuzzing.
+        Fuzz descriptor format: <target>|<arg-count>|<buffer-index>|<size-index>|<repeat-count>[|<calling-convention>]
+             <module>!<symbol>
+        The <arg-count> specifies the number of arguments to the function (for vararg
+        The <*-index> arguments specify the index of the corresponding parameter in
+        the target function (use 0 for no repeat and no mutation, and -1 to repeat until
+        specify the main module of the program.
+             1 = AMD64
+             3 = ARM32
+             5 = fastcall
+
+  -fuzz_mutator_ops <string>    [    ""]  Specify mutator options
+  -fuzz_mutator_unit <string>   ["bits"]  Specify the mutator unit: 'bits' or 'num'
+  -fuzz_mutator_sparsity <int>  [     1]  Values to skip between mutations
+  -fuzz_mutator_random_seed <int> [0x5a8390e9a31dc65fULL]  Randomization seed for the random algorithm
+  -fuzz_one_input <string>      [    ""]  Specify one fuzz input value to test.
+         for example '7f392a' represents byte array { 0x7f, 0x39, 0x2a }.
+  -fuzz_buffer_offset <int>     [     0]  Set an offset for the mutation span
+  -fuzz_stat_freq <int>         [     0]  Enable fuzzer status logging with the specified frequency

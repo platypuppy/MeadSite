@@ -1,0 +1,968 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>C Runtime Environment</title>
+</head>
+
+<body>  
+<center><h1>Runtime Environment</h1></center>
+
+
+<blockquote>
+</blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="COMMANDLINE">Command Line Arguments</a>
+<p>
+
+
+Usually, we see <b>main</b> prototyped as:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>);
+</pre></blockquote>
+
+However, <b>main</b> is sort of <i>overloaded</i> to take parameters as well:
+
+<blockquote><pre>
+  <font color="#9933CC"> /* These prototypes are the same */</font> 	
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[]);
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv);
+</pre></blockquote>
+
+As we've seen with arrays as parameters, the declarations above are equivalent.
+
+<ul>
+<li><i>argc</i> - The number of arguments passed to <b>main</b> (the program).
+<li><i>argv</i> - An array of pointers to NUL-terminated strings (the arguments).
+<li>The <i>caller</i> passes the arguments; the caller of main is the C runtime system.
+<li>The first element in <i>argv</i> (argv[0]) is the name of the program.
+<li>Note that the symbols <i>argc</i> and <i>argv</i> are just conventions. As with any function
+you implement, you can name the parameters anything you want. These are all the same:
+
+<blockquote><pre>
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv);
+<b>int</b> main(<b>int</b> foo, <b>char</b> **bar);
+<b>int</b> main(<b>int</b> fred, <b>char</b> **barney);
+<b>int</b> main(<b>int</b> argv, <b>char</b> **argc);  <font color="#9933CC"> /* You're just asking for trouble here! */</font> 
+</pre></blockquote>
+
+However, you will be required to use these names at all times:
+<blockquote><pre>
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv);
+</pre></blockquote>
+so everyone will know exactly what you mean when they read your code.
+
+
+</ul>
+
+This trivial program simply prints out each argument:
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+  <b>int</b> i;
+  
+  <b>for</b> (i = 0; i &lt; argc; i++)
+    printf(<font color="#9933CC">&quot;arg%i = %s\n&quot;</font>, i, argv[i]);
+    
+  <b>return</b> 0;
+}
+</code></pre>
+
+If our program was named <i>foo.exe</i> and we were to invoke the program like this:
+
+<blockquote><pre>
+foo one two three 911
+</pre></blockquote>
+
+we would see something like this printed out:
+
+<blockquote><pre>
+foo
+one
+two
+three
+911
+</pre></blockquote>
+
+Another example:
+
+<blockquote><pre>
+foo one "two three" four 911
+</pre></blockquote>
+
+
+<blockquote><pre>
+foo
+one
+two three
+four
+911
+</pre></blockquote>
+
+Within an IDE like Visual Studio we might see:
+
+<blockquote><pre>
+E:\Data\Courses\Code\Chapter16\RTL\Debug\foo.exe
+one
+two three
+four
+911
+</pre></blockquote>
+ 
+because the IDE invokes the program using the entire path to the executable.
+<p>
+
+Another way of printing the arguments using pointers instead of subscripts:
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>while</b> (*argv)
+    printf(<font color="#9933CC">&quot;%s\n&quot;</font>, *argv++);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<p class="technote">
+<b>Quick check: Complete the table below. (Assume a 64-bit computer)</b>
+</p>
+
+<blockquote><pre>
+Expression    Type     sizeof(Expression)
+-----------------------------------------
+  argc         int          4 
+  argv
+ *argv
+**argv
+</pre></blockquote>
+
+<br>
+
+Diagram of the arguments when invoked as: 
+
+<blockquote><pre>
+foo one "two three" four 911
+</pre></blockquote>
+<br>
+
+<blockquote><pre>
+<img src="ArgcArgv-1.gif">
+</pre></blockquote>
+
+<b>Note:</b> Because <b>argv</b> is an array of pointers to characters (strings), you can only pass strings
+to a program. If you want to use the parameter as a number, you will have to convert it from
+a string to a number yourself. See the <i>Data Conversion</i> section in the C Runtime Library, specifically
+the <a href="http://man7.org/linux/man-pages/man3/atoi.3.html">atoi</a> function.
+<p>
+
+
+<!--
+<h3>Example driver code for the <i>uucode</i> project:</h3>
+<P>
+
+<pre class="sourcecode"><code>
+<b>include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf */</i></font>
+<b>include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* atoi   */</i></font>
+<b>include</b> <font color="#9933CC">&quot;uucode.h&quot;</font>
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> mode;
+
+    <font color="#003399"><i>/* If less than 1 argument is provided, remind the user */</i></font>
+    <font color="#003399"><i>/* how to use the program.                              */</i></font>
+  <b>if</b> (argc &lt; 3)
+  {
+    printf(<font color="#9933CC">&quot;\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;  Usage: uucode {mode} {inputfile} [decode_path]\n\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;  mode = 1 for encoding, 2 for decoding\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;  inputfile = file to encode/decode\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;  decode_path = filename to store in encoded file (only for encoding)\n\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;  Examples: uucode preamble.txt mypreamble.txt &gt; preamble.uue\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;            uucode preamble.uue\n\n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+    <font color="#003399"><i>/* First argument is the mode, 1=encode, 2=decode */</i></font>
+  mode = atoi(argv[1]);
+
+    <font color="#003399"><i>/* Encode */</i></font>
+  <b>if</b> (mode == 1) 
+  {
+      <font color="#003399"><i>/* If only 2 args, the input/remote filename are the same */</i></font>
+    <b>if</b> (argc == 3)
+    {
+      <b>if</b> (uuencode(argv[2], argv[2]))
+        printf(<font color="#9933CC">&quot;Encoding failed: %s, %s\n&quot;</font>, argv[2], argv[2]);
+    }
+      <font color="#003399"><i>/* The input filename and remote filename are different   */</i></font>
+    <b>else</b> 
+    {
+      <b>if</b> (uuencode(argv[2], argv[3]))
+        printf(<font color="#9933CC">&quot;Encoding failed: %s, %s\n&quot;</font>, argv[2], argv[3]);
+    }
+  }
+    <font color="#003399"><i>/* Decode */</i></font>
+  <b>else</b> <b>if</b> (mode == 2)
+  {
+    <b>if</b> (uudecode(argv[2]))
+      printf(<font color="#9933CC">&quot;Decoding failed: %s\n&quot;</font>, argv[2]);
+  }
+  <b>else</b>  
+  {
+    printf(<font color="#9933CC">&quot;Bad mode: %i  Should be 1 or 2.\n&quot;</font>, mode);
+  }
+  <b>return</b> 0;
+}
+</code></pre>
+-->
+
+Imagine having to deal with hundreds of options like the 
+<a href="http://gcc.gnu.org/onlinedocs/gcc-4.7.2/gcc/Invoking-GCC.html#Invoking-GCC">gcc command options</a>.
+This <a href="http://gcc.gnu.org/onlinedocs/gcc-4.7.2/gcc/Option-Summary.html#Option-Summary">summary of options</a>
+shows hundreds of options alone. And don't believe for a minute that they are only for command-line
+apps. All "real" games have hundreds of them:
+<ul>
+  <li><a href="https://developer.valvesoftware.com/wiki/Command_Line_Options">Valve's command line options</a></li>
+  <li><a href="http://www.quakewiki.net/archives/console/commands/quake.html#h-4">Quake's options</a> One
+    of the best games of all time!</li>
+</ul>
+<p>
+
+
+<p>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="ENVIRONMENT">Environment</a>
+<p>
+
+
+There's actually another prototype for <b>main</b> which looks like this:
+
+<blockquote><pre>
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv, <b>char</b> **env);
+</pre></blockquote>
+
+where <i>env</i> is similar to <i>argv</i> in that it is a pointer to a pointer to a char. These pointers point to the strings in the <i>environment</i>.
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> **argv, <b>char</b> **env)
+{
+  <b>while</b> (*env)
+    printf(<font color="#9933CC">&quot;%s\n&quot;</font>, *env++);
+
+  <b>return</b> 0;
+}</code></pre>
+
+The output from the above program running on a Windows computer looks like <a href="https://azrael.digipen.edu/~mmead/www/courses/CS120/env.html">this</a>. Notice
+that this program produces the same results as the <b>SET</b> command typed at the console:
+
+<blockquote><pre>
+C:\> set     <i>type 'set' and press return</i>
+</pre></blockquote>
+
+We can experiment with this in C:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf         */</font>
+<font color="990099">#include &lt;string.h&gt; /* strchr, strcmp */</font>
+
+<b>char</b> *GetEnvironmentSetting(<b>char</b> **env, <b>const</b> <b>char</b> *key)
+{
+    <font color="#003399"><i>/* Strings are of the form: key=value */</i></font> 
+  <b>while</b> (*env)
+  {
+      <font color="#003399"><i>/* Find the equal sign so we can terminate the key */</i></font>
+    <b>char</b> *equal = strchr(*env, <font color="#9933CC">'='</font>);
+
+      <font color="#003399"><i>/* This should ALWAYS be non-NULL */</i></font>
+    <b>if</b> (equal)
+    {
+      *equal = 0;
+      <b>if</b> (!strcmp(key, *env))  <font color="#003399"><i>/* If key matches the current variable */</i></font> 
+        <b>return</b> equal + 1;      <font color="#003399"><i>/*   The value is 1 after the '='      */</i></font> 
+    }
+
+    env++; <font color="#003399"><i>/* Next key */</i></font>
+  }
+
+  <b>return</b> NULL;  <font color="#003399"><i>/* Not found */</i></font> 
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv, <b>char</b> **env)
+{
+  <b>char</b> *key;   <font color="#003399"><i>/* The environment variable  */</i></font>
+  <b>char</b> *value; <font color="#003399"><i>/* The value of the variable */</i></font>
+
+    <font color="#003399"><i>/* Must provide a key on the command line */</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Must provide an environment string.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+  key = argv[1];
+
+    <font color="#003399"><i>/* Get value from key/value pair */</i></font> 
+  value = GetEnvironmentSetting(env, key);
+
+    <font color="#003399"><i>/* Was the string in the environment? */</i></font>
+  <b>if</b> (value)
+    printf(<font color="#9933CC">&quot;%s is %s.&#92;n&quot;</font>, key, value);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;%s is not set.&#92;n&quot;</font>, key);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<!--
+<pre class="sourcecode"><code><b>const</b> <b>char</b> *GetEnvironmentSetting(<b>char</b> **env, <b>const</b> <b>char</b> *key)
+{
+  <b>int</b> len = strlen(key);
+
+  <font color="#9933CC"> /* Strings are of the form: key=value */</font> 
+  <b>while</b> (*env)
+  {
+    <b>if</b> (!strncmp(key, *env, len))<font color="#9933CC"> /* If substring matches       */</font> 
+      <b>return</b> *env + len + 1;     <font color="#9933CC"> /*   value is 1 after the '=' */</font> 
+
+    env++;
+  }
+
+  <b>return</b> NULL; <font color="#9933CC"> /* Not found */</font> 
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv, <b>char</b> **env)
+{
+  <font color="#9933CC"> /* Get value from key/value pair */</font> 
+  <b>const</b> <b>char</b> *value = GetEnvironmentSetting(env, <font color="#9933CC">&quot;MyTemp&quot;</font>);
+
+  <b>if</b> (value)
+    printf(<font color="#9933CC">&quot;MyTemp is %s.\n&quot;</font>, value);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;MyTemp is not set.\n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+-->
+
+The environment is a very powerful and easy way to seamlessly configure software. You should try exploiting
+this concept.
+<p>
+
+Final notes on <b><tt>main</tt></b>. Not all implementations will support the environment pointer:
+<p>
+
+ANSI C:
+<blockquote><pre>
+<b>int</b> main(<b>void</b>);                       
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv);      
+</pre></blockquote>
+
+Traditionally accepted implementations:
+<blockquote><pre>
+<b>int</b> main(<b>void</b>);
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv);
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv, <b>char</b> **env);                                      
+<b>extern</b> <b>char</b> *environ[];  <font color="#9933CC"> /* External global variable */</font> 
+</pre></blockquote>
+
+Finally, there is a <i>getenv</i> function (<b><tt>stdlib.h</tt></b>) that you can call anywhere in your program that will
+return the value a specific environment string:
+<blockquote><pre>
+<b>char</b> *getenv(<b>char const</b> *string);
+</pre></blockquote>
+This is almost identical to the <i>GetEnvironmentSetting</i> function implemented above and can be used
+without the parameter to <b>main</b>:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* getenv */</font>
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>char</b> *key;   <font color="#003399"><i>/* The environment variable  */</i></font>
+  <b>char</b> *value; <font color="#003399"><i>/* The value of the variable */</i></font>
+
+    <font color="#003399"><i>/* Must provide a key on the command line */</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Must provide an environment string.&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+  key = argv[1];
+
+    <font color="#003399"><i>/* Get value from key/value pair */</i></font> 
+  value = getenv(key);
+
+    <font color="#003399"><i>/* Was the string in the environment? */</i></font>
+  <b>if</b> (value)
+    printf(<font color="#9933CC">&quot;%s is %s.&#92;n&quot;</font>, key, value);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;%s is not set.&#92;n&quot;</font>, key);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<!--
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  value = getenv(<font color="#9933CC">&quot;MyTemp&quot;</font>);
+
+  <b>if</b> (value)
+    printf(<font color="#9933CC">&quot;MyTemp is %s.\n&quot;</font>, value);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;MyTemp is not set.\n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+-->
+
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="EXITCODE">Custom exit Code</a>
+<p>
+
+You can specify which function to call when your program terminates by using the <tt><b>atexit</b></tt>
+function. You need to include the <tt><b>stdlib.h</b></tt> header.
+
+<blockquote><pre>
+<b>int</b> atexit( <b>void</b>(*func)(<b>void</b>) );
+</pre></blockquote>
+
+What is the type of <b><tt>func</tt></b>? What is the type of <b><tt>atexit</tt></b>?
+<p>
+This example simply returns from main, which causes the program to terminate:
+
+
+<pre class="sourcecode"><code><b>void</b> MyExit(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In MyExit function...\n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  atexit(MyExit);
+  printf(<font color="#9933CC">&quot;In main...\n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>Output:</b>
+<blockquote><pre>
+In main...
+In MyExit function...
+</pre></blockquote>
+
+This code actually calls <b><tt>exit</tt></b> to terminate the program prematurely (but safely):
+
+<pre class="sourcecode"><code>
+<b>void</b> MyExit(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In MyExit function...\n&quot;</font>);
+}
+
+<b>void</b> SomeFn(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In SomeFn calling exit...\n&quot;</font>);
+  exit(0);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  atexit(MyExit);
+  printf(<font color="#9933CC">&quot;In main...\n&quot;</font>);
+  SomeFn();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>Output:</b>
+<blockquote><pre>
+In main...
+In SomeFn calling exit...
+In MyExit function...
+</pre></blockquote>
+
+This program sets up several exit functions:
+
+<pre class="sourcecode"><code>
+<b>void</b> MyExit1(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In MyExit1 function...\n&quot;</font>);
+}
+
+<b>void</b> MyExit2(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In MyExit2 function...\n&quot;</font>);
+}
+
+<b>void</b> MyExit3(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In MyExit3 function...\n&quot;</font>);
+}
+
+<b>void</b> SomeFn(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In SomeFn calling exit...\n&quot;</font>);
+  exit(0);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  atexit(MyExit1);
+  atexit(MyExit2);
+  atexit(MyExit3);
+  printf(<font color="#9933CC">&quot;In main...\n&quot;</font>);
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+And we can see that they are called in the reverse order in which they were assigned:
+<p>
+
+<b>Output:</b>
+<blockquote><pre>
+In main...
+In MyExit3 function...
+In MyExit2 function...
+In MyExit1 function...
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Note:</b> The registered exit functions will only be called if the program terminates normally.
+If the program terminates abnormally (e.g. by calling <i>abort</i>, <i>_exit</i>, or
+performing some illegal operation like division by 0 or illegal memory access)
+the functions will not be called.
+</p>
+
+So, changing this:
+
+<blockquote><pre>
+<b>void</b> SomeFn(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In SomeFn calling exit...\n&quot;</font>);
+  <font color="blue"><b>exit(0)</b></font>;
+}
+</pre></blockquote>
+
+to this:
+
+<blockquote><pre>
+<b>void</b> SomeFn(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;In SomeFn calling exit...\n&quot;</font>);
+  <font color="blue"><b>abort()</b></font>;
+}
+</pre></blockquote>
+
+Will prevent the exit functions from being called.
+
+
+</p>
+</blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="SYSTEM">Executing Programs from C Code</a>
+<p>
+
+Suppose you have an executable that you want to use <i>within</i> your own program. How can you 
+call it? The easiest way is with the <b>system</b> function from <tt><b>stdlib.h</b></tt>:
+
+<blockquote><pre>
+<b>int</b> system(<b>const</b> <b>char</b> *command);
+</pre></blockquote>
+
+Using it in a program like this:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  system(<font color="#9933CC">&quot;notepad&quot;</font>);
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+will cause the Windows Notepad application to run. You can also pass command line arguments to other
+programs as well. The example below calls the GNU gcc compiler and passes a filename to it
+to compile:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  system(<font color="#9933CC">&quot;gcc main.c&quot;</font>);
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+A simple program to execute almost any command from C:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>char</b> buffer[100];
+  
+  printf(<font color="#9933CC">&quot;What command do you want to execute?\n&quot;</font>);
+  fgets(buffer, 100, stdin);
+  system(buffer);
+  printf(<font color="#9933CC">&quot;This line will be printed after the system call above terminates.\n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Example run in Windows: (program is rtl.exe):
+
+<blockquote><pre>
+E:\Data\Courses\Code\Chapter16\RTL\Debug><font color="red"><b>rtl</b></font>
+What command do you want to execute?
+<font color="red"><b>dir d:\ e:\</b></font>
+Volume in drive D is Applications
+ Volume Serial Number is 1084-18F9
+
+ Directory of d:\
+
+04/10/2017  07:03a      &lt;DIR&gt;          borlandc
+05/24/2017  11:22a      &lt;DIR&gt;          CygWin
+12/06/2016  06:08p      &lt;DIR&gt;          Data
+12/10/2016  05:56p             126,875 dirinfo.mcd
+12/07/2016  03:37p      &lt;DIR&gt;          JBuilder4
+07/19/2017  12:41p      &lt;DIR&gt;          Program Files
+07/05/2017  10:25a      &lt;DIR&gt;          stuff
+               1 File(s)        126,875 bytes
+               6 Dir(s)     604,979,200 bytes free
+
+ Volume in drive E is Data
+ Volume Serial Number is DCA8-DC74
+
+ Directory of e:\
+
+05/10/2017  01:59p      &lt;DIR&gt;          CVSRoot
+07/19/2017  07:54a      &lt;DIR&gt;          Data
+01/15/2017  09:49a              16,663 dirinfo.mcd
+12/07/2016  12:36p      &lt;DIR&gt;          Documents and Settings
+07/22/2017  10:06a      &lt;DIR&gt;          Download
+02/05/2017  10:46a              29,607 Export_HKEY_CURRENT_USER_Software_Microsoft_DevStudio.reg
+12/06/2016  02:51p      &lt;DIR&gt;          i386
+07/15/2017  08:59a      &lt;DIR&gt;          images
+02/01/2017  09:06a      &lt;DIR&gt;          Installs
+12/07/2016  12:29p      &lt;DIR&gt;          Program Files
+05/23/2017  12:44p                   0 s1cc
+05/23/2017  12:44p                   0 s1cc.1
+05/23/2017  12:44p                   0 s1cc.2
+05/23/2017  12:44p                   0 s1cc.3
+05/23/2017  12:44p                   0 s1cc.4
+02/01/2017  11:58a      &lt;DIR&gt;          Share
+02/05/2017  10:39a      &lt;DIR&gt;          sp5
+07/05/2017  04:10p      &lt;DIR&gt;          stuff
+07/17/2017  06:59a      &lt;DIR&gt;          temp
+03/01/2017  05:02p              25,761 TempMon1.gif
+04/23/2017  08:43a      &lt;DIR&gt;          WebReaper
+12/07/2016  12:39p      &lt;DIR&gt;          WINNTX
+               8 File(s)         72,031 bytes
+              14 Dir(s)   4,069,343,232 bytes free
+
+
+This line will be printed after the system call above terminates.
+</pre></blockquote>
+<b>Notes:</b>
+<ul>
+  <li>Depending on which compiler you use, you will get different results.</li>
+  <li>Microsoft's compiler will produce the output above.</li>
+  <li>The same code with gcc will not work correctly on Windows.</li>
+  <ul>
+    <li>The <tt>dir c:\</tt> command needs to be <tt>ls -l /cygdrive/c/</tt> instead.</li>
+  </ul>
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+<a name="EXEC">Using exec and Others</a>
+<p>
+
+The <tt><b>exec</b></tt> family of functions is similar to the <tt><b>system</b></tt> function, but has more capabilities.
+
+<ul>
+<li><b>L</b>ist versions: (vararg)
+<blockquote><pre>
+execl    execle    execlp    execlpe
+</pre></blockquote>
+<li><b>V</b>ector versions: (array)
+<blockquote><pre>
+execv    execve    execvp    execvpe
+</pre></blockquote>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+Passing a (variable-length) list to <b>exec</b> under Windows:
+
+<!--
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  <b>int</b> retval;
+
+    <font color="#003399"><i>/* Using a <b>l</b>ist only (must specify path) */</i></font>
+  retval = execl(<font color="#9933CC">&quot;c:\\Windows\\system32\\notepad&quot;</font>, <font color="#9933CC">&quot;c:\\Windows\\system32\\notepad&quot;</font>, <font color="#9933CC">&quot;c:\\somefile.txt&quot;</font>, NULL);
+
+    <font color="#003399"><i>/* We only reach this if the call to execl fails */</i></font>
+  printf(<font color="#9933CC">&quot;Exec failed. retval = %i, errno = %i\n&quot;</font>, retval, errno);
+  perror(<font color="#9933CC">&quot;Message&quot;</font>);
+
+  <b>return</b> 0;
+}</code></pre>
+-->
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf, perror */</font>
+<font color="990099">#include &lt;unistd.h&gt; /* exec functions */</font>
+<font color="990099">#include &lt;errno.h&gt;  /* errno          */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> retval;
+
+    <font color="#003399"><i>/* Using a list only (must specify path) */</i></font>
+  retval = execl(<font color="#9933CC">&quot;c:&#92;&#92;Windows&#92;&#92;system32&#92;&#92;notepad.exe&quot;</font>, <font color="#9933CC">&quot;c:&#92;&#92;Windows&#92;&#92;system32&#92;&#92;notepad.exe&quot;</font>, <font color="#9933CC">&quot;c:&#92;&#92;eula.1040.txt&quot;</font>, NULL);
+
+    <font color="#003399"><i>/* We only reach this if the call to _exec fails */</i></font>
+  printf(<font color="#9933CC">&quot;Exec failed. retval = %i, errno = %i&#92;n&quot;</font>, retval, errno);
+  perror(<font color="#9933CC">&quot;execl&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+If we want to have the system find the command in the environment (the PATH variable), we can use this:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Using a <b>l</b>ist and getting <b>p</b>ath from the environment */</i></font>
+retval = execlp(<font color="#9933CC">&quot;notepad&quot;</font>, <font color="#9933CC">&quot;notepad&quot;</font>, <font color="#9933CC">&quot;c:\\somefile.txt&quot;</font>, NULL);
+</pre></blockquote>
+
+
+Passing a vector to <b>exec</b>:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf, perror */</font>
+<font color="990099">#include &lt;unistd.h&gt; /* exec functions */</font>
+<font color="990099">#include &lt;errno.h&gt;  /* errno          */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>char</b> *args[] = {<font color="#9933CC">&quot;c:&#92;&#92;Windows&#92;&#92;system32&#92;&#92;notepad&quot;</font>, <font color="#9933CC">&quot;c:&#92;&#92;eula.1040.txt&quot;</font>, NULL};
+  <b>int</b> retval;
+
+    <font color="#003399"><i>/* Using a vector only (must specify path) */</i></font>
+  retval = execv(<font color="#9933CC">&quot;c:&#92;&#92;Windows&#92;&#92;system32&#92;&#92;notepad&quot;</font>, args);
+
+    <font color="#003399"><i>/* We only reach this if the call to _exec fails */</i></font>
+  printf(<font color="#9933CC">&quot;Exec failed. retval = %i, errno = %i&#92;n&quot;</font>, retval, errno);
+  perror(<font color="#9933CC">&quot;execl&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+<!--
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  <b>char</b> *args[] = {<font color="#9933CC">&quot;c:\\Windows\\system32\\notepad&quot;</font>, <font color="#9933CC">&quot;c:\\somefile.txt&quot;</font>, NULL};
+  <b>int</b> retval;
+
+    <font color="#003399"><i>/* Using a vector only (must specify path) */</i></font>
+  retval = execv(<font color="#9933CC">&quot;c:\\Windows\\system32\\notepad&quot;</font>, args);
+
+    <font color="#003399"><i>/* We only reach this if the call to execv fails */</i></font>
+  printf(<font color="#9933CC">&quot;Exec failed. retval = %i, errno = %i\n&quot;</font>, retval, errno);
+  perror(<font color="#9933CC">&quot;Message&quot;</font>);
+
+  <b>return</b> 0;
+}</code></pre>
+-->
+
+
+If we want to have the system find the command in the environment (the PATH variable), we can use this:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Using a <b>v</b>ector and getting <b>p</b>ath from the environment */</i></font>
+retval = execvp(<font color="#9933CC">&quot;notepad&quot;</font>, args);
+</pre></blockquote>
+
+It may seem redundant to specify the name of the program twice. The first occurrence is the program that the OS 
+is going to run. The second occurrence will be placed into <tt>argv[0]</tt> for the program to be run. Common sense might indicate that
+they should be the same, but it isn't enforced.
+
+<blockquote><pre>
+  <b>char</b> *args[] = {<font color="#9933CC">&quot;notepad&quot;</font>, <font color="#9933CC">&quot;c:\\somefile.txt&quot;</font>, NULL};
+  execvp(<font color="#9933CC">&quot;notepad&quot;</font>, args);
+</pre></blockquote>
+
+or
+
+<blockquote><pre>
+execlp(<font color="#9933CC">&quot;notepad&quot;</font>, <font color="#9933CC">&quot;notepad&quot;</font>, <font color="#9933CC">&quot;c:\\somefile.txt&quot;</font>, NULL);
+</pre></blockquote>
+
+Launching Firefox and opening several tabs:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf, perror */</font>
+<font color="990099">#include &lt;unistd.h&gt; /* exec functions */</font>
+<font color="990099">#include &lt;errno.h&gt;  /* errno          */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *program = <font color="#9933CC">&quot;c:&#92;&#92;Program Files&#92;&#92;Mozilla Firefox&#92;&#92;firefox.exe&quot;</font>;
+  <b>char</b> *args[] = {<font color="#9933CC">&quot;http://www.digipen.edu/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.gamedev.net/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.ddj.com/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.microsoft.com/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.opera.com/&quot;</font>, 
+                  <font color="#9933CC">&quot;http://www.acmqueue.com/&quot;</font>,
+                  <font color="#9933CC">&quot;http://developers.slashdot.org/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.artima.com/index.jsp&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.provantage.com/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.tomshardware.com/&quot;</font>,
+                  <font color="#9933CC">&quot;http://www.theinquirer.net/&quot;</font>,
+                  <font color="#9933CC">&quot;http://arstechnica.com/&quot;</font>,
+                  NULL
+                 };
+  <b>int</b> retval;
+
+    <font color="#003399"><i>/* Using a vector only (must specify path) */</i></font>
+  retval = execv(program, args);
+
+    <font color="#003399"><i>/* We only reach this if the call to _exec fails */</i></font>
+  printf(<font color="#9933CC">&quot;Exec failed. retval = %i, errno = %i&#92;n&quot;</font>, retval, errno);
+  perror(<font color="#9933CC">&quot;execl&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<!--
+<pre class="sourcecode"><code><b>int</b> main(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *program = <font color="#9933CC">&quot;C:\\Program Files\\Mozilla Firefox\\firefox.exe&quot;</font>;
+  <b>const</b> <b>char</b> *args[] = {<font color="#9933CC">&quot;http://www.digipen.edu/&quot;</font>,
+                        <font color="#9933CC">&quot;http://www.gamedev.net/&quot;</font>,
+                        <font color="#9933CC">&quot;http://www.opera.com/&quot;</font>, 
+                        <font color="#9933CC">&quot;http://developers.slashdot.org/&quot;</font>,
+                        <font color="#9933CC">&quot;http://www.artima.com/index.jsp&quot;</font>,
+                        <font color="#9933CC">&quot;http://www.tomshardware.com/&quot;</font>,
+                        <font color="#9933CC">&quot;http://arstechnica.com/&quot;</font>,
+                        <font color="#9933CC">&quot;http://www.joelonsoftware.com/&quot;</font>, 
+                        NULL
+                       };
+  <b>int</b> retval;
+
+    <font color="#003399"><i>// Using a vector only (must specify path)</i></font>
+  printf(<font color="#9933CC">&quot;Before...\n&quot;</font>);
+  retval = _execv(program, args);
+  printf(<font color="#9933CC">&quot;After.\n&quot;</font>);
+
+    <font color="#003399"><i>// We only reach this if the call to _exec fails</i></font>
+  printf(<font color="#9933CC">&quot;Return value is: %i\n&quot;</font>, retval);
+  
+  <b>return</b> 0;
+}
+</code></pre>
+-->
+
+The <tt><b>spawn</b></tt> family of functions is similar to the <tt><b>exec</b></tt> family of functions, but has 
+slightly different capabilities. These are available on Windows and may not be present with other systems.
+
+<ul>
+<li><b>L</b>ist versions: (vararg)
+<blockquote><pre>
+_spawnl    _spawnle    _spawnlp    _spawnlpe
+</pre></blockquote>
+<li><b>V</b>ector versions: (array)
+<blockquote><pre>
+_spawnv    _spawnve    _spawnvp    _spawnvpe
+</pre></blockquote>
+</ul>
+
+The behavior of these functions depends on the value of the <tt>mode</tt> parameter and can be one of these:
+<ul>
+<li><tt>_P_OVERLAY</tt> - The parent process ends when the child begins. (Similar to <tt><b>exec</b></tt>)
+<li><tt>_P_WAIT</tt> - The parent waits (blocks) until the child process completes. (Similar to <tt><b>system</b></tt>)
+<li><tt>_P_NOWAIT</tt> - The parent continues running while the child process executes. (asynchronous)
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+Notes
+<ul>
+<li>With <b>system</b>, the calling program is suspended until the called program terminates.
+<li>With <b>exec</b>, the calling program is replaced by the called program.
+  <ul>
+    <li>Newer version of Microsoft's compiler may require you to use a leading underscore, e.g.: <tt>_execl</tt></li>
+  </ul>
+<li>In Windows, for more control over the environment you wish to share with the called program,
+look at the <b>exec</b> family of functions in <a href="http://msdn.microsoft.com/en-us/library/d6dtz42k(vs.71).aspx">Process and Environment Control</a> from MSDN.
+<li>For better control using Windows-only functions, look at the <a href="http://msdn.microsoft.com/en-us/library/ms682425(v=vs.85).aspx">CreateProcess</a> API function.
+</ul>
+
+
+<p>
+<!--
+
+<p>
+<h3>Additional source code shown in class</h3>
+<p>
+<a href="exec.c">exec code</a> (Also command line, environment, atexit, system, spawn)
+<p>
+<a href="popen.c">popen code</a>
+<p>
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

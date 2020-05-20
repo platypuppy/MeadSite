@@ -1,0 +1,311 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS170 - Programming Assignment #5</title>
+</head>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<bodyxx bgcolor="#FFFFFF" background="../../../../../images/notebook.jpg"  leftmargin="50" rightmargin="0">
+
+<center>
+<h1>CS 170 - Programming Assignment #5</h1>
+</center>
+
+<p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<!--
+<table border=0>
+<tr><td><img src="../../../../../images/annew3.gif" width="90" height="45"></td>
+<td>
+<p class="technote">
+</p>
+</td>
+</tr></table> 
+-->
+
+<ul>
+<li><a href="cs170-programming-assignment-list-template.pdf">Handout</a>
+  Notice the new behavior in bullet point #6. This is a slight change from the 
+  non-template version.
+<!--<li><a href="Doxyfile">Doxyfile</a> for this assignment. You must use this as the starting point and you must add to it. (Project name, files, path to the HTML help compiler, etc.)-->
+<li>Interface: <a href="List.h.html">HTML</a> <a href="List.h">Text</a> Notice the <b><tt>#include</tt></b>
+  directive at the bottom of the file. Do you understand why it's there?</li>
+<li>Partial implementation: <a href="List.cpp.html">HTML</a> <a href="List.cpp">Text</a> (Be sure to 
+  Doxygenize <b>all</b> of the function header comments properly, even functions that are provided for you.)
+<li>Sample driver #1 (using integers): <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a> <a href="output-sample.txt">output-1.txt</a>
+<li>Sample driver #2 (using structs): <a href="driver-sample-person.cpp.html">HTML</a> <a href="driver-sample-person.cpp">Text</a> <a href="output-sample-person.txt">output-2.txt</a>
+<li><a href="CS170-FAQ-List-template.html">FAQ</a> for this assignment
+
+
+<li>Sample command lines for compiling:
+  <p>
+g++:  
+<blockquote><pre>
+<b>g++</b> -o gnu driver-sample.cpp -O2 -Wall -Wextra -ansi -pedantic -Wconversion
+</pre></blockquote>
+
+<!--
+Microsoft: (Optional)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /D_CRT_SECURE_NO_WARNINGS /Fems.exe driver-sample.cpp
+</pre></blockquote>
+-->
+
+<!--<b>clang++</b> -o clan driver-sample.cpp -O2 -Wall -Wextra -ansi -pedantic -Wconversion-->
+
+<p class="technote">
+Notice that the command lines above DO NOT include <tt>List.cpp</tt>. This is not a mistake.
+Including <tt>List.cpp</tt> on the command line will lead to problems and may produce 
+very strange error messages. Therefore, <b>DO NOT</b> put <tt>List.cpp</tt> on the
+command line.
+</p>
+
+<li>Additional stress test cases: 
+  <!--(Output from GNU g++ done on a computer in Edison, replace the <tt><b>-O</b></tt> switch with <tt><b>-O2</b></tt>)-->
+
+<p>
+<ul>
+  <li>Driver: <a href="driver-stress.cpp.html">HTML</a> <a href="driver-stress.cpp">Text</a>
+    
+  <li>Output: <!--(combined: maya 3.3s, olga 5.6s)-->
+    <ol>
+    <li><a href="output-stress1.txt">Individual tests</a> 
+    <li><a href="output-stress2.txt">Combined</a> 
+<!--
+      for reference (the times can fluctuate, so this is an average of 10 runs) <tt>GNU: 4.14, Microsoft: 4.25, Borland: 3.80</tt>
+    -->
+    <p>
+  </ol>
+<li>Random number generator files (we've used them in previous assignments)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+  </ul>
+
+
+  <br>
+  You can select the test to run by putting the number on the command line. For example, assuming your executable is named
+  <b>foo.exe</b>, to run test #3 you would do this:
+
+<blockquote><pre>
+foo.exe 3
+</pre></blockquote>
+If you want to time your program, use the <b>time</b> program (from Cygwin):
+
+<blockquote><pre>
+c:\cygwin\bin\time -p foo.exe 3
+</pre></blockquote>
+
+To run all of the tests, pass the number <tt><b>0</b></tt> or just leave it blank:
+<blockquote><pre>
+c:\cygwin\bin\time -p foo.exe
+</pre></blockquote>
+
+You need to provide the entire path to the <b>time</b> program because there is a built-in time command in Windows
+(which isn't useful for this).
+<p>
+Linux and Mac OS users just have to type this:
+<blockquote><pre>
+time ./foo
+</pre></blockquote>
+
+
+
+</ul>
+  
+</ul>
+</ul>
+
+<p class="SectionHeader">
+typename Usage
+<p>
+<ul>
+<li>Note that this implementation of the <i>new_node</i> method won't compile:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+List&lt;T&gt;::Node *List&lt;T&gt;::new_node(<b>const</b> T&amp; data) <b>const</b>
+{
+  Node *node = <b>new</b> Node(data); <font color="#003399"><i>// create the node</i></font>
+  node-&gt;next = 0;              <font color="#003399"><i>// no next pointer yet</i></font>
+  <b>return</b> node;
+} 
+</pre></blockquote>
+
+The error message from g++ is this:
+
+<blockquote><pre>
+List.cpp:407:1: error: need 'typename' before 'CS170::List<T>::Node' because 'CS170::List<T>' is a dependent scope
+ List<T>::Node *List<T>::new_node(const T& data) const
+ ^
+</pre></blockquote>
+   
+<p>
+
+<!--
+Error from clang++:
+<blockquote><pre>
+<font color="red"><b>error</b></font>: missing 'typename' prior to dependent type name 'List<T>::Node'
+List<T>::Node *List<T>::new_node(const T& data) const
+<font color="green"><b>^~~~~~~~~~~~~</b></font>
+<font color="green">typename</font>
+1 error generated.
+</pre></blockquote>
+-->
+
+<!--
+Microsoft's compiler says this:
+warning C4346: 'CS170::List<T>::Node' : dependent name is not a type: prefix with 'typename' to indicate a type
+error C2143: syntax error : missing ';' before '*'
+error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+error C2888: 'List<T>::Node Node' : symbol cannot be defined within namespace 'CS170'
+fatal error C1903: unable to recover from previous error(s); stopping compilation
+-->
+
+<!--Unfortunately, Borland's compiler says nothing.-->
+<p>
+Corrected:
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b><font color="blue">typename</font></b> List&lt;T&gt;::Node *List&lt;T&gt;::new_node(<b>const</b> T&amp; data) <b>const</b>
+{
+  Node *node = <b>new</b> Node(data); <font color="#003399"><i>// create the node</i></font>
+  node-&gt;next = 0;              <font color="#003399"><i>// no next pointer yet</i></font>
+  <b>return</b> node;
+} 
+</pre></blockquote>
+
+Also notice the use of the <tt><b>typename</b></tt> keyword in the overloaded
+<tt><b>operator&lt;&lt;</b></tt> method in the 
+<a <a href="List.cpp.html">implementation file</a>.
+
+
+<p>
+<hr width="90%">
+<p>
+<b>More details</b>
+<p>
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> f1(<b>const</b> T&amp; a)
+{
+  <b>int</b> b;
+  T::foo * b;    <font color="#003399"><i>// What is the meaning of this?</i></font>
+  T::bar * ptr;  <font color="#003399"><i>// What is the meaning of this?</i></font>
+}
+</pre></blockquote>
+
+The error message:
+
+<blockquote><pre>
+In function `void f1(const T&)':
+error: 'ptr' was not declared in this scope
+</pre></blockquote>
+
+Let's look at the class:
+
+<blockquote><pre>
+<b>class</b> X 
+{
+  <b>public</b>:
+    <b>static</b> <b>const</b> <b>int</b> foo = 10;
+    <b>typedef</b> <b>int</b> bar;
+};
+</pre></blockquote>
+
+The problem is more noticeable if we actually instantiate the class and call the function:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  X a;
+  f1(a);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+This gives us these errors:
+
+<blockquote><pre>
+main.cpp: In function `void f1(const T&)':
+main.cpp:13: error: `ptr' undeclared (first use this function)
+main.cpp:13: error: (Each undeclared identifier is reported only once for each function it appears in.)
+main.cpp: In function `void f1(const T&) [with T = X]':
+main.cpp:19:   instantiated from here
+main.cpp:12: warning: statement has no effect
+main.cpp:13: error: dependent-name ` T::bar' is parsed as a non-type, but instantiation yields a type
+main.cpp:13: note: say `typename  T::bar' if a type is meant
+main.cpp: At global scope:
+main.cpp:10: warning: unused parameter 'a'
+</pre></blockquote>
+
+The whole program:
+
+<blockquote><pre>
+ 1.  <b>class</b> X 
+ 2. {
+ 3.   <b>public</b>:
+ 4.     <b>static</b> <b>const</b> <b>int</b> foo = 10;
+ 5.     <b>typedef</b> <b>int</b> bar;
+ 6. };
+ 7. 
+ 8. <b>template</b> &lt;<b>typename</b> T&gt;
+ 9. <b>void</b> f1(<b>const</b> T&amp; a)
+10. {
+11.   <b>int</b> b;
+12.   T::foo * b;    <font color="#003399"><i>// What is the meaning of this?</i></font>
+13.   T::bar * ptr;  <font color="#003399"><i>// What is the meaning of this?</i></font>
+14. }
+15. 
+16. <b>int</b> main(<b>void</b>)
+17. {
+18.   X a;   <font color="#003399"><i>// instantiate an X object</i></font>
+19.   f1(a); <font color="#003399"><i>// call f1 with [T = X]</i></font>
+20. 
+21.   <b>return</b> 0;
+22. }
+</pre></blockquote>
+
+
+
+Corrected:
+<p>
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> f1(<b>const</b> T&amp; a)
+{
+  <b>int</b> b;
+  T::foo * b;            <font color="#003399"><i>// Implicit assumption: foo is non-type (value)</i></font>
+                         <font color="#003399"><i>//   (multiplication expression)</i></font>  
+  <b>typename</b> T::bar * ptr; <font color="#003399"><i>// Explicit: bar is a type</i></font>
+                         <font color="#003399"><i>//   (pointer declaration)</i></font>  
+}
+</pre></blockquote>
+
+Stroustrup's <i>The C++ Programming Language (Special Edition)</i> discusses this in Appendix C.13.5. 
+<br><br><br><br>
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

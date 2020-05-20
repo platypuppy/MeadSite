@@ -1,0 +1,98 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>wcritical2.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/* wcritical2.c */</i></font>
+<b>#include</b> &lt;windows.h&gt;
+<b>#include</b> &lt;stdio.h&gt;
+
+<b>unsigned</b> <b>int</b> Count;
+
+<b>struct</b> ThreadParams
+{
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682530(v=vs.85).aspx">CRITICAL_SECTION</a> *critical_section;
+  <b>int</b> tid;
+};
+
+DWORD WINAPI ThreadFn(LPVOID p)
+{
+  <b>int</b> i;
+  <b>struct</b> ThreadParams *params = (<b>struct</b> ThreadParams *)p;
+  CRITICAL_SECTION *critical_section = params-&gt;critical_section;
+
+  <b>for</b> (i = 0; i &lt; 1000 * 1000; i++)
+  {
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682608(v=vs.85).aspx">EnterCriticalSection</a>(critical_section);
+      Count++;
+    <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms684169(v=vs.85).aspx">LeaveCriticalSection</a>(critical_section);
+  }
+  
+  <b>return</b> <b>TRUE</b>;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>int</b> i;
+  HANDLE *threads;
+  <b>struct</b> ThreadParams* params;  
+  DWORD ThreadID;
+  CRITICAL_SECTION critical_section;
+  <b>int</b> num_threads = 12;
+
+    <font color="#003399"><i>/* The user can specify the number of threads */</i></font>  
+  <b>if</b> (argc &gt; 1)
+    num_threads = atoi(argv[1]);
+
+    <font color="#003399"><i>/* Allocate memory for threads and parameters */</i></font>    
+  threads = malloc(num_threads * <b>sizeof</b>(HANDLE));
+  params = malloc(num_threads * <b>sizeof</b>(<b>struct</b> ThreadParams));
+  
+    <font color="#003399"><i>/* Setup critical section */</i></font>  
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms683472(v=vs.85).aspx">InitializeCriticalSection</a>(&amp;critical_section);
+
+    <font color="#003399"><i>/* Create the threads */</i></font>
+  <b>for</b>(i = 0; i &lt; num_threads; i++)
+  {
+    params[i].critical_section = &amp;critical_section;
+    params[i].tid = i;
+    
+    threads[i] = CreateThread(NULL, 0, ThreadFn, &amp;params[i], 0, &amp;ThreadID); 
+    <b>if</b>(threads[i] == NULL)
+    {
+      printf(<font color="#9933CC">&quot;Error creating thread: %d\n&quot;</font>, GetLastError());
+      <b>return</b> -1;
+    }
+  }
+
+    <font color="#003399"><i>/* Wait for each thread */</i></font>
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms687025(v=vs.85).aspx">WaitForMultipleObjects</a>(num_threads, threads, <b>TRUE</b>, INFINITE);
+  
+    <font color="#003399"><i>/* Release thread handles */</i></font>
+  <b>for</b>(i = 0; i &lt; num_threads; i++)
+    CloseHandle(threads[i]);
+
+    <font color="#003399"><i>/* Release critical section */</i></font>
+  <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682552(v=vs.85).aspx">DeleteCriticalSection</a>(&amp;critical_section);
+  
+  printf(<font color="#9933CC">&quot;Value of Count is %u\n&quot;</font>, Count);
+  
+    <font color="#003399"><i>/* Clean up memory */</i></font>
+  free(threads);
+  free(params);
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,261 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #5</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 5</h1>
+Adding right-mouse events, drag and drop, and a dialog box to the editor
+<br>
+(WM_DROPFILES, OnMouseDown, Multiple forms)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #5
+</p>
+
+This session, I added some features to the editor that enhance the user interface. The two
+big ones are 1) using the right mouse button to paint in the empty (background) color and 2) to open
+a data file by allowing the user to drag and drop from Windows Explorer. I also show how to 
+add another form (an About box in the Help menu, and a configuration form in the Edit menu) to the application. 
+
+<p>
+
+
+<p>
+<blockquote>
+</blockquote>
+<p>
+
+<ol>
+<li>
+<b>Painting with the right mouse button.</b> There are really only two small places in the code that needed to be added/modified
+to support this. The first one is the addition of an OnMouseDown event handler. The second is a slight modification
+to the OnMouseMove event handler. You can compare last session's code to this one to see the changes. 
+(Use WinMerge or something similar for a good view of the differences.)
+Look at the online help to
+see what information is stored in the <i>TMouseButton</i> and <i>TShiftState</i> parameters. As you might suspect, they contain
+information about which mouse button was pressed and which control keys (alt, ctrl, shift) are being pressed
+so you can perform different functions with Ctrl+Left-Click, Shift-Right-Click, Ctrl+Shift-Left-Click, etc.
+Any combination you want to use is available.
+
+<pre class="sourcecode"><code><font color="#003399"><i>/*
+  Handler for the OnMouseDown event. The Shift parameter contains
+  additional information such as the state of the control/alt/shift keys.
+*/</i></font>
+<b>void</b> <b>__fastcall</b> TfrmMain::gridWorldMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, <b>int</b> X, <b>int</b> Y)
+{
+    <font color="#003399"><i>// If the right mouse button is pressed down</i></font>
+  <b>if</b> (Button == mbRight)
+  {
+      <font color="#003399"><i>// Convert the x/y pixel location to a row and column in the grid</i></font>
+    TGridCoord coord = gridWorld-&gt;MouseCoord(X, Y);
+
+      <font color="#003399"><i>// Update current row/column</i></font>
+    FCurrRow = coord.Y;
+    FCurrColumn = coord.X;
+
+      <font color="#003399"><i>// Set this cell as empty (background color)</i></font>
+    FDataMap[FCurrRow][FCurrColumn] = ctEMPTY;
+
+      <font color="#003399"><i>// Paint the cell</i></font>
+    HighlightCell(<b>true</b>);
+  }
+}
+</code></pre>
+
+Technically, adding this feature is trivial, but it enhances the user interface significantly. In fact, as I was "cobbling" this tile editor 
+together and testing it, I kept wishing that I didn't have to keep switching between the Obstacle color and the Empty color. I thought it
+would have been so much more efficient to just toggle between the two colors by using the two mouse buttons. That is a very intuitive action
+and many paint programs do something similar. Many times, you'll find that it's the little things like this that distinguish between very good, usable programs,
+and programs that won't get used. <i>It's all about the interface.</i> And the more the interface stays out of the user's way, the better.
+Remember: <i>Think about the user's work flow.</i>
+
+<p>
+<li>
+<b>Supporting drag and drop from Windows Explorer.</b> This is another user interface enhancement that is easy to implement, yet
+enhances the program's usability tremendously. Honestly, I can't stand working with any kind of application that doesn't allow
+dropping files onto it, assuming that it makes sense to do so. (And this comes from a guy that was born and raised on the command line!) 
+Handling files that are dropped onto the main window is straight-forward. After setting up some message-handling code, 
+you simply need to implement the functionality you want to achieve. In this case, when a data file 
+(CS230 collision text file, <tt>Exported.txt</tt> by default) 
+is
+dropped onto the window, we want to load it into the editor. The behavior is exactly the same as if the user browsed
+for the file with the File Open dialog and selected a file from there. Drag and drop is much more natural (eventually!)
+than navigating the file system. These are the steps to remember:
+
+<ol>
+<li>In the header file, add a declaration for a method that will handle the <tt>WM_DROPFILES</tt> message from Windows. You can
+	put it in the private section. We will implement this in the .cpp file. Information about the WM_DROPFILES message can
+	be seen <a href="http://msdn.microsoft.com/en-us/library/bb774303(VS.85).aspx">here</a>. (Keep in mind that Microsoft is notorious
+	for moving pages on their website, so if the link is broken, you might have to search for it.)
+<blockquote><pre>
+<b>void __fastcall</b> WMDropFiles(TWMDropFiles &Message);
+</pre></blockquote>
+
+<li>In the header file, add a MESSAGE_MAP to the form's class (private or public). This is boiler-plate macro-magic code for Windows. Some IDEs will
+	actually generate and maintain this message map for you.
+<blockquote><pre>
+BEGIN_MESSAGE_MAP
+MESSAGE_HANDLER(WM_DROPFILES, TWMDropFiles, WMDropFiles)
+END_MESSAGE_MAP(TForm)
+</pre></blockquote>
+
+<li>In the implementation file, register the application with Windows as being a potential drop-target. 
+	Put this in the form's <i>OnCreate</i> method:
+<blockquote><pre>
+  <font color="#003399"><i>// Register this window with the OS as a drop target.</i></font>
+DragAcceptFiles(<b>this</b>-&gt;Handle, <b>true</b>);
+</pre></blockquote>
+
+<li><b>(Optionally)</b> In the implementation file, unregister the application with Windows as being a potential drop-target. 
+	Put this in the form's <i>OnDestroy</i> method:
+<blockquote><pre>
+  <font color="#003399"><i>// Unregister this window with the OS as a drop target.</i></font>
+DragAcceptFiles(<b>this</b>-&gt;Handle, <b>false</b>);
+</pre></blockquote>
+	
+<li>Now, add the desired functionality by implementing the event handler in the implementation file:
+	
+<pre class="sourcecode"><code><font color="#003399"><i>/*
+  Handler for the WM_DROPFILES message from Windows.
+*/</i></font>
+<b>void</b> <b>__fastcall</b> TfrmMain::WMDropFiles(TWMDropFiles &amp;Message)
+{
+  <b>int</b> num_files, filename_length;
+  <b>char</b> file_name[MAX_PATH + 1];
+
+    <font color="#003399"><i>// Refer to the Win SDK documentation about the details</i></font>
+    <font color="#003399"><i>// of DragQueryFile and the HDROP structure</i></font>
+
+    <font color="#003399"><i>// Get the number of files that are being dropped on the window</i></font>
+  num_files = DragQueryFile((HDROP)Message.Drop, -1, NULL, 0);
+
+    <font color="#003399"><i>// Unlikely to happen</i></font>
+  <b>if</b> (num_files &lt; 1)
+    <b>return</b>;
+
+    <font color="#003399"><i>// Retrieve each filename that was dropped</i></font>
+  <b>for</b>(<b>int</b> i = 0; i &lt; num_files; i++)
+  {
+      <font color="#003399"><i>// Get the length of the i'th filename</i></font>
+    filename_length = DragQueryFile((HDROP)Message.Drop, i, NULL, 0);
+
+      <font color="#003399"><i>// Retrieve the filename from the HDROP structure</i></font>
+    DragQueryFile((HDROP)Message.Drop, i, file_name, filename_length + 1);
+
+      <font color="#003399"><i>// Reset the grid</i></font>
+    Init();
+
+      <font color="#003399"><i>// Read in the data</i></font>
+    ImportMapData(file_name);
+
+      <font color="#003399"><i>// Update the UI</i></font>
+    <b>short</b> r = FRows;
+    <b>short</b> c = FColumns;
+    spnRows-&gt;Position = r;
+    spnColumns-&gt;Position = c;
+
+      <font color="#003399"><i>// We can only deal with one at this point so bail out.</i></font>
+      <font color="#003399"><i>// If we could handle multiple files, we would loop through all of them.</i></font>
+    <b>return</b>;
+  }
+}
+</code></pre>	
+
+</ol>
+
+<li>
+<b>Adding a second form to the application.</b> It is pretty easy to add additional forms to the 
+program. In the first example, I simply added a pre-built "About dialog" that will be used to 
+hold information about the program. 
+
+<ol>
+<li>Choose "File | New | Other..." from the File menu. Select the item in the left pane called
+	"C++Builder Files". Select "About box" from the list on the right. (It should be the first one.)
+<li>Now, add this class' header file to the main form. You can do this "manually" or you can do it by selecting the MainForm.cpp file in the
+	IDE and from the File menu choose "Use Unit...". In the dialog box, choose "ABOUT". This process simply adds
+	the About form's header file to your .cpp file.
+<li>Finally, add the code that will display the About box.
+	
+<blockquote><pre>
+AboutBox->ShowModal();
+</pre></blockquote>
+
+You can put this code anywhere. The obvious place is to make a Help menu that has an "About..." choice.
+When the user selects it, the dialog should be displayed. (See the project for details.) Also, if you want the dialog
+box to be non-modal, call the <i>Show()</i> method instead of <i>ShowModal()</i>.
+
+</ol>
+
+<blockquote><pre>
+</pre></blockquote>
+	
+<P>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/5/peditor2/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/5/peditor2/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/5/peditor2/peditor2.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/5/peditor2/peditor2-XE3.zip">(XE 3)</a> - Includes the images to build the application. The archive includes a folder named Debug_Build
+	that contains some sample data files (Exported?.txt) and the CS230 platform game executable. You should be able to drag and drop the data
+	files onto the application.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/5/peditor2/PEditor2.exe">Executable</a> (Needs the CS230 game that's in the Project files to work properly.)
+	</ul>
+</ul>
+	
+</ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+<ol>
+<li>Add icons to the Edit and Help menu items. Use any that you see fit. (Google for free icons, or create your own.)</li>
+<li>Add shortcut keys to show the Configuration and About forms.</li>
+<li>Implement a "cleaner" About dialog. Do this by giving better names to all of the components and by filling in the information
+	in the dialog. This is an easy task, but it will give you good practice in navigating between the visual form and the code behind it.
+<li>Make the About dialog resizable. Currently, it can't be resized, which is generally how this type of dialog should work. Keep in
+	mind that you must make sure that the components also size/place themselves properly in the window as it is resized.
+<li>Add some error handling for dropping (or opening) "bad" files. Right now, I can drop a .jpg file (or any file) onto the application
+	and it does nothing.
+</ol>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

@@ -1,0 +1,222 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Multi-File Programs</title>
+</head>
+
+<body>  
+<center><h1>Larger Programs</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Multi-File Programs
+</p>
+
+
+<ul>
+<li>For the most part, only trivial programs are implemented in a single file. 
+<li>Any non-trivial program consists of multiple source files.
+<li>These could be a combination of header files (.h) and C files (.c)
+<li>Even the simplest <i>Hello, world</i> program (implemented in <tt><b>hello.c</b></tt>) is composed of multiple files:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* Required for printf */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Hello, world!\n&quot;</font>);
+
+  <b>return</b> 0;
+}</code></pre>	
+
+<li>The file <tt>stdio.h</tt> is also part of the program. (It's required for the <i>function prototype</i> of <tt>printf</tt>)
+<li>Note that we could have prototyped the <tt>printf</tt> function ourselves:
+	
+<pre class="sourcecode"><code><font color="#003399"><i>/* Function prototype */</i></font>
+<b>int</b> printf(<b>const</b> <b>char</b> *, ...);
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Hello, world!\n&quot;</font>);
+
+  <b>return</b> 0;
+}</code></pre>	
+	
+<li>However, as a rule, you should not prototype <i>standard library functions</i> (e.g. <tt>printf</tt>, <tt>scanf</tt>, <tt>sqrt</tt>, <tt>sin</tt>, <tt>cos</tt>, etc.) 
+	yourself. It is very tedious, error-prone, and unnecessary.
+</ul>
+
+<p class="SectionHeader">
+Multi-File Example
+</p>
+
+Recall this function to find the average of two numbers:
+
+<blockquote><pre>
+<b>float</b> average(<b>float</b> a, <b>float</b> b)
+{
+  <b>return</b> (a + b) / 2;
+}
+</pre></blockquote>
+
+And we want to use it in our program. This is <tt><b>main.c</b></tt>:
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> ave = average(4.0F, 5.0F);
+  
+  printf(<font color="#9933CC">&quot;The average is %.2f\n&quot;</font>, ave);
+
+  <b>return</b> 0;
+}</code></pre>
+
+Of course, this is going to cause problems:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic main.c
+</pre></blockquote>
+
+We have a warning from the compiler and an error from the linker:
+
+<blockquote><pre>
+main.c: In function 'main':
+main.c:8:15: <font color="red"><b><big>warning</big></b></font>: <b>implicit declaration of function 'average'</b> [-Wimplicit-function-declaration]
+   float ave = average(4.0F, 5.0F);
+               ^~~~~~~
+C:\Users\mmead\AppData\Local\Temp\ccyQlmin.o:main.c:(.text+0x26): <b>undefined reference to `average'</b>
+collect2.exe: <font color="red"><b><big>error</big></b></font>: ld returned 1 exit status
+</pre></blockquote>
+
+We can fix the compiler warning by simply providing a prototype (declaration) for <tt>average</tt>:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf */</i></font>
+
+<font color="#003399"><i>/* Function prototype */</i></font>
+<b>float</b> average(<b>float</b> x, <b>float</b> y);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>float</b> ave = average(4.0F, 5.0F);
+
+  printf(<font color="#9933CC">&quot;The average is %.2f\n&quot;</font>, ave);
+
+  <b>return</b> 0;
+}</code></pre>
+
+Of course, this still causes the linker to complain:
+
+<blockquote><pre>
+C:\Users\mmead\AppData\Local\Temp\ccKLV9Mi.o:main.c:(.text+0x1e): <b>undefined reference to `average'</b>
+collect2.exe: <font color="red"><b><big>error</big></b></font>: ld returned 1 exit status
+</pre></blockquote>
+
+We need to tell the linker where to find the function <tt>average</tt>. First, we need
+to compile the code that contains the function <tt>average</tt>. Assume this is in <tt><b>average.c</b></tt>
+
+<blockquote><pre>
+<b>float</b> average(<b>float</b> a, <b>float</b> b)
+{
+  <b>return</b> (a + b) / 2;
+}
+</pre></blockquote>
+
+Compiling it: (Note the <tt><b>-c</b></tt> switch which will compile the file, but not link. <b>THIS IS IMPORTANT</b>.)
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic <b>-c</b> average.c
+</pre></blockquote>
+
+Had we not used the <tt><b>-c</b></tt> switch, we would have encountered this fatal error:
+
+<blockquote><pre>
+C:/mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/7.1.0/../../../../x86_64-w64-mingw32/lib/../lib/libmingw32.a(lib64_libmingw32_a-crt0_c.o):crt0_c.c:(.text.startup+0x2e): <b>undefined reference to `WinMain'</b>
+collect2.exe: <font color="red"><b><big>error</big></b></font>: ld returned 1 exit status  
+</pre></blockquote>
+
+The linker is telling us that it can't find a function called <tt>main</tt>. This makes sense, since <tt><b>average.c</b></tt>
+doesn't contain a <tt>main</tt> function and <i>all</i> programs need a <tt>main</tt> function.
+<p>
+
+We just need to make sure that we perform all of the steps:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -c main.c -o main.o       <b>&lt;--- compile main.c to main.o</b>
+gcc -Wall -Wextra -ansi -pedantic -c average.c -o average.o <b>&lt;--- compile average.c to average.o</b>
+gcc main.o average.o -o program                             <b>&lt;--- link main.o and average.o to program (program.exe on Windows)</b>
+</pre></blockquote>
+
+And we can do this in one step: (Compile both C files and link them together to form an executable program.)
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic main.c average.c -o program
+</pre></blockquote>
+
+We can see see the files on the disk and their relative sizes:
+
+<blockquote><pre>
+9/17/2019  08:35a        62 average.c
+9/17/2019  08:56a       209 main.c	
+9/17/2019  09:15a       458 average.o
+9/17/2019  09:15a       650 main.o
+9/17/2019  09:14a     9,089 program.exe
+</pre></blockquote>
+
+</body>
+</html>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<center>
+<blockquote>	
+</blockquote>
+</center>
+<p>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

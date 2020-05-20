@@ -1,0 +1,91 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - FAQ for Assignment #5</title>
+</head>
+
+<body>  
+
+<center><H1>
+Frequently Asked Questions
+</H1>
+</center>
+
+<p>
+
+Here are some popular Questions and Answers for this lab.<BR>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<ol>
+<li><b>Question:<br>
+In the <tt>copy</tt> function, you provide two ranges, but only the first one has an end. What happens
+if the second range isn't large enough to hold all of the items? Do we have to check for that case?
+</b>
+<p>
+
+<b>Answer:</b><br>
+You are not given an end to the second range because you don't need it. If the first range is larger than
+the second range, <i>bad things will happen</i>. This is by design. Remember, this is C++ and the programmer
+is always right (and speed comes first.) Also, realize that you <b>cannot</b> check to see if the second range is large enough as you only
+are given a pointer to the start.
+<p>
+Another reason why we aren't going to worry about bad behavior is because this is how the STL is implemented,
+and you are trying to understand How Things Work<sup>&trade;</sup>.
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+Are we allowed to create a new array for any of the functions?
+</b>
+<p>
+
+<b>Answer:</b><br>
+Absolutely not. Not now, not ever. No. All of the modifications are to be made on the ranges that
+you are provided. You are not to create any arrays. <b>In fact, you are not to use the subscript
+operator <tt>[]</tt> in any code</b>. Why? Because you may not be given an array. Remember, this
+is a template function and you have no idea what data structure (e.g. iterator) will be provided.
+Plus, you don't need any subscript operators as you are not doing any indexing or random access.
+As was demonstrated in class, you don't want to require more functionality that is absolutely
+necessary.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+How many functions are we supposed to implement? Some of my functions can be overloaded or can
+be written with multiple template parameters.
+</b>
+<p>
+
+<b>Answer:</b><br>
+The driver shows you what functions need to be created. (This is sort of what's called <i>Test Driven Development</i>, where you're given the test
+cases and you need to make them all work.)
+As you said, if you are using only one template
+parameter, <tt><b>T</b></tt>, then some functions may need to be overloaded. 
+If you use two template 
+parameters, <tt><b>T1</b></tt> and <tt><b>T2</b></tt>, then you may not need overloaded functions. 
+
+</ol>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+</body>
+</html>

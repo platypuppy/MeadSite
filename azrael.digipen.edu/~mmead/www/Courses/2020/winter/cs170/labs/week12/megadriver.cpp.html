@@ -1,0 +1,1013 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>megadriver.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+<font color="990099">#include &lt;ctime&gt;    // time_t, clock</font>
+<font color="990099">#include &quot;Vector.h&quot; // our Vector class</font>
+<font color="990099">#include &quot;PRNG.h&quot;   // our random number generator</font>
+
+<font color="990099">#define SHOW_COMPARES</font>
+<font color="990099">#define SHOW_TIMESx</font>
+
+<font color="#003399"><i>// generate random numbers between low and high </i></font>
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number = CS170::Utils::Random(low, high); 
+  <b>return</b> number;
+}
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>int</b> size)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    <b>int</b> r = CS170::Utils::Random(0, 2 &lt;&lt; 29) % size;
+    <b>int</b> t = array[i];
+    array[i] = array[r];
+    array[r] = t;
+  }
+}  
+
+<b>void</b> Print(<b>const</b> CS170::Vector&amp; array, <b>bool</b> newline = <b>true</b>)
+{
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; array.size(); i++)
+  {
+    std::cout &lt;&lt; array[i] &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;(size=&quot;</font> &lt;&lt; array.size() &lt;&lt; <font color="#9933CC">&quot;, capacity=&quot;</font> &lt;&lt; 
+                           array.capacity() &lt;&lt; <font color="#9933CC">&quot;, allocs=&quot;</font> &lt;&lt; 
+                           array.allocations() &lt;&lt; <font color="#9933CC">&quot;)&quot;</font>;
+  <b>if</b> (newline)
+    std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> PrintPartial(<b>const</b> CS170::Vector&amp; array, <b>bool</b> newline = <b>true</b>)
+{
+  <b>for</b> (<b>unsigned</b> i = 1; i &lt; array.size(); i *= 2)
+  {
+    std::cout &lt;&lt; array[i - 1] &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;(size=&quot;</font> &lt;&lt; array.size() &lt;&lt; <font color="#9933CC">&quot;, capacity=&quot;</font> &lt;&lt; 
+                           array.capacity() &lt;&lt; <font color="#9933CC">&quot;, allocs=&quot;</font> &lt;&lt; 
+                           array.allocations() &lt;&lt; <font color="#9933CC">&quot;)&quot;</font>;
+  <b>if</b> (newline)
+    std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPush()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestPush **********&#92;n&quot;</font>;
+  CS170::Vector a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_front(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop_back until empty:&#92;n&quot;</font>;
+  <b>while</b> (!a.empty())
+  {
+    a.pop_front();
+    Print(a);
+  }
+}
+
+<b>void</b> TestPop()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestPop **********&#92;n&quot;</font>;
+  CS170::Vector a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_front(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop_back/pop_front:&#92;n&quot;</font>;
+  a.pop_back();
+  a.pop_front();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop_back/front until empty:&#92;n&quot;</font>;
+  <b>while</b> (!a.empty())
+  {
+    a.pop_front();
+    a.pop_back();
+    Print(a);
+  }
+}
+
+<b>void</b> TestRemove()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestRemove **********&#92;n&quot;</font>;
+  CS170::Vector a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove(0), remove(3):&#92;n&quot;</font>;
+  a.remove(0);
+  a.remove(3);
+  Print(a);
+}
+
+<b>void</b> TestInsert1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestInsert **********&#92;n&quot;</font>;
+  CS170::Vector a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;insert(99, 3):&#92;n&quot;</font>;
+  a.insert(99, 3);
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;insert(98, 0):&#92;n&quot;</font>;
+  a.insert(98, 0);
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;insert(97, 6):&#92;n&quot;</font>;
+  a.insert(97, 6);
+  Print(a);
+}
+
+<b>void</b> TestSubscripts()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSubscripts **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 even integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(2 * i);
+
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;multiple each value by 3:&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; 10; i++)
+    a[i] = a[i] * 3;
+  Print(a);
+}
+
+<b>void</b> TestArray()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestArray **********&#92;n&quot;</font>;
+  <b>int</b> ia[] = {2, 4, 6, 6, 8, 10, 6, 12, -6, 14, 16, 6, 6};
+  <b>unsigned</b> size = <b>static_cast</b>&lt;<b>unsigned</b>&gt;(<b>sizeof</b>(ia)/<b>sizeof</b>(*ia));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Construct from int array:&#92;n&quot;</font>;
+  CS170::Vector a(ia, size);
+  Print(a);
+}
+
+<b>void</b> TestSubscript1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSubscript1 **********&#92;n&quot;</font>;
+  <b>int</b> ia[] = {2, 4, 6, 6, 8, 10, 6, 12, -6, 14, 16, 6, 6};
+  <b>unsigned</b> size = <b>static_cast</b>&lt;<b>unsigned</b>&gt;(<b>sizeof</b>(ia)/<b>sizeof</b>(*ia));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Construct from int array:&#92;n&quot;</font>;
+  <b>const</b> CS170::Vector a(ia, size);
+  Print(a);
+
+  <b>unsigned</b> index = a.size() / 2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;using subscript: a[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;] = &quot;</font> &lt;&lt; a[index] &lt;&lt; std::endl;
+}
+
+<b>void</b> TestALot1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestALot1 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 even integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(2 * i);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear:&#92;n&quot;</font>;
+  a.clear();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 odd integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(2 * i + 1);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;empty/fill with 10 ints 3 times:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 3; i++)
+  {
+    <b>while</b> (!a.empty())
+      a.pop_back();
+
+    <b>for</b> (<b>int</b> j = 0; j &lt; 10; j++)
+      a.push_back(j);
+  }
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove all but 3 integers:&#92;n&quot;</font>;
+  <b>while</b> (a.size() &gt; 3)
+    a.pop_back();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 more integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(i);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear:&#92;n&quot;</font>;
+  a.clear();
+  Print(a);
+}
+
+<b>void</b> TestCopy()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestCopy **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 even integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(2 * i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Copy: b(a), print a,b&#92;n&quot;</font>;
+  CS170::Vector b(a);
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Copy: c(b), print b,c&#92;n&quot;</font>;
+  <b>const</b> CS170::Vector c(b);
+  Print(b);
+  Print(c);
+}
+
+<b>void</b> TestAssign()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAssign **********&#92;n&quot;</font>;
+  CS170::Vector a, b;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+  {
+    a.push_back(2 * i);
+    b.push_back(i);
+  }
+
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Assign: b = a, print a,b&#92;n&quot;</font>;
+  b = a;
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Assign: a = a, print a&#92;n&quot;</font>;
+  a = a;
+  Print(a);
+}
+
+<b>void</b> TestAdd1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAdd1 **********&#92;n&quot;</font>;
+  CS170::Vector a, b;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    b.push_front(10 * i);
+    Print(b);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;c = a + b:&#92;n&quot;</font>;
+  CS170::Vector c;
+  c = a + b;
+
+  Print(a);
+  Print(b);
+  Print(c);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear a,b print c&#92;n&quot;</font>;
+  a.clear();
+  b.clear();
+  Print(c);
+}
+
+<b>void</b> TestAdd2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAdd2 **********&#92;n&quot;</font>;
+  CS170::Vector a, b;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(i);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    b.push_front(10 * i);
+    Print(b);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a += b:&#92;n&quot;</font>;
+  a += b;
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear b print a&#92;n&quot;</font>;
+  b.clear();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a += a:&#92;n&quot;</font>;
+  a += a;
+  Print(a);
+}
+
+<b>void</b> TestSelectionSort1()
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSelectionSort1 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 random integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(RandomInt(1, 20));
+
+  Print(a);
+  CS170::Vector::SortResult results = a.selection_sort();
+
+<font color="990099">#ifdef SHOW_COMPARES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+<font color="990099">#else</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted:&#92;n&quot;</font> &lt;&lt; results.compares;
+<font color="990099">#endif</font>
+  Print(a);
+}
+
+<b>void</b> TestSelectionSort2()
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSelectionSort2 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back &quot;</font> &lt;&lt; count &lt;&lt; <font color="#9933CC">&quot; integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(i);
+
+  Print(a);
+  CS170::Vector::SortResult results = a.selection_sort();
+<font color="990099">#ifdef SHOW_COMPARES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+<font color="990099">#else</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted:&#92;n&quot;</font> &lt;&lt; results.compares;
+<font color="990099">#endif</font>
+  Print(a);
+
+  a.clear();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back &quot;</font> &lt;&lt; count &lt;&lt; <font color="#9933CC">&quot; integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = count; i &gt; 0; i--)
+    a.push_back(i);
+
+  Print(a);
+  results = a.selection_sort();
+<font color="990099">#ifdef SHOW_COMPARES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+<font color="990099">#else</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted:&#92;n&quot;</font> &lt;&lt; results.compares;
+<font color="990099">#endif</font>
+  Print(a);
+
+  a.clear();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back &quot;</font> &lt;&lt; count &lt;&lt; <font color="#9933CC">&quot; integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = count; i &gt; 0; i--)
+    a.push_back(5);
+
+  Print(a);
+  results = a.selection_sort();
+<font color="990099">#ifdef SHOW_COMPARES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+<font color="990099">#else</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted:&#92;n&quot;</font> &lt;&lt; results.compares;
+<font color="990099">#endif</font>
+  Print(a);
+}
+
+<b>void</b> TestSelectionSortStress()
+{
+  <b>int</b> count = 10000;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSelectionSortStress **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::srand(6);
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(RandomInt(1, count));
+
+  CS170::Vector::SortResult results = a.selection_sort();
+
+<font color="990099">#ifdef SHOW_COMPARES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+<font color="990099">#else</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted:&#92;n&quot;</font> &lt;&lt; results.compares;
+<font color="990099">#endif</font>
+  <b>for</b> (<b>unsigned</b> i = 1; i &lt; <b>static_cast</b>&lt;<b>unsigned</b>&gt;(count); i *= 2)
+    std::cout &lt;&lt; a[i] &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+  <font color="#003399"><i>//Print(a);</i></font>
+}
+
+<b>void</b> TestBSearch1()
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestBSearch1 **********&#92;n&quot;</font>;
+  CS170::Vector a, b;
+
+  std::srand(6);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 random integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; <b>static_cast</b>&lt;<b>unsigned</b>&gt;(count); i++)
+  {
+    a.push_back(RandomInt(1000, 9999));
+    b.push_back(a[i]);
+  }
+
+  Print(a);
+  a.selection_sort();
+  Print(a);
+
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; a.size(); i++)
+  {
+    <b>int</b> index = a.bsearch(b[i]);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Index of &quot;</font> &lt;&lt; b[i] &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; index &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestBSearchStress()
+{
+  <b>int</b> count = 10000;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestBSearchStress **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  <b>int</b> *ia = <b>new</b> <b>int</b>[count];
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Generating...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    ia[i] = i;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shuffling...&#92;n&quot;</font>;
+  Shuffle(ia, count);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(ia[i]);
+
+  <font color="#003399"><i>//Print(a);</i></font>
+  a.selection_sort();
+  <font color="#003399"><i>//Print(a);</i></font>
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Searching...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 100; i++)
+  {
+    <b>for</b> (<b>int</b> j = 0; j &lt; count; j++)
+    {
+      a.bsearch(ia[i]);
+      <font color="#003399"><i>//std::cout &lt;&lt; &quot;Index of &quot; &lt;&lt; ia[i] &lt;&lt; &quot; is &quot; &lt;&lt; index &lt;&lt; std::endl;</i></font>
+    }
+  }
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; (<b>static_cast</b>&lt;<b>double</b>&gt;(end - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+  <b>delete</b> [] ia;
+}
+
+<b>void</b> TestReverse1()
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestReverse1 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(i + 1);
+
+  Print(a);
+  a.reverse();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Remove last element:&#92;n&quot;</font>;
+  a.pop_back();
+  Print(a);
+  a.reverse();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+  Print(a);
+}
+
+<b>void</b> TestReverse2()
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestReverse2 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(i + 1);
+
+  Print(a);
+  a.reverse();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+  Print(a);
+
+  <b>while</b> (!a.empty())
+  {
+    <b>if</b> (a.size() % 2) <font color="#003399"><i>// odd</i></font>
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Remove last element:&#92;n&quot;</font>;
+      a.pop_back();
+    }
+    <b>else</b> <font color="#003399"><i>// even</i></font>
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Remove first element:&#92;n&quot;</font>;
+      a.pop_front();
+    }
+    Print(a);
+    a.reverse();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+    Print(a);
+  }
+}
+
+<b>void</b> TestSwap1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSwap1 **********&#92;n&quot;</font>;
+  CS170::Vector a, b, c;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(i + 1);
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+    b.push_back(10 * (i + 1));
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;swapv a,b:&#92;n&quot;</font>;
+  a.swapv(b);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;swapv a,c:&#92;n&quot;</font>;
+  a.swapv(c);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;c: &quot;</font>;
+  Print(c);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;swapv b,b:&#92;n&quot;</font>;
+  b.swapv(b);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+}
+
+<b>void</b> TestSwapStress()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSwapStress **********&#92;n&quot;</font>;
+  CS170::Vector a, b, c;
+
+  <b>int</b> count = 1000000;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    a.push_back(i);
+    b.push_back(i * 2);
+    c.push_back(i * 3);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Swapping...&#92;n&quot;</font>;
+  CS170::Vector x;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10000001; i++)
+  {
+    a.swapv(b);
+    b.swapv(c);
+    c.swapv(a);
+  }
+
+  PrintPartial(a);
+  PrintPartial(b);
+  PrintPartial(c);
+
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; (<b>static_cast</b>&lt;<b>double</b>&gt;(end - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>void</b> TestAssignStress1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAssignStress1 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  <b>int</b> count = 20000000;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Swapping...&#92;n&quot;</font>;
+  CS170::Vector x;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+  {
+    x = a;
+  }
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; (<b>static_cast</b>&lt;<b>double</b>&gt;(end - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>void</b> TestAssignStress2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAssignStress2 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  <b>int</b> count = 20000000;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Swapping...&#92;n&quot;</font>;
+  CS170::Vector x;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    x = a;
+    a.push_back(0);
+  }
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; (<b>static_cast</b>&lt;<b>double</b>&gt;(end - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>void</b> TestEqual1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestEqual1 **********&#92;n&quot;</font>;
+  CS170::Vector a, b, c;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(i + 1);
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    b.push_back(i + 1);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove last element of a:&#92;n&quot;</font>;
+  a.pop_back();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove last element of b:&#92;n&quot;</font>;
+  b.pop_back();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;change last element of b to 100:&#92;n&quot;</font>;
+  b[b.size() - 1] = 100;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a: &quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b: &quot;</font>;
+  Print(b);
+
+
+
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+}
+
+<b>int</b> Sum(<b>const</b> CS170::Vector&amp; v)
+{
+  <b>int</b> sum = 0;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; v.size(); i++)
+    sum += v[i];
+  <b>return</b> sum;
+}
+
+<b>void</b> TestCrazy()
+{
+  <b>int</b> count = 10000;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestCrazy **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::srand(6);
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(i + 1);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sum before: &quot;</font> &lt;&lt; Sum(a) &lt;&lt; std::endl;
+  <font color="#003399"><i>//Print(a);</i></font>
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; a.size(); i++)
+  {
+    <b>int</b> from = RandomInt(0, <b>static_cast</b>&lt;<b>int</b>&gt;(a.size()) - 1);
+    <b>int</b> value = a[<b>static_cast</b>&lt;<b>unsigned</b>&gt;(from)];
+    a.remove(value);
+    <b>int</b> to = RandomInt(0, <b>static_cast</b>&lt;<b>int</b>&gt;(a.size()) - 1);
+    a.insert(value, <b>static_cast</b>&lt;<b>unsigned</b>&gt;(to));
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot; Sum after: &quot;</font> &lt;&lt; Sum(a) &lt;&lt; std::endl;
+  <font color="#003399"><i>//Print(a);</i></font>
+  <b>for</b> (<b>unsigned</b> i = 1; i &lt; a.size(); i *= 2)
+    std::cout &lt;&lt; a[i] &lt;&lt; <font color="#9933CC">&quot; &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestSubscriptEx()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSubscriptEx **********&#92;n&quot;</font>;
+  <b>int</b> ia[] = {2, 4, 6, 6, 8, 10, 6, 12, -6, 14, 16, 6, 6};
+  <b>unsigned</b> size = <b>static_cast</b>&lt;<b>unsigned</b>&gt;(<b>sizeof</b>(ia)/<b>sizeof</b>(*ia));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Construct from int array:&#92;n&quot;</font>;
+
+  <b>const</b> CS170::Vector a(ia, size); <font color="#003399"><i>// const</i></font>
+  CS170::Vector b(ia, size);       <font color="#003399"><i>// non-const</i></font>
+  Print(a);
+  Print(b);
+
+  <b>try</b>
+  {
+    <b>unsigned</b> index = a.size() * 2; <font color="#003399"><i>// illegal</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;accessing subscript on const vector: a[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; a[index] &lt;&lt; std::endl;
+  }
+  <b>catch</b>(<b>const</b> CS170::SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+
+  <b>try</b>
+  {
+    <b>unsigned</b> index = b.size() * 2; <font color="#003399"><i>// illegal</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;accessing subscript on non-const vector: b[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; b[index] &lt;&lt; std::endl;
+  }
+  <b>catch</b>(<b>const</b> CS170::SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+
+}
+
+<b>void</b> TestInsertEx()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestInsertEx **********&#92;n&quot;</font>;
+  <b>int</b> ia[] = {2, 4, 6, 6, 8, 10, 6, 12, -6, 14, 16, 6, 6};
+  <b>unsigned</b> size = <b>static_cast</b>&lt;<b>unsigned</b>&gt;(<b>sizeof</b>(ia)/<b>sizeof</b>(*ia));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Construct from int array:&#92;n&quot;</font>;
+  CS170::Vector a(ia, size);
+  Print(a);
+
+  <b>try</b>
+  {
+    <b>unsigned</b> index = a.size() * 3; <font color="#003399"><i>// illegal</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;insert integer at index &quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;:&#92;n&quot;</font>;
+    a.insert(99, index);
+  }
+  <b>catch</b>(<b>const</b> CS170::SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestShrink1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestShrink1 **********&#92;n&quot;</font>;
+  CS170::Vector a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 8 integers:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 8; i++)
+    a.push_back(i);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop last 3:&#92;n&quot;</font>;
+  a.pop_back();
+  a.pop_back();
+  a.pop_back();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back one integer:&#92;n&quot;</font>;
+  a.push_back(100);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear:&#92;n&quot;</font>;
+  a.clear();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+}
+
+<font color="#003399"><i>//***********************************************************************</i></font>
+<font color="#003399"><i>//***********************************************************************</i></font>
+<font color="#003399"><i>//***********************************************************************</i></font>
+<b>typedef</b> <b>void</b> (*TestFn)();
+
+<b>void</b> ExecuteTest(TestFn fn, <b>int</b> maxwait = 1000, <b>int</b> safewait = 1000)
+{
+  <b>if</b> (maxwait + safewait &gt; 0)
+    fn();
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  CS170::Utils::srand(1, 0);
+
+  <b>int</b> test_num = 0;
+  <b>if</b> (argc &gt; 1)
+    test_num = std::atoi(argv[1]);
+
+  <b>struct</b> TimedTest
+  {
+    <b>const</b> <b>char</b> *fn;
+    <b>void</b> (*test)();
+    <b>int</b> maxwait;
+    <b>int</b> safewait;
+  };
+
+  <b>int</b> maxwait =  100;
+  <b>int</b> safewait = 100;
+  TimedTest Tests[] = {
+                    {<font color="#9933CC">&quot;TestPush&quot;</font>,                TestPush,                maxwait, safewait}, <font color="#003399"><i>//  1 </i></font>
+                    {<font color="#9933CC">&quot;TestPop&quot;</font>,                 TestPop,                 maxwait, safewait}, <font color="#003399"><i>//  2</i></font>
+                    {<font color="#9933CC">&quot;TestRemove&quot;</font>,              TestRemove,              maxwait, safewait}, <font color="#003399"><i>//  3</i></font>
+                    {<font color="#9933CC">&quot;TestInsert1&quot;</font>,             TestInsert1,             maxwait, safewait}, <font color="#003399"><i>//  4</i></font>
+                    {<font color="#9933CC">&quot;TestSubscripts&quot;</font>,          TestSubscripts,          maxwait, safewait}, <font color="#003399"><i>//  5</i></font>
+                    {<font color="#9933CC">&quot;TestArray&quot;</font>,               TestArray,               maxwait, safewait}, <font color="#003399"><i>//  6</i></font>
+                    {<font color="#9933CC">&quot;TestSubscript1&quot;</font>,          TestSubscript1,          maxwait, safewait}, <font color="#003399"><i>//  7</i></font>
+                    {<font color="#9933CC">&quot;TestALot1&quot;</font>,               TestALot1,               maxwait, safewait}, <font color="#003399"><i>//  8</i></font>
+                    {<font color="#9933CC">&quot;TestCopy&quot;</font>,                TestCopy,                maxwait, safewait}, <font color="#003399"><i>//  9</i></font>
+                    {<font color="#9933CC">&quot;TestAssign&quot;</font>,              TestAssign,              maxwait, safewait}, <font color="#003399"><i>// 10</i></font>
+                    {<font color="#9933CC">&quot;TestAdd1&quot;</font>,                TestAdd1,                maxwait, safewait}, <font color="#003399"><i>// 11</i></font>
+                    {<font color="#9933CC">&quot;TestAdd2&quot;</font>,                TestAdd2,                maxwait, safewait}, <font color="#003399"><i>// 12</i></font>
+                    {<font color="#9933CC">&quot;TestSelectionSort1&quot;</font>,      TestSelectionSort1,      maxwait, safewait}, <font color="#003399"><i>// 13</i></font>
+                    {<font color="#9933CC">&quot;TestSelectionSort2&quot;</font>,      TestSelectionSort2,      maxwait, safewait}, <font color="#003399"><i>// 14</i></font>
+                    {<font color="#9933CC">&quot;TestBSearch1&quot;</font>,            TestBSearch1,            maxwait, safewait}, <font color="#003399"><i>// 15</i></font>
+                    {<font color="#9933CC">&quot;TestReverse1&quot;</font>,            TestReverse1,            maxwait, safewait}, <font color="#003399"><i>// 16</i></font>
+                    {<font color="#9933CC">&quot;TestReverse2&quot;</font>,            TestReverse2,            maxwait, safewait}, <font color="#003399"><i>// 17</i></font>
+                    {<font color="#9933CC">&quot;TestSwap1&quot;</font>,               TestSwap1,               maxwait, safewait}, <font color="#003399"><i>// 18</i></font>
+                    {<font color="#9933CC">&quot;TestEqual1&quot;</font>,              TestEqual1,              maxwait, safewait}, <font color="#003399"><i>// 19</i></font>
+                    {<font color="#9933CC">&quot;TestShrink1&quot;</font>,             TestShrink1,             maxwait, safewait}, <font color="#003399"><i>// 20</i></font>
+                    {<font color="#9933CC">&quot;TestSubscriptEx&quot;</font>,         TestSubscriptEx,         maxwait, safewait}, <font color="#003399"><i>// 21</i></font>
+                    {<font color="#9933CC">&quot;TestInsertEx&quot;</font>,            TestInsertEx,            maxwait, safewait}, <font color="#003399"><i>// 22</i></font>
+                    {<font color="#9933CC">&quot;TestBSearchStress&quot;</font>,       TestBSearchStress,          1000,      500}, <font color="#003399"><i>// 23</i></font>
+                    {<font color="#9933CC">&quot;TestSelectionSortStress&quot;</font>, TestSelectionSortStress,    1000,      500}, <font color="#003399"><i>// 24</i></font>
+                    {<font color="#9933CC">&quot;TestSwapStress&quot;</font>,          TestSwapStress,             2000,     1000}, <font color="#003399"><i>// 25</i></font>
+                    {<font color="#9933CC">&quot;TestAssignStress1&quot;</font>,       TestAssignStress1,          4000,     2000}, <font color="#003399"><i>// 26</i></font>
+                    {<font color="#9933CC">&quot;TestAssignStress2&quot;</font>,       TestAssignStress2,          4000,     2000}, <font color="#003399"><i>// 27</i></font>
+                    {<font color="#9933CC">&quot;TestCrazy&quot;</font>,               TestCrazy,                  1000,      500}, <font color="#003399"><i>// 28</i></font>
+                 };
+
+  <b>int</b> num = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests));
+  <b>if</b> (test_num == 0)
+  {
+    <b>for</b> (<b>int</b> i = 0; i &lt; num; i++)
+      ExecuteTest(Tests[i].test, Tests[i].maxwait, Tests[i].safewait);
+  }
+  <b>else</b> <b>if</b> (test_num == 99)
+  {
+    <b>for</b> (<b>int</b> i = 0; i &lt; 24; i++)
+      ExecuteTest(Tests[i].test, Tests[i].maxwait, Tests[i].safewait);
+  }
+  <b>else</b> <b>if</b> (test_num &gt; 0 &amp;&amp; test_num &lt;= num)
+  {
+    ExecuteTest(Tests[test_num - 1].test, Tests[test_num - 1].maxwait, Tests[test_num - 1].safewait);
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,275 @@
+You start with 100 points. Each play costs 10 points.
+There are 3 slots, each contains 5 different values.
+If you get 2 of the same, you win 15 points.
+If you get 3 of the same, you win 30 points.
+Here we go!
+
+ 5  3  4
+You didn't win anything. You now have 90 points.
+
+Play again? (1=yes,0=no)  1  3  5
+You didn't win anything. You now have 80 points.
+
+Play again? (1=yes,0=no)  3  5  5
+You win 15 points. You now have 85 points.
+
+Play again? (1=yes,0=no)  2  5  2
+You win 15 points. You now have 90 points.
+
+Play again? (1=yes,0=no) 
+You start with 100 points. Each play costs 10 points.
+There are 3 slots, each contains 5 different values.
+If you get 2 of the same, you win 15 points.
+If you get 3 of the same, you win 30 points.
+Here we go!
+
+ 5  3  4
+You didn't win anything. You now have 90 points.
+
+Play again? (1=yes,0=no)  1  3  5
+You didn't win anything. You now have 80 points.
+
+Play again? (1=yes,0=no)  3  5  5
+You win 15 points. You now have 85 points.
+
+Play again? (1=yes,0=no)  2  5  2
+You win 15 points. You now have 90 points.
+
+Play again? (1=yes,0=no)  1  3  1
+You win 15 points. You now have 95 points.
+
+Play again? (1=yes,0=no)  1  1  3
+You win 15 points. You now have 100 points.
+
+Play again? (1=yes,0=no)  5  4  4
+You win 15 points. You now have 105 points.
+
+Play again? (1=yes,0=no)  1  5  3
+You didn't win anything. You now have 95 points.
+
+Play again? (1=yes,0=no)  2  3  3
+You win 15 points. You now have 100 points.
+
+Play again? (1=yes,0=no)  2  1  2
+You win 15 points. You now have 105 points.
+
+Play again? (1=yes,0=no)  1  3  3
+You win 15 points. You now have 110 points.
+
+Play again? (1=yes,0=no)  2  1  1
+You win 15 points. You now have 115 points.
+
+Play again? (1=yes,0=no)  5  3  3
+You win 15 points. You now have 120 points.
+
+Play again? (1=yes,0=no)  1  5  4
+You didn't win anything. You now have 110 points.
+
+Play again? (1=yes,0=no)  4  5  2
+You didn't win anything. You now have 100 points.
+
+Play again? (1=yes,0=no)  4  3  4
+You win 15 points. You now have 105 points.
+
+Play again? (1=yes,0=no)  1  4  3
+You didn't win anything. You now have 95 points.
+
+Play again? (1=yes,0=no)  3  2  3
+You win 15 points. You now have 100 points.
+
+Play again? (1=yes,0=no)  2  5  3
+You didn't win anything. You now have 90 points.
+
+Play again? (1=yes,0=no)  4  2  4
+You win 15 points. You now have 95 points.
+
+Play again? (1=yes,0=no)  1  2  1
+You win 15 points. You now have 100 points.
+
+Play again? (1=yes,0=no)  4  4  5
+You win 15 points. You now have 105 points.
+
+Play again? (1=yes,0=no)  3  2  2
+You win 15 points. You now have 110 points.
+
+Play again? (1=yes,0=no)  3  3  1
+You win 15 points. You now have 115 points.
+
+Play again? (1=yes,0=no)  3  2  1
+You didn't win anything. You now have 105 points.
+
+Play again? (1=yes,0=no)  2  2  3
+You win 15 points. You now have 110 points.
+
+Play again? (1=yes,0=no)  5  3  5
+You win 15 points. You now have 115 points.
+
+Play again? (1=yes,0=no)  3  1  1
+You win 15 points. You now have 120 points.
+
+Play again? (1=yes,0=no)  3  3  1
+You win 15 points. You now have 125 points.
+
+Play again? (1=yes,0=no)  1  1  1
+BIG WINNER! You get 30 points!! You now have 145 points.
+
+Play again? (1=yes,0=no)  3  1  5
+You didn't win anything. You now have 135 points.
+
+Play again? (1=yes,0=no)  5  5  4
+You win 15 points. You now have 140 points.
+
+Play again? (1=yes,0=no)  1  1  3
+You win 15 points. You now have 145 points.
+
+Play again? (1=yes,0=no)  5  5  1
+You win 15 points. You now have 150 points.
+
+Play again? (1=yes,0=no)  2  2  1
+You win 15 points. You now have 155 points.
+
+Play again? (1=yes,0=no)  2  3  2
+You win 15 points. You now have 160 points.
+
+Play again? (1=yes,0=no)  2  1  2
+You win 15 points. You now have 165 points.
+
+Play again? (1=yes,0=no)  4  4  2
+You win 15 points. You now have 170 points.
+
+Play again? (1=yes,0=no)  5  4  1
+You didn't win anything. You now have 160 points.
+
+Play again? (1=yes,0=no)  5  3  2
+You didn't win anything. You now have 150 points.
+
+Play again? (1=yes,0=no)  4  2  1
+You didn't win anything. You now have 140 points.
+
+Play again? (1=yes,0=no)  3  4  3
+You win 15 points. You now have 145 points.
+
+Play again? (1=yes,0=no)  4  2  2
+You win 15 points. You now have 150 points.
+
+Play again? (1=yes,0=no)  3  1  4
+You didn't win anything. You now have 140 points.
+
+Play again? (1=yes,0=no)  1  5  3
+You didn't win anything. You now have 130 points.
+
+Play again? (1=yes,0=no)  5  5  4
+You win 15 points. You now have 135 points.
+
+Play again? (1=yes,0=no)  3  3  5
+You win 15 points. You now have 140 points.
+
+Play again? (1=yes,0=no)  4  1  3
+You didn't win anything. You now have 130 points.
+
+Play again? (1=yes,0=no)  1  2  1
+You win 15 points. You now have 135 points.
+
+Play again? (1=yes,0=no)  1  1  1
+BIG WINNER! You get 30 points!! You now have 155 points.
+
+Play again? (1=yes,0=no)  2  1  4
+You didn't win anything. You now have 145 points.
+
+Play again? (1=yes,0=no)  4  3  5
+You didn't win anything. You now have 135 points.
+
+Play again? (1=yes,0=no)  2  4  1
+You didn't win anything. You now have 125 points.
+
+Play again? (1=yes,0=no)  5  4  1
+You didn't win anything. You now have 115 points.
+
+Play again? (1=yes,0=no)  5  3  1
+You didn't win anything. You now have 105 points.
+
+Play again? (1=yes,0=no)  4  4  3
+You win 15 points. You now have 110 points.
+
+Play again? (1=yes,0=no)  3  2  5
+You didn't win anything. You now have 100 points.
+
+Play again? (1=yes,0=no)  1  2  4
+You didn't win anything. You now have 90 points.
+
+Play again? (1=yes,0=no)  4  1  2
+You didn't win anything. You now have 80 points.
+
+Play again? (1=yes,0=no)  5  3  3
+You win 15 points. You now have 85 points.
+
+Play again? (1=yes,0=no)  3  1  5
+You didn't win anything. You now have 75 points.
+
+Play again? (1=yes,0=no)  2  4  3
+You didn't win anything. You now have 65 points.
+
+Play again? (1=yes,0=no)  3  1  1
+You win 15 points. You now have 70 points.
+
+Play again? (1=yes,0=no)  2  4  1
+You didn't win anything. You now have 60 points.
+
+Play again? (1=yes,0=no)  2  2  2
+BIG WINNER! You get 30 points!! You now have 80 points.
+
+Play again? (1=yes,0=no)  5  3  2
+You didn't win anything. You now have 70 points.
+
+Play again? (1=yes,0=no)  3  3  3
+BIG WINNER! You get 30 points!! You now have 90 points.
+
+Play again? (1=yes,0=no)  1  3  4
+You didn't win anything. You now have 80 points.
+
+Play again? (1=yes,0=no)  2  1  1
+You win 15 points. You now have 85 points.
+
+Play again? (1=yes,0=no)  2  4  1
+You didn't win anything. You now have 75 points.
+
+Play again? (1=yes,0=no)  5  3  2
+You didn't win anything. You now have 65 points.
+
+Play again? (1=yes,0=no)  2  3  5
+You didn't win anything. You now have 55 points.
+
+Play again? (1=yes,0=no)  4  3  5
+You didn't win anything. You now have 45 points.
+
+Play again? (1=yes,0=no)  3  3  5
+You win 15 points. You now have 50 points.
+
+Play again? (1=yes,0=no)  2  1  1
+You win 15 points. You now have 55 points.
+
+Play again? (1=yes,0=no)  2  1  4
+You didn't win anything. You now have 45 points.
+
+Play again? (1=yes,0=no)  1  3  3
+You win 15 points. You now have 50 points.
+
+Play again? (1=yes,0=no)  3  1  5
+You didn't win anything. You now have 40 points.
+
+Play again? (1=yes,0=no)  4  1  5
+You didn't win anything. You now have 30 points.
+
+Play again? (1=yes,0=no)  1  4  5
+You didn't win anything. You now have 20 points.
+
+Play again? (1=yes,0=no)  4  3  5
+You didn't win anything. You now have 10 points.
+
+Play again? (1=yes,0=no)  5  4  5
+You win 15 points. You now have 15 points.
+
+Play again? (1=yes,0=no)  5  2  3
+You didn't win anything. You now have 5 points.
+You don't have enough to play. Go home.
+

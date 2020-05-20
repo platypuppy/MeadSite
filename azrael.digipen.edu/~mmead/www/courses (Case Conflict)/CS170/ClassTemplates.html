@@ -1,0 +1,1127 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Class Templates</title>
+</head>
+<body>  
+<center><h1>Class Templates</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Class Templates
+</p>
+
+
+<!--
+<<**>>
+A class template has much in common with a function template:
+-->
+
+<ul>
+<li>A class template is a generic way of describing a user-defined type (a class).
+<li>You define a class in terms of a generic type instead of a specific type.
+<li>This kind of programming is often referred to as <i>generic programming</i>.
+<li>Templates are also called <i>parameterized types</i> because you "pass a parameter" to the template
+at compile time and the compiler generates the appropriate code.
+</ul>
+
+An "old-style" stack class:
+
+<pre class="sourcecode"><code><b>class</b> Stack1
+{
+  <b>public</b>:
+    Stack1(<b>int</b> capacity) : items_(<b>new</b> <b>int</b>[capacity]), count_(0) 
+    {
+    }
+    
+    ~Stack1() 
+    { 
+      <b>delete</b>[] items_; 
+    }
+    
+    <b>void</b> Push(<b>int</b> item) 
+    { 
+      items_[count_++] = item; 
+    }
+    
+    <b>int</b> Pop() 
+    { 
+      <b>return</b> items_[--count_]; 
+    }
+    
+    <b>bool</b> IsEmpty() 
+    { 
+      <b>return</b> (count_ == 0);
+    }
+    
+  <b>private</b>:
+    <b>int</b> *items_; <font color="#003399"><i>// The array of integers</i></font>
+    <b>int</b> count_;  <font color="#003399"><i>// The number of integers on the stack</i></font>
+};</code></pre>
+
+Using the first Stack class:
+<p>
+
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main()
+{
+  <b>const</b> <b>int</b> SIZE = 5;
+  Stack1 s(SIZE);
+  
+  <b>for</b> (<b>int</b> i = 0; i &lt; SIZE; i++)
+    s.Push(i);
+
+  <b>while</b> (!s.IsEmpty())
+    std::cout &lt;&lt; s.Pop() &lt;&lt; std::endl;
+
+  <b>return</b> 0;
+}</pre></blockquote>
+</td>
+<td width=30></td>
+<td>
+Output:<b><pre>
+4
+3
+2
+1
+0</b></pre>
+</td>
+</tr></table>
+
+
+
+There are some limitations of this Stack class:
+<ol>
+<li>No error checking (e.g. Stack may be empty when calling Pop method.)</li>
+<ul>
+  <li>We could add the error handling.</li>
+</ul>
+<li>Size is kind of hard-coded (can't grow the Stack if we need more space, could be wasted unused space.)</li>
+<ul>
+  <li>Could allow the stack to grow in capacity (e.g. vector)</li>
+</ul>
+<li>Only accepts <b>int</b> type. We could make another class. (What about <tt><b>float</b></tt>, <tt><b>char</b></tt>, <tt>StopWatch</tt>, etc.?)</li>
+</ol>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>// A Stack for ints</i></font>
+<b>class</b> Stack_int
+{
+  <b>public</b>:
+    Stack_int(<b>int</b> capacity) 
+    {
+     items_ = <b>new</b> <font color="blue"><b>int</b></font>[capacity];
+     count_ = 0
+    }
+    
+    ~Stack_int() 
+    { 
+      <b>delete</b>[] items_; 
+    }
+    
+    <b>void</b> Push(<font color="blue"><b>int</b></font> item) 
+    { 
+      items_[count_++] = item; 
+    }
+    
+    <font color="blue"><b>int</b></font> Pop() 
+    { 
+      <b>return</b> items_[--count_]; 
+    }
+    
+    <b>bool</b> IsEmpty() 
+    { 
+      <b>return</b> (count_ == 0); 
+    }
+    
+  <b>private</b>:
+    <font color="blue"><b>int</b></font> *items_;
+    <b>int</b> count_;
+};
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>// A Stack for doubles</i></font>
+<b>class</b> Stack_double
+{
+  <b>public</b>:
+    Stack_double(<b>int</b> capacity) 
+    {
+      items_ = <b>new</b> <font color="blue"><b>double</b></font>[capacity];
+      count_ = 0;
+    }
+    
+    ~Stack_double() 
+    { 
+      <b>delete</b>[] items_; 
+    }
+    
+    <b>void</b> Push(<font color="blue"><b>double</b></font> item) 
+    { 
+      items_[count_++] = item; 
+    }
+    
+    <font color="blue"><b>double</b></font> Pop() 
+    { 
+      <b>return</b> items_[--count_]; 
+    }
+    
+    <b>bool</b> IsEmpty() 
+    { 
+      <b>return</b> (count_ == 0); 
+    }
+    
+  <b>private</b>:
+    <font color="blue"><b>double</b></font> *items_;
+    <b>int</b> count_;
+};
+</pre></blockquote>
+</td>
+</tr></table>
+
+<!--<font color="blue"><b>double</b></font>-->
+
+<ul>
+<li>We can remove limitation #1 (no error handling) simply by adding the error handling. 
+<li>Limitation #2 (hard-coded size) can be removed by growing the internal array.</li>
+<ul>
+<li>Could use a linked list internally</li>
+</ul>
+<!--<li>Limitation #3 could be handled by using <b>void</b> pointers. (Not type safe)-->
+<li>Limitation #3 (only accepts integers) can be solved by using <b>class templates</b>
+</ul>
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="STACK2_CLASS">
+<p class="SectionHeader">
+A Stack Implementation using a Template
+</p></a>
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Class Definition</th><th>Implementations</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> <font color="blue"><b>T</b></font>&gt;
+<b>class</b> Stack
+{
+  <b>public</b>:
+    Stack(<b>int</b> capacity);
+    ~Stack(); 
+    <b>void</b> Push(<font color="blue"><b>const T&amp;</b></font> item);
+    <font color="blue"><b>T</b></font> Pop(); 
+    <b>bool</b> IsEmpty(); 
+    
+  <b>private</b>:
+    <font color="blue"><b>T</b></font> *items_;
+    <b>int</b> count_;
+};
+
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+Stack&lt;T&gt;::Stack(<b>int</b> capacity)
+{
+  items_ = <b>new</b> T[capacity];
+  count_ = 0;
+}
+    
+<b>template</b> &lt;<b>typename</b> T&gt;
+Stack&lt;T&gt;::~Stack() 
+{ 
+  <b>delete</b>[] items_; 
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> Stack&lt;T&gt;::Push(<b>const</b> T&amp; item) 
+{ 
+  items_[count_++] = item; 
+}
+    
+<b>template</b> &lt;<b>typename</b> T&gt;
+T Stack&lt;T&gt;::Pop() 
+{ 
+  <b>return</b> items_[--count_]; 
+}
+    
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>bool</b> Stack&lt;T&gt;::IsEmpty() 
+{ 
+  <b>return</b> (count_ == 0); 
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+<b>Quiz:</b> What are the requirements for <b><tt>T</tt></b> in the templated <i>Stack</i> class above?
+<!--
+Copy constructor, destructor: Pop
+Default constructor: array in constructor
+-->
+<p>
+
+
+Pay close attention to the syntax for implementing the templated member functions.
+<blockquote>
+<ol>
+<li><pre><b>template</b> &lt;<b>typename</b> T&gt;</pre>
+<li><pre>Stack&lt;T&gt;::</pre>
+</ol>
+</blockquote>
+
+Template syntax:
+
+<p>
+<ul>
+<li>The keyword <b>template</b> indicates that the class is a <i>template</i> class.</li>
+<li>In between the angle brackets <tt>&lt; &gt;</tt> we put in the "parameter" name using the <b>typename</b> keyword</li>
+<li>The rest of the class is the same except that the types that were specified before (e.g. <tt><b>int</b></tt>)</li>
+are now replaced with the name of our parameter, in this case, <tt>T</tt>.</li>
+<li>We can use any name we want as the name of our parameter, just as with ordinary parameters.</li>
+  <ul>
+    <li>The uppercase letter '<tt>T</tt>' is a common name for the type name and should be used in most cases.</li>
+  </ul>
+<li>And, yes, you can have multiple template types and default types, as well.</li>
+<!--<li>Also, the keyword <b>class</b> can be used in place of the <b>typename</b> keyword. (It
+should be supported by all compilers for backward compatibility.) Note that not 
+all template types will be classes.
+-->
+</ul>
+
+<p>
+Implementing the methods within the class:
+    
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> <font color="blue"><b>T</b></font>&gt;
+<b>class</b> Stack2
+{
+  <b>public</b>:
+    Stack2(<b>int</b> capacity)
+    {
+      items_ = <b>new</b> <font color="blue"><b>T</b></font>[capacity];
+      count_ = 0;
+    }
+    
+    ~Stack2() 
+    { 
+      <b>delete</b>[] items_; 
+    }
+    
+    <b>void</b> Push(<font color="blue"><b>const T&amp;</b></font> item) 
+    { 
+      items_[count_++] = item; 
+    }
+    
+    <font color="blue"><b>T</b></font> Pop() 
+    { 
+      <b>return</b> items_[--count_]; 
+    }
+    
+    <b>bool</b> IsEmpty() 
+    { 
+      <b>return</b> (count_ == 0); 
+    }
+    
+  <b>private</b>:
+    <font color="blue"><b>T</b></font> *items_;
+    <b>int</b> count_;
+};
+</pre></blockquote>
+    
+
+<p class="technote">
+<b>Note:</b> When you put the method definitions inside the class (as shown above), you do not need to duplicate
+the <tt><b>template</b> &lt;<b>typename</b> T&gt;</tt> preface that is required outside of the class. I'm only
+showing this style here to keep the notes from becoming too verbose.
+</p>
+
+<p>
+<hr width=80%>
+<p>
+
+
+Using this Stack class is almost identical to using the first one:
+<p>
+
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main()
+{
+  <b>const</b> <b>int</b> SIZE = 5;
+  Stack2<font color="blue">&lt;<b>int</b>&gt;</font> s(SIZE);  <font color="#003399"><i>// This is the only change</i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; SIZE; i++)
+    s.Push(i);
+
+  <b>while</b> (!s.IsEmpty())
+    std::cout &lt;&lt; s.Pop() &lt;&lt; std::endl;
+
+  <b>return</b> 0;
+}</pre></blockquote>
+</td>
+<td width=10></td>
+<td>
+Output:<b><pre>
+4
+3
+2
+1
+0</b></pre>
+</td>
+</tr></table>
+
+<p>
+<hr width=80%>
+<p>
+
+We can now create a Stack of doubles:
+<p>
+
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main()
+{
+  <b>const</b> <b>int</b> SIZE = 5;
+  Stack2<font color="blue">&lt;<b>double</b>&gt;</font> s(SIZE); <font color="#003399"><i>// Change type to <b>double</b></i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; SIZE; i++)
+    s.Push(i / 10.0); <font color="#003399"><i>// Push a double</i></font>
+
+  <b>while</b> (!s.IsEmpty())
+    std::cout &lt;&lt; s.Pop() &lt;&lt; std::endl;
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td width=10></td>
+<td>
+Output:<b><pre>
+0.4
+0.3
+0.2
+0.1
+0</b></pre>
+</td>
+</tr></table>
+
+<hr width=80%>
+<p>
+A Stack of <b><tt>char *</tt></b>:
+<p>
+
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main()
+{
+  <b>const</b> <b>int</b> SIZE = 5;
+  Stack2<font color="blue">&lt;<b>char</b> *&gt;</font> s(SIZE); <font color="#003399"><i>// Change type to <b>char *</b></i></font>
+
+  s.Push(<font color="#9933CC">&quot;One&quot;</font>);
+  s.Push(<font color="#9933CC">&quot;Two&quot;</font>);
+  s.Push(<font color="#9933CC">&quot;Three&quot;</font>);
+
+  <b>while</b> (!s.IsEmpty())
+    std::cout &lt;&lt; s.Pop() &lt;&lt; std::endl;
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td width=10></td>
+<td>
+
+Output:
+<b><pre>
+Three
+Two
+One
+</pre></b>
+</td>
+</tr></table>
+
+<hr width=80%>
+<p>
+We can even create a Stack of StopWatch objects:<br>
+<!--<a href="StopWatch-1.h.html">StopWatch.h</a><br>-->
+<a href="StopWatch-1.cpp.html">StopWatch.cpp</a><br>
+<p>
+
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main()
+{
+  <b>const</b> <b>int</b> SIZE = 5;
+  Stack2<font color="blue">&lt;StopWatch&gt;</font> s(SIZE); <font color="#003399"><i>// Change type to StopWatch</i></font>
+
+  s.Push(StopWatch(60));
+  s.Push(StopWatch(90));
+  s.Push(StopWatch(120));
+
+  <b>while</b> (!s.IsEmpty())
+    std::cout &lt;&lt; s.Pop() &lt;&lt; std::endl;
+
+  <b>return</b> 0;
+}
+
+</td>
+<td width=10></td>
+<td>
+
+Output:
+<pre><b>00:02:00
+00:01:30
+00:01:00
+</b></pre>
+</td>
+</tr></table>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+The compiler generates code similar to <a href="Templates-1.html">this code</a> for the above.
+This automatic code generation is called <i>template instantiation</i>.
+<p>
+
+Notes:
+
+<ul>
+<li>The templated <tt>Stack</tt> class above does <i>not</i> generate any code in the program.
+(Much like a <b>class</b> or <b>struct</b> definition.)
+<li>Code is only generated when a <tt>Stack</tt> object is instantiated.
+<li>If we never create a <tt>Stack</tt> object, the code for the <tt>Stack</tt>
+class is never generated.
+<li>Only one instance of a class is generated for <i>each</i> type. (If we instantiate two
+integer <tt>Stack</tt> objects in our code, there is only one class that is generated)
+
+<blockquote><pre>
+Stack2&lt;<b>int</b>&gt; s1(10);    <font color="#003399"><i>// Code for int Stack is generated.</b></i></font>
+Stack2&lt;<b>int</b>&gt; s2(10);    <font color="#003399"><i>// Nothing is generated. int Stack already exists.</b></i></font>
+Stack2&lt;<b>int</b>&gt; s3(20);    <font color="#003399"><i>// Nothing is generated. int Stack already exists.</b></i></font>
+Stack2&lt;<b>double</b>&gt; s4(10); <font color="#003399"><i>// Code for double Stack is generated.</b></i></font>
+</pre></blockquote>
+
+
+<li>Instantiation occurs when the class definition is required.
+<li>Pointers and references do not need an instantiated class template (or any class definition
+for that matter):
+
+<blockquote><pre>
+<b>class</b> Foo; <font color="#003399"><i>// forward declaration, no definition needed</i></font>
+
+Foo *fp;   <font color="#003399"><i>// Ok, pointer, no definition needed</i></font>
+Foo f;     <font color="#003399"><i>// Error, Foo undefined</i></font>
+</pre></blockquote>
+
+<!--
+<li>When coding class templates, the keyword <b>class</b> can also be used instead of <b>typename</b>.
+This was the original way it was done, so you'll see it with older code. These two examples
+are the same:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> Stack2
+{
+}
+
+<b>template</b> &lt;<b>class</b> T&gt;
+<b>class</b> Stack2
+{
+}
+-->
+</pre></blockquote>
+
+</ul>
+
+Class templates vs. Function templates:
+<ul>
+<li>You must specify the template arguments when you instantiate a template class.
+<li>Function template parameters can be deduced from the arguments passed to the function.
+<li>There is no context for the compiler to deduce anything for the class template:
+<blockquote><pre>
+Stack s; <font color="#003399"><i>// What will be instantiated? (The <b>Stack</b> class is a templated class)</i></font>
+</pre></blockquote>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="NONTYPE_TEMPLATE_ARGS">
+<p class="SectionHeader">
+Non-Type Template Arguments
+</p>
+</a>
+
+Suppose we want to create a class that represents an array of integers. We want the size to vary depending
+on how it's instantiated:
+
+<pre class="sourcecode"><code><b>class</b> IntArray1
+{
+  <b>public</b>:
+    IntArray1(<b>unsigned int</b> size) : size_(size), array_(<b>new</b> <b>int</b>[size]) 
+    {
+    }
+    
+    ~IntArray1() 
+    { 
+      <b>delete</b> [] array_; 
+    }
+    
+    <font color="#003399"><i>// ...</i></font>
+  <b>private</b>:
+    <b>int</b> size_;
+    <b>int</b> *array_; <font color="#003399"><i>// dynamically allocated array (at run-time)</i></font>
+};
+</code></pre>
+
+We can use the class like this:
+<p>
+
+<blockquote><pre>
+IntArray1 ar1(20);  <font color="#003399"><i>// Dynamic allocation at runtime (20 ints)</i></font>
+IntArray1 ar2(30);  <font color="#003399"><i>// Dynamic allocation at runtime (30 ints)</i></font>
+</pre></blockquote>
+
+Using a non-type template parameter:
+
+<pre class="sourcecode"><code><b>template</b> &lt;<b>unsigned int</b> size&gt;
+<b>class</b> IntArray2
+{
+  <b>public</b>:
+    IntArray2() : size_(size) 
+    {
+    }
+    <font color="#003399"><i>// ... (no destructor needed)</i></font>
+  <b>private</b>:
+    <b>int</b> size_;
+    <b>int</b> array[size]; <font color="#003399"><i>// static array (allocated at compile-time)</i></font>
+};</code></pre>
+
+
+Using this template class:
+<p>
+
+<blockquote><pre>
+IntArray2&lt;20&gt; ar3;  <font color="#003399"><i>// Static allocation at compile time (20 ints)</i></font>
+IntArray2&lt;30&gt; ar4;  <font color="#003399"><i>// Static allocation at compile time (30 ints)</i></font>
+</pre></blockquote>
+
+Notes:
+<p>
+<ul>
+<li><tt>ar1</tt> and <tt>ar2</tt> are of the same type: <tt>IntArray1</tt>
+<li><tt>IntArray2&lt;20&gt;</tt> and <tt>IntArray2&lt;30&gt;</tt> are distinct classes. 
+<ul>
+  <li>Each one instantiates a different class. (<tt>ar3</tt> and <tt>ar4</tt> are <i>not</i> the same type.)</li>
+</ul>
+<li>Non-type template parameters represent <i>values</i>, not types.
+<li>Non-type template parameters must be <i>integral</i>. <!-- (or pointer).-->
+<li>Non-type parameters must be <i>constant</i> expressions. (Evaluate at compile time)
+<blockquote><pre>
+<b>const</b> <b>unsigned int</b> csize = 30;
+<b>unsigned int</b> size = 20;
+IntArray2&lt;10&gt; ar5;        <font color="#003399"><i>// Ok, literal constant expression</i></font>
+IntArray2&lt;csize&gt; ar6;     <font color="#003399"><i>// Ok, constant expression</i></font>
+IntArray2&lt;csize + 5&gt; ar7; <font color="#003399"><i>// Ok, constant expression</i></font>
+IntArray2&lt;size&gt; ar8;      <font color="#003399"><i>// Error, non-const expresson</i></font>
+
+  <font color="#003399"><i>// All refer to the same instantiation</i></font>
+IntArray2&lt;csize&gt; arA;  <font color="#003399"><i>// IntArray2&lt;30&gt;</i></font>
+IntArray2&lt;5 * 6&gt; arB;  <font color="#003399"><i>// IntArray2&lt;30&gt;</i></font>
+IntArray2&lt;32 - 2&gt; arC; <font color="#003399"><i>// IntArray2&lt;30&gt;</i></font>
+</pre></blockquote>
+
+<!--
+<blockquote><pre>
+<b>const</b> <b>int</b> x = 2;
+<b>const</b> <b>double</b> d = 3.5;
+IntArray2&lt;<font color="#9933CC">'A'</font>&gt; ar9;  <font color="#003399"><i>// Ok, promotion</i></font>
+IntArray2&lt;x&gt; ar10;   <font color="#003399"><i>// Ok, integral conversion (signed 2 promoted to unsigned 2)</i></font>
+IntArray2&lt;d&gt; ar11;   <font color="#003399"><i>// Error, <b>double</b> to <b>int</b> not allowed</i></font>
+</pre></blockquote>
+-->
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Multiple and Default Template Arguments
+</p>
+
+You can specify more than one template argument.
+<p>
+
+In this modified <tt><b>Array</b></tt> class, we specify not only the type of the elements in the
+array, but the size as well:
+<p>
+
+<pre class="sourcecode"><code><b>template</b> &lt;<b>typename</b> T, <b>unsigned</b> <b>int</b> size&gt;
+<b>class</b> Array
+{
+  <b>public</b>:
+    Array() : size_(size) 
+    {
+    }
+    <font color="#003399"><i>// ... (no destructor needed)</i></font>
+  <b>private</b>:
+    <b>int</b> size_;
+    T array[size]; <font color="#003399"><i>// static array (allocated at compile-time)</i></font>
+};
+</code></pre>
+
+Usage:
+
+<blockquote><pre>
+Array&lt;<b>int</b>, 10&gt; ar1;         <font color="#003399"><i>// int array[10]</i></font>
+Array&lt;<b>double</b>, 20&gt; ar2;      <font color="#003399"><i>// double array[20]; </i></font>
+Array&lt;StopWatch, 30&gt; ar3;   <font color="#003399"><i>// StopWatch array[30];</i></font>
+Array&lt;StopWatch *, 40&gt; ar4; <font color="#003399"><i>// StopWatch *array[40]</i></font>
+</pre></blockquote>
+
+<b>Quiz:</b> What are the requirements for <b><tt>T</tt></b> in the templated <i>Array</i> class above?
+<p><br>
+BTW, C++11 introduced a new class in the Standard Template Library named <a href="http://www.cplusplus.com/reference/array/array/"><tt>std::array</tt></a>,
+which is similar to the one I'm showing here.
+<p>
+
+Like function parameters, we can provide defaults for some or all of them:
+<p>
+
+<pre class="sourcecode"><code><b>template</b> &lt;<b>typename</b> T = <b>int</b>, <b>unsigned</b> <b>int</b> size = 10&gt;
+<b>class</b> Array
+{
+  <font color="#003399"><i>// ... </i></font>
+};</code></pre>
+
+Usage:
+
+<blockquote><pre>
+Array&lt;<b>double</b>, 5&gt; ar5; <font color="#003399"><i>// Array&lt;double, 5&gt;</i></font>
+Array&lt;<b>double</b>&gt; ar6;    <font color="#003399"><i>// Array&lt;double, 10&gt;</i></font>
+Array&lt;&gt; ar7;          <font color="#003399"><i>// Array&lt;int, 10&gt;</i></font>
+Array&lt;10&gt; ar8;        <font color="#003399"><i>// Error, type mismatch (10 is not a type)</i></font>
+Array ar9;            <font color="#003399"><i>// Error, the Array class is a templated class</i></font>
+</pre></blockquote>
+
+What about this? Definition of <a href="ClassTemplates.html#STACK2_CLASS">Stack</a>.
+
+<blockquote><pre>
+Array&lt;Stack&lt;<b>int</b>&gt;, 20&gt; ar10; <font color="#003399"><i>// Stack&lt;int&gt; array[20]; ???</i></font>
+</pre></blockquote>
+
+<br><br>
+One solution:
+
+<blockquote><pre>
+<font color="#003399"><i>// Add a default parameter</i></font>
+Stack(<b>int</b> capacity = 10) : items_(<b>new</b> T[capacity]), count_(0) {}
+</pre></blockquote>
+
+<p class="technote">
+<b>Self-check:</b> Given the classes below, which of the declarations are valid/invalid? If the 
+declaration is invalid, explain why. (They are all constructor calls.)
+</p>
+
+<table border=0>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T1 = <b>int</b>, <b>int</b> T2 = 10&gt;
+<b>class</b> Foo
+{
+  <b>public</b>:
+    Foo(<b>int</b> x = 0) { }
+  <b>private</b>:
+    <font color="blue"><b>T1 items[T2];</b></font>
+};
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>class</b> A
+{
+  <b>public</b>:
+    A() { }
+};
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>class</b> B
+{
+  <b>public</b>:
+    B(<b>int</b> x) : x_(x) { }
+    <b>operator</b> <b>int</b>() 
+    {
+      <b>return</b> x_;
+    }
+  <b>private</b>:
+    <b>int</b> x_;
+};
+</pre></blockquote>
+</td>
+</tr></table>
+
+Remember, you just need to know the requirements of the template parameters. That's how you figure this out.
+
+<ol>
+<pre>
+<li>Foo&lt;<b>int</b>, 5&gt; foo1;    
+<li>Foo foo2(5);         
+<li>Foo&lt;<b>int</b>, B(5)&gt; foo3;   
+<li>Foo&lt;A&gt; foo4(B(5));      
+<li>Foo&lt;B, 5&gt; foo5;         
+<li>Foo&lt;B, 5&gt; foo6(5);    
+<li>Foo&lt;A(), 5&gt; foo7;     
+<li>Foo&lt;&gt; foo8;             
+<li>Foo&lt;5&gt; foo9;          
+<li>Foo&lt;A, 5&gt; foo10;          
+</pre>
+</ol>
+
+<!--
+Illegal:
+2, 3, 5, 6, 7, 9
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Class Template Instantiation
+</p>
+
+<ul>
+<li>Like function templates, instantiation of class templates is implicit.
+<blockquote><pre>
+Array&lt;<b>int</b>, 10&gt; ar; <font color="#003399"><i>// implicit instantiation</i></font>
+</pre></blockquote>
+
+
+<li>Unlike function templates, only the <i>necessary</i> member functions of the class are instantiated:
+
+<blockquote><pre>
+<b>void</b> f(Stack&lt;<b>int</b>&gt; &amp;s); <font color="#003399"><i>// no instantiations, declaration</i></font>
+
+<b>int</b> main()
+{
+  Stack&lt;<b>int</b>&gt; s1(10);   <font color="#003399"><i>// instantiates Stack&lt;int&gt; (ctor and dtor)</i></font>
+  Stack&lt;<b>int</b>&gt; *s2 = <b>new</b> Stack&lt;<b>int</b>&gt;(10); <font color="#003399"><i>// instantiates Stack&lt;int&gt;::ctor</i></font>
+  f(s1);               <font color="#003399"><i>// no instantiations (by reference)</i></font>
+  <b>delete</b> s2;           <font color="#003399"><i>// instantiates Stack&lt;int&gt;::dtor</i></font>
+  <b>sizeof</b>(Stack&lt;<b>int</b>&gt;);  <font color="#003399"><i>// no method instantiations</i></font>
+  <b>return</b> 0;
+}
+
+<b>void</b> g(Stack&lt;<b>int</b>&gt; s)   <font color="#003399"><i>// instantiates Stack&lt;int&gt;::dtor</i></font>
+{
+  s.Push(10);          <font color="#003399"><i>// instantiates Stack&lt;int&gt;::Push</i></font>
+}
+
+<b>void</b> f(Stack&lt;<b>int</b>&gt; &amp;s)  <font color="#003399"><i>// no instantiations (reference)</i></font>
+{
+  Stack&lt;<b>double</b>&gt; t(5);  <font color="#003399"><i>// instantiates Stack&lt;double&gt; (ctor and dtor)</i></font>
+  Stack&lt;<b>int</b>&gt; *ps = &amp;s; <font color="#003399"><i>// no instantiations (pointer)</i></font>
+  ps-&gt;Push(10);        <font color="#003399"><i>// instantiates Stack&lt;int&gt;::Push</i></font>
+}
+
+</pre></blockquote>
+
+<li>Standard C++ says that a member function should only be instantiated when it is called or if 
+its address is taken. (The above information was gleaned from MSVC++ 7.1)
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+  
+<b>Somewhat advanced usage:</b>
+<ul>
+<li>Using an <i>explicit template instantiation</i> declaration will instantiate the entire class at once:
+<blockquote><pre>
+<b>template</b> Stack&lt;<b>int</b>&gt;;  <font color="#003399"><i>// instantiates all methods</i></font>
+</pre></blockquote>
+
+<li>Explicit instantiations give the programmer control over the code generation. Example:
+<ul>
+<li>Instantiate templates in <i>code.cpp</i>, don't instantiate in <i>main.cpp</i>, 
+but call them from <i>main.cpp</i>
+<li>Disable implicit template generation (GNU: <tt><b>-fno-implicit-templates</b></tt>)
+<li>Compile with: <tt>g++ main.cpp code.cpp -fno-implicit-templates</tt>
+
+<p>
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>// main.cpp</i></font>
+<b>#include</b> <font color="#9933CC">&quot;Stack.h&quot;</font>
+<b>int</b> main()
+{
+   <font color="#003399"><i>// No instantiations</i></font>
+  Stack&lt;<b>int</b>&gt; s(10);
+  s.Push(1); 
+ 
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td width=10></td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>// code.cpp</i></font>
+<b>#include</b> <font color="#9933CC">&quot;Stack.h&quot;</font>
+
+  <font color="#003399"><i>// instantiates all methods</i></font>
+<b>template</b> Stack&lt;<b>int</b>&gt;;
+
+<font color="#003399"><i>// other stuff...</i></font>
+</pre></blockquote>
+</td></tr></table>
+
+<li>If you build without <tt>code.cpp</tt>, you'll see link errors something like this:
+<p>
+
+<blockquote><pre>
+main.cpp: undefined reference to `Stack<int>::Stack[in-charge](int)'
+main.cpp: undefined reference to `Stack<int>::Push(int)'
+main.cpp: undefined reference to `Stack<int>::~Stack [in-charge]()'
+main.cpp: undefined reference to `Stack<int>::~Stack [in-charge]()'
+</pre></blockquote>
+
+
+Note that you can instantiate individual methods of the class as well:
+
+<blockquote><pre>
+  <font color="#003399"><i>// code.cpp</i></font>
+<b>#include</b> <font color="#9933CC">&quot;Stack.h&quot;</font>
+
+  <font color="#003399"><i>// instantiates individual methods</i></font>
+<b>template</b> Stack&lt;<b>int</b>&gt;::Stack(<b>int</b>);     <font color="#003399"><i>// Constructor</i></font>
+<b>template</b> Stack&lt;<b>int</b>&gt;::~Stack();   <font color="#003399"><i>// Destructor</i></font>
+<b>template</b> <b>void</b> Stack&lt;<b>int</b>&gt;::Push(<b>int</b>); <font color="#003399"><i>// Push</i></font>
+
+<font color="#003399"><i>// other stuff...</i></font>
+</pre></blockquote>
+
+</ul>
+
+	
+</ul>
+
+<!--
+<p class="technote">
+<b>Self-check:</b> Here are some
+<a href="Stack-exp-instantiation1.zip">test files</a> so you can try this on your own.
+</p>
+-->
+
+
+<blockquote><pre>
+</pre></blockquote>
+<tt><b></b></tt>
+
+
+<blockquote><pre>
+</pre></blockquote>
+<tt><b></b></tt>
+
+
+<blockquote><pre>
+</pre></blockquote>
+<tt><b></b></tt>
+
+
+
+<!--
+
+<h2>Multiple Template Arguments</h2>
+
+Compare this code with the code for the Stack2 class:
+
+<pre class="sourcecode"><code><b>template</b> &lt;<b>typename</b> T, <b>int</b> SIZE&gt;
+<b>class</b> Stack3
+{
+  <b>private</b>:
+    T m_Items[SIZE];
+    <b>int</b> m_Count;
+  <b>public</b>:
+    Stack3()
+    {
+      m_Count = 0;
+    }
+
+    <b>void</b> Push(T item)
+    {
+      m_Items[m_Count++] = item;
+    }
+
+    T Pop()
+    {
+      <b>return</b> m_Items[--m_Count];
+    }
+
+    <b>bool</b> IsEmpty()
+    {
+      <b>return</b> (m_Count == 0);
+    }
+};</code></pre>
+
+<b>Using Stack2:</b>
+
+<blockquote><pre>
+<b>void</b> PrintStack(Stack2&lt;String&gt; stack)
+{
+  <b>while</b> (!stack.IsEmpty())
+    cout &lt;&lt; stack.Pop() &lt;&lt; endl;
+}
+
+<b>int</b> main()
+{
+  Stack2&lt;String&gt; stack1(10);
+  Stack2&lt;String&gt; stack2(5);
+
+  String s1(<font color="#9933CC">&quot;one&quot;</font>);
+  String s2(<font color="#9933CC">&quot;two&quot;</font>);
+  String s3(<font color="#9933CC">&quot;three&quot;</font>);
+
+  stack1.Push(s1);
+  stack1.Push(s2);
+  stack1.Push(s3);
+
+  PrintStack(stack1); <font color="#003399"><i>// Compiles, calls PrintStack(Stack2&lt;String&gt;)</i></font>
+  PrintStack(stack2); <font color="#003399"><i>// Compiles, calls PrintStack(Stack2&lt;String&gt;)</i></font>
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+<b>Using Stack3:</b>
+
+<blockquote><pre>
+<b>void</b> PrintStack(Stack3&lt;String, 10&gt; stack)
+{
+  <b>while</b> (!stack.IsEmpty())
+    cout &lt;&lt; stack.Pop() &lt;&lt; endl;
+}
+
+<b>int</b> main()
+{
+  Stack3&lt;String, 10&gt; stack1;
+  Stack3&lt;String, 5&gt; stack2;
+
+  String s1(<font color="#9933CC">&quot;one&quot;</font>);
+  String s2(<font color="#9933CC">&quot;two&quot;</font>);
+  String s3(<font color="#9933CC">&quot;three&quot;</font>);
+
+  stack1.Push(s1);
+  stack1.Push(s2);
+  stack1.Push(s3);
+  PrintStack(stack1);  <font color="#003399"><i>// Compiles, calls PrintStack(Stack&lt;String, 10&gt;)</i></font>
+
+    <font color="#003399"><i>// Compile error. No PrintStack function that takes</i></font>
+    <font color="#003399"><i>// parameter of type: Stack3&lt;String, 5&gt;</i></font>
+  PrintStack(stack2); 
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Note that the code using Stack2 above will crash at runtime but the code using Stack3 won't. Can you tell why?
+<p>
+
+<b>Additional Notes on Templates</b>
+
+<ul>
+<li>A template class is used when an algorithm can be applied generically to different data types.
+<li>Container classes are often implemented as templates.
+<li>The Standard Template Library (STL) defines many such container classes. (vector, list, map, set)
+<li>By far, templates are what makes C++ a complex language. 
+<li>Most C++ compilers do not properly compile all of the variations in template semantics.
+<li>There are many books devoted exclusively to templates in C++.
+<li>It takes many, many hours to master templates in C++ (which will only occur through practice.)
+</ul>
+
+
+-->
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

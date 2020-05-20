@@ -1,0 +1,165 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Thread example using arrays</title>
+
+</head>
+
+<body>
+
+<center><h1>
+Thread example using arrays
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Another Approach
+</p>
+<tt><b>pi-mtfn.c</b></tt>:
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;   /* printf                  */</font>
+<font color="990099">#include &lt;stdlib.h&gt;  /* exit, atoi              */</font>
+<font color="990099">#include &lt;pthread.h&gt; /* thread create/join/exit */</font>
+
+<b>double</b> circle_pi(<b>int</b> rectangles);  <font color="#003399"><i>/* Find PI using a quarter circle */</i></font>
+<b>double</b> leibniz_pi(<b>int</b> iterations); <font color="#003399"><i>/* Find PI using a series         */</i></font>
+<b>double</b> atan_pi(<b>int</b> rectangles);    <font color="#003399"><i>/* Find PI using a curve          */</i></font>
+
+<font color="990099">#define NUM_THREADS 3</font>
+<b>typedef</b>  <b>double</b> (*PI_FUNCTION)(<b>int</b>);
+
+<font color="#003399"><i>/* Thread data */</i></font>
+<b>struct</b> pi_data
+{
+  <b>int</b> iterations;    <font color="#003399"><i>/* Number of iterations/rectangles */</i></font>
+  PI_FUNCTION pi_fn; <font color="#003399"><i>/* The pi function to call         */</i></font>
+  <b>double</b> result;     <font color="#003399"><i>/* The value of pi returned        */</i></font>
+};
+
+<b>void</b> *thread_fn(<b>void</b> *p)
+{
+  <b>struct</b> pi_data *data = (<b>struct</b> pi_data *)p;
+  data-&gt;result = data-&gt;pi_fn(data-&gt;iterations);
+  <b>return</b> NULL; <font color="#003399"><i>/* Result is passed back via structure */</i></font>
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv) 
+{
+  <b>int</b> iterations = 1000 * 1000 * 100; 
+  <b>int</b> i;
+  
+    <font color="#003399"><i>/* Data is in arrays now */</i></font>
+  pthread_t threads[NUM_THREADS];
+  <b>struct</b> pi_data data[NUM_THREADS];
+  
+    <font color="#003399"><i>/* Add functions here, if you have more functions */</i></font>
+  PI_FUNCTION pi_functions[] = {circle_pi, leibniz_pi, atan_pi};
+
+  <b>if</b> (argc &gt; 1)
+    iterations = 1000 * 1000 * atoi(argv[1]);
+
+    <font color="#003399"><i>/* Create threads with data passing */</i></font>
+  <b>for</b> (i = 0; i &lt; NUM_THREADS; i++)
+  {
+    data[i].iterations = iterations;
+    data[i].pi_fn = pi_functions[i];
+    pthread_create(&amp;threads[i], NULL, thread_fn, &amp;data[i]);
+  }
+  
+    <font color="#003399"><i>/* Wait on the threads */</i></font>
+  <b>for</b> (i = 0; i &lt; NUM_THREADS; i++)
+    pthread_join(threads[i], NULL);
+  
+    <font color="#003399"><i>/* Add a printf statements for more pi functions */</i></font>
+  printf(<font color="#9933CC">&quot;Iterations: %10i\n&quot;</font>, iterations);
+  printf(<font color="#9933CC">&quot; circle:%20.16f\n&quot;</font>, data[0].result);
+  printf(<font color="#9933CC">&quot;leibniz:%20.16f\n&quot;</font>, data[1].result);
+  printf(<font color="#9933CC">&quot;   atan:%20.16f\n&quot;</font>, data[2].result);
+ 
+  <b>return</b> 0;
+}
+</code></pre>
+
+<b>Output:</b>
+<blockquote><pre>
+Iterations:  200000000
+ circle:  3.1415926568498080
+leibniz:  3.1415926485894077
+   atan:  3.1415926536631549
+
+real    0m2.422s
+user    0m6.484s
+sys     0m0.000s
+</pre></blockquote>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

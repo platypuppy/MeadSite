@@ -1,0 +1,43 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Ocean.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<b>#ifndef</b> OCEAN_H
+<b>#define</b> OCEAN_H
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>#include</b> <font color="#9933CC">&quot;WarBoats.h&quot;</font> <font color="#003399"><i>// ShotStats</i></font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> WarBoats
+  {
+      <font color="#003399"><i>//! The attributes of the ocean</i></font>
+    <b>struct</b> Ocean
+    {
+      <b>int</b> *grid;        <font color="#003399"><i>//!&lt; The 2D ocean </i></font>
+      Boat *boats;      <font color="#003399"><i>//!&lt; The dynamic array of boats</i></font>
+      <b>int</b> num_boats;    <font color="#003399"><i>//!&lt; Number of boats in the ocean</i></font>
+      <b>int</b> x_quadrants;  <font color="#003399"><i>//!&lt; Ocean size along x-axis</i></font>
+      <b>int</b> y_quadrants;  <font color="#003399"><i>//!&lt; Ocean size along y-axis</i></font>
+      ShotStats stats;  <font color="#003399"><i>//!&lt; Status of the attack</i></font>
+    };
+
+  } <font color="#003399"><i>// namespace WarBoats</i></font>
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<b>#endif</b> <font color="#003399"><i>// OCEAN_H</i></font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+</code></pre>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

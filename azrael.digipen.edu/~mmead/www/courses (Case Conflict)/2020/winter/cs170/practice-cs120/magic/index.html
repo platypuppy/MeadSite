@@ -1,0 +1,297 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>magic</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: rgb(255,255,220); 
+  border-style: solid;
+  border-color: teal;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 0px;
+  padding-bottom : 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}   
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(magic.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<li>For this practice assignment you will write a program that creates a
+  <a href="https://en.wikipedia.org/wiki/Magic_square">magic square</a>. From Wikipedia:
+  <blockquote>
+  "... a magic square is an <i>N x N</i> square grid (where <i>N</i> is the number of cells
+  on each side) filled with distinct positive integers in the range <i>1, 2, . . . , N<sup>2</sup></i> 
+  such that each cell contains a different integer and the sum of the integers in each row,
+  column and diagonal is equal."
+  </blockquote>
+
+<p>
+  Here's an example of a <i>5 x 5</i> magic square:
+
+<blockquote><pre>
+   17   24    1    8   15
+   23    5    7   14   16
+    4    6   13   20   22
+   10   12   19   21    3
+   11   18   25    2    9
+</pre></blockquote>  
+
+If you add up all of the values in each row, column, and diagonal, you'll see that they
+all add up to 65. This is the <i>magic sum</i> for the magic square.
+<p>
+This practice is programming project 8.17 on page 181 in the textbook. A brief description of
+the algorithm is as follows:
+<p>
+<blockquote>
+Start by placing the number 1 in the middle of row 0. Place each of the remaining numbers
+2, 3, ..., N<sup>2</sup> by moving up one row and over (to the right) one column. Any
+attempt to go outside the bounds of the array should "wrap around" to the opposite side
+of the array.
+If a particular array element is already occupied, put the number directly below the
+<i>previously</i> stored number.
+</blockquote>
+
+This algorithm is known as the <a href="https://en.wikipedia.org/wiki/Siamese_method">
+Siamese method</a> or the De la Loub&egrave;re method. From Wikipedia:
+
+<p>
+<center>
+<a href="https://en.wikipedia.org/wiki/Siamese_method"><img src="SiameseMethod.gif"></a>
+</center>
+<p>
+
+As an example, here is a <i>3 x 3</i> array showing each move and how conflicts are
+resolved. The magic sum is 15:
+
+<blockquote>
+
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr align="center"><th>Move 1</th><th></th><th>Move 2</th><th></th><th>Move 3</th></tr>
+<tr>
+<td>
+<pre><big>.    1    .
+.    .    .
+.    .    .
+</big></pre>
+</td>
+
+<td width=50></td>
+
+<td>
+<pre><big>.    1    .
+.    .    .
+.    .    2
+</big></pre>
+</td>
+
+<td width=50></td>
+
+<td>
+<pre><big>.    1    .
+3    .    .
+.    .    2
+</big></pre>
+</td>
+</tr></table>
+
+<br>
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr align="center"><th>Move 4</th><th></th><th>Move 5</th><th></th><th>Move 6</th></tr>
+<tr>
+<td>
+<pre><big>.    1    .
+3    .    .
+4    .    2
+</big></pre>
+</td>
+
+<td width=50></td>
+
+<td>
+<pre><big>.    1    .
+3    5    .
+4    .    2
+</big></pre>
+</td>
+
+<td width=50></td>
+
+<td>
+<pre><big>.    1    6
+3    5    .
+4    .    2
+</big></pre>
+</td>
+</tr></table>
+
+<br>
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr align="center"><th>Move 7</th><th></th><th>Move 8</th><th></th><th>Move 9</th></tr>
+<tr>
+<td>
+<pre><big>.    1    6
+3    5    7
+4    .    2
+</big></pre>
+</td>
+
+<td width=50></td>
+
+<td>
+<pre><big>8    1    6
+3    5    7
+4    .    2
+</big></pre>
+</td>
+
+<td width=50></td>
+
+<td>
+<pre><big>8    1    6
+3    5    7
+4    9    2
+</big></pre>
+</td>
+</tr></table>
+</blockquote>
+
+Notice <b>Move 4</b>: From 3, you move up one row and over one column. Since this spot is already
+occupied, you put the number 4 one row below the number 3. A similar thing happens when
+placing the number 7.
+<p>
+
+This is the prototype of the function that the driver will call:
+
+<blockquote><pre>
+<b>int</b> magic_square(<b>int</b> size, <b>int</b> showall);
+</pre></blockquote>
+
+The input, <i>showall</i>, is a flag that determines if you should print all of the moves,
+instead of just the final square. The return value is the magic sum for the square.
+Put this function in a file named <i>magic.c</i> and build it with this command line:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c magic.c -o magic
+</pre></blockquote>
+
+Here is a simple driver file: (<tt>main.c</tt>, <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/main.c.html">HTML</a>
+    <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/main.c">Text</a>) The program requires 2 command line parameters:
+    <p>
+<ol>
+  <li>The first parameter is the size of the square. It must be a positive, odd integer.</li>
+  <li>The second parameter is an integer, either 0 or non-zero. This controls whether or not you
+    should print every square or just the final square. A zero means just print the final
+    square and any other integer means print all squares.</li>
+</ol>
+<p>
+Examples: (The text from the semi-colon on is just for descriptive purposes)
+<blockquote><pre>
+magic 5 0   ; Size is 5, just show the final square
+magic 7 1   ; Size is 7, show all of the squares
+magic 9     ; Size is 9, just show the final square (default)
+magic       ; Size is 5 (default), just show final square (default)
+</pre></blockquote>
+
+See the driver to see how it works.
+<p>
+Here are some sample outputs. The number in the filename is the size of the square.
+If there is a letter <i>a</i> following the number, it means the file contains
+all the squares (for debugging purposes).
+
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out1.txt">out1.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out1-a.txt">out1a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out3.txt">out3.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out3-a.txt">out3a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out5.txt">out5.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out5-a.txt">out5a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out7.txt">out7.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out7-a.txt">out7a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out9.txt">out9.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out9-a.txt">out9a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out11.txt">out11.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out11-a.txt">out11a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out13.txt">out13.txt</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out13-a.txt">out13a.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out41.txt">out41.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/magic/out99.txt">out99.txt</a></li>
+
+</ol>
+
+<p>
+  <hr width="95%">
+</p>
+
+<b>Notes:</b>
+
+<ol>
+<li>The value of <i>N</i> must be odd. For even-sized boards, a different algorithm
+is used. (We're not worried about that.)</li>
+<p>
+<li>When coded correctly, the algorithm above will always work for odd sized squares.
+  This means that if you have a collision and have to move down one row, that spot
+  will always be open.</li>
+  <p>
+<li>There are many different magic squares of each size. However, your solution must
+  match the output posted here. This means you must follow the algorithm that is posted.
+<p>
+<li>To print the numbers, use <tt>"%5i"</tt> as the format specifier to <i>printf</i>.</li>
+<p>
+<li>You must dynamically allocate the 2D array. The array should hold integers, to allow
+  very large squares.
+
+The only limitation for the size of the square is the amount of memory in the computer.
+Your program should be able to easily handle a 1001 x 1001 square and run in a fraction
+of a second. Of course, trying to print out a square of that size will be difficult
+to format so it can be read on the screen.</li>
+<p>
+<li>You should initialize all of the array elements to 0. When printing, if the
+  element is 0, you should print a period instead of the 0.</li>
+<p>
+<li>By now, it should go without saying that you need to make some helper functions.
+  Don't try to do the entire thing in the <i>magic_square</i> function.
+<p>
+
+</ol>
+
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,26 @@
+rat is an anagram of tar
+trap is an anagram of part
+baker is an anagram of break
+eager is an anagram of agree
+nicest is an anagram of insect
+promise is an anagram of imposer
+mattress is an anagram of smartest
+present is an anagram of serpent
+senator is an anagram of treason
+weather is an anagram of wreathe
+roasting is an anagram of organist
+worried is an anagram of wordier
+reversed is an anagram of reserved
+at is NOT an anagram of ar
+rap is NOT an anagram of art
+aker is an anagram of reak
+ager is NOT an anagram of gree
+icest is NOT an anagram of nsect
+romise is NOT an anagram of mposer
+attress is NOT an anagram of martest
+resent is NOT an anagram of erpent
+enator is NOT an anagram of reason
+eather is an anagram of reathe
+oasting is NOT an anagram of rganist
+orried is an anagram of ordier
+eversed is an anagram of eserved

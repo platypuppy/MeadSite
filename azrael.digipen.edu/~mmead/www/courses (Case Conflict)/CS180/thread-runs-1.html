@@ -1,0 +1,424 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Thread runs</title>
+
+<style type="text/css">
+
+ .ltpnk {background-color: #FFCCFF}
+ .ltred {background-color: #FFCCCC}
+ .ltyel {background-color: #FFFFCC}
+ .yel99 {background-color: #FFFF99}
+ .yel66 {background-color: #FFFF66}
+ .yel   {background-color: #FFFF00}
+ .ltgrn {background-color: #CCFFCC}
+ .grn99 {background-color: #99FF99}
+ .grnb  {background-color: #B3FFB3}
+ .ltgry {background-color: #CCCCCC}
+ .ltcyn {background-color: #CCFFFF}
+ .sblu  {background-color: #00CCFF}
+ .vio   {background-color: #CCCCFF}
+ .mystb {background-color: #99CCFF}
+ .dblu  {background-color: #6666CC}
+ .pnk99 {background-color: #FF99FF}
+
+ .blu {color:#0000FF; font-weight:bold}
+ .brn {color:#990000; font-weight:bold}
+ .grn {color:#006600; font-weight:bold}
+ .red {color:#FF0000; font-weight:bold}
+ 
+	.attrib {font-size:8px;}
+ 
+</style> 
+
+</head>
+
+<body>  
+
+<center><h1>
+Thread runs
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Multiple threads
+</p>
+
+		
+
+<li>A larger example using multiple threads:</li>
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;   <font color="#003399"><i>/* printf                  */</i></font>
+<b>#include</b> &lt;unistd.h&gt;  <font color="#003399"><i>/* sleep, getpid           */</i></font>
+<b>#include</b> &lt;pthread.h&gt; <font color="#003399"><i>/* thread create/join/exit */</i></font>
+
+<b>char</b> <b>const</b> *table[]
+   = { <font color="#9933CC">&quot;A man, a plan, a canal: Panama!&quot;</font>,
+       <font color="#9933CC">&quot;No lemons, no melon.&quot;</font>,
+       <font color="#9933CC">&quot;Step on no pets.&quot;</font>,
+       <font color="#9933CC">&quot;Was it a rat I saw?&quot;</font>,
+       <font color="#9933CC">&quot;Dog as a devil deified lived as a god.&quot;</font>,
+       <font color="#9933CC">&quot;Able was I ere I saw Elba.&quot;</font>,
+       <font color="#9933CC">&quot;Yawn! Madonna fan? No damn way!&quot;</font>,
+       <font color="#9933CC">&quot;Go hang a salami. I'm a lasagna hog!&quot;</font>
+     };
+
+<b>const</b> <b>int</b> table_size = <b>sizeof</b>(table) / <b>sizeof</b>(*table);
+
+<b>void</b> *palindrome(<b>void</b> *p) 
+{
+  pthread_t id = pthread_self();
+  <b>int</b> max = 5;
+  <b>int</b> i, pid;
+  
+  pid = getpid(); <font color="#003399"><i>/* all threads have the same pid */</i></font>
+  
+  <b>for</b> (i = 0; i &lt; max; ++i) 
+  {
+    <b>int</b> index = rand() % table_size;
+    printf(<font color="#9933CC">&quot;[p:%i][t:%u]: %s&#92;n&quot;</font>, pid, (<b>unsigned</b>)id / 1000000, table[index]);
+  }
+  
+  <b>return</b> NULL;
+}
+
+<b>int</b> main(<b>void</b>) 
+{
+  <b>#define</b> COUNT 8
+  <b>int</b> i; 
+    
+  pthread_t thread_id[COUNT];
+  
+  srand(0);
+  
+  printf(<font color="#9933CC">&quot;Creating threads...&#92;n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; COUNT; ++i)
+    pthread_create(&thread_id[i], NULL, palindrome, NULL);
+  printf(<font color="#9933CC">&quot;Done creating threads.&#92;n&quot;</font>);  
+  
+  printf(<font color="#9933CC">&quot;Waiting on threads...&#92;n&quot;</font>);
+  <b>for</b> (i = 0; i &lt; COUNT; ++i)
+  {
+    printf(<font color="#9933CC">&quot;Joining thread %i&#92;n&quot;</font>, i);
+    pthread_join(thread_id[i], 0);
+  }
+  printf(<font color="#9933CC">&quot;Done waiting on threads.&#92;n&quot;</font>);
+    
+  <b>return</b> 0;
+}
+</code></pre>
+
+<p><hr width="90%"><p>
+
+<table border=0 cellspacing=0 cellpadding=5>
+<tr><th>Run #1</th><th width="30"></th><th>Run #2</th></tr>
+<tr valign="top">
+<td>
+<pre>
+Creating threads...
+<font color="blue"><b>[p:18007][t:686]: Go hang a salami. I'm a lasagna hog!</b></font>
+<font color="blue"><b>[p:18007][t:686]: Was it a rat I saw?</b></font>
+<font color="blue"><b>[p:18007][t:686]: No lemons, no melon.</b></font>
+[p:18007][t:660]: Go hang a salami. I'm a lasagna hog!
+[p:18007][t:660]: Dog as a devil deified lived as a god.
+[p:18007][t:660]: Able was I ere I saw Elba.
+[p:18007][t:660]: Step on no pets.
+[p:18007][t:660]: Was it a rat I saw?
+[p:18007][t:652]: No lemons, no melon.
+[p:18007][t:652]: Was it a rat I saw?
+[p:18007][t:652]: Was it a rat I saw?
+[p:18007][t:652]: Yawn! Madonna fan? No damn way!
+[p:18007][t:652]: Dog as a devil deified lived as a god.
+<font color="blue"><b>[p:18007][t:686]: Step on no pets.</b></font>
+[p:18007][t:635]: Step on no pets.
+[p:18007][t:669]: No lemons, no melon.
+[p:18007][t:669]: A man, a plan, a canal: Panama!
+[p:18007][t:669]: Was it a rat I saw?
+[p:18007][t:669]: A man, a plan, a canal: Panama!
+[p:18007][t:669]: Go hang a salami. I'm a lasagna hog!
+[p:18007][t:627]: Able was I ere I saw Elba.
+[p:18007][t:627]: Step on no pets.
+Done creating threads.
+Waiting on threads...
+Joining thread 0
+[p:18007][t:635]: Yawn! Madonna fan? No damn way!
+[p:18007][t:635]: Was it a rat I saw?
+[p:18007][t:635]: Was it a rat I saw?
+[p:18007][t:644]: Step on no pets.
+[p:18007][t:644]: No lemons, no melon.
+[p:18007][t:644]: Step on no pets.
+[p:18007][t:644]: Yawn! Madonna fan? No damn way!
+<font color="blue"><b>[p:18007][t:686]: Dog as a devil deified lived as a god.</font></b>
+[p:18007][t:677]: Yawn! Madonna fan? No damn way!
+[p:18007][t:677]: Able was I ere I saw Elba.
+[p:18007][t:677]: Go hang a salami. I'm a lasagna hog!
+[p:18007][t:677]: No lemons, no melon.
+[p:18007][t:677]: A man, a plan, a canal: Panama!
+[p:18007][t:635]: Go hang a salami. I'm a lasagna hog!
+[p:18007][t:644]: Step on no pets.
+[p:18007][t:627]: Yawn! Madonna fan? No damn way!
+[p:18007][t:627]: Was it a rat I saw?
+[p:18007][t:627]: Step on no pets.
+Joining thread 1
+Joining thread 2
+Joining thread 3
+Joining thread 4
+Joining thread 5
+Joining thread 6
+Joining thread 7
+Done waiting on threads.
+</pre>
+</td>
+<td></td>
+<td>
+<pre>
+Creating threads...
+[p:18099][t:2189]: Go hang a salami. I'm a lasagna hog!
+[p:18099][t:2189]: Yawn! Madonna fan? No damn way!
+[p:18099][t:2189]: No lemons, no melon.
+[p:18099][t:2189]: Was it a rat I saw?
+[p:18099][t:2189]: No lemons, no melon.
+[p:18099][t:2181]: Step on no pets.
+[p:18099][t:2172]: No lemons, no melon.
+[p:18099][t:2181]: Able was I ere I saw Elba.
+[p:18099][t:2181]: Was it a rat I saw?
+[p:18099][t:2172]: Step on no pets.
+[p:18099][t:2172]: Dog as a devil deified lived as a god.
+[p:18099][t:2172]: Step on no pets.
+[p:18099][t:2172]: Dog as a devil deified lived as a god.
+<font color="blue"><b>[p:18099][t:2139]: Was it a rat I saw?</b></font>
+[p:18099][t:2181]: Was it a rat I saw?
+[p:18099][t:2181]: A man, a plan, a canal: Panama!
+Done creating threads.
+Waiting on threads...
+Joining thread 0
+Joining thread 1
+<font color="blue"><b>[p:18099][t:2139]: Was it a rat I saw?</b></font>
+<font color="blue"><b>[p:18099][t:2139]: A man, a plan, a canal: Panama!</b></font>
+<font color="blue"><b>[p:18099][t:2139]: Go hang a salami. I'm a lasagna hog!</b></font>
+[p:18099][t:2155]: Dog as a devil deified lived as a god.
+[p:18099][t:2155]: Able was I ere I saw Elba.
+[p:18099][t:2155]: Yawn! Madonna fan? No damn way!
+[p:18099][t:2155]: Step on no pets.
+[p:18099][t:2147]: Step on no pets.
+[p:18099][t:2147]: Was it a rat I saw?
+[p:18099][t:2147]: Go hang a salami. I'm a lasagna hog!
+[p:18099][t:2147]: No lemons, no melon.
+[p:18099][t:2147]: Step on no pets.
+Joining thread 2
+Joining thread 3
+[p:18099][t:2155]: Yawn! Madonna fan? No damn way!
+[p:18099][t:2128]: Yawn! Madonna fan? No damn way!
+<font color="blue"><b>[p:18099][t:2139]: Was it a rat I saw?</b></font>
+[p:18099][t:2128]: Yawn! Madonna fan? No damn way!
+[p:18099][t:2128]: Step on no pets.
+[p:18099][t:2128]: Able was I ere I saw Elba.
+[p:18099][t:2128]: Go hang a salami. I'm a lasagna hog!
+[p:18099][t:2164]: Go hang a salami. I'm a lasagna hog!
+[p:18099][t:2164]: No lemons, no melon.
+[p:18099][t:2164]: A man, a plan, a canal: Panama!
+[p:18099][t:2164]: Was it a rat I saw?
+[p:18099][t:2164]: Step on no pets.
+Joining thread 4
+Joining thread 5
+Joining thread 6
+Joining thread 7
+Done waiting on threads.
+</pre>
+</td>
+</tr></table>
+
+<table border=0 cellspacing=0 cellpadding=5>
+<tr><th>Run #3</th><th width="30"></th><th>Run #4</th></tr>
+<tr valign="top">
+<td>
+<pre>
+Creating threads...
+[p:18172][t:2086]: Go hang a salami. I'm a lasagna hog!
+[p:18172][t:2086]: Was it a rat I saw?
+[p:18172][t:2086]: No lemons, no melon.
+[p:18172][t:2086]: Go hang a salami. I'm a lasagna hog!
+[p:18172][t:2086]: Step on no pets.
+[p:18172][t:2077]: Yawn! Madonna fan? No damn way!
+[p:18172][t:2077]: No lemons, no melon.
+[p:18172][t:2077]: Able was I ere I saw Elba.
+[p:18172][t:2077]: Step on no pets.
+[p:18172][t:2077]: Step on no pets.
+[p:18172][t:2060]: Dog as a devil deified lived as a god.
+[p:18172][t:2060]: Was it a rat I saw?
+[p:18172][t:2044]: Was it a rat I saw?
+[p:18172][t:2069]: No lemons, no melon.
+[p:18172][t:2069]: Step on no pets.
+[p:18172][t:2069]: Dog as a devil deified lived as a god.
+[p:18172][t:2069]: A man, a plan, a canal: Panama!
+[p:18172][t:2069]: Was it a rat I saw?
+[p:18172][t:2052]: Was it a rat I saw?
+[p:18172][t:2052]: Go hang a salami. I'm a lasagna hog!
+[p:18172][t:2052]: Able was I ere I saw Elba.
+[p:18172][t:2052]: Yawn! Madonna fan? No damn way!
+[p:18172][t:2052]: Step on no pets.
+[p:18172][t:2060]: Yawn! Madonna fan? No damn way!
+Done creating threads.
+Waiting on threads...
+Joining thread 0
+[p:18172][t:2035]: Dog as a devil deified lived as a god.
+[p:18172][t:2035]: Was it a rat I saw?
+[p:18172][t:2035]: Go hang a salami. I'm a lasagna hog!
+[p:18172][t:2035]: No lemons, no melon.
+[p:18172][t:2035]: Step on no pets.
+[p:18172][t:2044]: A man, a plan, a canal: Panama!
+[p:18172][t:2044]: Yawn! Madonna fan? No damn way!
+[p:18172][t:2044]: Step on no pets.
+[p:18172][t:2044]: Able was I ere I saw Elba.
+[p:18172][t:2060]: Yawn! Madonna fan? No damn way!
+[p:18172][t:2060]: Go hang a salami. I'm a lasagna hog!
+[p:18172][t:2027]: Was it a rat I saw?
+[p:18172][t:2027]: No lemons, no melon.
+[p:18172][t:2027]: A man, a plan, a canal: Panama!
+[p:18172][t:2027]: Was it a rat I saw?
+[p:18172][t:2027]: Step on no pets.
+Joining thread 1
+Joining thread 2
+Joining thread 3
+Joining thread 4
+Joining thread 5
+Joining thread 6
+Joining thread 7
+Done waiting on threads.
+</pre>
+</td>
+<td></td>
+<td>
+<pre>
+Creating threads...
+[p:18259][t:3199]: Go hang a salami. I'm a lasagna hog!
+[p:18259][t:3199]: Was it a rat I saw?
+[p:18259][t:3199]: No lemons, no melon.
+[p:18259][t:3174]: Go hang a salami. I'm a lasagna hog!
+[p:18259][t:3174]: Dog as a devil deified lived as a god.
+[p:18259][t:3174]: Able was I ere I saw Elba.
+[p:18259][t:3174]: Step on no pets.
+[p:18259][t:3157]: Was it a rat I saw?
+[p:18259][t:3166]: No lemons, no melon.
+[p:18259][t:3166]: Was it a rat I saw?
+[p:18259][t:3166]: Was it a rat I saw?
+[p:18259][t:3166]: Yawn! Madonna fan? No damn way!
+[p:18259][t:3166]: Step on no pets.
+[p:18259][t:3174]: Step on no pets.
+Done creating threads.
+[p:18259][t:3140]: Dog as a devil deified lived as a god.
+[p:18259][t:3140]: A man, a plan, a canal: Panama!
+[p:18259][t:3182]: No lemons, no melon.
+[p:18259][t:3182]: Was it a rat I saw?
+Waiting on threads...
+Joining thread 0
+[p:18259][t:3182]: A man, a plan, a canal: Panama!
+[p:18259][t:3182]: Able was I ere I saw Elba.
+[p:18259][t:3182]: Yawn! Madonna fan? No damn way!
+[p:18259][t:3140]: Go hang a salami. I'm a lasagna hog!
+[p:18259][t:3140]: Step on no pets.
+[p:18259][t:3140]: Yawn! Madonna fan? No damn way!
+[p:18259][t:3149]: Dog as a devil deified lived as a god.
+[p:18259][t:3191]: Yawn! Madonna fan? No damn way!
+[p:18259][t:3191]: Was it a rat I saw?
+[p:18259][t:3191]: Was it a rat I saw?
+[p:18259][t:3191]: Go hang a salami. I'm a lasagna hog!
+[p:18259][t:3191]: No lemons, no melon.
+[p:18259][t:3199]: Step on no pets.
+[p:18259][t:3199]: Yawn! Madonna fan? No damn way!
+[p:18259][t:3149]: Step on no pets.
+[p:18259][t:3149]: Able was I ere I saw Elba.
+[p:18259][t:3157]: Step on no pets.
+[p:18259][t:3157]: No lemons, no melon.
+[p:18259][t:3157]: A man, a plan, a canal: Panama!
+[p:18259][t:3157]: Was it a rat I saw?
+Joining thread 1
+Joining thread 2
+Joining thread 3
+Joining thread 4
+[p:18259][t:3149]: Go hang a salami. I'm a lasagna hog!
+[p:18259][t:3149]: Step on no pets.
+Joining thread 5
+Joining thread 6
+Joining thread 7
+Done waiting on threads.
+</pre>
+</td>
+</tr></table>
+
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+	
+-->

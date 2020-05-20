@@ -1,0 +1,19 @@
+struct Employee
+{
+			Employee *Next;      //  4
+			char lastName[12];   // 12
+			char firstName[12];  // 12
+			float salary;        //  4
+			int years;           //  4
+};
+
+    TestFreeEmptyPages2();
+    cout << endl;
+    cout << "============================== Test free checking (stress)..." << endl;
+    StressFreeChecking();
+    cout << endl;
+    cout << "============================== Test stress using new/delete..." << endl;
+    Stress(true);
+    cout << endl;
+    cout << "============================== Test stress using allocator..." << endl;
+}

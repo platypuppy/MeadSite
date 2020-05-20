@@ -1,0 +1,48 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Square class</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>class</b> Square : <b>public</b> Rectangle
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Inherited from Rectangle</i></font>
+    <b>double</b> getLength() <b>const</b>;
+    <b>double</b> getWidth() <b>const</b>;
+    <b>void</b> setLength();
+    <b>void</b> setWidth();
+    <b>double</b> getCenterX() <b>const</b>;
+    <b>double</b> getCenterY() <b>const</b>;
+    <b>void</b> SetCenter(<b>double</b> x, <b>double</b> y);
+
+      <font color="#003399"><i>// Derived members</i></font>
+    Square(<b>double</b> x, <b>double</b> y, <b>double</b> side);
+    <b>double</b> GetSide() <b>const</b>;
+    <b>void</b> SetSide(<b>double</b> side);
+    <b>virtual</b> <b>void</b> Scale(<b>double</b> scale); <font color="#003399"><i>// Hides the base class function</i></font>
+
+      <font color="#003399"><i>// Redefined</i></font>
+    <b>double</b> Area() <b>const</b>;
+    <b>virtual</b> <b>void</b> Draw() <b>const</b>;
+
+  <b>private</b>:
+      <font color="#003399"><i>// Inherited from Rectangle (although not directly accessible in Square)</i></font>
+    <b>double</b> center_x_; <font color="#003399"><i>// x-coordinate of center point</i></font>
+    <b>double</b> center_y_; <font color="#003399"><i>// y-coordinate of center point</i></font>
+    <b>double</b> length_;   <font color="#003399"><i>// &quot;long&quot; sides</i></font>
+    <b>double</b> width_;    <font color="#003399"><i>// &quot;short&quot; sides</i></font>
+
+      <font color="#003399"><i>// Derived member</i></font>
+    <b>double</b> side_;  <font color="#003399"><i>// length of a side</i></font>
+};
+
+</code></pre>
+
+
+</body>
+</html>
+

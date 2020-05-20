@@ -1,0 +1,52 @@
+This is a simple test.
+Average word length: 3.60
+--------------------------
+one one one one one one
+Average word length: 3.00
+--------------------------
+abcdefghijkl
+Average word length: 12.00
+--------------------------
+ab c de f gh i jk l
+Average word length: 1.50
+--------------------------
+a b c d e f g h i j k l
+Average word length: 1.00
+--------------------------
+   This is   	another   		 test.   
+Average word length: 4.50
+--------------------------
+
+Average word length: 0.00
+--------------------------
+     
+Average word length: 0.00
+--------------------------
+A hair, Morty. I need one of your hairs. This isn't Game of Thrones.
+
+Average word length: 3.93
+--------------------------
+Now who can tell me the common denominator of these two fractions? You don't know or you're just bored?
+
+Average word length: 4.47
+--------------------------
+Hey listen, you know, if we're all bored over here, wouldn't the common denominator be you?
+
+Average word length: 4.75
+--------------------------
+It's a serum that I need to, uh...to stay alive. I have...had a rough day, and, uh...I've sustained a lot of damage, I'm pretty close to death, which the serum will prevent.
+
+Average word length: 4.44
+--------------------------
+Come on, flip the pickle, Morty. You're not gonna regret it. The payoff is huge. I turned myself into a pickle, Morty! Boom! Big reveal! I'm a pickle! What do you think about that? I turned myself into a pickle! W-what are you just staring at me for, bro? I turned myself into a pickle, Morty.
+
+Average word length: 4.25
+--------------------------
+Listen, Morty, I hate to break it to you, but what people call "love" is just a chemical reaction that compels animals to breed. It hits hard, Morty, then it slowly fades, leaving you stranded in a failing marriage. I did it. Your parents are gonna do it. Break the cycle, Morty. Rise above. Focus on science.
+
+Average word length: 4.44
+--------------------------
+Because I don't respect therapy; because I'm a scientist; because I invent, transform, create, and destroy for a living, and when I don't like something about the world, I change it. And I don't think going to a rented office in a strip mall to listen to some agent of averageness explain which words mean which feelings has ever helped anyone do anything. I think it's helped a lot of people get comfortable and stop panicking, which is a state of mind [belch] we value in the animals we eat, but not something I want for myself. I'm not a cow, I'm a pickle...when I feel like it.
+
+Average word length: 4.39
+--------------------------

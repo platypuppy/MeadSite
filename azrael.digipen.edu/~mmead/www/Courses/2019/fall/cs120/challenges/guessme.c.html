@@ -1,0 +1,44 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+*******************************************************************************/</i></font>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf         */</font>
+<font color="990099">#include &quot;jumble.h&quot; /* jumble, DECODE */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* The encoded string */</i></font>
+  <b>char</b> original[] = <font color="#9933CC">&quot;&#201&#219&#214ô&#216&#209&#218&#213ô&#194ê&#224&#208&#222&#160ê&#181Å&#220&#194&#222å&#200&#222&#213ê&#229&#208&#238Å&#209å&#213&#232&#198úå&#195&#222&#205&#217&#209&#215&#222Å&#221&#209èô&#181&#216&#209&#211&#222Å&#209&#222&#198ô&#216&#209&#229&#212&#165Å&#180&#225&#197&#222èê&#197&#208&#238Å&#212&#219&#207&#160&#213ê&#227&#194&#231&#207&#209å&#204&#231&#208&#231å&#194&#219&#208&#229&#224Å&#226&#213úå&#195&#222&#205&#217&#209&#215&#222Å&#221&#209è&quot;</font>;
+    
+  <b>char</b> phrase[<b>sizeof</b>(original)]; <font color="#003399"><i>/* Need to make a copy between decodings */</i></font>
+  <b>char</b> password[6] = {0};        <font color="#003399"><i>/* The password is 5 characters long     */</i></font>
+
+  printf(<font color="#9933CC">&quot;The encoded string:\n%s\n\n&quot;</font>, original);
+
+  <font color="#003399"><i>/* 
+  
+  
+    The rest of the code goes here... 
+
+
+  */</i></font>
+
+  printf(<font color="#9933CC">&quot;The password is %s and the decoded string is:\n%s\n&quot;</font>, password, phrase);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

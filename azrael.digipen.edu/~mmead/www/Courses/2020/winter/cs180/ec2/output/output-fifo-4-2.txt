@@ -1,0 +1,13 @@
+3   fault [3      ]
+2   fault [3 2    ]
+1   fault [3 2 1  ]
+0   fault [3 2 1 0]
+3    ok   [3 2 1 0]
+2    ok   [3 2 1 0]
+4   fault [2 1 0 4]
+3   fault [1 0 4 3]
+2   fault [0 4 3 2]
+1   fault [4 3 2 1]
+0   fault [3 2 1 0]
+4   fault [2 1 0 4]
+Faults: 10

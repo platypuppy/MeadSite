@@ -1,0 +1,110 @@
+#!/bin/bash
+
+# From here: https://solarianprogrammer.com/2017/05/21/compiling-gcc-macos/
+
+# This will force you to enter your password so it won't prompt later
+sudo ls > /dev/null
+
+# Make sure the directory/file permissions are correct
+umask 0022
+
+# Change this if you want to install somewhere else
+INSTALL_DIR=/usr/local/gcc-7.1
+
+# get the number of cores (for make -j)
+eval getconf _NPROCESSORS_ONLN > /dev/null
+result=$?
+if [[ $result -eq 0 ]]; then 
+	NPROCS=`getconf _NPROCESSORS_ONLN`
+else
+	NPROCS=4
+fi
+
+# uncomment the line below to force the number of cores to use
+#NPROCS=4
+
+# install some necessary command line tools (Mac only)
+# this should really be done prior to running this script
+#xcode-select --install
+
+###############################################################################
+# extract, build, and install gmp
+tar -xjvf gmp-6.1.2.tar.bz2
+cd gmp*
+mkdir build
+cd build
+../configure --prefix=${INSTALL_DIR} --enable-cxx
+make -j$(NPROCS)
+sudo make install
+
+# go back to the root of the build dir
+cd ..
+cd ..
+
+###############################################################################
+# extract, build, and install mpfr
+tar -xjvf mpfr-3.1.5.tar.bz2
+cd mpfr*
+mkdir build
+cd build
+../configure --prefix=${INSTALL_DIR} --with-gmp=${INSTALL_DIR}
+make -j${NPROCS}
+sudo make install
+
+# go back to root of the build dir
+cd ..
+cd ..
+
+###############################################################################
+# extract, build, and install mpc
+tar -xzvf mpc-1.0.3.tar.gz
+cd mpc*
+mkdir build
+cd build
+../configure --prefix=${INSTALL_DIR} --with-gmp=${INSTALL_DIR} --with-mpfr=${INSTALL_DIR}
+make -j${NPROCS}
+sudo make install
+
+# go back to root of the build dir
+cd ..
+cd ..
+
+###############################################################################
+# extract, build, and install isl
+tar -xjvf isl-0.16.1.tar.bz2
+cd isl*
+mkdir build
+cd build
+../configure --prefix=${INSTALL_DIR} --with-gmp-prefix=${INSTALL_DIR}
+make -j${NPROCS}
+sudo make install
+
+# go back to root of the build dir
+cd ..
+cd ..
+
+###############################################################################
+# extract, build, and install gcc/g++ (This could take a while)
+tar -xjvf gcc-7.1.0.tar.bz2
+cd gcc*
+mkdir build
+cd build
+
+# removed fortran from the list of compilers to build, only building c and c++
+../configure --prefix=${INSTALL_DIR} --enable-checking=release --with-gmp=${INSTALL_DIR} --with-mpfr=${INSTALL_DIR} --with-mpc=${INSTALL_DIR} --enable-languages=c,c++ --with-isl=${INSTALL_DIR} --program-suffix=-7.1
+time make -j${NPROCS}
+sudo make install
+
+# go back to root
+cd ..
+cd ..
+
+###############################################################################
+# Show the files and the version to make sure it worked.
+ls -l ${INSTALL_DIR}/bin
+${INSTALL_DIR}/bin/gcc-7.1 --version
+export PATH=${INSTALL_DIR}/bin:$PATH
+
+# compile a test program to verify the installation
+g++-7.1 main.cpp -std=c++14 -o main
+./main

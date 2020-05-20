@@ -1,0 +1,404 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #13</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 13</h1>
+TCP/IP networking using the Indy Components. (Chat client/server)
+</center>
+<p>
+
+<p class="technote">
+<b>Note</b>: These projects are using 3rd party networking components (Indy) which are not supported with the free
+Turbo C++ 2006 version. In the examples on this page, the client and server were built with RAD Studio 2010, which 
+includes the Indy components in the IDE. Some slight modifications were made to the code to support XE 3 and 
+later versions of RAD Studio. You can download the project for XE 3 <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/CSChat-XE3.zip">here</a>. 
+(It <i>should</i> work in XE 4 without modifications. I'm not sure about XE or XE 2, though.)
+
+</p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #13
+</p>
+
+<ol>
+	
+<li><b>Overview of Internet Direct (Indy) Components</b>
+<p>
+Rather than write a book on these components, I'm just going to point to some references online. Realize that most of the code samples
+ are written in Delphi, but you should be able to follow along. Also, some of the examples are a few years old, but that isn't a problem
+ since socket programming hasn't changed much over the years.
+<ul>
+<li><a href="http://www.swissdelphicenter.ch/en/showarticle.php?id=4">The original introduction</a> to Indy and why blocking is not evil in networking.
+	<b>This should be read first</b>.
+	<p>
+<li><a href="http://www.indyproject.org/index.en.aspx">Indy Home Page</a> This is the main starting point. You can find demos
+	and other stuff. 
+<li><a href="http://www.atozed.com/indy/index.en.aspx">The Indy Portal</a> A good place to start.
+<li><a href="http://www.indyproject.org/Sockets/Docs/Articles.EN.aspx">More Articles</a> More articles on Indy.
+<li><a href="http://www.indyproject.org/docsite/html/frames.html?frmname=topic&frmfile=index.html">Online Reference for Indy</a>
+	This is more of a reference than a tutorial.
+<li><a href="http://delphi.about.com/od/indy/Internet_Direct_Indy_knowledge_base.htm">Indy Links</a> Some tutorials for using Indy. The
+	code is Delphi, but it still is very useful.
+	
+<li><a href="http://www.youtube.com/user/Tracer1808#p/u">Youtube videos</a> This guy has made several videos on using RAD Studio 2010. He
+	has several on using the Indy components. <a href="http://www.youtube.com/watch?v=DBtzYB-h4hI">This video</a> is a much more 
+	simplified version of the chat program that I wrote for this tutorial.
+	
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/Files/Internet_Direct_Overview.pdf">Brief introduction</a> to using Indy.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/Files/IndyExample/IndyExample.html">Some simple examples</a> using Indy. There is an example using the  HTTP component 
+	to create a web server in a few lines	of code.
+</ul>
+
+<p>
+	
+There are over 100 components included with Indy and they are arranged among 6 categories:
+
+<p>
+<img border=0 src="chat/Components-3.png">	
+<p>
+
+
+All of the components give you a very nice object-oriented
+way of dealing with networking. The most basic components are the TCP client and server components which allow 
+you to do almost anything. There are higher level components (such as FTP, SMTP and HTTP) which provide concrete implementations
+for those protocols. I'm going to demonstrate a very simple client/server chat program using the lower-level
+<tt><b>TIdTCPClient</b></tt> and <tt><b>TIdTCPServer</b></tt> components. These will be used to implement the
+client and server, respectively. 
+
+<p>
+There will be a single server that will service an unlimited number of clients. In the screen shots below,
+there is one server and 3 clients. This demo is intentionally kept very simple so as to not confuse you
+with a lot of non-network-related stuff. However, given this simple demo, you could easily extend it into
+a very usable chat system.
+<p>
+
+<p>		
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>Server</th><th></th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="chat/Chat-Server.png">	
+</td>
+</tr></table>
+</blockquote>
+
+The server lets you start the server on any available port. All messages from clients will be shown in the window. If
+the server wants to send a message to all of the clients, it can enter text and then broadcast it. This is really about all
+there is to the server right now. The output is pretty sparse, but it could very easily be enhanced. Adding information about
+which client sent which message could be displayed, as well as a list of all connected clients. These are all trivial to add
+to this server (and are exercises for the student). Since the server doesn't do much, it's actually easier to code up than
+the clients (which, in the real world, would provide all kinds of features for the users).
+<p>
+Here are some screen shots from 3 clients that are all connected and chatting, albeit, not saying much. Notice that the chat
+system supports Unicode characters (for non-English languages). I'll talk about this a little at the end. The images show English,
+Spanish, and Russian (for Prof. Volper!), although all languages are supported.
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>Client #1</th><th></th><th>Client #2</th><th></th><th>Client #3</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="chat/Chat-Client1.png">	
+</td>
+<td width="30"></td>
+<td>
+<img border=0 src="chat/Chat-Client2.png">	
+</td>
+<td width="30"></td>
+<td>
+<img border=0 src="chat/Chat-Client3.png">	
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+
+
+Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/CSChat.zip">(RAD Studio 2010)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/CSChat-XE3.zip">(XE 3)</a> - to build it yourself. Includes both client and server projects.
+This is from RAD Studio 2010 and won't build with the free Turbo C++ 2006.
+
+
+
+<p>
+<hr width="90%">
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li><b>The Protocol</b>
+<p>
+Because this is a very simple demonstration, the protocol for the chat protocol is equally simple. In fact, there are only two types
+of messages that can be sent between the client and server.
+<p>
+Client messages to the server: (<tt>Client --> Server</tt>)
+<ol>
+<li><tt><b>SEND</b></tt> - This is the primary message. When a client wants to send a message to all of the other clients, it sends a
+	<tt><b>SEND</b></tt> command to the server. The format is:
+<blockquote><pre>
+	<tt><b>SEND</b></tt> message_text
+</pre></blockquote>
+Examples:
+<blockquote><pre>
+	SEND Hello
+	SEND I am not a great fool, so I can clearly not choose the wine in front of you.
+	SEND ¿Qué hora es?
+</pre></blockquote>
+
+The server takes the message and broadcasts it to all connected clients.
+<p>
+
+<li><tt><b>CMD</b></tt> - This is how the client communicates with the server. This command is not meant to be broadcast to other clients.
+<blockquote><pre>
+	<tt><b>CMD</b></tt> command
+</pre></blockquote>
+Example:
+<blockquote><pre>
+	CMD QUIT
+</pre></blockquote>
+
+Currently, only the <tt>QUIT</tt> command is supported and even that isn't really needed.
+</ol>
+<p>
+Server messages to the clients: (<tt>Server --> Client</tt>)
+<ol>
+<li><tt><b>MESG</b></tt> - This is how the server broadcasts messages to the clients. 
+<blockquote><pre>
+	<b>MESG</b> CLIENT_ID message_text
+</pre></blockquote>
+Examples:
+<blockquote><pre>
+	MESG 127.0.0:1234 Hello
+	MESG Server I am not a great fool, so I can clearly not choose the wine in front of you.
+	MESG Nigel ¿Qué hora es?
+</pre></blockquote>
+
+The <tt>CLIENT_ID</tt> is sent so that when the clients receive the message they know which client sent it. This string can
+be anything that uniquely identifies the sender. In this demo, the <tt>CLIENT_ID</tt> is simply the IP address and port
+of the sender. The server uses a <tt>CLIENT_ID</tt> of <i>Server</i> for simplicity.
+
+</ol>
+
+<p>
+<hr width="90%">
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li><b>The Server</b>
+<p>
+The server component is named <tt><b>TIdTCPServer</b></tt> and should be the fourth component under the <i>Indy Servers</i> section. 
+Depending on the exact version of Indy you are using, this position could change. You can always search for it and find it that
+way.
+<p>
+The server really doesn't do much besides routing the messages between the clients. It doesn't have to be visual. However,
+developing a program without any visual feedback (even if only text-based) is impossible. When I create software, I always
+have lots of output during the development stage. How else can you tell if things are working correctly? For a chat server,
+it is nice to be able to see the messages that are going between the clients. (Yes, in a real-world situation this could
+be a privacy issue, but, on the Internet, there is no privacy anyway. Get used to it.)
+		
+		
+
+<p>
+Briefly, this is how the server works:
+<ul>
+<li>When the server becomes active (by clicking the start button), it listens on the specified port for clients.
+<li>When a client connects, the server gets an <i>OnConnect</i> event. The parameter to this event handler is
+	the client that is connecting. The client is added to the list of connected clients.
+<li>At regular intervals, the server receives an <i>OnExecute</i> message. In this event handler, the server can
+	check to see if any client messages are pending. If no messages are waiting, the event handler is done. If
+	there is a message, the server handles it (e.g. sends the message to all clients).
+</ul>
+<p>
+That's pretty much it in a nutshell. Of course, there are lots of details handled by the component, so you won't usually have to
+deal with them. For example, each client connection is in its own thread. The list of clients that the server maintains is
+actually a <tt><b>TThreadList</b></tt>, which is simply a (thread-safe) list of threads (clients). Look at the 
+source code to get a feel for how this works. Pay close attention to the two events mentioned (<i>OnConnect</i> and <i>OnExecute</i>).
+	
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/ChatServerMainForm.h.html">ChatServerMainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/ChatServerMainForm.cpp.html">ChatServerMainForm.cpp</a> - The implementation.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/ChatServer.exe">Executable</a>
+	</ul>
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li><b>The Client</b>
+<p>
+The client component is named <tt><b>TIdTCPClient</b></tt> and should be the first component under the <i>Indy Clients</i> section. 
+<p>
+	
+Briefly, this is how the client works:
+<ul>
+<li>The user selects a server and port to connect to. Obviously, the chat server must be running on the remote (or local) machine.
+<li>When the client has connected to the server, the client receives an <i>OnConnected</i> event. Inside this event handler
+	the client will remain in an infinite loop, processing messages from the server.
+<li>When the client disconnects from the server (for whatever reason), the infinite loop will end.
+</ul>
+<p>
+That's it in a nutshell. However, there is one thing that makes this procedure problematic. That is the infinite loop that
+is waiting for messages. If you've read the documents about the <i>Indy Components</i>, you'll remember that they use
+blocking functions. In other words, while the client is waiting for messages from the server (via the <i>OnConnected</i> event
+handler which never returns), the client will seem to "lock up". This isn't good. There are several ways to deal with this, such
+as dealing with the messages in a background thread. For a very robust and full-featured chat client, that would be a good way
+to go. However, for this simple chat client, there is a component which solves this blocking stuff for us. It's called the
+<i>AntiFreeze</i> component (<tt><b>TIdAntiFreeze</b></tt>). You'll find this component in the <i>Indy Misc</i> category in the
+component palette.
+Simply adding this component to your form will allow it to respond to other Windows messages while
+the <i>OnConnected</i> event handler is blocked. It's a nifty component that works great. 
+
+<p>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/ChatClientMainForm.h.html">ChatClientMainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/ChatClientMainForm.cpp.html">ChatClientMainForm.cpp</a> - The implementation.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/13/chat/ChatClient.exe">Executable</a>
+	</ul>
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li><b>Unicode for Non-English Languages</b>
+<p>
+
+Well, some of you have heard this before: I lost 2 hours of my life again... Unicode! Sure, it's easy once you figure it out (or Google
+for it.) I just <big><font color="blue"><b>ass</b></font>u<font color="blue"><b>me</b></font>d</big>
+that everything in Indy was already being done in Unicode. But, it wasn't (which is correct and by design).
+Once I figured that out and found the one-liner that I needed, all was well again.
+Since this is a networked chat program, I thought it would be nice to support languages other than
+just English, especially when it wasn't hard to do. You just have to set the encoding to something
+that will handle other code pages:
+<p>
+In the server's <tt><b>OnConnect</b></tt> event handler:
+<blockquote><pre>
+AContext->Connection->IOHandler->DefStringEncoding = TIdTextEncoding::UTF8;	
+</pre></blockquote>
+
+In the client's <tt><b>OnConnect</b></tt> event handler:
+<blockquote><pre>
+tcpClient->IOHandler->DefStringEncoding = TIdTextEncoding::UTF8;
+</pre></blockquote>
+<p>
+
+You'll see an <tt><b>#ifdef</b></tt> in the code where you can turn this on and off. I left it in because
+it shows how little actually had to change and you might want to experiment with it. You wouldn't know how
+much time I wasted on that Unicode stuff by looking at that small amount of code. Well, now you don't have 
+to do it! Oh, by the way... <a href="http://www.youtube.com/watch?v=5TzHbcXYwI4"><b>You're Welcome!</b></a>.
+
+<p>
+<a href="http://embarcadero.newsgroups.archived.at/public.delphi.internet.winsock/200903/0903221365.html">Newsgroup article</a>
+that explained what I was missing. BTW, the guy that responded (Remy Lebeau, a.k.a. Gambit) works on the project and has been answering
+newsgroup questions for probably 10 years or more. He's helped me on some sticky issues in the past.
+
+</ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+
+As you can see, this is a very bare-bones chat client/server program. However, it shows the fundamentals
+of using two of the Indy components. Other things that you can experiment with include:
+<P>
+<ol>
+<li>Giving names to the clients. Currently, the IP:Port (e.g. <tt>127.0.0.1:1234</tt>) of the client is displayed. This was so you can
+	distinguish between the clients that were chatting. In a real chat program, when a client connected
+	they would be able to choose a name (or handle) that they want to be known as. The server would have
+	to make sure that these names were unique among the connected clients. You could do this by adding another command type for
+	when the client connects. Something like: 
+<blockquote><pre>
+<b>HELLO</b> Name	
+</pre></blockquote>
+	
+that would be sent to the server upon connecting. The server would welcome the client (with some return string) and then broadcast the client's name to all
+of the other connected clients. 
+<p>
+<li>Related to above, have the client display a list of chat users. Right now, when a client connects or disconnects, the other clients are
+	not notified about the new client. New behavior: Each time a new client connects or disconnects, the server would have to send the
+	updated list to each client. The list would be displayed at all times. You would want to update the protocol with a new command from the server, 
+	maybe	something like:
+	
+<blockquote><pre>
+<b>USERS</b> user1 user2 user3 user4 ...	
+</pre></blockquote>
+	
+This command contains the names of all connected clients.
+		
+<p>
+<li>Have each client's text be in a different color/font. Right now, the text that is sent is displayed in <font color="blue"><b>BLUE</b></font>
+	and the incoming text is displayed in <font color="red"><b>RED</b></font>. Allow the client to configure this.
+<p>
+<li>Allow client's to send <i>private</i> messages to selected users. Right now, any message sent by a client is sent to all other clients.
+	Let the client select one (or more) other clients to send a message to. The client would have to display a list of connected clients
+	so that one could be select.
+	
+	<p>
+<li><b>Code cleanup</b> - You'll notice that there's a lot of duplicated code/functionality between the client and server programs. They
+	are separate projects, but both need to do string parsing and message passing. This code could easily be factored out into a shared
+	library or something. It's not a big deal with this very simple demo, but you can see that if you were to make both the client and
+	server more robust and full-featured, this code duplication would get worse. There are also many places where errors could occur in 
+	the programs, yet there is very little error checking. Such is the case with simple demo programs.
+</ol>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

@@ -1,0 +1,94 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &lt;string.h&gt;</font>
+
+<b>enum</b> ENCODE_MODE {ENCODE, DECODE};
+
+<b>void</b> encode(FILE *infile, FILE *outfile);
+<b>void</b> decode(FILE *infile, FILE *outfile);
+
+<font color="#003399"><i>/*****************************************************************************
+       Name: main
+
+Description: The front-end of the encoder/decoder. Accepts filenames from the
+             command line, opens them for read/write, and checks for errors.
+
+     Inputs: argc - The number of command line options.
+             argv - The actual arguments. argv[1] is the input filename and
+                    argv[2] is the name of the output file.
+
+     Return: 0 on success or a positive value on error.
+*****************************************************************************/</i></font>
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>const</b> <b>char</b> *infilename;  <font color="#003399"><i>/* Name of the input file  */</i></font>
+  <b>const</b> <b>char</b> *outfilename; <font color="#003399"><i>/* Name of the output file */</i></font>
+  FILE *infile;            <font color="#003399"><i>/* The opened input file   */</i></font>
+  FILE *outfile;           <font color="#003399"><i>/* The opened output file  */</i></font>
+
+  <b>enum</b> ENCODE_MODE mode = ENCODE; <font color="#003399"><i>/* Assume encoding */</i></font>
+
+    <font color="#003399"><i>/* Must get at least 2 additional command line args */</i></font>
+  <b>if</b> (argc &lt; 3)
+  {
+    printf(<font color="#9933CC">&quot;Usage: encoder [-d] inputfile outputfile&#92;n&quot;</font>);
+    printf(<font color="#9933CC">&quot;       -d will decode, default is encode&#92;n&quot;</font>);
+    <b>return</b> 3; <font color="#003399"><i>/* Failure */</i></font>
+  }
+
+    <font color="#003399"><i>/* Use descriptive names for the filenames */</i></font>
+  infilename = argv[1];
+  outfilename = argv[2];
+
+    <font color="#003399"><i>/* If we get a -d, we will be decoding instead */</i></font>
+  <b>if</b> (!strcmp(argv[1], <font color="#9933CC">&quot;-d&quot;</font>))
+  {
+    mode = DECODE;
+    infilename = argv[2];
+    outfilename = argv[3];    
+  }
+
+    <font color="#003399"><i>/* Open input file and check for errors */</i></font>
+  infile = fopen(infilename, <font color="#9933CC">&quot;rb&quot;</font>);
+  <b>if</b> (!infile)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s for read.&#92;n&quot;</font>, argv[1]);
+    <b>return</b> 1; <font color="#003399"><i>/* Failure */</i></font>
+  }
+
+    <font color="#003399"><i>/* Open output file and check for errors */</i></font>
+  outfile = fopen(outfilename, <font color="#9933CC">&quot;wb&quot;</font>);
+  <b>if</b> (!outfile)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s for write.&#92;n&quot;</font>, argv[2]);
+    fclose(infile);
+    <b>return</b> 2; <font color="#003399"><i>/* Failure */</i></font>
+  }
+
+    <font color="#003399"><i>/* Do the encoding/decoding (this calls the student's code) */</i></font>
+  <b>if</b> (mode == ENCODE)
+    encode(infile, outfile);
+  <b>else</b>
+    decode(infile, outfile);
+
+    <font color="#003399"><i>/* Cleanup */</i></font>
+  fclose(infile);
+  fclose(outfile);
+
+  <b>return</b> 0; <font color="#003399"><i>/* Success */</i></font>
+}
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,159 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>const Examples</title>
+</head>
+
+<body>  
+<center><h1>Examples of const</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Examples
+</p>
+
+
+<blockquote><pre>
+<b> 1.</b> <b>void</b> foo(<b>void</b>)
+<b> 2.</b> {
+<b> 3.</b>   <b>int</b> i = 5;          <font color="#003399"><i>/* i is a non-constant int */</i></font>
+<b> 4.</b>   <b>int</b> j = 6;          <font color="#003399"><i>/* j is a non-constant int */</i></font>
+<b> 5.</b>   <b>const</b> <b>int</b> ci = 10;  <font color="#003399"><i>/* ci is a constant int    */</i></font>
+<b> 6.</b>   <b>const</b> <b>int</b> cj = 11;  <font color="#003399"><i>/* cj is a constant int    */</i></font>
+<b> 7.</b>
+<b> 8.</b>   <b>int</b> *pi;                      <font color="#003399"><i>/* pi is a pointer to an int              */</i></font>
+<b> 9.</b>   <b>const</b> <b>int</b> *pci;               <font color="#003399"><i>/* pci is a pointer to a const int        */</i></font>
+<b>10.</b>   <b>int</b> * <b>const</b> cpi = &amp;i;         <font color="#003399"><i>/* cpi is a const pointer to an int       */</i></font>
+<b>11.</b>   <b>const</b> <b>int</b> * <b>const</b> cpci = &amp;ci; <font color="#003399"><i>/* cpci is a const pointer to a const int */</i></font>
+<b>12.</b>
+<b>13.</b>   i = 6;     <font color="#003399"><i> /* Ok, i is not const    */</i></font>
+<b>14.</b>   j = 7;     <font color="#003399"><i> /* Ok, j is not const    */</i></font>
+<b>15.</b>   <font color="red"><b>ci = 8;</b></font>     <font color="#003399"><i>/* ERROR: ci is const    */</i></font>
+<b>16.</b>   <font color="red"><b>cj = 9;</b></font>     <font color="#003399"><i>/* ERROR: cj is const    */</i></font>
+<b>17.</b>
+<b>18.</b>   pi = &amp;i;   <font color="#003399"><i> /* Ok, pi is not const   */</i></font>
+<b>19.</b>   *pi = 8;   <font color="#003399"><i> /* Ok, *pi is not const  */</i></font>
+<b>20.</b>   pi = &amp;j;   <font color="#003399"><i> /* Ok, pi is not const   */</i></font>
+<b>21.</b>   *pi = 9;   <font color="#003399"><i> /* Ok, *pi is not const  */</i></font>
+<b>22.</b>
+<b>23.</b>   pci = &amp;ci; <font color="#003399"><i> /* Ok, pci is not const  */</i></font>
+<b>24.</b>   <font color="red"><b>*pci = 8;</b></font>   <font color="#003399"><i>/* ERROR: *pci is const  */</i></font>
+<b>25.</b>   pci = &amp;cj; <font color="#003399"><i> /* Ok, pci is not const  */</i></font>
+<b>26.</b>   <font color="red"><b>*pci = 9;</b></font>   <font color="#003399"><i>/* ERROR: *pci is const  */</i></font>
+<b>27.</b>
+<b>28.</b>   <font color="red"><b>cpi = &amp;j;</b></font>   <font color="#003399"><i>/* ERROR: cpi is const   */</i></font>
+<b>29.</b>   *cpi = 10; <font color="#003399"><i> /* Ok, *cpi is not const */</i></font>
+<b>30.</b>   *cpi = 11; <font color="#003399"><i> /* Ok, *cpi is not const */</i></font>
+<b>31.</b>
+<b>32.</b>   <font color="red"><b>cpci = &amp;j;</b></font>  <font color="#003399"><i>/* ERROR: cpci is const  */</i></font>
+<b>33.</b>   <font color="red"><b>*cpci = 10;</b></font> <font color="#003399"><i>/* ERROR: *cpci is const */</i></font>
+<b>34.</b>  
+<b>35.</b>   pi = &amp;ci;  <font color="#003399"><i> /* DANGER: constant ci can be changed through pi */</i></font>
+<b>36.</b> }
+</pre></blockquote>
+  <!--cpi = &amp;ci;  <font color="#003399"><i>/* DANGER: constant ci can be changed through cpi */</i></font>-->
+
+<p>
+<hr width="90%">
+<p>
+
+This is the output from the gcc compiler (code is in <tt>temp.c</tt>):
+<blockquote><pre>
+temp.c: In function 'foo':
+temp.c:15:3: error: assignment of read-only variable 'ci'
+temp.c:16:3: error: assignment of read-only variable 'cj'
+temp.c:24:3: error: assignment of read-only location '*pci'
+temp.c:26:3: error: assignment of read-only location '*pci'
+temp.c:28:3: error: assignment of read-only variable 'cpi'
+temp.c:32:3: error: assignment of read-only variable 'cpci'
+temp.c:33:3: error: assignment of read-only location '*cpci'
+temp.c:35:6: warning: assignment discards 'const' qualifier from pointer target type [enabled by default]
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+This is the output from Microsoft's C compiler:
+<blockquote><pre>
+temp.c
+temp.c(15) : error C2166: l-value specifies const object
+temp.c(16) : error C2166: l-value specifies const object
+temp.c(24) : error C2166: l-value specifies const object
+temp.c(26) : error C2166: l-value specifies const object
+temp.c(28) : error C2166: l-value specifies const object
+temp.c(32) : error C2166: l-value specifies const object
+temp.c(33) : error C2166: l-value specifies const object
+temp.c(35) : warning C4090: '=' : different 'const' qualifiers
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+This is from Embarcadero's (formerly Borland) C compiler:
+<blockquote><pre>
+temp.c:
+Error E2024 temp.c 15: Cannot modify a const object in function foo
+Error E2024 temp.c 16: Cannot modify a const object in function foo
+Error E2024 temp.c 24: Cannot modify a const object in function foo
+Error E2024 temp.c 26: Cannot modify a const object in function foo
+Error E2024 temp.c 28: Cannot modify a const object in function foo
+Error E2024 temp.c 32: Cannot modify a const object in function foo
+Error E2024 temp.c 33: Cannot modify a const object in function foo
+Warning W8075 temp.c 35: Suspicious pointer conversion in function foo
+Warning W8004 temp.c 36: 'cpci' is assigned a value that is never used in function foo
+Warning W8004 temp.c 36: 'pci' is assigned a value that is never used in function foo
+*** 7 errors in Compile ***
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+<font color=""></font>
+This is from the Clang compiler:
+<blockquote><pre>
+temp.c:15:6: <font color="red">error:</font> read-only variable is not assignable
+  ci = 8;     /* ERROR: ci is const    */
+  <font color="green">~~ ^</font>
+temp.c:16:6: <font color="red">error:</font> read-only variable is not assignable
+  cj = 9;     /* ERROR: cj is const    */
+  <font color="green">~~ ^</font>
+temp.c:24:8: <font color="red">error:</font> read-only variable is not assignable
+  *pci = 8;   /* ERROR: *pci is const  */
+  <font color="green">~~~~ ^</font>
+temp.c:26:8: <font color="red">error:</font> read-only variable is not assignable
+  *pci = 9;   /* ERROR: *pci is const  */
+  <font color="green">~~~~ ^</font>
+temp.c:28:7: <font color="red">error:</font> read-only variable is not assignable
+  cpi = &j;   /* ERROR: cpi is const   */
+  <font color="green">~~~ ^</font>
+temp.c:32:8: <font color="red">error:</font> read-only variable is not assignable
+  cpci = &j;  /* ERROR: cpci is const  */
+  <font color="green">~~~~ ^</font>
+temp.c:33:9: <font color="red">error:</font> read-only variable is not assignable
+  *cpci = 10; /* ERROR: *cpci is const */
+  <font color="green">~~~~~ ^</font>
+temp.c:35:6: <font color="turqoise">warning:</font> assigning to 'int *' from 'const int *' discards qualifiers [-Wincompatible-pointer-types]
+  pi = &ci;   /* DANGER: constant ci can be changed through pi */
+     <font color="green">^ ~~~</font>
+1 warning and 7 errors generated.
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

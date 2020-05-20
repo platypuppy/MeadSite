@@ -1,0 +1,1264 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/styles.css">
+<title>CS 180 Winter 2020</title>
+</head>
+
+<body>
+
+<!--
+  <script>
+    dark_theme = false;
+    function toggle_dark_theme() {
+      dark_theme = !dark_theme;
+      links = document.getElementsByTagName('a');
+      if(dark_theme) {
+        document.body.className = "dark";
+        for(i = 0; i < links.length; i ++) {
+	        links[i].className = "dark";
+	      }
+	    } else {
+	      document.body.className = "light";
+	      for(i = 0; i < links.length; i ++) {
+	        links[i].className = "light";
+	      }
+	    }
+    }
+  </script>
+  <a href="#" onclick="toggle_dark_theme()">Toggle Dark Theme</a>
+-->
+
+<center><h1>CS 180 - Introduction to Operating Systems</h1>
+<i>"You get the operating system you deserve"</i> -- Mead
+<p>
+<a href="../../../../courses/2020/winter/cs180/index.html">
+http://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/index.html</a>
+</center>
+
+<center>
+<table border=0>
+<tr>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40>
+</td>
+<td>
+<p class="technote">
+<font size=+2>
+<b>Reminder:</b> These notes will be taken down permanently on Friday, April 24, 2020. 
+If you want to save a copy for yourself, please download them before that time.
+</font>
+</p></td>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40>
+</td>
+</tr></table>
+<p>
+</center>
+<!--
+-->
+
+<!--
+-->
+
+<!--
+-->
+
+<!--
+<center>
+<img src="../../../../images/spinal_tap_amps.png">
+</center>
+<p>
+-->
+
+<p>
+<!--
+<p class="technote">
+</p>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Information
+</p>
+
+
+<p>
+<blockquote>
+<p class="technote">
+If you have any questions about any assignment, lecture, quiz, etc., please post the questions in the
+<a href="https://distance.digipen.edu/2020-spring/mod/forum/view.php?id=14449">CS180 Forum</a> on the
+<a href="https://distance.digipen.edu/2020-spring/course/view.php?id=106">CS180 Moodle website</a>.
+There are many people that can answer your question. If you
+just send your question to me in an email, it may be a while until (or if) I get back to you. If you 
+have a question about an assignment, it's very likely that other students have the same
+question and they will benefit from the posted answers. Also, you can use the Academic Support Center
+for help. 
+</p>
+</blockquote>
+
+<!--
+<table cellpadding=0 cellspacing=0 border=0>
+<tr valign="top">
+	<td width="600">
+-->
+<ul>
+<li><a class="pdf-icon" href="cs180-winter2020-syllabus.pdf">Syllabus</a></li>
+<li><a class="pdf-icon" href="../faculty-office-hour-form-winter2020.pdf">Office hours</a>
+	(<a class="pdf-icon" href="../../../../docs/office-location.pdf">office location<a>)</li>
+<li><a class="pdf-icon" href="../important-dates-2020.pdf">Important dates</a> for this semester
+
+<li><a class="pdf-icon" href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/ASC-schedule-fall-2019.latest.pdf">Academic Support Center Schedule</a>
+(The source documents can be found <a href="https://faculty.digipen.edu/%7Ejwang/Spring%202019%20Tutoring/">here</a>.)</li>
+
+
+<li><a class="pdf-icon" href="../../../../docs/FreshmanAttendancePolicy.pdf">Digipen attendance policy</a>
+<li><a href="https://www.oreilly.com/library/view/temporary-access/">Digipen's online library</a> - This is where you can access
+	Safari Books Online, which contains 1,000s of technical books covering many topics.
+Some required reading will be available here.</li>
+<p>
+
+<!--
+<li><a href="../../../../Files/Mead.zip">Mead Installer</a></li>
+
+https://azrael.digipen.edu/~mmead/www/Files/Mead.zip
+-->
+
+	
+
+
+<b>Mead Approved<sup>&trade;</sup> Books</b>
+
+<p>
+</td>
+<td width="1%"></td>
+<td>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td valign="top">
+				<a href="index.html"><img src="../../../CS180/tlpi.png" width="85" height="113" border=1></a>
+			</td>
+			<td valign="top">
+	<a href="http://man7.org/tlpi/">The Linux Programming Interface</a>:
+A Linux and UNIX System Programming Handbook. 
+	It is one of the highest-rated Linux books listed on <a href="http://www.amazon.com/dp/1593272200/">Amazon</a>.
+	 Highly recommended	for anyone wanting to understand more about Linux systems programming.
+	Sample chapters:
+	<ul>
+		<li><a class="pdf-icon" href="../../../CS180/tlpi-ch4.pdf">Chapter 4</a> - File I/O</a></li>
+		<li><a class="pdf-icon" href="../../../CS180/tlpi-ch24.pdf">Chapter 24</a> - Process Creation</a></li>
+		<li><a class="pdf-icon" href="../../../CS180/tlpi-ch52.pdf">Chapter 52</a> - POSIX Message Queues</a></li>
+		<li><a href="http://man7.org/tlpi/toc-detailed.html">Table of Contents</a> for the book.</li>
+		<li>Available for free from <a href="https://www.oreilly.com/library/view/temporary-access/">Digipen's online books</a> 
+			from Safari Books Online via Library Services 
+
+<a href="https://proquestcombo.safaribooksonline.com/book/programming/linux/9781593272203">here</a>
+			</li>
+	</ul>
+</td>
+</tr></table>
+
+<p>
+</td>
+<td width="1%"></td>
+<td>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td valign="top">
+				<a href="index.html"><img src="../../../CS180/apue-cover.jpg" width="85" height="113" border=1></a>
+			</td>
+			<td valign="top">
+	<a href="http://www.apuebook.com/apue3e.html">Advanced Programming in the UNIX Environment</a>:
+For over two decades, serious C programmers have relied on one book for practical,
+in-depth knowledge of the programming interfaces that drive the UNIX and Linux kernels:
+W. Richard Stevens' Advanced Programming in the UNIX<sup>&reg;</sup> Environment.	
+		<li><a href="http://www.apuebook.com/toc3e.html">Table of Contents</a> for the book.</li>
+
+
+
+
+		<li>Available for free from Digipen's online books
+			from Safari Books Online via Library Services 
+
+<a href="https://proquestcombo.safaribooksonline.com/book/programming/unix/9780321638014">here</a>
+			</li>
+	</ul>
+</td>
+</tr></table>
+
+
+</td>
+
+<p>
+
+<td width="1%"></td>
+<td>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td>
+				<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/"><img src="../../../CS180/OSTEP.png" width="85" height="113"></a>
+			</td>
+			<td valign="top">
+	<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a>:
+Welcome to Operating Systems: Three Easy Pieces, a free online operating systems book! The book is centered around three 
+conceptual pieces that are fundamental to operating systems: virtualization, concurrency, and persistence. In understanding 
+the conceptual, you will also learn the practical, including how an operating system does things like schedule the 
+CPU, manage memory, and store files persistently. Lots of fun stuff!
+</td>
+</tr></table>
+</td>
+
+
+<td><br></td>
+
+<td width="1%"></td>
+<td>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td>
+				<a href="https://docs.microsoft.com/en-us/sysinternals/learn/windows-internals"><img src="../../../CS180/win-internals-1-7.jpg" width="85" height="113"></a>
+			</td>
+			<td valign="top">
+	<a href="https://docs.microsoft.com/en-us/sysinternals/learn/windows-internals">Windows Internals <i>Part 1</i></a>
+	This is written by one of the most knowledgeable Windows programmers ever: Mark Russinovich. I read 
+	anything that he writes. He has written some of the most powerful and useful Windows tools
+	(e.g. <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/process-explorer">Process Explorer<a/>,
+	and <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview">TCPView</a>).
+	He is the creator of the <a href="http://technet.microsoft.com/en-us/sysinternals">Sysinternals</a>
+	website (unfortunately, now owned by Microsoft).
+		<p>
+	Available for free from <a href="https://www.oreilly.com/library/view/temporary-access/">Digipen's online books</a> 
+			from Safari Books Online via Library Services.</li>
+	</li>
+
+</td>
+</tr></table>
+</td>
+
+<!--
+-->
+
+
+<!--
+
+<p>
+
+<td width="1%"></td>
+<td>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td>
+				<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/"><img src="../../../CS180/OSTEP.png" width="85" height="113"></a>
+			</td>
+			<td valign="top">
+	<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a>:
+Welcome to Operating Systems: Three Easy Pieces, a free online operating systems book! The book is centered around three 
+conceptual pieces that are fundamental to operating systems: virtualization, concurrency, and persistence. In understanding 
+the conceptual, you will also learn the practical, including how an operating system does things like schedule the 
+CPU, manage memory, and store files persistently. Lots of fun stuff!
+		Available for free from Digipen's online books
+			from Safari Books Online via Library Services 
+
+<a href="https://proquestcombo.safaribooksonline.com/book/programming/unix/9780321638014">here</a>
+		
+
+</td>
+</tr></table>
+</td>
+-->
+
+
+
+
+<!--
+-->
+
+
+
+<!--</tr></table>-->
+	
+</ul>
+
+
+<p>
+
+<!--
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+References
+</p>
+Textbook:
+
+<!--
+				<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/"><img src="../../../CS180/OSTEP.png" width="85" height="113"></a>
+-->
+	<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a>
+	This is a FREE online textbook (PDF). If you wish, you can purchase a PDF, a paperback book, or hard cover
+	book (inexpensively).
+<p>
+
+Online Safari References:
+<ul>
+	<li><a href="https://proquestcombo.safaribooksonline.com/book/programming/linux/9781457185519">
+		How Linux Works, 2nd Edition</a></li>
+	<li><a href="https://proquestcombo.safaribooksonline.com/book/operating-systems-and-server-administration/bash/9781491941584">
+		Bash Pocket Reference, 2nd Edition</a></li>
+</ul>
+
+Other References:
+<ul>
+<p>
+<li><a href="../../../../docs/doxygen/index.html">Code documentation</a>
+<li><a class="pdf-icon" href="../../../../docs/CodeQuality.pdf">Code Quality Guidelines</a>
+<!--<li><a href="../../../../docs/StudentHomeworkChecklist-CS170.pdf">Checklist</a>-->
+<li><a href="../../../../docs/Deliverables.html">Delivering code</a>
+	in the course.
+
+<li><a href="../../../../docs/GradingTags-CS280.html">Grading tags</a> Codes added to your assignments.
+<li><a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide from CS120</a> When in doubt, follow the guide.
+<li><a href="../../../../docs/grading-codes.html">Understanding the marks</a> on your programming assignments.</li>
+
+<p>
+<hr width="100%">
+<p>
+<!--
+<li><a class="pdf-icon" href="practice_exercises_1.pdf">Solutions</a> to the practice exercises at the end of each chapter of the optional textbook.
+-->
+
+<li>Documentation:
+<ul>
+<li><a href="http://man7.org/linux/man-pages/index.html">Online man pages</a>
+<li><a href="http://www.gnu.org/software/make/manual/make.html">make utility</a>
+<li><a href="http://clang.llvm.org/docs/UsersManual.html">Clang compiler</a>
+	<p>
+	To install Clang version 8.x, you need to run these commands:
+<blockquote><pre>
+sudo apt-get install clang
+sudo apt-add-repository "deb http://llvm.org/apt/<b>bionic</b>/ llvm-toolchain-<b>bionic</b>-8 main"
+sudo apt-get update
+sudo apt-get install clang-8
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 60 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-6.0
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-8 80 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-8
+</pre></blockquote>
+The repository is for Mint 19.x distros. Mint 19.x is based on Ubuntu Bionic, that's what the <b>bionic</b>
+means.  If you are using some other version, you may have to change that to something else.
+See <a href="https://www.linuxmint.com/download_all.php">this</a> to determine what to put there.
+Also, if you want a different version of Clang, you'll need to change the "8" in the lines
+above to the correct value. See <a href="https://apt.llvm.org/">this</a> for examples.
+<p>
+To switch between versions, run this command:
+<blockquote><pre>
+sudo update-alternatives --config clang
+</pre></blockquote>
+
+</li>
+<!--	
+<li><a href="http://gcc.gnu.org/onlinedocs/">GCC compilers</a>
+<ul>
+	<li><a href="http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/C-Dialect-Options.html">ansi</a> This turns off certain features of GCC that are incompatible with ISO C90
+	<li><a href="http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/Warning-Options.html">pedantic</a> Issue all the warnings demanded by strict ISO C
+</ul>
+<li><a href="http://www.gnu.org/manual/manual.html">GNU Documentation Online</a> Includes documentation
+for other GNU tools cvs, gdb, etc.
+<li><a class="pdf-icon" href="../../../../docs/IntroToGCC.pdf">An Introduction to GCC</a> This is a PDF document
+that shows how to use the command line compiler. (It doesn't teach C/C++).
+<li><a class="pdf-icon" href="http://publib.boulder.ibm.com/infocenter/iadthelp/v6r0/index.jsp?topic=/com.ibm.etools.iseries.langref.doc/rzan5mst02.htm">
+C/C++ Run-Time Library Functions</a>
+<li><a class="pdf-icon" href="../../../../docs/gcc-manpage.pdf">The man page for the gcc/g++ compiler</a> I created this PDF using the command-line.</li>
+-->
+</ul>
+
+		<p>
+
+<!--
+-->
+
+<li><a href="http://technet.microsoft.com/en-us/sysinternals">Sysinternals</a> Many must-have utilities
+to explore many aspects of the Windows OS. (Now owned by Microsoft)
+
+
+
+<li><a class="pdf-icon" href="../../../../docs/AdvanceBashScriptingGuide.pdf">Advanced Bash Scripting Guide</a> A tutorial for learning bash scripting.</li>
+
+<li><a href="../../../CS180/computer-specs.html">Various computer specs</a> for testing in this class.</li>
+<li><a href="../../../CS180/tablen.html">tablen</a> for 64-bit Linux. <!-- Completion file is <a href="../../../CS180/tablen.txt">here</a>. (Remove .txt extension.)--></li>
+<li><a href="../../../CS180/dumpit.html">dumpit</a> for 64-bit Linux. <!--Completion file is <a href="../../../CS180/dumpit.txt">here</a>. (Remove .txt extension.)--></li>
+<li><a href="http://refspecs.linuxfoundation.org/fhs.shtml">Linux Filesystem Hierarchy</a> This document
+describes the layout of a UNIX-like operating system (Linux, BSD, iOS, Mac OS X, Android, etc.)
+Another document is <a class="pdf-icon" href="../../../CS180/Linux-Filesystem-Hierarchy.pdf">here</a>.</li>
+<li><a href="http://kernelnewbies.org/LinuxVersions">Linux Kernel Versions</a> from version 2.5.1 (December 17, 2001) to the present.
+<li>You can browse through the <a href="http://lxr.free-electrons.com/">Linux kernel source code</a>. That's
+	why open source software is so valuable and why we use Linux. No secrets. Keep in mind, of course,
+that reading OS code is not for the faint of heart!</li>
+
+<p>
+
+<!--	
+<li><a href="http://www.lighterra.com/papers/modernmicroprocessors/">Modern Microprocessors A 90-Minute Guide!</a>
+A brief, pulls-no-punches, fast-paced introduction to the main design aspects of modern processor microarchitecture.</li>
+
+<li><a href="https://www.tacc.utexas.edu/~eijkhout/Articles/EijkhoutIntroToHPC.pdf">Introduction to High-Performance Scientific Computing</a>
+	This is a free book on a wide-range of topics. The most relevant may be the first few chapters on computer architecture. There's
+	a bunch of theory and formulas, but I don't think you need to understand them to grasp the ideas behind the topics. It looks like
+	it's targeted at the graduate level, but many of the explanations are very clear to undergrads.
+	Here's a <a href="https://www.amazon.com/gp/customer-reviews/R2OXIH40R5UVV/ref=cm_cr_dp_d_rvw_ttl?ie=UTF8&ASIN=1257992546">
+	review</a> from Amazon. I've only started to read it, so I can't fully recommend the whole book just yet. But,
+	since it's free, you can't go wrong by checking it out.</li>
+-->
+
+
+</ul>
+
+
+<!--
+<b>Mead Approved<sup>&trade;</sup> Books</b>
+<ul>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td>
+				<a href=""><img src="../../../CS180/tlpi.png" width="85" height="113"></a>
+			</td>
+			<td valign="top">
+	<a href="http://www.nostarch.com/tlpi">The Linux Programming Interface</a>:
+A Linux and UNIX System Programming Handbook. 
+	It is one of the highest-rated Linux books listed on <a href="http://www.amazon.com/dp/1593272200/">Amazon</a>.
+	 Highly recommended	for anyone wanting to understand more about Linux systems programming.
+	Sample chapters:
+	<ul>
+		<li><a class="pdf-icon" href="../../../CS180/tlpi-ch4.pdf">Chapter 4</a> - File I/O</a></li>
+		<li><a class="pdf-icon" href="../../../CS180/tlpi-ch24.pdf">Chapter 24</a> - Process Creation</a></li>
+		<li><a class="pdf-icon" href="../../../CS180/tlpi-ch52.pdf">Chapter 52</a> - POSIX Message Queues</a></li>
+		<li><a href="http://man7.org/tlpi/toc-detailed.html">Table of Contents</a> for the book.</li>
+	</ul>
+</td>
+</tr></table>
+<p>
+	<table cellspacing=5 cellpadding=0 border=0>
+		<tr>
+			<td>
+				<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/"><img src="../../../CS180/OSTEP.png" width="85" height="113"></a>
+			</td>
+			<td valign="top">
+	<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a>:
+Welcome to Operating Systems: Three Easy Pieces, a free online operating systems book! The book is centered around three 
+conceptual pieces that are fundamental to operating systems: virtualization, concurrency, and persistence. In understanding 
+the conceptual, you will also learn the practical, including how an operating system does things like schedule the 
+CPU, manage memory, and store files persistently. Lots of fun stuff!
+</td>
+</tr></table>
+</ul>
+-->
+
+<b>Wine</b> (To run Windows apps directly on Linux)
+<ul>
+<li><a href="http://www.winehq.org/">WINE HQ</a> WINE Headquarters. The place to find out more about the
+	non-emulator emulator.</li>
+<li><a href="http://appdb.winehq.org/">WINE App Database</a> This site lists over 20,000 applications and
+	what their WINE compatibility is.</li>
+<li><a href="http://en.wikipedia.org/wiki/Wine_(software)">Wine at Wikipedia</a> for more information.</li>
+<li>To install wine:
+<blockquote><pre>
+sudo apt-get install wine-stable wine32-development winetricks
+</pre></blockquote>
+Then run:
+<blockquote><pre>
+winecfg
+</pre></blockquote>
+to configure things. If the defaults are good (which they probably are) you don't
+have to configure anything. Just run the commmand, and when the dialog box is presented, close it.
+</ul>
+To test it, download Notepad++ and install it like this (changing the version number as necessary):
+<blockquote><pre>
+wine npp.7.8.3.Installer.exe
+</pre></blockquote>
+<!--
+-->
+
+<b>Miscellaneous</b>
+<ul>
+	<p>
+	<li><a href="../../../../docs/mem.leaks.cpp">mem.leaks.cpp</a> Sample program to test out 
+		<a href="http://valgrind.org/">Valgrind</a>. You may also be interested in
+		<a href="http://kcachegrind.sourceforge.net/html/Home.html">kcachegrind</a> as well. 
+		(A graphical profiler for Linux.)
+		Here is a simpler leak program: <a href="../../../../docs/membugs.cpp">membugs.cpp</a>
+<p>
+If you need more help with Valgrind that was demonstrated in class, look
+<a href="../../../../docs/memory-debugging.html">here</a>. It also includes
+information about using Dr. Memory with Windows.
+<p>
+
+<!--
+	</li>
+
+		<p>
+ 	<li><a href="http://www.drmemory.org/">Dr. Memory</a> A cross-platform (Linux/Mac/Windows) memory 
+ 		debugger
+ 		much like Valgrind. It was developed at Google. It works best on 32-bit programs. You'll
+ 		need to install the 32-bit libraries on your 64-bit Linux system for C and C++:
+-->
+<li>If you need to build 32-bit programs, you'll need to install these files for gcc:
+<blockquote><pre>
+sudo apt-get install gcc-multilib g++-multilib
+</pre></blockquote>
+</li>
+<p>
+
+
+<li><a href="http://www.doxygen.nl/">Doxygen</a> - is a free, cross-platform, 
+	automated documentation generator. The version that comes with Linux Mint 19.2 is
+	1.8.13, and that's the version we'll be using. Simply install it like this:
+<blockquote><pre>
+sudo apt-get install doxygen
+</pre></blockquote>
+<!--
+	 You should install version 1.8.16, which is what is installed
+	at Digipen. You can get it here: <a href="https://sourceforge.net/projects/doxygen/files/rel-1.8.16/doxygen-1.8.16.linux.bin.tar.gz/download">
+  Doxygen 1.8.16</a>.
+  <p>
+  Just extract it into the <b><tt>/opt</tt></b> directory and then put a shortcut in the <tt>bin</tt>
+  directory in your home directory:
+<blockquote><pre>
+ln -s /opt/doxygen-1.8.16/bin/doxygen $HOME/bin/doxygen
+</pre></blockquote>
+-->
+
+
+  Here are the commands that you will need to run on your homework (and put in your <tt>makefile</tt>)
+
+<blockquote><pre>
+( cat Doxyfile ; echo "EXTRACT_ALL=YES" ) | doxygen -
+( cat Doxyfile ; echo "EXTRACT_ALL=NO" ) | doxygen -
+</pre></blockquote>
+
+You'll need to modify this <a href="Doxyfile.txt">configuration file</a> for each assignment. You'll also
+need to remove the file extension.
+
+
+<p>
+	You will also need to create a PDF file from the Doxygen-generate files.
+	This will require a few other programs to be installed, which is trivial to do under Linux. You should
+	install these:
+<blockquote><pre>
+sudo apt-get install doxygen-latex evince
+</pre></blockquote>
+<!--
+	<blockquote><pre>
+sudo apt-get install texlive-latex-base texlive-latex-extra texlive-font-utils texlive-fonts-recommended evince
+</pre></blockquote>
+-->
+
+If any other dependencies are required, simply install those as well. If you want the full
+<sub><img src="http://latex.codecogs.com/gif.latex?\textbf {\LaTeX{}}"/></sub>
+	experience, install the full version:
+	<blockquote><pre>
+sudo apt-get install texlive-full</pre></blockquote>
+Realize that this could install over 3 GBs of files. There's also a nice editor/IDE for creating documents
+called <a href="http://www.xm1math.net/texmaker/">Texmaker</a> that works on Linux, Windows, and Mac.
+I use that to create all of the quizzes and exams. Latex is one of the industry-standard tools for creating
+high-quality technical documents, so learning the basics will give you skills outside of just
+creating documentation for your code in CS180.
+<p>
+
+Here is a <a href="../../../../docs/sample1.tex.txt">sample1.tex</a> file to check your full installation.
+(Remove the <tt>.txt</tt> extension to use the file.) The sample has chemistry diagrams and musical notation,
+so you'll have to at least install these other packages (if you didn't do a full install):
+<blockquote><pre>
+sudo apt-get install texlive-science texlive-music abcm2ps ps2eps
+</pre></blockquote>
+<p>
+
+Then run this command to produce a PDF:
+<blockquote><pre>
+pdflatex -shell-escape sample1.tex
+</pre></blockquote>
+
+<li>To create a bootable Linux Mint installer USB drive, use
+	<a href="https://unetbootin.github.io/">unetbootin</a>. Download the version
+	for your host (most likely Windows). It's pretty straight-forward, and the 
+	website shows you how to use it. If you already have downloaded the .iso
+	file, you can just choose to use it. If not, it will download it for you.
+	However, if version 18.3 is not available, then you will have to download
+	it manually.
+</li>
+
+<p>
+<!--
+<li>Download all files for a Mead assignment with this
+	<a href="../../../CS180/fetch.html">bash script</a>. It's a work-in-progress, but it should
+	give you ideas on how to automate your own stuff. BTW, there is a really cool syntax
+highlighter to create HTML called <a href="http://www.andre-simon.de/doku/highlight/en/highlight.php">
+highlight</a>. I used it to create the HTML display for this bash script.
+</li>
+-->
+
+<!--
+<p>
+ 	<li>Various IDEs for Linux (also on Mac OS X and Windows): 
+ 		<a href="https://www.kdevelop.org/">KDevelop</a>, 
+ 		<a href="https://netbeans.org/">NetBeans</a>,
+ 		<a href="http://qt-project.org/">QtCreator</a>,
+ 		<a href="http://www.codeblocks.org/">Code::Blocks</a>,
+ 		<a href="http://codelite.org/">CodeLite</a>,
+ 		<a href="https://www.eclipse.org/">Eclipse</a>, and
+ 		<a href="https://www.jetbrains.com/clion/">CLion</a>
+<p>
+
+<li>Run your own private, secure cloud: <a href="https://owncloud.org/">ownCloud</a> or <a href="https://nextcloud.com/">nextCloud</a></li>
+<p>
+<li>Run your own private, secure, Skype-like VOIP server: <a href="https://wiki.mumble.info/wiki/Main_Page">Mumble/Murmur</a></li>
+<p>	
+-->
+
+<p>
+<li><a href="https://faculty.digipen.edu/~mmead/www/online-spring2020/cs180/">Online lectures</a></li>
+	
+</ul>
+
+
+<!--
+<b>Miscellaneous Hardward (Linux-related)</b>
+<ul>
+ 	<li><a href="http://www.hardkernel.com/main/products/prdt_info.php?g_code=G138745696275">odroid</a> 
+ 		computer from <a href="http://www.hardkernel.com/">HardKernel</a>.</li>
+ 		<ul>
+ 			<li><a href="http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825">ODROID-XU4</a>
+ 				This one has 8 cores! Check out how it migrates tasks between the cores.</li>
+ 			</ul>
+ 	<li><a href="http://www.raspberrypi.org/">Raspberry Pi</a> Another small, cheap device that runs Linux.
+ 		A very popular device. I recommend this book 
+ 		<a href="http://www.amazon.com/Raspberry-User-Guide-Eben-Upton/dp/1118921666">
+ 		Raspberry Pi User Guide</a> to get started. Updated to cover the B+ version. Written by the 
+ 		founder of the Raspberry Pi Foundation.</li>
+ 	<li><a href="http://vocore.io/">VoCore</a> A Linux computer (1 square inch). It runs
+ 		BusyBox, which is a really small version of Linux for embedded systems.</li>
+ 	<li><a href="https://www.solid-run.com/product/cubox-i4pro/">CuBox-i4Pro</a> A pretty powerful
+ 		little computer.
+ 	</li>
+ -->
+
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!--<li>Introduction to Operating Systems: <a href="../../../CS180/ch01.odp">Book Slides</a>-->
+<p class="SectionHeader">
+Notes
+</p>
+<ul>
+<li><a href="../../../CS180/Virtualization-1.html">Virtualization</a> Virtual machines, host/guest operating systems.
+	<ul>
+		<li><a class="pdf-icon" href="../../../../public/linux/linuxmint18-UserManual.pdf">Linux Mint User's Manual</a> - The documentation contains more details about Linux Mint. 
+			It's only about 50 pages, so you should sit at your Linux computer and read through it.</li>
+		<li>This is the <a href="../../../../public/linux/gldt1210.png">GNU/Linux Distribution Timeline</a> to see where distributions come from.
+			The image is from <a href="http://futurist.se/gldt/">here</a>. A great site to read up about the
+			top 100 distributions is <a href="http://distrowatch.com/">distrowatch.com</a>.
+		</li>
+		<li>Here is the list of <a href="https://en.wikipedia.org/wiki/List_of_Ubuntu_releases">release names</a>
+			that Ubuntu uses. (Mint is based on Ubuntu.) We're using Mint 19, which is based on Ubuntu 18.04 LTS
+			(Bionic Beaver). Some background on how the names were "suggested" or "voted for" is 
+			<a href="https://wiki.ubuntu.com/DevelopmentCodeNames">here</a>.
+		<li>Here is the list of <a href="https://en.wikipedia.org/wiki/List_of_Linux_Mint_releases">release
+			names</a> used by Linux Mint.</li>
+		</li>
+	</ul>
+<li><a href="../../../CS180/OSOverview.html">Introduction</a> Overview of Operating Systems</a>
+<li><a href="../../../../mg/getopt/index.html">Command line options</a> Mead's Guide to <b>getopt</b> (Programming with command line options using getopt.)
+<li><a href="../../../CS180/Single-Multi-task-OS.html">Operating System API</a> Single vs. multi-tasking, System calls vs. library calls, kernel/user mode, protection.
+<li><a href="../../../CS180/Processes-1.html">Processes</a> Process states, scheduling, interprocess communication, POSIX, Win32
+<li><a href="../../../CS180/Threads-1.html">Threads</a> Single vs. multi-threading, Thread API, POSIX, Win32
+<li><a href="../../../CS180/Memory-1.html">Memory</a> Physical, logical, addressing, paging
+<li><a href="../../../CS180/Scheduling-1.html">Scheduling</a> Non-preemptive, preemptive, priorities, multicore scheduling.
+<li><a href="../../../CS180/Synchronization-1.html">Synchronization</a> Race conditions, critical sections, locking, mutexes, semaphores.
+<li><a href="../../../CS180/Storage-1.html">Storage</a> Drives, formatting, scheduling algorithms, RAID, NAS
+<p>
+Additional Topics:
+<li><a href="../../../CS180/BootProcess.html">The Boot Process</a> POST, BIOS, Boot loaders, MBR, Partition tables, GUID partitions</li>
+<li><a href="../../../CS180/FileSystems-1.html">File Systems</a> Files, API, inodes, directories
+<!--
+</ul>
+
+
+-->
+
+<!--	
+<p>
+<li>The following topics will NOT be on the final exam:
+<ul>
+</ul>
+-->
+
+</ul>
+
+
+<b>Other references:</b>
+<ul>
+<li><a href="../../../CS180/Bash.html">Using the bash shell</a> A full-featured shell with its own language built-in.</li>
+<li><a href="../../../../mg/ssh/index.html">Mead's Guide to the Secure Shell (SSH)</a> Client, server, tunneling, keys, TCP wrappers, SSHFS, etc.</li>
+<li><a href="../../../../mg/ansicolors/index.html">Mead's Guide to Colorized Console Output</a> on Linux/Unix (MacOS) using ANSI escape sequences.</li>
+<li><a href="../../../../mg/signals/index.html">Mead's Guide to Signals</a> on Linux. Sending, receiving, and handling various signals.</li>
+<li><a href="../../../../mg/index.html">All Mead's Guides</a> A bunch of random topics that I've researched and posted.</li>
+<!--	
+<li><a href="../../../../mg/memdebug/index.html">Mead's Guide to Memory Debuggers</a> Introduction to using Dr. Memory and Valgrind</li>
+-->
+</ul>
+
+
+<!--
+<p>
+<b>Special Topics:</b>
+<ul>
+	
+<li><a href="../../../../mg/building-source/index.html">Mead's Guide to Building Software on Linux</a> A detailed step-by-step showing the various ways of building and installing software on Linux with examples.</li>
+<p>
+<li>Must see video:
+	<a href="https://www.youtube.com/watch?v=WDIkqP4JbkE">Scott Meyers: Cpu Caches and Why You Care</a>
+	If you're a programmer concerned with efficiency (e.g. a game programmer or Digipen student), this is a must see.
+</li>
+</ul>
+-->
+
+
+<!--
+-->
+
+<!--
+<p>
+<li>Special Topics: (NOT on the final exam)
+<ul>
+<li><a href="../../../../mg/ansicolors/index.html">Mead's Guide to Colorized Output using ANSI Escape Sequences</a> This short tutorial to get up and running with colorized output.</li>
+<li><a href="../../../../mg/update-compilers/index.html">Mead's Guide to Upgrading GCC and Clang on Linux</a> This shows how to install and manage multiple versions of the compilers.</li>
+<li><a href="../../../../mg/index.html">All Mead's Guides</a> This is a list of all of Mead's Guides.</li>
+</ul>
+-->
+
+
+<!--
+
+</ul>
+
+Special Topics:
+<ul>
+<li><a href="../../../CS180/Bash.html">Using the bash shell</a> A full-featured shell with its own language built-in.</li>
+<li><a href="../../../../mg/ssh/index.html">Mead's Guide to the Secure Shell (SSH)</a> Client, server, tunneling, keys, TCP wrappers, SSHFS, etc.</li>
+</ul>
+-->
+	
+
+<!--
+<li><a href="../../../CS180/BatchFiles.html">Commands and Batch files</a> Using system commands with simple batch files on Windows
+-->
+<!--
+-->
+
+<!--
+-->	
+<!--
+<p>
+<li>If you want to install a later version of gcc/g++ on your Linux computer, you can use the script in 
+<a href="../../../../public/linux/build-gcc.zip">this archive</a>.</li>
+<li>Extra Topic (This information will NOT be required for the final exam. It is here for curious students that want to know more.)
+<ul>
+-->
+
+<!--	
+<li><a href="../../../CS180/BatchFiles.html">Commands and Batch files</a> Using system commands with simple batch files on Windows
+-->
+</ul>
+<p>
+
+
+<!--
+-->
+
+<!--
+-->
+<!--
+-->
+<!--<li><a href="../../../CS180/cs180lecture01.pdf">CS180 slides</a> -->
+
+<!--QCRR7-YMP6Q-W8BFD-TKWTC-3VQRT-->
+
+<ul>
+</ul>
+
+
+<p>
+<!--
+<li><a href="CS170-GradingCodes.html">Understanding the marks</a> on your programming assignments.
+	Sample report files: <a href="../../../../docs/sample-report-good.txt">Good</a>
+	<a href="../../../../docs/sample-report-bad.txt">Not good</a>
+-->
+
+<!--
+<li><a href="../../../CS170/Differences-CtoCPP.html">Moving from C to C++</a> Points out some of the more	obvious differences.
+-->
+
+<!--
+-->
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Homework Assignments
+<p>
+
+<ul>
+<li>Material from the website and other sources:
+
+<p>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Assignments and Reading</th><th width=150>Due Date</th></tr>
+
+<tr><td>
+<a href="http://distrowatch.com/dwres.php?resource=major">Overview of the major Linux distributions</a> -  
+This page shows the Top Ten Linux Distributions.
+We will be spending some time studying Linux, and this will give you a good idea of why I chose the 
+distributions I did. There are over 100 different "versions" of Linux, and this gives you some insight 
+into why Linux has so many choices (and why it is used more than any other operating system). Be 
+prepared to answer the question, "Besides Mint, which of these distributions do you think you would 
+use and why?"
+<p>
+Check out this <a href="http://www.youtube.com/watch?v=yVpbFMhOAwE">short video</a> to see just 
+how popular Linux is. It's a few years old, so the numbers will be much higher than are 
+stated.</li> If you're new to Linux and interested in customizing the Cinnamon interface, here is 
+<a href="https://www.youtube.com/watch?v=_v7fnMfFdrI">an introductory video</a> to do that. The guy that
+did the video has lots of other related videos that you might find useful to watch. You can also search 
+for "Linux Mint" on youtube for lots of others.
+<p>
+Read sections 1.1 through 1.8 in the <a class="pdf-icon" href="../../../../docs/VirtualBox-UserManual_5.0.0.pdf">PDF</a> 
+that comes with Virtual Box. This is for version 5.0.0. Digipen may be using a different version, 
+but the documentation 
+should be almost identical. You can also read the latest documentation 
+<a href="https://www.virtualbox.org/manual/UserManual.html">online</a>.
+<p>
+To get a decent overview of what Linux is compared to Windows, read the 
+<a href="http://www.dedoimedo.com/computers/ultimate-linux-guide-for-windows-users.html">Ultimate Linux Guide for Windows Users</a>. 
+This should help you get started with the whole "Linux" thing.
+<p>
+</td><td>Friday, January 10, 2020</td></tr>
+
+
+<tr><td>
+Install Linux Mint, either natively or via a virtual machine. The recommended version for this class 
+is version 19.2. Any version from 18.0 to 19.2 (18.0, 18.1, 18.2, 19.0, 19.1, 19.2) should probably 
+work, since we are going to replace the versions of GCC and Clang.
+
+Unless you are having a 
+problem with 19.2, you should install that one. It's called 
+<font color="blue">
+<i><a href="https://linuxmint.com/edition.php?id=267">Linux Mint 19.2 "Tina" - Cinnamon (64-bit)</a></i></font>
+
+(Mint is the distribution, 19.2 is the version, and Cinnamon is the desktop envrionment.) You can add the other desktops 
+(MATE, Xfce, etc.) afterwards. Version 19.2 comes with the correct compiler version (Clang 8.x) that we are
+going to be using for all programming assignments. We will also be using version 8.x of the GNU gcc
+compiler. Instructions on upgrading the version that comes with Mint is
+<a href="../../../../mg/update-compilers/index.html#UPDATE2">here</a>. You can just run the install script (install-gcc-all.sh)
+that is near the end of the page.
+<p>
+Read 	<a class="pdf-icon" href="../../../../public/linux/linuxmint18-UserManual.pdf">Linux Mint User's Manual</a> - 
+It's for version 18, but it's mostly the same as 19.
+You can skip the installation instructions if you want as I've already demonstrated and given you
+a written tutorial on installation. Start reading at page 21, and then read about packages
+starting on page 35. This will give you lots of information to get you up to speed quickly.
+
+
+<p>
+Read chapters 1 through 7 in <a class="pdf-icon" href="../../../../docs/TheLinuxCommandLine.pdf">The Linux Command Line</a>. 
+You should read this while sitting at the computer and running Linux. Also, you should realize that, 
+although the command line in Linux may look a lot like the command line in Windows, the Linux command line 
+(the Bash shell) is infinitely more powerful than the one in Windows. You will do well for yourself to 
+explore at least the basics of it. Those of you that have been using Linux or Mac OS X from the command
+line may only need to skim this information.
+
+</td><td>Sunday, January 12, 2020</td></tr>
+
+<tr><td>
+Install GCC 8.x on your Linux Mint system by following
+<a href="../../../../mg/update-compilers/index.html#UPDATE2">these instructions</a>.
+<p>
+Take a few of your programming assignments/labs from CS120/CS170 (e.g. spellcheck, List, Vector,
+you'll need the Linux dictionary for the spellchecker), 
+build and execute them in Linux. 
+They should all compile and run the same as they did on Windows. Note: To execute a program under 
+Linux, you must prefix the command with <tt>./</tt> (that's a dot and forward slash, which 
+indicates the current directory).
+
+</td><td>Thursday, January 16, 2020</td></tr>
+
+<tr><td>
+Read chapter 10 in <a class="pdf-icon" href="../../../../docs/TheLinuxCommandLine.pdf">The Linux Command Line</a>. 
+This contains crucial information on configuring your Linux computer. 99% of the problems you
+will have can be solved with the commands shown in this chapter.
+</td><td>Monday, January 27, 2020</td></tr>
+
+
+<tr><td>
+Run all of the examples that are posted on the <a href="../../../CS180/Processes-1.html">Processes</a> page and see what kind of results you get. Practice with the <tt>exec</tt> functions so that you know 
+how to use them. 
+</td><td>Friday, February 14, 2020</td></tr>
+
+<tr><td>
+Make sure you've run all of the sample code on the <a href="../../../CS180/Threads-1.html">Threads</a> 
+page and see what kind of results you get.
+</td><td>Friday, February 28, 2020</td></tr>
+
+<tr><td><a href="study/cs180-winter2020-study-quiz4-threads.pdf">Study Quiz #4</a> (Threads)</td><td>&nbsp;</td></tr>
+
+<!--
+<tr><td>
+Experiment with the <a href="../../../../mg/getopt/index.html">getopt</a> stuff I've shown so far.
+(You're free to try all of it, if you want to get ahead.)
+</td><td>Friday, February 1, 2019</td></tr>
+
+<tr><td>
+Familiarize yourself by experimenting with these filters: <tt>cut sort head tail uniq shuf wc nl tee tr</tt>.
+Also experiment with <tt>grep</tt>. For a lot more power, look at <tt>sed</tt> and <tt>awk</tt>.
+Get help from the man pages or Google. Many are in Chapter 7 in this book:
+<a class="pdf-icon" href="../../../../docs/TheLinuxCommandLine.pdf">The Linux Command Line</a>
+</td><td>Wednesday, Februrary 13, 2019</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+<tr><td>
+Install GCC 7.2 on your Linux Mint system by following
+<a href="../../../../mg/update-compilers/index.html#UPDATE">these instructions</a>.
+<p>
+Take a few of your programming assignments/labs from CS120 (e.g. spellcheck, List, Vector,
+you'll need the Linux dictionary for the spellchecker), 
+build and execute them in Linux. 
+They should all compile and run the same as they did on Windows. Note: To execute a program under 
+Linux, you must prefix the command with <tt>./</tt> (that's a dot and forward slash, which 
+indicates the current directory).
+
+</td><td>Wednesday, September 13, 2017</td></tr>
+
+<tr><td>
+Experiment with <a href="../../../../docs/mem.leaks.cpp">mem.leaks.cpp</a> with valgrind. Yeah,
+it's a C++ file, but it will demonstrate a lot of bugs. (Originally developed by Prof. Volper).
+</td><td>Monday, September 18, 2017</td></tr>
+
+
+<tr><td>
+Here are some questions to help you <a href="cs180-command-line-practice-filters.pdf">Practice with Filters</a>.
+Post your answers to the 
+<a href="https://distance.digipen.edu/2017-fall/mod/forum/view.php?id=11256">Miscellaneous Topics and Tips</a>
+ forum on Moodle. In the subject, indicate
+the question number (e.g. 6d). In the message, show the command line that you used, with an 
+explanation of what each part of the command means. Finally, tells us how you found the
+answer (e.g. "I Googled for 'find files linux command line'). Once an answer has been given, you
+have to choose another question. (There are currently only about 30 questions and I may post more.)
+</td><td>Friday, October 6, 2017</td></tr>
+
+
+<tr><td>
+Read the <a href="http://catcode.com/teachmod/">chmod tutorial</a> up to and including "Try chmod".
+</td><td>Monday, October 9, 2017</td></tr>
+
+<tr><td>
+Study the sample code from the <a href="../../../CS180/Memory-1.html">Memory</a> 
+page regarding Dynamic Loading. You'll be implementing this for homework.
+</td><td>Monday, November 13, 2017</td></tr>
+<!--
+-->
+
+<!--
+
+<tr><td>
+Experiment with the <a href="../../../CS180/getopt.html">getopt</a> stuff I've shown so far.
+(You're free to try all of it, if you want to get ahead.)
+</td><td>Thursday, May 26, 2016</td></tr>
+
+
+<tr><td>
+Read chapter 15 of <a class="pdf-icon" href="../../../../docs/TheLinuxCommandLine.pdf">The Linux Command Line</a>. You 
+should read this while sitting at the computer and running Linux. You should install a few packages from 
+the command line. Linux Mint is Debian-based (Ubuntu is based on Debian also) so you will use <b>apt-get</b> 
+for package management. Pay attention to <b>apt-cache</b> also.
+<br><br>
+You can also read more up-to-date information on "Safari Online" with the book:
+<a href="http://proquestcombo.safaribooksonline.com/book/operating-systems-and-server-administration/linux/9781118983843">
+Linux Command Line and Shell Scripting Bible, 3rd Edition</a> specifically, Chapter 9. You can focus
+on the Debian commands, unless you're also running a Red Hat-based distribution as well.	
+<br><br>
+Also read: <a href="../../../CS180/building-source-details-htop.html">Mead's Guide to Building Software on Linux</a>
+
+</td><td>Friday, September 12, 2015</td></tr>
+
+
+-->
+
+<!--
+
+<tr><td>
+Some practice questions to help you familiarize yourself with the command line are
+ <a href="cs180-command-line-questions.pdf">here</a>. There is a blank text file for you 
+ to fill in <a href="cs180-command-line-answer-sheet.txt">here</a>.
+</td><td>Monday, Friday, January 15, 2016</td></tr>
+
+-->
+
+<!--
+<tr><td>
+Read chapter 10 of <a href="../../../../docs/TheLinuxCommandLine.pdf">The Linux Command Line</a>. 
+You should read this while sitting at the computer and running Linux. You should focus on the parts 
+about using <tt><b>chmod</b></tt>. 95% of the time you have problems, it's some kind of permissions thing.
+</td><td>Thursday, October 1, 2015</td></tr>
+<p>
+
+
+-->
+
+<!--
+
+
+
+-->
+<!--
+
+
+
+<tr><td>
+Experiment with the sample bash scripts from <a href="../../../CS180/Bash.html">The bash shell</a>. 
+Read the <a href="http://catcode.com/teachmod/">chmod tutorial</a> up to and including "Try chmod".
+</td><td>Monday, June 3, 2015</td></tr>
+
+<tr><td>
+Run all of the examples that are posted on 
+the <a href="../../../CS180/Synchronization-1.html">Synchronization</a> page and see what kind of results 
+you get.
+</td><td>Tuesday, November 24, 2015</td></tr>
+-->
+
+<!--
+
+-->
+
+
+
+<!--
+-->
+
+</table>
+<p>
+
+
+<li><h2>Programming Assignments</h2>
+<ul>
+	<li><a href="http://pontus.digipen.edu/cgi-bin/submission.cgi">Assignment Submission Page</a>
+		- Submit all programming assignments from this page.</li>
+	<li>All code will be written in C, so CS180 will still follow the <a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide from CS120</a></li>
+	<li>You can reach the Returned Folders using a browser from <a href="https://inside.digipen.edu/den/">here</a>.</li>
+<li>How to calculate your grade:. I've made a <a href="cs180-grades-student.ods">spreadsheet</a> 
+	to help you. Just change the numbers in <font color="red"><b>red</b></font> in the "Your score"
+	column to reflect your own scores.
+	<ul>
+		<li><a href="cs180-grades-student-no-final.ods">Updated version</a> that doesn't include the final exam.</li>
+	</ul>
+
+	If you've never used a spreadsheet before, now is
+a good time to learn because every college graduate must know how to use one.
+Google for anything you need to know. You can download the LibreOffice suite
+from <a href="https://www.libreoffice.org/download/libreoffice-fresh/">here</a>.
+</li>
+<!--
+-->
+
+<p>
+<li><a href="project1/index.html">Programming Assignment #1</a> - Due Thursday, January 23 at 10:00 pm</li>
+<li><a href="project2/index.html">Programming Assignment #2</a> - Due Thursday, February 13 at 10:00 pm</li>
+<li><a href="project3/index.html">Programming Assignment #3</a> - Due Thursday, February 27 at 10:00 pm</li>
+<li><a href="project4/index.html">Programming Assignment #4</a> - Due Thursday, March 5 at 10:00 pm</li>
+<li><a href="project5/index.html">Programming Assignment #5</a> - Due Thursday, April 2 at 10:00 pm</li>
+<p>
+<li><a href="ec1/index.html">EC Programming Assignment #1</a> - Due Thursday, April 23 at 12:00 noon</li>
+<li><a href="ec2/index.html">EC Programming Assignment #2</a> - Due Thursday, April 23 at 12:00 noon</li>
+<li><a href="ec3/index.html">EC Programming Assignment #3</a> - Due Thursday, April 23 at 12:00 noon</li>
+
+<!--
+
+<p>
+<p>
+
+-->
+
+
+</ul>
+<!--
+
+<li><h2>Command-line practice</h2> 
+<ul>
+	<li><a class="pdf-icon" href="cs180-command-line-challenge-1.pdf">Command line challenge #1</a> Posted 5-22-2018.
+		<a href="https://distance.digipen.edu/2018-summer/mod/forum/discuss.php?d=283#p307">Answer</a></li>
+</ul>
+-->
+
+<li><h2>Practice Labs</h2>
+<ul>
+<li><a href="practice/practicedata.html">Data</a> for the extra credit labs - Both are due Thursday, April 23 at 12:00 noon</li>
+</ul>
+<!--
+-->
+
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Additional Reading Assignments (required)
+<ul>
+<a href="https://en.wikipedia.org/wiki/LLP64#64-bit_data_models">64-bit data models</a> - 10 years ago, 
+everyone assumed everything was 32-bit. 10 years from now, everyone is going to assume everything is 
+64-bit. Unfortunately during the next few years, no one is going to be able to assume anything and will 
+need to test both. Here's a <a href="../../../../docs/sizes2.c.html">sample</a> for you to compile and run.
+<p>
+<li><a href="http://www.ibm.com/developerworks/linux/library/l-port64/index.html">Porting to 64-bit</a> A 
+	good article introducing some of the 	issues that might come up when moving from 32-bit to 64-bit. 
+	</li>
+<p>
+<li><a href="http://queue.acm.org/detail.cfm?id=1165766">The Long Road to 64 Bits</a>
+	"Those who cannot remember the past are condemned to repeat it." - George Santayana
+	(<a class="pdf-icon" href="../../../../public/Files/TheLongRoadTo64Bits.pdf">PDF</a>)</li>
+<!--
+-->
+</ul>
+
+<!--
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<p class="SectionHeader">
+Interesting reading/videos (optional)
+</p>
+
+<ul>
+	<!--
+	<li>Video <a href="https://www.youtube.com/watch?v=WDIkqP4JbkE">Scott Meyers: Cpu Caches and Why You Care</a>
+	If you're a programmer concerned with efficiency (e.g. a game programmer or Digipen student), this is a must see.</li>
+	-->
+<p>
+<li><a href="http://news.digipen.edu/academics/robert-gervais-epic-games">Digipen senior uses Linux
+	skills to help get a job at Epic Games and the Unreal Engine</a> With Valve betting heavily on gaming
+	on Linux with Steam, Linux is becoming an important skill to have on your resume.</li>
+	<p>
+<li><a href="http://www.zdnet.com/valve-ceo-why-linux-is-the-future-of-gaming-7000020735/">Valve CEO: 
+	Why Linux is the future of gaming.</a> 	Gabe Newell explains in a presentation given at LinuxCon 2013. 
+	There's a video of the presentation
+	<a href="http://www.omgubuntu.co.uk/2015/09/valve-promise-linux-steambox-info-next-week">here</a>.
+</li>
+<p>
+<li><a href="http://www.gamasutra.com/view/news/200997/QA_Understanding_the_future_of_Linux_game_development.php">
+	Q&amp;A: Understanding the future of Linux game development</a> This is a recent article
+	from the Gamasutra web site talking with "The" Linux game dev Ryan "Icculus" Gordon.
+<p>
+<li><a href="https://www.youtube.com/watch?v=Sd8ie5R4CVE">Getting Started with Linux Game Development</a> 
+	Ryan "Icculus" Gordon explains this in the video.</li>
+<p>
+<li><a href="https://www.youtube.com/watch?v=xTmAknUbpB0">Bruce Dawson</a> ex-Microsoft employee 
+	(ex-Digipen instructor), now working at <strike>Valve</strike> Google, explains how he debugs Valve's code under Linux. He 
+	gave a similar presentation at Digipen in the Spring of 2015.</li>
+<p>	
+<li><a href="http://queue.acm.org/detail.cfm?id=1017000">The Reincarnation of Virtual Machines</a> 
+	An excellent introduction to virtualization from the ACM Queue magazine.
+It's from 2004, but is still quite relevant. (<a class="pdf-icon" href="../../../CS180/The_Reincarnation_of_Virtual_Machines.pdf">PDF</a>)</li>
+<p>
+<li>IBM has invested billions of dollars in Linux and provides a wealth of free information about 
+	Linux in their <a href="http://www.ibm.com/developerworks/linux/library/">Technical Library</a>. 
+	Articles and tutorials are for both beginners and advanced users.</li>
+<p>
+
+
+<li>
+The first personal computer that I worked on was my dad's <a href="http://en.wikipedia.org/wiki/Apple_II_series">Apple II</a>.
+The first personal computer that
+I owned was the Sanyo MBC550. I had a love/hate relationship with that thing. It came with a whopping
+128K of RAM but I "upgraded" it by adding an additional 128K (256K total) for about $50 (circa 1986). 
+I bought the RAM from some electronics store. I didn't even know how I was going to put it in the 
+computer. I needed that much RAM because I was trying to do some graphics stuff (no color, of course) 
+in 640x200 mode, which was too much resolution for only 128K of RAM. You can read about
+this computer <a href="http://www.seasip.info/VintagePC/sanyo.html">here</a>
+and <a href="http://www.digibarn.com/collections/systems/sanyo/index.html">here</a>.
+<p>
+<li><a href="http://www.pacifier.com/~mmead/router">How to build a custom router</a> This is 
+	a "documentary" that I wrote on how to build your own router. Most people use a consumer-grade router 
+	by Linksys or Cisco or DLink or something like that. When you out-grow those routers, you need 
+	something more powerful. Follow the link and I'll show you how. (Lots of pictures!)</li>
+<p>
+
+<!--
+<li><a href="http://www.fit-pc.com/web/fit-pc/intensepc/">New server</a> It has 16 GBs of RAM, a 1 TB 2.5" 
+	hard drive, dual 10/100/1000 Mb network ports and
+is running Linux Mint 13 64-bit LTS. That's overkill for a supposedly "dedicated server", but I have
+much more planned for this bad boy. I also recently set up a 
+<a href="http://global.shuttle.com/news/productsSpec?productId=1767">new Linux server</a>
+to experiment with. I now have 4 of these puppies running.
+</li>
+-->
+
+<p>
+<li>CPU and GPU comparisons - How does your system rate?
+	<p>
+<ul>
+	<li><a href="http://www.cpubenchmark.net/">CPU Benchmarks</a> (<a href="http://www.cpubenchmark.net/cpu_list.php">Comparisons</a>)</li>
+	<li><a href="http://www.videocardbenchmark.net/">GPU Benchmarks</a> (<a href="http://www.videocardbenchmark.net/gpu_list.php">Comparisons</a>)</li>
+</ul>
+
+<!--
+<li><a href="http://blogs.msdn.com/b/oldnewthing/">Raymond Chen's Blog</a> This guy seems to know more about Windows
+	than almost anyone else. Interesting, informative, entertaining, and for many, a waste of time. A must read!
+	<p>
+<li><a href="http://www.pacifier.com/~mmead/router">How to build a custom router</a> This is a "documentary" that I wrote
+	on how to build your own router. Most people use a consumer-grade router by Linksys or Cisco or DLink or something like that.
+	When you out-grow those routers, you need something more powerful. Follow the link and I'll show you how.
+ 	(Lots of pictures!)</li>
+<p>
+<p>
+<b>Encryption</b>
+<li><a href="http://www.arg0.net/encfs">EncFS Home Page</a> Encrypted File System</li>
+<li><a href="http://movingtofreedom.org/2007/02/21/howto-encfs-encrypted-file-system-in-ubuntu-and-fedora-gnu-linux/">HOWTO: EncFS</a>
+	Nice introduction to EncFS and others.</li>
+<li><a href="https://wiki.archlinux.org/index.php/EncFS">Some rationale</a> about using EncFS from Arch wiki.</li>
+<li><a href="http://en.wikipedia.org/wiki/EncFS">EncFS on wikipedia</a> More details about EncFS.</li>
+<p>
+<li><a href="http://www.truecrypt.org/">TrueCrypt</a> Free, on-the-fly encryption.</li>
+<li><a href="http://www.truecrypt.org/docs/?s=tutorial">TrueCrypt Tutorial</a> Start here if you're new to TrueCrypt</li>
+<li><a href="https://wiki.archlinux.org/index.php/TrueCrypt">TrueCrypt on Arch Wiki</a> Kind of a tutorial.</li>
+<li><a href="http://en.wikipedia.org/wiki/TrueCrypt">TrueCrypt on Wikipedia</a> More details about TrueCrypt</li>
+<p>
+<li><a href="https://wiki.archlinux.org/index.php/Disk_Encryption#Comparison_table">Comparison table</a> on Arch Wiki.</li>
+
+
+-->
+
+
+
+</ul>
+
+
+<br><br>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

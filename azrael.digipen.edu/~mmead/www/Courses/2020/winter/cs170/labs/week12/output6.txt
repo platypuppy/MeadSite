@@ -1,0 +1,26 @@
+
+********** TestBSearch1 **********
+push_back 10 random integers:
+1173  7388  3307  1836  6193  3496  2340  1951  7596  6804  3336  5793  6029  4765  1154  4149  3736  4843  6348  8509  (size=20, capacity=32, allocs=6)
+1154  1173  1836  1951  2340  3307  3336  3496  3736  4149  4765  4843  5793  6029  6193  6348  6804  7388  7596  8509  (size=20, capacity=32, allocs=6)
+Index of 1173 is 1
+Index of 7388 is 17
+Index of 3307 is 5
+Index of 1836 is 2
+Index of 6193 is 14
+Index of 3496 is 7
+Index of 2340 is 4
+Index of 1951 is 3
+Index of 7596 is 18
+Index of 6804 is 16
+Index of 3336 is 6
+Index of 5793 is 12
+Index of 6029 is 13
+Index of 4765 is 10
+Index of 1154 is 0
+Index of 4149 is 9
+Index of 3736 is 8
+Index of 4843 is 11
+Index of 6348 is 15
+Index of 8509 is 19
+99 is not in the vector

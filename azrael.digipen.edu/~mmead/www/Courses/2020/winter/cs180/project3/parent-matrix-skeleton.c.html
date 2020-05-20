@@ -1,0 +1,115 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 180 - Assignment #2</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;   /* fopen, fscanf, fclose */</font>
+<font color="990099">#include &lt;stdlib.h&gt;  /* exit, malloc          */</font>
+<font color="990099">#include &lt;sys/shm.h&gt; /* Fill this in          */</font>
+
+<font color="#003399"><i>/* Put a complete Doxygen function header here */</i></font>
+<b>int</b> *get_matrix(<b>const</b> <b>char</b> *filename, <b>int</b> *width)
+{
+  <b>int</b> value, *matrix;
+  FILE *fp;
+  
+    <font color="#003399"><i>/* Open the file in text/translated mode */</i></font>  
+  fp = fopen(filename, <font color="#9933CC">&quot;rt&quot;</font>);
+  <b>if</b> (!fp)
+  {
+    printf(<font color="#9933CC">&quot;Can't open file: %s&#92;n&quot;</font>, filename);
+    exit(-1);
+  }
+  
+    <font color="#003399"><i>/* Read the width and allocate the matrix */</i></font>
+  fscanf(fp, <font color="#9933CC">&quot;%d&quot;</font>, width);
+  matrix = malloc(*width * *width * <b>sizeof</b>(<b>int</b>));
+  <b>if</b> (!matrix)
+  {
+    printf(<font color="#9933CC">&quot;Can't malloc matrix&#92;n&quot;</font>);
+    fclose(fp);
+    exit (-2);
+  }
+  
+    <font color="#003399"><i>/* Read the vaules and put in the matrix */</i></font>
+  <b>while</b> (!feof(fp))
+  {
+    <b>int</b> result = fscanf(fp, <font color="#9933CC">&quot;%d&quot;</font>, &amp;value);
+    <b>if</b> (result == -1)
+      <b>break</b>;
+    *matrix++ = value;
+  }
+  fclose(fp);
+  
+    <font color="#003399"><i>/* Return the address of the matrix */</i></font>
+  <b>return</b> matrix - (*width * *width);
+}
+
+<font color="#003399"><i>/* Put a complete Doxygen function header here */</i></font>
+<b>void</b> print_matrix(<b>int</b> *matrix, <b>int</b> width)
+{
+  <b>int</b> i, size = width * width;
+  <b>for</b> (i = 0; i &lt; size; i++)
+  {
+    printf(<font color="#9933CC">&quot;%8i&quot;</font>, matrix[i]);
+    <b>if</b> ( (i + 1) % width == 0)
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  }
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<font color="#003399"><i>/* Put a complete Doxygen function header here */</i></font>
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv) 
+{
+  <b>int</b> width;       <font color="#003399"><i>/* width of the matrix   */</i></font>
+  <b>int</b> *matrix;     <font color="#003399"><i>/* the matrix read in    */</i></font>
+
+  <b>if</b> (argc &lt; 3)
+  {
+    printf(<font color="#9933CC">&quot;Insufficient parameters supplied&#92;n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+    <font color="#003399"><i>/* read in matrix values from file */</i></font>
+    <font color="#003399"><i>/* don't forget to free the memory */</i></font>  
+  matrix = get_matrix(<font color="#003399"><i>/* 2 args go here */</i></font>);
+  
+    <font color="#003399"><i>/* print the matrix */</i></font>
+  print_matrix(matrix, width);
+  
+    <font color="#003399"><i>/* Fork a child for each matrix entry       */</i></font>
+    <font color="#003399"><i>/* May need an array to hold the child pids */</i></font>
+  <b>for</b> (i = 0; i &lt; width * width; i++)
+  {
+  
+    <font color="#003399"><i>/* Do forking and stuff */</i></font>
+  
+  }
+
+  <font color="#003399"><i>/* wait for children */</i></font>
+  
+  
+    <font color="#003399"><i>/* print matrix from shared buffer */</i></font>
+  print_matrix(buffer + 1 + width * width, width);
+  
+  
+  <font color="#003399"><i>/* cleanup */</i></font>
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

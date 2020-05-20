@@ -1,0 +1,154 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-big.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> &lt;iomanip&gt;  <font color="#003399"><i>// setw</i></font>
+
+<b>#include</b> <font color="#9933CC">&quot;WarBoats.h&quot;</font>
+<b>#include</b> <font color="#9933CC">&quot;PRNG.h&quot;</font>
+
+<b>void</b> PrintShotResult(<b>const</b> CS170::WarBoats::ShotResult &amp;sr)
+{
+  <b>const</b> <b>char</b> *strings[] = {<font color="#9933CC">&quot;HIT&quot;</font>, <font color="#9933CC">&quot;MISS&quot;</font>, <font color="#9933CC">&quot;DUPLICATE&quot;</font>, <font color="#9933CC">&quot;SUNK&quot;</font>, <font color="#9933CC">&quot;ILLEGAL&quot;</font>};
+  std::cout &lt;&lt; strings[<b>static_cast</b>&lt;<b>int</b>&gt;(sr)] &lt;&lt; std::endl;
+  <font color="#003399"><i>//if (sr == CS170::WarBoats::srSUNK)</i></font>
+  <font color="#003399"><i>//  std::cout &lt;&lt; &quot;*************************************************\n&quot;;</i></font>
+}
+
+<b>void</b> PrintStats(<b>const</b> CS170::WarBoats::ShotStats &amp;stats)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;      Hits: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.hits &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;    Misses: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.misses &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Duplicates: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.duplicates &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Boats Sunk: &quot;</font> &lt;&lt; std::setw(3) &lt;&lt; stats.sunk &lt;&lt; std::endl;
+}
+
+<b>void</b> TakeAShot(CS170::WarBoats::Ocean &amp;ocean, <b>const</b> CS170::WarBoats::Point&amp; pt)
+{
+  CS170::WarBoats::ShotResult sr;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Shot: &quot;</font> &lt;&lt; pt.x &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; pt.y &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  sr = CS170::WarBoats::TakeShot(ocean, pt);
+  PrintShotResult(sr);
+  PrintStats(GetShotStats(ocean));
+  CS170::WarBoats::DumpOcean(ocean);
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> test_rect(<b>int</b> num_boats, <b>int</b> xsize, <b>int</b> ysize, 
+               <b>bool</b> show_sunk = true, <b>bool</b> show_all = <b>false</b>)
+{
+    <font color="#003399"><i>// Initialize the pseudo-random number generator</i></font>
+  CS170::Utils::srand(0, 0);
+
+  CS170::WarBoats::Ocean *theOcean;
+  theOcean = CS170::WarBoats::CreateOcean(num_boats, xsize, ysize);
+  CS170::WarBoats::Ocean &amp;ocean = *theOcean;
+
+    <font color="#003399"><i>// Place the boats randomly in the ocean</i></font>
+  <b>int</b> boats_placed = 0;
+  <b>while</b> (boats_placed &lt; num_boats)
+  {
+    CS170::WarBoats::Boat boat;
+
+    <font color="#003399"><i>//boat.hits = 0;</i></font>
+    boat.ID = boats_placed + 1;
+    CS170::WarBoats::BoatPlacement bp;
+    <b>do</b>
+    {
+        <font color="#003399"><i>// Pick a random orientation</i></font>
+      boat.orientation = CS170::Utils::Random(0, 1)
+                                 ? CS170::WarBoats::oHORIZONTAL
+                                 : CS170::WarBoats::oVERTICAL;
+
+        <font color="#003399"><i>// Pick a random location</i></font>
+      CS170::WarBoats::Point location;
+      location.x = CS170::Utils::Random(0, xsize - 1);
+      location.y = CS170::Utils::Random(0, ysize - 1);
+      boat.position = location;
+
+        <font color="#003399"><i>// Place the boat</i></font>
+      bp = CS170::WarBoats::PlaceBoat(ocean, boat);
+
+    }<b>while</b> (bp == CS170::WarBoats::bpREJECTED);
+
+    <font color="#003399"><i>//CS170::WarBoats::DumpOcean(ocean);</i></font>
+    <font color="#003399"><i>//std::cout &lt;&lt; std::endl;</i></font>
+    boats_placed++;
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Boats placed:\n&quot;</font>;
+  CS170::WarBoats::DumpOcean(ocean);
+  std::cout &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Try to sink the boats with random shots</i></font>
+  <b>while</b> (num_boats &gt; 0)
+  {
+    CS170::WarBoats::ShotResult sr;
+    <b>do</b>
+    {
+      CS170::WarBoats::Point coordinate;
+      coordinate.x = CS170::Utils::Random(0, xsize - 1);
+      coordinate.y = CS170::Utils::Random(0, ysize - 1);
+      <font color="#003399"><i>//std::cout &lt;&lt; &quot;target: &quot; &lt;&lt; coordinate.x &lt;&lt; &quot;, &quot; </i></font>
+      <font color="#003399"><i>//          &lt;&lt; coordinate.y &lt;&lt; std::endl;</i></font>
+
+      sr = CS170::WarBoats::TakeShot(ocean, coordinate);
+    } <b>while</b> (sr == CS170::WarBoats::srDUPLICATE);
+
+      <font color="#003399"><i>// Sunk a boat</i></font>
+    <b>if</b> (sr == CS170::WarBoats::srSUNK)
+      num_boats--;
+
+    <b>if</b> (show_all)
+    {
+      PrintShotResult(sr);
+      PrintStats(GetShotStats(ocean));
+      CS170::WarBoats::DumpOcean(ocean, 4, <b>false</b>);
+      std::cout &lt;&lt; std::endl;
+    }
+    <b>else</b> <b>if</b> ( (sr == CS170::WarBoats::srSUNK) &amp;&amp; show_sunk)
+    {
+      PrintShotResult(sr);
+      PrintStats(GetShotStats(ocean));
+      CS170::WarBoats::DumpOcean(ocean, 4, <b>false</b>);
+      std::cout &lt;&lt; std::endl;
+    }
+  }
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Final board:\n&quot;</font>;
+  PrintStats(GetShotStats(ocean));
+  CS170::WarBoats::DumpOcean(ocean, 4, <b>false</b>);
+  std::cout &lt;&lt; std::endl;
+  CS170::WarBoats::DestroyOcean(theOcean);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="#003399"><i>// usage: test_rect(boats, xsize, ysize, show_sunk, show_all)</i></font>
+
+  test_rect(5, 10, 10, <b>false</b>, <b>false</b>);
+  <font color="#003399"><i>//test_rect(5, 10, 10, true, false);</i></font>
+  <font color="#003399"><i>//test_rect(5, 10, 10, true, true);</i></font>
+  
+  <font color="#003399"><i>//test_rect(5, 8, 12, false, false);</i></font>
+  <font color="#003399"><i>//test_rect(5, 8, 12, true, false);</i></font>
+  <font color="#003399"><i>//test_rect(5, 8, 12, true, true);</i></font>
+  
+  <font color="#003399"><i>//test_rect(99, 30, 30, false, false);</i></font>
+  <font color="#003399"><i>//test_rect(99, 30, 30, true, false);</i></font>
+  <font color="#003399"><i>//test_rect(99, 30, 30, true, true);</i></font>
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,284 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: red;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+In this lab you will write a few simple functions to manipulate a singly-linked list. There are 7 functions,
+but two are already provided for you. Remember to keep your code from this lab as you will add to it in
+the coming weeks. Also, be sure to draw diagrams to help you understand what you are trying to do.
+<!--Please do not ask a TA for help with any problems if you do not have a diagram to show them first.-->
+<p>
+<p class="technote">
+This is a fairly simple lab and is somewhat similar to a CS120 lab that some of you did. 
+(Even the Node structure was the same.)
+However, you can't just simply resubmit what you did in CS120 because you are going to be 
+modifying things and using C++-style code. 
+Also, the next 4 labs will be built from this lab, so make sure you do this correctly.
+If you need a refresher from CS120, you can find the linked-list notes
+<a href="../../../../../CS170/LinkedLists-Intro1.html">here</a> that I discussed
+on Friday during the extra linked-list lecture last week.
+<p>
+
+Given this header file: (<a href="List.h">List.h</a>)
+<p>
+The number in parentheses in the comments is the <i>approximate</i> number of lines of code
+(excluding variable declarations). You can see that most of them are trivial and the total
+amount of code is about 32 lines. Also, realized that a lot of this code has already been demonstrated
+in class and you can get that code from the notes on <a href="../../../../../CS170/LinkedLists-Intro1.html">linked-lists</a>.
+
+<blockquote><pre>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="000000"><b>#ifndef</b> LIST_H</font>
+<font color="000000"><b>#define</b> LIST_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> ListLab
+  {
+    <b>struct</b> Node
+    {
+      <b>int</b> number; <font color="#003399"><i>// data portion</i></font>
+      Node *next; <font color="#003399"><i>// pointer portion</i></font>
+    };
+
+      <font color="#003399"><i>// Adds a node to the end of the list (8)</i></font>
+    <b>void</b> AddToEnd(Node **pList, <b>int</b> value);
+
+      <font color="#003399"><i>// Adds a node to the front of the list (3)</i></font>
+    <b>void</b> AddToFront(Node **pList, <b>int</b> value);
+
+      <font color="#003399"><i>// Returns the number of nodes in the list (4)</i></font>
+    <b>int</b> Count(Node *list);
+
+      <font color="#003399"><i>// Finds an item and returns the node that contains it (5)</i></font>
+    Node *FindItem(Node *list, <b>int</b> value);
+
+      <font color="#003399"><i>// Frees (deletes) all of the nodes in the list (4)</i></font>
+    <b>void</b> FreeList(Node *pList);
+
+      <font color="#003399"><i>// Prints all of the nodes values (4)</i></font>
+    <b>void</b> PrintList(Node *list);
+
+      <font color="#003399"><i>// Inserts a new node at the specified position (12)</i></font>
+    <b>void</b> Insert(Node **pList, <b>int</b> value, <b>int</b> position);
+
+  } <font color="#003399"><i>// namespace ListLab</i></font>
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="000000"><b>#endif</b> // LIST_H</font>
+</pre></blockquote>
+
+<p>
+<hr width="95%">
+<p>
+
+<ol>
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+
+<li> Implement the functions in a file called <a href="List.cpp">List.cpp</a>. 
+  You are given 3 functions that are already implemented. Notice the helper function, 
+  <i>MakeNode</i>, that is in an unnamed namespace.
+<p>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr valign="top">
+<td>
+<pre>
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> <font color="#9933CC">&quot;List.h&quot;</font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> ListLab
+  {
+    <b>namespace</b> 
+    {
+      Node* MakeNode(<b>int</b> value)
+      {
+        Node *pNode = <b>new</b> Node; <font color="#003399"><i>// Allocate memory for the node</i></font>
+        pNode-&gt;number = value;  <font color="#003399"><i>// Set data field (number)</i></font>
+        pNode-&gt;next = 0;        <font color="#003399"><i>// Set next (no next yet)</i></font>
+
+        <b>return</b> pNode;
+      }
+    }
+
+    <b>void</b> PrintList(Node *list)
+    {
+      <b>while</b> (list)
+      {
+        std::cout &lt;&lt; list-&gt;number &lt;&lt; <font color="#9933CC">&quot;   &quot;</font>;
+        list = list-&gt;next;
+      }
+      std::cout &lt;&lt; std::endl;
+    }
+
+    <font color="#003399"><i>/*!******************************************************************
+      Get the number of nodes in the list.
+
+      \param list
+        The list to count.
+
+      \return
+        The number of nodes in the list.
+    ********************************************************************/</i></font>
+    <b>int</b> Count(Node *list)
+    {
+      <b>int</b> count = 0; <font color="#003399"><i>// The total number of nodes</i></font>
+
+      <b>while</b> (list)
+      {
+        count++;
+        list = list-&gt;next;
+      }
+
+      <b>return</b> count;
+    }
+
+  } <font color="#003399"><i>// namespace ListLab</i></font>
+} <font color="#003399"><i>// namespace CS170</i></font>
+</pre>
+
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+<p>
+<hr width="100%">
+<p>
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<li>Add a Doxygen file header comment to <tt><b>List.cpp</b></tt>. Make a bullet list of the functions 
+  in the file. Create doxygen function header comments for each function. 
+  <!--Generate a compiled help file (index.chm). -->
+  Note that you <i>must</i> add Doxygen function header comments to all functions, 
+  <b>even if they are  already provided for you.</b>
+  <p>
+  Be sure to use the provided <a href="../../Doxyfile-1.8.15.txt">Doxyfile template</a>. You have to modify
+  two lines in the file (which has been discussed at length in class). Be sure that Doxygen doesn't
+  produce any warnings. If there are warnings, you MUST modify YOUR code, not the Doxyfile.
+  The best way to ensure that you are doing things correctly is to make Doxygen generate a
+  warning by putting something incorrect in your Doxygen comments. If Doxygen doesn't detect
+  the bad comment, then you are using Doxygen incorrectly.
+</li>
+
+<p>
+<hr width="100%">
+<p>
+
+
+</ol>
+
+Here's some test code in <a href="driver.cpp">driver.cpp</a> &nbsp<a href="List.cpp.html">HTML</a>.
+<p>
+Command line:
+
+<blockquote><pre>
+<b>g++</b> -o gnu -O -Wall -Wextra -Werror -ansi -pedantic -Wconversion driver.cpp List.cpp<br>
+</pre></blockquote>
+<!--<b>cl</b> /EHsc /W4 /WX /Zi /MT /Oy- /Ob0 /Fems.exe driver.cpp List.cpp-->
+<!--<b>clang++</b> -c -O -Wall -Wextra -Werror -ansi -pedantic -Wconversion driver.cpp List.cpp<br>-->
+
+<blockquote><a href="output2.txt">Output</a></blockquote>
+
+Don't forget that you may need to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the newlines between GNU's output and the other compilers.
+<p>
+To run it under Dr. Memory:
+
+<blockquote><pre>
+drmemory -batch -no_summary -- gnu.exe
+</pre></blockquote>
+
+If there were no problems, this should produce no output (with the exception of the false positives
+on Windows.)
+<p>
+
+Also, be sure to run your program under Dr. Memory <b>at all times, not just before submission</b>. 
+This will help you identify any memory problems with your code as they appear. It may also help you to
+find bugs in your program that are caused by memory problems.
+(The submission server is currently running Valgrind for memory debugging and will reject any code
+that has problems.)
+<p>
+
+<p class="technote">
+You are not <i>required</i> to create makefiles for this lab, but if you are planning on becoming a professional
+developer, you will want to do things that increase your productivity (like using <b>makefiles</b> when
+developing software). If you still feel that spending a few minutes creating <b>makefiles</b> decreases 
+your productivity, then you definitely need to spend more time outside of the labs working 
+with <b>makefiles</b> so you are comfortable with them. Using <i>make</i> can be very
+complicated for large projects, but we are only using a very small subset of its capabilities
+in this class.
+</p>
+
+<p class="Extra">
+Actually, you are not <i>required</i> to do <i>anything</i> in this class. I'm not going to
+force you to learn to be a professional. If you don't want to use makefiles, or turn on the
+compiler warnings, or turn on Doxygen warnings, or use a memory debugger, or follow the Style
+Guide, or learn the command line, or read/follow instructions, etc., I'm not going to force you to. 
+However, the chances of you graduating from Digipen are 0%, and the chances of
+you getting a job as a game developer are even less.
+</p>
+
+<br>
+
+</ol>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

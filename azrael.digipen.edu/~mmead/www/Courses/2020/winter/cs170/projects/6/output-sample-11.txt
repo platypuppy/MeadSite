@@ -1,0 +1,118 @@
+
+SomeWidths------------------------------------------------
+There are 11 lines wrapped at 1 characters:
+Line #  1 [ 4] |When|
+Line #  2 [ 2] |in|
+Line #  3 [ 3] |the|
+Line #  4 [ 6] |Course|
+Line #  5 [ 2] |of|
+Line #  6 [ 5] |human|
+Line #  7 [ 7] |events,|
+Line #  8 [ 2] |it|
+Line #  9 [ 7] |becomes|
+Line # 10 [ 9] |necessary|
+Line # 11 [ 3] |for|
+Shortest line: 2
+ Longest line: 9
+
+
+SomeWidths------------------------------------------------
+There are 11 lines wrapped at 4 characters:
+Line #  1 [ 4] |When|
+Line #  2 [ 2] |in|
+Line #  3 [ 3] |the|
+Line #  4 [ 6] |Course|
+Line #  5 [ 2] |of|
+Line #  6 [ 5] |human|
+Line #  7 [ 7] |events,|
+Line #  8 [ 2] |it|
+Line #  9 [ 7] |becomes|
+Line # 10 [ 9] |necessary|
+Line # 11 [ 3] |for|
+Shortest line: 2
+ Longest line: 9
+
+
+SomeWidths------------------------------------------------
+There are 9 lines wrapped at 8 characters:
+Line #  1 [ 7] |When in|
+Line #  2 [ 3] |the|
+Line #  3 [ 6] |Course|
+Line #  4 [ 8] |of human|
+Line #  5 [ 7] |events,|
+Line #  6 [ 2] |it|
+Line #  7 [ 7] |becomes|
+Line #  8 [ 9] |necessary|
+Line #  9 [ 3] |for|
+Shortest line: 2
+ Longest line: 9
+
+
+SomeWidths------------------------------------------------
+There are 7 lines wrapped at 12 characters:
+Line #  1 [11] |When in the|
+Line #  2 [ 9] |Course of|
+Line #  3 [ 5] |human|
+Line #  4 [10] |events, it|
+Line #  5 [ 7] |becomes|
+Line #  6 [ 9] |necessary|
+Line #  7 [ 3] |for|
+Shortest line: 3
+ Longest line: 11
+
+
+SomeWidths------------------------------------------------
+There are 4 lines wrapped at 19 characters:
+Line #  1 [18] |When in the Course|
+Line #  2 [19] |of human events, it|
+Line #  3 [17] |becomes necessary|
+Line #  4 [ 3] |for|
+Shortest line: 3
+ Longest line: 19
+
+
+SomeWidths------------------------------------------------
+There are 3 lines wrapped at 25 characters:
+Line #  1 [21] |When in the Course of|
+Line #  2 [24] |human events, it becomes|
+Line #  3 [13] |necessary for|
+Shortest line: 13
+ Longest line: 24
+
+
+SomeWidths------------------------------------------------
+There are 2 lines wrapped at 35 characters:
+Line #  1 [35] |When in the Course of human events,|
+Line #  2 [24] |it becomes necessary for|
+Shortest line: 24
+ Longest line: 35
+
+
+SomeWidths------------------------------------------------
+There are 1 lines wrapped at 70 characters:
+Line #  1 [60] |When in the Course of human events, it becomes necessary for|
+Shortest line: 60
+ Longest line: 60
+
+
+SomeWidths------------------------------------------------
+There are 2 lines wrapped at 59 characters:
+Line #  1 [56] |When in the Course of human events, it becomes necessary|
+Line #  2 [ 3] |for|
+Shortest line: 3
+ Longest line: 56
+
+
+SomeWidths------------------------------------------------
+There are 1 lines wrapped at 60 characters:
+Line #  1 [60] |When in the Course of human events, it becomes necessary for|
+Shortest line: 60
+ Longest line: 60
+
+
+SomeWidths------------------------------------------------
+There are 1 lines wrapped at 61 characters:
+Line #  1 [60] |When in the Course of human events, it becomes necessary for|
+Shortest line: 60
+ Longest line: 60
+

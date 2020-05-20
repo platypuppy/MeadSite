@@ -1,0 +1,312 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Warning
+{
+  margin-left: 0;
+  font-size : 12pt;
+  font-weight : bold;
+  background-color: #FFFF00; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment</h1>
+(vector4)
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="technote">
+<b>Note:</b> 
+You will be required to submit all of the functions that have been writing for the <i>Vector</i> 
+class so far. There is a mega-driver at the bottom of this page that will be used to test all 
+of your functions. This should be trivial for you to test since there are only two additional 
+functions to write this week.  
+Make sure your code is cleanly written and properly formatted per the style guidelines. You also 
+need to make sure you have Doxygenized the code (file headers, function headers, etc.) 
+just as if you were submitting a "regular" assignment. Again, since you were supposed to 
+have done all of this in previous labs, this should only take you a short while to prepare. 
+Of course, if you haven't been doing the required lab work, you may not have time to submit much.
+<br><br>
+This is basically "free points" for students that have been doing the required
+homework this semester.
+<p>
+
+
+<p class="SectionHeader">
+Information
+</p>
+<ol>
+<li>You will continue to enhance the Vector class that you've been working on by adding 2 more 
+  methods to the class. You will add a search method
+	and a sort method as described below. The sort method sorts the data from smaller to larger.
+	<p>
+	
+	Given this header file <a  href="Vector.h">Vector.h</a> (<a href="Vector.h.html">HTML</a>), 
+  add the new methods of the Vector class. (The new methods are not in the header file yet.)
+
+
+
+There are 2 new methods:
+  
+<blockquote><pre>
+      <font color="#003399"><i>// Sorts the elements using a selection sort. </i></font>
+      <font color="#003399"><i>// Returns the number of swaps/comparisons that occurred.</i></font>
+      <font color="#003399"><i>// <b>Requires about 15 lines of code.</b></i></font>
+    SortResult selection_sort();
+
+      <font color="#003399"><i>// This searches the vector using a binary search instead</i></font>
+      <font color="#003399"><i>// of a linear search. The data must be sorted. Returns</i></font>
+      <font color="#003399"><i>// the index. If not found, returns CS170::Vector::NO_INDEX.</i></font>
+      <font color="#003399"><i>// DO NOT SORT THE DATA IN THIS FUNCTION!!</i></font>
+      <font color="#003399"><i>// <b>Requires about 12 lines of code.</b></i></font>
+    <b>int</b> bsearch(<b>int</b> value) <b>const</b>;
+</pre></blockquote>
+
+and a structure used by the sort method:
+
+<blockquote><pre>
+<b>struct</b> SortResult
+{
+  <b>unsigned</b> compares; <font color="#003399"><i>// The number of comparisons done during the sort.</i></font>
+  <b>unsigned</b> swaps;    <font color="#003399"><i>// The number of swaps done during the sort.</i></font>
+};
+</pre></blockquote>
+
+<p>
+You can not change the public interface for any class that is provided to you. For the
+  the <tt><b>SubscriptError</b></tt> class, you cannot change anything, public or private.
+<p>  
+Here is some additional information on <a href="diagrams/Sorting.html">selection sort and binary search</a>.
+<big><b>Please read this information before starting to write code.</b></big>
+<p>
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add Doxygen file headers and comments to <tt><b>Vector.h</b></tt> and 
+  <tt><b>Vector.cpp</b></tt>. Make a bullet list of the functions in the .cpp file. Create doxygen 
+  function header comments for each function. Most of this work was done for the last lab, so 
+  this should only take a few minutes to update.
+
+<p>
+<hr width="100%">
+<p>
+
+
+
+<li>Here's some test code in <a href="driver.cpp">driver.cpp</a> (<a href="driver.cpp.html">HTML</a>). 
+  Command lines:
+
+GNU g++:
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp PRNG.cpp
+</pre></blockquote>
+<!--<b>clang++</b> -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp PRNG.cpp<br>-->
+
+<!--
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp Vector.cpp PRNG.cpp
+</pre></blockquote>
+-->
+<!--<b>clang++</b> -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp PRNG.cpp<br>-->
+
+
+Random number generator files
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+  </ul>
+<p>
+
+Output from the individual tests:
+<ol>
+  <li><a href="output1.txt">output1.txt</a></li>
+  <li><a href="output2.txt">output2.txt</a></li>
+  <li><a href="output3.txt">output3.txt</a></li>
+  <li><a href="output4.txt">output4.txt</a></li>
+  <li><a href="output5.txt">output5.txt</a></li>
+  <li><a href="output6.txt">output6.txt</a></li>
+  <li><a href="output7.txt">output7.txt</a> (Should finish in less than 2 seconds or so.)</li>
+  <li><a href="output8.txt">output8.txt</a> (Should finish in less than .5 seconds or so.)</li>
+</ol>
+<p>
+Output from all tests:
+<blockquote>
+<a href="output-all.txt">output-all.txt</a>
+</blockquote>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the 
+newlines between GNU's
+output and the other compilers. <!--You may want to use WinMerge to diff individual tests.-->
+<p>
+<p class="technote">
+After you finish this lab, you can upload the files to the submission server to get credit for 
+the lab. The next part will be uploaded as a different assignment, so you will not upload 
+it with this lab.
+</p>
+</blockquote>
+
+
+</ol>
+
+<big>
+<center>
+<p class="Warning">
+This concludes the vector portion of the labs.
+</p>
+</center>
+</big>
+
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<p>
+<xhr width="100%">
+<p>
+<br>
+
+<a name="VECTORLAB"></a>
+
+Now that you have completed all of the necessary methods of the <tt>Vector</tt> class, you need 
+to make sure that
+you can pass the tests in this 
+<a href="megadriver.cpp">megadriver.cpp</a> (<a href="megadriver.cpp.html">HTML</a>). 
+After you successfully pass the tests, you will submit it like any
+other assignment. This driver has 28 tests.
+<p>
+
+Output of all tests:
+<blockquote>
+<a href="output-mega.txt">Output</a>&nbsp;&nbsp;&nbsp;
+</blockquote>
+<p>
+
+Command lines: 
+
+GNU g++:
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic megadriver.cpp Vector.cpp PRNG.cpp
+</pre></blockquote>
+
+<!--
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe megadriver.cpp Vector.cpp PRNG.cpp
+</pre></blockquote>
+-->
+<!--<b>clang++</b> -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic megadriver.cpp Vector.cpp PRNG.cpp<br>-->
+
+To run an individual test, provide the test number on the command line. For example, to 
+run <i>TestBSearch1</i>, do this:
+
+<blockquote><pre>
+gnu 15
+</pre></blockquote>
+
+To run all tests, don't provide any number on the command line. See the <tt>main</tt> function 
+in the driver to see
+which number runs which test.
+<p>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the 
+newlines between GNU's
+output and the other compilers.
+<p>
+</blockquote>
+
+
+<p class="Warning">
+After completing this final part, be sure to zip up your files 
+(<tt>Vector.h and Vector.cpp</tt>)
+and submit them to the appropriate submission page by the due date/time.
+This assignment is called <tt>assign_vectorlab</tt> on the submission server.
+Because this final part is an <i>assignment</i> rather than a <i>lab</i>, the
+submission server is doing nothing but building your program. I will build it
+on my computer and give the results to the TAs to grade. Afterwards, the 
+results will be placed in your Returned folders.
+</p>
+
+<!--
+<p>
+<hr width="90%">
+<p>
+
+<b>Somewhat advanced stuff:</b> (Maybe for after the semester or over the summer for those that
+are curious.) Students that have taken CS180 should have little problem understanding the code.
+<p>
+  
+For those of you that are interested in playing with the threaded version of the driver (Microsoft only), 
+you would build it like this:
+<blockquote><pre>
+<b>cl</b> /O2 /EHa /W4 /WX /Femst.exe <font color="blue"><b>/MT /DWATCHDOG</b></font> megadriver.cpp Vector.cpp PRNG.cpp 
+</pre></blockquote>
+
+This will run each test in a background thread. The benefit of this is that if the test runs 
+too long (infinite loop or other poorly written code), the test will be terminated after a while. 
+This will prevent any test from going "crazy" and never completing. I use this technique in almost
+all of my drivers for sophomore classes where it's very easy for students to implement code that 
+takes too long to complete. 
+<p>
+To see how long each test is actually taking to run, set the default value for the 
+<b><tt>announce_level</tt></b> in the <b><tt>ExecuteTest</tt></b>
+function to 2:
+
+<blockquote><pre>
+<b>void</b> ExecuteTest(TestFn fn, <b>int</b> maxwait = 1000, <b>int</b> safewait = 1000, <b>int</b> announce_level <font color="red"><b>= 2</b></font>)
+</pre></blockquote>
+
+Now, when you run your code, the time to execute each test is displayed in the output. 
+Please realize that the time is not very accurate using this method, but it is standard 
+across computers. However, it's more than accurate enough for these tests. Study the 
+driver for more information.
+
+<br><br><br>
+-->
+
+<br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

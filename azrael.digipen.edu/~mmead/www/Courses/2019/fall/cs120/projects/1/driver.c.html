@@ -1,0 +1,58 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/******************************************************************************
+filename    driver.c
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS120
+assignment  7
+due date    11/26/2037
+
+Brief Description:
+  This file contains the main function for the pi assignment. It is used as
+  a "driver" to test the circle_pi function and the leibniz_pi function.
+
+******************************************************************************/</i></font>
+<b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* scanf, printf */</i></font>
+
+<b>double</b> circle_pi(<b>int</b> rectangles);  <font color="#003399"><i>/* Calculates PI using a quarter circle */</i></font>
+<b>double</b> leibniz_pi(<b>int</b> iterations); <font color="#003399"><i>/* Calculates PI using a series         */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i; <font color="#003399"><i>/* loop counter */</i></font>
+
+    <font color="#003399"><i>/* Print out table header */</i></font>
+  printf(<font color="#9933CC">&quot;Approximations for pi\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Iterations      Circle Method   Leibniz Method\n&quot;</font>);
+  printf(<font color="#9933CC">&quot;----------------------------------------------\n&quot;</font>);
+
+    <font color="#003399"><i>/* Print out values for each set of numbers */</i></font>
+  <b>for</b> (i = 1; i &lt;= 1000000; i *= 10)
+  {
+      <font color="#003399"><i>/* Calculate PI with both methods */</i></font>
+    <b>double</b> pi_circle = circle_pi(i);
+    <b>double</b> pi_leibniz = leibniz_pi(i);
+
+      <font color="#003399"><i>/* Print the results of the calculations */</i></font>
+    printf(<font color="#9933CC">&quot;%10i%20.12f%16.12f\n&quot;</font>, i, pi_circle, pi_leibniz);
+  }
+
+  <b>return</b> 0; <font color="#003399"><i>/* Return success to the OS */</i></font>
+}
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

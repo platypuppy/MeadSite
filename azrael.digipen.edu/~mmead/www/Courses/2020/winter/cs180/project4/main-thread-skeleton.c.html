@@ -1,0 +1,112 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 180 - Assignment #4</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;         /* printf, fopen, fclose, fscanf */</font>
+<font color="990099">#include &lt;stdlib.h&gt;        /* exit, malloc                  */</font>
+<font color="990099">#include &lt;pthread.h&gt;       /* thread create/join/exit       */</font>
+<font color="990099">#include &quot;matrix-thread.h&quot; /* thread data struct, thread fn */</font>
+
+<b>int</b> *get_matrix(<b>const</b> <b>char</b> *filename, <b>int</b> *width)
+{
+  <b>int</b> value, *matrix, result;
+  FILE *fp;
+  
+  fp = fopen(filename, <font color="#9933CC">&quot;rt&quot;</font>);
+  <b>if</b> (!fp)
+  {
+    printf(<font color="#9933CC">&quot;Can't open file: %s&#92;n&quot;</font>, filename);
+    exit(-1);
+  }
+  
+  result = fscanf(fp, <font color="#9933CC">&quot;%d&quot;</font>, width);
+  <b>if</b> (result == -1)
+  {
+    printf(<font color="#9933CC">&quot;Can't read from file: %s&#92;n&quot;</font>, filename);
+    fclose(fp);
+    exit(-1);
+  }
+
+  matrix = malloc(*width * *width * <b>sizeof</b>(<b>int</b>));
+  <b>if</b> (!matrix)
+  {
+    printf(<font color="#9933CC">&quot;Can't malloc matrix&#92;n&quot;</font>);
+    fclose(fp);
+    exit (-2);
+  }
+  
+  <b>while</b> (!feof(fp))
+  {
+    result = fscanf(fp, <font color="#9933CC">&quot;%d&quot;</font>, &amp;value);
+    <b>if</b> (result == -1)
+      <b>break</b>;
+    *matrix++ = value;
+  }
+  fclose(fp);
+  <b>return</b> matrix - (*width * *width);
+}
+
+<b>void</b> print_matrix(<b>int</b> *matrix, <b>int</b> width)
+{
+  <b>int</b> i, size = width * width;
+  <b>for</b> (i = 0; i &lt; size; i++)
+  {
+    printf(<font color="#9933CC">&quot;%8i&quot;</font>, matrix[i]);
+    <b>if</b> ( (i + 1) % width == 0)
+      printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  }
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv) 
+{
+  <b>int</b> i;
+  <b>int</b> width;          <font color="#003399"><i>/* width of the matrix           */</i></font>
+  <b>int</b> matsize;        <font color="#003399"><i>/* total matrix values           */</i></font>
+  <b>int</b> *input_matrix;  <font color="#003399"><i>/* the matrix read in            */</i></font>
+  <b>int</b> *result_matrix; <font color="#003399"><i>/* threads will put results here */</i></font>
+  
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Insufficient parameters supplied&#92;n&quot;</font>);
+    <b>return</b> -1;
+  }
+  
+    <font color="#003399"><i>/* Reading the input matrix from a file into it's memory. */</i></font>
+  input_matrix = get_matrix(argv[1], &amp;width);
+  matsize = width * width;
+  
+    <font color="#003399"><i>/* Printing the input matrix. */</i></font>
+  print_matrix(input_matrix, width);
+  
+    <font color="#003399"><i>/* Creating all of the other threads and supplying them with */</i></font>
+    <font color="#003399"><i>/* their parameters                                          */</i></font>
+  <b>for</b> (i = 0; i &lt; matsize; i++)
+  {
+  }
+
+    <font color="#003399"><i>/* Waiting for all of the threads to finish. */</i></font>
+    
+    <font color="#003399"><i>/* Printing the resulting squared matrix. */</i></font>
+  print_matrix(result_matrix, width);
+  
+    <font color="#003399"><i>/* Cleaning up any memory or resources the main thread created. */</i></font>
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

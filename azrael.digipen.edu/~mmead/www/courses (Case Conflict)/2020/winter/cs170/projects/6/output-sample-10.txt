@@ -1,0 +1,29 @@
+
+Test10----------------------------------------------------
+There are 23 lines wrapped at 20 characters:
+Line #  1 [18] |When in the Course|
+Line #  2 [19] |of human events, it|
+Line #  3 [17] |becomes necessary|
+Line #  4 [17] |for one people to|
+Line #  5 [12] |dissolve the|
+Line #  6 [15] |political bands|
+Line #  7 [20] |which have connected|
+Line #  8 [18] |them with another,|
+Line #  9 [19] |and to assume among|
+Line # 10 [17] |the powers of the|
+Line # 11 [19] |earth, the separate|
+Line # 12 [20] |and equal station to|
+Line # 13 [17] |which the Laws of|
+Line # 14 [13] |Nature and of|
+Line # 15 [20] |Nature's God entitle|
+Line # 16 [14] |them, a decent|
+Line # 17 [14] |respect to the|
+Line # 18 [19] |opinions of mankind|
+Line # 19 [18] |requires that they|
+Line # 20 [18] |should declare the|
+Line # 21 [18] |causes which impel|
+Line # 22 [11] |them to the|
+Line # 23 [11] |separation.|
+Shortest line: 11
+ Longest line: 20
+

@@ -1,0 +1,548 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Beranger does... : The Five Coding Styles and Linux</title>
+  <meta name="description" content="Linux experience with GNOME">
+  <meta name="keywords" content="Linux, SuSE, GNOME, Debian Sarge, Python, PHP, MySQL, Unicode, Ubuntu, CentOS, Fedora, toolkit">
+  <meta name="rating" content="General">
+  <meta name="language" content="english, EN">
+  <meta name="revisit-after" content="1 Days">
+  <meta content="INDEX,FOLLOW" name="robots">
+  <meta name="publisher" content="beranger.org">
+  <meta name="author" content="Radu-Cristian FOTESCU">
+  <link href="http://web.archive.org/web/20061014014623cs_/http://beranger.org/style02.css" rel="STYLESHEET" type="text/css">
+  <LINK rel="stylesheet" type="text/css" media="print, handheld" href="http://web.archive.org/web/20061014014623cs_/http://beranger.org/styleprint.css">
+  <link rel="SHORTCUT ICON" href="http://web.archive.org/web/20061014014623im_/http://beranger.org/favicon.ico">  
+
+  <link rel="alternate" type="application/rss+xml" title="Beranger does GNOME with Debian, CentOS, Fedora ...and more!" href="http://web.archive.org/web/20061014014623/http://beranger.org/feed.xml" />
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<script language="JavaScript" type="text/JavaScript">
+function MM_preloadImages() {
+var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+	var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+	if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+</script>  
+</head>
+<body bgcolor="#557A5C" onload="javascript:MM_preloadImages('img/newcateg1.png', 'img/newcateg2.png', 'img/newcateg3.png', 'img/newcateg4.png', 'img/newcateg5.png', 'img/newcateg6.png', 'img/newcateg7.png', 'img/newcateg8.png', 'img/newcateg9.png', 'img/newcateg10.png', 'img/newcateg11.png', 'img/newcateg12.png', 'img/newcateg13.png', 'img/newcateg14.png', 'img/newcateg15.png', 'img/newcateg16.png', 'img/newcateg17.png', 'img/newcateg18.png', 'img/newcateg19.png', 'img/catbooks.png', 'img/catcontro.png', 'img/golden.png');">
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+
+<script type="text/javascript" src="http://staticweb.archive.org/js/disclaim-element.js" ></script>
+<script type="text/javascript" src="http://staticweb.archive.org/js/graph-calc.js" ></script>
+<script type="text/javascript" src="http://staticweb.archive.org/jflot/jquery.min.js" ></script>
+<script type="text/javascript">
+//<![CDATA[
+var firstDate = 820454400000;
+var lastDate = 1356998399999;
+var wbPrefix = "http://web.archive.org/web/";
+var wbCurrentUrl = "http:\/\/beranger.org\/index.php?article=1358";
+
+var curYear = -1;
+var curMonth = -1;
+var yearCount = 18;
+var firstYear = 1996;
+var imgWidth=450;
+var yearImgWidth = 25;
+var monthImgWidth = 2;
+var trackerVal = "none";
+var displayDay = "14";
+var displayMonth = "Oct";
+var displayYear = "2006";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function showTrackers(val) {
+	if(val == trackerVal) {
+		return;
+	}
+	if(val == "inline") {
+		document.getElementById("displayYearEl").style.color = "#ec008c";
+		document.getElementById("displayMonthEl").style.color = "#ec008c";
+		document.getElementById("displayDayEl").style.color = "#ec008c";		
+	} else {
+		document.getElementById("displayYearEl").innerHTML = displayYear;
+		document.getElementById("displayYearEl").style.color = "#ff0";
+		document.getElementById("displayMonthEl").innerHTML = displayMonth;
+		document.getElementById("displayMonthEl").style.color = "#ff0";
+		document.getElementById("displayDayEl").innerHTML = displayDay;
+		document.getElementById("displayDayEl").style.color = "#ff0";
+	}
+   document.getElementById("wbMouseTrackYearImg").style.display = val;
+   document.getElementById("wbMouseTrackMonthImg").style.display = val;
+   trackerVal = val;
+}
+function getElementX2(obj) {
+	var thing = jQuery(obj);
+	if((thing == undefined) 
+			|| (typeof thing == "undefined") 
+			|| (typeof thing.offset == "undefined")) {
+		return getElementX(obj);
+	}
+	return Math.round(thing.offset().left);
+}
+function trackMouseMove(event,element) {
+
+   var eventX = getEventX(event);
+   var elementX = getElementX2(element);
+   var xOff = eventX - elementX;
+	if(xOff < 0) {
+		xOff = 0;
+	} else if(xOff > imgWidth) {
+		xOff = imgWidth;
+	}
+   var monthOff = xOff % yearImgWidth;
+
+   var year = Math.floor(xOff / yearImgWidth);
+	var yearStart = year * yearImgWidth;
+   var monthOfYear = Math.floor(monthOff / monthImgWidth);
+   if(monthOfYear > 11) {
+       monthOfYear = 11;
+   }
+   // 1 extra border pixel at the left edge of the year:
+   var month = (year * 12) + monthOfYear;
+   var day = 1;
+	if(monthOff % 2 == 1) {
+		day = 15;
+	}
+	var dateString = 
+		zeroPad(year + firstYear) + 
+		zeroPad(monthOfYear+1,2) +
+		zeroPad(day,2) + "000000";
+
+	var monthString = prettyMonths[monthOfYear];
+	document.getElementById("displayYearEl").innerHTML = year + 1996;
+	document.getElementById("displayMonthEl").innerHTML = monthString;
+	// looks too jarring when it changes..
+	//document.getElementById("displayDayEl").innerHTML = zeroPad(day,2);
+
+	var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+	document.getElementById('wm-graph-anchor').href = url;
+
+   //document.getElementById("wmtbURL").value="evX("+eventX+") elX("+elementX+") xO("+xOff+") y("+year+") m("+month+") monthOff("+monthOff+") DS("+dateString+") Moy("+monthOfYear+") ms("+monthString+")";
+   if(curYear != year) {
+       var yrOff = year * yearImgWidth;
+       document.getElementById("wbMouseTrackYearImg").style.left = yrOff + "px";
+       curYear = year;
+   }
+   if(curMonth != month) {
+       var mtOff = year + (month * monthImgWidth) + 1;
+       document.getElementById("wbMouseTrackMonthImg").style.left = mtOff + "px";
+       curMonth = month;
+   }
+}
+//]]>
+</script>
+
+<style type="text/css">body{margin-top:0!important;padding-top:0!important;min-width:800px!important;}#wm-ipp a:hover{text-decoration:underline!important;}</style>
+<div id="wm-ipp" style="display:none; position:relative;padding:0 5px;min-height:70px;min-width:800px; z-index:9000;">
+<div id="wm-ipp-inside" style="position:fixed;padding:0!important;margin:0!important;width:97%;min-width:780px;border:5px solid #000;border-top:none;background-image:url(http://staticweb.archive.org/images/toolbar/wm_tb_bk_trns.png);text-align:center;-moz-box-shadow:1px 1px 3px #333;-webkit-box-shadow:1px 1px 3px #333;box-shadow:1px 1px 3px #333;font-size:11px!important;font-family:'Lucida Grande','Arial',sans-serif!important;">
+   <table style="border-collapse:collapse;margin:0;padding:0;width:100%;"><tbody><tr>
+   <td style="padding:10px;vertical-align:top;min-width:110px;">
+   <a href="http://wayback.archive.org/web/" title="Wayback Machine home page" style="background-color:transparent;border:none;"><img src="http://staticweb.archive.org/images/toolbar/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"/></a>
+   </td>
+   <td style="padding:0!important;text-align:center;vertical-align:top;width:100%;">
+
+       <table style="border-collapse:collapse;margin:0 auto;padding:0;width:570px;"><tbody><tr>
+       <td style="padding:3px 0;" colspan="2">
+       <form target="_top" method="get" action="http://wayback.archive.org/web/form-submit.jsp" name="wmtb" id="wmtb" style="margin:0!important;padding:0!important;"><input type="text" name="url" id="wmtbURL" value="http://beranger.org/index.php?article=1358" style="width:400px;font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;" onfocus="javascript:this.focus();this.select();" /><input type="hidden" name="type" value="replay" /><input type="hidden" name="date" value="20061014014623" /><input type="submit" value="Go" style="font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;margin-left:5px;" /><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td style="vertical-align:bottom;padding:5px 0 0 0!important;" rowspan="2">
+           <table style="border-collapse:collapse;width:110px;color:#99a;font-family:'Helvetica','Lucida Grande','Arial',sans-serif;"><tbody>
+			
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr style="width:110px;height:16px;font-size:10px!important;">
+           	<td style="padding-right:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       Sep
+                       
+               </td>
+               <td id="displayMonthEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight:bold;text-transform:uppercase;width:34px;height:15px;padding-top:1px;text-align:center;" title="You are here: 1:46:23 Oct 14, 2006">OCT</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       Nov
+                       
+               </td>
+           </tr>
+
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr>
+               <td style="padding-right:9px;white-space:nowrap;overflow:visible;text-align:right!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+                       <img src="http://staticweb.archive.org/images/toolbar/wm_tb_prv_off.png" alt="Previous capture" width="14" height="16" border="0" />
+                       
+               </td>
+               <td id="displayDayEl" style="background:#000;color:#ff0;width:34px;height:24px;padding:2px 0 0 0;text-align:center;font-size:24px;font-weight: bold;" title="You are here: 1:46:23 Oct 14, 2006">14</td>
+				<td style="padding-left:9px;white-space:nowrap;overflow:visible;text-align:left!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+                       <img src="http://staticweb.archive.org/images/toolbar/wm_tb_nxt_off.png" alt="Next capture" width="14" height="16" border="0"/>
+                       
+			    </td>
+           </tr>
+
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr style="width:110px;height:13px;font-size:9px!important;">
+				<td style="padding-right:9px;font-size:11px!important;font-weight: bold;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       2005
+                       
+               </td>
+               <td id="displayYearEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight: bold;padding-top:1px;width:34px;height:13px;text-align:center;" title="You are here: 1:46:23 Oct 14, 2006">2006</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight: bold;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       2007
+                       
+				</td>
+           </tr>
+           </tbody></table>
+       </td>
+
+       </tr>
+       <tr>
+       <td style="vertical-align:middle;padding:0!important;">
+           <a href="http://wayback.archive.org/web/20061014014623*/http://beranger.org/index.php?article=1358" style="color:#33f;font-size:11px;font-weight:bold;background-color:transparent;border:none;" title="See a list of every capture for this URL"><strong>1 captures</strong></a>
+           <div style="margin:0!important;padding:0!important;color:#666;font-size:9px;padding-top:2px!important;white-space:nowrap;" title="Timespan for captures of this URL">14 Oct 06 - 14 Oct 06</div>
+       </td>
+       <td style="padding:0!important;">
+       <a style="position:relative; white-space:nowrap; width:450px;height:27px;" href="Beranger-CodingStyles.html" id="wm-graph-anchor">
+       <div id="wm-ipp-sparkline" style="position:relative; white-space:nowrap; width:450px;height:27px;background-color:#fff;cursor:pointer;border-right:1px solid #ccc;" title="Explore captures for this URL">
+			<img id="sparklineImgId" style="position:absolute; z-index:9012; top:0px; left:0px;"
+				onmouseover="showTrackers('inline');" 
+				onmouseout="showTrackers('none');"
+				onmousemove="trackMouseMove(event,this)"
+				alt="sparklines"
+				width="450"
+				height="27"
+				border="0"
+				src="http://wayback.archive.org/web/jsp/graph.jsp?graphdata=450_27_1996:-1:000000000000_1997:-1:000000000000_1998:-1:000000000000_1999:-1:000000000000_2000:-1:000000000000_2001:-1:000000000000_2002:-1:000000000000_2003:-1:000000000000_2004:-1:000000000000_2005:-1:000000000000_2006:9:000000000100_2007:-1:000000000000_2008:-1:000000000000_2009:-1:000000000000_2010:-1:000000000000_2011:-1:000000000000_2012:-1:000000000000"></img>
+			<img id="wbMouseTrackYearImg" 
+				style="display:none; position:absolute; z-index:9010;"
+				width="25" 
+				height="27"
+				border="0"
+				src="http://staticweb.archive.org/images/toolbar/transp-yellow-pixel.png"></img>
+			<img id="wbMouseTrackMonthImg"
+				style="display:none; position:absolute; z-index:9011; " 
+				width="2"
+				height="27" 
+				border="0"
+				src="http://staticweb.archive.org/images/toolbar/transp-red-pixel.png"></img>
+       </div>
+		</a>
+
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td style="text-align:right;padding:5px;width:65px;font-size:11px!important;">
+       <a href="javascript:;" onclick="document.getElementById('wm-ipp').style.display='none';" style="display:block;padding-right:18px;background:url(http://staticweb.archive.org/images/toolbar/wm_tb_close.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;margin-bottom:23px;background-color:transparent;border:none;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="display:block;padding-right:18px;background:url(http://staticweb.archive.org/images/toolbar/wm_tb_help.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;background-color:transparent;border:none;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+
+</div>
+</div>
+<script type="text/javascript">
+ var wmDisclaimBanner = document.getElementById("wm-ipp");
+ if(wmDisclaimBanner != null) {
+   disclaimElement(wmDisclaimBanner);
+ }
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+ <!-- onload="javascript: document.forms[0].elements[0].focus();"--> 
+<!-- <script type="text/javascript" src="makehistory.js"> </script>
+<script type="text/javascript">document.write('<div style="position:absolute;top:0px;right:0px;height:163px;width:163px"><img src="CornerISupportDenmark.gif" width="163" height="163" border="0" usemap="#rc"></div>' + '<map name="rc"><area shape="poly" coords="0,0,163,0,163,163" href="http://web.archive.org/web/20061014014623/http://www.supportdenmark.com//" target="_blank"></map>')</script> -->
+<script>
+    function addengine()
+    {
+        if ((typeof window.sidebar == "object") && (typeof window.sidebar.addSearchEngine == "function")) {
+            window.sidebar.addSearchEngine("http://web.archive.org/web/20061014014623/http://beranger.org//misc4/beranger.src", "http://web.archive.org/web/20061014014623/http://beranger.org//misc4/beranger.gif", "Beranger", "Web");
+        } else {
+            alert("You need a Mozilla-based browser to install this search plugin.");
+        }
+     }
+</script>
+<center>
+<div id="logo"><center>	
+<!-- BEGIN TOP BAR STRUCTURE --><table border="0" cellpadding="0" cellspacing="0" width="800"> <tbody><tr> 
+<td colspan="2" bgcolor="#D70751" height="12" valign="top"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_topbar.png" alt="" border="0" height="12" width="800"></td>
+</tr> <tr> <td bgcolor="#D70751" valign="top"><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php"><img id="banner_top" src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02.png" alt="" border="0" height="90" width="530"></a></td><td bgcolor="#D70751" valign="top">
+<!-- BEGIN SEARCH FORM --> <form name="SearchForm" action="http://web.archive.org/web/20061014014623/http://beranger.org/search.php" method="get">
+<table border="0" cellpadding="0" cellspacing="0" width="230"> <tbody><tr> 
+<td colspan="3" bgcolor="#333333" height="4" valign="top" width="219"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/spacer_002.gif" alt="" border="0" height="4" width="219"></td> 
+<td rowspan="2" bgcolor="#D70751" height="28" valign="top" width="11"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/spacer_002.gif" alt="" border="0" height="1" width="11"></td> </tr>
+<tr> 
+<td bgcolor="#333333" valign="top"><img id="search_title" src="http://web.archive.org/web/20061014014623im_/http://beranger.org/search_title.gif" alt="" border="0" width="53"></td> 
+<td bgcolor="#333333" valign="top" width="133">
+<input name="search" type="text" size="18"></input></td> 
+<td bgcolor="#333333" width="44" valign="top"><input id="search_go" src="http://web.archive.org/web/20061014014623im_/http://beranger.org/search_go.gif" type="image"></td>
+<tr>
+<td bgcolor="#333333" width="53">
+<td bgcolor="#333333" width="177" valign="top" colspan="2"><a href="javascript:addengine();"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_addsearch.png" alt="" border="0" height="24" width="133"></a></td></tr></tbody></table></form>
+<!-- END SEARCH FORM --></td></tr>
+<tr><td colspan="2" align="right" bgcolor="#D70751" valign="top"><img id="search_form_motto" src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_underbanner.png" alt="" border="0" width="800"></td></tr></tbody></table></center>
+<!-- END TOP BAR STRUCTURE --></div><div id="printlogo"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_print.png"></div>
+<div id="content">
+<table border="0" cellpadding="0" cellspacing="0" width="800">
+<tr valign="top"><td width="600">
+<div class='fill'>
+<table bgcolor="#00004E" border=0 cellpadding=0 cellspacing=0 width="100%">
+                      <tr><td colspan="3"><h1> The Five Coding Styles and Linux&nbsp;<a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=8&offset=0" target="_self"><img border="0" src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg8.png"></a>&nbsp;</h1></td></tr></table><div class='vip'>Jul 25, 2006 (08:31 AM)</div><h2></h2><div class='paragraph'>A long time ago, there was a simple debate on what kind of indenting should you be using and where should you place curly braces: it was the dispute &quot;<font color="navy">ANSI vs. K&amp;R</font>&quot;.<br><br>I always was &quot;the pro-ANSI guy&quot;, and I still use the ANSI way, except for when I try to avoid mixing styles in the same source file.<br><br>Not being involved in the development of Linux, I didn't care about their mandatory formatting/indenting style, until I ran over <a target="_blank" href="http://web.archive.org/web/20061014014623/http://www.llnl.gov/linux/slurm/coding_style.pdf">this paper by Linus Torvalds</a>.<br><br>It's at the same time saying: <i>&quot;Coding style is very personal, and <u>I won't force my views on anybody</u>&quot;</i>, whereas strongly bashing the GNU formatting/indenting style: <i>&quot;I'd suggest printing out a copy of the GNU coding standards, and NOT read it. <u>Burn them</u>, it's a great symbolic gesture.&quot;</i><br><br>It's nice to see how contradicting concepts can still contribute to the progress of GNU/Linux.<br><br>Recently though, I noticed that <b>4 years ago</b>, Greg Kroah-Hartman <b>forced the use of the Linux (Linus) coding standards</b> in the kernel!<br><br>Here's <a target="_blank" href="http://web.archive.org/web/20061014014623/http://www.kroah.com/linux/talks/ols_2002_kernel_codingstyle_talk/html/">his presentation at Linux Symposium 2002</a>, and also two chat transcripts <a target="_blank" href="http://web.archive.org/web/20061014014623/http://kroah.com/linux/talks/umeet_2002/linux1.txt.html">[1]</a>, <a target="_blank" href="http://web.archive.org/web/20061014014623/http://kroah.com/linux/talks/umeet_2002/qc1.txt.html">[2]</a>, where Greg KH was saying:<ul><li><font color="navy">&quot;First off, read the Documentation/CodingStyle file in the kernel tree.</font></li><li><font color="navy">It lists a number of rules that should _always_ be followed.&quot;</font></li></ul>It's also about the &quot;Hungarian notation&quot; (mixed case notation) being forbidden in the Linux code (Microsoft bashing, perhaps?), so that &quot;<b>CommandAllocationGroupSize</b>&quot; is forbidden, and &quot;<b>cmd_group_size</b>&quot; is allowed.<br><br>Let's see however what are the five existing coding styles:<br><br>The <b>ANSI style</b> of formatting/indenting:<div class="code">namespace&nbsp;foospace
+<span style="color:red;font-weight:bold">{</span><br>
+int&nbsp;Foo()<br>
+<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isBar)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;<br>
+<span style="color:red;font-weight:bold">}</span><br>
+<span style="color:red;font-weight:bold">}</span></div>
+
+The <b>GNU style</b> of formatting/indenting:<div class="code">
+namespace&nbsp;foospace<br>
+&nbsp;&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;Foo()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isBar)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span><br>
+&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span></div>
+
+The <b>Kernighan&amp;Ritchie style</b> of formatting/indenting:<div class="code">namespace&nbsp;foospace&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+int&nbsp;Foo()&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isBar)&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span>&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;<br>
+<span style="color:red;font-weight:bold">}</span><br>
+<span style="color:red;font-weight:bold">}</span></div>
+The <b>Java style</b> of formatting/indenting:<div class="code">class&nbsp;foospace&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;Foo()&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isBar)&nbsp;<span style="color:red;font-weight:bold">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span>&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span><br>
+<span style="color:red;font-weight:bold">}</span></div>
+
+The <b>Linux kernel style</b> of formatting/indenting:<div class="code">namespace&nbsp;foospace<br>
+<span style="color:red;font-weight:bold"><span style="color:red;font-weight:bold">{</span></span><br>
+int&nbsp;Foo()<br>
+<span style="color:red;font-weight:bold"><span style="color:red;font-weight:bold">{</span></span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isBar)&nbsp;<span style="color:red;font-weight:bold"><span style="color:red;font-weight:bold">{</span></span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bar();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;font-weight:bold">}</span>&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;<br>
+<span style="color:red;font-weight:bold">}</span><br>
+<span style="color:red;font-weight:bold">}</span></div><br>
+Let's summarize:
+<br>
+<br><b>ANSI:</b><ul>
+<li>braces are opening and closing at the beginning of a new line (for functions) or right under the keyword (for commands)</li>
+<li>braces <u>for namespaces </u>are opening <i>attached to the pre-block code</i></li>
+<li>a closing brace is always on a line of its own</li>
+<li>function names are never indented</li>
+<li>TABs are <b>4</b> spaces wide</li>
+<li><b>else</b> is aligned to <b>if</b> (continuation is aligned to the command keyword)</li></ul>
+
+<br><b>GNU:</b><ul>
+<li>braces are <u>always indented</u>, and always under the names</li>
+<li>a closing brace is always on a line of its own</li>
+<li>&quot;everything that's different is always indented, including braces&quot;</li>
+<li>TABs are <b>2</b> spaces wide</li>
+<li><b>else</b> is aligned to <b>if</b> (continuation is aligned to the command keyword)</li></ul>
+
+<br><b>K&amp;R:</b><ul>
+<li>braces are always opening <i>attached to the pre-block code</i>, and closing right under the keyword</li>
+<li>function names are never indented</li>
+<li>TABs are <b>2</b> spaces wide</li>
+<li><b>else</b> (a continuation of the same command) is <i>attached to the closing brace</i></li></ul>
+
+<br><b>Java:</b><ul>
+<li>braces are always opening <i>attached to the pre-block code</i>, and closing right under the keyword</li>
+<li>&quot;everything that's different is always indented (except for unnecessary brace indents)&quot;</li>
+<li>TABs are <b>4</b> spaces wide</li>
+<li><b>else</b> (a continuation of the same command) is <i>attached to the closing brace</i></li></ul>
+
+<br><b>Linux:</b><ul>
+<li>braces are always opening <i>attached to the pre-block code</i> (<u>K&amp;R style</u>), and closing right under the keyword, <u>except for functions</u></li>
+<li>braces <u>for functions</u> are always under the names, i.e. opening on the next line (<u>ANSI style</u>)</li>
+<li>function names are never indented</li>
+<li>TABs are <b>8</b> spaces wide</li>
+<li><b>else</b> (a continuation of the same command) is <i>attached to the closing brace</i></li></ul>
+<br>Wow. Do you think it's easy to contribute to the Linux kernel? Most people use the K&amp;R style and this is partially compatible with the Linux coding style, but I'm using the ANSI style most of the time...<br><br>And I could never use 8 spaces-wide TABs...<br><br><b>P.S.:</b><br><br>1. Oh, BTW, the <a target="_blank" href="http://web.archive.org/web/20061014014623/http://www.python.org/dev/peps/pep-0008/">Python Style Guide</a> recommends using a 4 spaces TAB.<br><br>2. Another discussion could be done on the usage of <b>whitespaces in expressions and statements</b>, like:
+<div class="code">for(i=1;i&lt;n;i++)</div>
+vs.
+<div class="code">for(i=1; i&lt;n; i++)</div>
+vs.
+<div class="code">for(i = 1; i &lt; n; i++)</div>
+vs.
+<div class="code">for (i=1;i&lt;n;i++)</div>
+vs.
+<div class="code">for (i=1; i&lt;n; i++)</div>
+vs. 
+<div class="code">for (i = 1; i &lt; n; i++)</div><br>To distinguish keywords from functions/procedure calls, a classical C++ rule was to use spaces only after the keywords, but not between procedure names and their argument list. In the same time, the expressions (or the arguments) are separated by spaces:<div class="code">
+if (strcmp(input_value, "done") == 0)<br>
+&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;&nbsp;&nbsp;...;<br>
+for (expr1; expr2; expr3) {<br>
+&nbsp;&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;&nbsp;&nbsp;...;<br>
+}</div>However, as of today, usage of spaces after keywords like <b>if</b> and <b>for</b> is discouraged by many coding standards.<br><br><span class='small'><img src='http://web.archive.org/web/20061014014623im_/http://beranger.org/babelfish.png' alt='Altavista Babelfish translation'>&nbsp;
+     <a href='http://web.archive.org/web/20061014014623/http://babelfish.altavista.com/babelfish/tr?doit=done&url=http%3a%2f%2fberanger.org%2findex.php%3ffullarticle%3d1358&lp=en_fr'>[Fran&ccedil;ais]</a>&nbsp;
+     <a href='http://web.archive.org/web/20061014014623/http://babelfish.altavista.com/babelfish/tr?doit=done&url=http%3a%2f%2fberanger.org%2findex.php%3ffullarticle%3d1358&lp=en_de'>[Deutsch]</a>&nbsp;
+     <a href='http://web.archive.org/web/20061014014623/http://babelfish.altavista.com/babelfish/tr?doit=done&url=http%3a%2f%2fberanger.org%2findex.php%3ffullarticle%3d1358&lp=en_nl'>[Nederlands]</a>&nbsp;
+     <a href='http://web.archive.org/web/20061014014623/http://babelfish.altavista.com/babelfish/tr?doit=done&url=http%3a%2f%2fberanger.org%2findex.php%3ffullarticle%3d1358&lp=en_es'>[Espa&ntilde;ol]</a>&nbsp;
+<a href='http://web.archive.org/web/20061014014623/http://babelfish.altavista.com/babelfish/tr?doit=done&url=http%3a%2f%2fberanger.org%2findex.php%3ffullarticle%3d1358&lp=en_pt'>[Portugu&ecirc;s]</a>&nbsp;
+<a href='http://web.archive.org/web/20061014014623/http://babelfish.altavista.com/babelfish/tr?doit=done&url=http%3a%2f%2fberanger.org%2findex.php%3ffullarticle%3d1358&lp=en_it'>[Italiano]</a></span><br><span style="float: right;"><span class='small'><i><b>0 (+0)</b> comments so far</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1358'>[view/add comments]</a>
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=1358'>[permalink]</a></span></span><br></div></div>
+</td>
+<td id="ascuns" width="200">
+<!-- table1 -->
+<table bgcolor="#EEF4EE" border=0 cellpadding=0 cellspacing=0 width="100%">
+<tr><td></td><td>
+
+	<script language="JavaScript" type="text/JavaScript">
+	<!--
+	function MM_swapImgRestore() {
+	var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+	}
+	
+	function MM_preloadImages() {
+	var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+		var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+		if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+	}
+	
+	function MM_findObj(n, d) {
+	var p,i,x; if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+		d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+	if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+	for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+	if(!x && d.getElementById) x=d.getElementById(n); return x;
+	}
+	
+	function MM_swapImage() {
+	var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+	if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+	}
+	//-->
+	</script><center><table border='0' width='180'><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=1&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ1','','img/newcateg1.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg1_o.png" name="categ1" border="0" alt="GNOME "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=19&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ19','','img/newcateg19.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg19_o.png" name="categ19" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=17&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ17','','img/newcateg17.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg17_o.png" name="categ17" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=16&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ16','','img/newcateg16.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg16_o.png" name="categ16" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=2&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ2','','img/newcateg2.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg2_o.png" name="categ2" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=3&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ3','','img/newcateg3.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg3_o.png" name="categ3" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=5&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ5','','img/newcateg5.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg5_o.png" name="categ5" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=6&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ6','','img/newcateg6.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg6_o.png" name="categ6" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=4&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ4','','img/newcateg4.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg4_o.png" name="categ4" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=18&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ18','','img/newcateg18.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg18_o.png" name="categ18" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=10&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ10','','img/newcateg10.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg10_o.png" name="categ10" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=8&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ8','','img/newcateg8.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg8_o.png" name="categ8" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=9&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ9','','img/newcateg9.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg9_o.png" name="categ9" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=7&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ7','','img/newcateg7.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg7_o.png" name="categ7" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=11&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ11','','img/newcateg11.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg11_o.png" name="categ11" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=12&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ12','','img/newcateg12.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg12_o.png" name="categ12" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=14&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ14','','img/newcateg14.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg14_o.png" name="categ14" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=15&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ15','','img/newcateg15.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg15_o.png" name="categ15" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?categ=13&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('categ13','','img/newcateg13.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/newcateg13_o.png" name="categ13" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?isbook=1&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('catbooks','','img/catbooks.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/catbooks_o.png" name="catbooks" border="0" alt=" "></a></tr><tr><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?iscontroversial=1&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('catcontro','','img/catcontro.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/catcontro_o.png" name="catcontro" border="0" alt=" "></a></td><td valign='middle' align='center' width='90' height='25'><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?isgold=1&offset=0" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('golden','','img/golden.png',1)"> <img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/img/golden_o.png" name="golden" border="0" alt=" "></a></tr></table></center> 
+<img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_undermaster.png">  
+<br><center><br><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/pinned.png"> <b>1600 <a href="http://web.archive.org/web/20061014014623/http://beranger.org/archive.php"><u>archived</u></a> posts</b></center>
+
+<br><center><a target="_blank" style="text-decoration:none;" href="http://web.archive.org/web/20061014014623/http://beranger.org/feed.xml"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/xml_rss_feed.gif" border="0" alt="RSS Feed"></a>&nbsp;
+<a target="_blank" style="text-decoration:none;" href="http://web.archive.org/web/20061014014623/http://add.my.yahoo.com/rss?url=http%3A%2F%2Fberanger.org/rssmake.php"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/yahoo.gif" border="0" alt="Add to My Yahoo!"></a>&nbsp;
+<a target="_blank" style="text-decoration:none;" href="http://web.archive.org/web/20061014014623/http://fusion.google.com/add?feedurl=http%3A//beranger.org/rssmake.php"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/google.gif" border="0" alt="Add to Google"></a><br><a target="_blank" href="http://web.archive.org/web/20061014014623/http://www.asmallorange.com/extras/donate/?id=8569"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/happy_beranger2.png" border="0"><br><small>Support the hosting fees!</small></a></center></span><br>
+</td><td></td></tr>
+<tr><td></td><td>
+
+<img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_randomarticles.png">
+<form style='width:185px;'>
+<a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=426"><font style="font-size:9pt; font-weight:normal; line-height:12pt;">&bull;&nbsp;Wow! The first Phishing for 2006! (From Poland, with love...)</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=753"><font style="font-size:9pt; font-weight:normal; line-height:12pt;">&bull;&nbsp;Get rid of Beagle in FC5</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=467"><font style="font-size:9pt; font-weight:normal; line-height:12pt;">&bull;&nbsp;Song of the Dead: MyLinux 1/2006 as PDF!</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=985"><font style="font-size:9pt; font-weight:normal; line-height:12pt;">&bull;&nbsp;Feng Shui Wiring</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=723"><font style="font-size:9pt; font-weight:normal; line-height:12pt;">&bull;&nbsp;Bookmark: Unofficial FC4 Starter Guide at University of Latvia</font></a><br> 
+ 
+</td><td></td></tr>
+<tr><td></td><td>
+<img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_latestcomments.png">
+<form style='width:185px;'><table width="98%"><tr><td>
+<a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1483#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;Don't miss these yum articles:
+http://www.ducea .c...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1721#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;yep... they changed the PLF addy again... now it's...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1733#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;ironically, they could use their nuclear power to ...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1730#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;It only makes sense if you're using KDE. As long a...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1730#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;Just wanted to say that my preffered chm viewer is...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1710#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;No, it was not diplomacy. It was stubbornness.
+
+...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1710#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;What discussion on fedora-devel-list?
+
+Mozil la s...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1730#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;update your media and check again.
+
+all ths apli...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1633#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;Nay, it's *you* the one who's praising something "...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1633#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;Ga&#235;l Duval created with his Mandrake-Linux a ...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1727#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;Yeah, but manually saving each and every file...
+...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1727#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;Long life vim :-)
+
+:set fileformat=unix...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1728#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;How will it look like?
+
+When I posted:
+http://b...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1728#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;well, i disagree, i can imagine Ulteo how it will ...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1725#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;* Nope. I don't fscking care what the Church prete...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1725#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;First of all, good thing you decided not to let th...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1725#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;OK, here are some clarifications:
+
+*****
+ 
+&#16...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1721#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;I don't know how stable the PLF repos for 2007 are...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1725#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;OLPC is NOOOOOOOOOOOOOT non-profit!!!
+
+They will...</font></a><br><a href="http://web.archive.org/web/20061014014623/http://beranger.org/index.php?fullarticle=1725#comments"><font style="font-size:8pt; font-weight:normal; line-height: 11pt;">&bull;&nbsp;I also don't see why Fedora shouldn't support the ...</font></a><br> 
+</td></tr></table></form>
+</td><td></td></tr>
+<tr><td></td><td>
+
+<img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_placesivisit.png">
+<form style='width:185px;'><table width="98%"><tr><td>
+<a href="http://web.archive.org/web/20061014014623/http://alterslash.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;AlterSlash</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.debian-administration.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;Debian Administration</font></a><br><a href="http://web.archive.org/web/20061014014623/http://groups.google.com/group/linux.debian.bugs.dist" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;debian-bugs-dist</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.debianhelp.co.uk/index.php" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;DebianHelp UK</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.debuntu.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;Debuntu</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.gnomedesktop.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;FootNotes</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.frsirt.com/english/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;FrSIRT Advisories</font></a><br><a href="http://web.archive.org/web/20061014014623/http://gnomefiles.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;GNOME Files</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.howtoforge.com/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;Howtoforge</font></a><br><a href="http://web.archive.org/web/20061014014623/http://esfa.vnunetblog.fr/mandriva/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;Mandriva vu par Esfa</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.ducea.com/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;MDLog:/sysadmin</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.nuxified.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;Nuxified</font></a><br><a href="http://web.archive.org/web/20061014014623/http://planet.debian.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;Planet Debian</font></a><br><a href="http://web.archive.org/web/20061014014623/http://www.tuxmachines.org/" target="_blank"><font style="font-size:9pt; font-weight:normal; line-height: 12pt;">&bull;&nbsp;tuxmachines</font></a><br>  
+<center><br>
+<a target="_blank" href="http://web.archive.org/web/20061014014623/http://thelinuxstore.ca/"><img
+src="http://web.archive.org/web/20061014014623im_/http://beranger.org/tlsca_logo.gif" border="0"></a><br>
+<a target="_blank" href="http://web.archive.org/web/20061014014623/http://cheeplinux.com/"><img 
+src="http://web.archive.org/web/20061014014623im_/http://beranger.org/cheeplinux.gif" border="0"></a><br>
+<a target="_blank" href="http://web.archive.org/web/20061014014623/http://debianshop.com/"><img src="http://web.archive.org/web/20061014014623im_/http://www.beranger.org/debianshop.gif" border="0"></a><br>
+</center> 
+</td></tr></table></form>
+</td><td></td></tr>
+<tr><td></td><td>
+
+<img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_about.png">
+<form style='width:185px;'><table width="98%"><tr><td>
+
+<a href="http://web.archive.org/web/20061014014623/http://beranger.org/beranger.php"><font style="font-size:9pt; font-weight:normal; line-height:12pt;">&bull;&nbsp;Himself</a></font><br>
+<a href="http://web.archive.org/web/20061014014623/http://beranger.org/RCF_EuroCV_June212006.pdf"><font style="font-size:9pt; font-weight:normal; line-height:12pt;"><font color='navy'>&bull;&nbsp;My resum&eacute; [PDF]</font></font></a><br><br>
+</td></tr></table></form>
+<center><a href="http://web.archive.org/web/20061014014623/http://www.amazon.co.uk/gp/registry/1Q3B0PHCXF73/" target="_blank"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/misc2/book_icon.png" border="0"> Amazon UK Wish List</a><br><a href="http://web.archive.org/web/20061014014623/http://www.amazon.com/gp/registry/1YZQWDDBTZ259/" target="_blank"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/misc2/book_icon.png" border="0"> Amazon US Wish List</a><br><br><a href="http://web.archive.org/web/20061014014623/http://technorati.com/claim/zutpyk2855" rel="me"><img border="0" src="http://web.archive.org/web/20061014014623im_/http://beranger.org/tn-logo.gif"> Technorati Profile</a>
+<br><br><script language="javascript" src="http://web.archive.org/web/20061014014623js_/http://neocounter.neoworx-blog-tools.net/premium_trial.php?user_counter=77915_1"></script>
+</center>
+</td><td></td></tr>
+<tr><td></td><td>
+
+<img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/banner_candidate_02_userarea.png">
+<span class='lessersmall'><a href='http://web.archive.org/web/20061014014623/http://beranger.org/index.php?article=1358#login' onclick="document.getElementById('private_area').style.display=(document.getElementById('private_area').style.display=='block')?'none':'block';">[new login]</a></span>
+<a name='login'></a><form style='width:185px;' action="http://web.archive.org/web/20061014014623/http://beranger.org/post.php" method="post">
+<div id="private_area" style="display: none;">
+<table width="99%"><tr class="btnbar"><td>
+User:&nbsp;<input type="text" size="8" maxlength="8" name="login"></input><br>
+Password:&nbsp;<input type="password" size="8" maxlength="8" name="password"></input><br>
+<img src=http://web.archive.org/web/20061014014623im_/http://beranger.org/dynamicimage.php?dt=NDI5ODY2 border="1" width='65' height='20'><br><br>Enter the verification code:<br><input type="text" size="6" name="chk"><input type=hidden name="md5" value ='c78936b41fc60215267b7c9fc5d1a0d6'>&nbsp;&nbsp;<input type="submit" class="btn" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;"></input>&nbsp;
+</td></tr></table></div><br><center><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/37497.png"><small><br><font color="#003366">Reg'd 1996-08-26</font><br></small>
+</center><!-- <a href="http://web.archive.org/web/20061014014623/http://www.hewop.com//~ibsn"><img src="0-000-0500-00.png" alt="IBSN" border="0" /></a> -->
+</form>
+</td><td></td></tr></table>
+</div>
+</td></tr>
+</table><br>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript" language="javascript">
+<!-- 
+var sc_project=909330; 
+var sc_invisible=0; 
+var sc_partition=7; 
+var sc_security="ed608836"; 
+var sc_https=1; 
+//-->
+</script>
+<script type="text/javascript" language="javascript" src="http://web.archive.org/web/20061014014623js_/https://secure.statcounter.com/counter/counter.js"></script>
+<!-- End of StatCounter Code -->
+&nbsp;<a target="_blank" href="http://web.archive.org/web/20061014014623/http://creativecommons.org/licenses/by-nc-sa/2.5/"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/somerights.gif" border='0' width='88' height='31'></a>&nbsp;
+<a href="http://web.archive.org/web/20061014014623/http://asmallorange.com/services/hosting/?refer=beranger.org"><img src="http://web.archive.org/web/20061014014623im_/http://beranger.org/orangeupv2.gif" border="0"></a>
+</span></center></body></html>
+
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 1:46:23 Oct 14, 2006 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 17:37:58 Oct 17, 2012.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->

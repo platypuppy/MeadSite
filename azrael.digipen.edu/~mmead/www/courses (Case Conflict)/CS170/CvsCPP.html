@@ -1,0 +1,236 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>C vs. C++</title>
+</head>
+
+<body>  
+
+<!--************************************************************************-->
+<!--************************************************************************-->
+<!--************************************************************************-->
+<h2>Compiling CFile.c</h2>
+
+The C file gives two compiler warnings something like:
+
+<blockquote><pre>
+CFile.c: In function 'main':
+CFile.c:3:11: warning: implicit declaration of function 'sqrt' [-Wimplicit-function-declaration]
+   int i = sqrt(25.0);
+           ^
+CFile.c:3:11: warning: incompatible implicit declaration of built-in function 'sqrt'
+CFile.c:3:11: note: include '<math.h>' or provide a declaration of 'sqrt'
+CFile.c:5:3: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+   printf("In C: i = %i, d = %g\n", i, d);
+   ^
+CFile.c:5:3: warning: incompatible implicit declaration of built-in function 'printf'
+CFile.c:5:3: note: include '<stdio.h>' or provide a declaration of 'printf'
+</pre></blockquote>
+
+These warnings indicate that the compiler doesn't know what kinds of functions <b>sqrt</b>
+and <b>printf</b> are, so it <i>assumes</i> that they return an <b>int</b>, which is usually
+a poor assumption. To clue the compiler in as to their types, we need to specify the proper
+prototypes. This is easily done by including the header files where these functions are 
+prototyped:
+
+<blockquote><pre>
+<b>#include</b> &lt;math.h&gt;
+<b>#include</b> &lt;stdio.h&gt;
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+This suppresses the warnings about the functions being unknown. However, we still may get a warning
+for trying to assign a double to an integer. This is because the <b>sqrt</b> function returns a <b>double</b>, yet we are assigning it to an <b>int</b>.
+To suppress this warning, we need to cast the return value to an <b>int</b>:
+
+<blockquote><pre>
+<b>int</b> i = (<b>int</b>)sqrt(25.0);
+</pre></blockquote>
+
+Now the file will compile without warnings or errors. Note that not all compilers will warn
+about the possible loss of data.
+<p>
+<hr width=90%>
+
+<!--************************************************************************-->
+<!--************************************************************************-->
+<!--************************************************************************-->
+<h2>Compiling CPPFile.cpp:</h2>
+
+
+<blockquote><pre>
+CPPFile.cpp: In function 'void cpp_stuff()':
+CPPFile.cpp:3:20: error: 'sqrt' was not declared in this scope
+   int i = sqrt(25.0);
+                    ^
+CPPFile.cpp:5:42: error: 'printf' was not declared in this scope
+   printf("In CPP: i = %i, d = %g\n", i, d);
+                                          ^
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+The C++ file has the same problems as the C file. However, if a function is called that the compiler hasn't
+seen yet, the compiler generates an error instead of a warning. We need to add the two includes as well as
+a cast. We can use a C++ cast in this case because we the code is C++:
+
+<blockquote><pre>
+<b>#include</b> &lt;math.h&gt;
+<b>#include</b> &lt;stdio.h&gt;
+
+<b>int</b> i = <b>static_cast</b>&lt;<b>int</b>&gt;(sqrt(25));
+</pre></blockquote>
+
+Or, if you would rather use the "C" versions of the header files (without the extension), you can do this:
+
+<blockquote><pre>
+<b>#include</b> &lt;cmath&gt;
+<b>#include</b> &lt;cstdio&gt;
+</pre></blockquote>
+
+and then use <tt>std::</tt> with each function. The C++ code now compiles without warnings or errors.
+<p>
+<a href="WrappingCHeaders.html">Wrapping C header files in C++</a>
+
+
+<p>
+<hr width=90%>
+<p>
+
+<!--************************************************************************-->
+<!--************************************************************************-->
+<!--************************************************************************-->
+<h2>Linking the files and calling the C++ function from C</h2>
+
+The program links without warnings or errors and generates this output:
+
+<blockquote><pre>
+In C: i = 5, d = 5
+</pre></blockquote>
+
+So we are almost there. To get the output from the C++ code, we need to call the C++ function from the C code
+by adding a call to it in <b>main</b>:
+
+<blockquote><pre>
+<b>void</b> main(<b>void</b>)
+{
+  <b>int</b> i = (<b>int</b>) sqrt(25);
+  <b>double</b> d = sqrt(25);
+  printf(<font color="#9933CC">&quot;In C: i = %i, d = %g\n&quot;</font>, i, d);
+  cpp_stuff();
+}
+</pre></blockquote>
+
+This code generates a warning during the compile and an error during the link. 
+
+<blockquote><pre>
+CFile.c: In function 'main':
+CFile.c:9:3: warning: implicit declaration of function 'cpp_stuff' [-Wimplicit-function-declaration]
+   cpp_stuff();
+   ^
+/tmp/cc6hK5Dl.o: In function `main':
+CFile.c:(.text+0x43): undefined reference to `cpp_stuff'
+collect2: error: ld returned 1 exit status
+</pre></blockquote>
+
+
+The reason the compiler
+generates a warning is because it doesn't know what <b>cpp_stuff</b> is. (The same problem we had with
+<b>sqrt</b> and <b>printf</b>). So, we need to prototype it in our C file. (We don't have a header file
+that we can include.) The linker error is because the C++ compiler <i>mangled</i> the function name into
+a non-C compatible function name. 
+<p>
+To fix the compiler warning, we prototype the function before <b>main</b>:
+
+<blockquote><pre>
+<b>void</b> cpp_stuff(<b>void</b>);
+</pre></blockquote>
+
+To fix the linker error, we need to tell the C++ compiler to disable name mangling during the compile by
+using the <b>extern</b> keyword and then recompile the C++ file:
+
+<blockquote><pre>
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> cpp_stuff(<b>void</b>)
+{
+  ...
+}
+</pre></blockquote>
+
+Now we can build the C file and link with the C++ object file:
+<blockquote><pre>
+gcc CFile-original.c CPPFile-original.o -o mix
+</pre></blockquote>
+
+This fixes all of the problems we encountered when we attempted mix C and C++ code in the same project.
+The output from the program looks like:
+
+<blockquote><pre>
+In C: i = 5, d = 5
+In CPP: i = 5, d = 5
+</pre></blockquote>
+
+<p>
+<hr width=90%>
+<p>
+
+The complete code for both files:
+<p>
+
+
+<b>CFile.c:</b>
+
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;math.h&gt;   <font color="#003399"><i>/* for sqrt()   */</i></font>
+<b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* for printf() */</i></font>
+
+<b>void</b> cpp_stuff(<b>void</b>);
+
+<b>void</b> main(<b>void</b>)
+{
+  <b>int</b> i = (<b>int</b>) sqrt(25);
+  <b>double</b> d = sqrt(25);
+  printf(<font color="#9933CC">&quot;In C: i = %i, d = %g\n&quot;</font>, i, d);
+  cpp_stuff();
+}
+</code></pre>
+
+
+<b>CPPFile.cpp:</b>
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;math.h&gt;   <font color="#003399"><i>// for sqrt()</i></font>
+<b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>// for printf()</i></font>
+
+<font color="#003399"><i>// use extern &quot;C&quot; so the C file can link to this</i></font>
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> cpp_stuff(<b>void</b>)
+{
+  <b>int</b> i = (<b>int</b>)sqrt(25);
+  <b>double</b> d = sqrt(25);
+  printf(<font color="#9933CC">&quot;In CPP: i = %i, d = %g\n&quot;</font>, i, d);
+}
+</code></pre>
+
+</body>
+</html>
+
+
+
+
+

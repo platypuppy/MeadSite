@@ -1,0 +1,421 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>w_pow.c.html</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*
+ * IBM Accurate Mathematical Library
+ * written by International Business Machines Corp.
+ * Copyright (C) 2001, 2002, 2004 Free Software Foundation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */</i></font>
+<font color="#003399"><i>/***************************************************************************/</i></font>
+<font color="#003399"><i>/*  MODULE_NAME: upow.c                                                    */</i></font>
+<font color="#003399"><i>/*                                                                         */</i></font>
+<font color="#003399"><i>/*  FUNCTIONS: upow                                                        */</i></font>
+<font color="#003399"><i>/*             power1                                                      */</i></font>
+<font color="#003399"><i>/*             my_log2                                                        */</i></font>
+<font color="#003399"><i>/*             log1                                                        */</i></font>
+<font color="#003399"><i>/*             checkint                                                    */</i></font>
+<font color="#003399"><i>/* FILES NEEDED: dla.h endian.h mpa.h mydefs.h                             */</i></font>
+<font color="#003399"><i>/*               halfulp.c mpexp.c mplog.c slowexp.c slowpow.c mpa.c       */</i></font>
+<font color="#003399"><i>/*                          uexp.c  upow.c			           */</i></font>
+<font color="#003399"><i>/*               root.tbl uexp.tbl upow.tbl                                */</i></font>
+<font color="#003399"><i>/* An ultimate power routine. Given two IEEE double machine numbers y,x    */</i></font>
+<font color="#003399"><i>/* it computes the correctly rounded (to nearest) value of x^y.            */</i></font>
+<font color="#003399"><i>/* Assumption: Machine arithmetic operations are performed in              */</i></font>
+<font color="#003399"><i>/* round to nearest mode of IEEE 754 standard.                             */</i></font>
+<font color="#003399"><i>/*                                                                         */</i></font>
+<font color="#003399"><i>/***************************************************************************/</i></font>
+<font color="990099">#include &quot;endian.h&quot;</font>
+<font color="990099">#include &quot;upow.h&quot;</font>
+<font color="990099">#include &quot;dla.h&quot;</font>
+<font color="990099">#include &quot;mydefs.h&quot;</font>
+<font color="990099">#include &quot;MathLib.h&quot;</font>
+<font color="990099">#include &quot;upow.tbl&quot;</font>
+<font color="990099">#include &quot;math_private.h&quot;</font>
+
+
+<b>double</b> __exp1(<b>double</b> x, <b>double</b> xx, <b>double</b> error);
+<b>static</b> <b>double</b> log1(<b>double</b> x, <b>double</b> *delta, <b>double</b> *error);
+<b>static</b> <b>double</b> my_log2(<b>double</b> x, <b>double</b> *delta, <b>double</b> *error);
+<b>double</b> __slowpow(<b>double</b> x, <b>double</b> y,<b>double</b> z);
+<b>static</b> <b>double</b> power1(<b>double</b> x, <b>double</b> y);
+<b>static</b> <b>int</b> checkint(<b>double</b> x);
+
+<font color="#003399"><i>/***************************************************************************/</i></font>
+<font color="#003399"><i>/* An ultimate power routine. Given two IEEE double machine numbers y,x    */</i></font>
+<font color="#003399"><i>/* it computes the correctly rounded (to nearest) value of X^y.            */</i></font>
+<font color="#003399"><i>/***************************************************************************/</i></font>
+<b>double</b> __ieee754_pow(<b>double</b> x, <b>double</b> y) {
+  <b>double</b> z,a,aa,error, t,a1,a2,y1,y2;
+<font color="990099">#if 0</font>
+  <b>double</b> gor=1.0;
+<font color="990099">#endif</font>
+  mynumber u,v;
+  <b>int</b> k;
+  int4 qx,qy;
+  v.x=y;
+  u.x=x;
+  <b>if</b> (v.i[LOW_HALF] == 0) { <font color="#003399"><i>/* of y */</i></font>
+    qx = u.i[HIGH_HALF]&amp;0x7fffffff;
+    <font color="#003399"><i>/* Checking  if x is not too small to compute */</i></font>
+    <b>if</b> (((qx==0x7ff00000)&amp;&amp;(u.i[LOW_HALF]!=0))||(qx&gt;0x7ff00000)) <b>return</b> NaNQ.x;
+    <b>if</b> (y == 1.0) <b>return</b> x;
+    <b>if</b> (y == 2.0) <b>return</b> x*x;
+    <b>if</b> (y == -1.0) <b>return</b> 1.0/x;
+    <b>if</b> (y == 0) <b>return</b> 1.0;
+  }
+  <font color="#003399"><i>/* else */</i></font>
+  <b>if</b>(((u.i[HIGH_HALF]&gt;0 &amp;&amp; u.i[HIGH_HALF]&lt;0x7ff00000)||        <font color="#003399"><i>/* x&gt;0 and not x-&gt;0 */</i></font>
+       (u.i[HIGH_HALF]==0 &amp;&amp; u.i[LOW_HALF]!=0))  &amp;&amp;
+                                      <font color="#003399"><i>/*   2^-1023&lt; x&lt;= 2^-1023 * 0x1.0000ffffffff */</i></font>
+      (v.i[HIGH_HALF]&amp;0x7fffffff) &lt; 0x4ff00000) {              <font color="#003399"><i>/* if y&lt;-1 or y&gt;1   */</i></font>
+    z = log1(x,&amp;aa,&amp;error);                                 <font color="#003399"><i>/* x^y  =e^(y log (X)) */</i></font>
+    t = y*134217729.0;
+    y1 = t - (t-y);
+    y2 = y - y1;
+    t = z*134217729.0;
+    a1 = t - (t-z);
+    a2 = (z - a1)+aa;
+    a = y1*a1;
+    aa = y2*a1 + y*a2;
+    a1 = a+aa;
+    a2 = (a-a1)+aa;
+    error = error*ABS(y);
+    t = __exp1(a1,a2,1.9e16*error);     <font color="#003399"><i>/* return -10 or 0 if wasn't computed exactly */</i></font>
+    <b>return</b> (t&gt;0)?t:power1(x,y);
+  }
+
+  <b>if</b> (x == 0) {
+    <b>if</b> (((v.i[HIGH_HALF] &amp; 0x7fffffff) == 0x7ff00000 &amp;&amp; v.i[LOW_HALF] != 0)
+	|| (v.i[HIGH_HALF] &amp; 0x7fffffff) &gt; 0x7ff00000)
+      <b>return</b> y;
+    <b>if</b> (ABS(y) &gt; 1.0e20) <b>return</b> (y&gt;0)?0:INF.x;
+    k = checkint(y);
+    <b>if</b> (k == -1)
+      <b>return</b> y &lt; 0 ? 1.0/x : x;
+    <b>else</b>
+      <b>return</b> y &lt; 0 ? 1.0/ABS(x) : 0.0;                               <font color="#003399"><i>/* return 0 */</i></font>
+  }
+
+  qx = u.i[HIGH_HALF]&amp;0x7fffffff;  <font color="#003399"><i>/*   no sign   */</i></font>
+  qy = v.i[HIGH_HALF]&amp;0x7fffffff;  <font color="#003399"><i>/*   no sign   */</i></font>
+
+  <b>if</b> (qx &gt;= 0x7ff00000 &amp;&amp; (qx &gt; 0x7ff00000 || u.i[LOW_HALF] != 0)) <b>return</b> NaNQ.x;
+  <b>if</b> (qy &gt;= 0x7ff00000 &amp;&amp; (qy &gt; 0x7ff00000 || v.i[LOW_HALF] != 0))
+    <b>return</b> x == 1.0 ? 1.0 : NaNQ.x;
+
+  <font color="#003399"><i>/* if x&lt;0 */</i></font>
+  <b>if</b> (u.i[HIGH_HALF] &lt; 0) {
+    k = checkint(y);
+    <b>if</b> (k==0) {
+      <b>if</b> (qy == 0x7ff00000) {
+	<b>if</b> (x == -1.0) <b>return</b> 1.0;
+	<b>else</b> <b>if</b> (x &gt; -1.0) <b>return</b> v.i[HIGH_HALF] &lt; 0 ? INF.x : 0.0;
+	<b>else</b> <b>return</b> v.i[HIGH_HALF] &lt; 0 ? 0.0 : INF.x;
+      }
+      <b>else</b> <b>if</b> (qx == 0x7ff00000)
+	<b>return</b> y &lt; 0 ? 0.0 : INF.x;
+      <b>return</b> NaNQ.x;                              <font color="#003399"><i>/* y not integer and x&lt;0 */</i></font>
+    }
+    <b>else</b> <b>if</b> (qx == 0x7ff00000)
+      {
+	<b>if</b> (k &lt; 0)
+	  <b>return</b> y &lt; 0 ? nZERO.x : nINF.x;
+	<b>else</b>
+	  <b>return</b> y &lt; 0 ? 0.0 : INF.x;
+      }
+    <b>return</b> (k==1)?__ieee754_pow(-x,y):-__ieee754_pow(-x,y); <font color="#003399"><i>/* if y even or odd */</i></font>
+  }
+  <font color="#003399"><i>/* x&gt;0 */</i></font>
+
+  <b>if</b> (qx == 0x7ff00000)                              <font color="#003399"><i>/* x= 2^-0x3ff */</i></font>
+    {<b>if</b> (y == 0) <b>return</b> NaNQ.x;
+    <b>return</b> (y&gt;0)?x:0; }
+
+  <b>if</b> (qy &gt; 0x45f00000 &amp;&amp; qy &lt; 0x7ff00000) {
+    <b>if</b> (x == 1.0) <b>return</b> 1.0;
+    <b>if</b> (y&gt;0) <b>return</b> (x&gt;1.0)?INF.x:0;
+    <b>if</b> (y&lt;0) <b>return</b> (x&lt;1.0)?INF.x:0;
+  }
+
+  <b>if</b> (x == 1.0) <b>return</b> 1.0;
+  <b>if</b> (y&gt;0) <b>return</b> (x&gt;1.0)?INF.x:0;
+  <b>if</b> (y&lt;0) <b>return</b> (x&lt;1.0)?INF.x:0;
+  <b>return</b> 0;     <font color="#003399"><i>/* unreachable, to make the compiler happy */</i></font>
+}
+
+<font color="#003399"><i>/**************************************************************************/</i></font>
+<font color="#003399"><i>/* Computing x^y using more accurate but more slow log routine            */</i></font>
+<font color="#003399"><i>/**************************************************************************/</i></font>
+<b>static</b> <b>double</b> power1(<b>double</b> x, <b>double</b> y) {
+  <b>double</b> z,a,aa,error, t,a1,a2,y1,y2;
+  z = my_log2(x,&amp;aa,&amp;error);
+  t = y*134217729.0;
+  y1 = t - (t-y);
+  y2 = y - y1;
+  t = z*134217729.0;
+  a1 = t - (t-z);
+  a2 = z - a1;
+  a = y*z;
+  aa = ((y1*a1-a)+y1*a2+y2*a1)+y2*a2+aa*y;
+  a1 = a+aa;
+  a2 = (a-a1)+aa;
+  error = error*ABS(y);
+  t = __exp1(a1,a2,1.9e16*error);
+  <b>return</b> (t &gt;= 0)?t:__slowpow(x,y,z);
+}
+
+<font color="#003399"><i>/****************************************************************************/</i></font>
+<font color="#003399"><i>/* Computing log(x) (x is left argument). The result is the returned double */</i></font>
+<font color="#003399"><i>/* + the parameter delta.                                                   */</i></font>
+<font color="#003399"><i>/* The result is bounded by error (rightmost argument)                      */</i></font>
+<font color="#003399"><i>/****************************************************************************/</i></font>
+<b>static</b> <b>double</b> log1(<b>double</b> x, <b>double</b> *delta, <b>double</b> *error) {
+  <b>int</b> i,j,m;
+<font color="990099">#if 0</font>
+  <b>int</b> n;
+<font color="990099">#endif</font>
+  <b>double</b> uu,vv,eps,nx,e,e1,e2,t,t1,t2,res,add=0;
+<font color="990099">#if 0</font>
+  <b>double</b> cor;
+<font color="990099">#endif</font>
+  mynumber u,v;
+<font color="990099">#ifdef BIG_ENDI</font>
+  mynumber
+<font color="#003399"><i>/**/</i></font> two52          = {{0x43300000, 0x00000000}}; <font color="#003399"><i>/* 2**52         */</i></font>
+<font color="990099">#else</font>
+<font color="990099">#ifdef LITTLE_ENDI</font>
+  mynumber
+<font color="#003399"><i>/**/</i></font> two52          = {{0x00000000, 0x43300000}}; <font color="#003399"><i>/* 2**52         */</i></font>
+<font color="990099">#endif</font>
+<font color="990099">#endif</font>
+
+  u.x = x;
+  m = u.i[HIGH_HALF];
+  *error = 0;
+  *delta = 0;
+  <b>if</b> (m &lt; 0x00100000)             <font color="#003399"><i>/*  1&lt;x&lt;2^-1007 */</i></font>
+    { x = x*t52.x; add = -52.0; u.x = x; m = u.i[HIGH_HALF];}
+
+  <b>if</b> ((m&amp;0x000fffff) &lt; 0x0006a09e)
+    {u.i[HIGH_HALF] = (m&amp;0x000fffff)|0x3ff00000; two52.i[LOW_HALF]=(m&gt;&gt;20); }
+  <b>else</b>
+    {u.i[HIGH_HALF] = (m&amp;0x000fffff)|0x3fe00000; two52.i[LOW_HALF]=(m&gt;&gt;20)+1; }
+
+  v.x = u.x + bigu.x;
+  uu = v.x - bigu.x;
+  i = (v.i[LOW_HALF]&amp;0x000003ff)&lt;&lt;2;
+  <b>if</b> (two52.i[LOW_HALF] == 1023)         <font color="#003399"><i>/* nx = 0              */</i></font>
+  {
+      <b>if</b> (i &gt; 1192 &amp;&amp; i &lt; 1208)          <font color="#003399"><i>/* |x-1| &lt; 1.5*2**-10  */</i></font>
+      {
+	  t = x - 1.0;
+	  t1 = (t+5.0e6)-5.0e6;
+	  t2 = t-t1;
+	  e1 = t - 0.5*t1*t1;
+	  e2 = t*t*t*(r3+t*(r4+t*(r5+t*(r6+t*(r7+t*r8)))))-0.5*t2*(t+t1);
+	  res = e1+e2;
+	  *error = 1.0e-21*ABS(t);
+	  *delta = (e1-res)+e2;
+	  <b>return</b> res;
+      }                  <font color="#003399"><i>/* |x-1| &lt; 1.5*2**-10  */</i></font>
+      <b>else</b>
+      {
+	  v.x = u.x*(ui.x[i]+ui.x[i+1])+bigv.x;
+	  vv = v.x-bigv.x;
+	  j = v.i[LOW_HALF]&amp;0x0007ffff;
+	  j = j+j+j;
+	  eps = u.x - uu*vv;
+	  e1 = eps*ui.x[i];
+	  e2 = eps*(ui.x[i+1]+vj.x[j]*(ui.x[i]+ui.x[i+1]));
+	  e = e1+e2;
+	  e2 =  ((e1-e)+e2);
+	  t=ui.x[i+2]+vj.x[j+1];
+	  t1 = t+e;
+	  t2 = (((t-t1)+e)+(ui.x[i+3]+vj.x[j+2]))+e2+e*e*(p2+e*(p3+e*p4));
+	  res=t1+t2;
+	  *error = 1.0e-24;
+	  *delta = (t1-res)+t2;
+	  <b>return</b> res;
+      }
+  }   <font color="#003399"><i>/* nx = 0 */</i></font>
+  <b>else</b>                            <font color="#003399"><i>/* nx != 0   */</i></font>
+  {
+      eps = u.x - uu;
+      nx = (two52.x - two52e.x)+add;
+      e1 = eps*ui.x[i];
+      e2 = eps*ui.x[i+1];
+      e=e1+e2;
+      e2 = (e1-e)+e2;
+      t=nx*ln2a.x+ui.x[i+2];
+      t1=t+e;
+      t2=(((t-t1)+e)+nx*ln2b.x+ui.x[i+3]+e2)+e*e*(q2+e*(q3+e*(q4+e*(q5+e*q6))));
+      res = t1+t2;
+      *error = 1.0e-21;
+      *delta = (t1-res)+t2;
+      <b>return</b> res;
+  }                                <font color="#003399"><i>/* nx != 0   */</i></font>
+}
+
+<font color="#003399"><i>/****************************************************************************/</i></font>
+<font color="#003399"><i>/* More slow but more accurate routine of log                               */</i></font>
+<font color="#003399"><i>/* Computing log(x)(x is left argument).The result is return double + delta.*/</i></font>
+<font color="#003399"><i>/* The result is bounded by error (right argument)                           */</i></font>
+<font color="#003399"><i>/****************************************************************************/</i></font>
+<b>static</b> <b>double</b> my_log2(<b>double</b> x, <b>double</b> *delta, <b>double</b> *error) {
+  <b>int</b> i,j,m;
+<font color="990099">#if 0</font>
+  <b>int</b> n;
+<font color="990099">#endif</font>
+  <b>double</b> uu,vv,eps,nx,e,e1,e2,t,t1,t2,res,add=0;
+<font color="990099">#if 0</font>
+  <b>double</b> cor;
+<font color="990099">#endif</font>
+  <b>double</b> ou1,ou2,lu1,lu2,ov,lv1,lv2,a,a1,a2;
+  <b>double</b> y,yy,z,zz,j1,j2,j3,j4,j5,j6,j7,j8;
+  mynumber u,v;
+<font color="990099">#ifdef BIG_ENDI</font>
+  mynumber
+<font color="#003399"><i>/**/</i></font> two52          = {{0x43300000, 0x00000000}}; <font color="#003399"><i>/* 2**52         */</i></font>
+<font color="990099">#else</font>
+<font color="990099">#ifdef LITTLE_ENDI</font>
+  mynumber
+<font color="#003399"><i>/**/</i></font> two52          = {{0x00000000, 0x43300000}}; <font color="#003399"><i>/* 2**52         */</i></font>
+<font color="990099">#endif</font>
+<font color="990099">#endif</font>
+
+  u.x = x;
+  m = u.i[HIGH_HALF];
+  *error = 0;
+  *delta = 0;
+  add=0;
+  <b>if</b> (m&lt;0x00100000) {  <font color="#003399"><i>/* x &lt; 2^-1022 */</i></font>
+    x = x*t52.x;  add = -52.0; u.x = x; m = u.i[HIGH_HALF]; }
+
+  <b>if</b> ((m&amp;0x000fffff) &lt; 0x0006a09e)
+    {u.i[HIGH_HALF] = (m&amp;0x000fffff)|0x3ff00000; two52.i[LOW_HALF]=(m&gt;&gt;20); }
+  <b>else</b>
+    {u.i[HIGH_HALF] = (m&amp;0x000fffff)|0x3fe00000; two52.i[LOW_HALF]=(m&gt;&gt;20)+1; }
+
+  v.x = u.x + bigu.x;
+  uu = v.x - bigu.x;
+  i = (v.i[LOW_HALF]&amp;0x000003ff)&lt;&lt;2;
+  <font color="#003399"><i>/*------------------------------------- |x-1| &lt; 2**-11-------------------------------  */</i></font>
+  <b>if</b> ((two52.i[LOW_HALF] == 1023)  &amp;&amp; (i == 1200))
+  {
+      t = x - 1.0;
+      EMULV(t,s3,y,yy,j1,j2,j3,j4,j5);
+      ADD2(-0.5,0,y,yy,z,zz,j1,j2);
+      MUL2(t,0,z,zz,y,yy,j1,j2,j3,j4,j5,j6,j7,j8);
+      MUL2(t,0,y,yy,z,zz,j1,j2,j3,j4,j5,j6,j7,j8);
+
+      e1 = t+z;
+      e2 = (((t-e1)+z)+zz)+t*t*t*(ss3+t*(s4+t*(s5+t*(s6+t*(s7+t*s8)))));
+      res = e1+e2;
+      *error = 1.0e-25*ABS(t);
+      *delta = (e1-res)+e2;
+      <b>return</b> res;
+  }
+  <font color="#003399"><i>/*----------------------------- |x-1| &gt; 2**-11  --------------------------  */</i></font>
+  <b>else</b>
+  {          <font color="#003399"><i>/*Computing log(x) according to log table                        */</i></font>
+      nx = (two52.x - two52e.x)+add;
+      ou1 = ui.x[i];
+      ou2 = ui.x[i+1];
+      lu1 = ui.x[i+2];
+      lu2 = ui.x[i+3];
+      v.x = u.x*(ou1+ou2)+bigv.x;
+      vv = v.x-bigv.x;
+      j = v.i[LOW_HALF]&amp;0x0007ffff;
+      j = j+j+j;
+      eps = u.x - uu*vv;
+      ov  = vj.x[j];
+      lv1 = vj.x[j+1];
+      lv2 = vj.x[j+2];
+      a = (ou1+ou2)*(1.0+ov);
+      a1 = (a+1.0e10)-1.0e10;
+      a2 = a*(1.0-a1*uu*vv);
+      e1 = eps*a1;
+      e2 = eps*a2;
+      e = e1+e2;
+      e2 = (e1-e)+e2;
+      t=nx*ln2a.x+lu1+lv1;
+      t1 = t+e;
+      t2 = (((t-t1)+e)+(lu2+lv2+nx*ln2b.x+e2))+e*e*(p2+e*(p3+e*p4));
+      res=t1+t2;
+      *error = 1.0e-27;
+      *delta = (t1-res)+t2;
+      <b>return</b> res;
+  }
+}
+
+<font color="#003399"><i>/**********************************************************************/</i></font>
+<font color="#003399"><i>/* Routine receives a double x and checks if it is an integer. If not */</i></font>
+<font color="#003399"><i>/* it returns 0, else it returns 1 if even or -1 if odd.              */</i></font>
+<font color="#003399"><i>/**********************************************************************/</i></font>
+<b>static</b> <b>int</b> checkint(<b>double</b> x) {
+  <b>union</b> {int4 i[2]; <b>double</b> x;} u;
+  <b>int</b> k,m,n;
+<font color="990099">#if 0</font>
+  <b>int</b> l;
+<font color="990099">#endif</font>
+  u.x = x;
+  m = u.i[HIGH_HALF]&amp;0x7fffffff;    <font color="#003399"><i>/* no sign */</i></font>
+  <b>if</b> (m &gt;= 0x7ff00000) <b>return</b> 0;    <font color="#003399"><i>/*  x is +/-inf or NaN  */</i></font>
+  <b>if</b> (m &gt;= 0x43400000) <b>return</b> 1;    <font color="#003399"><i>/*  |x| &gt;= 2**53   */</i></font>
+  <b>if</b> (m &lt; 0x40000000) <b>return</b> 0;     <font color="#003399"><i>/* |x| &lt; 2,  can not be 0 or 1  */</i></font>
+  n = u.i[LOW_HALF];
+  k = (m&gt;&gt;20)-1023;                 <font color="#003399"><i>/*  1 &lt;= k &lt;= 52   */</i></font>
+  <b>if</b> (k == 52) <b>return</b> (n&amp;1)? -1:1;  <font color="#003399"><i>/* odd or even*/</i></font>
+  <b>if</b> (k&gt;20) {
+    <b>if</b> (n&lt;&lt;(k-20)) <b>return</b> 0;        <font color="#003399"><i>/* if not integer */</i></font>
+    <b>return</b> (n&lt;&lt;(k-21))?-1:1;
+  }
+  <b>if</b> (n) <b>return</b> 0;                  <font color="#003399"><i>/*if  not integer*/</i></font>
+  <b>if</b> (k == 20) <b>return</b> (m&amp;1)? -1:1;
+  <b>if</b> (m&lt;&lt;(k+12)) <b>return</b> 0;
+  <b>return</b> (m&lt;&lt;(k+11))?-1:1;
+}
+
+</code></pre>
+
+
+
+</body>
+</html>
+
+<sub></sub>
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

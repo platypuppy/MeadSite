@@ -1,0 +1,277 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 180 - Assignment #3</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 180 - Assignment #3</h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<!-- **************************************************************************** -->
+<!-- **************************************************************************** -->
+<!-- **************************************************************************** -->
+<p class="SectionHeader">
+Information
+</p>
+
+
+<ul>
+<li><a href="cs180-programming-assignment-POSIX-shared-mem.pdf">Handout</a></li>
+<li><a href="parent-matrix-skeleton.c">parent-matrix.c</a> (<a href="parent-matrix-skeleton.c.html">HTML</a>) This is a skeleton to get you started. You'll need to modify it. You
+	can change most anything you want but don't change the print_array function because you won't diff correctly if you do. 
+	<b>Also, you must document (Doxygenize) all functions, including main, even if you didn't write the functions.</b>
+	
+	<li>Command lines to compile the programs:
+<blockquote><pre>
+gcc <font color="blue"><b>-D_XOPEN_SOURCE</b></font> -Werror -Wall -Wextra -std=c11 -pedantic -g -O -Wno-unused-result parent-matrix.c -o parent-matrix
+gcc <font color="blue"><b>-D_XOPEN_SOURCE</b></font> -Werror -Wall -Wextra -std=c11 -pedantic -g -O -Wno-unused-result child-matrix.c -o child-matrix
+
+clang <font color="blue"><b>-D_XOPEN_SOURCE</b></font> -Werror -Wall -Wextra -std=c11 -pedantic -g -O -Wno-unused-result parent-matrix.c -o parent-matrix
+clang <font color="blue"><b>-D_XOPEN_SOURCE</b></font> -Werror -Wall -Wextra -std=c11 -pedantic -g -O -Wno-unused-result child-matrix.c -o child-matrix
+</pre></blockquote>
+
+Information on <a href="http://man7.org/linux/man-pages/man7/feature_test_macros.7.html">Feature test macros</a>
+(shown <font color="blue"><b>highlighted</b></font> above.)
+More discussion <a href="https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean">here</a>.
+<p>
+As always, creating a makefile will improve your productivity during development.
+<p>
+
+<li>To run the program, type this at the command line:
+<blockquote><pre>
+./parent-matrix <font color="blue"><b>input.txt child-matrix</b></font>
+</pre></blockquote>
+
+where the first parameter is the name of a text file that has the matrix in it and the second
+parameter is the name of the child program to execute. 
+<p>
+
+<blockquote>
+<p class="technote">
+<b>DO NOT</b> assume that the name of the child matrix executable is <b>child-matrix</b>. This is
+provided to the parent on the command line and you will use that name.
+Hard-coding this value will cause your program to fail and you will lose significant points for that.	
+</p>
+</blockquote>
+
+<li>Sample <a href="output3.txt">output</a> for a small <a href="mat3.txt">3x3</a> matrix:
+<blockquote><pre>
+       1       2       3
+       4       5       6
+       7       8       9
+
+      30      36      42
+      66      81      96
+     102     126     150	
+</pre></blockquote>
+<li>Here is a program to <a href="gen_matrix.c">generate random matrices</a> for use as input for this assignment. For example,
+	if you want a 5x5 matrix with values ranging from -20 to +20, you would run it like this:
+<blockquote><pre>
+./gen_matrix 5 -20 20
+</pre></blockquote>
+
+and you would see something like this:
+<blockquote><pre>
+5
+      16      14      16      12      15
+       8       8     -16     -19      -6
+     -17      -2      20      11       5
+     -15      -6     -10       5      19
+      16      -4      16      10       5
+</pre></blockquote>
+
+You would redirect the output into a file for use by the <tt><b>parent-matrix</b></tt> program:
+<blockquote><pre>
+./gen_matrix 5 -20 20 > mat5.txt
+</pre></blockquote>
+
+<li>Sample <a href="output5.txt">output</a> for the above matrix by 
+  running: <tt>parent-matrix <a href="mat5.txt">mat5.txt</a></tt> 
+  (assumes <tt><b>child-matrix</b></tt> exists)
+	
+<blockquote><pre>
+      16      14      16      12      15
+       8       8     -16     -19      -6
+     -17      -2      20      11       5
+     -15      -6     -10       5      19
+      16      -4      16      10       5
+
+     156     172     472     312     539
+     653     346    -226    -387    -399
+    -713    -380     130     159      91
+     111    -344     -90      39     -49
+    -118      80     620     544     559
+</pre></blockquote>
+
+<li>Sample <a href="output16.txt">output</a> for a random <a href="mat16.txt">16x16 matrix</a>
+<li>Random <a href="mat20.txt">20x20 matrix</a> (<a href="output20.txt">output20.txt</a>)
+<li>Stress test: Random <a href="mat50.txt">50x50 matrix</a> (<a href="output50.txt">output50.txt</a>)
+
+	
+<li>Matrix references:</li>
+<ul>
+<li>Refresher on <a href="http://en.wikipedia.org/wiki/Matrix_multiplication">matrix multiplication</a></li>
+<li>Another <a href="http://mathworld.wolfram.com/MatrixMultiplication.html">refresher</a>.
+	<li><a href="http://www.easycalculation.com/matrix/matrix-multiplication.php">Online matrix multiplier</a></li>
+</ul>
+
+<li>Additional information about <a href="../../../../CS120/RuntimeEnvironment.html#COMMANDLINE">command line arguments</a> and <a href="../../../../CS120/RuntimeEnvironment.html#EXEC">exec</a> functions. These
+	links are from a CS120 lecture.
+
+<!--<li><a href="parent-matrix">parent-matrix</a> and <a href="child-matrix">child-matrix</a></li>-->
+
+<p>
+<li><b>Using <tt>script</tt></b></li>
+<p>
+You need to capture your shell session that shows compiling and running the program, 
+using <b>diff</b> to make sure your output is correct and running with valgrind and 
+then running Doxygen. After you've finished coding and testing everything and are 
+sure everything is correct, use the <b>script</b> command to make a text file of 
+your session. From the bash shell in the directory you've setup to test with, run these 
+commands: (You'll need a proper Doxygen config file called <tt>Doxyfile</tt> for 
+the <tt>doxygen</tt> command to work. Make sure to enable warnings and set output 
+to QUIET. Otherwise, you will have lots of unecessary output and will not be able 
+to see the warnings.)
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+gcc -D_XOPEN_SOURCE -Werror -Wall -Wextra -std=c11 -pedantic -O -Wno-unused-result parent-matrix.c -o parent-matrix
+gcc -D_XOPEN_SOURCE -Werror -Wall -Wextra -std=c11 -pedantic -O -Wno-unused-result child-matrix.c -o child-matrix
+clang -D_XOPEN_SOURCE -Werror -Wall -Wextra -std=c11 -pedantic -O -Wno-unused-result parent-matrix.c -o parent-matrix
+clang -D_XOPEN_SOURCE -Werror -Wall -Wextra -std=c11 -pedantic -O -Wno-unused-result child-matrix.c -o child-matrix
+./parent-matrix mat16.txt child-matrix | tee output.txt
+diff output16.txt output.txt
+valgrind -q --leak-check=full --show-reachable=yes <b>--trace-children=yes</b> --tool=memcheck ./parent-matrix mat5.txt ./child-matrix
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> was created
+with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first name and last name. This is
+how you get your name in the typescript file. Consult the man pages if you want more information on <b>script</b>.
+
+</ul>
+
+
+<!-- **************************************************************************** -->
+<!-- **************************************************************************** -->
+<!-- **************************************************************************** -->
+<p class="SectionHeader">
+Additional information
+</p>
+
+<ul>
+
+<p>
+<li>Example for a 3x3 matrix:</li>
+<p>
+Squaring this:
+<blockquote><pre>
+1       2       3
+4       5       6
+7       8       9
+</pre></blockquote>
+
+Results in this:
+<blockquote><pre>
+ 30      36      42
+ 66      81      96
+102     126     150
+</pre></blockquote>
+
+Aftering the parent creates the shared memory:
+<blockquote>
+<img src="Shared-Memory-1.png">
+</blockquote>
+
+After the parent puts the width and input values into the shared memory:
+<blockquote>
+<img src="Shared-Memory-2.png">
+</blockquote>
+
+Aftering each child process has written its result to the shared memory
+<blockquote>
+<img src="Shared-Memory-3.png">
+</blockquote>
+
+This is the how the first child calculates the value:
+<p>
+Row 0:
+<blockquote>
+<img src="Shared-Memory-A.png">
+</blockquote>
+
+Column 0:
+<blockquote>
+<img src="Shared-Memory-B.png">
+</blockquote>
+
+Writes to first integer in the result matrix:
+<blockquote>
+<img src="Shared-Memory-C.png">
+</blockquote>
+
+This is how the 6th child calculates the value:
+<p>
+Row 1:
+<blockquote>
+<img src="Shared-Memory-D.png">
+</blockquote>
+
+Column 2:
+<blockquote>
+<img src="Shared-Memory-E.png">
+</blockquote>
+
+Writes to 6th integer in the result matrix:
+<blockquote>
+<img src="Shared-Memory-F.png">
+</blockquote>
+
+</ul>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br><br><br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

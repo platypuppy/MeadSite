@@ -1,0 +1,160 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.d</title>
+
+</head>
+<body>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<tt><b>main.d</b></tt>:
+<p>
+Install D:
+<blockquote><pre>
+sudo apt-get install dmd
+</pre></blockquote>
+or GCC version:
+<blockquote><pre>
+sudo apt-get install gdc
+</pre></blockquote>
+
+
+Compile:
+<blockquote><pre>
+dmd main.d -L-ldl -ofmaind
+</pre></blockquote>
+or with GCC version:
+<blockquote><pre>
+gdc main.d -ldl -o maind
+</pre></blockquote>
+
+
+Run:
+<blockquote><pre>
+./maind
+</pre></blockquote>
+
+<p class="technote">
+If the install command above doesn't work fo you, 
+you can go to the <a href="http://dlang.org/download.html">D download site</a>
+and get DMD from there.
+</p>
+
+<pre class="sourcecode"><code><b>import</b> std.stdio;
+<b>import</b> core.sys.posix.dlfcn;
+
+<font color="#003399"><i>// Convenient aliases</i></font>
+<b>alias int function</b>(<b>int</b>, <b>int</b>) ADD;
+<b>alias void function</b>(<b>const</b> <b>char</b> *) PRINTME;
+
+<b>int</b> main()
+{
+    <font color="#003399"><i>// Load library</i></font>
+  <b>auto</b> lib = dlopen(<font color="#9933CC">&quot;./libhello.so&quot;</font>.ptr, RTLD_LAZY);
+
+    <font color="#003399"><i>// Verify success</i></font>
+  <b>if</b> (!(lib is null))
+  {
+      <font color="#003399"><i>// Locate add and, if found, call it</i></font>
+    <b>auto</b> Add = cast(ADD)dlsym(lib, <font color="#9933CC">&quot;add&quot;</font>);
+    <b>if</b> (Add is null)
+      writeln(<font color="#9933CC">&quot;Can't find add.&quot;</font>);
+    <b>else</b>
+      writeln(<font color="#9933CC">&quot;The result is: &quot;</font>, Add(1, 2));
+
+      <font color="#003399"><i>// Locate printme and, if found, call it</i></font>
+    <b>auto</b> PrintMe = cast(PRINTME)dlsym(lib, <font color="#9933CC">&quot;printme&quot;</font>);
+    <b>if</b> (PrintMe is null)
+      writeln(<font color="#9933CC">&quot;Can't find printme.&quot;</font>);
+    <b>else</b>
+      PrintMe(<font color="#9933CC">&quot;Hello from D!&quot;</font>);
+
+      <font color="#003399"><i>// Clean up</i></font>
+    dlclose(lib);
+  } 
+  <b>else</b> 
+  {
+    writeln(<font color="#9933CC">&quot;Can't load ./libhello.so&quot;</font>);
+    <b>return</b> 1;
+  } 
+  <b>return</b> 0;
+}
+</code></pre>
+
+Output:
+<blockquote><pre>
+The result is: 3
+Hello from library: Hello from D!
+</pre></blockquote>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

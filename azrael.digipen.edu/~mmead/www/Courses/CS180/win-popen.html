@@ -1,0 +1,436 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Windows and Pipes</title>
+
+</head>
+
+<body>  
+
+<center><h1>
+Windows and Pipes
+</h1></center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+popen for Windows
+</p>
+
+This is a simple example of how you can execute a command line compiler (gcc, clang, cl, etc.)
+and have its output sent to a GUI window. This is kind of how many IDEs work. You can select
+the compiler from the drop-down box at the top and then compile or compile/link the code.
+<p>
+(Click on an image to view full size)
+<p>
+
+Building the code using GNU g++ (with warnings/errors). The command-line compiler 
+(<i>cl.exe</i>, <i>gcc.exe</i>, <i>clang.exe</i>, etc.)
+is run as a child
+process and its output is redirected (piped) back to the GUI, which displays it in the bottom
+window in the tab labeled <i>Compiler output</i>. Clicking the mouse on the error message in
+the bottom window will highlight the line in the source code in the top window.
+
+<blockquote>
+  <a href="win-ide-gnu-compile-errors.png"><img src="win-ide-gnu-compile-errors.png" border=0 width=1000 height=800></a>  
+</blockquote>
+
+<br><br>
+
+Building the code with GNU g++ (with no warnings/errors after fixing the problems above):
+
+<blockquote>
+  <a href="win-ide-gnu-compile-clean.png"><img src="win-ide-gnu-compile-clean.png" border=0 width=1000 height=800></a>	
+</blockquote>
+
+
+<br><br>
+
+
+Building the code using Microsoft's compiler (with warnings/errors).
+
+<blockquote>
+  <a href="win-ide-ms-compile-errors.png"><img src="win-ide-ms-compile-errors.png" border=0 width=1000 height=800></a>  
+</blockquote>
+
+<br><br>
+
+Building the code with Microsoft's compiler (with no warnings/errors after fixing the problems above):
+
+<blockquote>
+  <a href="win-ide-ms-compile-clean.png"><img src="win-ide-ms-compile-clean.png" border=0 width=1000 height=800></a>  
+</blockquote>
+
+
+<br><br>
+
+
+Running (executing) the program. The executable is run as a child process and its output
+is redirected (piped) back to the GUI, which displays it in the bottom
+window in the tab labeled <i>Run output</i>. The time it took to run is also displayed in 
+the output. The IDE gives you the option of displaying the output in the bottom window, or
+it will open a new console window and display the output there.
+
+<blockquote>
+  <a href="win-ide-run-hw.png"><img src="win-ide-run-hw.png" border=0 width=1000 height=800></a>	
+</blockquote>
+
+<br><br>
+
+
+Running Doxygen on the (different source) code. The Doxygen warnings are displayed in
+the bottom window. The same behavior applies here, meaning, clicking on the warning in
+the bottom window highlights the code in the top window:
+
+<blockquote>
+  <a href="win-ide-doxy-warn.png"><img src="win-ide-doxy-warn.png" border=0 width=1000 height=800></a>  
+</blockquote>
+
+<br><br>
+
+
+The HTML output from Doxygen
+is displayed (embedded) in the bottom window in the tab labeled <i>Doxygen preview</i>.
+The IDE gives you the choice of displaying the HTML in the embedded bottom window, or you can have
+it open the HTML in the (default) browser.
+
+
+<blockquote>
+  <a href="win-ide-doxy-preview.png"><img src="win-ide-doxy-preview.png" border=0 width=1000 height=800></a>  
+</blockquote>
+
+
+<br><br>
+
+
+
+
+
+
+
+Here are some code snippets that demonstrate what's happening.
+<p>
+Compiling/linking:
+<pre class="sourcecode"><code><b>const</b> <b>int</b> MAX_CMD_LINE = 4096;
+
+<b>void</b> TMainWindow::Compile(<b>const</b> <b>char</b> *filename, <b>bool</b> link)
+{
+  pgeMain-&gt;ActivePageIndex = 0;
+
+  <b>char</b> cmdLine[MAX_CMD_LINE]; <font color="#003399"><i>// compiler command line</i></font>
+
+    <font color="#003399"><i>// Compile/Link or just compiling?</i></font>
+  <b>char</b> *lstr = <font color="#9933CC">&quot;&quot;</font>;
+  <b>if</b> (!link)
+    lstr = <font color="#9933CC">&quot;-c&quot;</font>;
+
+    <font color="#003399"><i>// If warnings are enabled (each compiler does it differently!)</i></font>
+  <b>char</b> *gwarns = <font color="#9933CC">&quot;&quot;</font>;
+  <b>char</b> *mwarns = <font color="#9933CC">&quot;&quot;</font>;
+  <b>char</b> *bwarns = <font color="#9933CC">&quot;&quot;</font>;
+  <b>if</b> (chkEnableWarnings-&gt;Checked)
+  {
+    gwarns = <font color="#9933CC">&quot;-Wall -Wextra -pedantic&quot;</font>;
+    bwarns = <font color="#9933CC">&quot;-w&quot;</font>;
+    mwarns = <font color="#9933CC">&quot;/W4&quot;</font>;
+  }
+
+    <font color="#003399"><i>// All compilers accept -O2!</i></font>
+  <b>char</b> *optimize = <font color="#9933CC">&quot;&quot;</font>;
+  <b>if</b> (chkEnableOptimizations-&gt;Checked)
+    optimize = <font color="#9933CC">&quot;-O2&quot;</font>;
+
+    <font color="#003399"><i>// Each compiler has its own command line format</i></font>
+  <b>if</b> (Compiler_ == cmpMICROSOFT)
+    sprintf(cmdLine, <font color="#9933CC">&quot;cl %s %s %s %s /EHsc&quot;</font>, mwarns, optimize, lstr, filename);
+  <b>else</b> <b>if</b> (Compiler_ == cmpGNU)
+  {
+    AnsiString s = ChangeFileExt(filename, <font color="#9933CC">&quot;.exe&quot;</font>);
+    <b>char</b> *standard = <font color="#9933CC">&quot;-ansi&quot;</font>;
+    <b>if</b> (chkCPP14-&gt;Checked)
+      standard = <font color="#9933CC">&quot;-std=c++14&quot;</font>;
+    sprintf(cmdLine, <font color="#9933CC">&quot;g++ %s %s %s %s %s -o %s&quot;</font>, gwarns, optimize, lstr, standard, filename, s.c_str() );
+  }
+  <b>else</b> <b>if</b> (Compiler_ == cmpCLANG)
+  {
+    AnsiString s = ChangeFileExt(filename, <font color="#9933CC">&quot;.exe&quot;</font>);
+    <b>char</b> *standard = <font color="#9933CC">&quot;-ansi&quot;</font>;
+    <b>if</b> (chkCPP14-&gt;Checked)
+      standard = <font color="#9933CC">&quot;-std=c++14&quot;</font>;
+    sprintf(cmdLine, <font color="#9933CC">&quot;clang++ %s %s %s %s %s -o %s&quot;</font>, gwarns, optimize, lstr, standard, filename, s.c_str() );
+  }
+  <b>else</b> <b>if</b> (Compiler_ == cmpBORLAND)
+    sprintf(cmdLine, <font color="#9933CC">&quot;bcc32 %s %s %s %s&quot;</font>, bwarns, optimize, lstr, filename);
+  <b>else</b>
+    <b>return</b>; <font color="#003399"><i>// unknown compiler (shouldn't happen)</i></font>
+
+  std::string output; <font color="#003399"><i>// Compiler's output</i></font>
+  HANDLE process;     <font color="#003399"><i>// Process' handle returned from CreatePipe</i></font>
+
+    <font color="#003399"><i>// Start the compiler and capture its output</i></font>
+  HANDLE in = POPEN(cmdLine, &amp;process);
+  <b>if</b> (in)
+  {
+      <font color="#003399"><i>// Read all of the compiler's output and put into a std::string</i></font>
+    <b>while</b> (1)
+    {
+      <b>const</b> <b>int</b> chunksize = 128; <font color="#003399"><i>// How much to read each time</i></font>
+      <b>char</b> buffer[chunksize];    <font color="#003399"><i>// Buffer to store output</i></font>
+      DWORD bytesRead;           <font color="#003399"><i>// How much text was actually read</i></font>
+
+        <font color="#003399"><i>// Read a chunk of text (output) from the compiler</i></font>
+      BOOL success = ReadFile(in, buffer, chunksize, &amp;bytesRead, 0);
+
+        <font color="#003399"><i>// This will trigger either when there are no more bytes to read</i></font>
+        <font color="#003399"><i>// or on error. (Need to handle the potential error at some point.)</i></font>
+      <b>if</b> (!success)
+        <b>break</b>;
+
+        <font color="#003399"><i>// Add the chunk of text to the string</i></font>
+      <b>for</b> (DWORD i = 0; i &lt; bytesRead; i++)
+        output.push_back(buffer[i]);
+
+        <font color="#003399"><i>// Yield so the GUI is responsive (this could take a while)</i></font>
+      Application-&gt;ProcessMessages();
+    }
+
+      <font color="#003399"><i>// Convert the buffer of characters to a list of strings</i></font>
+    TStringList *list = <b>new</b> TStringList();
+    OutputToStrings(output, *list);
+    mmoOutput-&gt;Lines-&gt;AddStrings(list);
+    <b>delete</b> list;
+
+      <font color="#003399"><i>// Clean up</i></font>
+    CloseHandle(process);
+    CloseHandle(in);
+  }
+  <b>else</b>
+  {
+    mmoOutput-&gt;Lines-&gt;Add(AnsiString(<font color="#9933CC">&quot;Failed! Command line: &quot;</font>) + cmdLine);
+    <font color="#003399"><i>// TODO: Handle the error</i></font>
+  }
+}
+</code></pre>
+
+Executing the program:
+<pre class="sourcecode"><code><font color="#003399"><i>// Runs a command (cmdline) and redirects its output to the app</i></font>
+<b>void</b> TMainWindow::CaptureOutput(<b>const</b> <b>char</b> *cmdline)
+{
+    <font color="#003399"><i>// Update GUI</i></font>
+  mmoRunOutput-&gt;Clear();
+  Application-&gt;ProcessMessages();
+  pgeMain-&gt;ActivePageIndex = 1;
+  mmoRunOutput-&gt;Lines-&gt;Add(<font color="#9933CC">&quot;=== Running... ===&quot;</font>);
+
+    <font color="#003399"><i>// Keep track of how long the run took</i></font>
+  <b>double</b> timediff;
+  clock_t start = clock();
+
+  HANDLE process;
+  HANDLE in = POPEN(cmdline, &amp;process);
+  std::string output;
+  <b>if</b> (in)
+  {
+      <font color="#003399"><i>// Read all of the process' output</i></font>
+    <b>while</b> (1)
+    {
+      <b>const</b> <b>int</b> chunksize = 128; <font color="#003399"><i>// How much to read each time</i></font>
+      <b>char</b> buffer[chunksize];    <font color="#003399"><i>// Buffer to store output</i></font>
+      DWORD bytesRead;           <font color="#003399"><i>// How much text was actually read</i></font>
+
+        <font color="#003399"><i>// Read a chunk of text (output) from the compiler</i></font>
+      BOOL success = ReadFile(in, buffer, chunksize, &amp;bytesRead, 0);
+
+        <font color="#003399"><i>// This will trigger either when there are no more bytes to read</i></font>
+        <font color="#003399"><i>// or on error. (Need to handle the potential error at some point.)</i></font>
+      <b>if</b> (!success)
+        <b>break</b>;
+
+        <font color="#003399"><i>// Add the chunk of text to the string</i></font>
+      <b>for</b> (DWORD i = 0; i &lt; bytesRead; i++)
+        output.push_back(buffer[i]);
+
+        <font color="#003399"><i>// Yield so the GUI is responsive (this could take a while)</i></font>
+      Application-&gt;ProcessMessages();
+    }
+
+      <font color="#003399"><i>// Done reading</i></font>
+    CloseHandle(process);
+    CloseHandle(in);
+
+      <font color="#003399"><i>// Elapsed time (rough estimate)</i></font>
+    timediff = (clock() - start) / (<b>double</b>)CLOCKS_PER_SEC;
+
+      <font color="#003399"><i>// Put the output into a list of strings</i></font>
+    TStringList *list = <b>new</b> TStringList();
+    OutputToStrings(output, *list);
+    mmoRunOutput-&gt;Lines-&gt;AddStrings(list);
+    <b>delete</b> list;
+  }
+  <b>else</b>
+  {
+    <font color="#003399"><i>//fprintf(stderr, &quot;error: %s&quot;, errorMessage);</i></font>
+    timediff = (clock() - start ) / (<b>double</b>)CLOCKS_PER_SEC;
+    Beep();
+  }
+
+    <font color="#003399"><i>// Update GUI</i></font>
+  mmoRunOutput-&gt;Lines-&gt;Add(<font color="#9933CC">&quot;&quot;</font>);
+  mmoRunOutput-&gt;Lines-&gt;Add(<font color="#9933CC">&quot;=== Done. ===&quot;</font>);
+
+  <b>char</b> buf[100];
+  sprintf(buf, <font color="#9933CC">&quot;Elapsed time: %.3f ===&quot;</font>, timediff);
+  mmoRunOutput-&gt;Lines-&gt;Add(buf);
+}
+</code></pre>
+
+A Windows version of popen:
+<pre class="sourcecode"><code><font color="#003399"><i>//---------------------------------------------------------------------------</i></font>
+<font color="#003399"><i>// See MSDN article: &quot;Creating a Child Process with Redirected Input and Output&quot;</i></font>
+<font color="#003399"><i>// for more information on this. There's no guarantee this link still works, but</i></font>
+<font color="#003399"><i>// Google for it and you'll probably find something relevant.</i></font>
+<font color="#003399"><i>//</i></font>
+<font color="#003399"><i>// https://msdn.microsoft.com/en-us/library/windows/desktop/ms682499%28v=vs.85%29.aspx</i></font>
+HANDLE TMainWindow::POPEN(<b>const</b> <b>char</b>* cmdLine, HANDLE *process)
+{
+  SECURITY_ATTRIBUTES sa;
+  sa.lpSecurityDescriptor = NULL;
+  sa.nLength = <b>sizeof</b>(sa);
+  sa.bInheritHandle = TRUE; <font color="#003399"><i>// need this for the pipe</i></font>
+
+  HANDLE pipeWrite; <font color="#003399"><i>// Child will write to here</i></font>
+  HANDLE pipeRead;  <font color="#003399"><i>// Parent will read from here</i></font>
+
+    <font color="#003399"><i>// Create a new pipe for child to communicate with parent</i></font>
+  <b>if</b> (!CreatePipe(&amp;pipeRead, &amp;pipeWrite, &amp;sa, 0 <font color="#003399"><i>/* buffer size */</i></font>))
+    <b>return</b> NULL;
+
+    <font color="#003399"><i>// For CreateProcess</i></font>
+  PROCESS_INFORMATION info;
+  STARTUPINFO si;
+  ZeroMemory(&amp;si, <b>sizeof</b>(si));
+  si.cb = <b>sizeof</b>(si);
+  si.wShowWindow = SW_HIDE;
+
+    <font color="#003399"><i>// No visible window, use redirected handles</i></font>
+  si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+
+    <font color="#003399"><i>// The child will write to the pipe instead of stdout.</i></font>
+  si.hStdOutput = pipeWrite;
+
+    <font color="#003399"><i>// We also want stderr to go to the pipe, since some compilers (e.g. g++)</i></font>
+    <font color="#003399"><i>// send their warnings and errors to stderr.</i></font>
+  <b>if</b> (chkCaptureStderr-&gt;Checked)
+    si.hStdError = pipeWrite;
+
+    <font color="#003399"><i>// Need to use wide-strings with CreateProcess (see MSDN docs)</i></font>
+  std::wstring wcstr(MAX_CMD_LINE, L<font color="#9933CC">' '</font>);
+  mbstowcs(&amp;wcstr[0], cmdLine, MAX_CMD_LINE);
+
+    <font color="#003399"><i>// Create the child process</i></font>
+  BOOL success = CreateProcess
+  (
+    NULL,    <font color="#003399"><i>// application name</i></font>
+    (<b>wchar_t</b> *)wcstr.c_str(),  <font color="#003399"><i>// command line</i></font>
+    NULL,    <font color="#003399"><i>// process security attributes</i></font>
+    NULL,    <font color="#003399"><i>// thread attributes</i></font>
+    TRUE,    <font color="#003399"><i>// inherit handles</i></font>
+    0,       <font color="#003399"><i>// creation flags</i></font>
+    NULL,    <font color="#003399"><i>// use parent's environment</i></font>
+    NULL,    <font color="#003399"><i>// use parent's current directory</i></font>
+    &amp;si,     <font color="#003399"><i>// [in]</i></font>
+    &amp;info    <font color="#003399"><i>// [out] will be filled in</i></font>
+  );
+
+    <font color="#003399"><i>// Close the write end of the pipe since we (parent) are only going to read</i></font>
+    <font color="#003399"><i>// from the child process.</i></font>
+  CloseHandle(pipeWrite);
+
+    <font color="#003399"><i>// If something went wrong (TODO: show error message)</i></font>
+  <b>if</b> (!success)
+    <b>return</b> NULL;
+
+  *process = info.hProcess; <font color="#003399"><i>// for process management</i></font>
+  <b>return</b> pipeRead;          <font color="#003399"><i>// caller reads from here</i></font>
+}
+</code></pre>
+
+
+
+
+</body>
+</html>
+
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="ComputerComponents-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+	
+-->

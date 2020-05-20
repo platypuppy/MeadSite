@@ -1,0 +1,62 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;    /* printf, perror */</font>
+<font color="990099">#include &lt;string.h&gt;   /* strcmp         */</font>
+<font color="990099">#include &quot;fileconv.h&quot;</font>
+
+<b>void</b> usage(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Usage:  fileconv target input_file output_file&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;where:  target is either win or unix (the resulting format)&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;        input_file is the file to convert&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;        output_file is the newly converted file&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Example: (Converts a Windows text file to a Unix text file)&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;  fileconv unix file-with-CRLF.txt file-with-LF.txt&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>enum</b> FILE_ERR result; <font color="#003399"><i>/* File failures */</i></font>
+
+    <font color="#003399"><i>/* Make sure we get the required arguments */</i></font>
+  <b>if</b> (argc &lt; 4)
+  {
+    usage();
+    <b>return</b> 1;
+  }
+
+    <font color="#003399"><i>/* Do the conversion, check for errors */</i></font>
+  <b>if</b> (!strcmp(argv[1], <font color="#9933CC">&quot;unix&quot;</font>))
+    result = win2unix(argv[2], argv[3]);
+  <b>else</b> <b>if</b> (!strcmp(argv[1], <font color="#9933CC">&quot;win&quot;</font>))
+    result = unix2win(argv[2], argv[3]);
+  <b>else</b>
+  {
+    printf(<font color="#9933CC">&quot;Unknown target: %s&#92;n&quot;</font>, argv[1]);
+    usage();
+    <b>return</b> 2;
+  }
+
+  <b>if</b> (result == feINPUT)
+    perror(argv[2]);
+  <b>else</b> <b>if</b> (result == feOUTPUT)
+    perror(argv[3]);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

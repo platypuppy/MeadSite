@@ -1,0 +1,449 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+
+</style>
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment</h1>
+<h2><font color="red">This is optional for extra credit</font></h2>
+<b>(Due Tuesday, December 3, 2019 at 10:00 pm)</b>
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+<b>Please read this entire page before asking questions.</b>
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+  For this lab, you will write a program that will calculate your grade in CS120.
+  Actually, with slight modifications, you will be able to use this program to calculate your 
+  grade in any course. Calculating your grade is simple <strike>math</strike> arithmetic and
+  by now, everyone should be able to write a C program to perform simple arithmetic.
+  <p>
+  From the syllabus:
+  <blockquote>
+  <table border=1 cellpadding=5 cellspacing=0>
+  <tr><td>Homework/Labs</td><td>35%</td></tr>
+  <tr><td>Midterm</td><td>20%</td></tr>
+  <tr><td>Final</td><td>45%</td></tr>
+  </table>
+  </blockquote>
+  
+  <p>
+  The homework includes the labs with 20% going to programming assignments and 15% for labs.
+  <p>  
+  Thus, there are 4 portions to the final grade in CS120:
+  <ol>
+    <li>Labs - There are 12 labs and are worth 15% of the grade.</li>
+    <li>Programming assignments - There are 6 of these and they are worth 20% of the grade.</li>
+    <li>Midterm - The midterm exam is worth 20% of the grade.</li>
+    <li>Final - The final exam is worth 45% of the grade.</li>
+  </ol>
+  <p>
+You can see that these add up to 100%. To calcluate any one of these portions, you simply add
+up the scores you received, then divide that sum by the maximum number of points, and then multiply
+by the weight (e.g. 20% is 0.2). Do this for each portion and then add them up to give you your
+final score.
+<p>
+<p class="technote">
+Actually, you don't even have to write a program to do this, you can just do it with paper
+and pencil (or a calculator) in 5 minutes. But, writing a program is better because you can re-use
+it again and again. You can also use it to play the Game of "What if...?"&trade;
+</p>
+
+For example, assume these are the assignments and scores for the work during a typical semester:
+<p>
+
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Labs<br>(15%)</th><th>Programs<br>(20%)</th><th>Midterm<br>(20%)</th><th>Final<br>(45%)</th></tr>
+<tr valign="top">
+<td>
+<ol>
+  <li>100/100</li>
+  <li>0/100</li>
+  <li>100/100</li>
+  <li>100/100</li>
+  <li>100/100</li>
+  <li>100/100</li>
+  <li>100/100</li>
+  <li>100/100</li>
+  <li>0/100</li>
+  <li>100/100</li>
+  <li>0/100</li>
+  <li>100/100</li>
+</ol>
+</td>
+
+<td>
+<ol>
+  <li>90/100</li>
+  <li>65/80</li>
+  <li>75/80</li>
+  <li>80/80</li>
+  <li>85/100</li>
+  <li>100/120</li>
+</ol>  
+</td>
+
+<td align="center">
+60/79
+</td>
+
+<td align="center">
+87/100
+</td>
+</tr>
+
+<tr align="center">
+<td>900/1200<br>0.75000</td>
+<td>495/560<br>0.883929</td>
+<td>0.759494</td>
+<td>0.870000</td>
+</tr>
+
+<tr align="center">
+<td>0.112500</td>
+<td>0.176786</td>
+<td>0.151899</td>
+<td>0.391500</td>
+</tr>
+
+</tr></table>
+</blockquote>
+<p>
+
+The value in the last row is simply the sum of your scores divided by the max score multiplied
+by the weight. So, in the example above, the sum of the programs is 495 and the max score is 560.
+Dividing 495 by 560 gives us 0.883929 (which means you got an 88.39%, B+, on the programming assignments). 
+Multiply this by the weight, 0.2, and we get 0.176786.
+<p>
+Adding up the numbers in the last row gives us the total score in the class, which is 0.832685. 
+As a percent of 100 (i.e. multiply by 100) that gives us 83.27, which is a B. For any work that hasn't
+been turned in yet (e.g. the final exam), you can just set the score to the maximum values. This will
+tell you the heighest grade that you can receive.
+<p>
+<a href="cs120-grades-student.ods">Spreadsheet</a> to use for testing.
+<br>
+<a href="cs120-grades-student-sample.ods">Sample spreadsheet</a> with values from above.
+<p>
+You may need to download these to open them. You can get the program
+<a href="https://www.libreoffice.org/download/libreoffice-fresh/">here</a>.
+
+<p class="SectionHeader">
+Creating the Program
+</p>
+
+OK, so now that you know the simple arithmetic to calculate your grade, you need to write a
+program that will do it. To make this program re-usable, you are going to get your scores from
+a text file, rather than hard-code them into the program. Using the example above, this is the 
+format of the text file:
+<blockquote><pre>
+LAB02:100/100
+LAB03:0/100
+LAB04:100/100
+LAB05:100/100
+LAB06:100/100
+LAB07:100/100
+LAB08:100/100
+LAB09:100/100
+LAB10:0/100
+LAB11:100/100
+LAB12:0/100
+LAB13:100/100
+PHW01:90/100
+PHW02:65/80
+PHW03:75/80
+PHW04:80/80
+PHW05:85/100
+PHW06:100/120
+MID00:60/79
+FIN00:87/100
+</pre></blockquote>
+
+This scheme makes it easy for a program to distinguish between labs (LAB), programming homework (PHW),
+midterm (MID), and final (FIN). The first 3 letters, the tag, correspond to each of those. 
+<p>
+The two-digits after the tag are just for us humans so we know which is which. They can be 
+anything you want, but they must be there. I labeled the labs with the week they were given out. 
+The programming homework is labeled with the number.
+
+<p>
+<hr width="100%">
+<p>
+
+<ol>
+<li>The first part of the lab requires you to write this function:
+
+<blockquote><pre>
+<b>struct</b> GRADE parse_line(<b>const char</b> *line);
+</pre></blockquote>
+
+The function takes a string (like the ones in the files) and returns the two numbers in the string.
+The <b><tt>struct</tt></b> looks like this:
+
+<blockquote><pre>
+<b>struct</b> GRADE
+{
+  <b>int</b> score;
+  <b>int</b> max;
+};
+</pre></blockquote>
+
+So, given this input line:
+
+<blockquote><pre>
+PHW02:65/80
+</pre></blockquote>
+
+The structure returned will have <b>score</b> set to 65 and <b>max</b> set to 80. Once this function
+has been tested, you can move on to the next part.
+<font color="blue">This should require about 4 lines of code.</font>
+
+<p>
+<hr width="100%">
+<p>
+
+<li>The second part of the lab is to write this function:
+
+<blockquote><pre>
+<b>double</b> calculate_grade(<b>const char</b> *filename);
+</pre></blockquote>
+
+Your function will read all of the lines from the text file that is passed in, parse the lines
+to get the type (tag), score, and max, do the arithmetic,
+and return the total score as a <b><tt>double</tt></b>. The <b><tt>main</tt></b> function will
+take care of printing the letter grade associated with the total score.
+<p>
+Actually, this function won't do <i>all</i> of that work: It will call helper functions (like the one
+you wrote above) to, well, <i>help</i> with the work.
+
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+
+Put your functions in a file named <tt>grades.c</tt>. This is a command line to compile it:
+<blockquote><pre>
+gcc -O -Wall -Werror -Wextra -ansi -pedantic main.c grades.c -o grades
+</pre></blockquote>
+To run the program, you have to provide the name of the text file that contains the scores from
+all of the work as demonstrated above. For example:
+<blockquote><pre>
+grades myscores.txt
+</pre></blockquote>
+The output will simply look like this:
+<blockquote><pre>
+Your final score in CS120 is 83.27 and your letter grade is: B.
+</pre></blockquote>
+Here are some sample input files for you to work with:
+<p>
+<ul>
+  <li><a href="output-parse.txt">output-parse.txt</a> (Output from testing your parse function.) In order
+    to test just the parsing logic, do not provide the name of any files on the command line. Just invoke
+    the program like this:
+<blockquote><pre>
+grades > myparse.txt
+</pre></blockquote>
+or on Mac/Linux
+<blockquote><pre>
+./grades > myparse.txt
+</pre></blockquote>
+
+and only the parsing test will be run.
+<p>
+To test the actual calculations, you must provide the name of
+the input file like this:
+
+<blockquote><pre>
+grades input1.txt > myout.txt
+</pre></blockquote>
+or on Mac/Linux
+<blockquote><pre>
+./grades input1.txt > myout.txt
+</pre></blockquote>
+
+Here are the sample input and output files:
+
+
+  </li>
+  <p>
+  <li><a href="input-100.txt">input-100.txt</a>&nbsp;&nbsp;&nbsp;<a href="output-100.txt">output-100.txt</a></li>
+  <li><a href="input-0.txt">input-0.txt</a>&nbsp;&nbsp;&nbsp;<a href="output-0.txt">output-0.txt</a></li>
+  <li><a href="input1.txt">input1.txt</a>&nbsp;&nbsp;&nbsp;<a href="output1.txt">output1.txt</a></li>
+  <li><a href="input2.txt">input2.txt</a>&nbsp;&nbsp;&nbsp;<a href="output2.txt">output2.txt</a></li>
+  <li><a href="input3.txt">input3.txt</a>&nbsp;&nbsp;&nbsp;<a href="output3.txt">output3.txt</a></li>
+  <li><a href="input4.txt">input4.txt</a>&nbsp;&nbsp;&nbsp;<a href="output4.txt">output4.txt</a></li>
+  <li><a href="input5.txt">input5.txt</a>&nbsp;&nbsp;&nbsp;<a href="output5.txt">output5.txt</a></li>
+</ul>
+<p>
+Here is a driver: <a href="main.c.html">HTML</a>&nbsp;&nbsp;&nbsp;
+<a href="main.c">Text</a>
+<p>
+Here is a starting point for <tt>grades.c</tt>: <a href="grades-partial.c.html">HTML</a>&nbsp;&nbsp;&nbsp;
+<a href="grades-partial.c">Text</a>
+<p>
+
+<p>
+  <hr width="100%">
+</p>
+</ol>
+
+<b><tt></tt></b>
+<b><tt></tt></b>
+
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<b>Notes and Hints:</b>
+<ol>
+  <!--
+  <li>It doesn't matter what values you use for the labs (e.g. 1/1 or 10/10, or 100/100), since this
+    was an all-or-nothing grade and they are all equally weighted.</li>
+    <p>
+    -->
+  <li>The order of the lines in the input file are unimportant and you may get labs before the midterm,
+    or vice-versa. See the sample input files above.</li>
+    <p>
+  <li>The sample code I've provided allows for up to 15 labs and programming assignments.
+    For a program that really can work with any course and any number of labs, programming assignments, 
+    etc., you need to allocate your arrays dynamically. For this lab, though, you can just use those values
+    to create static arrays.
+    </li>
+    <p>
+  <li><b>MAKE HELPER FUNCTIONS.</b> At this point in CS120, anyone that tries to do this all in
+    one function really needs to re-think their career choice. That is not how programs are written.
+    Remember, programs are just a collection of functions. For example, don't pollute the code
+    that is doing the arithmetic with code that is doing file I/O or code that is parsing strings.
+    Those are all separate and unrelated tasks. 
+    <p>
+    Even if you <i>can</i> do all of the work in one function, don't. <b>IT DOESN'T MAKE
+    ANY SENSE!</b>
+    The complexity of your code is 
+    inversely proportional to the number of functions. That may sound counter-intuitive, but
+    that's the Real World&trade;.</li>
+    <p>
+  <li>You need to open the input file in read/text mode.
+    <p>
+  <li>You should remove the newline after you read the line from the file. This will make it 
+    easier to parse and process the values in the line.</li>
+  <p>
+  <li>Read one line at a time using 
+    <a href="http://www.cplusplus.com/reference/cstdio/fgets/">fgets</a> as you've done
+    before. You know what the longest line in the file can be, so allocate your character
+    array accordingly.
+    <p>
+  <li>To detect if the line is a lab (LAB), programming assignment (PHW), etc., you should use 
+    <a href="http://www.cplusplus.com/reference/cstring/strstr/">strstr</a>. This function
+    is used to search for a substring within a string. For example, to see if LAB is a
+    substring of the line read from a file:
+<blockquote><pre>
+strstr(line, "LAB");
+</pre></blockquote>
+This assumes that <tt>line</tt> is a NUL-terminated string. The return value is a pointer to where
+in the string the substring was found. NULL is returned if the string doesn't contain the substring.
+You should put these calls in an <tt><b>if</b></tt> statement.
+<p>
+  <li>Once you've determined what kind of score you have, you need to extract the two values using
+    the first function that you wrote. The
+    first value <b>always</b> starts at the 7th position (immediately after the colon) in the line. 
+    You should use
+    <a href="http://www.cplusplus.com/reference/cstdlib/atoi/">atoi</a> (ASCII to integer) to 
+    convert the numbers from strings to integers.</li>
+    <p>
+  <li>To extract the second number, use the 
+    <a href="http://www.cplusplus.com/reference/cstring/strchr/">strchr</a> function to 
+    locate the forward slash (<tt><b>/</b></tt>) that is separating the two values. This function
+    will return a pointer to the character and you will move one past it to get to the start of
+    the second number and use <a href="http://www.cplusplus.com/reference/cstdlib/atoi/">atoi</a>
+    on that pointer.
+<p>
+  <li>Test your program with the first input file above. That one contains scores of 100% on
+    everything. If your program doesn't print 100.00, then you have a flaw in your logic. Getting
+    your program to work with this case first will make it easier to debug. Once you get that file
+    working, try the one with all zeros. After that, try the rest. </li>
+
+<p>
+  <li>You don't have to handle files that do not conform to the scheme above. This means that there
+    will be no extraneous spaces or other characters on the line. The tags will also always be
+    UPPERCASE. It makes your parsing logic much simpler than if the user was allowed to enter the 
+    data in any which way. This is why I did it this way. 
+    Remember this when you create your own file formats for your own programs. You want to structure
+    it so a computer program can easily parse the content. 
+    <p>
+    Here's a sample from a Call of Duty 2 <a href="cod2-log.txt">log file</a>.
+    <p>
+  <li>The text files posted here have Unix line endings. If you're programming on Windows, convert them to have Windows line endings. 
+  There are a couple of Unix utilities (available in Cygwin) called <tt><b>dos2unix</b></tt> and
+    <tt><b>unix2dos</b></tt> which convert files from Windows to Unix and Unix to Windows, 
+    respectively. (These were around when DOS was the primary operating system from Microsoft, hence
+    the name <tt><b>dos2unix</b></tt>.) For example, to convert a Unix file to Windows (DOS):
+<blockquote><pre>
+unix2dos <b>-n</b> input.txt output.txt
+</pre></blockquote>
+Be sure you have the <tt><b>-n</b></tt> or you'll overwrite your original files, unless that's
+what you want. 
+The <tt><b>dos2unix</b></tt> program works similarly. Type:
+<blockquote><pre>
+man unix2dos
+</pre></blockquote>
+To get detailed information on how to use the two programs.</li>
+<p>
+
+</ol>
+
+<p class="technote">
+Now, with this program in hand, those of you that like to play the "What if ..." game, you can do so.
+You can use this program to answer questions like:<br><br>
+1. What if I get a 60% on the final exam?<br>
+2. What if I don't do the last two labs?<br>
+3. What if I get 80% on the last assignment?<br>
+4. What do I need on the final exam to pass?</br>
+5. What if &lt;<i>insert your question here</i>&gt;?<br>
+</p>
+
+
+
+
+
+<br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,633 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>sample-driver-s.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;  /* printf, sprintf, fopen, fclose, FILE */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* malloc, free, rand, srand, atoi      */</font>
+<font color="990099">#include &lt;string.h&gt; /* strcpy, strcat, memset               */</font>
+<font color="990099">#include &quot;memmgr.h&quot;</font>
+
+<font color="990099">#define DUMP(x) mm_dump(x, 0)</font>
+<font color="990099">#define GRAPHVIZ</font>
+
+<b>static</b> MMPolicy gPolicy = mmpFirstFit;
+<b>static</b> <b>int</b> gPrintValues = <b>false</b>;
+
+<b>void</b> mm_dump(block_info *heap, <b>int</b> show_address)
+{
+  <b>int</b> allocated = 0, alloc_blocks = 0;
+  <b>int</b> unallocated = 0, unalloc_blocks = 0;
+
+  <b>if</b> (!heap)
+    <b>return</b>;
+
+  printf(<font color="#9933CC">&quot;=========================================&#92;n&quot;</font>);
+  <b>while</b> (heap)
+  {
+    printf(<font color="#9933CC">&quot;    label: %s&#92;n&quot;</font>, heap-&gt;label);
+    <b>if</b> (show_address)
+      printf(<font color="#9933CC">&quot;  address: %p&#92;n&quot;</font>, (<b>void</b> *)heap-&gt;address);
+    <b>else</b>
+      printf(<font color="#9933CC">&quot;  address: 0x000000&#92;n&quot;</font>);
+    printf(<font color="#9933CC">&quot;     size: %lu&#92;n&quot;</font>, (<b>long</b> <b>unsigned</b>)heap-&gt;size);
+    printf(<font color="#9933CC">&quot;allocated: %s&#92;n&quot;</font>, heap-&gt;allocated ? <font color="#9933CC">&quot;true&quot;</font> : <font color="#9933CC">&quot;false&quot;</font>);
+    printf(<font color="#9933CC">&quot;--&#92;n&quot;</font>);
+    <b>if</b> (heap-&gt;allocated)
+    {
+      allocated += heap-&gt;size;
+      alloc_blocks++;
+    }
+    <b>else</b>
+    {
+      unallocated += heap-&gt;size;
+      unalloc_blocks++;
+    }
+
+    heap = heap-&gt;next;
+  }
+  printf(<font color="#9933CC">&quot;Allocated bytes: %8i [blocks: %5i]&#92;n&quot;</font>, allocated, alloc_blocks);
+  printf(<font color="#9933CC">&quot;     Free bytes: %8i [blocks: %5i]&#92;n&quot;</font>, unallocated, unalloc_blocks);
+}
+
+
+<b>void</b> mm_dump_gv(block_info *heap, <b>const</b> <b>char</b> *filename)
+{
+  FILE *fp;
+  <b>int</b> count = 0;
+  <b>char</b> *buffer;
+  <b>char</b> id[32];
+  block_info *save = heap;
+
+  <b>if</b> (!heap)
+    <b>return</b>;
+
+  <b>if</b> ((fp = fopen(filename, <font color="#9933CC">&quot;wt&quot;</font>)) == NULL)
+    <b>return</b>;
+
+    <font color="#003399"><i>/* Preamble */</i></font>
+  fprintf(fp, <font color="#9933CC">&quot;digraph g {&#92;n&quot;</font>);
+  fprintf(fp, <font color="#9933CC">&quot;graph [rankdir = &#92;&quot;</font>LR&#92;<font color="#9933CC">&quot;];&#92;n&quot;</font>);
+  fprintf(fp, <font color="#9933CC">&quot;node [fontsize = &#92;&quot;</font>12&#92;<font color="#9933CC">&quot; shape = &#92;&quot;</font>record&#92;<font color="#9933CC">&quot;];&#92;n&quot;</font>);
+  fprintf(fp, <font color="#9933CC">&quot;edge [arrowhead = &#92;&quot;</font>normal&#92;<font color="#9933CC">&quot;];&#92;n&quot;</font>);
+  fprintf(fp, <font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+    <font color="#003399"><i>/* How many nodes do we have? */</i></font>
+  <b>while</b> (heap)
+  {
+    count++;
+    heap = heap-&gt;next;
+  }
+
+    <font color="#003399"><i>/* Allocate  20 bytes per node, for the id/label */</i></font>
+  <b>if</b> ((buffer = malloc(20 * count + 200)) == NULL)
+  {
+    fclose(fp);
+    <b>return</b>;
+  }
+
+  heap = save;
+  count = 0;
+  <b>while</b> (heap)
+  {
+    <b>char</b> next[32], node[32], nnode[32];
+    count++;
+    <b>if</b> (heap-&gt;next)
+      sprintf(next, <font color="#9933CC">&quot;%p&quot;</font>, (<b>void</b> *)heap-&gt;next);
+    <b>else</b>
+      strcpy(next, <font color="#9933CC">&quot;NULL&quot;</font>);
+
+    sprintf(node, <font color="#9933CC">&quot;node%i&quot;</font>, count);
+    sprintf(nnode, <font color="#9933CC">&quot;node%i&quot;</font>, count + 1);
+
+      <font color="#003399"><i>/* Create the node */</i></font>
+    sprintf(buffer, <font color="#9933CC">&quot;%s [label = &#92;&quot;</font>&lt;f1&gt; %i | &lt;f2&gt; %p | &lt;f3&gt; %lu | &lt;f4&gt; %s | &lt;f5&gt; %s&#92;<font color="#9933CC">&quot; shape=record];&#92;n&quot;</font>, 
+            node,
+            heap-&gt;allocated ? 1 : 0,
+            (<b>void</b> *)heap-&gt;address,
+            (<b>long</b> <b>unsigned</b>)heap-&gt;size,
+            heap-&gt;label,
+            next);
+    fprintf(fp, <font color="#9933CC">&quot;%s&quot;</font>, buffer);
+
+      <font color="#003399"><i>/* If there is a next node, create an edge to it */</i></font>
+    <b>if</b> (heap-&gt;next)
+    {
+      sprintf(buffer, <font color="#9933CC">&quot;%s:f5-&gt;%s:f1;&#92;n&quot;</font>, node, nnode);
+      fprintf(fp, <font color="#9933CC">&quot;%s&quot;</font>, buffer);
+    }
+
+    heap = heap-&gt;next;
+  }
+
+    <font color="#003399"><i>/* Create the real &quot;heap&quot; node */</i></font>
+  strcpy(buffer, <font color="#9933CC">&quot;memory [label = &#92;&quot;</font><font color="#9933CC">&quot;);</font>
+  heap = save;
+  count = 0;
+  <b>while</b> (heap)
+  {
+    count++;
+    <b>if</b> (heap-&gt;allocated)
+      sprintf(id, <font color="#9933CC">&quot;&lt;f%i&gt; allocated&quot;</font>, count);
+    <b>else</b>
+      sprintf(id, <font color="#9933CC">&quot;&lt;f%i&gt; free&quot;</font>, count);
+
+    strcat(buffer, id);
+    <b>if</b> (heap-&gt;next)
+      strcat(buffer, <font color="#9933CC">&quot;|&quot;</font>);
+    heap = heap-&gt;next;
+  }
+  strcat(buffer, <font color="#9933CC">&quot;}&#92;&quot;</font>];<font color="#9933CC">&quot;);</font>
+  fprintf(fp, <font color="#9933CC">&quot;%s&#92;n&quot;</font>, buffer);
+
+    <font color="#003399"><i>/* Create all of the edges from the heap blocks to the memory */</i></font>
+  heap = save;
+  count = 0;
+  <b>while</b> (heap)
+  {
+    count++;
+    sprintf(buffer, <font color="#9933CC">&quot;node%i:f2-&gt;memory:f%i;&#92;n&quot;</font>, count, count);
+    fprintf(fp, <font color="#9933CC">&quot;%s&quot;</font>, buffer);
+    heap = heap-&gt;next;
+  }
+  fprintf(fp, <font color="#9933CC">&quot;}&#92;n&quot;</font>);
+
+  fclose(fp);
+  free(buffer);
+}
+
+
+<b>void</b> DUMP_GV(block_info *heap, <b>const</b> <b>char</b> *filename)
+{
+  <font color="990099">#ifdef GRAPHVIZ</font>
+  mm_dump_gv(heap, filename);
+  <font color="990099">#endif</font>
+  <b>if</b> (heap &amp;&amp; filename)
+    <b>return</b>;
+}
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number;
+  number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>void</b> SwapInt(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>int</b> count)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; count; i++)
+  {
+    <b>int</b> r = RandomInt(0, count - 1);
+    SwapInt(&amp;array[i], &amp;array[r]);
+  }
+}
+
+<b>static</b> <b>void</b> *Allocate(block_info *heap, <b>int</b> size, <b>char</b> *label)
+{
+  <b>char</b> *block = mm_allocate(heap, size, label);
+  <b>if</b> (!block)
+  {
+    printf(<font color="#9933CC">&quot;********** Allocation failed. **********&#92;n&quot;</font>);
+    <b>return</b> NULL;
+  }
+
+  memset(block, <font color="#9933CC">'A'</font>, size - 1);
+  block[size - 1] = <font color="#9933CC">'&#92;0'</font>;
+  <b>if</b> (gPrintValues)
+    printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, block);
+
+  <b>return</b> block;
+}
+
+<b>void</b> Deallocate(block_info *heap, <b>void</b> *block)
+{
+  <b>if</b> (mm_deallocate(heap, block) == FAILURE)
+    printf(<font color="#9933CC">&quot;********** Deallocation failed. **********&#92;n&quot;</font>);
+}
+
+<b>void</b> test_alloc1(<b>void</b>)
+{
+  block_info *heap;
+  gPrintValues = <b>true</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_alloc1 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(300, gPolicy);
+    DUMP(heap);
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_alloc1.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_alloc2(<b>void</b>)
+{
+  block_info *heap;
+  gPrintValues = <b>true</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_alloc2 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(300, gPolicy);
+    DUMP(heap);
+    Allocate(heap, 30, <font color="#9933CC">&quot;one&quot;</font>);
+    DUMP(heap);
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_alloc2.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_alloc3(<b>void</b>)
+{
+  block_info *heap;
+  gPrintValues = <b>true</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_alloc3 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(300, gPolicy);
+
+    DUMP(heap);
+
+    Allocate(heap, 10, <font color="#9933CC">&quot;one&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 20, <font color="#9933CC">&quot;two&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 25, <font color="#9933CC">&quot;three&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 30, <font color="#9933CC">&quot;four&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 35, <font color="#9933CC">&quot;five&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 30, <font color="#9933CC">&quot;six&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 20, <font color="#9933CC">&quot;seven&quot;</font>);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_alloc3.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_alloc4(<b>void</b>)
+{
+  block_info *heap;
+  gPrintValues = <b>true</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_alloc4 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(30, gPolicy);
+
+    DUMP(heap);
+    Allocate(heap, 30, <font color="#9933CC">&quot;one&quot;</font>);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_alloc4.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_alloc5(<b>void</b>)
+{
+  block_info *heap;
+  gPrintValues = <b>true</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_alloc5 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(50, gPolicy);
+
+    DUMP(heap);
+    Allocate(heap, 60, <font color="#9933CC">&quot;one&quot;</font>);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_alloc5.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+
+<b>void</b> test_alloc6(<b>void</b>)
+{
+  block_info *heap;
+  gPrintValues = <b>true</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_alloc6 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(150, gPolicy);
+
+    DUMP(heap);
+
+    Allocate(heap, 20, <font color="#9933CC">&quot;one&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 30, <font color="#9933CC">&quot;two&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 40, <font color="#9933CC">&quot;three&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 30, <font color="#9933CC">&quot;four&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 20, <font color="#9933CC">&quot;five&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 30, <font color="#9933CC">&quot;six&quot;</font>);
+    DUMP(heap);
+
+    Allocate(heap, 20, <font color="#9933CC">&quot;seven&quot;</font>);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_alloc6.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_dealloc1(<b>void</b>)
+{
+  block_info *heap;
+  <b>void</b> *block;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_dealloc1 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(100, gPolicy);
+
+    DUMP(heap);
+    block = Allocate(heap, 10, <font color="#9933CC">&quot;one&quot;</font>);
+    DUMP(heap);
+    Deallocate(heap, (<b>char</b> *)block);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_dealloc1.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_dealloc2(<b>void</b>)
+{
+  block_info *b[10];
+  block_info *heap;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_dealloc2 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(100, gPolicy);
+
+    b[1] = Allocate(heap, 10, <font color="#9933CC">&quot;one&quot;</font>);
+           Allocate(heap, 20, <font color="#9933CC">&quot;two&quot;</font>);
+    b[3] = Allocate(heap, 30, <font color="#9933CC">&quot;three&quot;</font>);
+           Allocate(heap, 15, <font color="#9933CC">&quot;four&quot;</font>);
+    b[5] = Allocate(heap, 10, <font color="#9933CC">&quot;five&quot;</font>);
+    DUMP(heap);
+
+    Deallocate(heap, b[1]);
+    DUMP(heap);
+
+    Deallocate(heap, b[3]);
+    DUMP(heap);
+
+    Deallocate(heap, b[5]);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_dealloc2.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_dealloc3(<b>void</b>)
+{
+  block_info *b[10];
+  block_info *heap;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_dealloc3 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(100, gPolicy);
+
+           Allocate(heap, 10, <font color="#9933CC">&quot;one&quot;</font>);
+    b[2] = Allocate(heap, 20, <font color="#9933CC">&quot;two&quot;</font>);
+    b[3] = Allocate(heap, 30, <font color="#9933CC">&quot;three&quot;</font>);
+           Allocate(heap, 15, <font color="#9933CC">&quot;four&quot;</font>);
+           Allocate(heap, 10, <font color="#9933CC">&quot;five&quot;</font>);
+    DUMP(heap);
+
+    Deallocate(heap, b[2]);
+    DUMP(heap);
+
+    Deallocate(heap, b[3]);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_dealloc3.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_dealloc4(<b>void</b>)
+{
+  block_info *b[10];
+  block_info *heap;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_dealloc4 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(100, gPolicy);
+
+           Allocate(heap, 10, <font color="#9933CC">&quot;one&quot;</font>);
+    b[2] = Allocate(heap, 20, <font color="#9933CC">&quot;two&quot;</font>);
+    b[3] = Allocate(heap, 30, <font color="#9933CC">&quot;three&quot;</font>);
+           Allocate(heap, 15, <font color="#9933CC">&quot;four&quot;</font>);
+           Allocate(heap, 10, <font color="#9933CC">&quot;five&quot;</font>);
+    DUMP(heap);
+
+    Deallocate(heap, b[3]);
+    DUMP(heap);
+
+    Deallocate(heap, b[2]);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_dealloc4.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_dealloc5(<b>void</b>)
+{
+  block_info *b[10];
+  block_info *heap;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_dealloc5 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(100, gPolicy);
+
+    b[1] = Allocate(heap, 10, <font color="#9933CC">&quot;one&quot;</font>);
+    b[2] = Allocate(heap, 20, <font color="#9933CC">&quot;two&quot;</font>);
+    b[3] = Allocate(heap, 30, <font color="#9933CC">&quot;three&quot;</font>);
+    b[4] = Allocate(heap, 15, <font color="#9933CC">&quot;four&quot;</font>);
+    b[5] = Allocate(heap, 10, <font color="#9933CC">&quot;five&quot;</font>);
+    DUMP(heap);
+
+    Deallocate(heap, b[1]);
+    DUMP(heap);
+
+    Deallocate(heap, b[3]);
+    DUMP(heap);
+
+    Deallocate(heap, b[5]);
+    DUMP(heap);
+
+    Deallocate(heap, b[4]);
+    DUMP(heap);
+
+    Deallocate(heap, b[2]);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_dealloc5.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_ada1(<b>void</b>)
+{
+  block_info *b[10];
+  block_info *heap;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_ada1 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(1000, gPolicy);
+
+    b[1] = Allocate(heap, 100, <font color="#9933CC">&quot;one&quot;</font>);
+    b[2] = Allocate(heap, 200, <font color="#9933CC">&quot;two&quot;</font>);
+    b[3] = Allocate(heap, 50, <font color="#9933CC">&quot;three&quot;</font>);
+    b[4] = Allocate(heap, 50, <font color="#9933CC">&quot;four&quot;</font>);
+    b[5] = Allocate(heap, 100, <font color="#9933CC">&quot;five&quot;</font>);
+    b[6] = Allocate(heap, 500, <font color="#9933CC">&quot;six&quot;</font>);
+
+    Deallocate(heap, b[2]);
+    Deallocate(heap, b[4]);
+    DUMP(heap);
+
+    Allocate(heap, 50, <font color="#9933CC">&quot;seven&quot;</font>);
+    DUMP(heap);
+    Allocate(heap, 200, <font color="#9933CC">&quot;eight&quot;</font>);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_ada1.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>void</b> test_ada2(<b>void</b>)
+{
+  block_info *b[20];
+  block_info *heap;
+  gPrintValues = <b>false</b>;
+  printf(<font color="#9933CC">&quot;&#92;n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; test_ada2 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&#92;n&quot;</font>);
+
+  heap = mm_create(1200, gPolicy);
+
+    b[1] = Allocate(heap, 100, <font color="#9933CC">&quot;one&quot;</font>);
+    b[2] = Allocate(heap, 200, <font color="#9933CC">&quot;two&quot;</font>);
+    b[3] = Allocate(heap, 300, <font color="#9933CC">&quot;three&quot;</font>);
+    b[4] = Allocate(heap, 100, <font color="#9933CC">&quot;four&quot;</font>);
+    b[5] = Allocate(heap, 100, <font color="#9933CC">&quot;five&quot;</font>);
+    b[6] = Allocate(heap, 50, <font color="#9933CC">&quot;six&quot;</font>);
+    b[7] = Allocate(heap, 50, <font color="#9933CC">&quot;seven&quot;</font>);
+    b[8] = Allocate(heap, 200, <font color="#9933CC">&quot;eight&quot;</font>);
+    DUMP(heap);
+
+    Deallocate(heap, b[1]);
+    Deallocate(heap, b[3]);
+    Deallocate(heap, b[5]);
+    Deallocate(heap, b[7]);
+    DUMP(heap);
+
+    b[9] = Allocate(heap, 100, <font color="#9933CC">&quot;nine&quot;</font>);
+    DUMP(heap);
+    b[10] = Allocate(heap, 10, <font color="#9933CC">&quot;ten&quot;</font>);
+    DUMP(heap);
+    b[11] = Allocate(heap, 100, <font color="#9933CC">&quot;eleven&quot;</font>);
+    DUMP(heap);
+    b[12] = Allocate(heap, 40, <font color="#9933CC">&quot;twelve&quot;</font>);
+    DUMP(heap);
+    b[13] = Allocate(heap, 50, <font color="#9933CC">&quot;thirteen&quot;</font>);
+    DUMP(heap);
+    b[14] = Allocate(heap, 150, <font color="#9933CC">&quot;fourteen&quot;</font>);
+    DUMP(heap);
+    b[15] = Allocate(heap, 150, <font color="#9933CC">&quot;fifteen&quot;</font>);
+    DUMP(heap);
+
+    DUMP_GV(heap, <font color="#9933CC">&quot;gv_ada2.txt&quot;</font>);
+  mm_destroy(heap);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>unsigned</b> test = 0;
+  <b>unsigned</b> policy = 0;
+  <b>unsigned</b> count;
+  <b>void</b> (*fp[])(<b>void</b>) = {
+                        test_alloc1,   <font color="#003399"><i>/*  1 */</i></font>
+                        test_alloc2,   <font color="#003399"><i>/*  2 */</i></font>
+                        test_alloc3,   <font color="#003399"><i>/*  3 */</i></font>
+                        test_alloc4,   <font color="#003399"><i>/*  4 */</i></font>
+                        test_alloc5,   <font color="#003399"><i>/*  5 */</i></font>
+                        test_alloc6,   <font color="#003399"><i>/*  6 */</i></font>
+                        test_dealloc1, <font color="#003399"><i>/*  7 */</i></font>
+                        test_dealloc2, <font color="#003399"><i>/*  8 */</i></font>
+                        test_dealloc3, <font color="#003399"><i>/*  9 */</i></font>
+                        test_dealloc4, <font color="#003399"><i>/* 10 */</i></font>
+                        test_dealloc5, <font color="#003399"><i>/* 11 */</i></font>
+                        test_ada1,     <font color="#003399"><i>/* 12 */</i></font>
+                        test_ada2      <font color="#003399"><i>/* 13 */</i></font>
+                       };
+
+  count = <b>sizeof</b>(fp) / <b>sizeof</b>(*fp);
+
+  srand(4);
+
+  <b>if</b> (argc &gt; 1)
+    test = atoi(argv[1]);
+  <b>if</b> (argc &gt; 2)
+    policy = atoi(argv[2]);
+
+  <b>if</b> (test &gt; count)
+    test = 0;
+
+  <b>if</b> (policy)
+    gPolicy = mmpBestFit;
+  <b>else</b>
+    gPolicy = mmpFirstFit;
+
+  <b>if</b> (test)
+    fp[test - 1]();
+  <b>else</b>
+  {
+    <b>unsigned</b> i;
+    <b>for</b> (i = 0; i &lt; count; i++)
+      fp[i]();
+  }
+
+  <font color="#003399"><i>/*
+  test_alloc1();
+  test_alloc2();
+  test_alloc3();
+  test_alloc4();
+  test_alloc5();
+  test_alloc6();
+  test_dealloc1();
+  test_dealloc2();
+  test_dealloc3();
+  test_dealloc4();
+  test_dealloc5();
+  test_ada1();
+  */</i></font>
+ 
+  <font color="#003399"><i>/*printf(&quot;policy is %s fit&#92;n&quot;, policy ? &quot;best&quot; : &quot;first&quot;);*/</i></font>
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

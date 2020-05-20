@@ -1,0 +1,589 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>The pow Function</title>
+</head>
+
+<body>  
+<center><h1>The <tt>pow</tt> Function</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Behind the Scenes of a Library Function
+</p>
+Students that are new to programming often make poor decisions when it comes to choosing a particular
+technique to use. For the most part, this is unavoidable, as they do not have the necessary experience
+when they are first starting out. As the students gain more experience with programming, either in lectures
+or actual hands-on programming, they begin to understand why one technique is preferable to another.
+<p>
+A classic example of this is when new students need to square a number
+(e.g. x<sup>2</sup>). Instinctively, they look for the <i>"exponent"</i> or <i>"power"</i> operator and when they
+realize that there isn't one, they look for a function to do the job. Incidentally, some languages do
+have an exponent operator. BASIC uses the caret: <big><tt>^</tt></big> and FORTRAN and Python both 
+use two asterisks: <big><tt>**</tt></big>
+<p>
+However, for integer exponents, it is always better to simply do the multiplication rather than call
+the (very expensive) <tt><b>pow</b></tt> function. Let's look at a simple example.
+<p>
+	
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>Using the <tt>pow</tt> function</th><th>Using simple multiplication</th></tr>
+<tr valign="top">
+<td>
+<pre>
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+<font color="990099">#include &lt;math.h&gt;  /* pow    */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> count = 20000000;
+  <b>double</b> foo = 0.0;
+  <b>int</b> print;
+
+  scanf("%i", &print);
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+    <font color="blue"><b>foo += pow(i, 2);</b></font>
+
+  <b>if</b> (print)
+    printf("%f", foo);
+  
+  <b>return</b> 0;
+}
+</code></pre>	
+</pre>
+</td>
+<td>
+<pre>
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> i;
+  <b>int</b> count = 20000000;
+  <b>double</b> foo = 0.0;
+  <b>int</b> print;
+
+  scanf("%i", &print);
+
+  <b>for</b> (i = 0; i &lt; count; i++)
+    <font color="blue"><b>foo += i * i;</b></font>
+
+  <b>if</b> (print)
+    printf("%f", foo);
+  
+  <b>return</b> 0;
+}
+</code></pre>	
+</pre>
+</td>
+</tr></table>
+</blockquote>
+The reason for the <tt>print</tt> variable is to prevent the compilers from "optimizing away"
+the code (since <b>foo</b> isn't going to be used anywhere).
+<p>
+
+The first program above uses the <tt><b>pow</b></tt> function and the second one simply multiplies the number
+by itself, which is exactly what squaring a number does. Both programs perform their operation 20,000,000 times.
+We can time these programs to see if there is any difference. The results are very interesting.
+<p>
+<p>
+	
+<table border=0 cellspacing=0 cellpadding=4>
+<tr><th>These timings were done with<br> this function call: <big><tt>pow(i, 2)</tt></big></th><th>These timings were done with<br> this function call: <big><tt>pow(i, 2.1)</tt></big></th></tr>
+<tr valign="top">
+<td>
+
+<blockquote>
+GNU gcc 7.2.0:
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2)</tt></th><th><tt>i * i</tt></th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-O0
+-O1
+-O2
+-O3
+</pre>
+</td>
+<td align="center">
+<pre>
+2.036
+0.477
+0.165
+0.163
+</pre>
+</td>
+<td align="center">
+<pre>
+0.487
+0.483
+0.165
+0.163
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote>
+Microsoft 19.0 (VS 2014):
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2)</tt></th><th><tt>i * i</tt></th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-Od
+-O2
+-Ox
+</pre>
+</td>
+<td align="center">
+<pre>
+9.55
+8.32
+8.35
+</pre>
+</td>
+<td align="center">
+<pre>
+0.53
+0.28
+0.27
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+
+<td>
+
+<blockquote>
+GNU gcc 7.2.0:
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2.1)</tt></th><th><tt>i * i</tt></th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-O0
+-O1
+-O2
+-O3
+</pre>
+</td>
+<td align="center">
+<pre>
+11.003
+10.823
+10.670
+10.747
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+----
+----
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote>
+Microsoft 19.0 (VS 2014):
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2.1)</tt></th><th><tt>i * i</tt></th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-Od
+-O2
+-Ox
+</pre>
+</td>
+<td align="center">
+<pre>
+9.98
+8.31
+8.42
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+----
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+</tr></table>
+</td>
+</tr></table>
+
+<!--
+
+There are 4 timings (columns) for each compile. The first two columns are the timings if the programs above removed
+the <tt><font color="red"><b>printf</b></font></tt> statement. This was just shown here to demonstrate how
+some compilers, upon seeing that a value is no longer needed, will optimize the code in such a way as to remove
+it from the program. The second two columns are the timings when the <tt><font color="red"><b>printf</b></font></tt>
+statement is included in the program (as is shown above).
+
+<blockquote>
+GNU gcc 4.3.2:
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2)</tt></th><th><tt>i * i</tt></th><th>pow w/printf</th><th>i*i w/printf</th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-O0
+-O1
+-O2
+-O3
+</pre>
+</td>
+<td align="center">
+<pre>
+0.16
+0.09
+0.08
+0.10
+</pre>
+</td>
+<td align="center">
+<pre>
+0.16
+0.09
+0.08
+0.07
+</pre>
+</td>
+<td align="center">
+<pre>
+0.13
+0.14
+0.14
+0.11
+</pre>
+</td>
+<td align="center">
+<pre>
+0.15
+0.13
+0.15
+0.12
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote>
+Microsoft 9.0:
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2)</tt></th><th><tt>i * i</tt></th><th>pow w/printf</th><th>i*i w/printf</th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-Od
+-O2
+-Ox
+</pre>
+</td>
+<td align="center">
+<pre>
+2.11
+0.09
+0.08
+</pre>
+</td>
+<td align="center">
+<pre>
+0.14
+0.07
+0.08
+</pre>
+</td>
+<td align="center">
+<pre>
+2.12
+2.09
+2.16
+</pre>
+</td>
+<td align="center">
+<pre>
+0.13
+0.09
+0.08
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote>
+Borland 6.20
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2)</tt></th><th><tt>i * i</tt></th><th>pow w/printf</th><th>i*i w/printf</th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-Od
+-O2
+</pre>
+</td>
+<td align="center">
+<pre>
+2.37
+0.13
+</pre>
+</td>
+<td align="center">
+<pre>
+0.80
+0.09
+</pre>
+</td>
+<td align="center">
+<pre>
+2.32
+2.08
+</pre>
+</td>
+<td align="center">
+<pre>
+0.79
+0.09
+</pre>
+</td>
+</tr></table>
+</blockquote>
+</td>
+
+<td></td>
+
+<td>
+
+<blockquote>
+GNU gcc 4.3.2:
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2.1)</tt></th><th><tt>i * i</tt></th><th>pow w/printf</th><th>i*i w/printf</th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-O0
+-O1
+-O2
+-O3
+</pre>
+</td>
+<td align="center">
+<pre>
+13.19
+13.08
+13.05
+13.02
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+----
+----
+</pre>
+</td>
+<td align="center">
+<pre>
+12.98
+13.11
+13.00
+13.06
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+----
+----
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote>
+Microsoft 9.0:
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2.1)</tt></th><th><tt>i * i</tt></th><th>pow w/printf</th><th>i*i w/printf</th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-Od
+-O2
+-Ox
+</pre>
+</td>
+<td align="center">
+<pre>
+2.16
+0.09
+0.08
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+----
+</pre>
+</td>
+<td align="center">
+<pre>
+2.22
+2.14
+2.12
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+----
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote>
+Borland 6.20
+<table border=1 cellspacing=1 cellpadding=6>
+<tr><th>Optimization</th><th><tt>pow(i, 2.1)</tt></th><th><tt>i * i</tt></th><th>pow w/printf</th><th>i*i w/printf</th></tr>
+<tr valign="top">
+<td align="center">
+<pre>
+-Od
+-O2
+</pre>
+</td>
+<td align="center">
+<pre>
+12.00
+00.09
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+</pre>
+</td>
+<td align="center">
+<pre>
+12.04
+ 2.05
+</pre>
+</td>
+<td align="center">
+<pre>
+----
+----
+</pre>
+</td>
+</tr></table>
+</td>
+</tr></table>
+-->
+
+<p>
+
+To really understand exactly what's going on in the <tt>pow</tt> function, you have to look at the
+source code. The <tt>pow(x, y)</tt> function is in <a href="w_pow.c.html">w_pow.c</a>, which, in turn,
+calls another function, <tt>__ieee754_pow(x,y)</tt>, in <a href="e_pow.c.html">e_pow.c</a>. (This
+code is from the GNU gcc libraries).
+
+Look at that code and you'll see
+why the function is so much slower than simply doing <tt>i * i</tt>. Also, you'll see this near the
+beginning of the function:
+<p>
+	
+<blockquote><pre>
+<b>if</b> (y == 1.0) <b>return</b> x;
+<b>if</b> (y == 2.0) <b>return</b> x*x;     <font color="blue"><b>&lt;---- significant optimization!!!</b></font>
+<b>if</b> (y == -1.0) <b>return</b> 1.0/x;
+<b>if</b> (y == 0) <b>return</b> 1.0;
+</pre></blockquote>
+
+That explains why there is little time difference between calling the <tt>pow</tt> function with an exponent of 2 and 
+simply multiplying the two numbers together. I haven't looked at the source code for the other compilers, but I would
+guess that those libraries are not optimizing like the GNU library does.
+
+
+<p>
+
+<a href="w_pow.c.html">w_pow.c</a>
+<br>
+<a href="e_pow.c.html">e_pow.c</a>
+<br>
+<p>
+<a href="http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Optimize-Options.html#Optimize-Options">Options That Control Optimization</a> for the gcc compiler.
+This is an advanced document that explains all of the optimizations that the GNU gcc compiler can do to your code.
+	
+
+</body>
+</html>
+
+<sub></sub>
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

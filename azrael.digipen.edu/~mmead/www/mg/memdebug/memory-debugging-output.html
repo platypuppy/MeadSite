@@ -1,0 +1,792 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Memory Debugging Output</title>
+</head>
+
+<style>
+</style>
+
+<body>  
+<center>
+<h1>Memory Debugging Output<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+Quick links:
+<ul>
+  <li><a href="memory-debugging-output.html#DRMEMMIN32">Dr. Memory Output (32-bit MinGW on Windows)</a></li>
+  <li><a href="memory-debugging-output.html#DRMEMMIN64">Dr. Memory Output (64-bit MinGW on Windows)</a></li>
+  <li><a href="memory-debugging-output.html#DRMEMCL32">Dr. Memory Output (32-bit Microsoft on Windows)</a></li>
+  <li><a href="memory-debugging-output.html#DRMEMCL64">Dr. Memory Output (64-bit Microsoft on Windows)</a></li>
+  <li><a href="memory-debugging-output.html#VALGRIND64">Valgrind Output (64-bit GNU g++ on Linux)</a></li>
+</ul>
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p class="SectionHeader">
+Output from Dr. Memory
+</p>
+
+<a name="DRMEMMIN32">
+<b>32-bit MinGW:</b> (All of the false positive 28-byte memory leaks have been removed.)
+</a>
+<p>
+<ol>
+
+<li>test1 - simple memory leak
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #2: LEAK 123 direct bytes 0x02d60310-0x02d6038b + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ # 1 test1                                    [c:\Users\mmead\drmem/mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 2 main                                     [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new[], freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+<b>~~Dr.M~~ # 1 test2                                         [c:\Users\mmead\drmem/mem.bugs.cpp:13]</b>
+<b>~~Dr.M~~ # 2 main                                          [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.292 in thread 5188
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ Note: # 1 test2                                    [c:\Users\mmead\drmem/mem.bugs.cpp:12]</b>
+<b>~~Dr.M~~ Note: # 2 main                                     [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i> 
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with operator delete[]</b>
+~~Dr.M~~ # 0 replace_operator_delete_array               [d:\drmemory_package\common\alloc_replace.c:2998]
+<b>~~Dr.M~~ # 1 test3                                       [c:\Users\mmead\drmem/mem.bugs.cpp:19]</b>
+<b>~~Dr.M~~ # 2 main                                        [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.307 in thread 112
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new               [d:\drmemory_package\common\alloc_replace.c:2899]
+<b>~~Dr.M~~ Note: # 1 test3                              [c:\Users\mmead\drmem/mem.bugs.cpp:18]</b>
+<b>~~Dr.M~~ Note: # 2 main                               [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with malloc, freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+<b>~~Dr.M~~ # 1 test4                                         [c:\Users\mmead\drmem/mem.bugs.cpp:25]</b>
+<b>~~Dr.M~~ # 2 main                                          [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.309 in thread 5688
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_malloc               [d:\drmemory_package\common\alloc_replace.c:2576]
+<b>~~Dr.M~~ Note: # 1 test4                        [c:\Users\mmead\drmem/mem.bugs.cpp:24]</b>
+<b>~~Dr.M~~ Note: # 2 main                         [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test5 - allocate with <i>new</i>, deallocate with <i>free</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with free</b>
+~~Dr.M~~ # 0 replace_free               [d:\drmemory_package\common\alloc_replace.c:2706]
+<b>~~Dr.M~~ # 1 test5                      [c:\Users\mmead\drmem/mem.bugs.cpp:31]</b>
+<b>~~Dr.M~~ # 2 main                       [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.308 in thread 4612
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new               [d:\drmemory_package\common\alloc_replace.c:2899]
+<b>~~Dr.M~~ Note: # 1 test5                              [c:\Users\mmead\drmem/mem.bugs.cpp:30]</b>
+<b>~~Dr.M~~ Note: # 2 main                               [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test6 - buffer overflow</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: UNADDRESSABLE ACCESS beyond heap bounds: writing 0x02ed0315-0x02ed0316 1 byte(s) within 0x02ed0314-0x02ed0316</b>
+<b>~~Dr.M~~ # 0 test6               [c:\Users\mmead\drmem/mem.bugs.cpp:37]</b>
+<b>~~Dr.M~~ # 1 main                [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.273 in thread 5480
+~~Dr.M~~ Note: refers to 0 byte(s) beyond last valid byte in prior malloc
+~~Dr.M~~ Note: prev lower malloc:  0x02ed0310-0x02ed0315
+~~Dr.M~~ Note: instruction: data16 mov    $0x0064 -> 0x04(%eax)
+</pre></blockquote>
+</li>
+
+<li>test7 - uninitialized read
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: UNINITIALIZED READ: reading register edx</b>
+~~Dr.M~~ # 0 replace_strlen               [d:\drmemory_package\drmemory\replace.c:412]
+~~Dr.M~~ # 1 libstdc++-6.dll!?           +0x0      (0x6fef4999 <libstdc++-6.dll+0xb4999>)
+<b>~~Dr.M~~ # 2 main                         [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.291 in thread 848
+~~Dr.M~~ Note: instruction: test   %edx %edx
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #2: UNINITIALIZED READ: reading register eax</b>
+~~Dr.M~~ # 0 msvcrt.dll!ftell    +0x19d    (0x762f962d &lt;msvcrt.dll+0x7962d>)
+~~Dr.M~~ # 1 msvcrt.dll!fwrite   +0x5a     (0x762f96db &lt;msvcrt.dll+0x796db>)
+~~Dr.M~~ # 2 libstdc++-6.dll!?   +0x0      (0x6fe5eb96 <libstdc++-6.dll+0x1eb96>)
+~~Dr.M~~ # 3 libstdc++-6.dll!?   +0x0      (0x6fef49a9 <libstdc++-6.dll+0xb49a9>)
+<b>~~Dr.M~~ # 4 main                 [c:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.323 in thread 848
+~~Dr.M~~ Note: instruction: cmp    %eax $0xffffffff
+</pre></blockquote>
+</li>
+
+</ol>
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p>
+<hr width="90%">
+<p>
+
+<a name="DRMEMMIN64">
+<b>64-bit MinGW:</b>
+</a>
+<p>
+<ol>
+
+<li>test1 - simple memory leak
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x00000000027c0ac0-0x00000000027c0b3b + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ # 1 libwinpthread-1.dll!?                   +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ # 3 msvcrt.dll!errno     
+~~Dr.M~~ # 4 libstdc++-6.dll!?                       +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ # 5 test1                                    [C:\Users\mmead\drmem/mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 6 main                                     [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new[], freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+~~Dr.M~~ # 1 libwinpthread-1.dll!?                        +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ # 3 msvcrt.dll!errno     
+~~Dr.M~~ # 4 libstdc++-6.dll!?                            +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ # 5 test2                                         [C:\Users\mmead\drmem/mem.bugs.cpp:13]</b>
+<b>~~Dr.M~~ # 6 main                                          [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.156 in thread 1652
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ Note: # 1 libwinpthread-1.dll!?                   +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ Note: # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ Note: # 3 msvcrt.dll!errno     
+~~Dr.M~~ Note: # 4 libstdc++-6.dll!?                       +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ Note: # 5 test2                                    [C:\Users\mmead\drmem/mem.bugs.cpp:12]</b>
+<b>~~Dr.M~~ Note: # 6 main                                     [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i> 
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with operator delete[]</b>
+~~Dr.M~~ # 0 replace_operator_delete_array_nothrow               [d:\drmemory_package\common\alloc_replace.c:2998]
+~~Dr.M~~ # 1 libwinpthread-1.dll!?                              +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ # 3 msvcrt.dll!errno     
+~~Dr.M~~ # 4 libstdc++-6.dll!?                                  +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ # 5 test3                                               [C:\Users\mmead\drmem/mem.bugs.cpp:19]</b>
+<b>~~Dr.M~~ # 6 main                                                [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.140 in thread 5964
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new               [d:\drmemory_package\common\alloc_replace.c:2899]
+~~Dr.M~~ Note: # 1 libwinpthread-1.dll!?             +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ Note: # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ Note: # 3 msvcrt.dll!errno     
+~~Dr.M~~ Note: # 4 libstdc++-6.dll!?                 +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ Note: # 5 test3                              [C:\Users\mmead\drmem/mem.bugs.cpp:18]</b>
+<b>~~Dr.M~~ Note: # 6 main                               [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with malloc, freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+~~Dr.M~~ # 1 libwinpthread-1.dll!?                        +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ # 3 msvcrt.dll!errno     
+~~Dr.M~~ # 4 libstdc++-6.dll!?                            +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+~~Dr.M~~ # 5 test4                                         [C:\Users\mmead\drmem/mem.bugs.cpp:25]</b>
+~~Dr.M~~ # 6 main                                          [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.296 in thread 5492
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_malloc               [d:\drmemory_package\common\alloc_replace.c:2576]
+~~Dr.M~~ Note: # 1 libwinpthread-1.dll!?       +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ Note: # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ Note: # 3 msvcrt.dll!errno     
+~~Dr.M~~ Note: # 4 libstdc++-6.dll!?           +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ Note: # 5 test4                        [C:\Users\mmead\drmem/mem.bugs.cpp:24]</b>
+<b>~~Dr.M~~ Note: # 6 main                         [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test5 - allocate with <i>new</i>, deallocate with <i>free</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with free</b>
+~~Dr.M~~ # 0 replace_free                [d:\drmemory_package\common\alloc_replace.c:2706]
+~~Dr.M~~ # 1 libwinpthread-1.dll!?      +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ # 3 msvcrt.dll!errno     
+~~Dr.M~~ # 4 libstdc++-6.dll!?          +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ # 5 test5                       [C:\Users\mmead\drmem/mem.bugs.cpp:31]</b>
+<b>~~Dr.M~~ # 6 main                        [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.203 in thread 4372
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new               [d:\drmemory_package\common\alloc_replace.c:2899]
+~~Dr.M~~ Note: # 1 libwinpthread-1.dll!?             +0x0      (0x0000000064944d85 &lt;libwinpthread-1.dll+0x4d85&gt;)
+~~Dr.M~~ Note: # 2 msvcrt.dll!getptd_noexit
+~~Dr.M~~ Note: # 3 msvcrt.dll!errno     
+~~Dr.M~~ Note: # 4 libstdc++-6.dll!?                 +0x0      (0x000000006fcdcff8 &lt;libstdc++-6.dll+0x9cff8&gt;)
+<b>~~Dr.M~~ Note: # 5 test5                              [C:\Users\mmead\drmem/mem.bugs.cpp:30]</b>
+<b>~~Dr.M~~ Note: # 6 main                               [C:\Users\mmead\drmem/mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test6 - buffer overflow</i>
+<blockquote><pre>
+</pre></blockquote>
+</li>
+
+<li>test7 - uninitialized read
+<blockquote><pre>
+</pre></blockquote>
+</li>
+
+</ol>
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p>
+<hr width="90%">
+<p>
+
+<a name="DRMEMCL32">
+<b>32-bit Microsoft:</b>
+</a>
+<p>
+<ol>
+
+<li>test1 - simple memory leak
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x01aec028-0x01aec0a3 + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ # 1 test1                                    [c:\users\mmead\drmem\mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 2 main                                     [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new[], freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+~~Dr.M~~ # 1 operator delete                               [f:\dd\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp:31]
+<b>~~Dr.M~~ # 2 test2                                         [c:\users\mmead\drmem\mem.bugs.cpp:13]</b>
+<b>~~Dr.M~~ # 3 main                                          [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.382 in thread 6548
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ Note: # 1 test2                                    [c:\users\mmead\drmem\mem.bugs.cpp:12]</b>
+<b>~~Dr.M~~ Note: # 2 main                                     [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i> 
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with operator delete[]</b>
+~~Dr.M~~ # 0 replace_operator_delete_array               [d:\drmemory_package\common\alloc_replace.c:2998]
+<b>~~Dr.M~~ # 1 test3                                       [c:\users\mmead\drmem\mem.bugs.cpp:19]</b>
+<b>~~Dr.M~~ # 2 main                                        [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.407 in thread 2876
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new               [d:\drmemory_package\common\alloc_replace.c:2899]
+<b>~~Dr.M~~ Note: # 1 test3                              [c:\users\mmead\drmem\mem.bugs.cpp:18]</b>
+<b>~~Dr.M~~ Note: # 2 main                               [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with malloc, freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+~~Dr.M~~ # 1 operator delete                               [f:\dd\vctools\crt\vcstartup\src\heap\delete_scalar_size.cpp:31]
+<b>~~Dr.M~~ # 2 test4                                         [c:\users\mmead\drmem\mem.bugs.cpp:25]</b>
+<b>~~Dr.M~~ # 3 main                                          [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:00.388 in thread 1652
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_malloc               [d:\drmemory_package\common\alloc_replace.c:2576]
+<b>~~Dr.M~~ Note: # 1 test4                        [c:\users\mmead\drmem\mem.bugs.cpp:24]</b>
+<b>~~Dr.M~~ Note: # 2 main                         [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test5 - allocate with <i>new</i>, deallocate with <i>free</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with free</b>
+~~Dr.M~~ # 0 replace_free               [d:\drmemory_package\common\alloc_replace.c:2706]
+<b>~~Dr.M~~ # 1 test5                      [c:\users\mmead\drmem\mem.bugs.cpp:31]</b>
+<b>~~Dr.M~~ # 2 main                       [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:01.006 in thread 2932
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new               [d:\drmemory_package\common\alloc_replace.c:2899]
+<b>~~Dr.M~~ Note: # 1 test5                              [c:\users\mmead\drmem\mem.bugs.cpp:30]</b>
+<b>~~Dr.M~~ Note: # 2 main                               [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test6 - buffer overflow</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: UNADDRESSABLE ACCESS beyond heap bounds: writing 0x016dc02d-0x016dc02e 1 byte(s)</b>
+~~Dr.M~~ # 0 replace_strcpy               [d:\drmemory_package\drmemory\replace.c:598]
+<b>~~Dr.M~~ # 1 test6                        [c:\users\mmead\drmem\mem.bugs.cpp:37]</b>
+<b>~~Dr.M~~ # 2 main                         [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+~~Dr.M~~ Note: @0:00:01.022 in thread 988
+~~Dr.M~~ Note: refers to 0 byte(s) beyond last valid byte in prior malloc
+~~Dr.M~~ Note: prev lower malloc:  0x016dc028-0x016dc02d
+~~Dr.M~~ Note: instruction: mov    $0x00 -&gt; (%eax)
+</pre></blockquote>
+</li>
+
+<li>test7 - uninitialized read
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x000001814935e680-0x000001814935e6fb + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array                           [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ # 1 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ # 2 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ # 3 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ # 4 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ # 5 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ # 6 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ # 7 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ # 8 test1                                                [c:\users\mmead\drmem\mem.bugs.cpp:7]</b>
+~~Dr.M~~ # 9 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ #10 atexit                                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ #11 __scrt_common_main_seh                               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+</pre></blockquote>
+</li>
+
+</ol>
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p>
+<hr width="90%">
+<p>
+
+
+<a name="DRMEMCL64">
+<b>64-bit Microsoft:</b>
+</a>
+<p>
+<ol>
+
+<li>test1 - simple memory leak
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: LEAK 123 direct bytes 0x01aec028-0x01aec0a3 + 0 indirect bytes</b>
+~~Dr.M~~ # 0 replace_operator_new_array               [d:\drmemory_package\common\alloc_replace.c:2928]
+<b>~~Dr.M~~ # 1 test1                                    [c:\users\mmead\drmem\mem.bugs.cpp:7]</b>
+<b>~~Dr.M~~ # 2 main                                     [c:\users\mmead\drmem\mem.bugs.cpp:72]</b>
+</pre></blockquote>
+</li>
+
+<li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new[], freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow               [d:\drmemory_package\common\alloc_replace.c:2974]
+~~Dr.M~~ # 1 std::_Facet_Register                          [f:\dd\vctools\crt\crtw32\stdcpp\locale0.cpp:73]
+~~Dr.M~~ # 2 std::use_facet&lt;&gt;                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ # 3 std::locale::~locale                          [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ # 4 std::ctype&lt;&gt;::widen                           [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ # 5 std::basic_ios&lt;&gt;::widen                       [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ # 6 std::ios_base::_Init                          [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+<b>~~Dr.M~~ # 7 test2                                         [c:\users\mmead\drmem\mem.bugs.cpp:13]</b>
+~~Dr.M~~ # 8 atexit                                        [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ # 9 __scrt_common_main_seh                        [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+~~Dr.M~~ #10 KERNEL32.dll!BaseThreadInitThunk             +0x13     (0x00007fff1db73034 &lt;KERNEL32.dll+0x13034&gt;)
+~~Dr.M~~ Note: @0:00:00.530 in thread 4848
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new_array                           [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ Note: # 1 std::_Facet_Register                                 [f:\dd\vctools\crt\crtw32\stdcpp\locale0.cpp:73]
+~~Dr.M~~ Note: # 2 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ Note: # 3 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ Note: # 4 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ Note: # 5 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ Note: # 6 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ Note: # 7 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ Note: # 8 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ Note: # 9 test2                                                [c:\users\mmead\drmem\mem.bugs.cpp:12]</b>
+~~Dr.M~~ Note: #10 atoi                                                 [minkernel\crts\ucrt\src\appcrt\convert\atox.cpp:22]
+~~Dr.M~~ Note: #11 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+</pre></blockquote>
+</li>
+
+<li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i> 
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with operator delete[]</b>
+~~Dr.M~~ # 0 replace_operator_delete_array_nothrow               [d:\drmemory_package\common\alloc_replace.c:2998]
+~~Dr.M~~ # 1 std::_Facet_Register                                [f:\dd\vctools\crt\crtw32\stdcpp\locale0.cpp:73]
+~~Dr.M~~ # 2 std::use_facet&lt;&gt;                                    [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ # 3 std::locale::~locale                                [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ # 4 std::ctype&lt;&gt;::widen                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ # 5 std::basic_ios&lt;&gt;::widen                             [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ # 6 std::ios_base::_Init                                [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+<b>~~Dr.M~~ # 7 test3                                               [c:\users\mmead\drmem\mem.bugs.cpp:19]</b>
+~~Dr.M~~ # 8 atexit                                              [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ # 9 __scrt_common_main_seh                              [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+~~Dr.M~~ #10 KERNEL32.dll!BaseThreadInitThunk                   +0x13     (0x00007fff1db73034 &lt;KERNEL32.dll+0x13034&gt;)
+~~Dr.M~~ Note: @0:00:00.546 in thread 224
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new                                 [d:\drmemory_package\common\alloc_replace.c:2899]
+~~Dr.M~~ Note: # 1 std::_Facet_Register                                 [f:\dd\vctools\crt\crtw32\stdcpp\locale0.cpp:73]
+~~Dr.M~~ Note: # 2 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ Note: # 3 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ Note: # 4 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ Note: # 5 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ Note: # 6 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ Note: # 7 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ Note: # 8 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ Note: # 9 test3                                                [c:\users\mmead\drmem\mem.bugs.cpp:18]</b>
+~~Dr.M~~ Note: #10 atoi                                                 [minkernel\crts\ucrt\src\appcrt\convert\atox.cpp:22]
+~~Dr.M~~ Note: #11 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+</pre></blockquote>
+</li>
+
+<li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with malloc, freed with operator delete</b>
+~~Dr.M~~ # 0 replace_operator_delete_nothrow                      [d:\drmemory_package\common\alloc_replace.c:2974]
+~~Dr.M~~ # 1 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ # 2 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ # 3 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ # 4 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ # 5 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ # 6 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ # 7 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ # 8 test4                                                [c:\users\mmead\drmem\mem.bugs.cpp:25]</b>
+~~Dr.M~~ # 9 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ #10 atexit                                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ #11 __scrt_common_main_seh                               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+~~Dr.M~~ #12 KERNEL32.dll!BaseThreadInitThunk                    +0x13     (0x00007fff1db73034 &lt;KERNEL32.dll+0x13034&gt;)
+~~Dr.M~~ Note: @0:00:00.569 in thread 6440
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_malloc                                       [d:\drmemory_package\common\alloc_replace.c:2576]
+~~Dr.M~~ Note: # 1 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ Note: # 2 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ Note: # 3 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ Note: # 4 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ Note: # 5 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ Note: # 6 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ Note: # 7 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ Note: # 8 test4                                                [c:\users\mmead\drmem\mem.bugs.cpp:24]</b>
+~~Dr.M~~ Note: # 9 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ Note: #10 atexit                                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ Note: #11 __scrt_common_main_seh                               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+</pre></blockquote>
+</li>
+
+<li>test5 - allocate with <i>new</i>, deallocate with <i>free</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: INVALID HEAP ARGUMENT: allocated with operator new, freed with free</b>
+~~Dr.M~~ # 0 replace_free                                         [d:\drmemory_package\common\alloc_replace.c:2706]
+~~Dr.M~~ # 1 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ # 2 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ # 3 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ # 4 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ # 5 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ # 6 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ # 7 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ # 8 test5                                                [c:\users\mmead\drmem\mem.bugs.cpp:31]</b>
+~~Dr.M~~ # 9 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ #10 atexit                                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ #11 __scrt_common_main_seh                               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+~~Dr.M~~ #12 KERNEL32.dll!BaseThreadInitThunk                    +0x13     (0x00007fff1db73034 &lt;KERNEL32.dll+0x13034&gt;)
+~~Dr.M~~ Note: @0:00:00.534 in thread 732
+~~Dr.M~~ Note: memory was allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new                                 [d:\drmemory_package\common\alloc_replace.c:2899]
+~~Dr.M~~ Note: # 1 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ Note: # 2 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ Note: # 3 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ Note: # 4 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ Note: # 5 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ Note: # 6 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ Note: # 7 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ Note: # 8 test5                                                [c:\users\mmead\drmem\mem.bugs.cpp:30]</b>
+~~Dr.M~~ Note: # 9 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ Note: #10 atexit                                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ Note: #11 __scrt_common_main_seh                               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+</pre></blockquote>
+</li>
+
+<li>test6 - buffer overflow</i>
+<blockquote><pre>
+~~Dr.M~~ 
+<b>~~Dr.M~~ Error #1: UNADDRESSABLE ACCESS beyond heap bounds: writing 0x00000234c8d9e685-0x00000234c8d9e686 1 byte(s)</b>
+~~Dr.M~~ # 0 replace_strcpy                       [d:\drmemory_package\drmemory\replace.c:598]
+<b>~~Dr.M~~ # 1 test6                                [c:\users\mmead\drmem\mem.bugs.cpp:37]</b>
+~~Dr.M~~ # 2 atexit                               [f:\dd\vctools\crt\vcstartup\src\utility\utility.cpp:275]
+~~Dr.M~~ # 3 __scrt_common_main_seh               [f:\dd\vctools\crt\vcstartup\src\startup\exe_common.inl:288]
+~~Dr.M~~ # 4 KERNEL32.dll!BaseThreadInitThunk    +0x13     (0x00007fff1db73034 &lt;KERNEL32.dll+0x13034&gt;)
+~~Dr.M~~ Note: @0:00:00.547 in thread 2872
+~~Dr.M~~ Note: refers to 0 byte(s) beyond last valid byte in prior malloc
+~~Dr.M~~ Note: prev lower malloc:  0x00000234c8d9e680-0x00000234c8d9e685
+~~Dr.M~~ Note: allocated here:
+~~Dr.M~~ Note: # 0 replace_operator_new_array                           [d:\drmemory_package\common\alloc_replace.c:2928]
+~~Dr.M~~ Note: # 1 std::_Facet_Register                                 [f:\dd\vctools\crt\crtw32\stdcpp\locale0.cpp:73]
+~~Dr.M~~ Note: # 2 std::use_facet&lt;&gt;                                     [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:546]
+~~Dr.M~~ Note: # 3 std::locale::~locale                                 [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:410]
+~~Dr.M~~ Note: # 4 std::ctype&lt;&gt;::widen                                  [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\xlocale:2578]
+~~Dr.M~~ Note: # 5 std::basic_ios&lt;&gt;::widen                              [c:\program files (x86)\microsoft visual studio\2017\enterprise\vc\tools\msvc\14.15.26726\include\ios:125]
+~~Dr.M~~ Note: # 6 std::ios_base::_Init                                 [f:\dd\vctools\crt\crtw32\stdhpp\xiosbase:558]
+~~Dr.M~~ Note: # 7 __crt_strtox::parse_integer&lt;&gt;                        [minkernel\crts\ucrt\inc\corecrt_internal_strtox.h:202]
+~~Dr.M~~ Note: # 8 __crt_seh_guarded_call&lt;&gt;::operator()&lt;&gt;               [minkernel\crts\ucrt\devdiv\vcruntime\inc\internal_shared.h:208]
+<b>~~Dr.M~~ Note: # 9 test6                                                [c:\users\mmead\drmem\mem.bugs.cpp:36]</b>
+~~Dr.M~~ Note: #10 atoi                                                 [minkernel\crts\ucrt\src\appcrt\convert\atox.cpp:22]
+~~Dr.M~~ Note: #11 std::basic_ostream&lt;&gt;::basic_ostream&lt;&gt;                [f:\dd\vctools\crt\crtw32\stdhpp\ostream:54]
+~~Dr.M~~ Note: instruction: mov    $0x00 -&gt; (%rax)
+</pre></blockquote>
+</li>
+
+<li>test7 - uninitialized read (Not supported on Windows with 64-bit apps)
+<blockquote><pre>
+~~Dr.M~~ (Uninitialized read checking is not yet supported for 64-bit)
+</pre></blockquote>
+</li>
+
+</ol>
+
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<a name="VALGRIND64">
+<p class="SectionHeader">
+Output from Valgrind
+</p>
+</a>
+
+<b>64-bit GNU g++:</b> (64-bit Linux, kernel version 3.13.0)
+<p>
+<ol>
+
+<li>test1 - simple memory leak
+<blockquote><pre>
+<b>==8340== 123 bytes in 1 blocks are definitely lost in loss record 1 of 2</b>
+==8340==    at 0x4C2B800: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8340==    by 0x400AA4: test1() (mem.bugs.cpp:7)</b>
+<b>==8340==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8340== 
+</pre></blockquote>
+</li>
+
+<li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+<b>==8344== Mismatched free() / delete / delete []</b>
+==8344==    at 0x4C2C2BC: operator delete(void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8344==    by 0x400ACE: test2() (mem.bugs.cpp:13)</b>
+<b>==8344==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8344==  Address 0x5a45c80 is 0 bytes inside a block of size 123 alloc'd
+==8344==    at 0x4C2B800: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8344==    by 0x400AB9: test2() (mem.bugs.cpp:12)</b>
+<b>==8344==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8344== 
+</pre></blockquote>
+</li>
+
+<li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i> 
+<blockquote><pre>
+<b>==8349== Mismatched free() / delete / delete []</b>
+==8349==    at 0x4C2C83C: operator delete[](void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8349==    by 0x400AFA: test3() (mem.bugs.cpp:19)</b>
+<b>==8349==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8349==  Address 0x5a45c80 is 0 bytes inside a block of size 1 alloc'd
+==8349==    at 0x4C2B0E0: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8349==    by 0x400AE3: test3() (mem.bugs.cpp:18)</b>
+<b>==8349==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+</pre></blockquote>
+</li>
+
+<li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+<b>==8350== Mismatched free() / delete / delete []</b>
+==8350==    at 0x4C2C2BC: operator delete(void*) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8350==    by 0x400B24: test4() (mem.bugs.cpp:25)</b>
+<b>==8350==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8350==  Address 0x5a45c80 is 0 bytes inside a block of size 123 alloc'd
+==8350==    at 0x4C2AB80: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8350==    by 0x400B0F: test4() (mem.bugs.cpp:24)</b>
+<b>==8350==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8350== 
+</pre></blockquote>
+</li>
+
+<li>test5 - allocate with <i>new</i>, deallocate with <i>free</i>
+<blockquote><pre>
+<b>==8354== Mismatched free() / delete / delete []</b>
+==8354==    at 0x4C2BDEC: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8354==    by 0x400B49: test5() (mem.bugs.cpp:31)</b>
+<b>==8354==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8354==  Address 0x5a45c80 is 0 bytes inside a block of size 1 alloc'd
+==8354==    at 0x4C2B0E0: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8354==    by 0x400B39: test5() (mem.bugs.cpp:30)</b>
+<b>==8354==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8354== 
+</pre></blockquote>
+</li>
+
+<li>test6 - buffer overflow</i>
+<blockquote><pre>
+<b>==8358== Invalid write of size 2</b>
+<b>==8358==    at 0x400B6D: test6() (mem.bugs.cpp:37)</b>
+<b>==8358==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8358==  Address 0x5a45c84 is 4 bytes inside a block of size 5 alloc'd
+==8358==    at 0x4C2B800: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+<b>==8358==    by 0x400B5E: test6() (mem.bugs.cpp:36)</b>
+<b>==8358==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8358== 
+</pre></blockquote>
+</li>
+
+<li>test7 - uninitialized read
+<blockquote><pre>
+<b>==8359== Conditional jump or move depends on uninitialised value(s)</b>
+==8359==    at 0x4C2E0E9: strlen (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8359==    by 0x4EEEDB8: std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;& std::operator&lt;&lt; &lt;std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&, char const*) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+<b>==8359==    by 0x400BB0: test7() (mem.bugs.cpp:44)</b>
+<b>==8359==    by 0x400C88: main (mem.bugs.cpp:72)</b>
+==8359== 
+</pre></blockquote>
+</li>
+
+</ol>
+
+
+
+
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<!--***********************************************************************************-->
+<p>
+  <hr width="90%">
+<p>
+
+<!--
+
+<b>64-bit GNU g++:</b> (64-bit macOS, Darwin kernel version 15.6.0)
+<p>
+<ol>
+
+<li>test1 - simple memory leak
+<blockquote><pre>
+<b>==50554== 123 bytes in 1 blocks are definitely lost in loss record 37 of 63</b>
+==50554==    at 0x100009681: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==50554==    by 0x100021737: operator new(unsigned long) (in /usr/local/Cellar/gcc/7.2.0/lib/gcc/7/libstdc++.6.dylib)
+<b>==50554==    by 0x100000CB8: main (mem.bugs.cpp:72)</b>
+==50554== 
+</pre></blockquote>
+</li>
+
+<li>test2 - allocate with <i>new[]</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+</pre></blockquote>
+</li>
+
+<li>test3 - allocate with <i>new</i>, deallocate with <i>delete[]</i> 
+<blockquote><pre>
+</pre></blockquote>
+</li>
+
+<li>test4 - allocate with <i>malloc</i>, deallocate with <i>delete</i>
+<blockquote><pre>
+</pre></blockquote>
+</li>
+
+<li>test5 - allocate with <i>new</i>, deallocate with <i>free</i>
+<blockquote><pre>
+</pre></blockquote>
+</li>
+
+<li>test6 - buffer overflow</i>
+<blockquote><pre>
+<b>==50579== Invalid write of size 2</b>
+<b>==50579==    at 0x100000B9E: test6() (mem.bugs.cpp:37)</b>
+<b>==50579==    by 0x100000CB8: main (mem.bugs.cpp:72)</b>
+==50579==  Address 0x100d3ac84 is 4 bytes inside a block of size 5 alloc'd
+==50579==    at 0x100009681: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==50579==    by 0x100021737: operator new(unsigned long) (in /usr/local/Cellar/gcc/7.2.0/lib/gcc/7/libstdc++.6.dylib)
+<b>==50579==    by 0x100000CB8: main (mem.bugs.cpp:72)</b>
+==50579== 
+</pre></blockquote>
+</li>
+
+<li>test7 - uninitialized read
+<blockquote><pre>
+<b>==50596== Conditional jump or move depends on uninitialised value(s)</b>
+==50596==    at 0x10000AE9C: strlen (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==50596==    by 0x1000A7098: std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;& std::operator&lt;&lt; &lt;std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&, char const*) (in /usr/local/Cellar/gcc/7.2.0/lib/gcc/7/libstdc++.6.dylib)
+==50596==    by 0x1048029FF: ???
+==50596== 
+</pre></blockquote>
+</li>
+
+</ol>
+
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<p>
+<hr width="100%">
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,42 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*
+* A PROPER FILE HEADER COMMENT MUST BE CREATED BY THE STUDENT
+*/</i></font>
+<b>#include</b> &lt;fstream&gt;        <font color="#003399"><i>// ifstream</i></font>
+<b>#include</b> <font color="#9933CC">&quot;FileStrings.h&quot;</font>  <font color="#003399"><i>// SpellChecker, StringUtils, DictionaryInfo</i></font>
+
+<b>namespace</b> CS170
+{
+
+<font color="#003399"><i>/*
+* A PROPER FUNCTION COMMENT MUST BE CREATED BY THE STUDENT
+*/</i></font>
+std::string&amp; StringUtils::UpperCase(std::string&amp; string)
+{
+  std::string::iterator it; <font color="#003399"><i>// To walk the string</i></font> 
+
+  <b>for</b> (it = string.begin(); it != string.end(); ++it)
+    <b>if</b> (*it &gt;= <font color="#9933CC">'a'</font> &amp;&amp; *it &lt;= <font color="#9933CC">'z'</font>)
+      *it = <b>static_cast</b>&lt;<b>char</b>&gt;(*it - SPACE);
+
+  <b>return</b> string;
+}
+
+
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

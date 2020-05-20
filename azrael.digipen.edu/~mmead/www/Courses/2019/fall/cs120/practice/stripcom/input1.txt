@@ -1,0 +1,11 @@
+/*************************************
+   A simple header comment
+*************************************/
+int main(void) /* help */
+{
+  /* a comment before   */
+  /* in front */ int a = 8/4; /* at end */
+  /* a comment after    */
+
+  return a;
+}

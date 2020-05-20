@@ -1,0 +1,981 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to Colorized Output using ANSI Escape Sequences</title>
+</head>
+
+<style>
+body {
+   background : #aaaaaa; 
+   margin-left : 50;
+   margin-right : 20;
+   #background : url("https://azrael.digipen.edu/images/notebook.jpg");
+   background : url("../../images/notebook.jpg");
+   }
+
+pre.console {
+	#font-family: Courier, "Courier New", mono;
+	#font-size: 16px;
+	color: #000000;
+	background-color: #ffffdd;
+	padding: 8px 8px 8px 8px; # top,right,bottom,left
+	margin-left: 20px;
+	border: #000000;
+	border-style: dashed;
+	border-width: 1px;
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+pre.bconsole {
+	#font-family: Courier, "Courier New", mono;
+	#font-size: 16px;
+	color: #FFFFFF;
+	background-color: #000000;
+	padding: 8px 8px 8px 8px; # top,right,bottom,left
+	margin-left: 20px;
+	border: #000000;
+	border-style: dashed;
+	border-width: 1px;
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+</style>
+
+<body>  
+<center>
+<h1>Mead's Guide to Colorized Output using ANSI Escape Sequences</h1>
+</center>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+
+This short tutorial demonstrates how to get up and running with colorized output using
+	<a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI escape sequences</a>. These escape 
+	sequences (or codes) are what
+	allow for text-based colored output in a terminal. You've all seen this.
+	The <a href="http://hisham.hm/htop/">htop</a> program (<a href="htop-2.0.png">screenshot</a>) 
+	is an excellent example. The latest GNU and
+	Clang compilers now emit colored output to distinguish between normal messages, warnings,
+	and errors. 
+	<p>
+	Here's a sample program with a warning and an error:
+
+<blockquote><pre>
+<font color="#003399"><i>/* INT instead of int */</i></font>
+<b>INT</b> main(<b>void</b>)
+{
+  <b>int</b> a;    <font color="#003399"><i>/* unused variable */</i></font>
+  <b>return</b> 0;
+}
+</pre>	</blockquote>
+
+This is the output from a pre-gcc5 (4.8.4) compiler:
+
+<blockquote><pre class="bconsole">
+foo.c:1:1: error: unknown type name 'INT'
+foo.c: In function 'main':
+foo.c:3:6: warning: unused variable 'a' [-Wunused-variable]
+</pre></blockquote>
+
+This is from a later version (5.3.0):
+
+<!--CC44CC is magenta -->
+
+<blockquote><pre class="bconsole">
+<b>foo.c:1:1:</b> <span style="color:red"><b>error:</b></span> unknown type name '<b>INT</b>'
+ INT main(void)
+ <span style="color:yellow"><b>^</b></span>
+<b>foo.c:</b> In function '<b>main</b>':
+<b>foo.c:3:6:</b> <span style="color:#CC44CC"><b>warning</b></span>: unused variable '<b>a</b>' [-Wunused-variable]
+  int a;
+      <span style="color:yellow"><b>^</b></span>
+</pre></blockquote>
+
+A few simple examples using <a href="http://tiswww.case.edu/php/chet/bash/bashref.html">bash</a> 
+<a href="http://tldp.org/LDP/abs/html/">scripting</a>
+that demonstrate the escape codes. (Just copy and paste them into a terminal).
+
+<blockquote><pre>
+printf '\e[0mNormal text\e[m\n'
+printf '\e[31mRed text\e[m\n'
+printf '\e[4mUnderlined text\e[m\n'
+printf '\e[37;104mGray on light blue\e[m\n'
+printf '\e[1;37;44mBright white on blue\e[m\n'
+printf '\e[1;37;41mBright white on red\e[m\n'
+printf '\e[0;30;101mBlack on light red\e[m\n'
+printf '\e[5;93mBlinking yellow\e[m\n'
+</pre></blockquote>
+
+The above lines will output like this (in a terminal that supports color):
+
+
+<blockquote><pre class="bconsole">
+<span style="color:lightgray">Normal text</span>
+<span style="color:red">Red text</span>
+<span style="color:lightgray"><u>Underlined text</u></span>
+<span style="color:lightgray;background-color:#4444CC">Gray on light blue</span>
+<span style="color:white;background-color:blue"><b>Bright white on blue</b></span>
+<span style="color:white;background-color:red"><b>Bright white on red</b></span>
+<span style="color:black;background-color:#CC4444">Black on light red</span>
+<span style="color:yellow"><blink>Blinking yellow</blink></span>
+</pre></blockquote>
+
+A note regarding blinking text:
+
+<blockquote>
+<p class="technote">
+All of the lines above (except the blinking yellow line) should display properly. This means
+you should see colored lines in your browser and in the terminal. Most browsers will not display
+the blinking text and there is a long history why that is. 
+A notable exception is Opera, which is what I've used for about 15 years.
+(Although, it's getting old and has changed into Chrome, like most of the others.) You may
+not see the blinking in the terminal either, as it is a function of the terminal.
+</p>
+</blockquote>
+
+Here's an animated GIF that should show the blinking in any browser that supports them:
+<blockquote>
+<img src="colors-animated.gif">
+</blockquote>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+ANSI Escape Sequences (Details)
+</p>
+
+An escape sequence includes 3 integer values: an attribute, a foreground color, and a background color.
+If you don't provide one of the three values, the default will be used.
+
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>Attributes</th><th>Foreground color</th><th>Background color</th></tr>
+<tr valign="top">
+<td>
+<pre>
+00 = normal
+01 = bold
+04 = underlined
+05 = blinking
+07 = reversed
+08 = concealed
+</pre>
+</td>
+<td>
+<pre>
+31 = red
+32 = green
+33 = orange
+34 = blue
+35 = purple
+36 = cyan
+37 = grey
+90 = dark grey
+91 = light red
+92 = light green
+93 = yellow
+94 = light blue
+95 = light purple
+96 = turquoise
+</pre>
+</td>
+<td>
+<pre>
+40 = black
+41 = red
+42 = green
+43 = orange
+44 = blue
+45 = purple
+46 = cyan
+47 = grey
+100 = dark grey
+101 = light red
+102 = light green
+103 = yellow
+104 = light blue
+105 = light purple
+106 = turquoise
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+The integer values and the text to display are surround by a pair of ESC characters, hence the name.
+So, the sequence to display text in bright white on a blue background is this:
+
+<blockquote><pre>
+ESC[1;37;44mBright white on blueESC[0m
+</pre></blockquote>
+
+Since the ESC character is a non-printable character (ASCII decimal 27, hex 1B, octal 033), many times you will
+see it displayed as: <tt>ESC[</tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+So, the sequence <tt>ESC[1;37;44m</tt> specifies an attribute of 1 (bold/bright), a foreground color of 37 (gray), 
+and background color of 44 (blue). The lowercase <i>m</i> terminates the ESC codes. Once these
+escape codes are sent to the terminal, any text that is displayed will be 
+<span style="color:white;background-color:blue;padding:1px"><b>white on blue</b></span>. To reset
+the terminal to its defaults, use the escape sequence: <tt>ESC[m</tt>
+<p>
+Using the table above, you should be able to display text in a variety of ways. To test your terminal,
+this simple bash script: (<a href="docolors.html">docolors</a>) displays the escape sequences
+in every possible combination. To test it, save the file to your computer, make it executable:
+
+<blockquote><pre>
+chmod +x docolors
+</pre></blockquote>
+
+and then run it:
+
+<blockquote><pre>
+./docolors
+</pre></blockquote>
+
+This <a href="ansicolors-1.png">screenshot</a> shows the partial output. The complete output is about
+180 lines of colored text.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+
+Many scripts today are meant to run from a 
+<a href="https://en.wikipedia.org/wiki/Computer_terminal">terminal</a>
+(or <a href="https://en.wikipedia.org/wiki/Terminal_emulator">terminal emulator</a>), 
+and so almost all scripting languages have
+support for ANSI escape sequences, or it is easy to add. The Bash scripting language is a very
+popluar one and you've just seen a snippet of code showing how bash scripts can enable colorized
+output. Of course, if a programming language can create a console application and write to the
+screen, then it will be able to manipulate the colored output.
+
+<p class="technote">
+There are a lot more details with regard to ANSI escape sequences that I'm not going to
+get into, such as clearing the screen or positioning the cursor. 
+I'm just giving an introduction on how to get up and running with colors in
+your own console applications. Probably 95% of what you want to do can be done with
+the few techniques that I'm showing. If you want to learn all of the gory details, then
+Google is your friend.
+</p>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Using ANSI Escape Sequences in a C Program
+</p>
+
+Of course, not all programs are written in a scripting language. We'll see how easy it is to do
+from C. If we can write to the screen (<i>printf</i>, anyone?), then we can output ANSI escape sequences
+as well. Let's convert this bash script:
+
+<blockquote><pre>
+printf '\e[0mNormal text\e[m\n'
+printf '\e[31mRed text\e[m\n'
+printf '\e[4mUnderlined text\e[m\n'
+printf '\e[37;104mGray on light blue\e[m\n'
+printf '\e[1;37;44mBright white on blue\e[m\n'
+printf '\e[1;37;41mBright white on red\e[m\n'
+printf '\e[0;30;101mBlack on light red\e[m\n'
+printf '\e[5;93mBlinking yellow\e[m\n'
+</pre></blockquote>
+
+into a C program:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font> <font color="#003399"><i>/* printf */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;&#92;033[0mNormal text&#92;033[0m&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;033[31mRed text&#92;033[0m&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;033[4mUnderlined text&#92;033[0m&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;033[37;104mGray on light blue&#92;033[0m&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;033[1;37;44mBright white on blue&#92;033[0m&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;033[1;37;41mBright white on light red&#92;033[0m&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;033[5;93mBlinking yellow&#92;033[0m&#92;n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+The C++ way is very similar:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;iostream&gt;</font> <font color="#003399"><i>/* cout, endl */</i></font>
+
+<b>int</b> main()
+{
+  <b>using</b> std::cout;
+  <b>using</b> std::endl;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[0mNormal text&#92;033[0m&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[31mRed text&#92;033[0m&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[4mUnderlined text&#92;033[0m&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[37;104mGray on light blue&#92;033[0m&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[1;37;44mBright white on blue&#92;033[0m&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[1;37;41mBright white on light red&#92;033[0m&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[5;93mBlinking yellow&#92;033[0m&quot;</font> &lt;&lt; endl;
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+
+Notes:
+<ul>
+	<li>To print an ESC character, use the octal notation: <tt>\033</tt>. This is octal for decimal 27.</li>
+  <ul>
+    <li>Some compilers will support the escape sequence <tt>\e</tt> instead, but it is not part of
+      Standard C, so you should avoid it.</li>
+    </ul>
+	<li>To change the color of a line, print an ESC character followed by attributes and colors separated by semi-colons.</li>
+  <ul>
+    <li>The order of the attributes and colors does not matter, since the values are all unique.</li>
+  </ul>
+	<li>After printing the text, reset to the defaults using <tt>ESC[0m</tt> or <tt>ESC[m</tt>.</li>
+	<li>Obviously, this is tedious, error prone, and just full of waaaay too many magic numbers!</li>
+  <li>You'll notice that you don't need to provide all of the values. If you want to use the 
+    defaults for some, you can just omit them.</li>
+  <ul>
+    <li>Be careful, though! If you really want to print gray/white text (the default
+    on many terminals), you should specify that. For example, if the user has their
+    terminal set up for green on black
+    as the default, your programs will not produce the color that you intended.</li>
+  </ul>
+</ul>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Creating Helper Functions in C
+</p>
+
+Now that we know how to get colorized output, we need an easier way to do that. Having to remember
+and type in those cryptic codes is unacceptable for anything but toy programs. The very first thing
+we should do is to make some kind of <b><tt>#define</tt></b> or <b><tt>enum</tt></b> (enumeration)
+for all of those values.
+
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>Attributes</th><th>Foreground color</th><th>Background color</th></tr>
+<tr valign="top">
+<td>
+<pre>
+<b>enum</b> ColorAttribute
+{
+  caNORMAL    = 0,
+  caBOLD      = 1,
+  caUNDERLINE = 4,
+  caBLINKING  = 5,
+  caREVERSED  = 7,
+  caCONCEALED = 8
+};
+</pre>
+</td>
+<td>
+<pre>
+<b>enum</b> ForegroundColor 
+{
+  fgBLACK       = 30,
+  fgRED         = 31,
+  fgGREEN       = 32,
+  fgORANGE      = 33,
+  fgBLUE        = 34,
+  fgPURPLE      = 35,
+  fgCYAN        = 36,
+  fgGREY        = 37,
+  fgGRAY        = 37,
+  fgDARKGREY    = 90,
+  fgDARKGRAY    = 90,
+  fgLIGHTRED    = 91,
+  fgLIGHTGREEN  = 92,
+  fgYELLOW      = 93,
+  fgLIGHTBLUE   = 94,
+  fgLIGHTPURPLE = 95,
+  fgTURQUOISE   = 96
+};</pre>
+</td>
+<td>
+<pre>
+<b>enum</b> BackgroundColor
+{
+  bgBLACK       =  40,
+  bgRED         =  41,
+  bgGREEN       =  42,
+  bgORANGE      =  43,
+  bgBLUE        =  44,
+  bgPURPLE      =  45,
+  bgCYAN        =  46,
+  bgGREY        =  47,
+  bgGRAY        =  47,
+  bgDARKGREY    = 100,
+  bgDARKGRAY    = 100,
+  bgLIGHTRED    = 101,
+  bgLIGHTGREEN  = 102,
+  bgYELLOW      = 103,
+  bgLIGHTBLUE   = 104,
+  bgLIGHTPURPLE = 105,
+  bgTURQUOISE   = 106
+};</pre>
+</td>
+</tr></table>
+</blockquote>
+
+We'll put these in a header file called <a href="termcolors.h.html">termcolors.h</a>
+(<a href="termcolors.h">Text</a>). We'll also provide a few helper functions:
+
+<blockquote><pre>
+<b>void</b> setcolors(<b>int</b> foreground, <b>int</b> background, <b>int</b> attribute);
+<b>void</b> resetcolors(<b>void</b>);
+<b>void</b> showcolors(<b>void</b>);
+</pre></blockquote>
+
+The first function simply sets up the terminal with the desired attribute and colors. The second
+one resets everything. The third function is just a demo, much like the bash script above. It
+allows you to write a one line program that will display all combinations of attributes, foreground
+colors, and background colors:
+
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &quot;termcolors.h&quot;</font>
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Best on a wide display of at least 128 characters. */</i></font>
+  showcolors();
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+This will display 15 columns, each with about 100 lines colored text. That's the first function you
+should run to test that you are using the library correctly. Here's the implementation in 
+<a href="termcolors.c.html">termcolors.c</a> (<a href="termcolors.c">Text</a>).
+<p>
+The implentation of the basic functions are trivial:
+<blockquote><pre>
+<b>void</b> setcolors(<b>int</b> foreground, <b>int</b> background, <b>int</b> attribute)
+{
+  printf(<font color="#9933CC">&quot;&#92;033[%i;%i;%im&quot;</font>, attribute, foreground, background);  
+}
+
+<b>void</b> resetcolors(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;&#92;033[0m&quot;</font>);  
+}
+</pre></blockquote>
+
+They are very simple and straight-forward to use. A first example: (<tt>testcolors.c</tt>)
+
+
+<blockquote><pre>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &quot;termcolors.h&quot;</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  setcolors(fgGREY, bgRED, caBOLD);
+  printf(<font color="#9933CC">&quot;Bold grey on red&quot;</font>);
+  resetcolors();
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  setcolors(fgYELLOW, bgBLUE, caNORMAL);
+  printf(<font color="#9933CC">&quot;Yellow on blue&quot;</font>);
+  resetcolors();
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  setcolors(fgCYAN, bgBLACK, caUNDERLINE);
+  printf(<font color="#9933CC">&quot;Underlined cyan on black&quot;</font>);
+  resetcolors();
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Compile and test it. I'm showing all of the steps explicitly (compiling each and then linking) to
+highlight the way we're going to use the "library" in the future:
+
+<blockquote><pre>
+compile:  gcc -Wall -Wextra -ansi -pedantic -O2 -g testcolors.c -c -o <b>testcolors.o</b>
+compile:  gcc -Wall -Wextra -ansi -pedantic -O2 -g termcolors.c -c -o <b>termcolors.o</b>
+   link:  gcc testcolors.o termcolors.o -o <b>testcolors</b>
+    run:  <b>./testcolors</b>
+</pre></blockquote>
+
+It should display something like this:
+
+<blockquote><pre class="bconsole">
+<span style="color:white;background-color:red"><b>Bold grey on red</b></span>
+<span style="color:yellow;background-color:blue">Yellow on blue</span>
+<span style="color:cyan"><u>Underlined cyan on black</u></span>
+</pre></blockquote>
+
+In a nutshell, that's it. With these two very simple wrapper functions, you can pretty much
+display colorized output from any of your console applications. Of course, there are still a
+few things that we can do to simplify it even further.
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Creating a Static Library in C
+</p>
+
+Sometimes, it's easier to use a pre-compiled, static library with your application instead of the
+source code. There a many reasons why this is a good idea, but I'm not going to get into why
+it is. I'm just going to show you how to do it. Everyone knows how to <i>compile</i> 
+the <tt>termcolors.c</tt> code:
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -O2 -g termcolors.c -c -o termcolors.o
+</pre></blockquote>
+
+This will produce an object file named <tt>termcolors.o</tt>. Then, we compile our code
+(<tt>testcolors.c</tt>):
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -O2 -g testcolors.c -c -o testcolors.o
+</pre></blockquote>
+
+The last step is to link the objects together to create the executable:
+
+<blockquote><pre>
+gcc testcolors.o termcolors.o -o testcolors
+</pre></blockquote>
+
+However, rather than linking with the object file (<tt>termcolors.o</tt>), I'm going to create a 
+<i>static library</i> and link with that instead. To create a static library from an object file:
+
+<blockquote><pre>
+ar rc libtermcolors.a termcolors.o
+</pre></blockquote>
+
+On Linux, a static library is sometimes called an <i>archive</i>. The <tt>ar</tt> command is
+an <i>archiver</i>, which is used to create static libraries (archives). The <tt>rc</tt> 
+characters are command line options (but you don't use a minus sign in front). Their meanings:
+
+<ul>
+	<li><b>r</b> - Insert the object file into the archive (replacing any matching objects that already exist).</li>
+	<li><b>c</b> - Creates the archive.</li>
+</ul>
+
+You can Google or get help from the man pages for additional information on all of the many 
+options available to <tt>ar</tt>. Now, to build with the static library, we just do this on
+the command line (you can provide any options to <tt>gcc</tt> that you want):
+
+<blockquote><pre>
+gcc testcolors.c libtermcolors.a -o testcolors
+</pre></blockquote>
+
+Since the helper functions are really just a black box, all we need to do is include the header file,
+<tt>termcolors.h</tt>, in our code and we can build (with <tt>libtermcolors.a</tt>) any
+program that we create.
+
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Additional Helper Functions
+</p>
+
+You might be tempted to stop here and start using the library to colorize terminal output. However,
+even with these helper functions, it's still too tedious and error prone to use effectively. Not
+only that, but you are still "hard-coding" colors throughout the program. 
+<p>
+With these two functions:
+
+<blockquote><pre>
+<b>void</b> setcolors(<b>int</b> foreground, <b>int</b> background, <b>int</b> attribute);
+<b>void</b> resetcolors(<b>void</b>);
+</pre></blockquote>
+
+we can build a bunch of other functions to streamline things. For example, let's say that we
+want to print messages in different colors based on their <i>severity</i>. We'll
+have 3 levels: <i>informational</i>, <i>warning</i>, and <i>error</i>.
+<p>
+This is the scheme:
+
+<ul>
+  <li><span style="color:white;background-color:black;padding:1px">informational messages will be displayed in gray on black.</span></li>
+  <p>
+  <li><span style="color:yellow;background-color:black;padding:1px">warning messages will be displayed in yellow on black.</span></li>
+  <p>
+  <li><span style="color:red;background-color:black;padding:1px"><b>error messages will be displayed in bold red on black.</b></span></li>
+</ul>
+
+Of course, the meaning of these is up to you to decide. One way to do this is to create function for each:
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+<b>void</b> INFO(<b>void</b>)
+{
+  setcolors(fgGRAY, bgBLACK, caNORMAL);
+}
+
+<b>void</b> WARNING(<b>void</b>)
+{
+  setcolors(fgYELLOW, bgBLACK, caNORMAL);
+}
+
+<b>void</b> ERROR(<b>void</b>)
+{
+  setcolors(fgRED, bgBLACK, caBOLD);
+}
+</pre></blockquote>
+
+Now, in our code (<tt>testcolors2.c</tt>):
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  INFO();
+  printf(<font color="#9933CC">&quot;The weather today is going to be cold and clear.&quot;</font>);
+  resetcolors();
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  WARNING();
+  printf(<font color="#9933CC">&quot;The mountains may get up to a foot of snow by 8 pm.&quot;</font>);
+  resetcolors();
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  ERROR();
+  printf(<font color="#9933CC">&quot;Unable to contact the weather station. (ERR:C7560)&quot;</font>);
+  resetcolors();
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+This produces this output:
+
+<blockquote><pre class="bconsole">
+<span style="color:white;background-color:black;padding:0px">The weather today is going to be cold and clear.</span>
+<span style="color:yellow;background-color:black;padding:0px">The mountains may get up to a foot of snow by 8 pm.</span>
+<span style="color:red;background-color:black;padding:0px"><b>Unable to contact the weather station. (ERR:C7560)</b></span>
+</pre></blockquote>
+
+A big advantage of this over "hard-coding" colors into your code is flexibility. Suppose that you now
+decide that you want the error messages to stand out more. To do that, you can print bold 
+gray (bright white) on red. You just have to edit this function:
+
+<blockquote><pre>
+<b>void</b> ERROR(<b>void</b>)
+{
+  setcolors(fgGRAY, bgRED, caBOLD);
+}
+</pre></blockquote>
+
+Now, the output from the program looks like this:
+
+<blockquote><pre class="bconsole">
+<span style="color:white;background-color:black;padding:0px">The weather today is going to be cold and clear.</span>
+<span style="color:yellow;background-color:black;padding:0px">The mountains may get up to a foot of snow by 8 pm.</span>
+<span style="color:white;background-color:red;padding:0px"><b>Unable to contact the weather station. (ERR:C7560)</b></span>
+</pre></blockquote>
+
+This is a good start, but let's take it a step further and create our own <i>custom</i> version of
+<i>printf</i>. 
+We'll create a single function that does both the printing and the colorization. I'll call the
+function <i>printfc</i> for <i>printf colored</i>. The function <i>printf</i> is short for
+<i>print formatted</i>, so this function is really <i>print formatted color</i>. This 
+is the prototype:
+
+<blockquote><pre>
+<b>int</b> printfc(<b>int</b> foreground, <b>int</b> background, <b>int</b> attribute, <b>const</b> <b>char</b> *format, ...);
+</pre></blockquote>
+
+Like <i>printf</i>, it's a <a href="https://en.wikipedia.org/wiki/Variadic_function#In_C">variadic function</a>.
+<p>
+This is the implementation:
+
+<blockquote><pre>
+<b>int</b> printfc(<b>int</b> fg, <b>int</b> bg, <b>int</b> attr, <b>const</b> <b>char</b> *format, ...)
+{
+  <b>int</b> count;    <font color="#003399"><i>// characters printed (like printf)</i></font>
+  va_list args; <font color="#003399"><i>// list of args from ...</i></font>
+
+  va_start(args, format);        <font color="#003399"><i>// find args</i></font>
+  setcolors(fg, bg, attr);       <font color="#003399"><i>// change the colors</i></font>
+  count = vprintf(format, args); <font color="#003399"><i>// do the printing</i></font>
+  va_end(args);                  <font color="#003399"><i>// done</i></font>
+
+  resetcolors();                 <font color="#003399"><i>// reset the colors</i></font>
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);                  <font color="#003399"><i>// should the user do this?</i></font>
+  <b>return</b> count;                  <font color="#003399"><i>// mimic printf</i></font>
+}
+</pre></blockquote>
+
+
+We can use it like this:
+
+<blockquote><pre>
+<b>int</b> code = 7560; <font color="#003399"><i>// To demonstrate variadic function</i></font>
+printfc(fgGRAY, bgRED, caBOLD, <font color="#9933CC">&quot;The error code is: %i.&quot;</font>, code);
+</pre></blockquote>
+
+and the output will look something like this:
+
+<span style="color:red;background-color:black;padding:1px"><b>The error code is: 7560.</b></span>
+<p>
+
+Now, let's combine both techniques to create shortcuts for printing based on the 
+category (INFO/WARNING/ERROR):
+
+<blockquote><pre>
+<b>void</b> INFO(<b>const</b> <b>char</b> *format, ...)
+{
+  va_list args;
+  va_start(args, format);
+  printfc(fgGRAY, bgBLACK, caNORMAL, format, args);
+  va_end(args);
+}
+
+<b>void</b> WARNING(<b>const</b> <b>char</b> *format, ...)
+{
+  va_list args;
+  va_start(args, format);
+  printfc(fgYELLOW, bgBLACK, caNORMAL, format, args);
+  va_end(args);
+}
+
+<b>void</b> ERROR(<b>const</b> <b>char</b> *format, ...)
+{
+  va_list args;
+  va_start(args, format);
+  printfc(fgGRAY, bgRED, caBOLD, format, args);
+  va_end(args);
+}
+</pre></blockquote>
+
+The example above becomes: (<tt>testcolors3.c</tt>):
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> code = 7560; <font color="#003399"><i>// To demonstrate variadic function</i></font>
+
+  INFO(<font color="#9933CC">&quot;The weather today is going to be cold and clear.&quot;</font>);
+  WARNING(<font color="#9933CC">&quot;The mountains may get up to a foot of snow by 8 pm.&quot;</font>);
+  ERROR(<font color="#9933CC">&quot;Unable to contact the weather station. (ERR:C%i)&quot;</font>, code);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+And the output is the same:
+<blockquote><pre class="bconsole">
+<span style="color:white;background-color:black;padding:0px">The weather today is going to be cold and clear.</span>
+<span style="color:yellow;background-color:black;padding:0px">The mountains may get up to a foot of snow by 8 pm.</span>
+<span style="color:red;background-color:black;padding:0px"><b>Unable to contact the weather station. (ERR:C7560)</b></span>
+</pre></blockquote>
+
+This is just a sample of some of the ways you can extend the functionality. 
+There are virtually unlimited ways you can set this up.
+<p>
+If you are unfamiliar with variadic functions, you can find
+a short reference/tutorial that I wrote <a href="../../Courses/CS120/VariadicFunctions.html">here</a>.
+<p>
+Reference for the <a href="http://en.cppreference.com/w/cpp/io/c/vfprintf">vprintf family of functions</a>.
+<!--, vsprintf, vfprintf, and vsnprintf.</a>-->
+
+
+<!--
+You could even go so far as to write your
+own <i>printf</i> function (maybe call is <i>cprintf</i> for colorized printf) that will accept
+the color attributes as parameters.
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Summary
+</p>
+
+This has been a brief introduction to colorizing your console/terminal output using ANSI
+escape codes (sequences). The goal was to just get you familiar with this so that you can
+take it to the next level.
+<p>
+Other points to note:
+
+<ul>
+  <li>The basic termcolors library (<tt>libtermcolors.a</tt>) that I wrote is just that: basic. However,
+    it demonstrates how to use the ANSI escape codes and it provides a good starting point for
+    you to explore on your own.</li>
+<p>    
+  <li>Using the enumerations rather than the raw integer values for the colors and attributes is
+    also a big advantage (e.g. <tt>fgGREEN</tt> instead of 32).</li>
+<p>    
+  <li>Making many small, specific helper functions will also help you. I showed an example
+    with a few functions, but you can imagine creating dozens of functions, one for each specific type
+    of output.</li>
+<p>    
+  <li>You could make a much more capable library containing all of these functions that could then
+    be re-used in all of your console applications. All you would need is to include the header file
+    in your source code, and then link with the library.</li>
+<p>    
+  <li>You also might want to disable all of the coloring when the output device doesn't support it.
+    (You don't want all of the <tt>ESC[1;34;103m...</tt> garbage showing up.) One way to do that is
+    to have a global flag that you set/unset. For example:
+<blockquote><pre>
+<b>void</b> ERROR(<b>const</b> <b>char</b> *format, ...)
+{
+  va_list args;
+  va_start(args, format);
+
+  if (COLORS_ENABLED)
+    printfc(fgGRAY, bgRED, caBOLD, format, args);
+  else
+    printf(format, args);
+
+  va_end(args);
+}
+</pre></blockquote>
+<!--
+<b>void</b> ERROR(<b>void</b>)
+{
+  if (COLORS_ENABLED)
+    setcolors(fgGRAY, bgRED, caBOLD);
+}
+-->
+
+This way, you don't have to remove/edit any of your existing code.
+  </li>
+<p>    
+  <!--
+  <li>If you're really feeling adventurous, you could write a custom version of <i>printf</i> 
+    (maybe <i>cprintf</i>)
+    that takes colors and attributes along with the text.</li>
+  -->
+<p>
+  <li>There are existing libraries/programs out there that include all of the functionality that
+    I've demonstrated here. One such command is 
+    <a href="http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x405.html">tput</a>. To get help on that command, just type:
+<blockquote><pre>
+man tput
+</pre></blockquote>
+into the console. For an overwhelming amount of information, type this:
+<blockquote><pre>
+man terminfo
+</pre></blockquote>
+and be thankful you don't need to know it all!
+<p>
+<li>Most terminals on Linux will support ANSI color sequences by default, though not all will
+  support blinking. You should use blinking sparingly because it can be downright annoying! To
+  test if your terminal supports blinking text, paste this command into it and see if the text is
+  blinking:
+<blockquote><pre>
+printf '\e[5m Blink Text\e[m\n'
+</pre></blockquote>
+One popular terminal is <a href="https://konsole.kde.org/">konsole</a>
+ in KDE and it supports blinking. I've found that
+ <a href="https://www.kde.org/applications/system/yakuake/">yakuake</a> (another good terminal) and 
+<a href="https://en.wikipedia.org/wiki/Xterm">xterm</a> also support it. Neither
+<a href="https://help.gnome.org/users/gnome-terminal/stable/">gnome-terminal</a>
+ nor <a href="https://gnometerminator.blogspot.com/p/introduction.html">Terminator</a> support blinking,
+ although these are two very popular terminal programs.
+Some terminal programs may support it, but may disabled it by default. On such terminals, you need to find out
+how to enable it.</li>
+
+<p>
+  <li>Finally, as I mentioned, this just scratches the surface of what you can do with ANSI
+    escape sequences. This short guide was focused on colors, but you can do other things like erasing a line,
+    clearing the screen, or moving the cursor to any row/column.</li>
+</ul>
+
+<p>
+<hr width="95%">
+<p>
+
+<b>Some links that you might find useful:</b>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI escape sequences</a> on Wikipedia.</li>
+  <li>A <a href="http://ascii-table.com/ansi-escape-sequences.php">reference</a> of all of the things you can do.</li>
+  <li>A <a href="https://en.wikipedia.org/wiki/Computer_terminal">terminal</a> vs. a 
+    <a href="https://en.wikipedia.org/wiki/Terminal_emulator">terminal emulator</a>. Most people are actually using an emulator when they are sitting
+    at the computer.</li>
+  <li>A <a href="https://en.wikipedia.org/wiki/List_of_terminal_emulators">list of terminal emulators</a>.
+    If yours doesn't work with colors, one of these will.</li>
+  <li><a href="https://www.gnu.org/software/ncurses/">ncurses</a> is an API to create TUIs (Textual User Interfaces).
+    This is pretty much the defacto standard in Unix/Linux.</li>
+
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+</blockquote>
+
+
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

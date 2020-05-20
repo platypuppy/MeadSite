@@ -1,0 +1,1356 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-int.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+<font color="990099">#include &lt;ctime&gt;    // time_t, clock</font>
+<font color="990099">#include &lt;cstring&gt;  // strcpy</font>
+<font color="990099">#include &lt;cstdio&gt;   // sprintf</font>
+
+<font color="990099">#include &quot;Vector.h&quot;</font>
+<font color="990099">#include &quot;PRNG.h&quot;</font>
+
+<b>bool</b> SHOW_COMPARES = <b>false</b>;
+<font color="990099">#define SHOW_TIMESx</font>
+
+<b>bool</b> KILLED = <b>false</b>;
+
+<font color="#003399"><i>// generate random numbers between low and high </i></font>
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number = CS170::Utils::Random(low, high); 
+  <b>return</b> number;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> Shuffle(T *array, <b>int</b> size)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    <b>int</b> r = CS170::Utils::Random(0, 2 &lt;&lt; 29) % size;
+    <b>int</b> t = array[i];
+    array[i] = array[r];
+    array[r] = t;
+  }
+}  
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> Print(<b>const</b> CS170::Vector&lt;T&gt;&amp; array, <b>bool</b> newline = <b>true</b>)
+{
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; array.size(); i++)
+  {
+    std::cout &lt;&lt; array[i] &lt;&lt; std::endl;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;(size=&quot;</font> &lt;&lt; array.size() &lt;&lt; <font color="#9933CC">&quot;, capacity=&quot;</font> &lt;&lt; 
+                           array.capacity() &lt;&lt; <font color="#9933CC">&quot;, allocs=&quot;</font> &lt;&lt; 
+                           array.allocations() &lt;&lt; <font color="#9933CC">&quot;)&quot;</font>;
+  <b>if</b> (newline)
+    std::cout &lt;&lt; std::endl;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> PrintPartial(<b>const</b> CS170::Vector&lt;T&gt;&amp; array, <b>bool</b> newline = <b>true</b>)
+{
+  <b>for</b> (<b>unsigned</b> i = 1; i &lt; array.size(); i *= 2)
+  {
+    std::cout &lt;&lt; array[i - 1] &lt;&lt; std::endl;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;(size=&quot;</font> &lt;&lt; array.size() &lt;&lt; <font color="#9933CC">&quot;, capacity=&quot;</font> &lt;&lt; 
+                           array.capacity() &lt;&lt; <font color="#9933CC">&quot;, allocs=&quot;</font> &lt;&lt; 
+                           array.allocations() &lt;&lt; <font color="#9933CC">&quot;)&quot;</font>;
+  <b>if</b> (newline)
+    std::cout &lt;&lt; std::endl;
+}
+
+<b>enum</b> SortByKind {sbkID, sbkName, sbkSalary, sbkYears};
+
+SortByKind SortBy = sbkName;
+
+<b>const</b> <b>unsigned</b> ID_LEN = 16;
+<b>struct</b> Person
+{
+  <b>char</b> ID[ID_LEN + 1];
+  <b>char</b> lastName[26];   
+  <b>char</b> firstName[26];  
+  <b>float</b> salary;        
+  <b>unsigned</b> years;           
+
+  <b>operator</b> <b>int</b> () <b>const</b>
+  {
+    <b>return</b> years;
+  }  
+
+  <b>bool</b> <b>operator</b>!=(<b>const</b> Person &amp;rhs) <b>const</b>
+  {
+    <b>if</b> (strcmp(ID, rhs.ID))
+      <b>return</b> <b>true</b>;
+    <b>if</b> (salary != rhs.salary)
+      <b>return</b> <b>true</b>;
+    <b>if</b> (years != rhs.years)
+      <b>return</b> <b>true</b>;
+    <b>if</b> (strcmp(lastName, rhs.lastName))
+      <b>return</b> <b>true</b>;
+    <b>if</b> (strcmp(firstName, rhs.firstName))
+      <b>return</b> <b>true</b>;
+
+    <b>return</b> <b>false</b>;
+  }
+
+  <b>bool</b> <b>operator</b>&lt;(<b>const</b> Person &amp;rhs) <b>const</b>
+  {
+    <b>if</b> (SortBy == sbkID)
+    {
+      <b>if</b> (strcmp(ID, rhs.ID) &lt; 0)
+        <b>return</b> <b>true</b>;
+      <b>else</b>
+        <b>return</b> <b>false</b>;
+    }
+    <b>else</b> <b>if</b> (SortBy == sbkSalary)
+    {
+      <b>return</b> salary &lt; rhs.salary;
+    }
+    <b>else</b> <b>if</b> (SortBy == sbkYears)
+    {
+      <b>return</b> years &lt; rhs.years;
+    }
+    <b>else</b> <b>if</b> (SortBy == sbkName)
+    {
+      <b>int</b> diff = strcmp(lastName, rhs.lastName);
+      
+      <font color="#003399"><i>// if the last names are the same, sort on first name</i></font>
+      <b>if</b> (diff == 0)
+      {
+        <b>if</b> (strcmp(firstName, rhs.firstName) &lt; 0)
+          <b>return</b> <b>true</b>;
+        <b>else</b> 
+          <b>return</b> <b>false</b>; <font color="#003399"><i>// both first and last are the same</i></font>
+      }
+      <b>else</b> <font color="#003399"><i>// last names are different</i></font>
+      {
+        <b>if</b> (diff &lt; 0)
+          <b>return</b> <b>true</b>;
+        <b>else</b>
+          <b>return</b> <b>false</b>;
+      }
+    }
+    <b>else</b> <font color="#003399"><i>// default</i></font>
+      <b>return</b> ID &lt; rhs.ID;
+  }
+};
+
+<b>struct</b> Person PEOPLE[] = 
+{
+  {<font color="#9933CC">&quot;101000&quot;</font>, <font color="#9933CC">&quot;Last&quot;</font>,       <font color="#9933CC">&quot;First&quot;</font>,        0,  0},
+  {<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,      30000, 10},
+  {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,    90000, 12},
+  {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,      50000,  3},
+  {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,     50000,  3},
+  {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,      40000,  5},
+  {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,    80000, 10},
+  {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,    90000, 11},
+  {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   120000,  8},
+  {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   250000, 22},
+  {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  5},
+  {<font color="#9933CC">&quot;111001&quot;</font>, <font color="#9933CC">&quot;McLochness&quot;</font>, <font color="#9933CC">&quot;Ross&quot;</font>,     60000,  6},
+  {<font color="#9933CC">&quot;112001&quot;</font>, <font color="#9933CC">&quot;Pudding&quot;</font>,    <font color="#9933CC">&quot;Ronnie&quot;</font>,   50000,  2},
+  {<font color="#9933CC">&quot;113001&quot;</font>, <font color="#9933CC">&quot;Schindler&quot;</font>,  <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  3},
+  {<font color="#9933CC">&quot;114001&quot;</font>, <font color="#9933CC">&quot;Pettibone&quot;</font>,  <font color="#9933CC">&quot;Jeanine&quot;</font>,  85000,  3},
+  {<font color="#9933CC">&quot;115001&quot;</font>, <font color="#9933CC">&quot;Fame&quot;</font>,       <font color="#9933CC">&quot;Duke&quot;</font>,     95000,  8},
+  {<font color="#9933CC">&quot;116001&quot;</font>, <font color="#9933CC">&quot;Fufkin&quot;</font>,     <font color="#9933CC">&quot;Artie&quot;</font>,    45000,  1},
+  {<font color="#9933CC">&quot;117001&quot;</font>, <font color="#9933CC">&quot;DiBergi&quot;</font>,    <font color="#9933CC">&quot;Marty&quot;</font>,    15000,  7},
+  {<font color="#9933CC">&quot;118001&quot;</font>, <font color="#9933CC">&quot;Floyd&quot;</font>,      <font color="#9933CC">&quot;Pink&quot;</font>,     25000,  6},
+  {<font color="#9933CC">&quot;119001&quot;</font>, <font color="#9933CC">&quot;Zeppelin&quot;</font>,   <font color="#9933CC">&quot;Led&quot;</font>,      35000,  3},
+  {<font color="#9933CC">&quot;120001&quot;</font>, <font color="#9933CC">&quot;Mason&quot;</font>,      <font color="#9933CC">&quot;Nick&quot;</font>,     15000,  7},
+  {<font color="#9933CC">&quot;121001&quot;</font>, <font color="#9933CC">&quot;Wright&quot;</font>,     <font color="#9933CC">&quot;Richard&quot;</font>,  17000,  9},
+  {<font color="#9933CC">&quot;122001&quot;</font>, <font color="#9933CC">&quot;Waters&quot;</font>,     <font color="#9933CC">&quot;Roger&quot;</font>,    10000,  3},
+  {<font color="#9933CC">&quot;123001&quot;</font>, <font color="#9933CC">&quot;Gilmore&quot;</font>,    <font color="#9933CC">&quot;David&quot;</font>,    19000,  5}
+};
+
+Person **PersonRecs;
+
+<b>int</b> UniqueID = 1;
+
+<b>void</b> MakeRandomPerson(Person &amp;person)
+{
+  <font color="#003399"><i>//sprintf(person.ID, &quot;%06i&quot;, RandomInt(0, 999999));</i></font>
+  sprintf(person.ID, <font color="#9933CC">&quot;%06i&quot;</font>, UniqueID++);
+  strcpy(person.lastName, PEOPLE[RandomInt(0, 20)].lastName);
+  strcpy(person.firstName, PEOPLE[RandomInt(0, 20)].firstName);
+  person.salary = <b>static_cast</b>&lt;<b>float</b>&gt;(RandomInt(10, 500) * 1000);
+  person.years = RandomInt(1, 30);
+}
+
+<b>void</b> FreePersonRecs()
+{
+  <b>int</b> count = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(PEOPLE) / <b>sizeof</b>(*PEOPLE));
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    <b>delete</b> PersonRecs[i];
+
+  <b>delete</b>[] PersonRecs;
+}
+
+<b>void</b> FillPersonRecs()
+{
+  <b>int</b> count = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(PEOPLE) / <b>sizeof</b>(*PEOPLE));
+  PersonRecs = (Person **) <b>new</b> Person[count];
+
+  <b>int</b> index = 0;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    Person *person = <b>new</b> Person;
+    std::strcpy(person-&gt;ID, PEOPLE[i].ID);
+    std::strcpy(person-&gt;lastName, PEOPLE[i].lastName);
+    std::strcpy(person-&gt;firstName, PEOPLE[i].firstName);
+    person-&gt;salary = PEOPLE[i].salary;
+    person-&gt;years = PEOPLE[i].years;
+    PersonRecs[index++] = person;
+  }
+}
+
+std::ostream&amp; <b>operator</b>&lt;&lt;(std::ostream &amp;os, <b>const</b> Person &amp;person)
+{
+  <b>char</b> buffer[200];
+  std::sprintf(buffer, <font color="#9933CC">&quot;Key: %8s, Name: %12s, %12s    Salary:%7.0f, Years: %2d&quot;</font>, 
+                  person.ID, person.lastName, person.firstName, person.salary, 
+                  person.years);
+  os &lt;&lt; buffer;
+  <b>return</b> os;
+}
+
+<b>bool</b> <b>operator</b>==(<b>const</b> Person &amp;lhs, <b>const</b> Person &amp;rhs)
+{
+  <b>if</b> ( (!strcmp(lhs.lastName, rhs.lastName)) &amp;&amp;
+       (!strcmp(lhs.firstName, rhs.firstName)) &amp;&amp;
+       (!strcmp(lhs.ID, rhs.ID)) &amp;&amp;
+       (lhs.salary == rhs.salary) &amp;&amp;
+       (lhs.years == rhs.years)
+    )
+    <b>return</b> <b>true</b>;
+
+  <b>return</b> <b>false</b>;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestPush(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestPush **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(PEOPLE[i]);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_front(PEOPLE[i]);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop_front until empty:&#92;n&quot;</font>;
+  <b>while</b> (!a.empty())
+  {
+    a.pop_front();
+    Print(a);
+  }
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestPop(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestPop **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(PEOPLE[i]);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_front(PEOPLE[i]);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop_back/pop_front:&#92;n&quot;</font>;
+  a.pop_back();
+  a.pop_front();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop_back/front until empty:&#92;n&quot;</font>;
+  <b>while</b> (!a.empty())
+  {
+    a.pop_front();
+    a.pop_back();
+    Print(a);
+  }
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestRemove(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestRemove **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(PEOPLE[i]);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove(0), remove(3):&#92;n&quot;</font>;
+  a.remove(PEOPLE[0]);
+  a.remove(PEOPLE[3]);
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestInsert1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestInsert1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Empty array:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(PEOPLE[i]);
+    Print(a);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;insert(PEOPLE[8], 3):&#92;n&quot;</font>;
+  a.insert(PEOPLE[8], 3);
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;insert(PEOPLE[9], 0):&#92;n&quot;</font>;
+  a.insert(PEOPLE[9], 0);
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;insert(PEOPLE[10], 6):&#92;n&quot;</font>;
+  a.insert(PEOPLE[10], 6);
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSubscripts(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSubscripts **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i]);
+
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;replace each Person:&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; 10; i++)
+    a[i] = a[10 - i - 1];
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestArray(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestArray **********&#92;n&quot;</font>;
+  Person array[] = {{<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,      80000, 10},
+                    {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,      50000,  4},
+                    {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,     50000,  4},
+                    {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,      40000,  1},
+                    {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,    80000, 10},
+                    {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   120000,  8},
+                    {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   250000, 22},
+                    {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  5}
+                   };
+
+  <b>int</b> size = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(array) / <b>sizeof</b>(*array));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Construct from Person array:&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a(array, size);
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSubscript1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSubscript1 **********&#92;n&quot;</font>;
+  Person array[] = {{<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,      80000, 10},
+                    {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,      50000,  4},
+                    {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,     50000,  4},
+                    {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,      40000,  1},
+                    {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,    80000, 10},
+                    {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   120000,  8},
+                    {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   250000, 22},
+                    {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  5}
+                   };
+
+  <b>int</b> size = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(array) / <b>sizeof</b>(*array));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Construct from Person array:&#92;n&quot;</font>;
+  <b>const</b> CS170::Vector&lt;T&gt; a(array, size);
+  Print(a);
+
+  <b>unsigned</b> index = a.size() / 2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;using subscript: a[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;] = &quot;</font> &lt;&lt; a[index] &lt;&lt; std::endl;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestALot1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestALot1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i]);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear:&#92;n&quot;</font>;
+  a.clear();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 more Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i + 10]);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;empty/fill with 10 Persons 3 times:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 3; i++)
+  {
+    <b>while</b> (!a.empty())
+      a.pop_back();
+
+    <b>for</b> (<b>int</b> j = 0; j &lt; 10; j++)
+      a.push_back(PEOPLE[j]);
+  }
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove all but 3 Persons:&#92;n&quot;</font>;
+  <b>while</b> (a.size() &gt; 3)
+    a.pop_back();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 more Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i]);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear:&#92;n&quot;</font>;
+  a.clear();
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestCopy(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestCopy **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 Person:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Copy: b(a), print a,b&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; b(a);
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Copy: c(b), print b,c&#92;n&quot;</font>;
+  <b>const</b> CS170::Vector&lt;T&gt; c(b);
+  Print(b);
+  Print(c);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestAssign(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAssign **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+  {
+    a.push_back(PEOPLE[10 + i]);
+    b.push_back(PEOPLE[i]);
+  }
+
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Assign: b = a, print a,b&#92;n&quot;</font>;
+  b = a;
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Assign: a = a, print a&#92;n&quot;</font>;
+  a = a;
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestAdd1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAdd1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(PEOPLE[i]);
+  }
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    b.push_front(PEOPLE[10 + i]);
+  }
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;c = a + b:&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; c;
+  c = a + b;
+
+  Print(a);
+  Print(b);
+  Print(c);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear a,b print c&#92;n&quot;</font>;
+  a.clear();
+  b.clear();
+  Print(c);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestAdd2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAdd2 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    a.push_back(PEOPLE[i]);
+  }
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_front 5 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    b.push_front(PEOPLE[10 + i]);
+  }
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a += b:&#92;n&quot;</font>;
+  a += b;
+  Print(a);
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear b print a&#92;n&quot;</font>;
+  b.clear();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a += a:&#92;n&quot;</font>;
+  a += a;
+  Print(a);
+
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSelectionSort1(<b>void</b>)
+{
+  <b>const</b> <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSelectionSort1 **********&#92;n&quot;</font>;
+
+  CS170::Vector&lt;T&gt; a;
+
+  <b>int</b> ia[count];
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    ia[i] = i;
+
+  Shuffle(ia, count);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 random Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[ia[i]]);
+
+  Print(a);
+  <b>typename</b> CS170::Vector&lt;T&gt;::SortResult results = a.selection_sort();
+
+  <b>if</b> (SHOW_COMPARES)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+  }
+
+  <b>if</b> (SortBy == sbkName)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorting on Name:&#92;n&quot;</font>;
+  <b>else</b> <b>if</b> (SortBy == sbkSalary)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorting on salary:&#92;n&quot;</font>;
+  <b>else</b> <b>if</b> (SortBy == sbkYears)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorting on years:&#92;n&quot;</font>;
+  <b>else</b> 
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorting on ID:&#92;n&quot;</font>;
+
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSelectionSortA(<b>void</b>)
+{
+  SortBy = sbkID;
+  TestSelectionSort1&lt;T&gt;();
+  SortBy = sbkSalary;
+  TestSelectionSort1&lt;T&gt;();
+  SortBy = sbkYears;
+  TestSelectionSort1&lt;T&gt;();
+  SortBy = sbkName;
+  TestSelectionSort1&lt;T&gt;();
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSelectionSort2(<b>void</b>)
+{
+  SortBy = sbkName;
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSelectionSort2 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back &quot;</font> &lt;&lt; count &lt;&lt; <font color="#9933CC">&quot; Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[i]);
+
+  Print(a);
+  <b>typename</b> CS170::Vector&lt;T&gt;::SortResult results = a.selection_sort();
+  <b>if</b> (SHOW_COMPARES)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+  }
+  Print(a);
+
+  a.clear();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back &quot;</font> &lt;&lt; count &lt;&lt; <font color="#9933CC">&quot; Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = count; i &gt; 0; i--)
+    a.push_back(PEOPLE[i]);
+
+  Print(a);
+  results = a.selection_sort();
+  <b>if</b> (SHOW_COMPARES)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+  }
+  Print(a);
+
+  a.clear();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back &quot;</font> &lt;&lt; count &lt;&lt; <font color="#9933CC">&quot; Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = count; i &gt; 0; i--)
+    a.push_back(PEOPLE[5]);
+
+  Print(a);
+  results = a.selection_sort();
+  <b>if</b> (SHOW_COMPARES)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+  }
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSelectionSortStress(<b>void</b>)
+{
+  <b>int</b> count = 10000;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSelectionSortStress **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[RandomInt(1, 20)]);
+
+  <font color="#003399"><i>//Print(a);</i></font>
+
+  <b>typename</b> CS170::Vector&lt;T&gt;::SortResult results = a.selection_sort();
+
+  <b>if</b> (SHOW_COMPARES)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Sorted: compares = &quot;</font> &lt;&lt; results.compares;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;, swaps = &quot;</font> &lt;&lt; results.swaps &lt;&lt; std::endl;
+  }
+  <b>for</b> (<b>unsigned</b> i = 1; i &lt; <b>static_cast</b>&lt;<b>unsigned</b>&gt;(count); i += count / 20)
+    std::cout &lt;&lt; a[i] &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+  <font color="#003399"><i>//Print(a);</i></font>
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestBSearch1(<b>void</b>)
+{
+  <b>const</b> <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestBSearch1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b;
+
+  <b>int</b> ia[count];
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    ia[i] = i;
+
+  Shuffle(ia, count);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 10 random Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; <b>static_cast</b>&lt;<b>unsigned</b>&gt;(count); i++)
+  {
+    a.push_back(PEOPLE[ia[i]]);
+    b.push_back(a[i]);
+  }
+
+  Print(a);
+  a.selection_sort();
+  Print(a);
+
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; a.size(); i++)
+  {
+    <b>int</b> index = a.bsearch(b[i]);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Index of &quot;</font> &lt;&lt; b[i] &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; index &lt;&lt; std::endl;
+  }
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestBSearchStress(<b>void</b>)
+{
+  <b>int</b> count = 10000;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestBSearchStress **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Generating...&#92;n&quot;</font>;
+  Person p;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    MakeRandomPerson(p);
+    a.push_back(p);
+  }
+
+  SortBy = sbkID;
+  <font color="#003399"><i>//Print(a);</i></font>
+  a.selection_sort();
+  <font color="#003399"><i>//Print(a);</i></font>
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Searching...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 100; i++)
+  {
+    <b>for</b> (<b>int</b> j = 0; j &lt; count; j++)
+    {
+      <font color="990099">#if 0</font>
+        <b>int</b> index = a.bsearch(a[j]);
+        std::cout &lt;&lt; <font color="#9933CC">&quot;Index of &quot;</font> &lt;&lt; a[j] &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; index &lt;&lt; std::endl;
+      <font color="990099">#else </font>
+        <b>if</b> (a.bsearch(a[j]) == -1) <font color="#003399"><i>// should never happen</i></font>
+          std::cout &lt;&lt; <font color="#9933CC">&quot;Can't find item at index &quot;</font> &lt;&lt; j &lt;&lt; std::endl;
+      <font color="990099">#endif</font>
+    }
+  }
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; ((<b>static_cast</b>&lt;<b>double</b>&gt;(end) - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestReverse1(<b>void</b>)
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestReverse1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[i + 1]);
+
+  Print(a);
+  a.reverse();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Remove last element:&#92;n&quot;</font>;
+  a.pop_back();
+  Print(a);
+  a.reverse();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+  Print(a);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestReverse2(<b>void</b>)
+{
+  <b>int</b> count = 10;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestReverse2 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[i + 1]);
+
+  Print(a);
+  a.reverse();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+  Print(a);
+
+  <b>while</b> (!a.empty())
+  {
+    <b>if</b> (a.size() % 2) <font color="#003399"><i>// odd</i></font>
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Remove last element:&#92;n&quot;</font>;
+      a.pop_back();
+    }
+    <b>else</b> <font color="#003399"><i>// even</i></font>
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Remove first element:&#92;n&quot;</font>;
+      a.pop_front();
+    }
+    Print(a);
+    a.reverse();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Reversed:&#92;n&quot;</font>;
+    Print(a);
+  }
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSwap1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSwap1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b, c;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i + 1]);
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+    b.push_back(PEOPLE[10 + (i + 1)]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;swapv a,b:&#92;n&quot;</font>;
+  a.swapv(b);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;swapv a,c:&#92;n&quot;</font>;
+  a.swapv(c);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;c:&#92;n&quot;</font>;
+  Print(c);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;swapv b,b:&#92;n&quot;</font>;
+  b.swapv(b);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSwapStress(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSwapStress **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b, c;
+
+  <b>int</b> count = 1000000;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  Person p;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    MakeRandomPerson(p);
+    a.push_back(p);
+    MakeRandomPerson(p);
+    b.push_back(p);
+    MakeRandomPerson(p);
+    c.push_back(p);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Swapping...&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; x;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10000001; i++)
+  {
+    a.swapv(b);
+    b.swapv(c);
+    c.swapv(a);
+  }
+
+  PrintPartial(a);
+  PrintPartial(b);
+  PrintPartial(c);
+
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; ((<b>static_cast</b>&lt;<b>double</b>&gt;(end) - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestAssignStress1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAssignStress1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  <b>int</b> count = 1000000;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[RandomInt(0, 20)]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Assigning...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 20; i++)
+  {
+    CS170::Vector&lt;T&gt; x;
+    x = a;
+  }
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; ((<b>static_cast</b>&lt;<b>double</b>&gt;(end) - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestAssignStress2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestAssignStress2 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  <b>int</b> count = 1000000;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing back...&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[RandomInt(0, 20)]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Assigning...&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; x;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t start = std::clock();
+<font color="990099">#endif</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+  {
+    x = a;
+    a.push_back(PEOPLE[0]);
+  }
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::time_t end = std::clock();
+<font color="990099">#endif</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Done...&#92;n&quot;</font>;
+<font color="990099">#ifdef SHOW_TIMES</font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Elapsed time: &quot;</font> &lt;&lt; ((<b>static_cast</b>&lt;<b>double</b>&gt;(end) - start) / CLOCKS_PER_SEC) &lt;&lt; <font color="#9933CC">&quot; secs&#92;n&quot;</font>;
+<font color="990099">#endif</font>
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestEqual1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestEqual1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a, b, c;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i + 1]);
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    b.push_back(PEOPLE[i + 1]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove last element of a:&#92;n&quot;</font>;
+  a.pop_back();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;remove last element of b:&#92;n&quot;</font>;
+  b.pop_back();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;change last element of b:&#92;n&quot;</font>;
+  b[b.size() - 1] = PEOPLE[20];
+  std::cout &lt;&lt; <font color="#9933CC">&quot;a:&#92;n&quot;</font>;
+  Print(a);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;b:&#92;n&quot;</font>;
+  Print(b);
+  <b>if</b> (a == b)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is equal to b&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;a is NOT equal to b&#92;n&quot;</font>;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>int</b> Sum(<b>const</b> CS170::Vector&lt;T&gt;&amp; v)
+{
+  <b>int</b> sum = 0;
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; v.size(); i++)
+    sum += v[i];
+  <b>return</b> sum;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestCrazy(<b>void</b>)
+{
+  <b>int</b> count = 10000;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestCrazy **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    a.push_back(PEOPLE[RandomInt(0, 20)]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Sum before: &quot;</font> &lt;&lt; Sum(a) &lt;&lt; std::endl;
+  <font color="#003399"><i>//Print(a);</i></font>
+
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; a.size(); i++)
+  {
+    <b>int</b> from = RandomInt(0, <b>static_cast</b>&lt;<b>int</b>&gt;(a.size()) - 1);
+    T value = a[<b>static_cast</b>&lt;<b>unsigned</b>&gt;(from)];
+    a.remove(value);
+    <b>if</b> ( (i % 3) == 0)
+    {
+      <b>int</b> to = RandomInt(0, <b>static_cast</b>&lt;<b>int</b>&gt;(a.size()) - 1);
+      a.insert(value, <b>static_cast</b>&lt;<b>unsigned</b>&gt;(to));
+    }
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot; Sum after: &quot;</font> &lt;&lt; Sum(a) &lt;&lt; std::endl;
+  <font color="#003399"><i>//Print(a);</i></font>
+
+  <b>for</b> (<b>unsigned</b> i = 1; i &lt; a.size(); i += count / 20)
+    std::cout &lt;&lt; a[i] &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestSubscriptEx(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestSubscriptEx **********&#92;n&quot;</font>;
+
+  CS170::Vector&lt;T&gt; b;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    b.push_back(PEOPLE[i + 1]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;make a copy:&#92;n&quot;</font>;
+  <b>const</b> CS170::Vector&lt;T&gt; a(b);
+  Print(a);
+  Print(b);
+
+  <b>try</b>
+  {
+    <b>unsigned</b> index = a.size() * 2; <font color="#003399"><i>// illegal</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;accessing subscript on const vector: a[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; a[index] &lt;&lt; std::endl;
+  }
+  <b>catch</b>(<b>const</b> CS170::SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+
+  <b>try</b>
+  {
+    <b>unsigned</b> index = b.size() * 2; <font color="#003399"><i>// illegal</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;accessing subscript on non-const vector: b[&quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;]&quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; b[index] &lt;&lt; std::endl;
+  }
+  <b>catch</b>(<b>const</b> CS170::SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestInsertEx(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestInsertEx **********&#92;n&quot;</font>;
+
+  CS170::Vector&lt;T&gt; a;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    a.push_back(PEOPLE[i + 1]);
+
+  Print(a);
+
+  <b>try</b>
+  {
+    <b>unsigned</b> index = a.size() * 3; <font color="#003399"><i>// illegal</i></font>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;insert Person at index &quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;:&#92;n&quot;</font>;
+    a.insert(PEOPLE[20], index);
+  }
+  <b>catch</b>(<b>const</b> CS170::SubscriptError &amp;se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Bad subscript: &quot;</font> &lt;&lt; se.GetSubscript() &lt;&lt; std::endl;
+  }
+}
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> TestShrink1(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;n********** TestShrink1 **********&#92;n&quot;</font>;
+  CS170::Vector&lt;T&gt; a;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back 8 Persons:&#92;n&quot;</font>;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 8; i++)
+    a.push_back(PEOPLE[i]);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;pop last 3:&#92;n&quot;</font>;
+  a.pop_back();
+  a.pop_back();
+  a.pop_back();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;push_back one Person:&#92;n&quot;</font>;
+  a.push_back(PEOPLE[20]);
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;clear:&#92;n&quot;</font>;
+  a.clear();
+  Print(a);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;shrink:&#92;n&quot;</font>;
+  a.shrink_to_fit();
+  Print(a);
+}
+
+
+<font color="#003399"><i>//***********************************************************************</i></font>
+<font color="#003399"><i>//***********************************************************************</i></font>
+<font color="#003399"><i>//***********************************************************************</i></font>
+
+<b>typedef</b> <b>void</b> (*TestFn)(<b>void</b>);
+
+<font color="990099">#define WATCHDOGx</font>
+<font color="990099">#if defined(WATCHDOG) //&amp;&amp; !defined(_DEBUG)</font>
+
+<font color="990099">#ifdef _MSC_VER</font>
+  <font color="990099">#include &lt;process.h&gt;</font>
+  <font color="990099">#include &lt;stdlib.h&gt;</font>
+  <font color="990099">#include &lt;windows.h&gt;</font>
+  <font color="990099">#include &lt;time.h&gt;</font>
+<font color="990099">#endif</font>
+
+static <b>bool</b> Completed = <b>false</b>;
+
+<b>unsigned</b> <b>__stdcall</b> ThreadTest(<b>void</b> *fn)
+{
+  Completed = <b>false</b>;
+
+  clock_t start, end;
+  <b>try</b>
+  {
+    TestFn testFn = <b>reinterpret_cast</b>&lt;TestFn&gt;(fn);
+    start = clock();
+    testFn();
+    end = clock();
+    Completed = <b>true</b>;
+  }
+  <b>catch</b>(...)
+  {
+    printf(<font color="#9933CC">&quot;Unexpected exception thrown in ThreadTest.&#92;n&quot;</font>);
+  }
+
+  <b>return</b> 0;
+}
+
+<font color="#003399"><i>//typedef unsigned int (*TestFn) __stdcall (void *);</i></font>
+
+<b>void</b> ExecuteTest(TestFn fn, <b>int</b> maxwait = 1000, <b>int</b> safewait = 1000, <b>int</b> announce_level = 2)
+{
+<font color="990099">#ifdef _MSC_VER</font>
+  HANDLE thread;
+  <b>unsigned</b> threadID;
+
+  thread = (HANDLE) _beginthreadex(NULL, 0, &amp;ThreadTest, fn, 0, &amp;threadID);
+
+  clock_t start = clock();
+  WaitForSingleObject(thread, maxwait);
+  clock_t end = clock();
+  CloseHandle(thread);
+
+  <b>if</b> (!Completed)
+  {
+    printf(<font color="#9933CC">&quot;&#92;n********** Test test took too long to complete (over %i ms). **********&#92;n&quot;</font>, maxwait);
+    KILLED = <b>true</b>;
+  }
+  <b>else</b> <b>if</b> (end - start &gt; safewait)
+    printf(<font color="#9933CC">&quot;&#92;n********** Test took %i ms. (Inefficient) **********&#92;n&quot;</font>, end - start);
+  <b>else</b> <b>if</b> (announce_level)
+  {
+    <b>if</b> (announce_level == 1)
+      printf(<font color="#9933CC">&quot;&#92;nTest completed within efficient time limit. (%i ms)&#92;n&quot;</font>, safewait);
+    <b>else</b>
+      printf(<font color="#9933CC">&quot;&#92;nTest completed within efficient time limit. (%i ms, max=%i ms)&#92;n&quot;</font>, end - start, safewait);
+  }
+
+  <font color="#003399"><i>//printf(&quot;&#92;n&quot;);</i></font>
+<font color="990099">#endif</font>
+}
+<font color="#003399"><i>//***********************************************************************</i></font>
+<font color="#003399"><i>//***********************************************************************</i></font>
+<font color="#003399"><i>//***********************************************************************</i></font>
+
+<font color="990099">#else // WATCHDOG</font>
+
+<b>void</b> ExecuteTest(TestFn fn, <b>int</b> maxwait = 1000, <b>int</b> safewait = 1000)
+{
+  <b>if</b> (maxwait + safewait &gt; 0)
+    fn();
+}
+
+<font color="990099">#endif</font>
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  CS170::Utils::srand(1, 0);
+
+  <b>int</b> test_num = 0;
+  <b>if</b> (argc &gt; 1)
+    test_num = std::atoi(argv[1]);
+
+  <b>struct</b> TimedTest
+  {
+    <b>const</b> <b>char</b> *fn;
+    <b>void</b> (*test)(<b>void</b>);
+    <b>int</b> maxwait;
+    <b>int</b> safewait;
+  };
+
+  <b>int</b> maxwait =  100;
+  <b>int</b> safewait = 100;
+
+  <b>typedef</b> Person T;
+  TimedTest Tests[] = {
+                    {<font color="#9933CC">&quot;TestPush&quot;</font>,                TestPush&lt;T&gt;,                maxwait, safewait}, <font color="#003399"><i>//  1 </i></font>
+                    {<font color="#9933CC">&quot;TestPop&quot;</font>,                 TestPop&lt;T&gt;,                 maxwait, safewait}, <font color="#003399"><i>//  2</i></font>
+                    {<font color="#9933CC">&quot;TestRemove&quot;</font>,              TestRemove&lt;T&gt;,              maxwait, safewait}, <font color="#003399"><i>//  3</i></font>
+                    {<font color="#9933CC">&quot;TestInsert1&quot;</font>,             TestInsert1&lt;T&gt;,             maxwait, safewait}, <font color="#003399"><i>//  4</i></font>
+                    {<font color="#9933CC">&quot;TestSubscripts&quot;</font>,          TestSubscripts&lt;T&gt;,          maxwait, safewait}, <font color="#003399"><i>//  5</i></font>
+                    {<font color="#9933CC">&quot;TestArray&quot;</font>,               TestArray&lt;T&gt;,               maxwait, safewait}, <font color="#003399"><i>//  6</i></font>
+                    {<font color="#9933CC">&quot;TestSubscript1&quot;</font>,          TestSubscript1&lt;T&gt;,          maxwait, safewait}, <font color="#003399"><i>//  7</i></font>
+                    {<font color="#9933CC">&quot;TestALot1&quot;</font>,               TestALot1&lt;T&gt;,               maxwait, safewait}, <font color="#003399"><i>//  8</i></font>
+                    {<font color="#9933CC">&quot;TestCopy&quot;</font>,                TestCopy&lt;T&gt;,                maxwait, safewait}, <font color="#003399"><i>//  9</i></font>
+                    {<font color="#9933CC">&quot;TestAssign&quot;</font>,              TestAssign&lt;T&gt;,              maxwait, safewait}, <font color="#003399"><i>// 10</i></font>
+                    {<font color="#9933CC">&quot;TestAdd1&quot;</font>,                TestAdd1&lt;T&gt;,                maxwait, safewait}, <font color="#003399"><i>// 11</i></font>
+                    {<font color="#9933CC">&quot;TestAdd2&quot;</font>,                TestAdd2&lt;T&gt;,                maxwait, safewait}, <font color="#003399"><i>// 12</i></font>
+                    {<font color="#9933CC">&quot;TestSelectionSortA&quot;</font>,      TestSelectionSortA&lt;T&gt;,      maxwait, safewait}, <font color="#003399"><i>// 13</i></font>
+                    {<font color="#9933CC">&quot;TestSelectionSort2&quot;</font>,      TestSelectionSort2&lt;T&gt;,      maxwait, safewait}, <font color="#003399"><i>// 14</i></font>
+                    {<font color="#9933CC">&quot;TestBSearch1&quot;</font>,            TestBSearch1&lt;T&gt;,            maxwait, safewait}, <font color="#003399"><i>// 15</i></font>
+                    {<font color="#9933CC">&quot;TestReverse1&quot;</font>,            TestReverse1&lt;T&gt;,            maxwait, safewait}, <font color="#003399"><i>// 16</i></font>
+                    {<font color="#9933CC">&quot;TestReverse2&quot;</font>,            TestReverse2&lt;T&gt;,            maxwait, safewait}, <font color="#003399"><i>// 17</i></font>
+                    {<font color="#9933CC">&quot;TestSwap1&quot;</font>,               TestSwap1&lt;T&gt;,               maxwait, safewait}, <font color="#003399"><i>// 18</i></font>
+                    {<font color="#9933CC">&quot;TestEqual1&quot;</font>,              TestEqual1&lt;T&gt;,              maxwait, safewait}, <font color="#003399"><i>// 19</i></font>
+                    {<font color="#9933CC">&quot;TestShrink1&quot;</font>,             TestShrink1&lt;T&gt;,             maxwait, safewait}, <font color="#003399"><i>// 20</i></font>
+                    {<font color="#9933CC">&quot;TestSubscriptEx&quot;</font>,         TestSubscriptEx&lt;T&gt;,         maxwait, safewait}, <font color="#003399"><i>// 21</i></font>
+                    {<font color="#9933CC">&quot;TestInsertEx&quot;</font>,            TestInsertEx&lt;T&gt;,            maxwait, safewait}, <font color="#003399"><i>// 22</i></font>
+                    {<font color="#9933CC">&quot;TestBSearchStress&quot;</font>,       TestBSearchStress&lt;T&gt;,          1000,      500}, <font color="#003399"><i>// 23</i></font>
+                    {<font color="#9933CC">&quot;TestSelectionSortStress&quot;</font>, TestSelectionSortStress&lt;T&gt;,    1000,      500}, <font color="#003399"><i>// 24</i></font>
+                    {<font color="#9933CC">&quot;TestSwapStress&quot;</font>,          TestSwapStress&lt;T&gt;,             2000,     1000}, <font color="#003399"><i>// 25</i></font>
+                    {<font color="#9933CC">&quot;TestAssignStress1&quot;</font>,       TestAssignStress1&lt;T&gt;,          4000,     2000}, <font color="#003399"><i>// 26</i></font>
+                    {<font color="#9933CC">&quot;TestAssignStress2&quot;</font>,       TestAssignStress2&lt;T&gt;,          4000,     2000}, <font color="#003399"><i>// 27</i></font>
+                    {<font color="#9933CC">&quot;TestCrazy&quot;</font>,               TestCrazy&lt;T&gt;,                  1000,      500}, <font color="#003399"><i>// 28</i></font>
+                 };
+
+  KILLED = <b>false</b>;
+  <b>int</b> num = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(Tests) / <b>sizeof</b>(*Tests));
+  <b>if</b> (test_num == 0)
+  {
+    <b>for</b> (<b>int</b> i = 0; i &lt; num; i++)
+      ExecuteTest(Tests[i].test, Tests[i].maxwait, Tests[i].safewait);
+  }
+  <b>else</b> <b>if</b> (test_num &gt; 0 &amp;&amp; test_num &lt;= num)
+  {
+    ExecuteTest(Tests[test_num - 1].test, Tests[test_num - 1].maxwait, Tests[test_num - 1].safewait);
+  }
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

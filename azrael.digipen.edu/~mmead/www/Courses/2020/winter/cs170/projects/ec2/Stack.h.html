@@ -1,0 +1,76 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;string&gt; // string (for exception message)</font>
+<font color="990099">#include &lt;list&gt;   // The stack class is composed of a std::list</font>
+
+<b>namespace</b> CS170
+{
+
+<b>class</b> StackError
+{
+  <b>public</b>:
+    StackError(<b>const</b> <b>char</b> *errmsg) : message_(errmsg) {};
+    <b>const</b> <b>char</b> *what() <b>const</b> {<b>return</b> message_.c_str();};
+
+  <b>private</b>:
+    std::string message_;
+};
+
+<b>class</b> Stack
+{
+  <b>public</b>:
+      <font color="#003399"><i>// Default constructor. If maxsize is 0, maxsize is UINT_MAX (constant)</i></font>
+    Stack(size_t maxsize = 0);
+
+      <font color="#003399"><i>// Non-default constructor. Construct stack from array. (linear)</i></font>
+    Stack(<b>int</b> *array, size_t count);
+
+      <font color="#003399"><i>// Clears the stack, freeing the underlying memory (linear)</i></font>
+    <b>void</b> clear(); 
+
+      <font color="#003399"><i>// True if the stack is empty. (constant)</i></font>
+    <b>bool</b> empty() <b>const</b>;
+
+      <font color="#003399"><i>// Gets the maxsize value (constant)</i></font>
+    size_t get_maxsize() <b>const</b>;
+
+      <font color="#003399"><i>// Removes the value on the top of the stack (constant)</i></font>
+    <b>void</b> pop();
+
+      <font color="#003399"><i>// Pushes a value onto the top of the stack (constant)</i></font>
+    <b>void</b> push(<b>int</b> value);
+
+      <font color="#003399"><i>// Prints the stack, either vertically (default) or horizontally (linear)</i></font>
+    <b>void</b> print(<b>bool</b> vertical = <b>true</b>) <b>const</b>;
+
+      <font color="#003399"><i>// The number of items on the stack (constant)</i></font>
+    size_t size() <b>const</b>;
+
+      <font color="#003399"><i>// Swaps this stack with another (constant)</i></font>
+    <b>void</b> swap(Stack&amp; rhs);
+
+      <font color="#003399"><i>// The value at the top of the stack. Does not remove it. (constant)</i></font>
+    <b>int</b> top() <b>const</b>;
+
+  <b>private</b>:
+    std::list&lt;<b>int</b>&gt; stack_; <font color="#003399"><i>// Composition (aggregation, containment)</i></font>
+    size_t maxsize_;       <font color="#003399"><i>// If we need to limit the size of the Stack</i></font>
+    size_t size_;          <font color="#003399"><i>// std::list.size() is linear!!</i></font>
+};
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

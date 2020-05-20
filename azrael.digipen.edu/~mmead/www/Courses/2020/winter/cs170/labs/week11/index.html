@@ -1,0 +1,199 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment</h1>
+(vector3)
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+For this week's lab, you will be adding a few simple methods. Since you've already implemented 
+all of the "hard" stuff, these new functions shouldn't be too difficult and most students
+will finish within 
+a couple of hours.
+
+<ol>
+<li>This lab adds 4 new methods and slightly modifies 4 others. The 4 new methods are:
+
+
+<blockquote><pre>
+  <font color="#003399"><i>// Swaps the contents of <b>other</b> with this Vector (Constant time)</i></font>
+<b>void</b> swapv(Vector &amp;other);
+
+  <font color="#003399"><i>// Reverses the order of the elements (Linear time)</i></font>
+<b>void</b> reverse();
+
+  <font color="#003399"><i>// Equality operator (Linear time)</i></font>
+  <font color="#003399"><i>// Both vectors must be the same size.</i></font>
+<b>bool</b> <b>operator</b>==(<b>const</b> Vector&amp; rhs) <b>const</b>;
+
+  <font color="#003399"><i>// Reallocates an array to match the size of the number </i></font>
+  <font color="#003399"><i>// of elements. If size == capacity, does nothing. </i></font>
+<b>void</b> shrink_to_fit();
+</pre></blockquote>
+
+and the 4 modified methods are the two subscript operators, the <tt><b>insert</b></tt> method, 
+and the private <tt><b>check_bounds</b></tt> method. These methods will now throw an exception 
+via the <tt><b>check_bounds</b></tt> method. The exception class is already given to you in the header file
+on this page.
+
+<blockquote><pre>
+  <font color="#003399"><i>// Subscript operators. If the index is invalid, throws a SubscriptError.</i></font>
+<b>int</b> <b>operator</b>[](<b>unsigned</b> index) <b>const</b>;
+<b>int</b>&amp; <b>operator</b>[](<b>unsigned</b> index);
+
+  <font color="#003399"><i>// Inserts a new element at the specified position. Throws a</i></font>
+  <font color="#003399"><i>// SubscriptError if the position is invalid.</i></font>
+<b>void</b> insert(<b>int</b> value, <b>unsigned</b> position);
+
+  <font color="#003399"><i>// If the index is out of bounds, throw a SubscriptError.</i></font>
+<b>void</b> check_bounds(<b>unsigned</b> index) <b>const</b>;
+
+</pre></blockquote>
+<p>
+
+<blockquote>
+<p class="technote">
+Technically, the first 3 methods above should not have to be modified. That is, if you followed
+my advice (<i>always</i> a good thing) and put your bounds-checking in the <tt>check_bounds</tt>
+method and called it from the 3 methods. That way, only <tt>check_bounds</tt> will need to be
+modified. Code reuse is a Wonderful Thing<big><sup>&trade;</sup></big>.
+</p>	
+</blockquote>
+
+Given this header file <a  href="Vector.h">Vector.h</a> (<a href="Vector.h.html">HTML</a>), 
+complete the implementation of the Vector class in Vector.cpp. Use the .cpp file
+  from the previous lab as your starting point.
+<p>
+
+Other hints:
+<ol>
+<li>You should work on the new functions in the order listed above. They are listed in order from 
+  very easy to less easy. The number to the left in parentheses is approximately how many lines of 
+  code each function requires.
+  <p>
+  <ol>
+  <li><font color="blue">(5)</font> <tt>swapv</tt>
+  <li><font color="blue">(6)</font> <tt>reverse</tt>
+  <li><font color="blue">(6)</font> <tt>operator==</tt>
+  <li><font color="blue">(10)</font> <tt>shrink_to_fit</tt>
+</ol>
+
+<p>
+<li>The <tt><b>swapv</b></tt> method's comment says that it should swap the two vectors in 
+  constant time. How is that possible? The vectors might contain millions of elements!
+  Well, it's not going to swap each element of the internal array. It
+  only swaps the four private data members, which makes it very fast and efficient.
+  (It also <i>guarantees</i> that no exceptions can be thrown during the swap.)
+  <p>
+  You should implement a <tt><b>swap</b></tt> helper method to help your <tt><b>swapv</b></tt> method. 
+  This will make your <tt><b>swapv</b></tt> method trivial to implement. 
+  You don't need to declare it or put it	in the class. You can 
+  just put this in your .cpp file at the top (inside the CS170 namespace). DO NOT MAKE IT GLOBAL!
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+void swap(T &a, T& b)
+{
+  T temp = a;
+  a = b;
+  b = temp;
+}
+</pre></blockquote>
+	
+<p>
+<li>You've written the <tt><b>reverse</b></tt> method in CS120, so that is also trivial.
+  (Even if you didn't write it in CS120, it's still trivial to do. Hint: Use the <tt><b>swap</b></tt>
+  function you wrote above to help.)
+<p>
+<li>If you've implemented your <tt><b>insert</b></tt> method and subscript operators properly, 
+  then the only code that will change is the private <tt><b>check_bounds</b></tt> method. You 
+  will remove the error messages and <tt>abort()</tt> code and replace it with a single line of code 
+  that will throw the 
+  <tt><b>SubscriptError</b></tt> exception. 
+  <p>
+  In a nutshell, that is why we factored out the 
+  bounds checking. Had you simply done bounds checking in each method that needed it, you would 
+  have to update a lot more code. Keep this in mind when you start writing larger programs with 
+  error checking. This means that the only place in your code where you'll have the <tt><b>throw</b></tt>
+  keyword is in your <tt><b>check_bounds</b></tt> function. You will not <tt><b>catch</b></tt> anything.
+  Remember, it is the <i>client</i> code (i.e. driver) that will <tt><b>catch</b></tt> the 
+  exception.
+<p>
+<li>You can not change the public interface for any class that is provided to you. For the
+  the <tt><b>SubscriptError</b></tt> class, you cannot change anything, public or private.
+</ol>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add Doxygen file headers and comments to <tt><b>Vector.h</b></tt> and <tt><b>Vector.cpp</b></tt>. 
+  Make a bullet list of the functions in the .cpp file. 	Create doxygen function header comments 
+  for each function. Most of this work was done in the previous labs, so this should only take a 
+  few minutes to update.
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Here are sample command lines:
+
+GNU g++:
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp
+</pre></blockquote>
+<!--<b>clang++</b> -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp<br>-->
+
+<!--
+Microsoft (Optional for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp Vector.cpp
+</pre></blockquote>
+-->
+
+<!--<b>clang++</b> -o clan -O2 -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp Vector.cpp<br>-->
+
+
+
+This is a sample driver for the new and modified methods: <a href="driver.cpp">driver.cpp</a> (<a href="driver.cpp.html">HTML</a>) 
+and the <a href="output.txt">output.txt</a>
+<p>
+
+Don't forget that you <i>may</i> need to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to 
+ignore the newlines.
+
+</ol>
+
+<br><br><br>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

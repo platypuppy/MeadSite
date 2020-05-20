@@ -1,0 +1,343 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ol>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>The program you are to write is the <tt><b>tablen</b></tt> program. You all know how this works. 
+  (Well, you do if you are following directions and using it!)
+  This is the prototype for the function:
+<p>
+
+<blockquote><pre>
+<b>void</b> tablen(<b>const char</b> *filename);
+</pre></blockquote>
+
+
+<p>
+
+  Here's a sample run from the command line under Windows:
+	
+<blockquote><pre>
+tablen somefile.c
+</pre></blockquote>
+
+<!--
+Simplified output (summary information only):
+
+<blockquote><pre>
+*****  TABS IN USE  *****: Number of tabs in the file is 18.
+***** LINE TOO LONG *****: 11 lines longer than 80. Longest line is 361 at 111 chars.
+</pre></blockquote>
+-->
+
+Output:
+
+<blockquote><pre>
+# 32: (tabs: 3) |                       Employee *Next;|
+# 33: (tabs: 3) |                       char lastName[12];|
+# 34: (tabs: 3) |                       char firstName[12];|
+# 35: (tabs: 3) |                       float salary;|
+# 36: (tabs: 3) |                       int years;|
+# 69: (tabs: 1) |       {"Faith", "Ian", 80000, 10},|
+# 70: (tabs: 1) |       {"Tufnel", "Nigel", 90000, 12},|
+# 71: (tabs: 1) |       {"Savage", "Viv", 50000, 4},|
+*****  TABS IN USE  *****: Number of tabs in the file is 18.
+#114: ( 99) |  unsigned char *data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char *>(block));|
+#137: ( 84) |  data = const_cast<unsigned char*>(reinterpret_cast<const unsigned char *>(block));|
+#173: (102) |//****************************************************************************************************|
+#174: (102) |//****************************************************************************************************|
+#223: ( 84) |    cout << "============================== Test free checking (stress)..." << endl;|
+#227: ( 85) |    cout << "============================== Test stress using new/delete..." << endl;|
+#230: ( 84) |    cout << "============================== Test stress using allocator..." << endl;|
+#322: ( 82) |    cout << "Exception thrown during construction of Student in Stress."  << endl;|
+#361: (111) |    cout << ", ObjectsPerPage = " << objects << ", MaxPages = " << pages << ", MaxObjects = " << total << endl;|
+#387: ( 82) |    cout << "Exception thrown during construction of Student in Stress."  << endl;|
+#417: ( 94) |    unsigned width = oa->GetStats().ObjectSize_ + 2 * oa->GetConfig().PadBytes_ + header_size;|
+***** LINE TOO LONG *****: 11 lines longer than 80. Longest line is 361 at 111 chars.
+</pre></blockquote>
+
+This is actually a simple task and I've separated it into two discrete tasks for you:
+<p>
+<ol>
+	<li>Counting tabs
+	<li>Checking line lengths
+</ol>
+<P>
+
+<table>
+<tr><th>Pseudocode for counting tabs</th><th></th><th>Pseudocode for checking line lengths</th></tr>
+<tr>
+<td>	
+<ul>
+<li>Open a file for read/text
+<li>While there are more lines in the file
+<ul>
+<li>Read in a line.
+<ul>
+<li>Count the number of tabs
+<li>If the line has tabs
+	<ul>
+		<li>Print that line with tab information
+	</ul>
+</ul>
+</ul>
+<li>Close the file.
+<li>Print the summary information.
+</ul>
+</td>
+
+<td width=50></td>
+
+<td>	
+<ul>
+<li>Open a file for read/text
+<li>While there are more lines in the file
+<ul>
+<li>Read in a line.
+<ul>
+<li>Check the length of the line
+<li>If the line is longer than 80 characters
+	<ul>
+		<li>Print that line with length information
+	</ul>
+</ul>
+</ul>
+<li>Close the file.
+<li>Print the summary information.
+</ul>
+</td>
+</tr></table>
+<p>
+
+<p>
+The only "hard" part is keeping track of the number of tabs and the number of long lines, as well as which
+line is the longest and printing this at the end. You can assume that all lines contain less than 
+1000 characters (they will typically be much shorter). 
+<p>
+Hints:
+<p class="technote">
+The best advice I can give you at this point is to <b>follow the advice</b>. Don't try to write one function
+that does all of the work. You should write one function that will look for tabs and you should write
+a second function that checks for long lines. Don't try and be a "hero" and do it in one function. Even
+if you can, it's not the way that programs in the Real World<sup>&trade;</sup> are written. One task,
+one function. Yes, sometimes we violate this rule, but for the most part, unless you have a good reason
+to discard this advice, that's the way to do it.
+<ol>
+  <li>Create two helper functions in your code, one for counting tabs and one for
+    checking line lengths. Yes, there will be some code duplication, but it will
+    be much easier if you separate the two tasks.</li>
+    <p>
+  <li>Make sure to check the return value from 
+    <tt><a href="http://www.cplusplus.com/reference/cstdio/fopen">fopen</a></tt>. It will save you from a 
+    lot of headaches.</li>
+    <p>
+  <li>If you successfully open a file, make sure you close the file when you are done.</li>
+  <p>
+  <li>You can assume that all lines are shorter than 1000 characters. Make a <tt><b>#define</b></tt> for 
+    that and use it when you create your buffer (array) to read the lines from the file.</li>
+<blockquote><pre>
+<b>#define</b> MAX_LINE_LENGTH 1000
+</pre></blockquote>
+  <li>Use <tt><a href="http://www.cplusplus.com/reference/cstdio/fgets/">fgets</a></tt> to read lines 
+    from the file.</li>
+    <p>
+  <li>Don't forget, <tt>fgets</tt> will return strings with the newline at the end. DO NOT COUNT THIS.
+    The easiest thing to do is to remove the newline character by overwriting it with a 0, which is trivial. 
+    (It's the last character in the line. Always.) Hey, here's a good idea: Write a helper function that
+    replaces the newline with a NUL character. You will use this function often in other programs.</li>
+    <p>
+  <li>This is the <tt>printf</tt> statement to format the tabs portion:
+<blockquote><pre>
+printf("#%3i: (tabs:%2i) |%s|\n", <font color="blue"><b>[fill in 3 variables here ...]</b></font>);
+</pre></blockquote>
+The three variables are the current line number (counting from 1), the count of tabs, and the line itself.
+      <p>
+<li>This is the <tt>printf</tt> statement to format the long lines portion:
+<blockquote><pre>
+printf("#%3i: (%3i) |%s|\n", <font color="blue"><b>[fill in 3 variables here ...]</b></font>);
+</pre></blockquote>
+The three variables are the current line number (counting from 1), the length of the line, and the line 
+itself.
+    <p>
+  <li>If you are unable to open the file for reading (e.g. mistyped characters, etc.), you must print a 
+    message that indicates this. For example, if the file <tt>foobar</tt> can't be opened:
+<blockquote><pre>
+Can't open foobar for read.
+</pre></blockquote>
+If the first function (counting tabs) can't open the file, don't call the other function to check for
+long lines. Just return back to <b>main</b> after printing the message.
+<p>
+  <li>If <b>fopen</b> fails, meaning you can't open the file, DO NOT TRY TO CLOSE IT! Why? Because
+    it's NOT open.</li>
+    <p>
+    <li>You are reading text from a file (using <b>fgets</b>), and writing text to the screen 
+    (using <b>printf</b>). DO NOT write the output to a file.</li>
+    <p>
+<li>The only files you need to include are <tt>string.h</tt> (for <i>strlen</i>), and 
+  <tt>stdio.h</tt> (for all of the I/O functions).</li>
+  <p>
+
+  <li>You may need to ignore the end-of-line characters when you <tt><b>diff</b></tt>, just add:
+<blockquote><pre>
+--strip-trailing-cr
+</pre></blockquote>
+to the <tt><b>diff</b></tt> command.</li>
+
+<p>
+  <li><font color="blue">This lab is about 50 lines of code.</font></li>
+
+</ol>
+
+
+</ol>
+<p>
+<hr width="90%">
+<p>
+  
+Here are sample input files. Choose the one that matches the operating system you are using. 
+Download and save the files to your computer. Don't copy and paste the text from the web pages.
+<ul>
+  <li><a href="driver-sample-CRLF.cpp">Windows</a> (with CR-LF endings)</li>
+  <Li><a href="driver-sample-LF.cpp">Linux/Mac OS X</a> (with LF endings)</li>
+</ul>
+<p>
+and the <a href="driver-sample-tablen.txt">output</a> to <tt><b>diff</b></tt> with.
+<p>
+
+Here is what the main file looks like:
+<table border=0>
+<tr><th><b><tt>main.c</tt></b></th></tr>
+<tr><td>	
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+
+<font color="#003399"><i>/* Prototype from tablen.c */</i></font>
+<b>void</b> tablen(<b>const</b> <b>char</b> *filename);
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+    <font color="#003399"><i>/* Must be given a filename */</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    printf(<font color="#9933CC">&quot;Usage: tablen filename\n&quot;</font>);
+    printf(<font color="#9933CC">&quot;where: filename - file to process.\n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+  tablen(argv[1]);
+
+  <b>return</b> 0;
+}
+</code></pre>	
+</td></tr></table>
+<p>
+
+You need to implement the <b><i>tablen</i></b> function in a file named <tt><b>tablen.c</b></tt>. 
+A command line to build the program
+will look like this:
+<p>
+
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -Werror -O main.c tablen.c -o tablen
+
+</pre></blockquote>
+
+To run the program on a file, run it like this:
+
+<blockquote><pre>
+tablen filename_to_check
+</pre></blockquote>
+
+for example:
+
+<blockquote><pre>
+tablen driver-sample-CRLF.cpp
+</pre></blockquote>
+
+On Linux or Mac OS X:
+<blockquote><pre>
+./tablen driver-sample-CRLF.cpp
+</pre></blockquote>
+
+</ol>
+<p class="technote">
+Now that you have implemented the <b>tablen</b> program, there is no excuse for not using
+it on all of your assignments! Of course, to be safe, you should use the one that I posted.
+This way, if there is a bug in your version of <b>tablen</b>, you won't miss any tabs or 
+long lines.
+</p>
+
+
+
+
+</ol>
+
+
+
+<p>
+<big><big>
+</big></big>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<br><br><br><br>
+
+	
+<hr>
+
+<table border=0 cellpadding=0 cellspacing=10>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+	<td>
+</td>
+<td></td>
+<td>
+</td>
+</tr></table>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

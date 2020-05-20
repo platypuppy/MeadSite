@@ -1,0 +1,141 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Programming Assignment #5</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<p>
+<h1>CS 120 - Programming Assignment #5</h1>
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<li><a href="cs120-programming-assignment-scantext.pdf">Handout</a> 
+<p>
+<!--
+<li>Here is the header file for you to use: <a href="scantext.h.html">HTML</a> 	<a href="scantext.h">Text</a> (Do not modify this file.)
+-->
+<li>The partial .c file for you to start with: <a href="scantext.c.html">HTML</a> 	<a href="scantext.c">Text</a>
+<p>
+<li>Here is a <i>sample</i> <tt>driver.c</tt> file for you to use and experiment with: <a href="driver.c.html">HTML</a>
+	<a href="driver.c">Text</a>
+<ul>
+<p>
+<li>Compile it like this:
+<blockquote><pre>
+gcc -O -Wall -Wextra -Werror -ansi -pedantic driver.c scantext.c -o scantext
+</pre></blockquote>
+<li>Sample output: <a href="output.sample.txt">all tests</a>.
+</ul>
+<p>
+<br>
+
+<li>Here is another driver that will stress-test your code:
+	<a href="driver-stress.c.html">HTML</a>&nbsp;&nbsp;
+	<a href="driver-stress.c">Text</a></li>
+	It's only testing the <i>count_words</i> function, which is the most complex
+	function. The first test should count 1499 words and the second should count 991170 words.
+<blockquote><pre>
+== test1 ======================================================
+Word count is 1499
+Reading...
+
+== test2 ======================================================
+Word count is 991170
+</pre></blockquote>
+
+		<p class="technote">
+	The first test should finish almost instantly. The second test may take up to
+	20 seconds (or more), depending on the speed of your computer.
+	99% of the time is spent reading the text from the disk file (127,000 lines) and appending them
+	to a very large string. Your code to count the words should finish almost 
+	instantly (even with about 1,000,000 words).
+</p>
+	<p>
+	You have to change the name of the files in the driver used in each test to match your system.
+	The first line in each test function has the name of the file to read.
+	<p>
+	Build it with this command:
+	<p>
+
+<blockquote><pre>
+gcc -fno-builtin -O2 -Wall -Wextra -ansi -pedantic driver-stress.c scantext.c -o stress
+</pre></blockquote>
+
+	For Windows systems, use these files: <a href="decl80j-crlf.txt">decl80j-crlf.txt</a>
+	and <a href="big100-crlf.txt">big100-crlf.txt</a>.
+	<p>
+	For Linux and Mac use these files: <a href="decl80j-lf.txt">decl80j-lf.txt</a>
+	and <a href="big100-lf.txt">big100-lf.txt</a>.
+	<p>
+	Don't copy and paste from the web browser. You must download the files (to preserve the
+	EOL characters).
+	<p>
+	You can download all files in one zip file: <a href="allfiles.zip">allfiles.zip</a>.</li>
+
+
+
+</ul>
+
+
+
+
+<p class="SectionHeader">
+Additional Notes
+</p>
+
+<ul>
+
+<li>You are given the .c file (<tt>scantext.c</tt>) that you need to finish. There is a <tt>mystrlen</tt> 
+function included that you may use, if necessary. (You may need to find the length of the string,
+and you aren't allowed to include any header files.) You are not to remove the function or change it in any 
+way. However, if you do not use it (call it), you will get a <i>compiler</i> warning (something along 
+the lines of 
+not using a function that is in the file). If you are not calling that function and you do not get a 
+compiler warning, you have done something wrong (like maybe changed the <tt>mystrlen</tt> function?).
+The only way to stop the warning is to remove the function (which you can't do) or to call it (which you may
+not need to do.) So, what about the warning? The warning is OK. When I compile your code, I will also use
+this command, which won't produce the warning:
+<blockquote><pre>
+gcc -O -Wall -Wextra -Werror -ansi -pedantic <b>-Wno-unused-function</b> driver.c scantext.c -o scantext
+</pre></blockquote>
+
+<p class="technote">
+The purpose of this compiler warning is for you to <b>learn and understand why you get the warning</b> 
+and not 
+to simply ignore it. At this point, you should be able to explain most, if not all, of the warnings that 
+you are receiving from the compiler. If you don't understand them, you need to be asking a TA/Tutor
+or on the Moodle forums.
+</p>
+</ul>
+
+<p>
+<hr>
+<p>
+
+<!--
+gcc -O -Wuninitialized -Wextra -ansi -pedantic -Wchar-subscripts -Wcomment -Wformat -Wimplicit -Wmissing-braces -Wparentheses
+-Wsequence-point -Wreturn-type -Wswitch -Wswitch-default -Wswitch-enum -Wtrigraphs -Wunused-label
+-Wunused-parameter -Wunused-variable -Wunused-value -Wunknown-pragmas driver.c scantext.c -o scantext.exe
+-->
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

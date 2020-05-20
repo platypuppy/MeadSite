@@ -1,0 +1,171 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Programming Assignment #2</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Programming Assignment #2</h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="technote">
+<b>Note:</b> If you had no problems with the previous assignment, then this a trivial
+assignment. All you are doing is putting everything into a class. (Much like you're
+doing for the lab).
+<!--
+ Before all of the snow, I had intended to give this out this week.
+Normally, I would only give students one week to do the assignment, as it
+is not difficult. However, instead of waiting until next Friday to give out the assignment
+and then have it due the following week, I'm going to give it out today and give you
+two weeks to complete it. There are a lot of diligent students in CS170 that don't want
+to do nothing for a week so this will allow them to "get ahead" of it.
+-->
+<br><br>
+<b>Also, you will receive feedback on the first assignment (in your returned folders soon),
+so you will want to check that so you don't lose the same points twice.</b>
+</p>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<table border=0>
+<tr><td><ximg src="../../../../../images/annew3.gif" width="60" height="30"></td>
+<td>
+<p class="technote">
+<b>Observations:</b> Many students are forgetting that arrays in C/C++ are zero-based, meaning, if
+you have an array of 5 boats, you'd better only index that array with 0 through 4. Students are indexing that array using the
+BoatID (1 through 5), which is the cause of 99.9% of the problems. Remember, <b>overwriting an array means your program is undefined (broken)</b>, which
+(unfortunately) usually means it will work for you on your machine with simple tests, but won't work for me when I test it. The same is true
+when doing bounds-checking to see if the boat or shot is outside of the array (ocean).
+So, please, please, please pay attention to the
+details when indexing an array. 
+<br><br>
+The sample driver is just that, a sample. Just because you pass all of the tests in that simple driver doesn't necessarily mean your code is perfect.
+Several people had incorrect output or crashes because they failed to check the coordinates of the boats or shots correctly. The problem is that they
+failed to check if the coordinates were negative. They were checking that the coordinates were less than the x and y dimensions, but they didn't 
+check to make sure the coordinates weren't less than 0. Many students failed to do this. Double-check your checks!
+</p>
+
+</td>
+</tr></table>	
+
+
+<ul>
+
+<li><a href="cs170-programming-assignment-warboatsOO.pdf">Handout</a> 
+
+
+<!--<li><a href="CS170-FAQ2.html">FAQ</a> Frequently Asked Questions for this assignment-->
+<li>Interface: <a href="WarBoats.h.html">HTML</a> <a href="WarBoats.h">Text</a>
+<li>Ocean definitions:  <a href="Ocean.h.html">HTML</a>  <a href="Ocean.h">Text</a>
+<li>Partial Ocean implementations:  <a href="Ocean.cpp.html">HTML</a> <a href="Ocean.cpp">Text</a> 
+<li>Sample driver program: <a href="driver-sample.cpp.html">HTML</a> <a href="driver-sample.cpp">Text</a> 
+<li>Outputs from the tests: <a href="test0.txt">test0.txt</a>&nbsp;&nbsp;&nbsp;<a href="test1.txt">test1.txt</a>&nbsp;&nbsp;&nbsp;
+	<a href="test2.txt">test2.txt</a>&nbsp;&nbsp;&nbsp;<a href="test3.txt">test3.txt</a>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+	</ul>
+<li>Sample command lines for compiling
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -O -ansi -pedantic -Wconversion -o gnu driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+
+<!--
+<blockquote>
+Microsoft (for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> /W4 /Za /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver-sample.cpp Ocean.cpp PRNG.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+<p>
+<li>Don't forget to run your program under a memory debugger.
+Submitting code with memory errors will lead to a low score 
+<b>EVEN IF YOUR OUTPUT IS CORRECT</b>.</li>	
+<p>
+<!--
+<li><a href="Doxyfile">Doxyfile</a> - This will be used to grade your assignment.
+-->
+
+<!--
+<li>Makefiles for <a href="makefile">GNU</a>, <a href="makefile.vc7">Microsoft</a>, and <a href="makefile.bcc">Borland</a>.
+-->
+</ul>
+
+<p class="SectionHeader">
+Additional Sample Program Runs
+</p>
+
+Be sure that you test your code with this driver as well, especially the 8x12 board. 
+<b>YOU HAVE BEEN WARNED.</b>
+
+<ul>
+<li>Another sample driver: <a href="driver-big.cpp.html">HTML</a> <a href="driver-big.cpp">Text</a>
+	<ul>
+	<li><a href="out-5-10-10-ff.txt">10x10 with 5 boats, minimum output</a>
+	<li><a href="out-5-10-10-tf.txt">10x10 with 5 boats, medium output</a>
+	<li><a href="out-5-10-10-tt.txt">10x10 with 5 boats, maximum output</a>
+		<p>
+	<li><a href="out-5-8-12-ff.txt">8x12 with 5 boats, minimum output</a>
+	<li><a href="out-5-8-12-tf.txt">8x12 with 5 boats, medium output</a>
+	<li><a href="out-5-8-12-tt.txt">8x12 with 5 boats, maximum output</a>
+		<p>
+	<li><a href="out-99-30-30-ff.txt">30x30 with 99 boats, minimum output</a>
+	<li><a href="out-99-30-30-tf.txt">30x30 with 99 boats, medium output</a>
+	<li><a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs170/projects/2/out-99-30-30-tt.zip">30x30 with 99 boats, maximum output</a> zip file
+	</ul>
+</ul>
+
+<p class="SectionHeader">
+GUI Driver</p>
+
+After completing this assignment, you will have the "logic" to create a simple game like this one. 
+<!-- Of course, you need to know how to create a graphical user interface, which is one of the things you'll learn in CS230. -->
+
+<p>
+<a href="WarBoats.exe">Download the executable</a> &nbsp;&nbsp;&nbsp; No installation necessary. Just copy to your hard drive and run it.
+<p>
+	
+<!--	
+<a href="WarBoatsOO-src.zip">Object files</a> for the GUI driver. You just need to add your Ocean.cpp and
+Ocean.h files and run the <b>build.bat</b> batch file to compile and link everything. You must have Borland's Turbo C++ installed. See the <tt>readme.txt</tt>
+that is included in the archive.
+-->
+
+<p>
+<img src="WarBoats-1.png">
+<p>
+
+
+<p>
+<hr width=90%>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

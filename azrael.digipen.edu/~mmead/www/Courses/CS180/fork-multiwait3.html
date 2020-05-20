@@ -1,0 +1,187 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>fork-multiwait3</title>
+
+</head>
+
+<body>  
+
+<center><h1>
+Example
+</h1></center>
+
+
+This example shows the parent waiting on <i>any</i> child to complete, regardless
+of the order the children complete. (<tt>fork-multiwait3.c</tt>)
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;    /* fprintf, stdout     */</font>
+<font color="990099">#include &lt;stdlib.h&gt;   /* exit                */</font>
+<font color="990099">#include &lt;unistd.h&gt;   /* fork, getpid, sleep */</font>
+<font color="990099">#include &lt;sys/wait.h&gt; /* wait, waitpid       */</font>
+
+<b>void</b> dochild(<b>int</b> id, <b>int</b> count)
+{
+  <b>int</b> pid = getpid();
+
+  fprintf(stdout,<font color="#9933CC">&quot;[%i] child process&#92;n&quot;</font>, pid);
+  sleep(count);
+  fprintf(stdout, <font color="#9933CC">&quot;[%i] child exiting&#92;n&quot;</font>, pid);
+
+  exit(id * 10);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="990099">#define COUNT 3</font>
+  <b>int</b> running = COUNT;
+  <b>int</b> i, cpid[COUNT], child;
+  <b>int</b> ppid = getpid();
+  <b>int</b> counts[] = {3, 2, 1};
+  fprintf(stdout, <font color="#9933CC">&quot;parent pid = %d&#92;n&quot;</font>, ppid);
+
+  <b>for</b> (i = 0; i &lt; COUNT; i++)
+  {
+    cpid[i] = fork();
+    <b>if</b> (cpid[i] == 0) <font color="#003399"><i>/* child process is always 0 */</i></font>
+      dochild(i, counts[i]);
+  }
+
+  <font color="#003399"><i>/* parent process is non-zero (child's pid) */</i></font>
+  fprintf(stdout, <font color="#9933CC">&quot;waiting for children&#92;n&quot;</font>);
+  <b>while</b> (running &gt; 0)
+  {
+    <b>int</b> status;
+      <font color="#003399"><i>/* wait for any child */</i></font>
+    <b>if</b> ( (child = waitpid(-1, &amp;status, WNOHANG)) != 0)
+    {
+      <b>if</b> (WIFEXITED(status))
+        fprintf(stdout, <font color="#9933CC">&quot;[%i] child ended normally: %i&#92;n&quot;</font>, child, WEXITSTATUS(status));
+      <b>else</b>
+        fprintf(stdout, <font color="#9933CC">&quot;[%i] child ended abnormally: %i&#92;n&quot;</font>, child, WEXITSTATUS(status));
+
+      running--;
+    }
+    <font color="#003399"><i>/* If the parent has work to do while waiting, do it here...*/</i></font>
+  }
+
+  fprintf(stdout, <font color="#9933CC">&quot;children terminated&#92;n&quot;</font>);
+  fprintf(stdout, <font color="#9933CC">&quot;parent exiting&#92;n&quot;</font>);
+  
+  <b>return</b> 0;
+}
+</code></pre>
+
+<blockquote>
+<table border=0 cellpadding=0 cellspacing=5>
+<tr align="left"><th>Output</th></tr>
+<tr valign="top">
+<td>
+<pre>
+parent pid = 1524
+<font color="red">[1525] child process</font>
+waiting for children
+<font color="red">[1527] child process
+[1528] child process
+[1528] child exiting</font>
+[1528] child ended normally: 20
+<font color="red">[1527] child exiting</font>
+[1527] child ended normally: 10
+<font color="red">[1525] child exiting</font>
+[1525] child ended abnormally: 0
+children terminated
+parent exiting
+</pre>
+</td>
+<td width=40></td>
+<td>
+<pre>
+</pre>
+</td>
+<td width=40></td>
+<td>
+<pre>
+</pre>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="ComputerComponents-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+	
+-->

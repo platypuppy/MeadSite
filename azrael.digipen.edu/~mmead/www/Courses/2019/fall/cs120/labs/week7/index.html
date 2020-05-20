@@ -1,0 +1,507 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<!--***************************************************************************************-->
+<!--***************************************************************************************-->
+<!--***************************************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+<p class="technote">
+<b>Please read this entire page before beginning to write code.</b>
+<br><br>
+Last week, you wrote a function to determine if a given number was a prime number. This week,
+you are going to use a different method to create a table (an array) of prime numbers using a technique called
+<a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">The Sieve of Erotoshenes</a>.
+<br><br>
+There are 3 parts to this lab and need to be done in order. Part 1 will require the most
+work. Parts 2 and 3 are fairly simple to do after completing the first part.
+<br><br>
+Part 1 of this lab requires <b>about</b> 10 lines of code.
+<br>
+Part 2 of this lab requires <b>about</b> 6 lines of code.
+<br>
+Part 3 of this lab requires <b>about</b> 4 lines of code.
+<br><br>
+These counts do not include variable declarations, comments, or lines with curly braces.
+</p>
+
+  
+<hr width="90%">
+
+<ol>
+	
+<li>Write a function that will find all of the prime numbers between 0 and some number. 
+  (By definition, 0 and 1 are not prime, so	you are really searching in the range of 2 to 
+  some number. We'll see why we consider 0 and 1 later.) The function will use an array to 
+  indicate the prime numbers in the range. For example, this is the list of all prime
+	numbers between 2 and 100:
+<blockquote><pre>
+2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
+</pre></blockquote>
+
+The method that you will use to find all of the primes in a range is called the 
+<i>Sieve of Eratosthenes</i>. The idea is that you start with a list of all numbers in 
+the range that you want to find prime numbers. So, if we want to find all of the primes 
+between 2 and 100, we'd start with the list:
+
+<blockquote><pre>
+<big>2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, . . ., 96, 97, 98, 99, 100</big>
+</pre></blockquote>
+
+Starting from 2, you mark 2 as being prime. Then, you cross out all multiples of 2, 
+because any number that can be evenly divided by 2 can't be prime. Another way to say
+this is that any even number greater than 2 cannot be prime. (<font color="blue">The 
+number 4 below has a line through it, but may be difficult to see in the browser.</font>)
+
+<blockquote><pre>
+<big><b><font color="red">2</font></b>, 3, <strike><font color="blue"><b>4</b></font></strike>, 5, <strike><font color="blue"><b>6</b></font></strike>, 7, <strike><font color="blue"><b>8</b></font></strike>, 9, <strike><font color="blue"><b>10</b></font></strike>, 11, <strike><font color="blue"><b>12</b></font></strike>, 13, <strike><font color="blue"><b>14</b></font></strike>, 15, . . ., <strike><font color="blue"><b>96</b></font></strike>, 97, <strike><font color="blue"><b>98</b></font></strike>, 99, <strike><font color="blue"><b>100</b></font></strike></big>
+</pre></blockquote>
+
+Then, you go to the next number that isn't crossed out and mark that as being prime. 
+(That number is 3). Then, you cross out all multiples of 3, because any number that can 
+be evenly divided by 3 can't be prime.
+
+<blockquote><pre>
+<big><b><font color="red">2</font></b>, <b><font color="red">3</font></b>, <strike>4</strike>, 5, <strike>6</strike>, 7, <strike>8</strike>, <strike><font color="blue"><b>9</b></font></strike>, <strike>10</strike>, 11, <strike>12</strike>, 13, <strike>14</strike>, <strike><font color="blue"><b>15</b></font></strike>, . . ., <strike>96</strike>, 97, <strike>98</strike>, <strike><font color="blue"><b>99</b></font></strike>, <strike>100</strike></big>
+</pre></blockquote>
+
+Then, you go to the next number that isn't crossed out and mark that as being prime. 
+(That number is 5). Then, you cross out all multiples of 5:
+
+<blockquote><pre>
+<big><b><font color="red">2</font></b>, <b><font color="red">3</font></b>, <strike>4</strike>, <b><font color="red">5</font></b>, <strike>6</strike>, 7, <strike>8</strike>, <strike>9</strike>, <strike>10</strike>, 11, <strike>12</strike>, 13, <strike>14</strike>, <strike>15</strike>, . . ., <strike>96</strike>, 97, <strike>98</strike>, <strike>99</strike>, <strike>100</strike></big>
+</pre></blockquote>
+
+Those numbers are not shown in the list above, but they would be: 
+<tt>25, 35, 55, 65, 85,</tt> and <tt>95</tt>.
+<p>
+<p class="technote">
+<b>Run this animation</b>
+<a href="https://www.visnos.com/demos/sieve-of-eratosthenes">here</a>
+to see how it works. It uses an array integers 
+with values from 1 to N. Start by clicking on "2", then "3", then "5", etc.
+<!--
+http://www.hbmeyer.de/eratosiv.htm
+-->
+</p>
+
+
+<p class="technote">
+Here's another <a href="http://www.hbmeyer.de/eratclass.htm">example</a> using an array of 400 integers 
+with values from 1 to 400. Start by clicking on "2", then "3", then "5", etc.
+<!--
+http://www.hbmeyer.de/eratosiv.htm
+-->
+</p>
+
+<p>
+To implement this method, you will use an array that is as large as the range of primes
+you wish to find. (Actually, to keep it simple, range + 1 elements because we are going 
+to include the range of 0 to <b>N</b>).
+<p>
+You start by setting all elements to 1, 
+indicating that every number in the range is prime. In the example, the number of 
+elements in the array is 101 (indexed 0 to 100).
+<p>
+<blockquote><pre>
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, . . ., 1, 1, 1, 1
+</pre></blockquote>
+
+You can set element 0 and 1 to 0, indicating that the number 0 and the number 1 are 
+not prime:
+
+<blockquote><pre>
+0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, . . ., 1, 1, 1, 1
+</pre></blockquote>
+
+The number 2 is prime, it remains a 1. "Crossing out" (setting to 0) all multiples of 2 
+means that all even-numbered indexes will be set to 0:
+
+<blockquote><pre>
+0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, . . ., 1, 0, 1, 0
+</pre></blockquote>
+
+Continuing with 3 (which is prime) and "crossing out" (setting to 0) multiples of 3:
+
+<blockquote><pre>
+0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, . . ., 1, 0, 0, 0
+</pre></blockquote>
+
+and so on. <b>You will continue up until, and including, the square root of the maximum number.</b> 
+In this case, the number is 100, so we only need to check multiples of 2, 3, 4, 5, 6, 
+7, 8, 9, and 10. Technically, we only have to check multiples of 2, 3, 5, and 7. The reason 
+is that, since we've already crossed off multiples of 2, 3, and 5, we won't find any 
+multiples of 4, 6, 8, 9, or 10. (Those multiples have already been crossed off.) 
+<p>
+When you are done, the only elements in the array with a value of 1 will correspond to 
+prime numbers. So, if the array was named <tt>primes</tt>, these indexes would have the 
+value 1:
+
+<blockquote><pre>
+2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
+</pre></blockquote>
+
+In code that means that <tt>primes[2], primes[3], primes[5], primes[7], primes[11], ... 
+primes[89],</tt> and <tt>primes[97]</tt> have the value 1.
+Every other element has the value 0.
+<p>
+	
+The prototype for the <i>sieve</i> function looks like this:
+
+<blockquote><pre>
+<b>void</b> sieve(<b>int</b> array[], <b>int</b> size);
+</pre></blockquote>
+
+<ul>
+<li>The first parameter is the array that you will modify.</li>
+<ul>
+  <li>Notice that the first parameter is NOT marked as <tt><b>const</b></tt>, meaning 
+  you will be changing it.</li>
+</ul>
+
+<li>The second parameter is the size (number of elements) of the array. 
+Hints:
+<ul>
+<li>You need to set all of the values in <tt>array</tt> to TRUE before starting the loop.
+<li>You will have a nested loop.
+<li>Use the values TRUE and FALSE in your code. <b>DO NOT</b> use 1 and 0.
+</ul>
+<li>It is expected that you will set some of the array elements to FALSE multiple times. For example, when
+  crossing out multiples of 2, you will set index 10 to FALSE. You will also set index 10
+  to FALSE when crossing out multiples of 5. This is expected and is the correct way to
+  do it. <b>DO NOT TRY TO AVOID THAT.</b> You
+  will most certainly have more complex logic, more errors in your code, and a slower program
+  if you try to avoid it.
+</ul>
+<p>
+Finally, <b>think before you start</b> to type anything. This is a simple task, if you think
+before starting. <b>The solution requires about 10 lines of code (more or less) not counting 
+comments, white space, or braces.</b> You are not being graded on the number of lines you
+write, but if you find that you have more than 20 lines and are having trouble, you
+need to ask for help.
+<!--
+<p>
+<a href="sieve01.html">Another example</a> using an array of 400 integers with the values 0 and 1 only. A faster version is <a href="sieve01-fast.html">here</a>.
+<p>
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+
+<p>
+<hr width="100%">
+<p>
+
+<!--***************************************************************************************-->
+<!--***************************************************************************************-->
+<!--***************************************************************************************-->
+<li>A twin prime is a prime number that differs from another prime number by two. For 
+  example, here are some twin primes:
+	
+<blockquote><pre>
+	 3 and  5
+	 5 and  7
+	11 and 13
+	17 and 19
+	59 and 61
+	71 and 73
+</pre></blockquote>
+	
+Like primes, there are an infinite number of twin primes. Using the array that you 
+created	in the first part of the lab, print out all of the twin primes in a range. The 
+prototype looks like this:
+
+<blockquote><pre>
+<b>int</b> twin_primes(<b>const</b> <b>int</b> primes[], <b>int</b> size);
+</pre></blockquote>
+
+<ul>
+<li>The first parameter is the array that you created in the <i>sieve</i> function.</li>
+<ul>
+  <li>Notice that the first parameter is marked as <tt><b>const</b></tt>, meaning 
+  you are not changing it at all.</li>
+</ul>
+
+<li>The second parameter is the size (number of elements) of the array. 
+<li>To find the twin primes, you simply have to walk through the array (starting at 3) looking for a pair 
+and when you find a pair, print them out. The printf format is: 
+<tt>"twin prime #%4i: %4i and %4i\n"</tt>
+<li>The return value is the number of twin primes (pairs) that you found.
+<li>Be careful not to go past the end of the array. Your program will be <i>undefined</i>
+  if you do, which could mean it crashes, or, sadly, produces the correct output. This
+  means it may <i>appear</i> to run correctly on your computer, but when you upload
+  it to the submission server, it may crash and you won't get any credit. If that's
+  the case, you will definitely want to ask for help.
+</ul>
+<p>
+Again, think before you start. <b>A solution for this will need about 6 lines of
+code (not counting comments, white space, or braces).</b> You aren't being graded on how 
+many lines of code you have, but if you have over 12, you need to stop and ask for help.
+<blockquote><pre>
+</pre></blockquote>
+	
+<p>
+<!--
+<a href="http://mathworld.wolfram.com/TwinPrimes.html">Twin Primes at Wolfram</a>
+-->
+<!--http://en.wikipedia.org/wiki/Twin_prime-->
+<p>
+
+<p>
+<hr width="100%">
+<p>
+	
+<!--***************************************************************************************-->
+<!--***************************************************************************************-->
+<!--***************************************************************************************-->
+<li>The sum of the reciprocals of all of the twin primes is known 
+  as <a href="http://mathworld.wolfram.com/BrunsConstant.html"><i>Brun's Constant</i></a>:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr valign="center">
+<td>
+<img src="BrunsConstant-1.png">
+</td>
+<td>
+ = 1.902160583104...
+</td>
+</tr></table>
+</blockquote>
+
+Using the array that you created in the first part of the lab, calculate Brun's Constant. 
+The prototype looks like this:
+
+<blockquote><pre>
+<b>double</b> brun_constant(<b>const</b> <b>int</b> primes[], <b>int</b> size);
+</pre></blockquote>
+
+<ul>
+<li>The first parameter is the array that you created in the <i>sieve</i> function.</li>
+<ul>
+    <li>Notice that the first parameter is marked as <tt><b>const</b></tt>, meaning 
+  you are not changing it at all.</li>
+</ul>
+<li>The second parameter is the size (number of elements) of the array.</li>
+<li>The return value is the value that you calculated in the function. The precision of 
+  the number will depend on how many twin primes were used in your calculation.</li>
+</ul>	
+<p>
+If you've completed the <i>twin_primes</i> function, then calculating Brun's Constant is 
+very simple.
+<p>
+	
+Here are some values produced when running the program with arrays of different sizes. (The
+actual prime numbers and twin primes have been left out to keep it readable.)
+
+<blockquote><pre>
+25 primes found between 0 and 100.
+8 twin primes found between 0 and 100.
+Brun's constant with 8 twin primes is 1.330990365719.
+
+168 primes found between 0 and 1000.
+35 twin primes found between 0 and 1000.
+Brun's constant with 35 twin primes is 1.518032463560.
+
+1229 primes found between 0 and 10000.
+205 twin primes found between 0 and 10000.
+Brun's constant with 205 twin primes is 1.616893557432.
+
+9592 primes found between 0 and 100000.
+1224 twin primes found between 0 and 100000.
+Brun's constant with 1224 twin primes is 1.672799584828.
+
+21336326 primes found between 0 and 400000000.
+1507733 twin primes found between 0 and 400000000.
+Brun's constant with 1507733 twin primes is 1.768841803744.
+</pre></blockquote>
+
+
+<b>A solution for this will need about 4 lines of
+code (not counting comments, white space, or braces).</b> You aren't being graded on how 
+many lines of code you have, but if you have over 10, you need to stop and ask for help.
+
+<blockquote><pre>
+</pre></blockquote>
+	
+	
+<!-- http://en.wikipedia.org/wiki/Brun_sieve -->
+<p>
+
+</ol>
+
+<p>
+<hr width="100%">
+<p>
+	
+The command line to build the program will be:
+
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O main.c sieve.c -o sieve
+</pre></blockquote>
+
+Students using Linux or Mac OS X will use this line:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O main.c sieve.c -o sieve <b>-lm</b>
+</pre></blockquote>
+
+
+Note that the only C library header files that you are to include in your C file 
+is <tt>stdio.h</tt> (for printf) and <tt>math.h</tt> (for sqrt). You won't need 
+any others). I've included <tt>sieve.h</tt> for you so you have access to the 
+defines of <tt>TRUE</tt> and <tt>FALSE</tt>.
+<p>
+
+<!--
+When creating stub functions, you may need this <b><i>temporarily</i></b>
+<blockquote><pre>
+-Wno-unused-parameter
+</pre></blockquote>
+-->
+
+<p>
+Don't forget that you may need to use the <tt>--strip-trailing-cr</tt> option 
+with <tt><b>diff</b></tt>.
+<p>
+
+<table border=0>
+<tr><th>main.c (You will have to modify the <tt>SIZE</tt> value to test larger arrays.)</th>
+  <th>Start with this sieve.c  file</th></tr>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf                                         */</i></font>
+<b>#include</b> <font color="#9933CC">&quot;sieve.h&quot;</font> <font color="#003399"><i>/* sieve, twin_primes, brun_constant, TRUE, FALSE */</i></font>
+
+<b>#define</b> SIZE 101   <font color="#003399"><i>/* The size of the array */</i></font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> array[SIZE] = {0}; <font color="#003399"><i>/* The array of 0's and 1's     */</i></font>
+  <b>int</b> count = 0;         <font color="#003399"><i>/* Number of primes/twins found */</i></font>
+  <b>double</b> bruns;          <font color="#003399"><i>/* Brun's Constant              */</i></font>
+  <b>int</b> i;                 <font color="#003399"><i>/* Loop counter                 */</i></font>
+
+    <font color="#003399"><i>/* Mark prime/non-prime numbers using the array */</i></font>
+  sieve(array, SIZE - 1);
+
+    <font color="#003399"><i>/* Count the number of primes and print each one */</i></font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+  {
+      <font color="#003399"><i>/* If TRUE, this marks a prime number */</i></font>
+    <b>if</b> (array[i] == TRUE)
+    {
+      count++;
+      <b>#if</b> 1
+        printf(<font color="#9933CC">&quot;Prime #%04i:  %4i\n&quot;</font>, count, i);
+      <b>#endif</b>
+    }
+  }
+  
+    <font color="#003399"><i>/* Print the total number of primes that were found */</i></font>
+  printf(<font color="#9933CC">&quot;%i primes found between 0 and %i.\n&quot;</font>, count, SIZE - 1);
+
+  <font color="#003399"><i>/* Uncomment the return below if you just want to test the sieve. */</i></font>
+  <font color="#003399"><i>/* <b>return</b> 0; */</i></font>
+
+    <font color="#003399"><i>/* Find the number of twin primes and print it */</i></font>
+  count = twin_primes(array, SIZE - 1);
+  printf(<font color="#9933CC">&quot;%i twin primes found between 0 and %i.\n&quot;</font>, count, SIZE - 1);
+
+    <font color="#003399"><i>/* Get Brun's Constant and print it */</i></font>
+  bruns = brun_constant(array, SIZE - 1);
+  printf(<font color="#9933CC">&quot;Brun's constant with %i twin primes is %1.12f.\n&quot;</font>, count, bruns);
+
+  <b>return</b> 0;
+}
+</code></pre>
+</td>
+<td>
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt; <font color="#003399"><i>/* printf      */</i></font>
+<b>#include</b> &lt;math.h&gt;  <font color="#003399"><i>/* sqrt        */</i></font>
+<b>#include</b> <font color="#9933CC">&quot;sieve.h&quot;</font> <font color="#003399"><i>/* TRUE, FALSE */</i></font>
+
+<b>void</b> sieve(<b>int</b> array[], <b>int</b> size)
+{
+}
+
+<b>int</b> twin_primes(<b>const</b> <b>int</b> primes[], <b>int</b> size)
+{
+  <b>return</b> 0;
+}
+
+<b>double</b> brun_constant(<b>const</b> <b>int</b> primes[], <b>int</b> size)
+{
+  <b>return</b> 0.0;
+}
+</code></pre>	
+<br>
+<!--
+<b>This is the output you'll get with just the stub functions:</b>
+<pre>
+0 primes found between 0 and 1000.
+0 twin primes found between 0 and 1000.
+Brun's constant with 0 twin primes is 0.000000000000.	
+</pre>
+-->
+<br>
+<b>You should put this code into <tt>sieve.h</tt>:</b>
+<pre class="sourcecode"><code><b>#define</b> FALSE 0
+<b>#define</b> TRUE  1
+
+<b>void</b> sieve(<b>int</b> array[], <b>int</b> size);
+<b>int</b> twin_primes(<b>const</b> <b>int</b> primes[], <b>int</b> size);
+<b>double</b> brun_constant(<b>const</b> <b>int</b> primes[], <b>int</b> size);
+</code></pre>	
+
+
+</td>
+</tr></table>
+<p>
+
+Sample output: (<b>Download</b> the output files. <b>DO NOT save the web pages</b>.)
+<ol>
+<li>With <tt>SIZE</tt> set to 101: <a href="out-100.txt">out-100.txt</a>
+<li>With <tt>SIZE</tt> set to 1001: <a href="out-1000.txt">out-1000.txt</a>
+<li>With <tt>SIZE</tt> set to 10001: <a href="out-10000.txt">out-10000.txt</a>
+</ol>
+
+<p class="technote">
+For those that want a little more of a challenge, how high can you go with the prime
+numbers? Meaning, how big can you make <tt>SIZE</tt>? What's the problem? What's
+a solution to the problem? (Yes, it crashes, but why?)
+</p>
+	
+<br>
+<br>
+<br>
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

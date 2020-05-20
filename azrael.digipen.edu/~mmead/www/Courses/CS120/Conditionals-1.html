@@ -1,0 +1,1261 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Conditionals</title>
+</head>
+
+<body>  
+<center><h1>Conditionals</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Introduction
+</p>
+
+The C language has <i>conditional</i> statements, also called <i>selection</i> statements (and
+colloquially called <i>if</i> statements).
+
+Essentially,
+depending on a certain <i>condition</i>, a program can decide which statements to execute and which 
+ones to ignore.
+<p>
+The simplest selection statement is the <tt><b>if</b></tt> statement:
+
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+  <i>statement</i>
+</pre></blockquote>
+
+Note that the parentheses after the <tt><b>if</b></tt> keyword are required.
+<p>
+
+You read this as: 
+<blockquote>
+<i>"If <b>expression</b> is true, then execute <b>statement</b>."</i>
+</blockquote>
+
+You could also read it as: 
+<blockquote>
+<i>"If <b>expression</b> is false, then do not execute <b>statement</b>."</i> (In which case <b>statement</b> is simply skipped.)
+</blockquote>
+
+Notes about <i>expression</i>:
+<ul>
+<li><i>expression</i> is a <i>boolean</i> expression, meaning it is evaluated as either 
+  <b>true</b> or <b>false</b>, no other result is produced.
+<li>Since there is no boolean type in C, zero evaluates to false and non-zero (anything other than zero) evaluates to true.
+These are all considered zero (false):
+<blockquote><pre>
+0     0F     0.0     NULL     '\0'
+</pre></blockquote>
+</li>
+<li>To determine the value of the expression, you simply evaluate it.
+<li>Assuming a is 5 and b is 0, these expressions are all <b>true</b>:
+<blockquote><pre>
+a > b      a      a > 2      2 < a      b < 2      a - b      2      a * 5 * b + 4
+</pre></blockquote>
+<li>Assuming a is 5 and b is 0, these expressions are all <b>false</b>:
+<blockquote><pre>
+b > a      b      a < 2      2 > a      a - 5      0          a * 5 * b
+</pre></blockquote>
+</ul>	
+	
+Relational operators: (They all have the same precedence)
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="5" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-family: monospace;"><span
+ style="font-family: mon;">&lt;</span></td>
+      <td style="text-align: center;">less than</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospace;"><span
+ style="font-family: mon;">&gt;</span></td>
+      <td style="text-align: center;">greater than</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospace;"><span
+ style="font-family: mon;">&lt;=</span></td>
+      <td style="text-align: center;">less than or equal
+to
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospace;">&gt;=</td>
+      <td style="text-align: center;">greater than or equal to</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Equality operators: (They both have the same precedence)
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="5" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Operator</td>
+      <td style="text-align: center; font-weight: bold;">Meaning</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospace;">==</td>
+      <td style="text-align: center;">equal to</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospace;"><span
+ style="font-family: mon;">!=</span></td>
+      <td style="text-align: center;">not equal to</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Note that the relational operators have higher precedence than the equality operators.
+<a href="../../docs/OperatorPrecedence.html">(Operators in C)</a>
+
+<p>
+	
+Some example usage:
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Statement</td>
+      <td style="text-align: center; font-weight: bold;">Correct/Incorrect
+      </td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; text-align: left;">if<span
+ style="font-weight: bold;"> </span>(a &gt; 5)<br>
+&nbsp; statement</td>
+      <td style="text-align: center;">Correct</td>
+    </tr>
+    <tr>
+      <td style="text-align: left; font-family: monospace;">if
+(a)<br>
+&nbsp; statement</td>
+      <td style="text-align: center;">Correct</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">if (1)<br>
+&nbsp; statement</td>
+      <td style="text-align: center;">Correct</td>
+    </tr>
+    <tr>
+      <td style="text-align: left; font-family: monospace;">if
+a &lt; 5<br>
+&nbsp; statement</td>
+      <td style="text-align: center; color: red">Missing parentheses</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; text-align: left;"><span
+ style="font-family: mon;"><span style="font-weight: bold;">IF</span>
+(a &lt; 5)<br>
+&nbsp; statement</span></td>
+      <td style="text-align: center; color: red">Wrong 'if' keyword</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; text-align: left;"><span
+ style="font-family: mon;">if<span
+ style="font-weight: bold;"> </span>(a &lt; 5) <span
+ style="font-weight: bold;">then</span><br>
+&nbsp; statement</span></td>
+      <td style="text-align: center; color: red">No 'then' keyword
+      </td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; text-align: left;">if
+()<br>
+&nbsp; statement</td>
+      <td style="text-align: left; color: red">Missing expression</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+The <b><i>value</i></b> of a relational expression is either 0 (false) or 1 (true).
+<p>
+Examples of the relationship between false/0 and true/1: (all statements print either 0 or 1)
+<blockquote><pre>
+<b>int</b> a = 5;
+<b>int</b> b = 0;
+
+printf(<font color="#9933CC">&quot;Value of a &gt; b is %i\n&quot;</font>, a &gt; b);    <font color="#003399"><i>/* 1, (true)  */</i></font>
+printf(<font color="#9933CC">&quot;Value of a &lt; b is %i\n&quot;</font>, a &lt; b);    <font color="#003399"><i>/* 0, (false) */</i></font>
+printf(<font color="#9933CC">&quot;Value of a == b is %i\n&quot;</font>, a == b);  <font color="#003399"><i>/* 0, (false) */</i></font>
+printf(<font color="#9933CC">&quot;Value of a == a is %i\n&quot;</font>, a == a);  <font color="#003399"><i>/* 1, (true)  */</i></font>
+printf(<font color="#9933CC">&quot;Value of b == b is %i\n&quot;</font>, b == b);  <font color="#003399"><i>/* 1, (true)  */</i></font>
+printf(<font color="#9933CC">&quot;Value of a != a is %i\n&quot;</font>, a != a);  <font color="#003399"><i>/* 0, (false) */</i></font>
+printf(<font color="#9933CC">&quot;Value of a &gt; a is %i\n&quot;</font>, a &gt; a);    <font color="#003399"><i>/* 0, (false) */</i></font>
+printf(<font color="#9933CC">&quot;Value of b &gt; b is %i\n&quot;</font>, b &gt; b);    <font color="#003399"><i>/* 0, (false) */</i></font>
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Value of a > b is 1
+Value of a < b is 0
+Value of a == b is 0
+Value of a == a is 1
+Value of b == b is 1
+Value of a != a is 0
+Value of a > a is 0
+Value of b > b is 0
+</pre></blockquote>
+
+Logical operators: (the precedence is accurate as well)
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="5" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Operator</td>
+      <td style="text-align: center; font-weight: bold;">Meaning</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospacex;">!</td>
+      <td style="text-align: center;">logical NOT (negation)<br>(unary operator)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospacex;"><span
+ style="font-family: mon;">&amp;&amp;</span></td>
+      <td style="text-align: center;">logical AND</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospacex;"><span
+ style="font-family: mon;">||</span></td>
+      <td style="text-align: center;">logical OR</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Boolean Truth Tables:
+<blockquote>
+<table border=0>
+<tr>
+<td>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-family: monospace; font-weight: bold;">a</td>
+      <td style="font-family: monospace; font-weight: bold;">b</td>
+      <td style="font-family: monospace; font-weight: bold;">a &amp;&amp; b</td>
+      <td style="font-family: monospace; font-weight: bold;">a || b</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">false</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">true</td>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">true</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">true</td>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">false</td>
+      <td style="text-align: center;">true</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">true</td>
+      <td style="text-align: center;">true</td>
+      <td style="text-align: center;">true</td>
+      <td style="text-align: center;">true</td>
+    </tr>
+  </tbody>
+</table>
+</td>
+<td width="40"></td>
+<td>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-family: monospace; font-weight: bold;">a</td>
+      <td style="font-family: monospace; font-weight: bold;">b</td>
+      <td style="font-family: monospace; font-weight: bold; text-align: center;">a &amp;&amp; b</td>
+      <td style="font-family: monospace; font-weight: bold; text-align: center;">a || b</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">0</td>
+      <td style="text-align: center;">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">1</td>
+      <td style="text-align: center;">1</td>
+    </tr>
+  </tbody>
+</table>
+</tr>
+</table>
+<p>
+</blockquote>
+
+Notes about these operators:
+<ul>
+<li>Make sure you pay attention to the precedence of the operators.
+<li>All the expressions will evaluate to 0 or 1 (false or true).
+<li>The logical operators perform <i>short circuit evaluation</i>, meaning,
+	as soon as the result can be determined, the evaluation stops. 
+<li>In English, this means:
+	<ul>
+		<li>True <b>OR</b> anything is <i>true</i>. (Short circuit: Won't bother evaluating <i>anything</i>)
+		<li>False <b>AND</b> anything is <i>false</i>. (Short circuit: Won't bother evaluating <i>anything</i>)
+		<li>False <b>OR</b> anything is <i>anything</i>. (Must evaluate <i>anything</i>)
+		<li>True <b>AND</b> anything is <i>anything</i>. (Must evaluate <i>anything</i>)
+	</ul>
+<li>The logical AND and logical OR operators are <i>sequence guarantee operators</i>
+  <ul>
+    <li>They are guaranteed to be evaluated left to right (unlike other operators).</li>
+    <li>Once the outcome of the expression can be determined, remaining operands are <b>NOT</b> 
+      evaluated (short-circuited).</li>
+  </ul>
+	<p>
+	For example, what is the output of this program? (Hint: Put parentheses around the 
+  sub-expressions first.)
+<blockquote>
+	
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;
+	
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a;
+  <b>int</b> b;
+
+  a = 5;
+  b = 3;
+  <b>if</b> (a &gt; b &amp;&amp; b &gt; 0 &amp;&amp; ++a == 6)
+    printf(<font color="#9933CC">&quot;1. The value of a is %i\n&quot;</font>, a);
+
+  a = 5;
+  <b>if</b> (a &gt; b &amp;&amp; b &gt; 5 &amp;&amp; ++a == 6)
+    printf(<font color="#9933CC">&quot;2. The value of a is %i\n&quot;</font>, a);
+
+  a = 5;
+  <b>if</b> (a &gt; b || b &gt; 5 || ++a == 6)
+    printf(<font color="#9933CC">&quot;3. The value of a is %i\n&quot;</font>, a);
+
+  a = 5;
+  <b>if</b> (a &gt; b &amp;&amp; b &gt; 5 || ++a == 6)
+    printf(<font color="#9933CC">&quot;4. The value of a is %i\n&quot;</font>, a);
+
+  a = 5;
+  <b>if</b> (a &gt; b || b &gt; 5 &amp;&amp; ++a == 6)
+    printf(<font color="#9933CC">&quot;5. The value of a is %i\n&quot;</font>, a);
+
+  <b>return</b> 0;
+}
+</code></pre>	
+</blockquote>
+
+<!--
+1. The value of a is 6
+2. NO PRINTING
+3. The value of a is 5
+4. The value of a is 6
+5. The value of a is 5
+-->
+
+<li>Also, don't be afraid to use redundant parentheses and spaces to help you understand:
+<blockquote><pre>
+<b>if</b> ( ( (a &gt; b) &amp;&amp; (b &gt; 0) ) || (++a == 6) )
+  printf(<font color="#9933CC">&quot;1. The value of a is %i\n&quot;</font>, a);
+</pre></blockquote>
+
+In fact, the GNU compiler will actually warn you about the lack of parentheses to get you to make your
+intentions clearer. (When mixing <tt>||</tt> and <tt>&amp;&amp;</tt>)
+</ul>
+
+<p class="technote">
+<b>Note</b>: Remember, the logical operators, <tt>||</tt> and <tt>&amp;&amp;</tt> are different from 
+the other operators we've seen. These operators enable <i>short-circuit</i> evaluation so it is
+possible that a portion of the expression could be skipped entirely. This means that if there are
+any side-effect operators in the part of the expression that is skipped, those side-effects will <b>NOT</b>
+occur.
+</p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<p class="SectionHeader">
+More on the <tt>if</tt> Statement
+</p>
+
+We've seen the simplest form of the <tt><b>if</b></tt> statement:
+
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+  <i>statement</i>
+</pre></blockquote>
+
+where <i>statement</i> is exactly one statement. If you want to execute multiple statements, you need to include
+curly braces around them:
+
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+<b>{</b>
+  <i>statements</i>
+<b>}</b>
+</pre></blockquote>
+
+The <i>statements</i> (plural) means more than one statement. Example:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* single statement */</i></font>
+<b>if</b> (a &gt; b)
+  printf(<font color="#9933CC">&quot;a = %i, b = %i\n&quot;</font>, a, b);
+
+  <font color="#003399"><i>/* compound statement */</i></font>
+<b>if</b> (a &gt; b)
+{
+  printf(<font color="#9933CC">&quot;a = %i, &quot;</font>, a);
+  printf(<font color="#9933CC">&quot;b = %i\n&quot;</font>, b);
+}
+</pre></blockquote>
+
+Note that there is no semicolon after the closing curly brace. (But each statement inside the braces ends 
+with a semicolon.) Also, it doesn't hurt to put a single statement inside curly braces:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Braces unnecessary, but legal. */</i></font>
+<b>if</b> (a &gt; b)
+{
+  printf(<font color="#9933CC">&quot;a = %i, b = %i\n&quot;</font>, a, b);
+}
+</pre></blockquote>
+This is also legal:
+<blockquote><pre>
+  <font color="#003399"><i>/* Pointless, but legal. */</i></font>
+<b>if</b> (a &gt; b)
+{
+}
+</pre></blockquote>
+
+However, without the braces, you can't have an empty statement. You'll need at least a semicolon:
+<blockquote><pre>
+  <font color="#003399"><i>/* Pointless again, but legal. */</i></font>
+<b>if</b> (a &gt; b)
+    ;
+</pre></blockquote>
+
+Watch out for this common beginner's error which claims that 0 is greater than 5:
+
+<blockquote><pre>
+<b>int</b> a = 5;
+<b>int</b> b = 0;
+
+<b>if</b> (b &gt; a);  <font color="#003399"><i>/* Trailing semicolon! */</i></font>
+  printf(<font color="#9933CC">&quot;b is greater than a\n&quot;</font>);
+</pre></blockquote>
+
+Fortunately, most compilers will alert you to this mistake (May have to enable extra warnings):
+
+<blockquote><pre>
+warning: if statement has empty body [-Wempty-body]
+  if (a == 4);
+             ^
+note: put the semicolon on a separate line to silence this warning
+</pre></blockquote>
+
+<!--
+GNU catches it: empty body in an if-statement
+-->
+
+<p>
+<hr width="90%">
+<p>
+	
+<h2>The <tt>else</tt> Clause</h2>
+
+Another form of the <tt><b>if</b></tt> statement includes an optional <tt><b>else</b></tt> clause:
+
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+  <i>statement<sub>1</sub></i>
+<b>else</b> 
+  <i>statement<sub>2</sub></i>
+</pre></blockquote>
+
+This reads as: "If <i>expression</i> is true, execute <i>statement<sub>1</sub></i>, otherwise, execute <i>statement<sub>2</sub></i>. This
+is <i>mutually exclusive</i>. Either <i>statement<sub>1</sub></i> or <i>statement<sub>2</sub></i> will get executed, but not both (or neither).
+<p>
+Either of the statements (or both) can be compound as well:
+<p>
+	
+<table border=0 cellpadding=10 cellspacing=10>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+{
+  <i>statements</i>
+}
+<b>else</b> 
+  <i>statement</i>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+  <i>statement</i>
+<b>else</b> 
+{
+  <i>statements</i>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>if</b> <b>(</b> <i>expression</i> <b>)</b>
+{
+  <i>statements<sub>1</sub></i>
+}
+<b>else</b> 
+{
+  <i>statements<sub>2</sub></i>
+}
+</pre></blockquote>
+	
+</td></tr></table>
+<p>
+
+Example:	
+<blockquote><pre>
+<b>int</b> average = 85;
+<b>char</b> grade;
+
+<b>if</b> (average &gt;= 70)
+{
+  grade = <font color="#9933CC">'P'</font>;
+  printf(<font color="#9933CC">&quot;You passed. Your average is %i%%.\n&quot;</font>, average);
+}
+<b>else</b>
+{
+  grade = <font color="#9933CC">'F'</font>;
+  printf(<font color="#9933CC">&quot;You didn't pass. Your average is %i%%\n&quot;</font>, average);
+}
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+
+<h2>Nested <tt>if</tt> Statements</h2>
+
+Sometimes we need to perform more than one test to determine the path our program will take. If the conditionals are
+mutually exclusive, we can <i>cascade</i> or <i>nest</i> the <tt>if</tt> statements.
+<p>
+Examples (assume <i>average</i> is 85):
+<p>
+<table border=0 cellpadding=5 cellspacing=5>
+<tr><th>Non-nested</th><th></th><th>Nested (cascading)</th><th>Nested (no formatting)</tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>if</b> (average &gt;= 90)
+  grade = <font color="#9933CC">'A'</font>;
+<b>if</b> (average &gt;= 80)
+  grade = <font color="#9933CC">'B'</font>;
+<b>if</b> (average &gt;= 70)
+  grade = <font color="#9933CC">'C'</font>;
+<b>if</b> (average &gt;= 60)
+  grade = <font color="#9933CC">'D'</font>;
+<b>if</b> (average &lt; 60)
+  grade = <font color="#9933CC">'F'</font>;
+</pre></blockquote>
+</td>
+<td width=20></td>
+<td>
+<blockquote><pre>
+<b>if</b> (average &gt;= 90)
+  grade = <font color="#9933CC">'A'</font>;
+<b>else</b> 
+  <b>if</b> (average &gt;= 80)
+    grade = <font color="#9933CC">'B'</font>;
+  <b>else</b> 
+    <b>if</b> (average &gt;= 70)
+      grade = <font color="#9933CC">'C'</font>;
+    <b>else</b> 
+      <b>if</b> (average &gt;= 60)
+        grade = <font color="#9933CC">'D'</font>;
+      <b>else</b>
+        grade = <font color="#9933CC">'F'</font>;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>if</b> (average &gt;= 90)
+  grade = <font color="#9933CC">'A'</font>;
+<b>else</b> 
+<b>if</b> (average &gt;= 80)
+  grade = <font color="#9933CC">'B'</font>;
+<b>else</b> 
+<b>if</b> (average &gt;= 70)
+  grade = <font color="#9933CC">'C'</font>;
+<b>else</b> 
+<b>if</b> (average &gt;= 60)
+  grade = <font color="#9933CC">'D'</font>;
+<b>else</b>
+  grade = <font color="#9933CC">'F'</font>;
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+Can you see why the non-nested version will possibly execute slower than the nested version (besides being incorrect)?
+<p>	
+
+The proper way to format nested <tt><b>if</b></tt> statements in this class:
+
+<blockquote><pre>
+<b>if</b> (average &gt;= 90)
+  grade = <font color="#9933CC">'A'</font>;
+<b>else</b> <b>if</b> (average &gt;= 80)
+  grade = <font color="#9933CC">'B'</font>;
+<b>else</b> <b>if</b> (average &gt;= 70)
+  grade = <font color="#9933CC">'C'</font>;
+<b>else</b> <b>if</b> (average &gt;= 60)
+  grade = <font color="#9933CC">'D'</font>;
+<b>else</b>
+  grade = <font color="#9933CC">'F'</font>;
+</pre></blockquote>
+
+Remember that the compiler doesn't care about formatting and will actually see this, all on one line:
+
+<blockquote><pre>
+<b>if</b> (average &gt;= 90) grade = <font color="#9933CC">'A'</font>; <b>else</b> <b>if</b> (average &gt;= 80) grade = <font color="#9933CC">'B'</font>; <b>else</b> <b>if</b> (average &gt;= 70) grade = <font color="#9933CC">'C'</font>; <b>else</b> <b>if</b> (average &gt;= 60) grade = <font color="#9933CC">'D'</font>; <b>else</b> grade = <font color="#9933CC">'F'</font>;
+</pre></blockquote>
+
+In fact, can you take out all of the spaces as well? If not, which ones can you take out?
+<blockquote><pre>
+Example: <big><font color=white><b>if</b>(average&gt;=90)grade='A';<b>else</b> <b>if</b>(average&gt;=80)grade='B;<b>else</b> <b>if</b>(average&gt;=70)grade='C';<b>else</b> <b>if</b>(average&gt;=60)grade='D';<b>else </b>grade='F';</big>
+</font>
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+
+<h2>The "Dangling" <tt>else</tt></h2>
+
+This doesn't print out what you might expect:
+<blockquote><pre>
+<b>if</b> (average &lt; 90)
+  <b>if</b> (average &lt; 60)
+    printf(<font color="#9933CC">&quot;Failing\n&quot;</font>);
+<b>else</b>
+  printf(<font color="#9933CC">&quot;An A student!\n&quot;</font>);
+</pre></blockquote>
+
+If we change the formatting, we can see the problem more clearly.
+<blockquote><pre>
+<b>if</b> (average &lt; 90)
+  <b>if</b> (average &lt; 60)
+    printf(<font color="#9933CC">&quot;Failing\n&quot;</font>);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot;An A student!\n&quot;</font>);
+</pre></blockquote>
+
+Again, compilers don't need any formatting, but humans do.
+<blockquote><pre>
+<b>if</b> (average &lt; 90)
+{
+  <b>if</b> (average &lt; 60)
+    printf(<font color="#9933CC">&quot;Failing\n&quot;</font>);
+}
+<b>else</b>
+  printf(<font color="#9933CC">&quot;An A student!\n&quot;</font>);
+</pre></blockquote>
+
+The rule for matching up <tt><b>if</b></tt> and <tt><b>else</b></tt> is:
+<blockquote>
+<i>The <tt><b>else</b></tt> matches the closest (previous) <tt><b>if</b></tt> that hasn't already been matched.</i>
+</blockquote>
+You override this behavior through the use of braces, as shown above.
+<p>
+Fortunately, again, most compilers will notice your "misleading formatting" and
+will say so if you do something like this:
+
+<blockquote><pre>
+<b>if</b> (average &lt; 90)
+  <b>if</b> (average &lt; 60)
+    printf(<font color="#9933CC">&quot;Failing\n&quot;</font>);
+<b>else</b>
+  printf(<font color="#9933CC">&quot;An A student!\n&quot;</font>);
+</pre></blockquote>
+
+Compiler warning:
+<blockquote><pre>
+warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+ if (average &lt; 90)
+    ^
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+The <tt>switch</tt> Statement
+</p>
+
+The <tt><b>switch</b></tt> statement is similar to nested <tt><b>if ... else ...</b></tt> statements.
+The most common form of the <tt><b>switch</b></tt> statement looks like this:
+<blockquote><pre>
+<b>switch</b> <b>(</b> <i>expression</i> <b>)</b>
+<b>{</b>
+  <b>case</b> <i>constant_expression<sub>1</sub></i> <b>:</b> 
+    <i>statements<sub>1</sub></i>
+    <b>break;</b>
+  <b>case</b> <i>constant_expression<sub>2</sub></i> <b>:</b> 
+    <i>statements<sub>2</sub></i>
+    <b>break;</b>
+  . . .
+  <b>case</b> <i>constant_expression<sub>N</sub></i> <b>:</b> 
+    <i>statements<sub>N</sub></i>
+    <b>break;</b>
+<b>}</b>
+</pre></blockquote>
+
+An example showing both a nested <tt><b>if ... else ...</b></tt> statement and a <tt><b>switch</b></tt> statement. The result is
+the same. However, when you have a large number of conditions, the <tt><b>switch</b></tt> statement <i>may</i> execute faster.
+<p>
+	
+<table border=0 cellspacing=10 cellpadding=0>
+<tr><th>Nested <tt>if</tt></th><th><tt>switch</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>if</b> (year == 1)
+  printf(<font color="#9933CC">&quot;Freshman\n&quot;</font>);
+<b>else</b> <b>if</b> (year == 2)
+  printf(<font color="#9933CC">&quot;Sophomore\n&quot;</font>);
+<b>else</b> <b>if</b> (year == 3)
+  printf(<font color="#9933CC">&quot;Junior\n&quot;</font>);
+<b>else</b> <b>if</b> (year == 4)
+  printf(<font color="#9933CC">&quot;Senior\n&quot;</font>);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1: 
+    printf(<font color="#9933CC">&quot;Freshman\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 2: 
+    printf(<font color="#9933CC">&quot;Sophomore\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 3: 
+    printf(<font color="#9933CC">&quot;Junior\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 4: 
+    printf(<font color="#9933CC">&quot;Senior\n&quot;</font>);
+    <b>break</b>;
+}
+<font color="#003399"><i>/* <b>break</b> statement jumps to here */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+
+Notice that if the value of <tt><b>year</b></tt> is not one of the values tested, nothing will be printed. If you want a
+<i>catch-all</i> condition, you would use an <tt><b>else</b></tt> clause in the <tt><b>if</b></tt> statement. For 
+the <tt><b>switch</b></tt> statement, use a <tt><b>default</b></tt>:
+
+<table border=0 cellspacing=10 cellpadding=0>
+<tr><th>Nested <tt>if</tt></th><th><tt>switch</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>if</b> (year == 1)
+  printf(<font color="#9933CC">&quot;Freshman\n&quot;</font>);
+<b>else</b> <b>if</b> (year == 2)
+  printf(<font color="#9933CC">&quot;Sophomore\n&quot;</font>);
+<b>else</b> <b>if</b> (year == 3)
+  printf(<font color="#9933CC">&quot;Junior\n&quot;</font>);
+<b>else</b> <b>if</b> (year == 4)
+  printf(<font color="#9933CC">&quot;Senior\n&quot;</font>);
+<b>else</b>
+  printf(<font color="#9933CC">&quot;Invalid year\n&quot;</font>);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1: 
+    printf(<font color="#9933CC">&quot;Freshman\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 2: 
+    printf(<font color="#9933CC">&quot;Sophomore\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 3: 
+    printf(<font color="#9933CC">&quot;Junior\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 4: 
+    printf(<font color="#9933CC">&quot;Senior\n&quot;</font>);
+    <b>break</b>;
+  <b>default</b>: 
+    printf(<font color="#9933CC">&quot;Invalid year\n&quot;</font>);
+    <b>break</b>;
+}
+<font color="#003399"><i>/* <b>break</b> statement jumps to here */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+
+<!--
+Other examples of formatting:
+<p>
+	
+<table border=0 cellspacing=10 cellpadding=0>
+<tr><th>Aligned</th><th>One line</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1: printf(<font color="#9933CC">&quot;Freshman\n&quot;</font>);
+          <b>break</b>;
+  <b>case</b> 2: printf(<font color="#9933CC">&quot;Sophomore\n&quot;</font>);
+          <b>break</b>;
+  <b>case</b> 3: printf(<font color="#9933CC">&quot;Junior\n&quot;</font>);
+          <b>break</b>;
+  <b>case</b> 4: printf(<font color="#9933CC">&quot;Senior\n&quot;</font>);
+          <b>break</b>;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1: printf(<font color="#9933CC">&quot;Freshman\n&quot;</font>); <b>break</b>;
+  <b>case</b> 2: printf(<font color="#9933CC">&quot;Sophomore\n&quot;</font>); <b>break</b>;
+  <b>case</b> 3: printf(<font color="#9933CC">&quot;Junior\n&quot;</font>); <b>break</b>;
+  <b>case</b> 4: printf(<font color="#9933CC">&quot;Senior\n&quot;</font>); <b>break</b>;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+-->
+
+Notes:
+<ul>
+<li>The <tt><b>switch</b></tt> (controlling) expression must be an <i>integral</i> type. (No <tt><b>float</b></tt>, <tt><b>double</b></tt>, etc.)</li>
+<li>Each <tt><b>case</b></tt> label must be an integral <i>constant expression</i>. The value must be known at compile time.</li>
+<li>No braces are required when you have multiple statements after a case label.</li>
+<li>The <tt><b>break</b></tt> statement causes execution to continue with the statement immediately after
+	the entire <tt><b>switch</b></tt> statement.</li>
+  <ul>
+    <li>The compiler <i>may</i> re-order the cases as an optimization (faster execution).</li>
+  </ul>
+<li>If a <tt><b>case</b></tt> does not contain a <tt><b>break</b></tt> statement, the next <tt><b>case</b></tt> is executed. (Fall-through)
+Example:
+<ul>
+<p>
+<table border=0 cellspacing=10 cellpadding=0>
+<tr><th>case</th><th>if</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1: 
+  <b>case</b> 2: 
+    printf(<font color="#9933CC">&quot;Lower division\n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 3: 
+  <b>case</b> 4: 
+    printf(<font color="#9933CC">&quot;Upper division\n&quot;</font>);
+    <b>break</b>;
+  <b>default</b>:
+    printf(<font color="#9933CC">&quot;Invalid year\n&quot;</font>);
+    <b>break</b>;
+}
+<font color="#003399"><i>/* <b>break</b> statement jumps to here */</i></font>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>if</b> ( (year == 1) || (year == 2) )
+  printf(<font color="#9933CC">&quot;Lower division\n&quot;</font>);
+<b>else</b> <b>if</b> ( (year == 3) || (year == 4) )
+  printf(<font color="#9933CC">&quot;Upper division\n&quot;</font>);
+<b>else</b>
+  printf(<font color="#9933CC">&quot;Invalid year\n&quot;</font>);
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+</ul>
+
+<li>If you have code in a case statement that falls through, you will get a warning from the
+GCC compiler. The code on the left below will generate 2 warnings and the code on the right
+will suppress them:
+<p>
+
+<table border=0 cellspacing=10 cellpadding=0>
+<tr><th>Warnings</th><th>Warnings suppressed</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1:
+    freshman++;
+  <b>case</b> 2: 
+    sophomore++;
+    printf(<font color="#9933CC">&quot;Another lower class&#92;n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 3: 
+    junior++;
+  <b>case</b> 4: 
+    senior++;
+    printf(<font color="#9933CC">&quot;Another upper class&#92;n&quot;</font>);
+    <b>break</b>;
+  <b>default</b>:
+    printf(<font color="#9933CC">&quot;Invalid year&#92;n&quot;</font>);
+    <b>break</b>;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>switch</b> (year)
+{
+  <b>case</b> 1:
+    freshman++;
+    <font color="blue"><i><b>/* fall through */</b></i></font>
+  <b>case</b> 2: 
+    sophomore++;
+    printf(<font color="#9933CC">&quot;Another lower class&#92;n&quot;</font>);
+    <b>break</b>;
+  <b>case</b> 3: 
+    junior++;
+    <font color="blue"><i><b>/* fall through */</b></i></font>
+  <b>case</b> 4: 
+    senior++;
+    printf(<font color="#9933CC">&quot;Another upper class&#92;n&quot;</font>);
+    <b>break</b>;
+  <b>default</b>:
+    printf(<font color="#9933CC">&quot;Invalid year&#92;n&quot;</font>);
+    <b>break</b>;
+}
+</pre></blockquote>
+</tr></table>
+
+These are the warnings that are generated:
+
+<blockquote><pre>
+switch.c:72:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+       freshman++;
+       ~~~~~~~~^~
+switch.c:74:5: note: here
+     case 2:
+     ^~~~
+switch.c:79:13: warning: this statement may fall through [-Wimplicit-fallthrough=]
+       junior++;
+       ~~~~~~^~
+switch.c:81:5: note: here
+     case 4:
+     ^~~~
+</pre></blockquote>
+
+<li>The comment must be on one line by itself and the wording must be exactly one of these
+  (i.e. no extra spaces between the words, no mixed case)
+
+<blockquote><pre>
+fall through
+fallthrough
+FALL THROUGH
+FALLTHROUGH
+fall thru
+fallthru
+FALL THRU
+FALLTHRU
+</pre></blockquote>
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+<a name="BOOLEAN">
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Boolean Types
+</a>
+</p>
+
+As was stated before, C doesn't have a boolean type. Instead, it uses 0 to represent false and 1 (or non-zero) to 
+represent true.
+<p>
+Using one and zero, the meaning isn't clear:
+<blockquote><pre>
+<b>int</b> value = 1;
+
+<b>if</b> (value == 1)
+{
+  <font color="#003399"><i>/* do something if value is true */</i></font>
+}
+
+<b>if</b> (value == 0)
+{
+  <font color="#003399"><i>/* do something if value is false */</i></font>
+}
+</pre></blockquote>
+
+We can "create" our own boolean values and type:
+<blockquote><pre>
+<b>#define</b> FALSE 0
+<b>#define</b> TRUE  1
+<b>#define</b> BOOL <b>int</b>
+</pre></blockquote>
+
+And use these types in our programs:
+<p>
+
+<blockquote>	
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Explicit comparisons</th><th>Implicit comparison</th></tr>
+<tr valign="top">
+
+<td
+<blockquote><pre>
+BOOL value = TRUE;
+
+<b>if</b> (value == TRUE)
+{
+  <font color="#003399"><i>/* do something if value is true */</i></font>
+}
+
+<b>if</b> (value == FALSE)
+{
+  <font color="#003399"><i>/* do something else if value is false */</i></font>
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+BOOL value = TRUE;
+
+<b>if</b> (value)
+{
+  <font color="#003399"><i>/* do something if value is true */</i></font>
+}
+
+<b>if</b> (!value)
+{
+  <font color="#003399"><i>/* do something else if value is false */</i></font>
+}
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+</blockquote>	
+
+What the compiler sees after preprocessing:
+
+<blockquote>  
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Explicit comparisons</th><th>Implicit comparison</th></tr>
+<tr valign="top">
+
+<td
+<blockquote><pre>
+<b>int</b> value = 1;
+
+<b>if</b> (value == 1)
+{
+  <font color="#003399"><i>/* do something if value is true */</i></font>
+}
+
+<b>if</b> (value == 0)
+{
+  <font color="#003399"><i>/* do something else if value is false */</i></font>
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>int</b> value = 1;
+
+<b>if</b> (value)
+{
+  <font color="#003399"><i>/* do something if value is true */</i></font>
+}
+
+<b>if</b> (!value)
+{
+  <font color="#003399"><i>/* do something else if value is false */</i></font>
+}
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+</blockquote> 
+
+
+<!--
+<p class="SectionHeader">
+The Conditional Operator
+</a>
+</p>
+
+Because the whole <tt><b>if ... else . . .</b></tt> idea is very common, C has created yet-another operator for this 
+common situation.
+
+<blockquote><pre>
+	<i>expression<sub>1</sub></i> <b>?</b> <i>expression<sub>2</sub></i> <tt><b>:</b></tt> <i>expression<sub>3</sub></i>
+</pre></blockquote>
+
+This reads as: 
+<blockquote>
+If <i>expression<sub>1</sub></i> is true, then execute <i>expression<sub>2</sub></i>, otherwise, execute <i>expression<sub>3</sub></i>.
+</blockquote>
+There are two individual tokens: <tt><b>?</b></tt> and <tt><b>:</b></tt>, that are surrounded by expressions. Using this operator
+is pretty much same thing as we had with the <tt><b>if ... else . . .</b></tt>. In fact, each can be written in terms of the other. This:
+<p>
+
+<blockquote><pre>
+<b>if</b> (a &gt; b)
+  printf(<font color="#9933CC">&quot;a is larger\n&quot;</font>);
+<b>else</b>
+  printf(<font color="#9933CC">&quot;a is NOT larger\n&quot;</font>);
+</pre></blockquote>
+
+is the same as this:
+
+<blockquote><pre>
+(a &gt; b) ? printf(<font color="#9933CC">&quot;a is larger\n&quot;</font>) : printf(<font color="#9933CC">&quot;a is NOT larger\n&quot;</font>);
+</pre></blockquote>
+
+Note that the parentheses around <tt>a + b</tt> are redundant, but help to make the expressions clearer.
+<p>
+These examples are the same and both assign the larger value to <tt>c</tt>:
+<p>
+	
+<table border=0 cellpadding=10 cellspacing=0>
+<tr valign="top">
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Assign larger value to c */</i></font>
+<b>if</b> (a &gt; b)
+  c = a;
+<b>else</b>
+  c = b;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Assign larger value to c */</i></font>
+c = (a &gt; b) ? a : b;
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+
+Example:
+<blockquote><pre>
+<b>int</b> a = 1;
+<b>int</b> b = 4;
+<b>int</b> c;
+
+  <font color="#003399"><i>/* These two statements are the same */</i></font>
+c = a &gt; b ? a + 2 : b + 2;
+c = (a &gt; b) ? (a + 2) : (b + 2);
+</pre></blockquote>
+
+What is printed from these statements?
+<blockquote><pre>
+c = a == b ? a + 2 : b + 2;
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i\n&quot;</font>, a, b, c);
+
+c = a = b ? a + 2 : b + 2;
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i\n&quot;</font>, a, b, c);
+</pre></blockquote>
+
+What about these?
+<blockquote><pre>
+c = a = b ? a + 2 : b += 2;
+c = (a = b) ? (a + 2) : (b += 2);
+</pre></blockquote>
+-->
+
+<!--
+a = 1, b = 4, c = 6
+a = 3, b = 4, c = 3
+
+Illegal due to lower precedence of +=
+MS warns: warning C4706: assignment within conditional expression but prints:
+a = 4, b = 4, c = 6
+
+-->
+
+
+
+
+</body>
+</html>
+
+<sub></sub>
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+

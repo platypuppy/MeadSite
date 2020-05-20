@@ -1,0 +1,180 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.c</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*******************************************************************************
+filename    driver.c
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS120
+assignment  12
+due date    12/11/2019
+
+Brief Description:
+  This file contains the main function for the palindrome assignment.
+
+*******************************************************************************/</i></font>
+<b>#include</b> &lt;stdio.h&gt;  <font color="#003399"><i>/* printf */</i></font>
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>int</b> is_palindrome1(<b>const</b> <b>char</b> phrase[], <b>int</b> length);
+<b>int</b> is_palindrome2(<b>const</b> <b>char</b> *phrase, <b>int</b> length);
+
+<font color="#003399"><i>/* print all elements of an array */</i></font>
+<b>void</b> print_array(<b>const</b> <b>char</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%c&quot;</font>, a[i]);
+}
+
+<b>void</b> test_palindrome(<b>const</b> <b>char</b> sentence[], <b>int</b> length, <b>int</b> which_one)
+{
+  <b>int</b> pal;
+  <b>if</b> (which_one == 1)
+  {
+    printf(<font color="#9933CC">&quot;Testing #1: &quot;</font>);
+    pal = is_palindrome1(sentence, length);
+  }
+  <b>else</b>
+  {
+    printf(<font color="#9933CC">&quot;Testing #2: &quot;</font>);
+    pal = is_palindrome2(sentence, length);
+  }
+
+  print_array(sentence, length); 
+  <b>if</b> (pal == 1)
+    printf(<font color="#9933CC">&quot; is a palindrome\n&quot;</font>);
+  <b>else</b>
+    printf(<font color="#9933CC">&quot; is not a palindrome\n&quot;</font>);
+}
+
+<b>void</b> test1(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test2(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>, <font color="#9933CC">'b'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test3(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>, <font color="#9933CC">'a'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test4(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>, <font color="#9933CC">'b'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'d'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'b'</font>, <font color="#9933CC">'a'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+
+<b>void</b> test5(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'m'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'d'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'m'</font>, <font color="#9933CC">'I'</font>, <font color="#9933CC">'m'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'d'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'m'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test6(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'m'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'d'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'m'</font>, <font color="#9933CC">'I'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'m'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'d'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'m'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test7(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>, <font color="#9933CC">'B'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'D'</font>, <font color="#9933CC">'E'</font>, <font color="#9933CC">'D'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'B'</font>, <font color="#9933CC">'a'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test8(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>, <font color="#9933CC">'B'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'D'</font>, <font color="#9933CC">'E'</font>, <font color="#9933CC">'E'</font>, <font color="#9933CC">'D'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'B'</font>, <font color="#9933CC">'a'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test9(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'a'</font>, <font color="#9933CC">'B'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'D'</font>, <font color="#9933CC">'E'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'D'</font>, <font color="#9933CC">'c'</font>, <font color="#9933CC">'B'</font>, <font color="#9933CC">'a'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test10(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'h'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'i'</font>, <font color="#9933CC">'v'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'d'</font>, <font color="#9933CC">'a'</font>, <font color="#9933CC">'s'</font>, <font color="#9933CC">'a'</font>,
+                    <font color="#9933CC">'d'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'v'</font>, <font color="#9933CC">'i'</font>, <font color="#9933CC">'l'</font>, <font color="#9933CC">'e'</font>, <font color="#9933CC">'h'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test11(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'b'</font>, <font color="#9933CC">'o'</font>, <font color="#9933CC">'t'</font>, <font color="#9933CC">'t'</font>, <font color="#9933CC">'o'</font>, <font color="#9933CC">'m'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>void</b> test12(<b>void</b>)
+{
+  <b>const</b> <b>char</b> a[] = {<font color="#9933CC">'1'</font>, <font color="#9933CC">'2'</font>, <font color="#9933CC">'3'</font>, <font color="#9933CC">'2'</font>, <font color="#9933CC">'1'</font>};
+  test_palindrome(a, <b>sizeof</b>(a), 1);
+  test_palindrome(a, <b>sizeof</b>(a), 2);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  test1();
+  test2();
+  test3();
+  test4();
+  test5();
+  test6();
+  test7();
+  test8();
+  test9();
+  test10();
+  test11();
+  test12();
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

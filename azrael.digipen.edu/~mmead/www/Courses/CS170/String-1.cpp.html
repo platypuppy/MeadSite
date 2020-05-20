@@ -1,0 +1,192 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>String.cpp</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// ostream, cout, endl</i></font>
+<b>#include</b> &lt;cstring&gt;  <font color="#003399"><i>// strcpy, strcmp</i></font>
+<b>#include</b> &lt;cctype&gt;   <font color="#003399"><i>// islower, isupper</i></font>
+<b>#include</b> <font color="#9933CC">&quot;String.h&quot;</font> <font color="#003399"><i>// String class</i></font>
+
+String::String()
+{
+    <font color="#003399"><i>// Allocate minimal space</i></font>
+  string_ = <b>new</b> <b>char</b>[1]; 
+  string_[0] = 0;        
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[String] Default constructor&quot;</font> 
+            &lt;&lt; std::endl;
+}
+
+String::String(<b>const</b> <b>char</b> *cstr)
+{
+    <font color="#003399"><i>// Allocate space and copy</i></font>
+  <b>int</b> len = (<b>int</b>)strlen(cstr);
+  string_ = <b>new</b> <b>char</b>[len + 1];
+  std::strcpy(string_, cstr);      
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[String] Conversion constructor: &quot;</font> 
+            &lt;&lt; cstr &lt;&lt; std::endl;
+}
+
+String::~String()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[String] Destructor: &quot;</font> &lt;&lt; string_ 
+            &lt;&lt; std::endl;
+  <b>delete</b> [] string_; <font color="#003399"><i>// release the array</i></font>
+}
+
+String::String(<b>const</b> String&amp; rhs)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[String] Copy constructor: &quot;</font> 
+            &lt;&lt; rhs.string_ &lt;&lt; std::endl;
+
+  <b>int</b> len = (<b>int</b>)strlen(rhs.string_);
+  string_ = <b>new</b> <b>char</b>[len + 1];
+  std::strcpy(string_, rhs.string_);
+}
+
+String&amp; String::<b>operator</b>=(<b>const</b> String&amp; rhs)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[String] operator=: &quot;</font> 
+            &lt;&lt; string_ &lt;&lt; <font color="#9933CC">&quot; = &quot;</font>
+            &lt;&lt; rhs.string_ &lt;&lt; std::endl;
+
+  <b>if</b> (&amp;rhs != <b>this</b>)
+  {
+    <b>delete</b> [] string_;
+    <b>int</b> len = (<b>int</b>)strlen(rhs.string_);
+    string_ = <b>new</b> <b>char</b>[len + 1];
+    std::strcpy(string_, rhs.string_);
+  }
+  <b>return</b> *<b>this</b>;
+}
+
+std::ostream &amp; <b>operator</b>&lt;&lt;(std::ostream &amp; os, 
+                          <b>const</b> String &amp;str)
+{
+  os &lt;&lt; str.string_;
+  <b>return</b> os;
+}
+
+<b>int</b> String::size(<b>void</b>) <b>const</b>
+{
+  <b>return</b> (<b>int</b>)strlen(string_);
+}
+
+<b>void</b> String::upper(<b>void</b>)
+{
+  <b>int</b> len = size();
+  <b>for</b> (<b>int</b> i = 0; i &lt; len; i++)
+    <b>if</b> (std::islower(string_[i]))
+      string_[i] -= <font color="#9933CC">'a'</font> - <font color="#9933CC">'A'</font>;
+}
+
+<b>void</b> String::lower(<b>void</b>)
+{
+  <b>int</b> len = size();
+  <b>for</b> (<b>int</b> i = 0; i &lt; len; i++)
+    <b>if</b> (std::isupper(string_[i]))
+      string_[i] += <font color="#9933CC">'a'</font> - <font color="#9933CC">'A'</font>;
+}
+
+<b>bool</b> String::<b>operator</b>&lt;(<b>const</b> String&amp; rhs) <b>const</b>
+{
+    <font color="#003399"><i>// if we're 'less' than rhs</i></font>
+  <b>if</b> (std::strcmp(string_, rhs.string_) &lt; 0)
+    <b>return</b> true;
+  <b>else</b>
+    <b>return</b> <b>false</b>;
+}
+<!--
+<b>bool</b> String::<b>operator</b>&gt;=(<b>const</b> String&amp; rhs) <b>const</b>
+{
+<font color="990099">#if 0</font>
+    <font color="#003399"><i>// This is now ambiguous</i></font>
+  <b>return</b> !(rhs &lt; string_);
+<font color="990099">#else</font>
+    <font color="#003399"><i>// Functional notation disambiguates</i></font>
+  <b>return</b> !(rhs.<b>operator</b>&lt;(string_));
+<font color="990099">#endif</font>
+}
+-->
+<b>const</b> <b>char</b>&amp; String::<b>operator</b>[](<b>int</b> index) <b>const</b>
+{
+    <font color="#003399"><i>// Validate the index</i></font>
+  <b>if</b> ( (index &gt;= 0) || (index &lt; size()) )
+    <b>return</b> string_[index];
+  <b>else</b>
+    <b>return</b> string_[0]; <font color="#003399"><i>// What to return???</i></font>
+
+}
+
+<b>char</b>&amp; String::<b>operator</b>[](<b>int</b> index)
+{
+    <font color="#003399"><i>// Validate the index</i></font>
+  <b>if</b> ( (index &gt;= 0) || (index &lt; size()) )
+    <b>return</b> string_[index];
+  <b>else</b>
+    <b>return</b> string_[0]; <font color="#003399"><i>// What to return???</i></font>
+
+}
+
+String::<b>operator</b> <b>const</b> <b>char</b> *(<b>void</b>) <b>const</b>
+{
+  <b>return</b> string_;
+}
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

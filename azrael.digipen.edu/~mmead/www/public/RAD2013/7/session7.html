@@ -1,0 +1,191 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #7</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 7</h1>
+List View
+<br>
+(TListView, intra-program drag and drop)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #7
+</p>
+
+This session I demonstrate a very powerful UI component called a <i>list view</i> (TListView). 
+The list view is one of the most powerful UI components, as it makes it easy to display lots of information very easily
+and makes the information easily accessible. It can even be made simple so computer beginners are not overwhelmed by the amount of data
+that is available. Everyone is familiar with the List View (even though most don't realize it), as it is the central component in 
+Windows Explorer.
+<P>
+	
+This is the form at design time:
+
+<p>
+<blockquote>
+<img border=0 src="listview1/ListView1-Design.png">
+</blockquote>
+<p>
+
+The application at runtime:
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Detailed view</th><th>List view</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="listview1/ListView1-Details.png">
+</td>
+<td>
+<img border=0 src="listview1/ListView1-List.png">
+</td>
+</tr></table>
+<p>
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Small icons view</th><th>Large icons view</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="listview1/ListView1-SmallIcons.png">
+</td>
+<td>
+<img border=0 src="listview1/ListView1-BigIcons.png">
+</td>
+</tr></table>
+<p>
+
+	
+<P>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview1/ListView1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview1/ListView1-XE3.zip">(XE 3)</a> - Includes the images.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview1/ListView.exe">Executable</a>
+	</ul>
+</ul>
+
+</blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+The example is a modification of the previous List view example. I added a second TListView component. You can drag and drop between the two
+List Views, as well as drag and drop within a single list view. 
+
+<blockquote>
+<img border=0 src="listview2/ListView-drag1.png">
+</blockquote>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview2/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview2/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project file <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview2/ListView2.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview2/ListView2-XE3.zip">(XE 3)</a> - Includes the images.
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/listview2/ListViewDrag.exe">Executable</a>
+	</ul>
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+This project demonstrates how to drag and drop between different windows (forms) of an application. In addition to
+the drag and drop stuff, I showed how to use the Anchor property of a component to properly resize a form. 
+<p>
+The drag and drop demo shows how to copy items from one list box to another as well as move items from one list
+box to another. It also shows how to add items to a list box as well as insert into a particular position. 
+The code for the two forms is trivial. The real work is done in
+the DragDropUtils.cpp support file.
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/dragdrop1/Form1.cpp.html">Form1.cpp</a> - The definition of the first form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/dragdrop1/Form2.cpp.html">Form2.cpp</a> - The definition of the second form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/dragdrop1/DragDropUtils.cpp.html">DragDropUtils.cpp</a> - The helper functions.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/dragdrop1/DragDrop1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/dragdrop1/DragDrop1-XE3.zip">(XE 3)</a> - to build it yourself. 	
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/7/dragdrop1/DragDrop1.exe">Executable</a>
+	</ul>
+</ul>
+
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>The first form</th><th>The second form</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="dragdrop1/ListBox-drag1.png">
+</td>
+<td>
+<img border=0 src="dragdrop1/ListBox-drag2.png">
+</td>
+</tr></table>
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+<ol>
+<li>In the first List View example, add the ability to sort on the file extension and path columns. (These are both strings.)
+<li>Modify the first example so that the user can sort in both directions, ascending and descending. The
+	first time the header is clicked, the data should be sorted in ascending order. The second click should sort in
+	descending order. (Essentially, left-clicking toggles the sort order.)
+<li>Add a popup menu to the list view that lets the user change some properties of the list view. <!--(This was demonstrated during the session.)-->
+<li>"Fix" the UI so that, if the item is a folder (not a file), nothing is displayed in the size subitem. (It currently displays 0.)
+</ol>
+	
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

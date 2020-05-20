@@ -1,0 +1,824 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Dynamic Memory Allocation</title>
+</head>
+
+<body>  
+<center><h1>Allocating Memory at Runtime</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Dynamic Memory Allocation
+</p>
+
+Up until now, all memory allocation has been <i>static</i> or <i>automatic</i>
+
+<ul>
+<li>The programmer (you) didn't have to worry about finding available memory; the compiler did it for you.
+<li>You also didn't have to worry about releasing the memory when you were finished with it; it happened automatically.
+<li>Static memory allocation is easy and effortless, but it has limitations.</li>
+<ul>
+  <li>Size must be known at compile time.</li>
+  <li>The size can't be changed at run-time.</li>
+  <li>Stack (static) size is much, much smaller than heap (dynamic) size.</li>
+  <ul>
+    <li>Stack is only a few MBs in size (1 MB on Windows, 8 MBs on Linux/macOS).</li>
+    <ul>
+      <li>Embedded systems have a much smaller stack (KBs).</li>
+    </ul>
+    <li>Heap is the rest of memory in the computer (GBs).</li>
+  </ul>
+</ul>
+<li>Dynamic memory allocation is under complete control of the programmer.
+<li>This means that you will be responsible for allocating and de-allocating memory.
+<li>Failing to understand how to manage the memory yourself will lead to programs that behave badly (crash).</li>
+  <ul>
+    <li>This is a fundamental difference between C/C++ and other languages such as Java, C#, and Python,
+      to name a few.</li>
+    <li>This is also what makes other languages relatively easier to learn and use.</li>
+    </ul>
+
+</ul>
+
+The two primary functions required for dynamic memory management are 
+<a href="http://man7.org/linux/man-pages/man3/malloc.3.html"><i>malloc</i></a> and 
+<a href="http://man7.org/linux/man-pages/man3/free.3.html"><i>free</i></a>.
+
+<blockquote><pre>
+<b>void</b> *malloc(size_t size); <font color="#003399"><i>/* Allocate a block of memory   */</i></font>
+<b>void</b> free(<b>void</b> *pointer);  <font color="#003399"><i>/* Deallocate a block of memory */</i></font>
+</pre></blockquote>
+
+To use <tt>malloc</tt> and <tt>free</tt>:
+<blockquote><pre>
+<b>#include</b> &lt;stdlib.h&gt; <font color="#003399"><i>/* malloc, free */</i></font>
+</pre></blockquote>
+
+
+The argument to <i>malloc</i> is the number of bytes to allocate:
+
+<blockquote><pre>
+<b>char</b> *pc = malloc(10); <font color="#003399"><i>/* allocate memory for 10 chars */</i></font>
+<b>int</b> *pi = malloc(40);  <font color="#003399"><i>/* allocate memory for 10 ints  */</i></font>
+</pre></blockquote>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>10 chars (10 bytes)</th><th>10 ints (40 bytes)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Dynamic-char-1.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Dynamic-int-1.png">
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p>
+<p>
+	
+Notice that there is no type information associated with <tt>malloc</tt>, so
+the return from <tt>malloc</tt> may need to be cast to the correct type:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Casting the return from malloc to the proper type */</i></font>
+<b>char</b> *pc = (<b>char</b> *) malloc(10); <font color="#003399"><i>/* allocate memory for 10 chars */</i></font>
+<b>int</b> *pi = (<b>int</b> *) malloc(40);   <font color="#003399"><i>/* allocate memory for 10 ints  */</i></font>
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Note:</b> The original version of <i>malloc</i> (from K&R C) returned a <i><tt>char *</tt></i> and so
+the returned pointed had to be cast to the correct type. Newer ANSI C compilers have 
+malloc returning a <tt><i>void *</i></tt> pointer so the cast is not necessary in C.
+The cast is required in C++, however.
+</p>
+</blockquote>
+
+You should never hard-code the size of the data types, since they may change. Do this instead:
+<blockquote><pre>
+  <font color="#003399"><i>/* Proper memory allocation for 10 chars */</i></font>
+<b>char</b> *pc = (<b>char</b> *) malloc(10 * <b>sizeof</b>(<b>char</b>)); 
+
+  <font color="#003399"><i>/* Proper memory allocation for 10 ints  */</i></font>
+<b>int</b> *pi = (<b>int</b> *) malloc(10 * <b>sizeof</b>(<b>int</b>));
+</pre></blockquote>
+
+
+If the allocation fails, NULL is returned so you should check the pointer after calling <i>malloc</i>.
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Allocate some memory for a string */</i></font>
+<b>char</b> *pc = (<b>char</b> *) malloc(10 * <b>sizeof</b>(<b>char</b>));
+
+  <font color="#003399"><i>/* If the memory allocation was successful */</i></font>
+<b>if</b> (pc != NULL)
+{
+  strcpy(pc, <font color="#9933CC">&quot;Digipen&quot;</font>); <font color="#003399"><i>/* Copy some text into the memory */</i></font>
+  printf(<font color="#9933CC">&quot;%s\n&quot;</font>, pc);    <font color="#003399"><i>/* Print out the text             */</i></font>
+  free(pc);              <font color="#003399"><i>/* Release the memory             */</i></font>
+}
+<b>else</b>
+  printf(<font color="#9933CC">&quot;Memory allocation failed!\n&quot;</font>);
+</pre></blockquote>
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>After allocation</th><th>After <tt>strcpy</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Dynamic-char-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Dynamic-char-3.png">
+</pre></blockquote>
+</td>
+</tr></table>
+	
+Notes:
+<ul>
+<li>The memory allocated by <tt>malloc</tt> is uninitialized (random values).
+<li>You need to initialize the memory yourself.
+<li>If you want all of the memory to be set to zeros, you can use the <tt>calloc</tt> function instead:
+<blockquote><pre>
+<b>void</b> *calloc(size_t num, size_t size); <font color="#003399"><i>/* Allocates memory and sets all bytes to 0 */</i></font>
+</pre></blockquote>
+<li>Notice that <tt>calloc</tt> has two parameters: 1) the number of elements and 2) the size of each element.
+	
+<blockquote><pre>
+  <font color="#003399"><i>/* Allocate and initialize 10 chars to 0 */</i></font>
+<b>char</b> *pc = (<b>char</b> *) calloc(10, <b>sizeof</b>(<b>char</b>));
+
+
+<!--
+A less known difference is that in operating systems with optimistic memory allocation, 
+like Linux, the pointer returned by malloc isn't backed by real memory until the 
+program actually touches it.
+
+calloc does indeed touch the memory (it writes zeroes on it) and thus you'll be 
+sure the OS is backing the allocation with actual RAM (or swap). This is also 
+why it is slower than malloc (not only does it have to zero it, the OS must 
+also find a suitable memory area by possibly swapping out other processes)  
+
+http://stackoverflow.com/questions/1538420/difference-between-malloc-and-calloc
+
+https://vorpus.org/blog/why-does-calloc-exist/
+
+-->
+</pre>
+After calling <tt>calloc</tt>:
+<p>
+<img src="Dynamic-char-4.png">
+
+</pre></blockquote>
+
+<li><tt>malloc</tt> and <tt>calloc</tt> are essentially the same, but, <tt>calloc</tt> may be 
+  slightly safer due to checking for arithmetic overflow (which <tt>malloc</tt> doesn't).</li>
+<ul>
+    <li>Technically, <tt>calloc</tt> may not work correctly (initializing to zero) on pointers or
+      floating-point numbers.</li>
+</ul>
+<li>If you are going to set the values of the memory yourself immediately after allocation,
+ then <tt>calloc</tt> may be unnecessary.</li>
+<li>It's really impossible to predict how <tt>calloc</tt> works, as it is implementation-dependent
+(e.g. zero pages, virtual memory, copy-on-write semantics).</li>
+</ul>
+
+
+
+<!--
+<li>To resize a block of previously allocated memory, use <i>realloc</i>:
+<blockquote><pre>
+<b>void</b> *realloc( <b>void</b> *prevblock, size_t size );
+</pre></blockquote>
+<li><i>realloc</i> can be (relatively) slow if the previous block has to be moved</i>.
+<li>Be sure to use the new pointer returned by <i>realloc</i>.
+-->
+
+
+</ul>
+Examples:
+<p>
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> SIZE = 10;
+  <b>int</b> *pi;
+
+    <font color="#003399"><i>/* allocate memory */</i></font>
+  pi = (<b>int</b> *)malloc(SIZE * <b>sizeof</b>(<b>int</b>));
+
+    <font color="#003399"><i>/* check for valid pointer */</i></font>
+  <b>if</b> (!pi)
+  {
+    printf(<font color="#9933CC">&quot;Failed to allocate memory.\n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+  <font color="#003399"><i>/* do stuff */</i></font>
+
+    <font color="#003399"><i>/* free memory */</i></font>
+  free(pi);
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+<!--
+<p>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr><th>Common usage</th><th>Set and check in one statement</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> SIZE = 10;
+  <b>int</b> *pi;
+
+    <font color="#003399"><i>/* allocate memory */</i></font>
+  pi = (<b>int</b> *)malloc(SIZE * <b>sizeof</b>(<b>int</b>));
+
+    <font color="#003399"><i>/* check for valid pointer */</i></font>
+  <b>if</b> (!pi)
+  {
+    printf(<font color="#9933CC">&quot;Failed to allocate memory.\n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+  <font color="#003399"><i>/* do stuff */</i></font>
+
+    <font color="#003399"><i>/* free memory */</i></font>
+  free(pi);
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> SIZE = 1000 * 1000 * 1000; <font color="#003399"><i>/* 1 billion */</i></font>
+  <b>int</b> *pi;
+
+    <font color="#003399"><i>/* allocate and check memory */</i></font>
+  <b>if</b> ((pi = (<b>int</b> *)malloc(SIZE * <b>sizeof</b>(<b>int</b>))) == NULL)
+  {
+    printf(<font color="#9933CC">&quot;Failed to allocate memory.\n&quot;</font>);
+    <b>return</b> -1;
+  }
+
+  <font color="#003399"><i>/* do stuff */</i></font>
+
+    <font color="#003399"><i>/* free memory */</i></font>
+  free(pi);
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+-->
+
+Accessing the allocated block:
+
+<blockquote><pre>
+<b>void</b> test_malloc(<b>void</b>)
+{
+  <b>int</b> SIZE = 10;
+  <b>int</b> i, *pi;
+
+    <font color="#003399"><i>/* allocate memory */</i></font>
+  pi = (<b>int</b> *)malloc(SIZE * <b>sizeof</b>(<b>int</b>));
+
+    <font color="#003399"><i>/* check for valid pointer */</i></font>
+  <b>if</b> (!pi)
+  {
+    printf(<font color="#9933CC">&quot;Failed to allocate memory.\n&quot;</font>);
+    <b>return</b>;
+  }
+
+
+    <font color="#003399"><i>/* using pointer notation */</i></font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    *(pi + i) = i;
+
+    <font color="#003399"><i>/* using subscripting */</i></font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    pi[i] = i;
+
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    printf(<font color="#9933CC">&quot;%i \n&quot;</font>, *(pi + i));
+
+    <font color="#003399"><i>/* free memory */</i></font>
+  free(pi);
+}
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Note:</b> By now it should be clear why we learned that pointers can
+be used to access array elements. With dynamic memory allocation, there are no <i>named</i> arrays,
+just pointers to contiguous (array-like) memory and pointers <i>must</i> be used.
+</p>
+</blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Dynamically Allocated Structures
+</p>
+
+Revisiting our <tt>FILEINFO</tt> example:
+
+<blockquote><pre>
+<b>#define</b> MAX_PATH 12
+</pre></blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td valign=top><pre>
+<b>struct</b> DATE 
+{
+  <b>int</b> month;
+  <b>int</b> day;
+  <b>int</b> year;
+};
+</pre></td>
+<td width=40></td>
+<td valign=top><pre>
+<b>struct</b> TIME 
+{
+  <b>int</b> hours;
+  <b>int</b> minutes;
+  <b>int</b> seconds;
+};
+</pre></td>
+<td width=40></td>
+<td valign=top><pre>
+<b>struct</b> DATETIME 
+{
+  <b>struct</b> DATE date;
+  <b>struct</b> TIME time;
+};
+</pre></td>
+<td width=40></td>
+<td valign=top><pre>
+<b>struct</b> FILEINFO 
+{
+  <b>int</b> length;
+  <b>char</b> name[MAX_PATH];
+  <b>struct</b> DATETIME dt;
+};
+</pre></td>
+</tr>
+</table>
+</blockquote>
+
+Function to print a single FILEINFO structure:
+<blockquote><pre>
+<b>void</b> PrintFileInfo(<font color="blue"><b>const</b></font> <b>struct</b> FILEINFO <font color="blue"><b>*</b></font>fi)
+{
+  printf(<font color="#9933CC">&quot;Name: %s\n&quot;</font>, fi-&gt;name);
+  printf(<font color="#9933CC">&quot;Size: %i\n&quot;</font>, fi-&gt;length);
+  printf(<font color="#9933CC">&quot;Time: %2i:%02i:%02i\n&quot;</font>, fi-&gt;dt.time.hours, fi-&gt;dt.time.minutes, fi-&gt;dt.time.seconds);
+  printf(<font color="#9933CC">&quot;Date: %i/%i/%i\n&quot;</font>, fi-&gt;dt.date.month, fi-&gt;dt.date.day, fi-&gt;dt.date.year);
+}
+</pre></blockquote>
+
+<p>
+Dynamically allocate a FILEINFO structure and print it:
+<blockquote><pre><b>void</b> f14(<b>void</b>)
+{
+    <font color="#003399"><i>/* Pointer to a FILEINFO struct (The 1 is redundant but instructive) */</i></font>
+  <b>struct</b> FILEINFO *pfi = (<b>struct</b> FILEINFO *)malloc(1 * <b>sizeof</b>(<b>struct</b> FILEINFO));
+
+    <font color="#003399"><i>/* Check that the allocation succeeded */</i></font>
+    <font color="#003399"><i>/* Set the fields of the struct ....   */</i></font>
+
+  PrintFileInfo(pfi); <font color="#003399"><i>/* Print the fields */</i></font>
+  free(pfi);          <font color="#003399"><i>/* Free the memory  */</i></font>
+}
+</pre></blockquote>
+
+<!--
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Pointer to a FILEINFO struct    */</i></font>
+  <b>struct</b> FILEINFO *pfi = malloc(<b>sizeof</b>(<b>struct</b> FILEINFO));
+
+    <font color="#003399"><i>/* Make sure it worked */</i></font>
+  assert(pfi != NULL);
+
+    <font color="#003399"><i>/* Set the fields of the struct .... */</i></font>
+
+  PrintFileInfos(pfi, 1); <font color="#003399"><i>/* Print the struct */</i></font>
+  free(pfi);              <font color="#003399"><i>/* Free the memory  */</i></font>
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+-->
+
+View of memory after allocation: (32-bit system)
+
+<blockquote>
+<img src="Structures-4.gif">
+</blockquote>
+
+<p>
+<hr width="90%">
+</p>
+
+Function to print an array of FILEINFO structures:
+<blockquote><pre>
+<b>void</b> PrintFileInfos(<font color="blue"><b>const</b></font> <b>struct</b> FILEINFO <font color="blue"><b>*</b></font>records, <b>int</b> count)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; count; i++)
+    PrintFileInfo(records++); <font color="#003399"><i>/* Code reuse! */</i></font>
+}
+</pre></blockquote>
+
+Remember, for function parameters, we could have written the function like this:
+<blockquote><pre>
+  <font color="#003399"><i>/* Use array notation instead of pointer notation */</i></font>
+<b>void</b> PrintFileInfos(<b>const struct</b> FILEINFO records[], <b>int</b> count)
+{
+  . . .
+}
+</pre></blockquote>
+
+
+<p>
+<table><tr valign="top">
+<td>
+<pre class="sourcecode"><code><b>#include</b> &lt;assert.h&gt; <font color="#003399"><i>/* assert */</i></font>
+
+<b>#define</b> SIZE 10
+<b>#define</b> MAX_PATH 12
+
+<b>void</b> TestHeapStruct(<b>void</b>)
+{
+  <b>int</b> i;                   <font color="#003399"><i>/* Loop counter               */</i></font>
+  <b>struct</b> FILEINFO *pfi;   <font color="#003399"><i>/* For the "array" of structs */</i></font>
+  <b>struct</b> FILEINFO *saved; <font color="#003399"><i>/* Need to remember address   */</i></font>
+
+    <font color="#003399"><i>/* Allocate and initialize all fields of all structs to 0 */</i></font>
+  pfi = (<b>struct</b> FILEINFO *)calloc(SIZE, <b>sizeof</b>(<b>struct</b> FILEINFO));
+    
+  assert(pfi != NULL); <font color="#003399"><i>/* Check that it was successful */</i></font>
+  saved = pfi;         <font color="#003399"><i>/* Save pointer for later...    */</i></font>
+
+    <font color="#003399"><i>/* Set the date and name of each structure */</i></font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+  {
+    <b>char</b> name[MAX_PATH]; <font color="#003399"><i>/* Declare in scope where used. */</i></font>
+
+      <font color="#003399"><i>/* Format dates from 12/1/2019 through 12/10/2019 */</i></font>
+    pfi-&gt;dt.date.month = 12;
+    pfi-&gt;dt.date.day = i + 1;
+    pfi-&gt;dt.date.year = 2019;
+
+      <font color="#003399"><i>/* Format and store the filenames (foo-1.txt through foo-10.txt) */</i></font>
+    sprintf(name, <font color="#9933CC">&quot;foo-%i.txt&quot;</font>, i + 1);
+    strcpy(pfi-&gt;name, name); 
+
+      <font color="#003399"><i>/* Point to next FILEINFO struct in the array */</i></font>
+    pfi++;
+  }
+
+    <font color="#003399"><i>/* Reset pointer to beginning */</i></font>
+  pfi = saved;
+
+    <font color="#003399"><i>/* Print info */</i></font>
+  PrintFileInfos(pfi, SIZE);
+
+    <font color="#003399"><i>/* Release the memory */</i></font>
+  free(pfi);
+}
+</code></pre>
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+<b>Output:</b>
+<pre>
+Name: foo-1.txt
+Size: 0
+Time:  0:00:00
+Date: 12/1/2019
+Name: foo-2.txt
+Size: 0
+Time:  0:00:00
+Date: 12/2/2019
+Name: foo-3.txt
+Size: 0
+Time:  0:00:00
+Date: 12/3/2019
+Name: foo-4.txt
+Size: 0
+Time:  0:00:00
+Date: 12/4/2019
+Name: foo-5.txt
+Size: 0
+Time:  0:00:00
+Date: 12/5/2019
+Name: foo-6.txt
+Size: 0
+Time:  0:00:00
+Date: 12/6/2019
+Name: foo-7.txt
+Size: 0
+Time:  0:00:00
+Date: 12/7/2019
+Name: foo-8.txt
+Size: 0
+Time:  0:00:00
+Date: 12/8/2019
+Name: foo-9.txt
+Size: 0
+Time:  0:00:00
+Date: 12/9/2019
+Name: foo-10.txt
+Size: 0
+Time:  0:00:00
+Date: 12/10/2019	
+</pre>
+</td>
+</tr></table>
+<p>
+
+
+Quick <a href="Pointers-1.html#POINTER_ARITHMETIC">pointer arithmetic</a> review.
+<p>
+
+Note:
+<ul>
+<li>In the code above, we didn't have to reset the pointer. We could have just used the <i>saved</i> pointer:
+	<blockquote><pre>
+    <font color="#003399"><i>/* Print info */</i></font>
+  PrintFileInfos(<font color="blue"><b>saved</b></font>, SIZE);
+
+    <font color="#003399"><i>/* Release the memory */</i></font>
+  free(<font color="blue"><b>saved</b></font>);
+</pre></blockquote>
+This is simply because <i>saved</i> has the same value that <i>pfi</i> had originally.
+<p>
+<li>Also, failure to save the original value of <i>pfi</i> could pose a serious problem. You may have no
+	way to get back to the original address so that you can free the memory.
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+A Brief Look At <a href="http://man7.org/linux/man-pages/man3/realloc.3p.html"><tt>realloc</tt></a>
+</p>
+
+What happens if the block of memory that was allocated was too small? This is a problem that
+happens often. Consider this code:
+
+<blockquote><pre>
+<b>void</b> f0(<b>void</b>)
+{
+  <b>char</b> *p1 = malloc(1000);
+  <b>char</b> *p2;
+
+  <font color="#003399"><i>/* put some values into the memory  */</i></font>
+
+  <font color="#003399"><i>/* oops, should have allocated more */</i></font>
+
+  p2 = malloc(2000);            <font color="#003399"><i>/* allocate a bigger block */</i></font>
+  memcpy(p2, p1, <b>sizeof</b>(<b>char</b>)); <font color="#003399"><i>/* copy over existing data */</i></font>
+  free(p1);                     <font color="#003399"><i>/* free the old memory     */</i></font>
+
+  <font color="#003399"><i>/* do something with new memory */</i></font>
+
+  free(p2);
+}
+</pre></blockquote>
+
+This is such a common occurrence that there is a function in the library (<i>realloc</i>) to handle
+this situation.
+
+The <i>realloc</i> function can extend (or shrink) the size of a previously-allocated block.
+<p>
+Here is the prototype:
+<blockquote><pre>
+<b>void</b> *realloc(<b>void</b> *ptr, size_t size);
+</pre></blockquote>
+
+On its surface, that sounds great. However, in practice, it generally doesn't work when growing the block.
+I'm showing you this so that, sometime in the future, you may find that you need this possible behavior.
+Examples are worth a 1000 words.
+<p>
+
+<b>Note:</b> I've purposely left out the calls to <i>free</i> in the code below.
+Don't do that in real code! (Also, the addresses will change with each run.)
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+Example 1 (grow):
+
+<blockquote><pre>
+<b>void</b> f1(<b>void</b>)
+{
+  <b>char</b> *p1 = malloc(1000);
+  <b>char</b> *p2;
+
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p1); <font color="#003399"><i>/* 0x1c78010        */</i></font>
+  p2 = realloc(p1, 2000);     <font color="#003399"><i>/* grow the block   */</i></font>
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p2); <font color="#003399"><i>/* 0x1c78010 (same) */</i></font>
+}
+</pre></blockquote>
+
+Example 2 (grow):
+<blockquote><pre>
+<b>void</b> f2(<b>void</b>)
+{
+  <b>char</b> *p1 = malloc(1000);
+  <b>char</b> *p2;
+
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p1); <font color="#003399"><i>/* 0x1da5010                */</i></font>
+  malloc(10);                 <font color="#003399"><i>/* any arbitrary allocation */</i></font>
+  p2 = realloc(p1, 2000);     <font color="#003399"><i>/* grow the block           */</i></font>
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p2); <font color="#003399"><i>/* 0x1da5420 (different)    */</i></font>
+}
+</pre></blockquote>
+
+Example 3 (shrink):
+<blockquote><pre>
+<b>void</b> f3(<b>void</b>)
+{
+  <b>char</b> *p1 = malloc(1000);
+  <b>char</b> *p2;
+
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p1); <font color="#003399"><i>/* 0x122a010                */</i></font>
+  malloc(10);                 <font color="#003399"><i>/* any arbitrary allocation */</i></font>
+  p2 = realloc(p1, 200);      <font color="#003399"><i>/* shrink the block         */</i></font>
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p2); <font color="#003399"><i>/* 0x122a010 (same)         */</i></font>
+}
+</pre></blockquote>
+
+Example 4 (grow):
+<blockquote><pre>
+<b>void</b> f4(<b>void</b>)
+{
+  <b>char</b> *p1 = malloc(1000);
+  <b>char</b> *p2;
+
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p1); <font color="#003399"><i>/* 0x92b010                  */</i></font>
+  strdup(<font color="#9933CC">&quot;hello&quot;</font>);            <font color="#003399"><i>/* call arbitrary function   */</i></font>
+  p2 = realloc(p1, 2000);     <font color="#003399"><i>/* grow the block            */</i></font>
+  printf(<font color="#9933CC">&quot;%p&#92;n&quot;</font>, (<b>void</b> *)p2); <font color="#003399"><i>/* 0x92b420 (different!)     */</i></font>
+}
+</pre></blockquote>
+
+<!--
+/* Need -D_BSD_SOURCE to suppress warnings of non-standard strdup */
+-->
+<blockquote>
+<p class="technote">
+The reason I wanted to show this is because beginning programmers often look at the <i>realloc</i>
+function without really understanding how it works and think that it's a panacea for growing
+(extending) a block of memory. It isn't, but it does have it's uses, if you know what to expect.
+</p>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Summary
+</p>
+
+
+Summary for <tt>malloc</tt>/<tt>calloc</tt>
+<ul>
+<li>The most common uses for dynamic memory allocation are arrays and structures. You will rarely allocate
+a single <tt><b>int</b></tt>, <tt><b>char</b></tt>, <tt><b>double</b></tt> dynamically, but you can, of course.
+<li>Using memory allocated by <tt>malloc</tt> is no different than using memory allocated (statically) by
+the compiler.
+<li>Like static allocation of arrays, there are no range checks on the subscripts, so the programmer has to be careful.
+<li>If you try to access memory outside the block that you allocated, the behavior of your program is undefined.
+<li>You must <b>ALWAYS</b> check the return from <tt>malloc</tt> to make sure that the call succeeded.</li>
+</ul>
+
+Summary for <tt>free</tt>	
+<ul>
+<li>Forgetting to call <tt>free</tt> will result in a <i>memory leak</i>, which can lead to your program running out of memory.
+	Memory leaks are <b>very, very bad</b>.
+<li>Calling <tt>free</tt> twice on a pointer renders your entire program undefined. It may cause the program to crash or it may not. But the
+	results of the running program will now be undefined (random).
+<li>Calling <tt>free</tt> on a pointer not pointing to the beginning of memory allocated by <tt>malloc/calloc</tt> will also
+	render your entire program undefined. 
+In other words, the address you pass to <tt>free</tt> <b>MUST</b> be an address that you was returned by <tt>malloc/calloc</tt>).
+<li>If you allocate memory dynamically, you must call <tt>free</tt> on it at some point.</li>
+<li>It is safe to call <tt>free</tt> with a NULL pointer. This means that you don't need
+(and shouldn't try) to check the
+  pointer before freeing it.</li>
+<li>Don't access memory after it has been freed as strange problems may occur. (Dangling pointers)</li>
+<li>There are many other problems associated with dynamically allocated memory that you will discover in the coming months and years!</li>
+</ul>
+
+Other issues:
+<ul>
+<li>It's important to realize that <tt>free</tt> may not do anything with the memory that is returned.
+  It may simply mark it as "not in use" which makes it available for re-use elsewhere in your program.</li>
+  <ul>
+    <li>Why can't <tt>free</tt> set the pointer it is given to NULL? Prototype:</li>
+<blockquote><pre>
+<b>void</b> free(<b>void</b> *pointer); 
+</pre></blockquote>
+  </ul>
+<li>How does <tt>free</tt> know how big the block of memory is? (It just gets a pointer.)</li>
+
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

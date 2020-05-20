@@ -1,0 +1,90 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Vector.h</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef VECTOR_H</font>
+<font color="990099">#define VECTOR_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>namespace</b> CS170
+{
+
+<font color="#003399"><i>// Do not modify this class</i></font>
+<b>class</b> SubscriptError
+{
+  <b>public</b>:
+    SubscriptError(<b>int</b> Subscript) : subscript_(Subscript) {};
+    <b>int</b> GetSubscript() <b>const</b> { <b>return</b> subscript_; }
+
+  <b>private</b>:
+    <b>int</b> subscript_;
+};
+
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> Vector
+{
+  <b>public</b>:
+
+    <b>static</b> <b>const</b> <b>int</b> NO_INDEX = -1;
+
+    <b>struct</b> SortResult
+    {
+      <b>unsigned</b> compares;
+      <b>unsigned</b> swaps;
+    };
+
+      <font color="#003399"><i>// Adds an element to the back of the array. If there is</i></font>
+      <font color="#003399"><i>// not enough room in the array, it will be grown to</i></font>
+      <font color="#003399"><i>// handle more items.</i></font>
+    <b>void</b> push_back(<b>const</b> T&amp; value);
+
+      <font color="#003399"><i>// Adds an element to the front of the array. If there is</i></font>
+      <font color="#003399"><i>// not enough room in the array, it will be grown to</i></font>
+      <font color="#003399"><i>// handle more items. All items to the right must be</i></font>
+      <font color="#003399"><i>// shifted over one element to the right.</i></font>
+    <b>void</b> push_front(<b>const</b> T&amp; value);
+
+      <font color="#003399"><i>// Concatenates a vector onto the end of this vector.</i></font>
+      <font color="#003399"><i>// This operator is optimized from the previous lab. Instead of growing</i></font>
+      <font color="#003399"><i>// the vector incrementally as we push_back more items, we are going to</i></font>
+      <font color="#003399"><i>// grow it once to accommodate all of the new items. See the driver for</i></font>
+      <font color="#003399"><i>// output details, especially the number of allocations performed.</i></font>
+    Vector&amp; <b>operator</b>+=(<b>const</b> Vector&amp; rhs);
+
+    <font color="#003399"><i>// More public methods from the previous lab (Vector4)</i></font>
+
+  <b>private</b>:
+    T *array_;          <font color="#003399"><i>// The dynamically allocated array</i></font>
+    
+    <font color="#003399"><i>// Other private stuff ...</i></font>
+
+};
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="990099">#include &quot;Vector.cpp&quot;</font>
+
+<font color="990099">#endif // VECTOR_H</font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

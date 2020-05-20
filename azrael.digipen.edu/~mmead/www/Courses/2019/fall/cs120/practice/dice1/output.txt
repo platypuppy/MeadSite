@@ -1,0 +1,22 @@
+How many times do you want to roll the dice? (0=quit) After 100 rolls, you had 5 of a kind 0 times.
+This is a percentage of 0.00000000.
+
+How many times do you want to roll the dice? (0=quit) After 1000 rolls, you had 5 of a kind 2 times.
+This is a percentage of 0.00200000.
+
+How many times do you want to roll the dice? (0=quit) After 1000 rolls, you had 5 of a kind 0 times.
+This is a percentage of 0.00000000.
+
+How many times do you want to roll the dice? (0=quit) After 1000 rolls, you had 5 of a kind 1 time.
+This is a percentage of 0.00100000.
+
+How many times do you want to roll the dice? (0=quit) After 10000 rolls, you had 5 of a kind 8 times.
+This is a percentage of 0.00080000.
+
+How many times do you want to roll the dice? (0=quit) After 200000 rolls, you had 5 of a kind 159 times.
+This is a percentage of 0.00079500.
+
+How many times do you want to roll the dice? (0=quit) After 1234567 rolls, you had 5 of a kind 974 times.
+This is a percentage of 0.00078894.
+
+How many times do you want to roll the dice? (0=quit) 

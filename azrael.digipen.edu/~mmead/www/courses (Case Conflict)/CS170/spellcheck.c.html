@@ -1,0 +1,59 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>spellcheck.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &quot;SpellChecker.h&quot;</font>
+
+<b>enum</b> SCResult { scrFILE_OK = -10,       <font color="#003399"><i>/* File was opened successfully */</i></font>
+                scrFILE_ERR_OPEN = -20, <font color="#003399"><i>/* File was unable to be opened */</i></font>
+                scrWORD_OK = 10,        <font color="#003399"><i>/* Word found in dictionary     */</i></font>
+                scrWORD_BAD = 20        <font color="#003399"><i>/* Word not found in dictionary */</i></font> 
+              };
+
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>const</b> <b>char</b> *dictionary = <font color="#9933CC">&quot;allwords.txt&quot;</font>;
+  <b>void</b> *spellchecker;
+  <b>const</b> <b>char</b> *words[] = {<font color="#9933CC">&quot;Four&quot;</font>, <font color="#9933CC">&quot;SCORE&quot;</font>, <font color="#9933CC">&quot;and&quot;</font>, <font color="#9933CC">&quot;sevn&quot;</font>, <font color="#9933CC">&quot;years&quot;</font>, <font color="#9933CC">&quot;ago&quot;</font>, <font color="#9933CC">&quot;ar&quot;</font>,
+                         <font color="#9933CC">&quot;fawthers&quot;</font>, <font color="#9933CC">&quot;brought&quot;</font>, <font color="#9933CC">&quot;foarth&quot;</font>, <font color="#9933CC">&quot;on&quot;</font>, <font color="#9933CC">&quot;this&quot;</font>, <font color="#9933CC">&quot;contnent&quot;</font>,
+                         <font color="#9933CC">&quot;a&quot;</font>, <font color="#9933CC">&quot;gnu&quot;</font>, <font color="#9933CC">&quot;nashun&quot;</font>
+                        };
+
+  <b>int</b> size = <b>sizeof</b>(words) / <b>sizeof</b>(*words);
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Assume filename */</i></font>
+  <b>if</b> (argc &gt; 1)
+    dictionary = argv[1];
+
+  spellchecker = create_spellchecker(dictionary);
+
+  <b>for</b> (i = 0; i &lt; size; i++)
+  {
+    <b>int</b> result = spellcheck(spellchecker, words[i]);
+    <b>if</b> (result == scrWORD_OK)
+      printf(<font color="#9933CC">&quot;%s is correct.&#92;n&quot;</font>, words[i]);
+    <b>else</b> <b>if</b> (result == scrWORD_BAD)
+      printf(<font color="#9933CC">&quot;%s is incorrect.&#92;n&quot;</font>, words[i]);
+    <b>else</b> <b>if</b> (result == scrFILE_ERR_OPEN)
+      printf(<font color="#9933CC">&quot;Couldn't open the file: %s.&#92;n&quot;</font>, dictionary);
+    <b>else</b>
+      printf(<font color="#9933CC">&quot;Shouldn't see this.&#92;n&quot;</font>);
+  }
+
+  destroy_spellchecker(spellchecker);
+
+  <b>return</b> 0;
+}
+</code></pre>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

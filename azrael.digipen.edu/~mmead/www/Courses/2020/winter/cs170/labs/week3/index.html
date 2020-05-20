@@ -1,0 +1,357 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+
+This assignment is very similar to what you were given in a CS120 lab (<tt>fibonacci</tt>), 
+so it will actually be fairly trivial. (Plus, I am giving you almost all of the code.) 
+<p>
+You are to modify it to be more 
+C++-like. That is, replace <tt><b>printf</b></tt> with <tt><b>cout</b></tt>. You should also modify 
+the variable declarations to be closer to where they are used (e.g. declare the <tt><b>for</b></tt>
+loop's index within the <tt><b>for</b></tt> statement itself.) You are given two files to start with, 
+and all you need to add is the <tt><b>cout</b></tt> statements. (The actual calculation of the numbers 
+is already done for you.)
+	 
+	
+<p>	
+
+<p>	
+<hr width="90%">
+<p>	
+
+
+<ol>
+
+<!--***************************************************************************************************-->
+<!--***************************************************************************************************-->
+<!--***************************************************************************************************-->
+<li>(<b><font color="black">Part 1</font></b>) You'll create a makefile 
+	(called <tt><b>makefile.gnu</b></tt>)
+	much like the previous lab so it uses a separate directory for the output files.
+	(Name the directory <tt>gnu</tt> again.)
+<p>
+
+You'll notice that you aren't running the code, so you just have to make sure that it compiles cleanly.
+You don't really need any code in the body of the function to get it to compile. You will need to make
+sure that you don't have any warnings due to not using the parameters in the function.
+<b>The command lines to compile the code are listed in part 3 below.</b>
+<p>
+To keep the compiler from complaining about an unused parameter before implementing with real code, 
+do this for the <tt>fibonacci</tt>
+function:
+<blockquote><pre>
+<b>void</b> fibonacci(<b>int</b> max)
+{
+  <b>if</b> (max)
+    <b>return</b>;
+}
+</pre></blockquote>
+
+Now the compiler thinks that the parameter <i>max</i> is being used. (The compiler is not smart enough 
+to realize that this is stupid, though!)
+
+<p>	
+<hr width="90%">
+<p>	
+
+
+<!--***************************************************************************************************-->
+<!--***************************************************************************************************-->
+<!--***************************************************************************************************-->
+<li>(<b><font color="black">Part 2</font></b>) 
+	The next step is to document the code using Doxygen tags. You must add a complete file header 
+	comment
+	to the top of the file (fibonacci.cpp). The one function (fibonacci) must have a complete
+	function header comment with the appropriate tags (<tt>\brief</tt>, <tt>\param</tt>, and, if necessary,
+	a <tt>\return</tt> tag).
+	<p>
+	After you've documented the code, you need to edit a Doxyfile (either with a text editor or the Doxywizard) 
+	so that you can run Doxygen on the code. Refer to	your notes on using Doxygen.
+  Here is a <a href="../../Doxyfile-1.8.15.txt">Doxygen template</a> to get you started. You must edit this file.
+
+<p>
+<p>
+
+<p>	
+<hr width="90%">
+<p>	
+
+
+<!--***************************************************************************************************-->
+<!--***************************************************************************************************-->
+<!--***************************************************************************************************-->
+<li>(<b><font color="black">Part 3</font></b>) 
+	After you've completed parts 1 and 2, you can now actually get the <tt>fibonacci</tt> function 
+	to work properly.
+
+<p>
+	Here is the description from CS120:
+
+<p>
+Create a table of <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci numbers</a> and 
+	the corresponding Fibonacci quotients. In case you've forgotten
+	the Fibonacci sequence:
+
+<blockquote><pre>
+F<sub>0</sub> = 0
+F<sub>1</sub> = 1
+F<sub>N</sub> = F<sub>N-1</sub> + F<sub>N-2</sub>    for all N &gt; 0
+</pre></blockquote>
+
+So this gives 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, etc.
+<p>
+The Fibonacci quotient is defined as:
+
+<blockquote><pre>
+Q<sub>N</sub> = F<sub>N</sub> / F<sub>N-1</sub>   for all N &gt; 1
+</pre></blockquote>
+
+The interesting thing about the Fibonacci quotient, is that as N gets very large, Q<sub>N</sub> approaces the 
+<a href="http://en.wikipedia.org/wiki/Golden_ratio">Goldent Ratio</a>.	
+<blockquote>
+1.618033988749894848204586834365638117720309179805762862135448622705260462818902449707207204...
+</blockquote>
+
+Command lines for compiling:
+	
+<blockquote>
+GNU:
+<blockquote><pre>
+<b>g++</b> -Wall -Wextra -Werror -ansi -pedantic -O -Wconversion main.cpp fibonacci.cpp -o fib
+</pre></blockquote>
+</blockquote>
+
+<!--
+<blockquote>
+Clang
+<blockquote><pre>
+<b>clang++</b> -Wall -Wextra -Werror -ansi -pedantic -O -Wconversion main.cpp fibonacci.cpp -o fib
+</pre></blockquote>
+If you can't link on Windows, use this command (compile-only):
+<blockquote><pre>
+<b>clang++</b> -c -Wall -Wextra -Werror -ansi -pedantic -O -Wconversion main.cpp fibonacci.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+<!--
+<blockquote>
+Microsoft
+<blockquote><pre>
+<b>cl</b> /W4 /EHsc /Za /WX /Fefib.exe main.cpp fibonacci.cpp
+</pre></blockquote>
+</blockquote>
+-->
+
+Here's a <a href="fib.exe">compiled executable</a> that provides the basic functionality described. 
+Nothing fancy. You need to download it
+to run it.
+<p>
+Here are the two files to start with:  &nbsp;&nbsp;<a href="main.cpp">main.cpp</a> &nbsp;&nbsp;<a href="fibonacci.cpp">fibonacci.cpp</a>
+<p>
+		
+<table cellpadding=0 cellspacing=0 border=0>
+<tr><th>main.cpp</th><th></th><th>fibonacci.cpp</th></tr>
+<tr valign="top">
+<td>
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout</font>
+<font color="990099">#include &lt;cstdlib&gt;  // atoi</font>
+
+<b>void</b> fibonacci(<b>int</b> max);
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>if</b> (argc &lt; 2)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;You must specify the&quot;</font>
+              &lt;&lt; <font color="#9933CC">&quot; fibonacci numbers to generate.&#92;n&quot;</font>;
+    <b>return</b> 1;
+  }
+
+  <b>int</b> size = std::atoi(argv[1]);
+  fibonacci(size);
+
+  <b>return</b> 0;
+}
+</code></pre>
+</td>
+<td>
+</td>
+<td>
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout</font>
+<font color="990099">#include &lt;iomanip&gt;  // </font>
+
+<b>void</b> fibonacci(<b>int</b> max)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;           Fibonacci        Fibonacci&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; N           number          quotient&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; 0             0                  N/A&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; 1             1                  N/A&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> count = max;
+  <b>int</b> fib1 = 0, fib2 = 1;
+  <b>for</b> (<b>int</b> i = 2; i &lt;= count; i++)
+  {
+    <b>int</b> next = fib1 + fib2;
+    
+    <font color="#003399"><i>// Add statements to print here...</i></font>
+
+    fib1 = fib2;
+    fib2 = next;
+  }
+}
+</code></pre></td>
+</tr>
+</table>
+
+As you can see, most of the code is written for you. You just need to format the output. The variable
+<i>next</i> is the current Fibonacci number to print. The Fibonacci quotient is calculated by the 
+expression <i>next / fib2</i>.
+<p>
+After you've finished part 3, zip up the files and submit the zip file to the submission page. 
+(The lab is called <b>lab03_fibonacci</b>). The 2 files in the zip are:
+
+<ul>
+	<li><tt>fibonacci.cpp</tt></li>
+	<li><tt>makefile.gnu</tt></li>
+</ul>
+</ol>
+
+
+
+
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<!--********************************************************************************************-->
+<p class="SectionHeader">
+Example Output
+</p>
+
+
+<ul>
+
+<li>Fibonacci<sub>12</sub>. If you run
+<blockquote><pre>
+fib 12 > fib12.txt
+</pre></blockquote> 
+	will result in <a href="fib12.txt">this file</a>:
+<blockquote><pre>
+
+           Fibonacci        Fibonacci
+ N           number          quotient
+-------------------------------------
+ 0             0                  N/A
+ 1             1                  N/A
+ 2             1   1.0000000000000000
+ 3             2   2.0000000000000000
+ 4             3   1.5000000000000000
+ 5             5   1.6666666666666667
+ 6             8   1.6000000000000001
+ 7            13   1.6250000000000000
+ 8            21   1.6153846153846154
+ 9            34   1.6190476190476191
+10            55   1.6176470588235294
+11            89   1.6181818181818182
+12           144   1.6179775280898876
+</pre></blockquote>
+
+
+<li>The largest value: Running
+	<blockquote><pre>
+fib 46 > fib46.txt
+	</pre></blockquote> 
+	will result in <a href="fib46.txt">this file</a>:
+</blockquote></pre>
+	
+<blockquote><pre>
+           Fibonacci        Fibonacci
+ N           number          quotient
+-------------------------------------
+ 0             0                  N/A
+ 1             1                  N/A
+ 2             1   1.0000000000000000
+ 3             2   2.0000000000000000
+ 4             3   1.5000000000000000
+ 5             5   1.6666666666666667
+ 6             8   1.6000000000000001
+ 7            13   1.6250000000000000
+ 8            21   1.6153846153846154
+ 9            34   1.6190476190476191
+10            55   1.6176470588235294
+11            89   1.6181818181818182
+12           144   1.6179775280898876
+13           233   1.6180555555555556
+14           377   1.6180257510729614
+15           610   1.6180371352785146
+16           987   1.6180327868852460
+17          1597   1.6180344478216819
+18          2584   1.6180338134001253
+19          4181   1.6180340557275541
+20          6765   1.6180339631667064
+21         10946   1.6180339985218033
+22         17711   1.6180339850173580
+23         28657   1.6180339901755971
+24         46368   1.6180339882053250
+25         75025   1.6180339889579021
+26        121393   1.6180339886704431
+27        196418   1.6180339887802426
+28        317811   1.6180339887383031
+29        514229   1.6180339887543225
+30        832040   1.6180339887482036
+31       1346269   1.6180339887505408
+32       2178309   1.6180339887496482
+33       3524578   1.6180339887499890
+34       5702887   1.6180339887498589
+35       9227465   1.6180339887499087
+36      14930352   1.6180339887498896
+37      24157817   1.6180339887498969
+38      39088169   1.6180339887498940
+39      63245986   1.6180339887498951
+40     102334155   1.6180339887498947
+41     165580141   1.6180339887498949
+42     267914296   1.6180339887498949
+43     433494437   1.6180339887498949
+44     701408733   1.6180339887498949
+45    1134903170   1.6180339887498949
+46    1836311903   1.6180339887498949
+</pre></blockquote>
+</ul>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

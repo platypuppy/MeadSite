@@ -1,0 +1,960 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/styles.css">
+<title>CS 120 Fall 2019</title>
+</head>
+
+<body>
+
+<center><h1>CS 120 - High-Level Programming I</h1>
+<a href="index.html">
+http://azrael.digipen.edu/~mmead/www/Courses/2019/fall/cs120/index.html</a>
+</center>
+
+<table>
+<tr>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40>
+</td>
+<td>
+<p class="technote">
+<font size=+2>
+<b>Reminder:</b> These notes will be taken down permanently on Friday, December 13, 2019.
+If you want to save a copy for yourself, please download them before that time.
+</font>
+</p>
+</td>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40>
+</td>
+</tr></table>
+<p>
+<!--
+-->
+
+<!--
+-->
+
+<p>
+<li><a href="../../../../public/Files/CS_and_Gaming.jpg">Computer Science and Gaming</a>
+<p>
+
+<blockquote>
+"There is no doubt that learning the fundamentals of a programming language is not as
+much fun as writing programs. However, <i>not</i> knowing the fundamentals makes writing
+programs a lot less fun." -- Kenneth A. Reek
+</blockquote>
+
+<!--
+<table>
+<tr>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40>
+</td>
+<td>
+<p class="technote">
+<font size=+2>
+<b>Notice:</b> There will be TAs in Euclid on Friday, September 19 from 4:00 pm to 6:00 pm. They
+will be there to help
+any students that are still having difficulties getting the Cygwin utilities and compilers
+working on your laptops.
+</font>
+</p>
+</td>
+<td>
+<img src="../../../../images/annew3.gif" xxwidth=80 xxheight=40>
+</td>
+</tr></table>
+<p>
+-->
+
+<p>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Information
+</p>
+
+<!--
+<blockquote>
+<table border=1>
+<tr bgcolor="#FFFF66"><td>
+There will be an extra CS120 session in Van Gogh every Tuesday from 4:30 pm to 6:30 pm. There will be TAs
+available to answer any questions you have about anything we've covered in CS120. This includes lectures,
+quizzes, labs, homework, reading in the textbook, etc. This is a great opportunity for you to get answers
+to any questions you might have and to help you prepare for any upcoming quizzes or exams.
+</td></tr></table>
+</blockquote>
+-->
+
+<p>
+<blockquote>
+<p class="technote">
+If you have any questions about any assignment, please post the questions in the
+<a href="https://distance.digipen.edu/2019-fall/mod/forum/view.php?id=11164">CS120 Forum</a> on the
+<a href="https://distance.digipen.edu/2019-fall/course/view.php?id=19">CS120 Moodle website</a>.
+There are many people that can answer your question. If you
+just send your question to me in an email, it may be a while until (or if) I get back to you. Also,
+if you have a question about the assignment, it's very likely that many other students have the same
+question and they will benefit from the posted answers.
+<!--
+<br><br>
+There are now two Supplementary Review Lectures for CS120 this semester. There is one on Friday
+afternoons from 4:00 to 5:00 pm in Michelangelo. There is another on Monday afternoons from
+5:00 to 6:00 pm in Van Gogh. Both lectures will review what was covered during the week (or
+previous weeks) in CS120. They are optional, but highly recommended, especially for students
+that are new to programming or are having difficulty keeping up with the information.
+</p>
+-->
+</blockquote>
+
+
+<!--
+<li><a class="pdf-icon" href="TutoringScheduleColor.pdf">Tutor Schedule</a> This is a schedule for the Academic Support Center (ASC).
+-->
+<p>
+<ul>
+<li><a class="pdf-icon" href="cs120-fall2019-syllabus.pdf">Syllabus</a>
+<li><a class="pdf-icon" href="../faculty-office-hour-form-fall2019.pdf">Office hours</a>
+	(<a class="pdf-icon" href="../../../../docs/office-location.pdf">office location<a>)</li>
+<li><a class="pdf-icon" href="../../../../docs/first-floor-map-highlighted.pdf">First floor map</a> of Digipen.
+<li><a class="pdf-icon" href="../important-dates-2019-2020.pdf">Important dates</a> for this semester
+<li><a class="pdf-icon" href="../../../../docs/FreshmanAttendancePolicy.pdf">Digipen attendance policy</a>
+<li>Academic Support Center <a class="pdf-icon" href="../Fall-2019-Tutor-Schedule.pdf">schedule</a>
+	<a class="pdf-icon" href="../Tutoring-Subjects-Fall-2019.pdf">Tutors/Subjects</a>
+
+<!--
+https://faculty.digipen.edu/~jwang/Fall%202019%20Tutoring/
+-->
+	
+<li><a href="https://inside.digipen.edu/main/ITFAQ:Wireless_Access">Wireless access</a> at Digipen.
+<li><a href="https://www.oreilly.com/library/view/temporary-access/">Digipen's online library</a> - This is where you can access
+	Safari Books Online, which contains 1,000s of technical books covering many topics.
+	You just need to provide your Digipen email.</li>
+<li><a href="http://www.acmicpc-pacnw.org/scoreboard/2019/index1.html">ICPC Pacific Northwest Results</a>
+The <a href="http://www.acmicpc-pacnw.org/results.htm">problem sets</a>.
+</li>
+<p>
+</ul>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+References
+</p>
+<ul>
+<!--
+<li><a href="http://academicalliance.digipen.edu/msdnaa/">MSDN Academic Alliance</a> Information about downloading Microsoft software
+	for use on your home computer.
+<ul>
+	<b>NOTICE: Microsoft Office (Word, Excel, etc.) is NOT available from the MSDNAA</b>
+</ul>
+<p>
+-->
+
+
+	
+<li><a href="http://knking.com/books/c2/answers/index.html">Answers to Selected Exercises</a> from the textbook.
+<li><a class="pdf-icon" href="../../../../docs/CodeQuality.pdf">Code Quality Guidelines</a>
+<li><a class="pdf-icon" href="../../../../docs/StudentHomeworkChecklist-CS120.pdf">Checklist</a>
+<li><a href="../../../../docs/Deliverables.html">Delivering code</a>
+<!--<li><a href="../../../../docs/FreshmanAttendancePolicy.pdf">Digipen attendance policy</a>-->
+<li><a href="../../../../docs/OperatorPrecedence.html">Operator precedence chart</a> with a simple ASCII chart
+and common printf formatting characters.
+<li><a href="../../../../docs/ASCII-binary-hex-chart.html">Character representations</a> ASCII, binary, octal, decimal, and hexadecimal
+<li><a href="http://www.asciitable.com/">ASCII table</a> On the web
+<li><a href="http://www.faqs.org/faqs/C-faq/faq/">comp.lang.c FAQ</a> Answers to Frequently Asked Questions (FAQ List)
+	<a href="http://c-faq.com/">FAQ by section</a>.
+<li><a href="http://faq.cprogramming.com/cgi-bin/smartfaq.cgi">C Programming.com</a> Another site with a good FAQ
+
+<!--
+<li><a href="http://accu.org/index.php/book_reviews">Book Reviews</a> from the Association of
+C and C++ Users. The books are reviewed by experienced C/C++ programmers.
+Currently, they have reviewed 151 books on beginning C/C++ and 84 books on advanced C/C++.
+-->
+
+<li>Documentation:
+<ul>
+<!--<li><a href="http://www.gnu.org/software/make/manual/make.html">make utility</a> -->
+<li><a href="http://gcc.gnu.org/onlinedocs/">GCC compilers</a>
+<!--
+<ul>
+	<li><a href="http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/C-Dialect-Options.html">ansi</a> This turns off certain features of GCC that are incompatible with ISO C90
+	<li><a href="http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/Warning-Options.html">pedantic</a> Issue all the warnings demanded by strict ISO C
+</ul>
+-->
+<li><a href="http://www.gnu.org/manual/manual.html">GNU Documentation Online</a> Includes documentation
+for other GNU tools cvs, gdb, etc.
+<li><a class="pdf-icon" href="../../../../docs/IntroToGCC.pdf">An Introduction to GCC</a> This is a PDF document
+that shows how to use the command line compiler. (It doesn't teach C/C++).
+<p>
+C Library References:
+
+<ul>
+<li><a href="http://www.acm.uiuc.edu/webmonkeys/book/c_guide/index.html">The C Library Reference Guide</a>
+	This site contains information about C and the Standard Library.
+<li><a href="http://www.utas.edu.au/infosys/info/documentation/C/CStdLib.html">C Standard Library</a> Another library reference.
+<li><a href="http://www.gnu.org/software/libc/manual/html_node/index.html">The GNU C Library</a> Lots of information about C functions and systems programming
+<li><a href="http://en.wikipedia.org/wiki/List_of_C_functions">List of C functions</a> on Wikipedia.
+	Also, some <a href="http://en.wikipedia.org/wiki/C_standard_library">background on the library</a>.
+<li><a href="http://www.kernel.org/doc/man-pages/online_pages.html">Linux manual (man) pages in HTML</a> Not for the faint of heart, but still a one-stop-shopping place.
+</ul>
+<p>
+<!--
+<li>Some help with <a class="pdf-icon" href="../../../../docs/NtsWk1.pdf">the command prompt in Windows</a> This is from Prof. Dee's lectures
+	in GAM100.
+-->
+<li><a class="pdf-icon" href="../../../../docs/DiffAndPatch.pdf">Comparing and Merging Files with GNU diff and patch</a>
+A PDF document containing more detailed information about this family of utilities.
+<li><a href="http://david.tribble.com/text/cdiffs.htm">Incompatibilities Between ISO C and ISO C++</a>
+	This is rather advanced, but some of the information may be useful, especially the C90 vs. C99 stuff.
+</ul>
+
+<ul>
+<!--
+<li><a href="../../../../public/cygwin/InstallingCygwin.html">Installing Cygwin</a> from the download. 
+	<p>
+	<ul>
+	<li>You can download the installation files here: <a href="https://faculty.digipen.edu/~mmead/www/public/cygwin/cygwin2012.zip">cygwin2012.zip</a> (It's about 725 MB,
+		MD5: <tt>157cfec4db2496321b43ae9cdebc360a</tt>) 
+		<center><blockquote>
+		<p class="technote">
+		<big><b>Please note: The Cygwin utilities include the gcc compiler. DO NOT TRY TO INSTALL GCC ANOTHER WAY.</b></big>
+	</p>
+	</blockquote>
+</center>
+-->
+		<p>
+<!--
+<li><a href="../../../../public/cygwin/cygintl-2.dll">cygintl-2.dll</a> If some of the Cygwin tools complain about a missing <tt><b>cygintl-2.dll</b></tt> file,
+	this one might work. Just put it where the rest of your Cygwin DLLs are. This is likely to be <tt>C:\cygwin\bin</tt>. (If you already have one there, don't
+	download this file.)
+<li><a href="../../../../public/cygwin/cygpopt-0.dll">cygpopt-0.dll</a> Some students have said that this file may be missing as well.
+-->
+
+
+<!--
+<li><a href="../../../../docs/mno-cygwin.html">Compiling without <tt>cygwin1.dll</tt> dependency</a> Shows how to avoid the error about the
+	<tt>cygwin1.dll</tt> missing. <b>Note: This only works with the older 3.4 version of gcc (gcc-3). It won't work with the newer 4.3 version (gcc-4).</b>
+-->
+
+<p>
+<!--
+	<li><a href="../../../../docs/cs170cygwin.pdf">Cygwin Guide</a> This is a very brief guide for using some of the command-line
+		programs that come with Cygwin.
+-->
+<!--
+<li>Another <a href="http://www.informit.com/articles/article.asp?p=466665&rl=1">Tutorial for downloading and installing</a> Cygwin on Windows.
+-->
+
+</ul>
+
+<li>(Mostly) Free Text Editors
+<ul>
+<li><a href="https://notepad-plus-plus.org/">Notepad++</a>
+	is a free source code editor (and Notepad replacement) running under the MS Windows environment.</li>
+<li><a href="https://www.geany.org/">Geany</a> A cross-platform text editor (Windows, OS X, Linux, and others) that also
+	works as an IDE (Integrated Development Environment).</li>
+<li><a href="http://www.sublimetext.com/">Sublime</a>
+	is a really nice source code editor (not free), which supports several programming languages, and is cross-platform (Windows, Mac, Linux).
+<li><a href="http://www.jedit.org/">jEdit</a>
+	is a mature programmer's text editor with hundreds (counting the time developing plugins) of person-years of development behind it.
+	Written in Java so it runs on Windows, Linux, and Mac at least.
+<li><a href="http://www.editpadlite.com/index.html">EditPad Lite</a>
+	is a general-purpose text editor, designed to be small and compact, yet offer all the functionality you expect from a basic text editor.
+	Windows-only.
+<li><a href="http://www.crimsoneditor.com">Crimson Editor</a>
+	is a simple source code editor for Windows.
+</ul>
+
+
+
+<li><a href="http://www.catb.org/jargon/">The Jargon File</a> Want to know where
+<a href="http://www.catb.org/jargon/html/F/foo.html">foo</a> came from or thousands of other computer-related terms? How about
+<a href="http://www.catb.org/jargon/html/B/bogosity.html">bogosity</a>,
+<a href="http://www.catb.org/jargon/html/C/crufty.html">crufty</a>,
+<a href="http://www.catb.org/jargon/html/F/FUD.html">FUD</a>,
+<a href="http://www.catb.org/jargon/html/N/nyetwork.html">nyetwork</a>,
+<a href="http://www.catb.org/jargon/html/R/RTFM.html">RTFM</a>,
+<a href="http://www.catb.org/jargon/html/V/Vulcan-nerve-pinch.html">Vulcan nerve pinch</a>, or
+<a href="http://www.catb.org/jargon/html/W/Wintendo.html">Wintendo</a>?
+
+
+<li><a href="https://www.tiobe.com/tiobe-index/">TIOBE Programming Community Index</a> Don't take this <i>too</i> seriously,
+	but it's somewhat interesting.
+
+<li>The <a href="../../../../Files/tablen.exe">tablen program</a>. Detects tabs and long lines in files. You <b>MUST</b> run this on <b>EVERY</b> programming
+and lab assignment. Here's a binary version <a href="../../../../Files/tablen">for Linux</a>. (The Windows version also seems to work fine under Linux with Wine). 
+Here is a binary version <a href="../../../../Files/tablen-mac">for Mac OS X</a>.
+<blockquote>
+	On Windows, you should create a directory in the <b>C:</b> drive named <b>utils</b> and put this
+	directory at the front of your PATH. You should put the tablen program in <tt>C:\utils</tt> so you can
+	run it from anywhere.
+</blockquote>
+
+
+<li>The <a href="../../../../Files/dumpit.exe">dumpit program</a>. Dumps files in hexadecimal. Here's a binary version <a href="../../../../Files/dumpit">for Linux</a>. 
+Here is a binary version <a href="../../../../Files/dumpit-mac">for Mac OS X</a>. On Windows, you should
+put this in your <tt>C:\utils</tt> directory.</li>
+<li><a href="http://www.drmemory.org/">Dr. Memory</a> A tool to catch memory leaks and other memory-related bugs. 
+	Works on Linux, Mac, and Windows.</li>
+
+<!--
+-->
+
+<!--
+<p>
+Videos
+<ul>
+<li><a href="../../../../videos/ModifyingThePath/index.html">Modifying the path</a> on your computer.
+</ul>
+-->
+
+<!--
+<li><a href="../../../../public/cygwin/InstallingCygwin.html">Installing Cygwin</a> from the CD that I distributed.
+You can download the ISO image here: <a href="https://faculty.digipen.edu/~mmead/www/public/cygwin/Cygwin2007.iso">Cygwin2007.iso</a> (It's about 640 MB)
+-->
+
+<!--
+<li><a href="../../../../Files/Console-2.00b126-Beta.zip">Console replacement</a> For those power-users that aren't satisfied with
+	the console in Windows. The source can be found <a href="http://sourceforge.net/project/showfiles.php?group_id=43764">here</a>.
+
+-->
+<p>
+
+<li><a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a>
+	&nbsp;&nbsp;&nbsp;<a class="pdf-icon" href="../../../../docs/CS120StyleGuide-addendum.pdf">Style Guide Addendum</a>
+
+</li>
+<li><a href="http://astyle.sourceforge.net/">Artistic Style</a> (astyle) - 
+	This is an automated code formatting tool that you might wish to experiment with.</li>
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Required Software (free)
+</p>
+	
+All of the software that is required for this course is installed on all of the computers at Digipen.
+However, for those of you that wish to also work on your own computers (recommended), these are the
+things you will need to install and configure on your own computer.
+<p>
+<ul>
+<li><b>Windows 64-bit C compiler (MinGW)</b> This is the compiler that we will be using for all of the
+	work in CS120. There are detailed instructions on downloading, installing, and configuring
+	the software <a href="../../../../public/mingw/index.html">here</a>.
+	Note that this will also install a C++ compiler, which you will need next semester in CS170.
+<p>
+
+
+<li><b>Cygwin Utilities</b> - Download the <a href="https://azrael.digipen.edu/~mmead/www/public/Files/preinstalls/cygwin64-2016-preinstalled.zip">Cygwin64 programs</a> 
+and put them on your computer. There's a document 
+<a class="pdf-icon" href="../../../../public/Files/preinstalls/readme-2017-cygwin-install.pdf">readme-2017-cygwin-install.pdf</a>
+that explains what to do.
+<p class="technote">
+The zip file contains many command-line utilities that you will use throughout your time at Digipen.
+The zip file is about 530 MB and extracts to about 1.5 GB.
+Creates a folder named <tt>cygwin64</tt> on the C: drive.
+</p>
+<!--
+ There is also a PDF there that explains what to do: 
+<a href="http://azrael.digipen.edu/~mmead/www/public/Files/preinstalls/readme-2014-RTIS-image.pdf">readme-2014-RTIS-image.pdf</a>.
+<p class="technote">
+Note that you only need the Cygwin64 files. You don't need any of the other files (e.g. Clang, MinGW, etc.) that are posted on
+that site. You're welcome to download them and try them, but I won't give you any support on those. You will need 
+some of those programs in CS170 next semester.
+-->
+</li>
+Don't forget to add <tt>C:\cygwin64\bin</tt> directory to your PATH. 
+<!--
+	<a href="http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx">
+	Windows 7</a>. -->
+	 If you're new to computers or Windows, there's a nicer GUI (Graphical User Interface) program
+	called <a href="http://eveditor.com">Windows Environment Variables Editor</a> that makes it easier to
+	manipulate the PATH.</li>
+
+<ul>
+	<li>Understanding the <a href="https://en.wikipedia.org/wiki/PATH_(variable)">PATH variable</a> from wikipedia.</li>
+	<li><a href="http://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/">
+		Editing the PATH variable</a> on Windows 7, 8, and 10.</li>
+	<li>Once you've got Cygwin installed in Windows and in your PATH, you can type this to see a better view of
+		your PATH from the command line:
+<blockquote><pre>path | tr ; "\n"</pre></blockquote>
+		This will list all of the directories in the PATH with each on a separate line. That is:
+<blockquote>
+<table cellspacing=0 cellpadding=5 border=1>
+<tr><th>Token</th><th>Meaning</th><tr>
+<tr><td align="center"><tt>path</tt></td><td>Displays the PATH as one long line</td></tr>
+<tr><td align="center"><tt>|</tt></td><td>A vertical bar (pipe symbol), usually on the key with the backslash (\)</td></tr>
+<tr><td align="center"><tt>tr</tt></td><td>The translate command</td></tr>
+<tr><td align="center"><tt>;</tt></td><td>A semi-colon (usually to the right of the letter 'L' on the keyboard). On Linux and 
+Mac OS X, use a colon <big><b>:</b></big> instead.</td></tr>
+<tr><td align="center"><tt>"\n"</tt></td><td>A double quote, backslash, lowercase letter 'N', double quote</td></tr>
+</table>
+</blockquote>
+
+</ul>
+<li><b>C compiler for non-Windows users:</b>
+<p class="technote">
+Version 8.1.0 is what is installed with MinGW on the computers at Digipen.
+For non-Windows users, if you can't get version 8.1.0,  
+any 8.x.x version will probably be fine. We won't be using any of the advanced features of 
+C that are in 8.x, but you do want to have the closest version possible so that you will 
+get the same errors and warnings that 8.1 emits. 
+<br><br>
+For Mac people, you may have to install it (using <a href="https://brew.sh/">homebrew</a>)
+ as the default compiler for C and C++ on Mac is Clang. If you are new to software development,
+ you may need to seek help from other Mac users. (I'm not a Mac user, although I pretend sometimes!)
+<!--
+For Mac people, you can follow this link to 
+<a href="../../../../mg/compiling-gcc7/index.html">building GCC 7.1 on macOS</a>.
+I've only tested this with macOS 10.11 (El Capitan). You can also use this link to install
+on Linux, but it is easier to use the link below.
+-->
+
+<br><br>
+For Linux people, I recommend Linux Mint. The latest version comes with version 7.x, but
+it can easily be upgraded. 
+Here's some information on 
+<a href="../../../../mg/update-compilers/index.html#UPDATE2">installing multiple versions</a>.
+<!--
+-->
+
+ However, any distribution that allows you
+to use version 8.x of the compiler should work.
+<br><br>
+Note that these installations will also install a C++ compiler, which you will need next semester in CS170.
+</p>
+
+<li><a href="../../../../Files/Mead.zip">Mead Installer</a></li>
+<!--
+-->
+
+</ul>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Notes
+</p>
+<ul>
+<p>
+<li><a href="../../../CS120/Fundamentals-1.html">Fundamentals</a>
+<ul>
+	<li><a class="pdf-icon" href="../../../CS120/Edit-Compile-Execute-Loop.pdf">Creating a simple program</a> Editing, compiling, linking, executing
+</ul>
+<li><a href="../../../CS120/FormattedIO-1.html">Formatted Input/Output</a> Introduction to <tt>printf</tt>, <tt>scanf</tt>, format specifiers
+<li><a href="../../../CS120/Expressions-1.html">Expressions and Operators</a> Precedence, associativity, order of operations, assignments, side-effects
+<li><a href="../../../CS120/Conditionals-1.html">Conditionals</a> Booleans, relational/logical operators,
+	<tt><b>if</b></tt>, <tt><b>else</b></tt>, <tt><b>switch</b></tt>, <tt><b>case</b></tt></tt>
+<li><a href="../../../CS120/Iteration-1.html">Iteration</a> Looping and repetitions, <tt><b>while</b></tt>, <tt><b>do</b></tt>, <tt><b>for</b></tt>
+<li><a href="../../../CS120/Functions-1.html">Functions</a> Prototypes, parameters, arguments, call-by-value, scope, lifetime
+<ul>
+	<li><a href="../../../CS120/MultiFilePrograms.html">Larger programs</a> multiple file programs, separate compilation/linking
+</ul>
+<li>Topic: <a href="../../../CS120/RandomNumbers-1.html">Random Numbers</a> Pseudo-random number generators (PRNG), seeding (Pages 686-687 in 2nd edition of the textbook, pages 570-571 of first edition)
+<li><a href="../../../CS120/Arrays-1.html">Arrays</a> one-dimensional, <tt><b>sizeof</b></tt> operator, subscripting</i>
+<li><a href="../../../CS120/DataTypes-1.html">Data Types</a> integral types, signed/unsigned integers, long/short integers, characters, floating point types, long doubles
+<li><a href="../../../CS120/Pointers-1.html">Pointers</a> address operator, indirection/dereference operator, arrays vs. pointers
+<li><a href="../../../CS120/Strings-1.html">Strings</a> string literals, variables, NULL character, character arrays vs. strings, string functions
+<li><a href="../../../CS120/FileIO-1.html">File I/O</a> FILE, opening/closing, reading/writing text files, redirection
+<li><a href="../../../CS120/Structures-1.html">Structures</a> <b><tt>struct</tt></b>, pointers to structures, structure operators
+<li><a href="../../../CS120/DynamicMemoryAllocation-1.html">Dynamic Memory Allocation</a> <tt>malloc/free</tt>
+<li><a href="../../../CS120/LinkedLists-Intro1.html">Introduction to linked-lists</a> A dynamic and flexible data structure.</li>
+<li><a href="../../../CS170/ComplexDeclarations-1.html">Complex declarations</a> Pointers, arrays, functions and function pointers.</li>
+<li><a href="../../../CS120/Arrays-2D.html">More Arrays</a> Two-dimensional arrays, pointers and 2D arrays.</i></li>
+<li><a href="../../../CS120/Visibility.html">Visibility and Lifetime</a> Linkage (internal vs. external), lifetime (storage classes)</li>
+<!--
+-->
+
+</ul>
+<ul>
+<li>The topics below will NOT be on the final exam. Only the topics listed above will be eligible for the exam.
+<ul>
+<li><a href="../../../CS120/VariadicFunctions.html">Variadic Functions</a> like <tt>printf</tt> and <tt>scanf</tt>
+<li><a href="../../../CS120/Structures-2.html">More Structures</a> alignment, unions, bit-fields.
+<ul>
+	<li><a href="../../../CS120/Record-IO.html">Record-based File I/O</a> using structured data files.</li>
+</ul>
+<li><a href="../../../CS120/RuntimeEnvironment.html">Runtime Environment</a> Command line arguments, environment variables, <tt>exec</tt> functions
+<li><a href="../../../CS120/RTL.html">RunTime Library</a> Lots of functions for you to learn.
+
+</ul>
+
+<!--
+-->
+
+
+<!--
+	-->
+
+<!--
+<li><a href="../../../CS220/IEEE754.html">Representing floating-point</a> numbers in binary.
+-->
+
+<!--
+<p>
+<li>These topics will NOT be on the final exam:</li>
+<ul>
+</ul>
+-->
+
+<!--
+<li><a href="../../../CS120/FunctionPointers-1.html">Function Pointers</a> Callback functions, jump tables</li>
+
+
+<br>
+<p>
+
+</ul>
+-->
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Homework Assignments
+</p>
+<ul>
+
+<li>You should be compiling and running all of the examples on the Notes pages above 
+	after each lecture. This will prepare you for the labs, exams, and programming homework.
+	You should have reviewed the material below by the date given.
+	</li>
+<p>
+
+<table border=1 cellpadding=10 cellspacing=0>
+
+<tr><th>Assignment</th><th>You should have completed the work by the date given.<br>(You aren't turning
+	 anything in for these assignments.)</th></tr>
+<tr><td>1. Read Chapter one in the textbook.<br>
+2. Read <a href="../../../../docs/JoysAndWoes.html">this</a>.
+(If this paper doesn't describe you or the work you want to do in life, then you are in the wrong place.)
+<br>
+3. Read <a href="../../../../docs/professional.html">The difference between the amateur and the professional</a> programmer.
+
+     <td>Friday, September 6, 2019.</td></tr> 
+
+<tr><td>1. Read chapter 1 from <a class="pdf-icon" href="../../../../docs/IntroToGCC.pdf">An Introduction to GCC</a>.</br>
+    2. Install Cygwin and MinGW on your own computer (if you intend on programming on your own computer).
+  </td><td>Wednesday, September 11, 2019.</td></tr> 
+
+<tr><td><a href="study/cs120-fall2019-study-quiz1.pdf">Study quiz #1</a></td><td>&nbsp;</td></tr>
+
+<tr><td>Chapter 2:<br> 2nd Edition - Exercises #1 - 10<br>
+	1st Edition - Exercises #1, #2, #4, #10, #11, #12, #13<br>
+	Programming Projects <a href="programs.html#CH2"> #1 and #2.</a></td>
+	<td>Wednesday, September 18, 2019.</td></tr>
+
+
+<tr><td><a href="study/cs120-fall2019-study-quiz2.pdf">Study quiz #2</a></td><td>&nbsp;</td></tr>
+
+<tr><td>Chapter 3:<br>
+2nd Edition - Exercises #1, #2, #4, #5<br>1st Edition - Exercises #1, #2, #7, #8<br>
+Programming Projects <a href="programs.html#CH3"> #1</a></td>
+<td>Friday, September 20, 2019</td></tr>
+
+<tr><td>Practice with <a href="labs/diff/index.html">diff and visual diff tools</a></td>
+	<td>Tuesday, September 24, 2019&nbsp;</td></tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz2.5.pdf">Study quiz #2.5</a></td><td>&nbsp;</td></tr>
+
+<!--
+-->
+
+
+
+<tr><td>Chapter 4:<br>2nd Edition - Exercises #1, #9, #10, #11, #12, #14, #15<br>
+	1st Edition - Exercises #1, #6, #7, #9, #11
+	<br>
+Programming Projects <a href="programs.html#CH4"> #1 and #2</a></td>
+</td><td>Wednesday, September 25, 2019.</td></tr>
+<!--
+-->
+
+
+<tr><td>Chapter 5:<br>2nd Edition - Exercises #1, #2, #3, #5, #6, #8, #10, #11<br>
+	1st Edition - Exercises #1, #2, #3, #11, #12, #16 
+</td><td>Friday, September 27, 2019&nbsp;</td></tr>
+
+<tr><td>Read the <a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a> We haven't
+	really covered a lot of the topics yet, but you can start reading about them.
+	Pay particularly close attention to pages 13-17. 
+	Also, read the <a class="pdf-icon" href="../../../../docs/CS120StyleGuide-addendum.pdf">Style Guide Addendum</a>.
+	</td><td>Friday, Sunday, September 29, 2019&nbsp;</td></tr>
+
+
+<tr><td>Chapter 6:<br>2nd Edition - Exercises #1, #2, #3, #4, #5, #8, #11, #14<br>
+	1st Edition - Exercises #9, #10, #11, #13, #15, #16
+</td><td>Wednesday, October 2, 2019&nbsp;</td></tr>
+
+
+
+<tr><td><a href="study/cs120-fall2019-study-quiz3.pdf">Study quiz #3</a></td><td>&nbsp;</td></tr>
+
+
+
+<tr><td>Chapter 9:<br>2nd Edition - Exercises #1, #2, #3, #7, #8, #9<br>
+	1st Edition - Exercises #1, #2, #3, #7, #8, #9
+</td><td>Monday, October 7, 2019</td></tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz4.pdf">Study quiz #4</a></td><td>&nbsp;</td></tr>
+<tr><td><a href="study/cs120-fall2019-study-quiz5.pdf">Study quiz #5</a></td><td>&nbsp;</td></tr>
+
+<tr><td>Chapter 8:<br>2nd Edition - Exercises #1, #2, #3, #5<br>
+	1st Edition - Exercise #4
+</td><td>Friday, October 12, 2019</td></tr>
+
+<tr><td>Chapter 7:<br>2nd Edition - Exercises #1 - #6, #9 - #14<br>
+	1st Edition - Exercises #1, #3, #4, #6, #7, #13, #15, #16, #17
+</td><td>Wednesday, October 16, 2019</td></tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz6.pdf">Study quiz #6</a></td><td>&nbsp;</td></tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz-midterm.pdf">Study quiz #6.5</a></td><td>&nbsp;</td></tr>
+
+
+
+
+<tr><td>Chapter 11:<br>2nd Edition - Exercises #1, #2, #3, #5, #6<br>
+	1st Edition - Exercises #1, #2, #3, #5, #6
+</td><td>Tuesday, October 28, 2019</td></tr>
+
+<tr><td>Chapter 12:<br>2nd Edition - Exercises #1, #2, #3, #5, #6, #8<br>
+	1st Edition - Exercises #1, #2, #3, #7, #10
+</td><td>Tuesday, October 28, 2019</td></tr>
+
+<tr><td>Chapter 13:<br>2nd Edition - Exercises #1, #2, #5, #7, #8, #9, #10, #12, #14, #15<br>
+	1st Edition - Exercises #1, #2, #5, #9, #10, #11, #12, <a href="programs.html#CH13">#1, #2</a></td>
+</td><td>Friday, November 1, 2019</td></tr>
+
+<tr><td>Chapter 22:<br>2nd Edition - Exercises #1, #2, #10, #11, #13<br>
+	1st Edition - Exercises #1, #2, #10, #11 <a href="programs.html#CH22">#1</a></td>
+
+	</td><td>Monday, November 4, 2019</td></tr>
+<tr><td>Familiarize yourself with these functions:<br>
+	<tt><a href="http://www.cplusplus.com/reference/clibrary/cstdio/sprintf/">sprintf</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstring/strcat/">strcat</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstring/strcpy/">strcpy</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstring/strcmp/">strcmp</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstdio/fopen/">fopen</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstdio/fclose/">fclose</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstdio/fread/">fread</a>,
+
+		<a href="http://www.cplusplus.com/reference/clibrary/cstdlib/malloc/">malloc</a>,
+		<a href="http://www.cplusplus.com/reference/clibrary/cstring/memset/">memset</a>
+	</tt></td><td >Monday, November 4, 2019</tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz7.pdf">Study quiz #7</a></td><td>&nbsp;</td></tr>
+
+<tr><td>Chapter 16:<br>2nd Edition - Exercises #1, #2, #3, #6<br>
+	1st Edition - Exercises #1, #2, #3, <a href="programs.html#CH16">#1</a></td>
+</td><td>Wednesday, November 13, 2019</td></tr>
+
+<tr><td>Chapter 17.1-17.6:<br>2nd Edition - Exercises #1, #2, #3, #4, #7<br>
+	1st Edition - #1, #2, <a href="programs.html#CH17">#1</a>, #5, #8</td>
+
+</td><td>Friday, November 15, 2019</td></tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz8.pdf">Study quiz #8</a></td><td>&nbsp;</td></tr>
+
+<tr><td><a href="study/cs120-fall2019-study-quiz9.pdf">Study quiz #9</a></td><td>&nbsp;</td></tr>
+
+
+<tr><td><a href="study/cs120-fall2019-study-quiz10.pdf">Study quiz #10</a></td><td>&nbsp;</td></tr>
+<!--
+-->
+
+<!--    
+
+
+
+
+
+
+<tr><td>Read <a href="https://www.joelonsoftware.com/2005/12/29/the-perils-of-javaschools-2/">
+	The Perils Of Java Schools</a> This is why Digipen grads are sought after by many
+	of the biggest software companies around.
+If you want an "easy" CS degree, go somewhere else. There are plenty of
+schools to choose from. Here's another <a href="https://www.joelonsoftware.com/2001/12/11/back-to-basics/">
+good article</a> from Joel that maybe should help you appreciate why we do it this way. The second article
+is a little advanced in some places, but you should be able to follow the ideas. The articles are
+a little out-dated, but much of the information is still very relevant today and well worth reading.
+</td><td>Wednesday, November 15, 2019</td></tr>
+<tr><td>Read section 8.2 in the textbook</td><td>Friday, November 17, 2019</td></tr>
+
+
+-->
+
+<!--
+-->
+
+
+<!--    
+<tr><td>If you haven't done so yet, reading the <a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a> We haven't covered all of the topics yet, but
+	you can read about the things we've learned. This is a nice article from a development company talking about the <a href="http://www.perforce.com/perforce/papers/prettycode.html">
+	Seven Pillars of Pretty Code</a>. It will give you insight into what professional developers think about.
+	</td><td>Friday, October 2, 2016&nbsp;</td></tr>
+-->
+
+
+<!--
+<tr><td>Read pages 686-687 in the textbook</td><td>Friday, October 12, 2012.</td></tr>
+<tr><td>Chapter 10: Exercises #1, #2, #3</td><td>Monday, December 3, 2012.</tr>
+-->
+
+<!--
+	-->
+
+<!--
+<tr><td>You've already read chapter 22, now you need to experiment with the
+	samples posted on the <a href="../../../CS120/FileIO-1.html">File I/O</a> pages</td><td>Thursday, December 2, 2010.</tr>
+<tr><td>Chapter 10: Exercises #1, #2, #3</td><td>Friday, December 3, 2010.</tr>
+-->
+
+</table>
+<p>
+<li><h2>Programming Assignments</h2>
+<ul>
+<li><a href="http://pontus.digipen.edu/cgi-bin/submission.cgi">Online Submission Page</a> - Submit all labs and programming
+assignments from this page. This requires your "real" Digipen username and password.
+<!--
+(Check to see if you are in the <a href="classlist.txt">classlist</a> for the submission server.)
+-->
+
+<li>You can reach the Returned Folders using a browser from <a href="https://inside.digipen.edu/den/">here</a>.
+	(At the bottom of the page click on the <i>N:Courses/current_courses</i> link and browse to the
+	current semester's Returned link.)
+</li>
+
+
+<li><a href="cs120-fall2019-grades-student.ods">Spreadsheet</a> to show you how to calculate your final
+	grade for the semester.
+	To calculate your midsemester grade, use <a href="cs120-fall2019-grades-student-midsemester.ods">this spreadsheet</a>.
+You can download the free Libre Office programs from <a href="https://www.libreoffice.org/download/download/">here</a>.
+<!--
+-->
+</ul>
+<p>
+<ul>
+
+<li><a href="projects/1/index.html">Programming Assignment #1</a> - Tuesday, October 8 at 10:00 pm</li>
+<li><a href="projects/2/index.html">Programming Assignment #2</a> - Wednesday, October 16 at 10:00 pm</li>
+<li><a href="projects/3/index.html">Programming Assignment #3</a> - Monday, October 28 at 10:00 pm</li>
+<li><a href="projects/4/index.html">Programming Assignment #4</a> - Tuesday, November 5 at 10:00 pm</li>
+<li><a href="projects/5/index.html">Programming Assignment #5</a> - Tuesday, November 12 at 10:00 pm</li>
+<li><a href="projects/6/index.html">Programming Assignment #6</a> - Tuesday, November 26 at 10:00 pm</li>
+<!--
+-->
+
+<blockquote>
+<li><a href="../../../../docs/GradingTags.html">Grading Tags</a> This page explains what the tags at the top of your
+<tt><b>spellcheck-annotated.c</b></tt> file mean. Not all of the tags are used. Some will be used in the coming semesters.
+This is only an example of how the grading tags are used.
+</blockquote>
+<!--
+-->
+
+</ul>
+<!--
+-->
+
+<p>
+<!--
+<li><a href="ProgrammingProblems.html">Practice programming problems</a> for those that want to try and get 
+ahead.</li>
+-->
+
+<li><h2>Lab and Practice Assignments</h2>
+<ul>
+<a href="labs/labdata.html">Data</a> for the lab assignments<br>
+<a href="practice/practicedata.html">Data</a> for the practice assignments
+</ul>
+
+<li><h2>Over-the-break Challenges</h2>
+<ul>
+<li><a href="challenges/challenges.html">Here</a> - These will give you a head-start for CS170 next semester.
+</ul>
+<!--
+-->
+
+<p>
+<li>What's the difference between <a href="practice-labs-assignments.html">
+	Practice, Labs, and Assignments?</a></li>
+
+<li><a href="WhatYouShouldKnow.html">What you have learned</a> These are some of the topics that we've covered this semester.
+<!--
+-->
+
+</ul>
+
+<!--
+-->
+
+<!--
+<li><a href="GradingCodes.html">Understanding the marks</a> on your programming assignments.
+<p>
+-->
+
+<!--
+<p>
+<li><a href="Project8/index.html">Programming Assignment #8</a>
+<li><a href="Project9/index.html">Programming Assignment #9</a>
+<p>
+
+-->
+
+<p>
+<!--
+-->
+
+<!--
+-->
+
+<ul>
+
+<p>
+
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Additional Reading Assignments (required)
+</p>
+
+<ul>
+
+<li>If programming is so hard, <a href="../../../../docs/JoysAndWoes.html">why do we do it?</a>.
+(If this paper doesn't describe you or the work you want to do in life, then you are in the wrong place.)
+<li>The difference between the amateur and the <a href="../../../../docs/professional.html">professional</a> programmer.
+
+<!--
+<li><a href="http://www.linuxjournal.com/print/1007505">Examining the Compilation Process. Part 1</a> By now, everyone should
+	understand what the preprocessor, compiler, and linker do (although not the internal details). This article discusses them. With the exception of the assembly code, you
+	should understand all of it.
+-->
+
+<!--
+http://www.linuxjournal.com/content/examining-compilation-process-part-1
+http://www.linuxjournal.com/content/examining-compilation-process-part-2
+http://www.linuxjournal.com/content/examining-compilation-process-part-3
+-->
+
+<li>Elements of Style (It's an old book, so you can <a href="http://www.bestwebbuys.com/books/compare/isbn/1558512918">find it really cheap</a> on
+	the Internet somewhere.) We are not following this style guide exactly, but it explains why
+	companies have style guides.
+	<ul>
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c01.pdf">Chapter 1</a> - Style and Program Organization
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c02.pdf">Chapter 2</a> - File Basics, Comments, and Program Headings
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c03.pdf">Chapter 3</a> - Variable Names
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c04.pdf">Chapter 4</a> - Statement Formatting
+			<ul>
+			<a href="../../../../docs/Beranger-CodingStyles.html">A small teaser</a> about indenting and braces. (BTW, ANSI with 2 space tabs is the <b>One True Way</b>&trade;.)
+		</ul>
+	</ul>
+
+<li><a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>
+	Another example for you to see. Yes, it's for C++, but a lot of it applies to C. We are not 
+	following this, but it's good for you to see how one of the biggest developer firms set
+	their styles.
+<li><a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a> This is the Official CS120 Style Guide<sup>&reg;</sup>
+<!--
+-->
+
+<!--
+<P>
+<li><a class="pdf-icon" href="../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a> - <b>Updated: 11/5/2009 8:55AM</b> C Programming style for CS120. The first 12 pages talk about
+	programming style <i>in general</i> and were written by Prof. Ghali (he's currently teaching at the Singapore campus). The remaining pages are <b>specific
+guidelines for this CS 120 course</b>. Some of them may contradict guidelines in the earlier pages. When there is a contradiction, the latter
+	pages are what you must follow.
+-->
+
+<!--
+<li><a href="http://www.joelonsoftware.com/items/2007/09/26b.html">Explaining the Excel Bug</a>
+	In decimal, if you tried to do 3*1/3, and you didn't have time to write 3's forever, the result you would
+	get would be 0.99999999, not 1, and people would get angry with you for being wrong.
+
+-->
+
+<!--
+<li><a href="http://brucebyfield.wordpress.com/2007/10/11/fear-and-loathing-at-the-command-line/">Fear and loathing at the command line<a/>
+The truth, of course, is that you can almost always do less from a desktop application than its command line equivalent, but the average user has no experience that would help them understand that.
+-->
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Interesting Reading (optional for everyone)
+</p>
+
+<ul>
+<li><a href="../../../../docs/Chistory.html">The Development of the C Language</a>
+<li><a class="pdf-icon" href="../../../../docs/ClassroomSeating.pdf">Classroom Seating Position and College Grades</a> Of course, not everyone can
+	sit in the front, but you should keep this in mind if you're trying to do your best in college.
+<p>
+<li><a href="http://www.catb.org/jargon/">The Jargon File</a> Want to know where
+<a href="http://www.catb.org/jargon/html/F/foo.html">foo</a> came from or thousands of other computer-related terms? How about
+<a href="http://www.catb.org/jargon/html/B/bogosity.html">bogosity</a>,
+<a href="http://www.catb.org/jargon/html/C/crufty.html">crufty</a>,
+<a href="http://www.catb.org/jargon/html/F/FUD.html">FUD</a>,
+<a href="http://www.catb.org/jargon/html/N/nyetwork.html">nyetwork</a>,
+<a href="http://www.catb.org/jargon/html/R/RTFM.html">RTFM</a>,
+<a href="http://www.catb.org/jargon/html/V/Vulcan-nerve-pinch.html">Vulcan nerve pinch</a>, or
+<a href="http://www.catb.org/jargon/html/W/Wintendo.html">Wintendo</a>?
+<!--
+-->
+</ul>
+<p>
+
+<li>Elements of Style (the whole book)
+	<ul>
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c01.pdf">Chapter 1</a> - Style and Program Organization
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c02.pdf">Chapter 2</a> - File Basics, Comments, and Program Headings
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c03.pdf">Chapter 3</a> - Variable Names
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c04.pdf">Chapter 4</a> - Statement Formatting
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c05.pdf">Chapter 5</a> - Statement Details
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c06.pdf">Chapter 6</a> - Preprocessor
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c07.pdf">Chapter 7</a> - Directory Organization and Makefile Style
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c08.pdf">Chapter 8</a> - User-Friendly Programming
+		<li><a class="pdf-icon" href="../../../../docs/eos/ElementsOfStyle-c09.pdf">Chapter 9</a> - Rules
+	</ul>
+
+
+<li><a href="https://www.youtube.com/watch?v=SsoOG6ZeyUI">Tabs vs. spaces</a> The debate has been
+	around longer than the internet. (BTW, spaces have won.)</li>
+<!--
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Advanced Reading (optional for the advanced student)
+</p>
+<ul>
+<li><a href="http://www.informit.com/articles/printerfriendly.aspx?p=686170">C Language Issues for Application Security</a>
+This chapter explores subtle details of the C programming language that could adversely affect an application's security and robustness.
+
+<!--
+Local copy of above without diagrams:
+<li><a href="../../../../docs/C_Language_Issues_for_Application_Security_Introduction.html">C Language Issues for Application Security</a>
+This chapter explores subtle details of the C programming language that could adversely affect an application's security and robustness.
+-->
+</ul>
+
+<br><br><br>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

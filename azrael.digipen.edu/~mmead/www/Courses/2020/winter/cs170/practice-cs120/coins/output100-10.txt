@@ -1,0 +1,7 @@
+You can make $1.00 with 10 dimes  
+You can make $1.00 with 1 quarter  6 dimes  3 nickels  
+You can make $1.00 with 2 quarters  2 dimes  6 nickels  
+You can make $1.00 with 3 quarters  2 dimes  5 pennies  
+You can make $1.00 with 1 half  1 dime  8 nickels  
+You can make $1.00 with 1 half  1 quarter  1 dime  2 nickels  5 pennies  
+There are 6 possible ways to make $1.00 from 10 coins.

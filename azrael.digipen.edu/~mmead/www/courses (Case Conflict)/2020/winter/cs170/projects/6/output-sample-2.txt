@@ -1,0 +1,18 @@
+
+Test2-----------------------------------------------------
+Dictionary: lexicon.txt
+Number of words: 12
+Shortest word: 4 letters
+Longest word: 10 letters
+
+Test2-----------------------------------------------------
+Dictionary: small.txt
+Number of words: 35
+Shortest word: 2 letters
+Longest word: 12 letters
+
+Test2-----------------------------------------------------
+Dictionary: allwords.txt
+Number of words: 168093
+Shortest word: 1 letters
+Longest word: 15 letters

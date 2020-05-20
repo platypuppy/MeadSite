@@ -1,0 +1,59 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Ocean.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef WARBOATS_H</font>
+<font color="990099">#define WARBOATS_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> WarBoats
+  {
+    <b>enum</b> Orientation {oHORIZONTAL, oVERTICAL, oDIAGONAL_RIGHT, oDIAGONAL_LEFT};
+    <b>enum</b> ShotResult {srHIT, srMISS, srDUPLICATE, srSUNK, srILLEGAL};
+    <b>enum</b> DamageType {dtOK = 0, dtBLOWNUP = -1};
+    <b>enum</b> BoatPlacement {bpACCEPTED, bpREJECTED};
+
+    <b>struct</b> Point
+    {
+      <b>int</b> x; <font color="#003399"><i>// x-coordinate (column)</i></font>
+      <b>int</b> y; <font color="#003399"><i>// y-coordinate (row)</i></font>
+    };
+
+    <b>struct</b> Boat
+    {
+      <b>int</b> hits;                 <font color="#003399"><i>// Hits taken so far</i></font>
+      <b>int</b> ID;                   <font color="#003399"><i>// Unique ID</i></font>
+      <b>int</b> length;               <font color="#003399"><i>// Length of the boat</i></font>
+      Orientation orientation;  <font color="#003399"><i>// Horizontal/Vertical</i></font>
+      Point position;           <font color="#003399"><i>// x-y coordinate (left-top)</i></font>
+    };
+
+    <b>struct</b> ShotStats
+    {
+      <b>int</b> hits;       <font color="#003399"><i>// shots hit a boat</i></font>
+      <b>int</b> misses;     <font color="#003399"><i>// shots missed all boats</i></font>
+      <b>int</b> duplicates; <font color="#003399"><i>// shot was already taken</i></font>
+      <b>int</b> sunk;       <font color="#003399"><i>// how many boats have been sunk</i></font>
+    };
+
+  } <font color="#003399"><i>// namespace WarBoats</i></font>
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="990099">#endif // WARBOATS_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

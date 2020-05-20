@@ -1,0 +1,392 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Two-Dimensional Arrays and Pointers</title>
+</head>
+
+<body>  
+<center><h1>Two-Dimensional Arrays and Pointers</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+One Dimensional Arrays and Pointers
+</p>
+
+Let's start with something simple:
+<blockquote><pre>
+<b>double</b> d = 5.0;  <font color="#003399"><i>/* a double              */</i></font>
+<b>double</b> *pd = &d; <font color="#003399"><i>/* a pointer to a double */</i></font>
+</pre></blockquote>
+Visually (with an arbitrary address):
+<blockquote>
+<img src="PointerDouble-1.png">
+</blockquote>
+This is the simplest use of a pointer. Here, <font color="blue"><tt>d</tt></font> is a double
+and <font color="blue"><tt>pd</tt></font> is a pointer to it. Nothing complicated at all.
+<p>
+
+When dealing with pointers and arrays, things can seem a little complicated. For example, there is a 
+big difference between a pointer to a <i>double</i> and a pointer to an <i>array of doubles</i>. 
+Below, <font color="blue"><tt>da</tt></font> is an array of 4 doubles:
+
+<blockquote><pre>
+<b>double</b> da[4] = {1.0, 2.0, 3.0, 4.0}; <font color="#003399"><i>/* array of 4 doubles */</i></font>
+</pre></blockquote>
+
+Visually, with an arbitrary address of 100:
+
+<blockquote>
+<img src="ArrayDouble-1.png">
+</blockquote>
+
+How we declare the pointer is important. Creating a pointer to a double is trivial:
+<blockquote><pre>
+<b>double</b> *pd = da; <font color="#003399"><i>/* a pointer to a double (in this case it's a pointer to the first element of the array) */</i></font>
+</pre></blockquote>
+
+Visually:
+<blockquote>
+<img src="ArrayDouble-2.png">
+</blockquote>
+
+What confuses many new C programmers is that <font color="blue">pd<tt></tt></font> is <i>not</i> 
+pointing at the array, but is pointing at the <i>first element</i> of the array. When an array
+name is used in an expression, the array is said to decay into a pointer to the first element. 
+You can read about the history (and gory details) here: <a href="../../docs/Chistory.html#EMBRYONIC">The Development of the C Language</a>
+under the section: Embryonic C.
+<p>
+The exception to this rule is when the array name is used with the <b><tt>sizeof</tt></b> operator.
+(Actually, there are two more exceptions: When the array name is used with the <tt>&amp;</tt> 
+(address-of) operator and literal strings used to initialize an array.
+See <a href="http://c-faq.com/aryptr/aryptrequiv.html">this</a> for more details.)
+<p>
+This is just how the language works and is something that C programmers have to get used to.
+<p>
+<ul>
+  <li><tt><b>sizeof</b>(pd)</tt> is 8 (64-bit/8-byte pointer)</li>
+  <li><tt><b>sizeof</b>(*pd)</tt> is 8 (8-byte double)</li>
+  <li><tt><b>sizeof</b>(da)</tt> is 32 (4 * <tt><b>sizeof</b>(double)</tt>)</li>
+</ul>
+<p>
+Also, remember that these are
+equivalent:
+<blockquote><pre>
+<b>double</b> *pd = da;     <font color="#003399"><i>/* a pointer to a double (the first element of the array) */</i></font>
+<b>double</b> *pd = &amp;da[0]; <font color="#003399"><i>/* a pointer to a double (the first element of the array) */</i></font>
+<b>double</b> *pd = da + 0; <font color="#003399"><i>/* same as the others, but kind of strange to do this     */</i></font>
+</pre></blockquote>
+If we wanted to point at the second element, we would do this:
+<blockquote><pre>
+<b>double</b> *pd = &amp;da[1]; <font color="#003399"><i>/* a pointer to a double (the second element of the array) */</i></font>
+</pre></blockquote>
+
+
+Visually:
+<blockquote>
+<img src="ArrayDouble-3.png">
+</blockquote>
+
+These are equivalent:
+<blockquote><pre>
+<b>double</b> *pd = &amp;da[1]; <font color="#003399"><i>/* a pointer to a double (the second element of the array) */</i></font>
+<b>double</b> *pd = da + 1; <font color="#003399"><i>/* a pointer to a double (the second element of the array) */</i></font>
+</pre></blockquote>
+
+<p>
+
+Creating a pointer to an <i>array</i> of doubles is a little more complicated:
+<blockquote><pre>
+<b>double</b> (*pda)[4] = &amp;da; <font color="#003399"><i>/* a pointer to an array of 4 doubles */</i></font>
+</pre></blockquote>
+
+Visually:
+<blockquote>
+<img src="ArrayDouble-4.png">
+</blockquote>
+
+What is <tt><b>sizeof</b>(pda)</tt>? What is <tt><b>sizeof</b>(*pda)</tt>?  What is <tt><b>sizeof</b>(**pda)</tt>? 
+To answer these questions you must first answer the question: <i>"What are the types of each of those objects?"</i>
+<p>
+<!--
+8 (pointer), 32 (array of 4 doubles), 8 (double)
+-->
+
+The parentheses around <font color="blue"><tt>*pda</tt></font> are important. Without them, you have this:
+<blockquote><pre>
+<b>double</b> *pda[4] <font color="#003399"><i>/* an array of 4 pointers to doubles */</i></font>
+</pre></blockquote>
+
+which is certainly not what you want. Also,
+
+the &amp; in front of <font color="blue"><tt>da</tt></font> is important. Without it, it's incorrect:
+
+<blockquote><pre>
+<b>double</b> (*pda)[4] = da; <font color="#003399"><i>/* Incorrect */</i></font>
+</pre></blockquote>
+
+and the <tt>gcc</tt> compiler calls us out on it:
+
+<blockquote><pre>
+warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   double (*pda)[4] = da;
+ </pre></blockquote>
+
+The <tt>clang</tt> compiler is more verbose, even telling you how to fix it:
+<blockquote><pre>
+warning: incompatible pointer types initializing 'double (*)[4]' with an expression of type 'double [4]'; 
+         take the address with & [-Wincompatible-pointer-types]
+  double (*pda)[4] = da;
+           ^         ~~
+                     &amp;
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Two Dimensional Arrays and Pointers
+</p>
+Here's the reference array initialized with values:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = { 
+                        {1.0,  2.0,  3.0,  4.0}, 
+                        {5.0,  6.0,  7.0,  8.0}, 
+                        {9.0, 10.0, 11.0, 12.0}
+                      };
+</pre></blockquote>
+
+Visualized with an arbitrary address:
+<blockquote>
+<img src="PointsArray-4a.png">
+</blockquote>
+
+and with subscripts and arbitrary addresses:
+
+<blockquote>
+<img src="PointsArray-1a.png">
+</blockquote>
+
+<p>
+  <hr width="95%">
+<p>
+
+The concept of creating pointers is similar with 2-dimensional arrays. If we want a pointer to the 2D array of doubles above, 
+we could do this:
+<blockquote><pre>
+<b>double</b> (*p1)[3][4] = &amp;points; <font color="#003399"><i>/* pointer to an array of 3 arrays of 4 doubles */</i></font>
+</pre></blockquote>
+
+and it would look like this visually:
+
+<blockquote>
+<img src="Arrays-2D-pointer1.png">
+</blockquote>
+<p>
+
+Again, the &amp; in front of <font color="blue"><tt>points</tt></font> is important. This is incorrect:
+
+<blockquote><pre>
+<b>double</b> (*p1)[3][4] = points; <font color="#003399"><i>/* Incorrect */</i></font>
+</pre></blockquote>
+
+and the <tt>gcc</tt> compiler calls us out on it:
+
+<blockquote><pre>
+warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   p1 = points; 
+      ^
+</pre></blockquote>
+
+The <tt>clang</tt> compiler is more verbose:
+<blockquote><pre>
+warning: incompatible pointer types assigning to 'double (*)[3][4]' from 'double [3][4]'; 
+         take the address with & [-Wincompatible-pointer-types]
+  p1 = points;
+     ^ ~~~~~~
+       &amp;
+</pre></blockquote>
+
+<p class="technote">
+This may seem odd at first, especially if you are thinking that the <i>value</i> of <tt>points</tt> and
+<tt>&amp;points</tt> are the same. This is true. They have the same <i>value</i> but they are of
+different <i>types</i>, and that's what the compiler is checking: types, not values. The compiler can't
+check values because that's done at runtime.
+</p>
+
+That is also why these are incorrect:
+
+<blockquote><pre>
+<b>double</b> (*p1)[3][4] = &amp;points[0];    <font color="#003399"><i>/* Incorrect */</i></font>
+<b>double</b> (*p1)[3][4] = &amp;points[0][0]; <font color="#003399"><i>/* Incorrect */</i></font>
+</pre></blockquote>
+
+And this is what the clang compiler says:
+<blockquote><pre>
+warning: incompatible pointer types assigning to 'double (*)[3][4]' from 'double (*)[4]' [-Wincompatible-pointer-types]
+  p1 = &amp;points[0];    /* Incorrect */
+     ^ ~~~~~~~~~~
+warning: incompatible pointer types assigning to 'double (*)[3][4]' from 'double *' [-Wincompatible-pointer-types]
+  p1 = &amp;points[0][0]; /* Incorrect */
+     ^ ~~~~~~~~~~~~~
+</pre></blockquote>
+
+It's incorrect because the <i>types</i> are different:
+<ul>
+  <li><font color="blue"><tt>p1</tt></font> is a pointer to an array of 3 arrays of 4 doubles.</li>
+  <li><font color="blue"><tt>&amp;points[0]</tt></font> is a pointer to an array (first row) of 4 doubles.</li>
+  <li><font color="blue"><tt>&amp;points[0][0]</tt></font> is a pointer to a double (first row, first element).</li>
+</ul>
+
+In fact, all of these expressions have the same value but are of different types:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=7>
+<tr align="center"><th>Expression</th><th>Type</th></tr>
+<tr valign="top">
+<td><font color="blue"><tt>points</tt></font></td><td>an array of 3 arrays of 4 doubles.</td></tr>
+<td><font color="blue"><tt>&amp;points</tt></font></td><td>the address of (pointer to) an array of 3 arrays of 4 doubles.</td></tr>
+<td><font color="blue"><tt>&amp;points[0]</tt></font></td><td>the address of (pointer to) an array of 4 doubles (the first row).</td></tr>
+<td><font color="blue"><tt>&amp;points[0][0]</tt></font></td><td>the address of (pointer to) a double (the first double in the first row).</td></tr>
+</tr></table>
+</blockquote>
+
+Don't believe me? Here's a <i>Mead Proof<sup>&trade;</sup></i>:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;Value of points is        %p&#92;n&quot;</font>, (<b>void</b> *)points);
+printf(<font color="#9933CC">&quot;Value of &amp;points is       %p&#92;n&quot;</font>, (<b>void</b> *)&amp;points);
+printf(<font color="#9933CC">&quot;Value of &amp;points[0] is    %p&#92;n&quot;</font>, (<b>void</b> *)&amp;points[0]);
+printf(<font color="#9933CC">&quot;Value of &amp;points[0][0] is %p&#92;n&quot;</font>, (<b>void</b> *)&amp;points[0][0]);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Value of points is        0x7fffaa8fc240
+Value of &amp;points is       0x7fffaa8fc240
+Value of &amp;points[0] is    0x7fffaa8fc240
+Value of &amp;points[0][0] is 0x7fffaa8fc240
+</pre></blockquote>
+
+Those are stack-based addresses on a 64-bit Linux computer.
+
+<p>
+  <hr width="95%">
+<p>
+
+
+If we want to create a pointer to one element (row) of the 2D array, we could do this:
+
+<blockquote><pre>
+<b>double</b> (*p2)[4] = &amp;points[1]; <font color="#003399"><i>/* pointer to an array of 4 doubles (2nd element/row) */</i></font>
+</pre></blockquote>
+
+Visually:
+<blockquote>
+<img src="Arrays-2D-pointer2.png">
+</blockquote>
+
+These are equivalent:
+<blockquote><pre>
+<b>double</b> (*p2)[4] = &amp;points[1]; <font color="#003399"><i>/* pointer to an array of 4 doubles (2nd element) */</i></font>
+<b>double</b> (*p2)[4] = points + 1; <font color="#003399"><i>/* pointer to an array of 4 doubles (2nd element) */</i></font>
+</pre></blockquote>
+
+If we want to create a pointer to the first element of that row, we could do this:
+<blockquote><pre>
+<b>double</b> *p3 = &amp;points[1][0]; <font color="#003399"><i>/* a pointer to a double (first element of 2nd row) */</i></font>
+</pre></blockquote>
+Visually:
+<blockquote>
+<img src="Arrays-2D-pointer3.png">
+</blockquote>
+
+Notice how the value (132) of <font color="blue"><tt>p2</tt></font> and <font color="blue"><tt>p3</tt></font>
+are the same. Their <i>values</i> are the same, but the <i>types</i> are different.
+<p>
+If we want to create a pointer to the third element of that row, we could do this:
+<blockquote><pre>
+<b>double</b> *p3 = &amp;points[1][2]; <font color="#003399"><i>/* a pointer to a double (3rd element of 2nd row) */</i></font>
+</pre></blockquote>
+Visually:
+<blockquote>
+<img src="Arrays-2D-pointer4.png">
+</blockquote>
+
+If we wanted to use the pointer <font color="blue"><tt>p2</tt></font> from above to 
+initialize <font color="blue"><tt>p3</tt></font>, it would look like this:
+<blockquote><pre>
+<b>double</b> *p3 = &amp;(*p2)[2]; <font color="#003399"><i>/* a pointer to a double (3rd element of 2nd row) */</i></font>
+</pre></blockquote>
+
+Breaking it down (as the compiler does):
+<ul>
+  <li><font color="blue"><tt>p2</tt></font> is a pointer to an array of 4 doubles.</li>
+  <li><font color="blue"><tt>*p2</tt></font> is an array of 4 doubles.</li>
+  <li><font color="blue"><tt>(*p2)[2]</tt></font> is a double (the 3rd double) in the array (parentheses required).</li>
+  <li><font color="blue"><tt>&amp;(*p2)[2]</tt></font> is the address of the 3rd double in the array.</li>
+  <li>Remember, you can use the phrase <i>address of</i> and <i>pointer to</i> interchangeably.</li>
+  <ul>
+    <li>So, <font color="blue"><tt>&amp;(*p2)[2]</tt></font> is a pointer to a double, which is exactly
+      what <font color="blue"><tt>p3</tt></font> is declared as.</li>
+  </ul>
+  <li><i>Easy, peasy, lemon squeezy!<sup>&trade;</sup></i></li>
+</ul>
+
+Knowing the types of those expressions above will help you answer the question: 
+<i>What is <b><tt>sizeof</tt></b> each of those expressions?
+<!--
+<a href="../../docs/OperatorPrecedence.html">precedence chart</a>
+-->
+
+<br><br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<br><br>
+
+<!--
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<tt><b></b></tt>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

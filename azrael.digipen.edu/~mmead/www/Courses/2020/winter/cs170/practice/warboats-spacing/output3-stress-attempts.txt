@@ -1,0 +1,123 @@
+Attempt   1: len is 6, x,y is 28,9, orientation is 1 ACCEPTED
+Attempt   2: len is 5, x,y is 14,26, orientation is 1 REJECTED
+Attempt   3: len is 5, x,y is 6,2, orientation is 0 ACCEPTED
+Attempt   4: len is 6, x,y is 17,14, orientation is 1 ACCEPTED
+Attempt   5: len is 5, x,y is 27,28, orientation is 0 REJECTED
+Attempt   6: len is 5, x,y is 7,4, orientation is 1 ACCEPTED
+Attempt   7: len is 3, x,y is 26,14, orientation is 0 REJECTED
+Attempt   8: len is 4, x,y is 25,5, orientation is 0 ACCEPTED
+Attempt   9: len is 4, x,y is 7,18, orientation is 0 ACCEPTED
+Attempt  10: len is 7, x,y is 24,24, orientation is 0 REJECTED
+Attempt  11: len is 6, x,y is 21,17, orientation is 0 ACCEPTED
+Attempt  12: len is 6, x,y is 19,24, orientation is 1 ACCEPTED
+Attempt  13: len is 4, x,y is 29,12, orientation is 1 ACCEPTED
+Attempt  14: len is 3, x,y is 12,1, orientation is 1 ACCEPTED
+Attempt  15: len is 5, x,y is 8,25, orientation is 1 ACCEPTED
+Attempt  16: len is 4, x,y is 19,0, orientation is 1 ACCEPTED
+Attempt  17: len is 6, x,y is 7,13, orientation is 1 REJECTED
+Attempt  18: len is 6, x,y is 27,4, orientation is 1 REJECTED
+Attempt  19: len is 5, x,y is 21,26, orientation is 0 ACCEPTED
+Attempt  20: len is 3, x,y is 25,12, orientation is 0 ACCEPTED
+Attempt  21: len is 4, x,y is 21,2, orientation is 0 ACCEPTED
+Attempt  22: len is 5, x,y is 14,15, orientation is 1 ACCEPTED
+Attempt  23: len is 7, x,y is 10,8, orientation is 1 ACCEPTED
+Attempt  24: len is 6, x,y is 13,7, orientation is 1 ACCEPTED
+Attempt  25: len is 3, x,y is 0,18, orientation is 1 ACCEPTED
+Attempt  26: len is 6, x,y is 21,3, orientation is 1 ACCEPTED
+Attempt  27: len is 5, x,y is 18,11, orientation is 1 ACCEPTED
+Attempt  28: len is 4, x,y is 24,18, orientation is 0 ACCEPTED
+Attempt  29: len is 5, x,y is 16,4, orientation is 0 ACCEPTED
+Attempt  30: len is 4, x,y is 17,6, orientation is 0 ACCEPTED
+Attempt  31: len is 4, x,y is 15,24, orientation is 1 ACCEPTED
+Attempt  32: len is 6, x,y is 8,26, orientation is 1 REJECTED
+Attempt  33: len is 7, x,y is 15,13, orientation is 1 ACCEPTED
+Attempt  34: len is 4, x,y is 14,25, orientation is 0 REJECTED
+Attempt  35: len is 5, x,y is 18,8, orientation is 0 REJECTED
+Attempt  36: len is 6, x,y is 21,9, orientation is 1 ACCEPTED
+Attempt  37: len is 4, x,y is 26,3, orientation is 0 ACCEPTED
+Attempt  38: len is 3, x,y is 23,16, orientation is 0 ACCEPTED
+Attempt  39: len is 4, x,y is 5,4, orientation is 1 ACCEPTED
+Attempt  40: len is 7, x,y is 9,6, orientation is 0 ACCEPTED
+Attempt  41: len is 6, x,y is 24,12, orientation is 1 REJECTED
+Attempt  42: len is 3, x,y is 16,15, orientation is 1 ACCEPTED
+Attempt  43: len is 5, x,y is 23,11, orientation is 1 ACCEPTED
+Attempt  44: len is 4, x,y is 6,18, orientation is 1 ACCEPTED
+Attempt  45: len is 6, x,y is 29,27, orientation is 0 REJECTED
+Attempt  46: len is 5, x,y is 1,28, orientation is 0 ACCEPTED
+Attempt  47: len is 3, x,y is 6,0, orientation is 0 ACCEPTED
+Attempt  48: len is 6, x,y is 2,16, orientation is 1 ACCEPTED
+Attempt  49: len is 5, x,y is 24,10, orientation is 1 ACCEPTED
+Attempt  50: len is 6, x,y is 26,10, orientation is 1 REJECTED
+Attempt  51: len is 7, x,y is 8,22, orientation is 0 ACCEPTED
+Attempt  52: len is 7, x,y is 11,3, orientation is 1 REJECTED
+Attempt  53: len is 7, x,y is 24,14, orientation is 1 REJECTED
+Attempt  54: len is 5, x,y is 9,22, orientation is 1 REJECTED
+Attempt  55: len is 6, x,y is 3,7, orientation is 1 ACCEPTED
+Attempt  56: len is 7, x,y is 21,26, orientation is 1 REJECTED
+Attempt  57: len is 6, x,y is 5,16, orientation is 1 ACCEPTED
+Attempt  58: len is 7, x,y is 14,2, orientation is 0 REJECTED
+Attempt  59: len is 4, x,y is 3,17, orientation is 0 REJECTED
+Attempt  60: len is 6, x,y is 14,3, orientation is 0 REJECTED
+Attempt  61: len is 5, x,y is 14,25, orientation is 0 REJECTED
+Attempt  62: len is 7, x,y is 7,23, orientation is 0 ACCEPTED
+Attempt  63: len is 4, x,y is 6,20, orientation is 1 REJECTED
+Attempt  64: len is 7, x,y is 12,18, orientation is 1 REJECTED
+Attempt  65: len is 7, x,y is 5,20, orientation is 1 REJECTED
+Attempt  66: len is 7, x,y is 11,1, orientation is 1 REJECTED
+Attempt  67: len is 3, x,y is 5,28, orientation is 0 REJECTED
+Attempt  68: len is 6, x,y is 6,2, orientation is 0 REJECTED
+Attempt  69: len is 5, x,y is 16,26, orientation is 0 REJECTED
+Attempt  70: len is 6, x,y is 19,12, orientation is 0 REJECTED
+Attempt  71: len is 6, x,y is 10,26, orientation is 0 REJECTED
+Attempt  72: len is 5, x,y is 13,29, orientation is 0 ACCEPTED
+Attempt  73: len is 6, x,y is 24,22, orientation is 0 ACCEPTED
+Attempt  74: len is 5, x,y is 20,29, orientation is 0 ACCEPTED
+Attempt  75: len is 6, x,y is 3,5, orientation is 0 REJECTED
+Attempt  76: len is 6, x,y is 16,12, orientation is 1 REJECTED
+Attempt  77: len is 6, x,y is 12,24, orientation is 1 ACCEPTED
+Attempt  78: len is 3, x,y is 25,22, orientation is 0 REJECTED
+Attempt  79: len is 6, x,y is 16,6, orientation is 0 REJECTED
+Attempt  80: len is 5, x,y is 1,13, orientation is 1 ACCEPTED
+Attempt  81: len is 4, x,y is 25,4, orientation is 1 REJECTED
+Attempt  82: len is 3, x,y is 24,24, orientation is 1 REJECTED
+Attempt  83: len is 7, x,y is 25,3, orientation is 0 REJECTED
+Attempt  84: len is 4, x,y is 8,14, orientation is 0 REJECTED
+Attempt  85: len is 6, x,y is 23,8, orientation is 1 REJECTED
+Attempt  86: len is 3, x,y is 5,16, orientation is 1 REJECTED
+Attempt  87: len is 7, x,y is 0,13, orientation is 0 REJECTED
+Attempt  88: len is 3, x,y is 0,4, orientation is 0 ACCEPTED
+Attempt  89: len is 7, x,y is 12,25, orientation is 0 REJECTED
+Attempt  90: len is 6, x,y is 19,17, orientation is 1 ACCEPTED
+Attempt  91: len is 4, x,y is 22,20, orientation is 0 ACCEPTED
+Boats placed:
+   0   0   0   0   0   0  36  36  36   0   0   0   0   0   0   0   0   0   0  12   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  10   0   0   0   0   0   0  12   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   2   2   2   2   2   0  10   0   0   0   0   0   0  12   0  15  15  15  15   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  10   0   0   0   0   0   0  12   0  20   0   0   0   0  28  28  28  28
+  48  48  48   0   0  30   0   4   0   0   0   0   0   0   0   0  23  23  23  23  23  20   0   0   0   0   0   0   0   0
+   0   0   0   0   0  30   0   4   0   0   0   0   0   0   0   0   0   0   0   0   0  20   0   0   0   5   5   5   5   0
+   0   0   0   0   0  30   0   4   0  31  31  31  31  31  31  31   0  24  24  24  24  20   0   0   0   0   0   0   0   0
+   0   0   0  40   0  30   0   4   0   0   0   0   0  18   0   0   0   0   0   0   0  20   0   0   0   0   0   0   0   0
+   0   0   0  40   0   0   0   4   0   0  17   0   0  18   0   0   0   0   0   0   0  20   0   0   0   0   0   0   0   0
+   0   0   0  40   0   0   0   0   0   0  17   0   0  18   0   0   0   0   0   0   0  27   0   0   0   0   0   0   1   0
+   0   0   0  40   0   0   0   0   0   0  17   0   0  18   0   0   0   0   0   0   0  27   0   0  38   0   0   0   1   0
+   0   0   0  40   0   0   0   0   0   0  17   0   0  18   0   0   0   0  21   0   0  27   0  33  38   0   0   0   1   0
+   0   0   0  40   0   0   0   0   0   0  17   0   0  18   0   0   0   0  21   0   0  27   0  33  38  14  14  14   1   9
+   0  47   0   0   0   0   0   0   0   0  17   0   0   0   0  26   0   0  21   0   0  27   0  33  38   0   0   0   1   9
+   0  47   0   0   0   0   0   0   0   0  17   0   0   0   0  26   0   3  21   0   0  27   0  33  38   0   0   0   1   9
+   0  47   0   0   0   0   0   0   0   0   0   0   0   0  16  26  32   3  21   0   0   0   0  33   0   0   0   0   0   9
+   0  47  37   0   0  41   0   0   0   0   0   0   0   0  16  26  32   3   0   0   0   0   0  29  29  29   0   0   0   0
+   0  47  37   0   0  41   0   0   0   0   0   0   0   0  16  26  32   3   0  49   0   7   7   7   7   7   7   0   0   0
+  19   0  37   0   0  41  34   6   6   6   6   0   0   0  16  26   0   3   0  49   0   0   0   0  22  22  22  22   0   0
+  19   0  37   0   0  41  34   0   0   0   0   0   0   0  16  26   0   3   0  49   0   0   0   0   0   0   0   0   0   0
+  19   0  37   0   0  41  34   0   0   0   0   0   0   0   0   0   0   0   0  49   0   0  50  50  50  50   0   0   0   0
+   0   0  37   0   0  41  34   0   0   0   0   0   0   0   0   0   0   0   0  49   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  39  39  39  39  39  39  39   0   0   0   0  49   0   0   0   0  44  44  44  44  44  44
+   0   0   0   0   0   0   0  42  42  42  42  42  42  42   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0  46   0   0  25   0   0   0   8   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  11   0   0   0  46   0   0  25   0   0   0   8   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  11   0   0   0  46   0   0  25   0   0   0   8   0  13  13  13  13  13   0   0   0   0
+   0   0   0   0   0   0   0   0  11   0   0   0  46   0   0  25   0   0   0   8   0   0   0   0   0   0   0   0   0   0
+   0  35  35  35  35  35   0   0  11   0   0   0  46   0   0   0   0   0   0   8   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  11   0   0   0  46  43  43  43  43  43   0   8  45  45  45  45  45   0   0   0   0   0
+

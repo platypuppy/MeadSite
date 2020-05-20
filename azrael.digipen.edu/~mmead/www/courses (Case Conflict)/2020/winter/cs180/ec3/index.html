@@ -1,0 +1,400 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS180 Extra Credit Lab #3</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS180 Extra Credit Lab #3</h1>
+</center>
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<li><a href="cs180-programming-assignment-threadlist.pdf">Handout</a></li>
+<p>
+<li><a href="threadlist.h.html">threadlist.h</a> (<a href="threadlist.h">Text</a>) This is the interface.</li>
+<p>
+<li><a href="threadlist-skeleton.c.html">threadlist.c</a> (<a href="threadlist-skeleton.c">Text</a>) This is a 
+	skeleton to get you started. You'll need to modify it,
+	but be careful not to change the <i>cl_dump</i> function because you won't diff correctly if you do.
+	<b>Also: Make sure you document all functions with Doxygen, even if you didn't write the functions.</b>
+<p>
+<li><a href="driver-sample.c.html">driver-sample.c</a> (<a href="driver-sample.c">Text</a>) This is a 
+	sample driver to help you get started testing.</li>
+<p>
+<li>Random number generator files
+	<ul>
+		<li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+		<li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+	</ul>
+	
+<p>
+	<li>Command lines to compile the program:
+<blockquote><pre>
+clang -Werror -Wall -Wextra -std=c11 -pedantic -g -O2 driver-sample.c threadlist.c PRNG.c -o threadlist -pthread
+gcc -Werror -Wall -Wextra -std=c11 -pedantic -g -O2 driver-sample.c threadlist.c PRNG.c -o threadlist -pthread
+</pre></blockquote>
+
+<!--
+<li>Everyone should be using makefiles for all of the assignments (this is true for all of my courses).
+	Here is a sample <a href="makefile">makefile</a> for the project to get you started. You should enhance it by adding rules 
+	so that you can run the executable and diff the output. You should also add a rule to run Doxygen.
+	Reminder: You can override a variable on the command line:
+
+<blockquote><pre>
+make CC=clang
+</pre></blockquote>
+
+This will use clang instead of the default gcc in the makefile.
+-->
+
+</li>
+<p>
+<!--  
+<li>A sample <a href="Doxyfile.txt">Doxyfile</a>. Use this as a starting point. (Remove the .txt extension)
+Make sure your name is in the PROJECT_NAME</li>
+<p>
+-->
+
+<li>To run the program, type this at the command line:
+<blockquote><pre>
+<b>./threadlist</b>&nbsp;&nbsp;TEST_NUM&nbsp;&nbsp;THREAD_COUNT&nbsp;&nbsp;DATA_SIZE&nbsp;&nbsp;USE_LOCKS&nbsp;&nbsp;DELETE_THREAD_COUNT
+</pre></blockquote>
+
+There are really only 2 tests in the driver:
+<p>
+<ol>
+  <li>The first test creates a bunch (THREAD_COUNT) of threads
+that insert a set of random numbers into the list at the same time.
+After those threads have all completed their
+inserts and terminated, a second bunch (REMOVE_THREAD_COUNT) of threads are created to
+remove some or all of the numbers.</li>
+<p>
+<li>The second test splits the THREAD_COUNT in half, creating <i>THREAD_COUNT / 2</i> threads
+  that are inserting items and <i>THREAD_COUNT / 2</i> threads that are removing items
+  at the same time.</li>
+</ol>
+<p>
+Depending on the value of USE_LOCKS, the resulting list will either be correct
+or incorrect. (Is there any other result?) Realize, of course, that if the data
+set is small and no locks are used, the list may be correct. You just got lucky,
+as we've seen this happen many times this semester.
+<p>
+As the data set grows and the number of threads grows, it becomes more and more
+likely that, without proper locking, the list is incorrect. It's also quite possible that your program
+will crash or hang due to the problems of inserting/removing nodes without any
+locks.
+<p>
+With proper locking, the list will always be correct. However, the runtime of the
+program is going to be slower, due to the locking/unlocking overhead. As with most
+programs, correctness is the primary goal. Once it's working correctly, we can
+devise better (more efficient) locking strategies.
+
+<p>
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><th>Argument</th><th>Meaning</th></tr>
+
+<tr>
+  <td>TEST_NUM</td>
+  <td>
+    The number of the test in the driver to run. 
+  </td>
+</tr>
+
+<tr>
+  <td>THREAD_COUNT</td>
+  <td>
+    The number of worker threads to create.
+  </td>
+</tr>
+
+<tr>
+  <td>ARRAY_SIZE</td>
+  <td>
+    The number of elements in the data set. This must be equally divisible by
+    THREAD_COUNT. If it isn't
+
+    , it will be scaled up so that it is.
+  </td>
+</tr>
+
+<tr>
+  <td>USE_LOCKS</td>
+  <td>
+    This is a boolean option that enables/disables locks in the program. This
+    makes it easy to see the difference when running with and without the locks.
+    <p>
+    Without locks, you will likely get incorrect results, crashes, lock-ups,
+    or other bad things. Valgrind will find some of these problems. On the upside,
+    the code runs faster! :)
+    <p>
+    With locks, you will get the correct results. However, it may run much
+    slower. But, that's the cost you pay.
+  </td>
+</tr>
+
+<tr>
+  <td>REMOVE_THREAD_COUNT</td>
+  <td>
+    This tells the driver how much data to delete. The first argument, THREAD_COUNT,
+    specifies how many threads to create. All of these threads insert items into
+    the list. Afterwards, threads will be created to remove the items in the list.
+    REMOVE_THREAD_COUNT is the number of threads used to remove. For example, if
+    the THREAD_COUNT is 8 and REMOVE_THREAD_COUNT is 8, after all 8 threads insert
+    items into the list, another 8 threads will delete the data. There will be nothing
+    left in the list. If REMOVE_THREAD_COUNT is 5, then 5 threads will be created to 
+    remove 5/8 of the data (the first 5/8). If REMOVE_THREAD_COUNT is 0, then no
+    removals take place. <b>This is only applicable for test #1.</b>
+    <p>
+    Obviously, THREAD_COUNT must be >= REMOVE_THREAD_COUNT
+  </td>
+</tr>
+
+</table>
+<p>
+
+To detect memory errors and leaks, run it under valgrind like this:
+<blockquote><pre>
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./threadlist <font color="blue"><b>args...</b></font>
+</pre></blockquote>
+
+replace <font color="blue"><b>args...</b></font> with the required arguments.
+
+<p class="technote">
+Realize that
+when running under Valgrind, your program may appear to run perfectly without locks. That's because
+Valgrind is "interfering" with the runtime behavior so that the multiple threads don't
+interact in the same way as without Valgrind running. This is another example of how it
+is very difficult to debug multithreaded programs.
+</p>
+
+<p>
+<li>Sample outputs: (The link is the command line options)
+<p>
+Example:
+<blockquote><pre>
+./threadlist 1 16 64 1 0
+</pre></blockquote>
+This will run test #1 with 16 threads, 64 items in the data set, enable locks (1),
+and don't delete any items.
+<p>
+
+These tests just insert items. No deletion takes place.
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Data size: 16</th><th>Data size: 64</th><th>Data size: 16000</th></tr>
+<tr valign="top">
+
+<td align="right">
+  <a href="output/output-1-1-16-1-0.txt">1 1 16 1 0</a><br>
+  <a href="output/output-1-2-16-1-0.txt">1 2 16 1 0</a><br>
+  <a href="output/output-1-4-16-1-0.txt">1 4 16 1 0</a><br>
+  <a href="output/output-1-8-16-1-0.txt">1 8 16 1 0</a><br>
+  <a href="output/output-1-16-16-1-0.txt">1 16 16 1 0</a><br>
+</td>
+
+<td align="right">
+  <a href="output/output-1-1-64-1-0.txt">1 1 64 1 0</a><br>
+  <a href="output/output-1-2-64-1-0.txt">1 2 64 1 0</a><br>
+  <a href="output/output-1-4-64-1-0.txt">1 4 64 1 0</a><br>
+  <a href="output/output-1-8-64-1-0.txt">1 8 64 1 0</a><br>
+  <a href="output/output-1-16-64-1-0.txt">1 16 64 1 0</a><br>
+  <a href="output/output-1-32-64-1-0.txt">1 32 64 1 0</a><br>
+  <a href="output/output-1-64-64-1-0.txt">1 64 64 1 0</a><br>
+</td>
+
+<td align="right">
+  <a href="output/output-1-16-16000-1-0.txt">1 16 16000 1 0</a><br>
+</td>
+
+
+</tr>
+</table>
+</blockquote>
+
+<p>
+
+These tests insert and then delete items.
+<blockquote>
+<table border=1 cellpadding=10 cellspacing=0>
+<tr><th>Data size: 16</th><th>Data size: 64</th><th>Data size: 16000</th></tr>
+<tr valign="top">
+
+<td align="right">
+  <a href="output/outputd-1-16-16-1-1.txt">1 16 16 1 1</a><br>
+  <a href="output/outputd-1-16-16-1-2.txt">1 16 16 1 2</a><br>
+  <a href="output/outputd-1-16-16-1-3.txt">1 16 16 1 3</a><br>
+  <a href="output/outputd-1-16-16-1-4.txt">1 16 16 1 4</a><br>
+  <a href="output/outputd-1-16-16-1-5.txt">1 16 16 1 5</a><br>
+  <a href="output/outputd-1-16-16-1-6.txt">1 16 16 1 6</a><br>
+  <a href="output/outputd-1-16-16-1-7.txt">1 16 16 1 7</a><br>
+  <a href="output/outputd-1-16-16-1-8.txt">1 16 16 1 8</a><br>
+  <a href="output/outputd-1-16-16-1-9.txt">1 16 16 1 9</a><br>
+  <a href="output/outputd-1-16-16-1-10.txt">1 16 16 1 10</a><br>
+  <a href="output/outputd-1-16-16-1-11.txt">1 16 16 1 11</a><br>
+  <a href="output/outputd-1-16-16-1-12.txt">1 16 16 1 12</a><br>
+  <a href="output/outputd-1-16-16-1-13.txt">1 16 16 1 13</a><br>
+  <a href="output/outputd-1-16-16-1-14.txt">1 16 16 1 14</a><br>
+  <a href="output/outputd-1-16-16-1-15.txt">1 16 16 1 15</a><br>
+  <a href="output/outputd-1-16-16-1-16.txt">1 16 16 1 16</a><br>
+</td>
+
+<td align="right">
+  <a href="output/outputd-1-64-64-1-1.txt">1 64 64 1 1</a><br>
+  <a href="output/outputd-1-64-64-1-5.txt">1 64 64 1 5</a><br>
+  <a href="output/outputd-1-64-64-1-10.txt">1 64 64 1 10</a><br>
+  <a href="output/outputd-1-64-64-1-14.txt">1 64 64 1 14</a><br>
+  <a href="output/outputd-1-64-64-1-23.txt">1 64 64 1 23</a><br>
+  <a href="output/outputd-1-64-64-1-44.txt">1 64 64 1 44</a><br>
+  <a href="output/outputd-1-64-64-1-51.txt">1 64 64 1 51</a><br>
+</td>
+
+<td align="right">
+  <a href="output/outputd-1-16-16000-1-10.txt">1 16 16000 1 10</a><br>
+</td>
+</tr>
+</table>
+</blockquote>
+<p>
+
+<li>Many more tests are here: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/ec3/output-set1.zip">output-set1.zip</a> (~12 MBs zipped, ~42 MBs unzipped)</li>
+<ul>
+  <li>The <a href="output-set1.txt">list of tests</a> in the .zip file.</li>
+</ul>
+
+<li>To easily see the correct/incorrect output, pipe the output through the <i>nl</i> (number lines)
+  filter:
+  <p>
+Without proper locking:
+<blockquote><pre>
+./threadlist 1 8 16000 0 0 | nl
+</pre></blockquote>
+
+<b>Output:</b>
+<blockquote><pre>
+ 15988   15993: 8
+ 15989   15994: 7
+ 15990   15995: 6
+ 15991   15996: 8
+ 15992   15997: 6
+ 15993   15998: 2
+ 15994   15999: 6
+ 15995   16000: 7
+ 15996  ------------------
+
+real  0m0.669s
+user  0m0.634s
+sys 0m0.052s
+</pre></blockquote>
+
+
+
+With proper locking:
+<blockquote><pre>
+./threadlist 1 8 16000 1 0 | nl
+</pre></blockquote>
+
+<b>Output:</b>
+<blockquote><pre>
+ 15993   15993: 8
+ 15994   15994: 7
+ 15995   15995: 6
+ 15996   15996: 8
+ 15997   15997: 6
+ 15998   15998: 2
+ 15999   15999: 6
+ 16000   16000: 7
+ 16001  ------------------
+
+real  0m1.281s
+user  0m0.798s
+sys 0m0.101s
+</pre></blockquote>
+
+
+
+
+
+
+</ol>
+
+<!--
+
+<p>
+<hr width="100%">
+<p>
+
+<li><b>Using <a href="http://man7.org/linux/man-pages/man1/script.1.html"><tt>script</tt></b></a></li>
+<p>
+You need to capture your shell session that shows various things like compiling and running the program, 
+using <b>diff</b> to make sure your output is correct and running with valgrind and then running Doxygen. 
+After you've finished coding and testing everything and are sure everything is correct, use the 
+<b>script</b> command to make a text file of your session. From the bash shell in the directory you've 
+setup to test with, run these commands. Make sure you're using the Doxyfile that I posted.
+
+<blockquote><pre>
+script
+date
+uptime
+echo FIRSTNAME LASTNAME
+pwd
+whoami
+uname -a
+cat /proc/cpuinfo
+cat /proc/meminfo
+clang --version
+gcc --version
+clang -g -Werror -Wall -Wextra -std=c11 -pedantic driver-sample.c threadlist.c PRNG.c -o threadlist
+./threadlist | tee output.txt
+diff output.txt output-all.txt
+valgrind -q --leak-check=full --show-reachable=yes --tool=memcheck ./threadlist > /dev/null
+doxygen
+cd latex
+make
+cd ..
+ls -al latex/
+</pre></blockquote>
+
+Then, press <tt><b>Ctrl-D</b></tt> to end the script session. A file named <b><tt>typescript</tt></b> 
+was created with all of the commands and output. Replace FIRSTNAME and LASTNAME with your real first 
+name and last name. This is how you get your name in the typescript file. Consult the man pages 
+<a href="http://man7.org/linux/man-pages/man1/script.1.html">here</a>.if you want more information on 
+<tt>script</tt>.
+	
+</ul>
+
+-->
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+
+<br><br><br><br><br>
+
+</body>
+</html>
+
+<b><tt></tt></b>
+
+<blockquote><pre>
+</pre></blockquote>

@@ -1,0 +1,120 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>C/CPP Headers</title>
+</head>
+
+<body>  
+
+
+<h2>cmath</h2>
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>// cmath standard header</i></font>
+
+<b>#if</b>     _MSC_VER &gt; 1000
+<b>#pragma</b> once
+<b>#endif</b>
+
+<b>#ifndef</b> _CMATH_
+<b>#define</b> _CMATH_
+<b>#ifdef</b> _STD_USING
+ <b>#undef</b> _STD_USING
+ <b>#include</b> &lt;math.h&gt;
+ <b>#define</b> _STD_USING
+<b>#else</b>
+ <b>#include</b> &lt;math.h&gt;
+<b>#endif</b> <font color="#003399"><i>/* _STD_USING */</i></font>
+<b>#endif</b> <font color="#003399"><i>/* _CMATH_ */</i></font>
+
+<font color="#003399"><i>/*
+ * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
+ * Consult your license regarding permissions and restrictions.
+ */</i></font>
+
+</code></pre>
+
+<h2>math.h (partial)</h2>
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/***
+*math.h - definitions and declarations for math library
+*
+*       Copyright (c) 1985-1997, Microsoft Corporation. All rights reserved.
+*
+*Purpose:
+*       This file contains constant definitions and external subroutine
+*       declarations for the math subroutine library.
+*       [ANSI/System V]
+*
+*       [Public]
+*
+****/</i></font>
+
+<b#>if</b>     _MSC_VER &gt; 1000
+<b>#pragma</b> once
+<b>#endif</b>
+
+<b>#ifndef</b> _INC_MATH
+<b>#define</b> _INC_MATH
+
+<b>#if</b>     !defined(_WIN32) &amp;&amp; !defined(_MAC)
+<b>#error</b> ERROR: Only Mac or Win32 targets supported!
+<b>#endif</b>
+
+
+<b>#ifdef</b>  _MSC_VER
+<font color="#003399"><i>/*
+ * Currently, all MS C compilers for Win32 platforms default to 8 byte
+ * alignment.
+ */</i></font>
+<b>#pragma</b> pack(push,8)
+<b>#endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+
+<b>#ifdef</b> __cplusplus
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> {
+<b>#endif</b>
+
+  <font color="#003399"><i>/**********************************************/</i></font>
+  <font color="#003399"><i>/* About 600 lines removed                    */</i></font>
+  <font color="#003399"><i>/**********************************************/</i></font>
+
+
+<b>#ifdef</b>  __cplusplus
+}
+<b>#endif</b>  <font color="#003399"><i>/* __cplusplus */</i></font>
+
+
+  <font color="#003399"><i>/**********************************************/</i></font>
+  <font color="#003399"><i>/* More stuff removed                         */</i></font>
+  <font color="#003399"><i>/**********************************************/</i></font>
+
+
+<b>#ifdef</b>  _MSC_VER
+<b>#pragma</b> pack(pop)
+<b>#endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+
+<b>#endif</b>  <font color="#003399"><i>/* _INC_MATH */</i></font>
+
+</code></pre>
+
+
+</body>
+</html>
+
+<!--
+  <b>int</b>     <b>__cdecl</b> abs(<b>int</b>);
+  <b>double</b>  <b>__cdecl</b> acos(<b>double</b>);
+  <b>double</b>  <b>__cdecl</b> asin(<b>double</b>);
+  <b>double</b>  <b>__cdecl</b> atan(<b>double</b>);
+  <b>double</b>  <b>__cdecl</b> atan2(<b>double</b>, <b>double</b>);
+  <b>double</b>  <b>__cdecl</b> cos(<b>double</b>);
+  <b>double</b>  <b>__cdecl</b> cosh(<b>double</b>);
+-->
+
+
+
+
+
+
+

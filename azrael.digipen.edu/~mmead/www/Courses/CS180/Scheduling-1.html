@@ -1,0 +1,783 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Scheduling</title>
+
+
+</head>
+
+<body>  
+
+<center><h1>
+Scheduling
+</h1></center>
+
+<center>
+<i>"I know of no way of judging the future but by the past."</i>
+&mdash; Patrick Henry, 1775
+</center>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Overview
+</p>
+
+CPU scheduling forms the basis of multi-programmed operating systems. 
+<p>
+<b>Process <span id=wpurl><a class=wplabel>scheduling</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Scheduling_%28computing%29">scheduling</a></b>
+
+<ul>
+	<li>If a system only runs one program (process), you don't need any scheduling.</li>
+	<li>Most computers have the ability to run many different programs, oftentimes, concurrently.</li>
+	<li>How the operating system chooses which program to run is key to scheduling.</li>
+	<li>The CPU scheduler selects only the processes that are in the <font color="black"><b>ready queue</b></font>.</li>
+	<ul>
+		<li>Processes in the waiting queue (blocked) are not eligible to run.</li>
+		<img src="ProcessStates-2.png">
+	</ul>
+	<li>Not all processes are equal nor do they require the same resources.</li>
+	<li>Some processes are more important (higher priority), so they may get special treatment from the scheduler.</li>
+	<li>There are many different kinds of <span id=wpurl><a class=wplabel>scheduling algorithms</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Scheduling_algorithm">scheduling algorithms</a>, some are simple, others, not so simple.</li>
+	<li>Some algorithms are based on the process' <b>CPU burst time</b>.</li>
+	<ul>
+		<li>CPU burst: Time spent on the CPU</li>
+		<ul>
+			<li><span id=wpurl><a class=wplabel>CPU-bound</a></span><a class=wplink href="http://en.wikipedia.org/wiki/CPU-bound">CPU-bound</a> - 
+			The time taken to complete a task is determined primarily by the CPU speed. (Bounded by the CPU, e.g. calculating digits of pi)</li>
+		</ul>
+		<li>I/O burst: Time spent blocked/waiting for I/O</li>
+		<ul>
+			<li><span id=wpurl><a class=wplabel>I/O-bound</a></span><a class=wplink href="http://en.wikipedia.org/wiki/I/O-bound">I/O-bound</a> - 
+				The time taken to complete a task is determined primarily by the time spent waiting for I/O operations.
+				(Bounded by I/O, e.g. writing to the disk)</li>
+			</ul>
+	</ul>
+	<li>Two basic scheduling algorithms are non-preemptive (e.g. cooperative) 
+		and <span id=wpurl><a class=wplabel>preemptive</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Preemptive_multitasking">preemptive</a>.</li>
+</ul>
+
+<b>Scheduling Criteria</b>
+<p>
+Scheduling algorithms have different properties depending on what the algorithm is trying to minimize/maximize.
+(e.g. interactive vs. non-interactive processes)
+<!--
+<ul>
+	<li><b>Throughput</b> (Maximize) - How many jobs (processes) are completed in a given time.</li>
+	<li><b>Waiting time</b> (Minimize) - How much time a process spends in the ready queue. (Running/blocked doesn't count.)</li>
+	<li><b>CPU utilization</b> (Maximize) - How busy the CPU is. The goal is to keep the CPU working. </li>
+	<li><b>Response time</b> (Minimize) - How long it takes from the time a process is created until it produces some response (output).</li>
+	<li><b>Turnaround time</b> (Minimize) - How much time has elapsed from the time a process is created until it finishes.</li>
+</ul>	
+-->
+<blockquote>
+<table border=1 cellpadding=8 cellspacing=0>
+	<tr><th>Criteria</th><th>Min/Max</th><th>Description</th></tr>
+	<tr><td><b>Throughput</b></td><td>Maximize</td><td>How many jobs (processes) are completed in a given time.</td></tr>
+	<tr><td><b>Waiting time</b></td><td>Minimize</td><td>How much time a process spends in the ready queue. (Running/blocked doesn't count.)</td></tr>
+	<tr><td><b>CPU utilization</b></td><td>Maximize</td><td>How busy the CPU is. The goal is to keep the CPU working.</td></tr>
+	<tr><td><b>Response time</b></td><td>Minimize</td><td>How long it takes from the time a process is created until it produces some response (output).</td></tr>
+	<tr><td><b>Turnaround time</b></td><td>Minimize</td><td>How much time has elapsed from the time a process is created until it finishes.</td></tr>
+</table>
+</blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Non-preemptive Scheduling
+</p>
+
+<ul>
+	<li>Used on systems where jobs are executed serially without interruption, such as single-task operating systems.</li>
+	<ul>
+			<li>This means that the process usually runs to completion</li>
+			<ul>
+				<li>or it may voluntarily give up the CPU (cooperative scheduling)</li>
+			</ul>
+			<li>Could be a long time (even hours).</li>
+	</ul>
+	<li>Two types of scheduling</li>
+	<ul>
+		<li><b>First-come, first-serve (FCFS)</b> - jobs are processed in the order they are received.</li>
+		<li><b>Priority scheduling</b> - jobs are sorted according to a prioritization scheme.</li>
+		<ul>
+			<li><b>Shortest job first (SJF)</b> - jobs are sorted by (estimated) processing time	</li>
+		</ul>
+	</ul>
+</ul>
+
+<b>FCFS scheduling and waiting time</b>
+<ul>
+	<li>Probably the simplest scheduling algorithm to understand and to implement.</li>
+	<li>Simple algorithm that uses a <span id=wpurl><a class=wplabel>FIFO</a></span><a class=wplink href="http://en.wikipedia.org/wiki/FIFO">FIFO</a> 
+		<span id=wpurl><a class=wplabel>queue</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Queue_area">queue</a>.</li>
+	<ul>
+		<li>If the queue is not empty:</li>
+		<ul>
+			<li>Get a job from the (front of the) queue</li>
+			<li>Process the job</li>
+		</ul>
+		<li>Repeat</li>
+	</ul>
+	<li>Average waiting time can be large</li>
+	<ul>
+		<li>Is this meaningful or important? (As always, it depends.)</li>
+	</ul>
+	<li>FCFS wait time example #1:</li>
+	<ul>
+		<li>P<sub>1</sub> takes 22 ms (milliseconds) to execute (CPU burst time)</li>
+		<li>P<sub>2</sub> takes 9 ms</li>
+		<li>P<sub>3</sub> takes 4 ms</li>
+		<li>Wait time for P<sub>1</sub> is 0 ms</li>
+		<li>Wait time for P<sub>2</sub> is 22 ms</li>
+		<li>Wait time for P<sub>3</sub> is 31 ms</li>
+		<li>Average wait time: <tt>(0 ms + 22 ms + 31 ms)/3 = 53/3 = 17.67 ms</tt></li>
+		<p>
+		<img src="Scheduling-FCFS-1.png">	
+	  <p>
+	</ul>
+	<li>FCFS wait time example #2:</li>
+	<ul>
+		<li>Now suppose that the processes arrived in this order: 
+		<blockquote>
+			P<sub>2</sub> (9 ms), P<sub>3</sub> (4 ms), P<sub>1</sub> (22 ms).
+		</blockquote>
+		<li>Wait time for P<sub>2</sub> is 0 ms</li>
+		<li>Wait time for P<sub>3</sub> is 9 ms</li>
+		<li>Wait time for P<sub>1</sub> is 13 ms</li>
+		<li>Average wait time: <tt>(0 ms + 9 ms + 13 ms)/3 = 22/3 = 7.33 ms</tt></li>
+		<p>
+		<img src="Scheduling-FCFS-2.png">	
+	  <p>
+	</ul>
+	<!--
+	<li>FCFS wait time example #3:</li>
+	<ul>
+		<li>Now suppose that the processes arrived in this order: 
+		<blockquote>
+			P<sub>3</sub> (4 ms), P<sub>2</sub> (10 ms), P<sub>1</sub> (22 ms).
+		</blockquote>
+		<li>Wait time for P<sub>3</sub> is 0 ms</li>
+		<li>Wait time for P<sub>2</sub> is 4 ms</li>
+		<li>Wait time for P<sub>1</sub> is 10 ms</li>
+		<li>Average wait time:</li>
+		<li>(0 ms + 4 ms + 10 ms) / 3 = 4.67 ms</li>
+		<p><font size=+3>Gantt chart #2 here</font></p>
+	</ul>
+	-->
+</ul>
+
+<b>Priority scheduling and waiting time</b>
+<ul>
+	<li>A <b>priority queue</b> is a type of generalized queue with two basic queue operations:</li>
+	<ul>
+		<li><b>Put</b> - place an item on the queue.</li>
+		<li><b>Get</b> - get the item with <i>highest</i> (or lowest) value item from the queue.</li>
+	</ul>
+	<li>Same as FCFS scheduling algorithm, except that the queue is replaced by a priority queue.</li>
+	<li>Minimizes wait time</li>
+	<li>SJF (shortest job first) wait time example:</li>
+	<ul>
+		<li>P<sub>1</sub> takes 22 ms</li>
+		<li>P<sub>2</sub> takes 9 ms</li>
+		<li>P<sub>3</sub> takes 4 ms</li>
+		<li>Order of jobs: P<sub>3</sub>, P<sub>2</sub>, P<sub>1</sub></li>
+		<li>Wait time for P<sub>3</sub>: 0 ms</li>
+		<li>Wait time for P<sub>2</sub>: 4 ms</li>
+		<li>Wait time for P<sub>1</sub>: 13 ms</li>
+		<li>Average wait time: <tt>(0 ms + 4 ms + 13 ms)/3 = 17/3 = 5.67 ms</tt></li>
+		<p>
+		<img src="Scheduling-SJF-1.png">	
+	  <p>
+		<li>SJF is optimal in that it minimizes the average wait time for a set of processes.</li>
+		<li>SJF can be complicated by the fact that the scheduler needs to know how long a process will take to complete.</li>
+		<li>SJF algorithms approximate how much CPU burst time a process will require by averaging previous times spent running.</li>
+	</ul>
+</ul>
+
+<b>Priority scheduling problem</b>
+<ul>
+	<li>May cause process <b>starvation</b>: A low priority job may sit on the queue indefinitely.</li>
+	<ul>
+		<li>This happens if there is always an incoming job request with a higher priority than the lowest priority job on the queue.</li>
+	</ul>
+	<li>A possible solution is <b>aging</b>: If a job has waited on the queue for a sufficiently long time, its priority is increased by a set amount.</li>
+	<ul>
+		<li>For example, increase the priorities of all processes in the ready queue by 1 every N milliseconds (where N can be any positive number and larger priorities have more priority).</li>
+	</ul>
+</ul>
+
+<a name="EXPRIORITY">
+<b>Example priority values</b>
+</a>
+<ul>
+<li><a href="http://msdn.microsoft.com/en-us/library/ms685100(v=vs.85).aspx">Windows Scheduling Priorities</a> Process priority class across the top, 
+	thread priority level along the left.
+<!--
+	 On Windows:
+	 Only the zero-page thread can have a priority of zero. (The zero-page thread is a 
+	 system thread responsible for zeroing any free pages when there are no other threads that need to run.)
+-->
+<ul>
+	<li> Zero is the lowest priority (only zero-page thread), 31 is the highest.</li>
+	<li>Priority class is for the process. (<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setpriorityclass">SetPriorityClass</a>)</li>
+	<li>Priority level is for the threads of the process. (<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadpriority">SetThreadPriority</a>)</li>
+	<li>Threads with the same priority use a round-robin scheme to take turns running.</li>
+	<li>Processes may get a priority boost (<a href="https://docs.microsoft.com/en-us/windows/win32/procthread/priority-boosts">Priority Boosts</a>) when switching from background to foreground
+		or when keyboard input has occurred.</li>
+</ul>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="Scheduling-XP-Priorities.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+<b>Example priority queue:</b>
+<blockquote>
+<img src="Scheduling-PQ-1.png">	
+</blockquote>
+
+	
+</ul>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Preemptive Scheduling
+</p>
+
+<ul>
+	<li>Each job/task is allowed a time slice, or <b>time quantum</b>, in which to execute.</li>
+	<ul>
+		<li>Most time quantum are between 5 ms and 200 ms.</li>
+		<li>A modern CPU (core) can execute millions of instructions in a few milliseconds.</li>
+	</ul>
+	<li>Once a time quantum has passed, or if the job has finished within that time, a different job gets a time slice.</li>
+	<li>A scheduling algorithm is used to determine the order in which jobs get a time slice.</li>
+	<ul>
+		<li><b><span id=wpurl><a class=wplabel>Round-robin</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Round-robin_scheduling">Round-robin</a> (RR)</b> scheduling</li>
+		<li><b>Preemptive Shortest Job First (PSJF)</b> scheduling</li>
+		<li><b><span id=wpurl><a class=wplabel>Multilevel queue</a></span><a class=wplink href="https://en.wikipedia.org/wiki/Multilevel_queue">Multilevel queue</a></b> scheduling (1950s/1960s)</li>
+		<li><b><span id=wpurl><a class=wplabel>Multilevel feedback queue</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Multilevel_feedback_queue">Multilevel feedback queue</a></b> scheduling (1962)</li>
+		<li><b><span id=wpurl><a class=wplabel>Completely fair scheduler (CFS)</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Completely_Fair_Scheduler">Completely fair scheduler (CFS)</a></b> (2007)</li>
+	</ul>
+</ul>
+
+<b>Round robin scheduling</b>
+<ul>
+	<li>Uses a FIFO queue to process jobs in a first-come first-serve order.</li>
+	<ul>
+		<li>Get a job from the front of the queue</li>
+		<ul>
+			<li>Let it execute for a maximum of one time quantum</li>
+			<li>If it does not complete within that time</li>
+			<ul>
+				<li>Pause the job, and put the job at the back of the queue</li>
+			</ul>
+	  </ul>
+		<li>Repeat</li>
+  </ul>
+	<li>RR wait time example #1:</li>
+	<ul>
+		<li>In queue: P<sub>1</sub> (22 ms), P<sub>2</sub> (9 ms), P<sub>3</sub> (4 ms)</li>
+		<li><font color="blue"><b>Assume a time quantum of 5 ms</b></font></li>
+		<li>P<sub>1</sub> executes for 5 ms (17 ms remaining)</li>
+		<li>P<sub>2</sub> executes for 5 ms (4 ms remaining)</li>
+		<li>P<sub>3</sub> executes for 4 ms (done )</li>
+		<li>P<sub>1</sub> executes for 5 ms (12 ms remaining)</li>
+		<li>P<sub>2</sub> executes for 4 ms (done)</li>
+		<li>P<sub>1</sub> executes for 5 ms (7 ms remaining)</li>
+		<li>P<sub>1</sub> executes for 5 ms (2 ms remaining)</li>
+		<li>P<sub>1</sub> executes for 2 ms (done)</li>
+		<li>P1 waits a total of: 5 + 4 + 4 = 13 ms</li>
+		<li>P2 waits a total of: 5 + 4 + 5 = 14 ms</li>
+		<li>P3 waits a total of: 5 + 5 = 10 ms</li>
+		<li>Average waiting time: <tt>(13 ms + 14 ms + 10 ms)/3 = 37/3 = 12.33 ms</tt></li>
+		<p>
+		<img src="Scheduling-RR-1.png">	
+	  <p>
+	  <li>Note that if no other process is waiting to be run, the currently running process
+	  	is not removed from the CPU.</li>
+	  <li>In this example, the total time was the same as the non-preemptive. However,
+	  	this example may give the illusion that all 3 processes are running <i>at the
+	  	same time</i>, even on a single-core CPU.</li>
+	  	<p>
+	</ul>
+	<li>RR wait time example #2:</li>
+	<ul>
+		<li>In queue: P<sub>1</sub> (22 ms), P<sub>2</sub> (9 ms), P<sub>3</sub> (4 ms)</li>
+		<li><font color="blue"><b>Now assume a time quantum of 10 ms</b></font></li>
+		<li>P<sub>1</sub> executes for 10 ms (12 ms remaining)</li>
+		<li>P<sub>2</sub> executes for 9 ms (done)</li>
+		<li>P<sub>3</sub> executes for 4 ms (done)</li>
+		<li>P<sub>1</sub> executes for 10 ms (2 ms remaining)</li>
+		<li>P<sub>1</sub> executes for 2 ms (done)</li>
+		<li>P1 waits a total of: 9 + 4 = 13 ms</li>
+		<li>P2 waits a total of: 10 ms</li>
+		<li>P3 waits a total of: 10 + 9 = 19 ms</li>
+		<li>Average waiting time: <tt>(13 ms + 10 ms + 19 ms)/3 = 42/3 = 14 ms</tt></li>
+		<p>
+		<img src="Scheduling-RR-2.png">	
+	  <p>
+	</ul>
+	<li>RR considerations:</li>
+	<ul>
+		<li>The average waiting time decreases (in general) with decreasing time quantum size.</li>
+		<ul>
+			<li>Conversely, waiting time increases as the time quantum increases.</li>
+		</ul>
+		<li>A very large time quantum (infinity) makes RR the same as FCFS.</li>
+		<li>A very small time quantum (approaching 0) is called 
+<span id=wpurl><a class=wplabel>processor sharing</a></span><a class=wplink href="https://en.wikipedia.org/wiki/Processor_sharing">processor sharing</a></li>
+		
+
+		<li>Note that these examples do not consider the context switching time</li>
+		<ul>
+			<li>Context switching causes more processing time.</li>
+			<li>A balance must be made between time quantum size and context switching time.</li>
+		</ul>
+		<ul>
+			<li>We want the time quantum to be "large" with respect to the context switching time.</li>
+		</ul>
+		<li>Most modern systems have:</li>
+		<ul>
+			<li>time quanta ranging from 10 to 100 milliseconds (1 millisecond = 1/1,000 of a second).</li>
+			<li>context switching time less than 10 microseconds (1 microsecond = 1/1,000,000 of a second).</li>
+		</ul>
+		</ul>
+		<!--<xblink><font size=+3 color="red">Suppose the time quantum was 1</font></blink>-->
+	</ul>
+</ul>
+
+<b>Preemptive SJF scheduling</b>
+<ul>
+	<li>It is possible to modify the non-preemptive SJF algorithm (from above) to be preemptive. (Kind of like a dynamic SJF.)</li>
+	<li>Instead of using a time quantum like other preemptive scheduling algorithms, it simply checks the CPU burst values of
+	the newly arriving processes in the ready queue.</li>
+	<li>Same as SJF above except that if a new process arrives in the ready queue that has a lower burst time than the currently 
+		running process, the current process is taken off the CPU and the ready process is given the CPU.</li>
+	<li>Preemptive SJF (shortest job first) wait time example:</li>
+	<ul>
+		<li>P<sub>1</sub> arrives at time 0 requires 7 ms</li>
+		<li>P<sub>2</sub> arrives at time 2 requires 4 ms (P<sub>1</sub> is put back into the queue with 5 ms remaining.)</li>
+		<li>P<sub>3</sub> arrives at time 4 requires 1 ms (P<sub>2</sub> is put back into the queue with 2 ms remaining.)</li>
+		<li>P<sub>4</sub> arrives at time 5 requires 4 ms. The queue:</li>
+		<ol>
+			<li>P<sub>2</sub> - 2 ms</li>
+			<li>P<sub>4</sub> - 4 ms</li>
+			<li>P<sub>1</sub> - 5 ms</li>
+		</ol>
+		<li>Wait time for P<sub>1</sub>: 9 ms</li>
+		<li>Wait time for P<sub>2</sub>: 1 ms</li>
+		<li>Wait time for P<sub>3</sub>: 0 ms</li>
+		<li>Wait time for P<sub>4</sub>: 2 ms</li>
+		<li>Average wait time: <tt>(9 ms + 1 ms + 0 ms + 2 ms)/4 = 12/4 = 3 ms</tt></li>
+		<p>
+		<img src="Scheduling-SJF-pre-1.png">	
+	  <p>
+		<li>Like non-preemptive SJF, preemptive SJF still needs to know how much time a process requires.</li>
+		<ul>
+			<li>The scheduler keeps track of previous execution times and uses this to predict how long the next CPU burst will likely be.</li>
+			<li>If the process/thread does no I/O, it will not voluntarily give up the CPU.</li>
+			<li>If the process/thread does a lot of I/O, it will often give up the CPU using only a small portion of it's allotted time slice.</li>
+		</ul>
+		<li>Still suffers from starvation because shorter jobs can keep showing up preventing longer jobs from running.</li>
+		<li>Preemptive SJF is also called <b>shortest-remaining-time-first</b>.</li>
+	</ul>
+</ul>
+
+<b>Multilevel queue scheduling</b>
+<ul>
+	<li>Jobs are put on different queues according to prioritization criteria. (<a href="Scheduling-1.html#EXPRIORITY">like this</a>)</li>
+	<ul>
+		<li>System jobs might have top priority.</li>
+		<li>User jobs might have less priority.</li>
+		<li>Background jobs might have least priority.</li>
+		<li>Sometimes the jobs are just divided between foreground processes and background processes.</li>
+		<li>To affect processor scheduling:</li>
+		<ul>
+			<li>On Win XP, Right click: My Computer, choose Properties | Advanced | Settings for Performance | Advanced</li>
+			<li>On Win 7, Click start button, choose Computer | System properties | Advanced system settings | Advanced | Settings for Performance | Advanced</li>
+			<li>On Win 10, Click start button, choose Control Panel | System | Advanced system settings | Advanced | Settings for Performance | Advanced</li>
+		</ul>
+	</ul>
+	<li>Processes (threads) are assigned to a queue and they never change queues. (<i>static priorities</i>)</li>
+	<li>Each queue may be given a different percent of the CPU time: the higher priority job queue gets the most, the lower priority job queue get the least, 
+		e.g. system 60%, user 30%, background 10%.</li>
+	<li>Each queue may use a different scheduling algorithm (e.g. RR or SJF).</li>
+</ul>
+
+<b>Multilevel feedback queue scheduling</b>
+<ul>
+	<li>Uses multiple queues, as in multilevel queue scheduling.</li>
+	<li>However, a job may be moved between each of the different level queues, depending on CPU usage. (<i>dynamic priorities</i>)</li>
+	<ul>
+		<li>If a job voluntarily yields, it is put on a blocked queue, and when it's time to run again, it stays at the same priority.</li>
+		<ul>
+			<li>It's possible that the scheduler may "reward" a voluntary yield by increasing the job's time slice next time. (It still has the same priority.)</li>
+		</ul>
+		<li>If a job is forced to yield (CPU-bound), it is moved to a lower priority queue.</li>
+		<li>Also, if a job is blocked on I/O, it may be promoted to a higher priority queue.</li>
+	</ul>
+	<li>Another way to say it: If a job has long CPU burst cycles, it is put on a lower priority queue. (Its priority is lowered.)</li>
+	<ul>
+		<li>Conversely, if a job has long I/O burst, it can be moved to a higher priority queue. (Its priority is raised.)</li>
+	</ul>
+	<li>What this means is that short jobs will get higher priority, and will run to completion (much like how SJF, shortest-job-first works).</li>
+	<li>Favors short jobs and I/O bound jobs.</li>
+	<li>A CPU-bound process at the lowest level will stay there until it completes.</li>
+	<li>Implementation-wise, this is the most complex algorithm to implement.</li>
+	<li>It is used by most modern operating systems, including Windows NT, Mac OS X (macOS), Solaris, BSD, and older Linux kernels (before 2004).</li>
+	<li>Windows Vista introduced <a href="http://technet.microsoft.com/en-us/magazine/2007.02.vistakernel.aspx">
+		CPU cycle counting</a> as a more fair method of scheduling. </li>
+</ul>	
+
+<b>Completely fair scheduling (CFS)</b>
+<ul>
+	<li>Used by newer Linux kernels (2.6.23 or newer, circa October 2007).</li>
+	<ul>
+		<li>Before that, the <a href="http://www.ibm.com/developerworks/linux/library/l-completely-fair-scheduler/index.html">O(1)</a>
+			scheduler was used.</li>
+	</ul>
+	<li>Based on the <span id=wpurl><a class=wplabel>fair-share scheduler</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Fair-share_scheduling">fair-share scheduler</a> (that uses user-level or group-level scheduling).</li>
+	<li>Groups of processes (rather than a single process) are given a time slice to share.</li>
+	<ul>
+		<li>e.g. grouped by user/owner of the processes.</li>
+		<li>2 users - user A has 1 process user B has 10 processes.</li>
+		<li>User A's process gets 50% of the CPU, user B's processes each get 5%.</li>
+	</ul>
+	<li>Like multilevel feedback queue scheduling, gives higher priority to blocked/sleeping tasks.</li>
+	<li>Sounds a little counter-intuitive, but it makes sense.</li>
+	<li>Process groups can be made to share time, e.g. 
+	
+	If a process forks 10 children, instead of each child getting, say, 20 ms, the "group" shares
+	the 20 ms.</li>
+	
+	<li>Technical detail: CFS uses a red-black tree instead of run queues.
+		OS nerds (like myself) can read about it <a href="http://www.ibm.com/developerworks/library/l-completely-fair-scheduler/">here</a>.</li>
+	<li>To see all of the gory details of what the schedule keeps track of, look at
+		the <tt>/proc/PID/sched</tt> file. Replace <tt>PID</tt> with the actual process ID you want 
+		to look at. For example, 
+<blockquote><pre>
+cat /proc/12345/sched
+</pre></blockquote>
+will show lots of details.
+</ul>
+
+<!--
+When a blocked thread is ready to run again, it gets a higher priority. Why? Because it has
+not been consuming any CPU cycles in the past, so it would be unfair to make it wait while
+other jobs "hog" the CPU and never relinquish it. The blocked threads are being rewarded
+for their "system-friendliness".
+-->
+
+<b>Why so many?</b>
+<ul>
+	<li>Depends on the type of work:</li>
+	<ul>
+		<li>Batch - e.g. maximize throughput</li>
+		<li>Interactive - e.g. minimize response time</li>
+		<li>Real time - e.g. minimize wait time</li>
+	</ul>
+	<li>Different computing systems:</li>
+	<ul>
+		<li>Desktops</li>
+		<li>Servers</li>
+		<li>Embedded devices</li>
+		<li>Mainframes</li>
+		<li>Supercomputers</li>
+	</ul>
+	<li>There really isn't a one-size-fits-all scheduler.</li>
+</ul>
+
+Links: <a href="http://userbase.kde.org/KSysGuard">ksysguard</a>, <a href="http://help.gnome.org/users/gnome-system-monitor/">gnome-system-monitor</a>
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<p class="sectionheader">
+Multicore Scheduling
+</p>
+
+Up until now, everything that was discussed ignored the concept of multiple CPUs or cores. With
+multicore processors, we can now achieve true parallelism.
+
+<p>
+Real World examples:
+<blockquote>
+<p class="technote">
+In my opinion, the most approachable introduction and explanation of scheduling
+is a book called
+<a href="http://www.amazon.com/P-S-Operating-Systems-Larry-Dowdy/dp/0130116858/qid=1404321468">
+	P.S. To Operating Systems</a>. The explanations use ordinary daily activities to 
+	describe different scheduling approaches (e.g. fast-food restaurant, video rental).
+	Be warned that some of the math gets pretty involved and tedious. However, you don't 
+	need to understand all of the math to get the ideas.
+	It covers single core, multiple core, processor scheduling, disk scheduling, process synchronization,
+	and memory management. Well worth the read for those that want to understand how the OS works
+	behind the scenes.
+</p>
+</blockquote>
+
+<p>
+The first system uses a sno-cone stand to model how much profit is made. 
+(Employees are CPUs, customers are jobs, the line of customers is the ready queue.)
+<p>
+<b>Example:</b>
+<ul>
+	<li>Employee <i>A</i> costs $12 per hour (20 cents per minute) and can service 3 customers per minute.</li>
+	<li>Employee <i>B</i> costs $6 per hour (10 cents per minute) and can service 2 customers per minute.</li>
+	<li>This means that employee <i>A</i> costs twice (100% more) as much as employee <i>B</i>, but only
+		services 50% more people.</li>
+	<li>Which employee will make the most profit? (i.e. get the most work done)</li>
+	<li>This will depend on many factors (e.g. how much does a sno-cone cost, how many customers want a sno-cone.)</li>
+	<ul>
+		<li>What happens if customers arrive one-per-minute?</li>
+		<li>What about 3 per minute?</li>
+		<li>Is there additional overhead (context switching) to service a customer?</li>
+	</ul>
+</ul>
+
+The sno-cone model describes how a single-core CPU works in regards to efficiency.
+<p>
+After a somewhat detailed statistical analysis it can be shown that Employee <i>A</i>
+will make $2.73 per minute profit, while Employee <i>B</i> will make $2.70 per minute profit.
+<p>
+
+<a href="PS-to-OS-chapter1.pdf">Chapter1-sample.pdf</a>
+
+
+<p>
+Consider how customers get serviced at the local Enormo-Burger<sup>&trade;</sup>.
+<ul>
+	<li><b>One-at-a-time system</b> - One line, one person does everything. (Reference system)</li>
+	<li><b>Twice-as-fast system</b> - One line, two people attend to one customer.</li>
+	<li><b>Sequential system</b> - Two lines (sequential), one worker taking orders, one working filling the order.</li>
+	<li><b>Random line system</b> - Two lines, when a customer arrives he chooses a random line where one worker does everything.</li>
+	<li><b>Shortest line system</b> - Two lines, when a customer arrives, he goes to the shortest line where one worker does everything.</li>
+	<li><b>Common line system</b> - One line, two workers, the next customer goes to the available worker who does everything.</li>
+</ul>
+All of the methods can have different times associated with throughput, waiting time, and utilization.
+<ul>
+	<li>Maximizing throughput means making more money.</li>
+	<li>Minimizing initial wait time (response time) means (maybe) happier customers, which may mean repeat business.</li>
+	<li>Minimizing overall wait time means (maybe) happier customers, which may mean repeat business.</li>
+	<li>Maximizing utilization means that workers aren't standing idle (and getting paid).</li>
+</ul>
+
+In operating systems, this models a computer with two CPUs or two cores.
+Again, after detailed statistical analysis, the results:
+<p>
+
+For throughput (how many customers get served per time unit), this is how they fare (larger number is better)
+<blockquote><pre>
+Twice as fast - 0.466
+Sequential    - 0.423
+Random line   - 0.423
+Shortest line - 0.450
+Common line   - 0.454
+</pre></blockquote>
+
+For wait time, (smaller is better)
+<blockquote><pre>
+Twice as fast - 0.571
+Sequential    - 0.909
+Random line   - 0.909
+Shortest line - 0.333
+Common line   - 0.202
+</blockquote>
+
+<ul>
+	<li>Faster processors, or processors with more cores generally cost more.</li>
+	<li>It is not uncommon for one processor, <i>A</i>, to be only 30% faster than
+		another processor, <i>B</i>, yet cost 100% more.</li>
+	<li>This is yet another trade-off that one must make when deciding how much
+		"computing power" to purchase.</li>
+	<li>In other words, is it really cost-effective to pay for processor <i>A</i>
+		over processor <i>B</i>. The answer is, as usual, it depends (on the workload).</li>
+</ul>
+
+<p>
+<a href="ps-to-os-ch2.pdf">sample2.pdf</a>
+<p>
+
+Other things to take into consideration:
+<ul>
+	<li>Reliability or <i>fault tolerance</i> - What if the cash register breaks?</li>
+	<ul>
+		<li>If there is only one cash register (resource, CPU core), the whole place shuts down.</li>
+		<li>With multiple cash registers (resources, CPU cores), progress is still made, albeit, more slowly.</li>
+	</ul>
+	<li>Job specialization - Costs to gain multiple skills?</li>
+	<ul>
+		<li>May need to train each person for two types of jobs.</li>
+		<li>Better for redundancy (someone gets sick).</li>
+		<li>Specialization is cheaper. (CPUs used to be this way.)</li>
+		<!--<li>AMP vs. SMP (Asymmetric Multi-Processing vs. Symmetric Multi-Processing)</li>-->
+	</ul>
+	<li>If customers see long lines, they may go elsewhere</li>
+	<ul>
+		<li>This may limit the maximum amount of income.</li>
+	</ul>
+</ul>
+<!--
+-->
+
+<p>
+Applications to scheduling:
+
+<ul>
+	<li><b>Asymmetric multiprocessing</b></li>
+	<ul>
+		<li>One CPU/core handles all I/O, scheduling, and system activities (OS).</li>
+		<li>Other CPUs/cores run user-level programs.</li>
+		<li>Some CPUs/cores may be specific to a program.</li>
+	</ul>
+	<li><b>Symmetric multiprocessing (SMP)</b></li>
+	<ul>
+		<li>Each CPU/core is treated the same. Most systems implement SMP.</li>
+		<li>The ready queue may be shared by all cores or they may each have their own queue.</li>
+		<li>If each core has its own ready queue, can jobs in the queue move to another?</li>
+				<img src="ProcessStates-2.png">
+
+	</ul>
+	<li><b>Processor affinity</b> - The ability to specify on which CPU/core a thread will execute. Two types: soft and hard.</li>
+	<ul>
+		<li><b>Soft</b> - The OS will try to keep processes (threads) on the same core, but can't guarantee it.</li>
+		<li><b>Hard</b> - The OS guarantees that all processes/threads will always use the same core(s).</li>
+		<li>If another CPU/core is available, the thread will still wait until the specific CPU/core becomes available.</li>
+		<li>Moving (migrating) a thread between cores can cause a negative performance hit due to cache issues.</li>
+		<ul>
+			<li>This will depend on whether or not the cores all share a common cache or if they each have their own private cache. 
+				(This has other problems associated with <span id=wpurl><a class=wplabel>cache coherency</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Cache_coherence">cache coherency</a>.)
+			<li>Maintaining cache coherency is done by snooping (cache invalidating, watches address lines only) and snarfing (cache updating, watches address and data lines).</li>
+			<ul>
+				<li>Write-through (synchronous) vs. write-back (asynchronous, lazy update)</li>
+			</ul>
+			<li>However, sometimes the ability to run the thread outweighs the fact that there will be cache misses.</li>
+		</ul>
+		<li>Most systems avoid migrating threads between cores, but sometimes they still do.</li>
+	</ul>
+	<li><b>Load balancing</b> - The ability to keep all cores busy.</li>
+	<ul>
+		<li>Not needed if there is one shared ready queue for all cores.</li>
+		<li>If each core has its own ready queue, load balancing will redistribute the processes to the idle core's queue.</li>
+		<li>Two approches to load balancing:</li>
+		<ul>
+			<li><b>Push migration</b> - A special process periodically checks the load on each core and if a core is idle, pushes processes
+				from a busy core's queue into the idle core's queue.</li>
+			<li><b>Pull migration</b> - When a core is idle, it pulls a process from another core's ready queue.</li>
+		</ul>
+		<li>Load balancing may interfere with processor affinity.</li>
+		<li>Some systems, such as Linux, assign a larger time quantum to processes with higher priorties.</li>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="fg5_15.jpg"><!--Scheduling-Linux-Priorites.jpg--></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+
+		
+	</ul>
+</ul>
+
+<p>
+	
+<ul>
+<li><span id=wpurl><a class=wplabel>Comparison</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Scheduling_(computing)#Summary">Comparison</a> of different operating systems
+and the scheduling algorithm used by each OS.</li>
+<p>
+<li><a href="https://probablydance.com/2019/12/30/measuring-mutexes-spinlocks-and-how-bad-the-linux-scheduler-really-is/">
+In-depth measurements</a> of schedulers and synchronization primitives on Linux and Windows.</li>
+<p>	
+<li>To tweak the schedulers, look at the <tt>sched*</tt> files in <tt>/proc/sys/kernel/</tt>
+<p>
+</ul>
+	
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="ComputerComponents-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+	
+-->

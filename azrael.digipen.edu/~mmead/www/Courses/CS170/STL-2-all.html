@@ -1,0 +1,2784 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>STL-2</title>
+
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+<center><h1>STL Algorithms and Function Objects</h1></center>
+
+<p>
+<i>
+"The second major efficiency argument is that all but the most trivial STL algorithms use computer
+science algorithms that are more sophisticated -- sometimes <i>much</i> more sophisticated -- than
+anything the average C++ programmer will be able to come up with. It's impossible to beat <b>sort</b>
+or its kin; the search algorithms for sorted ranges are equally good; and even such mundane tasks
+as eliminating some objects from contiguous memory containers are more efficiently accomplished using
+the <b>erase-remove</b> idiom than the loops most programmers come up with."</i>
+<p>
+From the book <i>Effective STL</i> by Scott Meyers
+<p>
+
+<a href="Stroustrup-Chapter18.pdf">Chapter 18</a> from the Stroustrup book.
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Algorithms
+</p>
+The algorithms of the Standard Template Library are also known as the <i>generic algorithms</i> 
+because they are designed and implemented to work with the standard containers.
+
+<ul>
+<li>The generic algorithms typically work with a contiguous set of elements from a container
+called a <i>range</i> or a <i>sequence</i>.
+<li>These ranges are delimited by iterators. (e.g. <i>begin()</i> to <i>end()</i>. This is the largest range 
+in a container)
+<li>Many algorithms have default behavior, so you only need to specify the range.
+<li>You can change the behavior of an algorithm by supplying additional optional parameters. (Think qsort)
+<ul>
+<li>These additional parameters are in the form of function pointers or <i>function objects</i>. 
+<li>A function object is also known as a <i>functor</i>. (More on functors later)
+</ul>
+<p>
+<li>Algorithms behave in different ways. For example some are read-only (with respect to the elements), 
+some modify elements, and some change the order of the elements.
+<li>The generic algorithms can be classified into several categories:
+<ol>
+<li><b>Non-modifying</b> Does not change any elements nor the order of the elements in the container.
+Counting, searching, comparing. (ex. <tt>find</tt>)
+<li><b>Modifying</b> Changes the value of the elements. Transforming, generating, etc. (ex. <tt>transform</tt>)
+<li><b>Removing</b> Removes elements from the container.(ex. <tt>remove</tt>)
+<li><b>Mutating</b> Changes the order of the elements in the container. 
+Reversing, rotating, shuffling. (ex. <tt>reverse</tt>)
+<li><b>Sorting</b> Similar to mutating algorithms, but more complicated. (ex. <tt>sort</tt>)
+<li><b>Sorted range</b> Assumes that the range to operate on is already sorted. (ex. <tt>binary_search</tt>)
+<li><b>Numeric</b> Acts on numerical elements and combines them based on a specified function.
+Sums, products. (ex. <tt>accumulate</tt>)
+</ol>
+</ul>
+</ul>
+
+As of April 2016, there are 85 generic algorithms in the STL.
+<a href="http://www.cplusplus.com/reference/algorithm/">Algorithms reference</a>
+<p>
+
+<table border=1 cellspacing=0 cellpadding=10>
+<tr>
+<th>Non-modifying</th>
+<th>Modifying</th>
+<th>Removing</th>
+<th>Mutating</th>
+</tr>
+
+<tr valign=top>
+<td>
+for_each, count, count_if, min_element, max_element, find, find_if,
+search_n, search, find_end, find_first_of, adjacent_find, 
+equal, mismatch, lexicographical_compare
+</td>
+
+<td>
+for_each, copy, copy_backward, transform, merge, swap_ranges, fill, fill_n,
+generate, generate_n, replace, replace_if, replace_copy, replace_copy_if
+</td>
+
+<td>
+remove, remove_if, remove_copy, remove_copy_if, unique, unique_copy
+</td>
+
+<td>
+reverse, reverse_copy, rotate, rotate_copy, next_permutation, prev_permutation,
+random_shuffle, partition, stable_partition
+</td>
+
+</tr>
+</table>
+
+<p>
+
+<table border=1 cellspacing=0 cellpadding=10>
+<tr>
+<th>Sorting</th>
+<th>Sorted range</th>
+<th>Numeric</th>
+</tr>
+
+<tr valign=top>
+<td>
+sort, stable_sort, partial_sort, partial_sort_copy, nth_element, partition,
+stable_partition, make_heap, push_heap, pop_heap, sort_heap
+</td>
+
+<td>
+binary_search, includes, lower_bound, upper_bound, equal_range, merge,
+set_union, set_intersection, set_difference, set_symmetric_difference,
+inplace_merge
+</td>
+
+<td>
+accumulate, inner_product, adjacent_difference, partial_sum
+</td>
+
+</tr>
+</table>
+
+<p>
+Some algorithms come in multiple flavors:
+<ul>
+<li>The <b>_if</b> version - Allows you to pass a function object to the algorithm instead of a value. 
+<li>The <b>_copy</b> version - Indicates that the algorithm copies the manipulated elements to another container. 
+<li>The <b>_copy_if</b> version - Combines both variations into one algorithm.
+</ul>
+
+The capabilities of each algorithm depend on the type of iterator it accepts.
+<ol>
+<li><b>InputIterator</b> - Used to read elements; able to compare InputIterators for equality/inequality,
+increment them using pre/post <b>operator++</b>, dereference them (r-value).
+<li><b>OutputIterator</b> - Used to write elements; similar to InputIterator as l-values.
+<li><b>ForwardIterator</b> - Used to read/write elements but only in one direction (forward). Has 
+all capabilities of InputIterator and OutputIterator as well.
+<li><b>BidirectionalIterator</b> - Used to read/write elements in both directions. Has all capabilities
+of ForwardIterators as well.
+<li><b>RandomAccessIterator</b> - Has all capabilities of BidirectionalIterator plus random access, 
+comparison operators (<, >, <=, >=), and iterator arithmetic.
+</ol>
+
+To use the generic algorithms, you need to include this header file:
+
+<blockquote><pre>
+<b>#include</b> &lt;algorithm&gt;
+</pre></blockquote>
+
+<a name="FOO_CLASS">
+Our trusty <i>Foo</i> class for experimenting:
+</a>
+
+<pre class="sourcecode"><code><b>class</b> Foo
+{
+  <b>public</b>:
+    Foo(<b>int</b> x = 0) {
+      x_ = x;
+    };
+
+    <b>friend</b> <b>bool</b> <b>operator</b>&lt;(<b>const</b> Foo &amp;lhs, <b>const</b> Foo &amp;rhs);
+    <b>friend</b> <b>bool</b> <b>operator</b>==(<b>const</b> Foo &amp;lhs, <b>const</b> Foo &amp;rhs);
+    <b>friend</b> std::ostream &amp; <b>operator</b>&lt;&lt;(std::ostream &amp;os, <b>const</b> Foo &amp;foo);
+
+  <b>private</b>:
+    <b>int</b> x_;
+};
+
+<b>bool</b> <b>operator</b>&lt;(<b>const</b> Foo &amp;lhs, <b>const</b> Foo &amp;rhs)
+{
+  <b>return</b> lhs.x_ &lt; rhs.x_;
+}
+
+<b>bool</b> <b>operator</b>==(<b>const</b> Foo &amp;lhs, <b>const</b> Foo &amp;rhs)
+{
+  <b>return</b> lhs.x_ == rhs.x_;
+}
+
+std::ostream &amp; <b>operator</b>&lt;&lt;(std::ostream &amp;os, <b>const</b> Foo &amp;foo)
+{
+  <b>return</b> os &lt;&lt; foo.x_;
+}</code></pre>
+
+Also, our <i>print5</i> function from before so we can conveniently print any container:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> print5(<b>const</b> T&amp; v)
+{
+  <b>typename</b> T::const_iterator iter;
+  <b>for</b> (iter = v.begin(); iter != v.end(); ++iter)
+    std::cout &lt;&lt; *iter &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+<a name="SIMPLE_EXAMPLES">
+Some simple examples:
+</a>
+
+<pre class="sourcecode"><code><b>#include</b> &lt;iostream&gt;
+<b>#include</b> &lt;vector&gt;
+<b>#include</b> &lt;algorithm&gt;
+
+<b>void</b> f1()
+{
+    <font color="#003399"><i>// Container of integers and an iterator</i></font>
+  std::vector&lt;<b>int</b>&gt; cont1;
+  std::vector&lt;<b>int</b>&gt;::iterator iter;
+
+    <font color="#003399"><i>// Add some integers</i></font>
+  cont1.push_back(5);
+  cont1.push_back(7);
+  cont1.push_back(3);
+  cont1.push_back(8);
+  cont1.push_back(7);
+  cont1.push_back(1);
+
+    <font color="#003399"><i>// Print the container</i></font>
+    <font color="#003399"><i>// 5  7  3  8  7  1</i></font>
+  print5(cont1); 
+
+    <font color="#003399"><i>// Find the maximum and print</i></font>
+    <font color="#003399"><i>// Max: 8</i></font>
+  iter = <font color="blue"><b>std::max_element</b></font>(cont1.begin(), cont1.end());
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Max: &quot;</font> &lt;&lt; *iter &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Find the minimum and print</i></font>
+    <font color="#003399"><i>// Min: 1</i></font>
+  iter = <font color="blue"><b>std::min_element</b></font>(cont1.begin(), cont1.end());
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Min: &quot;</font> &lt;&lt; *iter &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Find the first occurrence of the value 7  </i></font>
+    <font color="#003399"><i>// Value 7 found.</i></font>
+  iter = <font color="blue"><b>std::find</b></font>(cont1.begin(), cont1.end(), 7);
+  <b>if</b> (iter != cont1.end())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value &quot;</font> &lt;&lt; *iter &lt;&lt; <font color="#9933CC">&quot; found.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Find the second occurrence of the value 7  </i></font>
+    <font color="#003399"><i>// Value 7 found.</i></font>
+  iter = <font color="blue"><b>std::find</b></font>(++iter, cont1.end(), 7);
+  <b>if</b> (iter != cont1.end())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value &quot;</font> &lt;&lt; *iter &lt;&lt; <font color="#9933CC">&quot; found.&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Reverse the elements and print</i></font>
+    <font color="#003399"><i>// Reversed:  1  7  8  3  7  5</i></font>
+  <font color="blue"><b>std::reverse</b></font>(cont1.begin(), cont1.end());
+  std::cout &lt;&lt; <font color="#9933CC">&quot;     Reversed:  &quot;</font>;
+  print5(cont1); 
+
+    <font color="#003399"><i>// Sort the elements and print</i></font>
+    <font color="#003399"><i>// Sorted:  1  3  5  7  7  8</i></font>
+  <font color="blue"><b>std::sort</b></font>(cont1.begin(), cont1.end());  <font color="#003399"><i>// requires operator&lt;</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;       Sorted:  &quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Reverse the first 3 and print</i></font>
+    <font color="#003399"><i>// Reverse 1st 3:  5  3  1  7  7  8</i></font>
+  <font color="blue"><b>std::reverse</b></font>(cont1.begin(), cont1.begin() + 3);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Reverse 1st 3:  &quot;</font>;
+  print5(cont1); 
+}</code></pre>
+
+Output:
+<blockquote><pre>
+5  7  3  8  7  1
+Max: 8
+Min: 1
+Value 7 found.
+Value 7 found.
+     Reversed:  1  7  8  3  7  5
+       Sorted:  1  3  5  7  7  8
+Reverse 1st 3:  5  3  1  7  7  8
+</pre></blockquote>
+
+Notes
+<ul>
+<li>Almost all algorithms take a range as their first two parameters.
+<li>The range is actually the first element to process and <i>one after</i> the last
+element to process.(This mimics how <i>end()</i> works.)
+<li>This is called a <i>left-inclusive</i> or <i>half-open</i> range and is noted like this:
+<blockquote>
+[first, last)
+</blockquote>
+<li>Many algorithms require a comparison function such as the less-than operator.
+<li>Some algorithms require iterators with certain functionality (e.g. sort requires random-access,
+  reverse requires bidirectional).
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Algorithms with Multiple Ranges
+</p>
+
+<ul>
+<li>Some algorithms take multiple ranges as parameters. 
+<li>This is usually because these algorithms need to operate on multiple containers.
+<li>For example, comparing elements in two containers, copying from one container to another, etc.
+<li>Usually, you specify the [first, last) elements of the first container and only the first element
+of the second container. (The size of the second range is implied by the first range.)
+<li>No range checking is done on the second container, so you must ensure that it has enough room.
+</ul>
+
+<p>
+<hr width=90%>
+<p>
+
+Example: Comparing two vectors:
+
+<pre class="sourcecode"><code><b>void</b> f2()
+{
+    <font color="#003399"><i>// Containers of integers</i></font>
+  std::vector&lt;<b>int</b>&gt; cont1, cont2;
+  <b>int</b> i, size = 10;
+
+    <font color="#003399"><i>// Populate both with identical elements</i></font>
+  <b>for</b> (i = 0; i &lt; size; i++)
+  {
+    cont1.push_back(i);
+    cont2.push_back(i);
+  }
+
+    <font color="#003399"><i>// See if the containers are the same (must be same size)</i></font>
+  <b>if</b> ( <font color="blue"><b>std::equal</b></font>(cont1.begin(), cont1.end(), cont2.begin()) )
+    std::cout &lt;&lt; <font color="#9933CC">&quot;cont1 and cont2 are equal&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;cont1 and cont2 are NOT equal&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Using the overloaded '==' operator for vectors</i></font>
+  <b>if</b> (cont1 == cont2)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;cont1 and cont2 are equal&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;cont1 and cont2 are NOT equal&quot;</font> &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Change the first element in cont1</i></font>
+  cont1[0] = 100;
+
+    <font color="#003399"><i>// See if the containers are the same (must be same size)</i></font>
+  <b>if</b> ( <font color="blue"><b>std::equal</b></font>(cont1.begin(), cont1.end(), cont2.begin()) )
+    std::cout &lt;&lt; <font color="#9933CC">&quot;cont1 and cont2 are equal&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;cont1 and cont2 are NOT equal&quot;</font> &lt;&lt; std::endl;
+}</code></pre>
+
+Output:
+<blockquote><pre>
+cont1 and cont2 are equal
+cont1 and cont2 are equal
+cont1 and cont2 are NOT equal
+</pre></blockquote>
+
+
+A better (safer) way to check for equality would be something like this:
+<blockquote><pre>
+<b>if</b> ( cont1.size() == cont2.size() &amp;&amp;
+     std::equal(cont1.begin(), cont1.end(), cont2.begin()) )
+</pre></blockquote>
+
+<ul>
+<li>If there are more elements in the second container than the first, they are simply ignored.
+<li>Algorithms may be needed instead of built-in operators (such as the equality '= =' operator above).
+<li>Note that if we changed one of the containers (so they are different):
+<blockquote><pre>
+  <font color="#003399"><i>// List/vector of integers</i></font>
+std::vector&lt;<b>int</b>&gt; cont1;
+std::list&lt;<b>int</b>&gt; cont2;
+</pre></blockquote>
+
+this still works just fine:
+
+<blockquote><pre>
+std::equal(cont1.begin(), cont1.end(), cont2.begin())
+</pre></blockquote>
+
+However, this will no longer work. Why?
+
+<blockquote><pre>
+(cont1 == cont2)
+</pre></blockquote>
+
+<p>
+What are the issues when comparing the following containers for equality? (In other words,
+<i>exactly</i> why won't it compile?)
+
+<blockquote><pre>
+std::vector&lt;<b>int</b>&gt; cont1;     <font color="#003399"><i>// Vector of integers</i></font>
+std::vector&lt;string&gt; cont2;  <font color="#003399"><i>// Vector of strings</i></font>
+</pre></blockquote>
+
+<!--
+it will cause an error with the equality operator. You can't compare int and string.
+Even if implemented with <, it will fail.
+-->
+
+</ul>
+
+<p>
+<hr width=90%>
+<p>
+
+Example: Copying between different containers
+
+<pre class="sourcecode"><code><b>void</b> f4()
+{
+    <font color="#003399"><i>// List/vector of integers</i></font>
+  std::vector&lt;<b>int</b>&gt; cont1;
+  std::list&lt;<b>int</b>&gt; cont2;
+  <b>int</b> i, size = 10;
+
+    <font color="#003399"><i>// Populate </i></font>
+  <b>for</b> (i = 0; i &lt; size; i++)
+    cont1.push_back(i);
+
+    <font color="#003399"><i>// Make sure there is enough room in the list (elements initialized to 0)</i></font>
+  cont2.resize(cont1.size());
+
+    <font color="#003399"><i>// Copy all elements from vector to list</i></font>
+  <font color="blue"><b>std::copy</b></font>(cont1.begin(), cont1.end(), cont2.begin());
+
+    <font color="#003399"><i>// Create a deque same size as list (elements initialized to 0)</i></font>
+  std::deque&lt;<b>int</b>&gt; cont3(cont2.size());
+
+    <font color="#003399"><i>// Copy all elements from list into deque</i></font>
+  <font color="blue"><b>std::copy</b></font>(cont2.begin(), cont2.end(), cont3.begin());
+
+    <font color="#003399"><i>// Print the containers</i></font>
+  print5(cont1);
+  print5(cont2);
+  print5(cont3);
+
+    <font color="#003399"><i>// See if the containers are the same</i></font>
+  <b>if</b> ( <font color="blue"><b>std::equal</b></font>(cont1.begin(), cont1.end(), cont2.begin()) &amp;&amp;
+       <font color="blue"><b>std::equal</b></font>(cont2.begin(), cont2.end(), cont3.begin()) 
+     )
+    std::cout &lt;&lt; <font color="#9933CC">&quot;All containers are the same&quot;</font> &lt;&lt; std::endl;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;The containers are NOT the same&quot;</font> &lt;&lt; std::endl;
+  
+}</code></pre>
+
+Output:
+<blockquote><pre>
+0  1  2  3  4  5  6  7  8  9
+0  1  2  3  4  5  6  7  8  9
+0  1  2  3  4  5  6  7  8  9
+All containers are the same
+</pre></blockquote>
+
+<!--
+<b>Interesting behavior</b>: - Both Microsoft (RW and STLport) and Borland (STLport) seem to use 
+<b>operator==</b> in the implementation of <i>equal()</i>. GNU g++ seems to implement it with
+<b>operator!=</b>. This means we need to overload <b>operator!=</b> in class <i>Foo</i>:
+
+<blockquote><pre>
+<b>bool</b> <b>operator</b>!=(<b>const</b> Foo &amp;lhs, <b>const</b> Foo &amp;rhs)
+{
+  <b>return</b> !(lhs == rhs);
+}
+</pre></blockquote>
+-->
+
+<!--
+
+<hr width=90%>
+<p>
+
+<p class="technote">
+Check your understanding so far by explaining why each example below is incorrect. Which problems
+will be caught by the compiler? Assume that <i>sa</i> represents an array of strings and that <i>ia</i> represents
+an array of integers. (From Lippman and Lajoie, page 602.)
+</p>
+
+<ol>
+<li>
+<pre>
+<b>const</b> std::vector&lt;std::string&gt; words(sa, sa + 6);
+std::vector&lt;std::string&gt;::iterator it = words.begin() + 2;
+</pre>
+
+<li>
+<pre>
+<b>const</b> std::vector&lt;<b>int</b>&gt; ivec;
+std::fill(ivec.begin(), ivec.end(), 10);
+</pre>
+
+<li>
+<pre>
+std::sort(ivec.begin(), ivec.rend());
+</pre>
+
+<li>
+<pre>
+std::list&lt;<b>int</b>&gt; ilist(ia, ia + 6);
+std::binary_search(ilist.begin(), ilist.end());
+</pre>
+
+<li>
+<pre>
+std::sort(ivec1.begin(), ivec2.end());
+</pre>
+
+</ol>
+-->
+
+<!--
+const std::vector<std::string> words(sa, sa + 6);
+std::vector<std::string>::const_iterator it = words.begin() + 2;
+
+const std::vector<int> ivec;
+std::fill(ivec.begin(), ivec.end(), 10);
+
+std::sort(ivec.begin(), ivec.rend());
+
+std::list<int> ilist(is, ia + 6);
+std::binary_search(ilist.begin(), ilist.end());
+
+std::sort(ivec1.begin(), ivec2.end());
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Implementing Generic Algorithms
+</p>
+<!--
+Old function template code for dealing with <a href="ArrayTemplates.html">arrays</a>. (IndexOf, LargestValue, Replace)
+-->
+<p>
+
+There are 5 categories of iterators we use: Input, Output, Forward, Bidirectional, RandomAccess
+<p>
+
+<a name="ITERCAPS">
+<table border=1 cellpadding=5>
+<tr>
+<th>Input<br>(read-only)</th><th>Output<br>(write-only)</th><th>Forward<br>(read/write)</th><th>Bidirectional<br>(read/write)</th><th>RandomAccess<br>(read/write)</th></tr>
+
+<tr valign="top">
+
+<td>
+<pre>
+iter++
+++iter
+*iter (r-value)
+iter->member
+iter1 == iter2
+iter1 != iter2
+</pre>
+</td>
+
+<td>
+<pre>
+iter++
+++iter
+*iter (l-value)
+iter->member
+iter1 == iter2
+iter1 != iter2
+</pre>
+</td>
+
+<td>
+<pre>
+iter++
+++iter
+*iter
+iter->member
+iter1 = iter2
+iter1 == iter2
+iter1 != iter2
+</pre>
+</td>
+
+<td>
+<pre>
+iter++
+++iter
+iter--
+--iter
+*iter
+iter->member
+iter1 = iter2
+iter1 == iter2
+iter1 != iter2
+</pre>
+</td>
+
+
+<td>
+<pre>
+iter++             iter1 > iter2
+++iter             iter1 < iter2
+iter--             iter1 <= iter2
+--iter             iter1 >= iter2
+*iter              iter + i
+iter->member       iter += i
+iter1 = iter2      iter - i
+iter1 == iter2     iter -= i
+iter1 != iter2     iter[i] 
+iter1 - iter2
+</pre>
+</td>
+
+
+</tr>
+</table>
+</a>
+
+<p>
+
+The <i>find</i> algorithm is declared as:
+<p>
+
+<blockquote><pre>
+<b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> T&gt;
+  InputIt find(InputIt first, InputIt last, <b>const</b> T&amp; val)
+</pre></blockquote>
+
+<p>  
+
+The functionality of the <i>find</i> algorithm is:
+<p>
+<blockquote><i>
+... to traverse the range specified comparing each element with <b>val</b> using the
+equality operator for the corresponding type. The traversal ends when the first match
+is found. The iterator to the found element is returned. If no match is found, an
+iterator to <b>last</b> is returned.
+</i></blockquote>
+
+<p>
+Given the declaration and functional description, we can implement a version of this algorithm to deal
+with this code:
+
+<blockquote><pre>iter = <font color="blue"><b>std::find</b></font>(cont1.begin(), cont1.end(), 7);
+</pre></blockquote>
+	
+One implementation could look like this: 
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> T1, <b>typename</b> T2&gt;
+T1 find(T1 first, T1 last, <b>const</b> T2&amp; val)
+{
+  <b>while</b> (first != last) 
+  {
+    <b>if</b> (*first == val)
+      <b>return</b> first;
+    ++first;
+  }
+  <b>return</b> first;
+}</code></pre>  
+
+<p>
+	
+Commonly, it will be seen like this: (note the template argument <tt>InputIt</tt> for self-documentation)
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> T&gt;
+InputIt find(InputIt first, InputIt last, <b>const</b> T&amp; val)
+{
+  <b>while</b> (first != last) 
+  {
+    <b>if</b> (*first == val)
+      <b>return</b> first;
+    ++first;
+  }
+  <b>return</b> first;
+}</code></pre>  
+
+Refer to the 
+<a href="STL-2-all.html#SIMPLE_EXAMPLES">simple example</a> 
+above.
+<p>
+
+Given these declarations, how would you implement the functions? (Obviously, some kind of loop/iteration must occur.)
+<p>
+Function:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Replace all occurrences of val with new_val within specified range.</i></font>
+  <font color="#003399"><i>// There is no return value.</i></font>
+<b>template</b>&lt;<b>typename</b> ForwardIt, <b>typename</b> T&gt;
+  <b>void</b> replace(ForwardIt first, ForwardIt last, <b>const</b> T&amp; val, <b>const</b> T&amp; new_val)
+</pre></blockquote>
+
+Usage:
+<blockquote><pre>
+  <font color="#003399"><i>// Replaces all occurrences of 3 with 7 in cont1</i></font>
+replace(cont1.begin(), cont1.end(), 3, 7);
+</pre></blockquote>
+
+<p>
+<hr width="80%">
+<p>
+	
+Function:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Copies elements from specified range into a container starting</i></font>
+  <font color="#003399"><i>// at position specified by result. Returns iterator to one past</i></font>
+  <font color="#003399"><i>// the last element copied.</i></font>
+<b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt&gt;
+  OutputIt copy(InputIt first, InputIt last, OutputIt result)
+</pre></blockquote>
+  
+Usage:
+<blockquote><pre>
+  <font color="#003399"><i>// Copies every element from cont1 to cont2</i></font>
+copy(cont1.begin(), cont1.end(), cont2.begin());
+</pre></blockquote>
+
+<p>
+<hr width="80%">
+<p>
+  
+
+Function:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Compares each element within the specified range with value and</i></font>
+  <font color="#003399"><i>// returns the number of elements that match.</i></font>
+<b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> T&gt;
+  <b>int</b> count(InputIt first, InputIt last, <b>const</b> T&amp; val)
+</pre></blockquote>
+
+Usage:
+<blockquote><pre>
+  <font color="#003399"><i>// Counts the occurrences of the number 19 in cont1</i></font>
+<b>int</b> count = std::count(cont1.begin(), cont1.end(), 19);
+</pre></blockquote>
+
+
+<p>
+<hr width="80%">
+<p>
+	
+Example implementations:
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> ForwardIt, <b>typename</b> T&gt;
+<b>void</b> replace(ForwardIt first, ForwardIt last, <b>const</b> T&amp; val, <b>const</b> T&amp; new_val)
+{
+  <b>while</b> (first != last) 
+  {
+    <b>if</b> (*first == val)
+      *first = new_val;
+    ++first;
+  }
+}</code></pre>
+
+Why does the <i>replace</i> algorithm above use a 
+<a href="STL-2-all.html#ITERCAPS"><b>ForwardIterator</b>?</a>
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> OutputIt&gt;
+OutputIt copy(InputIt first, InputIt last, OutputIt result)
+{
+  <b>while</b> (first != last) 
+  {
+    *result = *first;
+    ++result;
+    ++first;
+  }
+  <b>return</b> result;
+}</code></pre>
+
+
+<ol>
+<li>Why does the <i>copy</i> algorithm above use <a href="STL-2-all.html#ITERCAPS">different iterators?</a> (<b>InputIterator</b> and
+<b>OutputIterator</b>) Why not just use a <b>ForwardIterator</b> all around?
+<li>Do you see why the caller of this algorithm must ensure that the destination has enough space?
+</ol>
+
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> T&gt;
+<b>int</b> count(InputIt first, InputIt last, <b>const</b> T&amp; val)
+{
+  <b>int</b> result = 0;
+  <b>while</b> (first != last) 
+  {
+    <b>if</b> (*first == val)
+      ++result;
+    ++first;
+  }
+  <b>return</b> result;
+}</code></pre>
+
+Why does the <i>count</i> algorithm above use an <a href="STL-2-all.html#ITERCAPS"><b>InputIterator</b>?</a>
+
+<p>
+
+Technically, the <i>count</i> algorithm is declared/implemented like this:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;iterator&gt;
+
+<b>template</b>&lt;<b>typename</b> Input, <b>typename</b> T&gt;
+<b>typename</b> iterator_traits&lt;Input&gt;::difference_type count(Input first, Input last, <b>const</b> T&amp; val)
+{
+  <b>typename</b> iterator_traits&lt;Input&gt;::difference_type result = 0;
+  <b>while</b> (first != last) 
+  {
+    <b>if</b> (*first == val)
+      ++result;
+    ++first;
+  }
+  <b>return</b> result;
+}</code></pre>
+
+<a href="algorithm.h.html">algorithm.h</a> 
+<br>
+<a href="xutility.h.html">xutility.h</a>
+<p>
+<a href="new-algorithm.h.html">MSC++ 7.1 version of algorithm.h</a>
+<br>
+<a href="new-xutility.h.html">MSC++ 7.1 version of xutility.h</a>
+<p>
+<p>
+
+<!--
+What is the type of the difference between two integers? Between two pointers?
+-->
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FUNCTIONS_AS_PARAMETERS"></a>
+<p class="SectionHeader">
+Functions as Parameters
+</p>
+
+Some simple functions:
+<p>
+
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top>
+
+<td>
+<blockquote><pre>
+<b>int</b> NextInt()
+{
+  <b>static</b> <b>int</b> i = 0;
+  <b>return</b> ++i;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>int</b> RandomInt()
+{
+  <b>return</b> rand();
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>void</b> TripleByRef(<b>int</b>&amp; value)
+{
+  value *= 3;
+}
+</pre></blockquote>
+</td>
+
+</tr>
+<tr valign=top>
+
+<td>
+<blockquote><pre>
+<b>int</b> TripleByVal(<b>int</b> value)
+{
+  <b>return</b> value * 3;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>bool</b> DivBy6(<b>int</b> value)
+{
+  <b>return</b> !(value % 6);
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>bool</b> IsEven(<b>int</b> value)
+{
+  <b>return</b> !(value % 2);
+}
+</pre></blockquote>
+</td>
+
+
+</tr>
+</table>
+Note 1: <tt>NextInt</tt> and <tt>RandomInt</tt> are called <i>generators</i>.
+<ul>
+  <li>A generator is a function with no inputs that returns a value (in some sequence, which may be random) each time it is called.</li>
+</ul>
+Note 2: <tt>DivBy6</tt> and <tt>IsEven</tt> are called <i>predicates</i>.
+<ul>
+  <li>A predicate is simply a function that returns <b>true</b> or <b>false</b>.</li>
+</ul>
+<p>
+
+This code uses the functions as parameters to the algorithms: (Notice the lack of any looping or iteration)
+
+<pre class="sourcecode"><code><b>void</b> f5()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create a container all set to 0: 0  0  0  0  0  0  0  0  0  0</i></font>
+  ContainerType cont1(10);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Container all set to 0\n&quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with the value 5: 5  5  5  5  5  5  5  5  5  5</i></font>
+  <font color="blue"><b>std::fill</b></font>(cont1.begin(), cont1.end(), 5);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nContainer all set to 5\n&quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with values (1..10): 1  2  3  4  5  6  7  8  9  10</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), NextInt);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nContainer set sequentially from 1 to 10\n&quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3 (incorrect): 1  2  3  4  5  6  7  8  9  10</i></font>
+  <font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), TripleByVal);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nEach element multiplied by 3 (incorrect)\n&quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3: 3  6  9  12  15  18  21  24  27  30</i></font>
+  <font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), TripleByRef);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nEach element multiplied by 3\n&quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3: 9  18  27  36  45  54  63  72  81  90</i></font>
+  <font color="blue"><b>std::transform</b></font>(cont1.begin(), cont1.end(), cont1.begin(), TripleByVal);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nEach element multiplied by 3 (again)\n&quot;</font>;
+  print5(cont1);
+
+    <font color="#003399"><i>// Create another list (same size as first list)</i></font>
+  ContainerType cont2(cont1.size());
+
+    <font color="#003399"><i>// Count number of even elements: 5</i></font>
+  <b>int</b> count = <font color="blue"><b>std::count_if</b></font>(cont1.begin(), cont1.end(), IsEven);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nNumber of even elements: &quot;</font> &lt;&lt; count &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Copy values from list1 to list2 where element not divisible by 6</i></font>
+    <font color="#003399"><i>// 9  27  45  63  81  0  0  0  0  0</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nCopy values from list1 to list2 where element not divisible by 6\n&quot;</font>;
+  <font color="blue"><b>std::remove_copy_if</b></font>(cont1.begin(), cont1.end(), cont2.begin(), DivBy6);
+  print5(cont2);
+
+    <font color="#003399"><i>// Copy values from list1 to list2 where element not divisible by 6</i></font>
+    <font color="#003399"><i>// and trim the list</i></font>
+    <font color="#003399"><i>// List1: 9  18  27  36  45  54  63  72  81  90</i></font>
+    <font color="#003399"><i>// List2: 9  27  45  63  81</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nCopy values from list1 to list2 where element not divisible by 6 &quot;</font>;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;and trim the list\n&quot;</font>;
+  cont2.erase(<font color="blue"><b>std::remove_copy_if</b></font>(cont1.begin(), cont1.end(), cont2.begin(), DivBy6), 
+              cont2.end());
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1: &quot;</font>;
+  print5(cont1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2: &quot;</font>;
+  print5(cont2);
+}</code></pre>
+
+Full output:
+<blockquote><pre>
+Container all set to 0
+0  0  0  0  0  0  0  0  0  0
+
+Container all set to 5
+5  5  5  5  5  5  5  5  5  5
+
+Container set sequentially from 1 to 10
+1  2  3  4  5  6  7  8  9  10
+
+Each element multiplied by 3 (incorrect)
+1  2  3  4  5  6  7  8  9  10
+
+Each element multiplied by 3
+3  6  9  12  15  18  21  24  27  30
+
+Each element multiplied by 3 (again)
+9  18  27  36  45  54  63  72  81  90
+
+Number of even elements: 5
+
+Copy values from list1 to list2 where element not divisible by 6
+9  27  45  63  81  0  0  0  0  0
+
+Copy values from list1 to list2 where element not divisible by 6 and trim the list
+List1: 9  18  27  36  45  54  63  72  81  90
+List2: 9  27  45  63  81
+</pre></blockquote>
+
+Incidentally, if we change the container from a list to a set, we get this from
+the <i>fill</i> algorithm (as well as many other algorithms):
+
+<blockquote><pre>
+In file included from /usr/include/c++/8/bits/char_traits.h:39,
+                 from /usr/include/c++/8/ios:40,
+                 from /usr/include/c++/8/ostream:38,
+                 from /usr/include/c++/8/iostream:39,
+                 from main.cpp:11:
+/usr/include/c++/8/bits/stl_algobase.h: In instantiation of 'typename __gnu_cxx::__enable_if<std::__is_scalar<_Tp>::__value, void>::__type
+std::__fill_a(_ForwardIterator, _ForwardIterator, const _Tp&) [with _ForwardIterator = std::_Rb_tree_const_iterator<int>; _Tp = int;
+typename __gnu_cxx::__enable_if<std::__is_scalar<_Tp>::__value, void>::__type = void]':
+/usr/include/c++/8/bits/stl_algobase.h:731:20:   required from 'void std::fill(_ForwardIterator, _ForwardIterator, const _Tp&)
+[with _ForwardIterator = std::_Rb_tree_const_iterator<int>; _Tp = int]'
+main.cpp:793:42:   required from here
+/usr/include/c++/8/bits/stl_algobase.h:696:11: <b>error: assignment of read-only location</b> '__first.std::_Rb_tree_const_iterator<int>::operator*()'
+  <font color="blue"><b>*__first = __tmp;
+  ~~~~~~~~~^~~~~~~</b></font>
+</pre></blockquote>
+
+<b>Closer look at std::remove</b>
+<p>
+
+<pre class="sourcecode"><code><b>void</b> f6()
+{
+    <font color="#003399"><i>// Create vector and populate</i></font>
+  std::vector&lt;<b>int</b>&gt; cont1(10);
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), NextInt);
+  cont1[1] = 50;
+  cont1[2] = 50;
+  cont1[5] = 50;
+  cont1[8] = 50;
+
+    <font color="#003399"><i>// Print out size and elements: 1  50  50  4  5  50  7  8  50  10</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Size of cont1 is &quot;</font> &lt;&lt; cont1.size() &lt;&lt; std::endl;
+  print5(cont1);
+
+    <font color="#003399"><i>// Remove all elements that have value of 50.</i></font>
+    <font color="#003399"><i>// std::remove returns an iterator to the &quot;new&quot; logical end</i></font>
+  std::vector&lt;<b>int</b>&gt;::iterator iter = <font color="blue"><b>std::remove</b></font>(cont1.begin(), cont1.end(), 50);
+
+    <font color="#003399"><i>// Print out size and elements: 1  4  5  7  8  10  7  8  50  10</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nSize of cont1 is now &quot;</font> &lt;&lt; cont1.size() &lt;&lt; std::endl;
+  print5(cont1);
+
+    <font color="#003399"><i>// This will &quot;trim&quot; the container to what we expected</i></font>
+  cont1.erase(iter, cont1.end());
+
+    <font color="#003399"><i>// Print out size and elements: 1  4  5  7  8  10</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nSize of cont1 is now &quot;</font> &lt;&lt; cont1.size() &lt;&lt; std::endl;
+  print5(cont1);
+}</code></pre>
+
+
+Output:
+<blockquote><pre>
+Size of cont1 is 10
+1  50  50  4  5  50  7  8  50  10
+
+Size of cont1 is now 10
+1  4  5  7  8  10  7  8  50  10
+
+Size of cont1 is now 6
+1  4  5  7  8  10
+</pre></blockquote>
+
+A closer look at the modified array:
+
+<font size=+1><blockquote><pre>
+  1  4  5  7  8  10  7  8  50  10
+  ^                  ^            ^
+begin             new end     real end
+</pre></blockquote></font>
+
+Notes:
+<ul>
+  <li>Usually, when we remove elements from an array, we must shift all of the elements to the right of the deleted item over to the left.</li>
+  <li>Shifting elements (especially in a very large array) is a very expensive operation.</li>
+  <li>It could be worse if the elements themselves are very large.</li>
+  <li>The technique that <b><tt>remove</tt></b> implements does not shift any elements. Instead, it just copies a few elements filling in the "holes" that
+were created by removing elements.</li>
+  <li>In the example, if we would have naively shifted the elements for each <tt>50</tt> we removed, we
+    would have copied 20 elements. The more elements we removed, the more shifting that would occur.
+     By using the technique described here, we only copied 5 elements.</li>
+</ul>
+
+
+<!--The number of elements copied is at most the number of elements that were
+removed.-->
+
+<p>
+It's also important to notice that the <b><tt>remove</tt></b> function returns <i>the new end</i> (or logical end). This is important because
+it tells the caller where the end of the remaining elements is. Without that return value, the caller would have no way to know where 
+the "good" elements stop.
+<p>
+It is techniques like this that make the STL such an efficient library for all kinds of tasks. You 
+would do well to learn it and use it as much as possible.
+
+
+
+<p class="technote">
+<b>Self-check</b> Familiarize yourself with the algorithms above by experimenting with them yourself. Especially
+<b><tt>fill</tt></b>, <b><tt>for_each</tt></b>, <b><tt>generate</tt></b>,  <b><tt>generate_n</tt></b>,  and <b><tt>transform</tt></b>. These
+will come in handy in your daily testing.
+<p>
+	
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+More Implementations
+</p>
+
+
+Given the example usage below, how would you declare the following algorithms?
+
+<ul>
+<li>count_if
+<blockquote><pre>
+  <font color="#003399"><i>// Count number of even elements</i></font>
+std::count_if(cont1.begin(), cont1.end(), IsEven);</pre></blockquote>
+
+<li>generate
+<blockquote><pre>
+  <font color="#003399"><i>// Fill list with values</i></font>
+std::generate(cont1.begin(), cont1.end(), NextInt);</pre></blockquote>
+
+<li>for_each
+<blockquote><pre>
+  <font color="#003399"><i>// Multiply each element by 3</i></font>
+std::for_each(cont1.begin(), cont1.end(), TripleByRef);</pre></blockquote>
+
+<li>transform
+<blockquote><pre>
+  <font color="#003399"><i>// Multiply each element by 3</i></font>
+std::transform(cont1.begin(), cont1.end(), cont1.begin(), TripleByVal);</pre></blockquote>
+<li>remove_copy
+<blockquote><pre>
+  <font color="#003399"><i>// Copy values from cont1 to cont2 where element not 6</i></font>
+std::remove_copy(cont1.begin(), cont1.end(), cont2.begin(), 6);</pre></blockquote>
+
+<li>remove_copy_if
+<blockquote><pre>
+  <font color="#003399"><i>// Copy values from cont1 to cont2 where element not divisible by 6</i></font>
+std::remove_copy_if(cont1.begin(), cont1.end(), cont2.begin(), DivBy6);</pre></blockquote>
+
+</ul>
+
+
+<!--
+<a href="Solutions/STLAlgorithmsInterface.html">Declarations</a>
+<p>
+<a href="Solutions/STLAlgorithmsImplementation.html">Implementations</a>
+
+
+-->
+
+<a href="STLAlgorithmsInterface.html">Declarations</a>
+
+<!--
+<br>
+<a href="STLAlgorithmsImplementation.html">Implementations</a>
+-->
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Function Objects
+</p>
+
+The following code doesn't compile. Which of the five commented lines are problematic?
+
+<pre class="sourcecode"><code><b>int</b> RandomInt()
+{
+  <b>return</b> rand();
+}
+
+<b>void</b> f10()
+{
+  <b>char</b> *p;
+  <b>int</b> (*pf)();
+  Foo foo;      <font color="#003399"><i>// Foo is a class</i></font>
+
+  RandomInt();  <font color="#003399"><i>// legal?</i></font>
+  p();          <font color="#003399"><i>// legal?</i></font>
+  pf();         <font color="#003399"><i>// legal?</i></font>
+  Foo();        <font color="#003399"><i>// legal?</i></font>
+  foo();        <font color="#003399"><i>// legal?</i></font>
+}</code></pre>
+
+<!--
+Ok (function call)
+illegal (p is a char pointer)
+Ok (function call)
+Ok (default ctor, depends if it has one or not, but the "Foo foo" above shows it does.)
+Ok (actually depends if Foo implement operator()
+-->
+
+General form of a class that can be used as a function object:
+
+<blockquote><pre>
+<b>class</b> <i>ClassName</i>
+{
+  <b>public</b>:
+    <i>ReturnType</i> <b>operator</b>()(<i>Parameters</i>)  <font color="#003399"><i>// can be overloaded</i></font>
+    {
+      <font color="#003399"><i>// implementation</i></font>
+    }
+};
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Essentially, a function object, or <i>functor</i>, is simply an instance of a class that has implemented
+the function call operator.
+</p>
+</blockquote>
+Example: Random integer generation (for values 10 - 99) 
+<p>
+
+<table cellpadding=5>
+<tr><th>Function</th><th>Class</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> fRandomInt()
+{
+  <b>return</b> rand() % 90 + 10;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>class</b> cRandomInt1
+{
+  <b>public</b>:
+    <b>int</b> <b>operator</b>()() <b>const</b>
+    {
+      <b>return</b> rand() % 90 + 10;
+    }
+};</pre></blockquote>
+</td>
+</tr></table>
+
+Using the function and object to generate random numbers:
+<p>
+
+<blockquote><pre>
+  <font color="#003399"><i>// Instantiate object</i></font>
+cRandomInt1 random;
+
+  <font color="#003399"><i>// Call random.operator() 3 times</i></font>
+std::cout &lt;&lt; random() &lt;&lt; std::endl; <font color="#003399"><i>// 51</i></font>
+std::cout &lt;&lt; random() &lt;&lt; std::endl; <font color="#003399"><i>// 27</i></font>
+std::cout &lt;&lt; random() &lt;&lt; std::endl; <font color="#003399"><i>// 44</i></font>
+
+  <font color="#003399"><i>// Call global function 3 times</i></font>
+std::cout &lt;&lt; fRandomInt() &lt;&lt; std::endl; <font color="#003399"><i>// 50</i></font>
+std::cout &lt;&lt; fRandomInt() &lt;&lt; std::endl; <font color="#003399"><i>// 99</i></font>
+std::cout &lt;&lt; fRandomInt() &lt;&lt; std::endl; <font color="#003399"><i>// 74</i></font>
+</pre></blockquote>
+
+Using the function and object as parameters to algorithms:
+<p>
+
+<pre class="sourcecode"><code><b>void</b> f11()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create container all set to 0: 0  0  0  0  0  0  0  0  0  0</i></font>
+  ContainerType cont1(10);
+
+    <font color="#003399"><i>// Fill list with random values, using function</i></font>
+    <font color="#003399"><i>// 51  27  44  50  99  74  58  28  62  84</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), fRandomInt);
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using functor (named function object)</i></font>
+    <font color="#003399"><i>// 91  34  42  73  32  62  61  96  18  15</i></font>
+  cRandomInt1 rnd;
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), rnd);
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using functor (unnamed function object)</i></font>
+    <font color="#003399"><i>// 45  75  71  97  71  51  35  72  67  46</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt1());
+  print5(cont1);
+
+}</code></pre>
+
+
+Output:
+<blockquote><pre>
+51  27  44  50  99  74  58  28  62  84
+91  34  42  73  32  62  61  96  18  15
+45  75  71  97  71  51  35  72  67  46
+</pre></blockquote>
+
+
+This statement:
+
+<blockquote><pre>
+std::generate(cont1.begin(), cont1.end(), cRandomInt1());
+</pre></blockquote>
+
+could be implemented as a template something like this:
+
+<blockquote><pre>
+<b>template</b>&lt;<b>typename</b> ForwardIt, <b>typename</b> Gen&gt;
+<b>void</b> generate(ForwardIt first, ForwardIt last, Gen gen)
+{
+  <b>while</b> (first != last) 
+  {
+    *first = gen(); <font color="#003399"><i>// same as gen.operator()()</i></font>
+    ++first;
+  }
+}
+</pre></blockquote>
+
+<!--
+and yields logic similar to this:
+
+<blockquote><pre>
+std::list&lt;<b>int</b>&gt;::iterator first = cont1.begin();
+std::list&lt;<b>int</b>&gt;::iterator last = cont1.end();
+
+cRandomInt1 rand_int;   <font color="#003399"><i>// default constructor</i></font>
+
+<b>while</b> (first != last) 
+{
+  *first = rand_int();  <font color="#003399"><i>// calls rand_int.operator()</i></font>
+  ++first;
+}
+</pre></blockquote>
+-->
+
+What exactly causes the code below to fail to compile?
+
+<blockquote><pre>
+std::generate(cont1.begin(), cont1.end(), 7);
+</pre></blockquote>
+<!--
+term does not evaluate to a function. 7() doesn't work
+-->
+
+<b>Bonus</b>: What is the meaning of the following code? Is it legal? What is it doing?
+<p>
+<blockquote><pre>
+std::cout &lt;&lt; cRandomInt1()() &lt;&lt; std::endl;
+</pre></blockquote>
+<!--
+Creates a default constructed object then calls operator()
+Basically generates a random number
+-->
+
+
+<!--
+
+<ul>
+<li><b>Function objects are more powerful than functions</b> - Function objects can have state
+(local to the object), ordinary functions have no state. Each function object can have
+a <i>different</i> state as well.
+<li><b>Function objects have a type</b> Ordinary functions have a type (based on their signature),
+but function objects
+-->
+
+<p>
+<hr width="90%">
+<p>
+
+A different version of the cRandomInt1 class. This allows the user to initialize the generator with
+a <i>seed</i>. 
+
+<blockquote><pre>
+<b>class</b> cRandomInt2
+{
+<b>public</b>:
+  cRandomInt2(<b>int</b> seed)
+  {
+    srand(seed);
+  }
+
+  <b>int</b> <b>operator</b>()() <b>const</b>
+  {
+    <b>return</b> rand() % 90 + 10;
+  }
+};
+</pre></blockquote>
+
+Sample program:
+
+<pre class="sourcecode"><code><b>void</b> f12()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create containers all set to 0: 0  0  0  0  0  0  0  0  0  0</i></font>
+  ContainerType cont1(10);
+
+    <font color="#003399"><i>// Fill list with random values, using function</i></font>
+    <font color="#003399"><i>// 51  27  44  50  99  74  58  28  62  84</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), fRandomInt);
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 45  75  71  97  71  51  35  72  67  46</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt1());
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 91  34  42  73  32  62  61  96  18  15</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt1());
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 81  79  42  24  27  36  72  52  36  19</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt2(10));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 23  79  83  31  98  55  48  38  52  25</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt2(20));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 81  79  42  24  27  36  72  52  36  19</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt2(10));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 23  79  83  31  98  55  48  38  52  25</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt2(20));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using function</i></font>
+    <font color="#003399"><i>// 25  11  36  27  58  85  56  53  13  61</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), fRandomInt);
+  print5(cont1);
+}</code></pre>
+
+
+Full output:
+<blockquote><pre>
+51  27  44  50  99  74  58  28  62  84
+45  75  71  97  71  51  35  72  67  46
+91  34  42  73  32  62  61  96  18  15
+81  79  42  24  27  36  72  52  36  19
+23  79  83  31  98  55  48  38  52  25
+81  79  42  24  27  36  72  52  36  19
+23  79  83  31  98  55  48  38  52  25
+25  11  36  27  58  85  56  53  13  61
+</pre></blockquote>
+
+
+
+<p class="technote"><b>Self-check</b>:
+Create a class, <i>cRandomInt3</i>, that implements <b>operator()</b> so as to support the code below. 
+The class generates random numbers in a given range (inclusive).
+</p>
+
+Here's how the class should start:
+
+<blockquote><pre>
+<b>class</b> cRandomInt3
+{
+  <b>public</b>:
+    cRandomInt3(<b>int</b> min, <b>int</b> max) 
+    {
+      <font color="#003399"><i>// code</i></font>
+    }
+
+    <b>int</b> <b>operator</b>()() <b>const</b>
+    {
+      <font color="#003399"><i>// code</i></font>
+    }
+  <b>private</b>:
+    <font color="#003399"><i>// data members</i></font>
+};
+</pre></blockquote>
+
+This code should work as described:
+
+<pre class="sourcecode"><code><b>void</b> f13()
+{
+    <font color="#003399"><i>// Create list all set to 0</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; cont1(15);
+
+    <font color="#003399"><i>// Fill list with random values, using function</i></font>
+    <font color="#003399"><i>// 2  8  5  1  10  5  9  9  3  5  6  6  2  8  2</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(1, 10));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// 23  5  8  17  2  21  18  2  23  6  6  1  22  10  5</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(0, 25));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with random values, using class (function object)</i></font>
+    <font color="#003399"><i>// -3  -4  4  5  5  -3  -1  4  2  0  -1  2  0  1  2</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(-5, 5));
+  print5(cont1);
+}</code></pre>
+
+Note that function objects are not unique to the STL algorithms. They can be used "in the wild":
+
+<blockquote><pre>
+<b>void</b> f14()
+{
+  cRandomInt3 rand_int(2, 5);
+  <b>for</b> (<b>int</b> i = 0; i &lt; 10; i++)
+    std::cout &lt;&lt; rand_int() &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+3  5  4  2  3  2  4  4  4  2
+</pre></blockquote>
+
+
+
+<!--
+<div id=empty style="visibility: hidden">
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+More Stateful Objects
+</p>
+
+
+The class below returns the next integer when its <b>operator()</b> method is called:
+
+<blockquote><pre>
+<b>class</b> cNextInt
+{
+  <b>public</b>:
+    cNextInt(<b>int</b> start)
+    {
+      value_ = start;
+    }
+
+    <b>int</b> <b>operator</b>()()
+    {
+      <b>return</b> value_++;
+    }
+  <b>private</b>:
+    <b>int</b> value_;
+};
+</pre></blockquote>
+
+Sample program:
+
+<pre class="sourcecode"><code><b>void</b> f13()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create containers all set to 0: 0  0  0  0  0  0  0  0  0  0</i></font>
+  ContainerType cont1(10);
+
+    <font color="#003399"><i>// Fill list with sequential numbers starting with 0</i></font>
+    <font color="#003399"><i>// 0  1  2  3  4  5  6  7  8  9</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cNextInt(0));
+  print5(cont1);
+
+     <font color="#003399"><i>// Fill list with sequential numbers starting with 10</i></font>
+    <font color="#003399"><i>// 10  11  12  13  14  15  16  17  18  19</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cNextInt(10));
+  print5(cont1);
+
+    <font color="#003399"><i>// Fill list with sequential numbers starting with 67</i></font>
+    <font color="#003399"><i>// 67  68  69  70  71  72  73  74  75  76</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cNextInt(67));
+  print5(cont1);
+
+    <font color="#003399"><i>// Create a NextInt object starting at 100</i></font>
+  cNextInt next(100);
+
+    <font color="#003399"><i>// Generate numbers from 100</i></font>
+    <font color="#003399"><i>// 100  101  102  103  104  105  106  107  108  109</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), next);
+  print5(cont1);
+
+    <font color="#003399"><i>// Generate numbers from 110?</i></font>
+    <font color="#003399"><i>// 100  101  102  103  104  105  106  107  108  109</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), next);
+  print5(cont1);
+}</code></pre>
+
+Output:
+<blockquote><pre>
+0  1  2  3  4  5  6  7  8  9
+10  11  12  13  14  15  16  17  18  19
+67  68  69  70  71  72  73  74  75  76
+100  101  102  103  104  105  106  107  108  109
+100  101  102  103  104  105  106  107  108  109
+</pre></blockquote>
+
+What's the problem with the second call to <i>generate</i> using <i>next</i>?
+
+<p>
+<a href="STLAlgorithmsInterface.html">Declarations</a>
+<p>
+<!--
+<br>
+<a href="STLAlgorithmsImplementation.html">Implementations</a>
+-->
+<p>
+This is an attempt at one solution:
+
+<blockquote><pre>
+std::generate&lt;ContainerType::iterator, cNextInt&amp;&gt;(cont1.begin(), cont1.end(), next);
+</pre></blockquote>
+
+<!--
+A copy of the functor is being passed so the original object
+is never updated with the counts.
+-->
+
+<p>
+<hr width="90%">
+<p>
+
+<b>Example: Counting occurrences of certain letters in a list of strings.</b>
+<p>
+Given the list of strings below:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Convenience</i></font>
+<b>typedef</b> std::list&lt;std::string&gt; ContainerType;
+
+  <font color="#003399"><i>// Make list, add 5 strings</i></font>
+ContainerType cont1;
+cont1.push_back(<font color="#9933CC">&quot;one&quot;</font>);
+cont1.push_back(<font color="#9933CC">&quot;two&quot;</font>);
+cont1.push_back(<font color="#9933CC">&quot;three&quot;</font>);
+cont1.push_back(<font color="#9933CC">&quot;four&quot;</font>);
+cont1.push_back(<font color="#9933CC">&quot;five&quot;</font>);
+</pre></blockquote>
+
+we want to count the occurrences of certain letters in each word. 
+
+First, we need to create a <i>LetterCounter</i> class to be used as a function object:
+
+<blockquote><pre>
+<b>class</b> LetterCounter
+{
+  <b>public</b>:
+    LetterCounter(<b>char</b> letter) : letter_(letter), total_(0)  
+    { 
+    }
+
+      <font color="#003399"><i>// Counts the number of occurrences of &quot;letter_&quot; in &quot;word&quot;</i></font>
+    <b>void</b> <b>operator</b>()(<b>const</b> std::string&amp; word)
+    {
+      std::string::size_type pos = 0;
+      <b>while</b> ( (pos = word.find(letter_, pos)) != std::string::npos )
+      {
+        ++total_;
+        ++pos;
+      }
+    }
+
+    <b>int</b> GetTotal() 
+    { 
+      <b>return</b> total_; 
+    }
+
+  <b>private</b>:
+    <b>char</b> letter_; <font color="#003399"><i>// Letter to count</i></font>
+    <b>int</b> total_;   <font color="#003399"><i>// Total occurrences</i></font>
+};
+</pre></blockquote>
+
+
+First attempt at counting the occurrences of the letter <i>e</i>:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Create instance of LetterCounter for counting 'e'</i></font>
+LetterCounter lc1(<font color="#9933CC">'e'</font>);
+  
+  <font color="#003399"><i>// Count the occurrences of 'e' and print total: 0</i></font>
+std::for_each(cont1.begin(), cont1.end(), lc1);
+std::cout &lt;&lt; <font color="#9933CC">&quot;Occurrences of e: &quot;</font> &lt;&lt; lc1.GetTotal() &lt;&lt; std::endl;
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Occurrences of e: 0
+</pre></blockquote>
+
+<p>
+<a href="STLAlgorithmsInterface.html">Declarations</a>
+<p>
+
+<p>
+<hr width="80%">
+<p>
+	
+<p>
+Another attempt at counting the occurrences of the letter <i>e</i> (passing by reference):
+
+<blockquote><pre>
+  <font color="#003399"><i>// Create instance of LetterCounter for counting 'e'</i></font>
+LetterCounter lc2(<font color="#9933CC">'e'</font>);
+
+  <font color="#003399"><i>// Count the occurrences of 'e' and print total: 4</i></font>
+std::for_each&lt;ContainerType::iterator, LetterCounter&amp;&gt;(cont1.begin(), cont1.end(), lc2);
+std::cout &lt;&lt; <font color="#9933CC">&quot;Occurrences of e: &quot;</font> &lt;&lt; lc2.GetTotal() &lt;&lt; std::endl;
+</pre></blockquote>
+
+Supplying explicit types to the templated <tt>for_each</tt> function worked with the GNU, Clang, and Borland compilers, but
+gave a warning with Microsoft's compiler and produced incorrect results.
+
+<blockquote><pre>
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\INCLUDE\algorithm(32) : warning C4172: returning address of local variable or temporary
+        main.cpp(1339) : see reference to function template instantiation '_Fn1 std::for_each<std::_List_iterator<_Mylist>,LetterCounter&>(_InIt,_InIt,_Fn1)' being compiled
+        with
+        [
+            _Fn1=LetterCounter &,
+            _Mylist=std::_List_val<std::string,std::allocator<std::string>>,
+            _InIt=std::_List_iterator<std::_List_val<std::string,std::allocator<std::string>>>
+        ]  
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Note:</b> Recent version of Microsoft's compiler now work correctly.
+</p>
+</blockquote>
+<p>
+<hr width="80%">
+<p>
+	
+What about casting instead? <!-- (Add a <tt>cout</tt> to the copy constructor of LetterCounter) -->
+
+<!--
+compiles with all, runs correctly only with Borland
+fails with GNU, MSVC 6.0/7.1, they all print 4 (meaning they didn't inc anything)
+
+Now (4-1-2013) they all compile without warning, but Microsoft still outputs 0
+-->
+
+<blockquote><pre>
+std::for_each(cont1.begin(), cont1.end(), <b>static_cast</b>&lt;LetterCounter &amp;&gt;(lc2));
+</pre></blockquote>
+
+In the above (casting), my tests showed that the code compiled on all compilers (GNU, Clang, Borland, and MS),
+but only Borland gave the correct output. The other compilers are calling the copy constructor when
+passing the object to <tt>for_each</tt>.
+<p>
+<!--
+In the above (casting), my tests showed that the code compiled on all compilers (GNU, MS 6.0/7.1, and Borland),
+but only Borland's compiler gave the correct output. The other compilers are calling the copy constructor when
+passing the object to <tt>for_each</tt>.
+<p>
+<b>Updated:</b> Now, all current versions of the compilers fail to work correctly.
+<p>
+-->
+
+<b>A better solution:</b>
+<p>
+
+Recall the implementation of <i>for_each</i>:
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Op&gt;
+Op for_each(InputIt first, InputIt last, Op op)
+{
+  <b>while</b> (first != last)
+  {
+    op(*first);
+    ++first;
+  }
+  <font color="blue"><b>return</b> op;</font>
+}</code></pre>
+
+<p>
+
+Counting the occurrences of the letter <i>o</i>, using the return value of <i>for_each</i>
+
+<blockquote><pre>
+  <font color="#003399"><i>// Count the occurrences of 'e' and print total: 3</i></font>
+LetterCounter lc3 = std::for_each(cont1.begin(), cont1.end(), LetterCounter(<font color="#9933CC">'o'</font>));
+std::cout &lt;&lt; <font color="#9933CC">&quot;Occurrences of o: &quot;</font> &lt;&lt; lc3.GetTotal() &lt;&lt; std::endl;
+</pre></blockquote>
+
+Without the temporary:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Count the occurrences of 'o' and print total: 3</i></font>
+std::cout &lt;&lt; <font color="#9933CC">&quot;Occurrences of o: &quot;</font> &lt;&lt; std::for_each(cont1.begin(), cont1.end(), LetterCounter(<font color="#9933CC">'o'</font>)).GetTotal() &lt;&lt; std::endl;
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Predefined Classes for Function Objects
+</p>
+
+To use the predefined function objects, you need to include this header file:
+
+<blockquote><pre>
+<b>#include</b> &lt;<a href="functional.h.html">functional</a>&gt; (Newer version of <a href="new-functional.h.html">functional</a>)
+</pre></blockquote>
+
+A list of predefined function objects: (arithmetic, logic, relational)
+
+<blockquote>
+<table border=0 cellpadding=0>
+<tr><th>Unary function objects</th><th></th><th>Meaning</th></tr>
+<tr>
+<td>
+<pre>
+logical_not&lt;<i>type</i>&gt;() 
+negate&lt;<i>type</i>&gt;()
+</pre>
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+<pre>
+!value
+-value</pre>
+</td>
+</tr>
+
+
+<tr><th>Binary function objects</th><th></th><th>Meaning</th></tr>
+<tr>
+<td>
+<pre>
+less&lt;<i>type</i>&gt;()           
+greater&lt;<i>type</i>&gt;()        
+equal_to&lt;<i>type</i>&gt;()       
+not_equal_to&lt;<i>type</i>&gt;()   
+less_equal&lt;<i>type</i>&gt;()     
+greater_equal&lt;<i>type</i>&gt;()  
+logical_and&lt;<i>type</i>&gt;()     
+logical_or&lt;<i>type</i>&gt;()      
+plus&lt;<i>type</i>&gt;()            
+minus&lt;<i>type</i>&gt;()           
+multiplies&lt;<i>type</i>&gt;()      
+divides&lt;<i>type</i>&gt;()         
+modulus&lt;<i>type</i>&gt;()</pre>
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+<pre>
+lhs &lt; rhs
+lhs &gt; rhs
+lhs == rhs
+lhs != rhs
+lhs &lt;= rhs
+lhs &gt;= rhs
+lhs &amp;&amp; rhs
+lhs || rhs
+lhs + rhs
+lhs - rhs
+lhs * rhs
+lhs / rhs
+lhs % rhs</pre>
+</td>
+</tr></table></blockquote>
+
+You can think of these as lots of little Lego<sup>&trade;</sup> blocks that can be combined
+with the generic algorithms to provide a virtually unlimited set of functionalities.
+<p>
+Simple example sorting with <b>greater</b>:
+
+<pre class="sourcecode"><code><b>void</b> f17()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create container all set to 0</i></font>
+  ContainerType cont1(10);
+
+    <font color="#003399"><i>// Fill list with random values</i></font>
+    <font color="#003399"><i>// 51  27  44  50  99  74  58  28  62  84</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(10, 99));
+  print5(cont1);
+
+    <font color="#003399"><i>// Sort using default less than operator</i></font>
+    <font color="#003399"><i>// 27  28  44  50  51  58  62  74  84  99</i></font>
+  cont1.sort();
+  print5(cont1);
+
+    <font color="#003399"><i>// Sort using greater&lt;int&gt; function object</i></font>
+    <font color="#003399"><i>// 99  84  74  62  58  51  50  44  28  27</i></font>
+  cont1.sort(std::greater&lt;<b>int</b>&gt;());
+  print5(cont1);
+
+}</code></pre>
+
+
+A sample implementation:
+<p>
+
+<blockquote><pre>
+<b>namespace</b> std
+{
+  <b>template</b> &lt;<b>typename</b> T&gt;
+  <b>class</b> greater
+  {
+    <b>public</b>:
+      <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; a, <b>const</b> T &amp;b) <b>const</b>
+      {
+        <b>return</b> a &gt; b;
+      }
+  };
+}
+</pre></blockquote>
+
+Using the function object as a named object:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Using as a named object</i></font>
+std::greater&lt;<b>double</b>&gt; gr;
+<b>bool</b> is_greater = gr(10, 20);
+<b>if</b> (is_greater)
+  std::cout &lt;&lt; <font color="#9933CC">&quot;10 is greater than 20\n&quot;</font>;
+<b>else</b>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;10 is NOT greater than 20\n&quot;</font>;
+</pre></blockquote>
+
+and as an unnamed object:
+
+<blockquote><pre>
+  <font color="#003399"><i>// As an unnamed (anonymous) object</i></font>
+<b>if</b> (std::greater&lt;<b>int</b>&gt;()(10, 20))
+  std::cout &lt;&lt; <font color="#9933CC">&quot;10 is greater than 20\n&quot;</font>;
+<b>else</b>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;10 is NOT greater than 20\n&quot;</font>;
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+An example that adds two containers:
+
+<pre class="sourcecode"><code><b>void</b> f18()
+{
+    <font color="#003399"><i>// Make it easy to switch containers/types</i></font>
+  <b>typedef</b> <b>int</b> T;
+  <b>typedef</b> std::list&lt;T&gt; ContainerType;
+
+    <font color="#003399"><i>// Create containers all set to 0</i></font>
+  ContainerType cont1(10), cont2(10), cont3(10);
+
+    <font color="#003399"><i>// Fill lists with random values</i></font>
+    <font color="#003399"><i>// 20  32  20  36  21  17  18  11  33  15</i></font>
+    <font color="#003399"><i>// 11  38  10  35  20  36  29  17  32  21</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(10, 40));
+  <font color="blue"><b>std::generate</b></font>(cont2.begin(), cont2.end(), cRandomInt3(10, 40));
+  print5(cont1);
+  print5(cont2);
+
+    <font color="#003399"><i>// Add cont1,cont2 put in cont3</i></font>
+    <font color="#003399"><i>// 31  70  30  71  41  53  47  28  65  36</i></font>
+  <font color="blue"><b>std::transform</b></font>(cont1.begin(), cont1.end(), cont2.begin(), cont3.begin(), std::plus&lt;T&gt;());
+  print5(cont3);
+
+    <font color="#003399"><i>// Negate all values</i></font>
+    <font color="#003399"><i>// -31  -70  -30  -71  -41  -53  -47  -28  -65  -36</i></font>
+  <font color="blue"><b>std::transform</b></font>(cont3.begin(), cont3.end(), cont3.begin(), std::negate&lt;T&gt;());
+  print5(cont3);
+}</code></pre>
+
+Output:
+<blockquote><pre>
+20  32  20  36  21  17  18  11  33  15
+11  38  10  35  20  36  29  17  32  21
+31  70  30  71  41  53  47  28  65  36
+-31  -70  -30  -71  -41  -53  -47  -28  -65  -36
+</pre></blockquote>
+
+Note that we can instantiate a function object before-hand:
+
+<blockquote><pre>
+std::plus&lt;<b>int</b>&gt; add_em_up;
+std::transform(cont1.begin(), cont1.end(), cont2.begin(), cont3.begin(), add_em_up);
+</pre></blockquote>
+
+<p class="technote">
+<b>Self-check</b>: Implement the <b><tt>transform</tt></b> algorithms used above. Note they are different (overloaded).
+</p>
+
+A more formal implementation for the <i>plus</i> function object:
+<p>
+
+
+<blockquote>
+
+<table border=1 cellpadding=10>
+<tr align=center>
+<th>Using a class</th><th>Using a struct</th></tr>
+<tr valign="top">
+<td>
+
+<pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> plus : <b>public</b> std::binary_function&lt;T, T, T&gt;
+{
+  <b>public</b>:
+    T <b>operator</b>()(<b>const</b> T&amp; lhs, <b>const</b> T&amp; rhs)
+    {
+      <b>return</b> lhs + rhs;
+    }
+};</pre>
+
+</td>
+<td>
+
+
+<pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>struct</b> plus : std::binary_function&lt;T, T, T&gt;
+{
+  T <b>operator</b>()(<b>const</b> T&amp; lhs, <b>const</b> T&amp; rhs)
+  {
+    <b>return</b> lhs + rhs;
+  }
+};
+</pre>
+</td>
+</tr>
+</table>
+
+
+</blockquote>
+
+
+An implementation for the base class, <i>binary_function</i> (and <i>unary_function</i>):
+<p>
+
+
+<blockquote>
+
+<table border=1 cellpadding=10>
+<tr align=center>
+<th>For binary functions</th><th>For unary functions</th></tr>
+<tr valign="top">
+<td>
+
+<pre><b>template</b>&lt;<b>class</b> LeftT, <b>class</b> RightT , <b>class</b> ResultT&gt;
+<b>struct</b> binary_function 
+{
+  <b>typedef</b> LeftT first_argument_type;
+  <b>typedef</b> RightT second_argument_type;
+  <b>typedef</b> ResultT result_type;
+};</pre>
+</td>
+
+<td>
+<pre>
+<b>template</b>&lt;<b>class</b> T, <b>class</b> ResultT&gt;
+<b>struct</b> unary_function 
+{
+  <b>typedef</b> T argument_type;
+  <b>typedef</b> ResultT result_type;
+};</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+Upon instantiation (with type <b>int</b>), the <i>plus</i> struct would look something like:
+
+<pre class="sourcecode"><code><b>struct</b> plus
+{
+  <b>typedef</b> <b>int</b> first_argument_type;
+  <b>typedef</b> <b>int</b> second_argument_type;
+  <b>typedef</b> <b>int</b> result_type;
+  
+  <b>int</b> <b>operator</b>()(<b>const</b> <b>int</b>&amp; lhs, <b>const</b> <b>int</b>&amp; rhs)
+  {
+    <b>return</b> lhs + rhs;
+  }
+};</code></pre>
+
+An implementation for unary <i>negate</i>:
+
+<blockquote><pre>
+  <b>template</b>&lt;<b>class</b> T&gt;
+  <b>struct</b> negate : unary_function&lt;T, T&gt; 
+  {
+    T <b>operator</b>()(<b>const</b> T&amp; value) <b>const</b>
+    {
+      <b>return</b> (-value); 
+    }
+  };</pre></blockquote>
+
+Suppose we modify the function (f18) above to create a container of <i>Foo</i> objects 
+instead of integers:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Make it easy to switch containers/types</i></font>
+<b>typedef</b> Foo T;
+<b>typedef</b> std::list&lt;T&gt; ContainerType;</pre></blockquote>
+
+Will this work as is or do we need to change something else?
+<p>
+
+Upon instantiation with <i>Foo</i>, the <i>plus</i> struct would look something like:
+
+<pre class="sourcecode"><code><b>struct</b> plus
+{
+  <b>typedef</b> Foo first_argument_type;
+  <b>typedef</b> Foo second_argument_type;
+  <b>typedef</b> Foo result_type;
+  
+  Foo <b>operator</b>()(<b>const</b> Foo&amp; lhs, <b>const</b> Foo&amp; rhs)
+  {
+    <b>return</b> lhs + rhs;
+  }
+};</code></pre>
+
+
+Notes:
+<ul>
+<li><b>Function objects are like "smart functions"</b> - They are objects, so they have state. Ordinary
+functions are transient. You can instantiate multiple function objects (all different) from
+one class. Ordinary functions can't do this.
+<li><b>Function objects are faster than function pointers</b> - Since the function is known at
+compile time, optimizations can be made. This includes inlining, which is not possible with
+function pointers.
+<li><b>Function objects have their own type</b> - You can pass templated function objects to
+algorithms working on generic containers. The types are guaranteed to match, or you will get
+a compiler error.
+</ul>
+
+<p>
+	
+<p class="technote">
+<b>Self-check:</b> Implement several of the pre-defined function objects on your own and test
+them.
+</p>
+
+	
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Function Adapters
+</p>
+
+Counting the number of occurrences of a particular value was easy (range and value):
+
+<blockquote><pre>
+count = std::count(cont1.begin(), cont1.end(), 19);
+</pre></blockquote>
+
+as is counting the number of even elements (range and predicate):
+
+<blockquote><pre>
+  count = std::count_if(cont1.begin(), cont1.end(), <a href="STL-2-all.html#FUNCTIONS_AS_PARAMETERS">IsEven</a>);
+</pre></blockquote>
+
+What about counting the occurrences of values less than 10? Greater than 10? Greater than 12? 13? <i>Any</i> value?
+<p>
+Of course, we can make functions (or function objects):
+<p>
+
+<table>
+<tr>
+<td>
+<blockquote><pre>
+<b>bool</b> less_than_10(<b>int</b> val)
+{
+  <b>return</b> val &lt; 10;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>bool</b> greater_than_10(<b>int</b> val)
+{
+  <b>return</b> val &gt; 10;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>bool</b> greater_than_12(<b>int</b> val)
+{
+  <b>return</b> val &gt; 12;
+}
+</pre></blockquote>
+</td></tr>
+<tr>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>// etc...</i></font>
+</pre></blockquote>
+</td>
+</tr>
+</table>
+<p>
+or classes for function objects:
+<p>
+
+<table><tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>// For integers</i></font>  
+<b>class</b> greater_than_x
+{
+  <b>public</b>:
+    greater_than_x(<b>int</b> rhs) : rhs_(rhs) {};
+    <b>bool</b> <b>operator</b>()(<b>int</b> value)
+    {
+      <b>return</b> value &gt; rhs_;
+    }
+  <b>private</b>:
+    <b>int</b> rhs_;
+};
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<font color="#003399"><i>// For any type</i></font>  
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> greater_than_t
+{
+  <b>public</b>:
+    greater_than_t(<b>const</b> T&amp; rhs) : rhs_(rhs) {};
+    <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; value)
+    {
+      <b>return</b> value &gt; rhs_;
+    }
+  <b>private</b>:
+    T rhs_;
+};
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+
+
+Using them:
+
+<blockquote><pre>
+count = std::count_if(cont1.begin(), cont1.end(), less_than_10);
+count = std::count_if(cont1.begin(), cont1.end(), greater_than_10);
+count = std::count_if(cont1.begin(), cont1.end(), greater_than_12);
+count = std::count_if(cont1.begin(), cont1.end(), greater_than_x(3));
+count = std::count_if(cont1.begin(), cont1.end(), greater_than_t&lt;<b>int</b>&gt;(5));
+<font color="#003399"><i>// etc...</i></font>
+</pre></blockquote>
+
+Obviously, there is a better way: the 	<i>function adapter</i>. 
+<p>
+
+We'd like somehow to be able to use the <i>greater</i> function object, but its constructor doesn't take
+any parameters, and more importantly, it's a binary function, meaning it needs to compare
+two items in its <tt><b>operator()</b></tt> method:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> greater : <b>public</b> binary_function&lt;T, T, <b>bool</b>&gt; 
+{
+  <b>public</b>:
+    <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; a, <b>const</b> T &amp;b) <b>const</b>
+    {
+      <b>return</b> a &gt; b;
+    }
+};
+</pre></blockquote>
+
+The <a href="STLAlgorithmsImplementation.html#COUNT_IF">count_if</a>
+algorithm is only supplying one parameter, so this:
+
+<blockquote><pre>
+count = std::count_if(cont1.begin(), cont1.end(), std::less&lt;<b>int</b>&gt;());
+</pre></blockquote>
+
+will generate an error because <tt><b>std::less::operator()</b></tt> requires 2 parameters. So, essentially,
+a function adapter is a function that wraps the function object and provides the additional parameters.
+<p>
+Note that a function adapter is a <b><i>function</i></b>. (A function object is a class object.)
+<p>
+
+<p>
+<hr width="90%">
+<p>
+
+<blockquote>
+<p class="technote">
+<b>The standard binders (bind1st and bind2nd) have been deprecated in favor of 
+  <a href="http://en.cppreference.com/w/cpp/utility/functional/bind">std::bind</a>
+  (and <a href="http://www.cplusplus.com/reference/functional/bind/">here</a>)
+and <a href="http://en.cppreference.com/w/cpp/language/lambda">lambda expressions</a>.</b>
+</p>
+</blockquote>
+
+There are 4 predefined function adapters: (<i>Element</i> is provided by the iterators over the range)
+
+<blockquote>
+<table>
+<tr><th>Function Adapter</th><th></th><th>Meaning</th></tr>
+<tr>
+
+<td>
+<pre>
+bind1st(<i>Op</i>, <i>Value</i>)
+bind2nd(<i>Op</i>, <i>Value</i>)
+not1(<i>Op</i>)
+not2(<i>Op</i>)
+</pre>
+</td>
+
+<td width=20>
+</td>
+
+<td>
+<pre>
+<i>Op</i>(<i>Value</i>, <i>Element<i>)
+<i>Op</i>(<i>Element<i>, <i>Value</i>)
+!<i>Op</i>(<i>Element<i>)
+!<i>Op</i>(<i>Element1<i>, <i>Element2<i>)
+</pre>
+</td>
+
+</tr>
+</table>
+</blockquote>
+
+Using function adapters:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Fill lists with random values</i></font>
+  <font color="#003399"><i>// 2  8  15  1  10  5  19  19  3  5</i></font>
+std::generate(cont1.begin(), cont1.end(), cRandomInt3(1, 20));
+
+  <font color="#003399"><i>// Count elements &lt; 10: 6</i></font>
+count = std::count_if(cont1.begin(), cont1.end(), <font color="blue">std::bind2nd</font>(std::less&lt;<b>int</b>&gt;(), 10));
+
+  <font color="#003399"><i>// Count elements not &lt; 10: 4</i></font>
+count = std::count_if(cont1.begin(), cont1.end(), <font color="blue">std::not1</font>(<font color="blue">std::bind2nd</font>(std::less&lt;<b>int</b>&gt;(), 10)));
+std::cout &lt;&lt; <font color="#9933CC">&quot;\nNumber of elements not &lt; 10: &quot;</font> &lt;&lt; count &lt;&lt; std::endl;
+
+  <font color="#003399"><i>// Count elements &gt; 10: 3</i></font>
+count = std::count_if(cont1.begin(), cont1.end(), <font color="blue">std::bind2nd</font>(std::greater&lt;<b>int</b>&gt;(), 10));
+
+  <font color="#003399"><i>// Count elements where 10 &lt; element: 3</i></font>
+count = std::count_if(cont1.begin(), cont1.end(), <font color="blue">std::bind1st</font>(std::less&lt;<b>int</b>&gt;(), 10));
+
+  <font color="#003399"><i>// Count elements not &gt; 10: </i></font>
+count = std::count_if(cont1.begin(), cont1.end(), 
+                      <font color="blue">std::not1</font>(<font color="blue">std::bind2nd</font>(std::greater&lt;<b>int</b>&gt;(), 10)));
+</pre></blockquote>
+
+Removing the <b>std::</b> namespace qualifier:
+
+<blockquote><pre>
+generate(cont1.begin(), cont1.end(), cRandomInt3(1, 20));
+count = count_if(cont1.begin(), cont1.end(), bind2nd(less&lt;<b>int</b>&gt;(), 10));
+count = count_if(cont1.begin(), cont1.end(), not1(bind2nd(less&lt;<b>int</b>&gt;(), 10)));
+count = count_if(cont1.begin(), cont1.end(), bind2nd(greater&lt;<b>int</b>&gt;(), 10));
+count = count_if(cont1.begin(), cont1.end(), bind1st(less&lt;<b>int</b>&gt;(), 10));
+count = count_if(cont1.begin(), cont1.end(), not1(bind2nd(greater&lt;<b>int</b>&gt;(), 10)));
+</pre></blockquote>
+
+We can use algorithms and function adapters on their own:
+<p>
+Anonymously:
+
+<blockquote><pre>
+  <font color="#003399"><i>// 1. Instantiates an object of the 'less' class for ints</i></font>
+  <font color="#003399"><i>// 2. Calls 'bind2nd' passing the 'less' object and integer '10'</i></font>
+  <font color="#003399"><i>// 3. A function object 'temp' (unnamed) is returned from 'bind2nd'</i></font>
+  <font color="#003399"><i>// 4. temp.operator() is called with integer '12'</i></font>
+  <font color="#003399"><i>// 5. The return value is a boolean: (12 &lt; 10)?</i></font>
+  <font color="#003399"><i>// 6. Prints the appropriate message. </i></font>
+<b>if</b> ( bind2nd(less&lt;<b>int</b>&gt;(), 10)(12) )
+  cout &lt;&lt; <font color="#9933CC">&quot;\n12 is less than 10&quot;</font> &lt;&lt; endl;
+<b>else</b>
+  cout &lt;&lt; <font color="#9933CC">&quot;\n12 is not less than 10&quot;</font> &lt;&lt; endl;
+</pre></blockquote>
+
+By name:
+<blockquote><pre>
+  <font color="#003399"><i>// Create a named variable 'LT_10' of type 'binder2nd'</i></font>
+binder2nd&lt;less&lt;<b>int</b>&gt; &gt; LT_10 = bind2nd(less&lt;<b>int</b>&gt;(), 10);
+
+  <font color="#003399"><i>// Call LT_10.operator() with int '12'</i></font>
+<b>if</b> (LT_10(12))
+  cout &lt;&lt; <font color="#9933CC">&quot;\n12 is less than 10&quot;</font> &lt;&lt; endl;
+<b>else</b>
+  cout &lt;&lt; <font color="#9933CC">&quot;\n12 is not less than 10&quot;</font> &lt;&lt; endl;
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<a href="STL-FunctionAdapters-Impl.html">More details</a> about function adapters
+<p>
+
+
+<p class="technote">
+<b>Self-check</b>: Rewrite the call below to <i>count_if</i> to use only code from the STL. In other words, remove
+the <i>IsEven</i> function pointer and replace it with function adapters and pre-defined function objects. 
+(All of the functionality you need is already present in the STL.)
+</p>
+
+<blockquote><pre>
+  count = std::count_if(cont1.begin(), cont1.end(), <a href="STL-2-all.html#FUNCTIONS_AS_PARAMETERS">IsEven</a>);
+</pre></blockquote>
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="CALLINGMEMFUN">
+<p class="SectionHeader">
+Calling Member Functions
+</p>
+</a>
+	
+Suppose we add a couple of methods to our <a href="STL-2-all.html#FOO_CLASS"><i>Foo</i> class</a>:
+
+<pre class="sourcecode"><code>  <font color="#003399"><i>// print out the value of x_</i></font>
+<b>void</b> Foo::print() <b>const</b> {
+  std::cout &lt;&lt; x_;
+}
+
+  <font color="#003399"><i>// print out the value of x_ padded with spaces</i></font>
+<b>void</b> Foo::printpad (<b>int</b> width) <b>const</b> {
+  std::cout &lt;&lt; std::setw(width) &lt;&lt; x_;
+}</code></pre>
+
+To print a list of <i>Foo</i> elements, how would we do it? Given:
+<p>
+<blockquote><pre>
+  <font color="#003399"><i>// Create containers all set to 0</i></font>
+std::list&lt;Foo&gt; cont1(10);
+
+  <font color="#003399"><i>// Fill lists with random values</i></font>
+  <font color="#003399"><i>// 2  8  15  1  10  5  19  19  3  5</i></font>
+std::generate(cont1.begin(), cont1.end(), cRandomInt3(1, 20));
+</pre></blockquote>
+
+
+"Old-style" method using a loop:
+<p>
+
+
+<blockquote><pre>
+std::list&lt;Foo&gt;::const_iterator it;
+
+  <font color="#003399"><i>// 28151105191935</i></font>
+<b>for</b> (it = cont1.begin(); it != cont1.end(); ++it)
+  it-&gt;print();
+
+  <font color="#003399"><i>//   2  8 15  1 10  5 19 19  3  5</i></font>
+<b>for</b> (it = cont1.begin(); it != cont1.end(); ++it)
+  it-&gt;printpad(3);
+</pre></blockquote>
+
+Of course, we want to use the generic algorithms so we do this:
+<p>
+
+<blockquote><pre>
+std::for_each(cont1.begin(), cont1.end(), Foo::print); <font color="#003399"><i>// Compiler error</i></font>
+</pre></blockquote>
+
+Depending on your compiler, you would get something similar to these error messages:
+<p>
+<blockquote><pre>
+MS:      term does not evaluate to a function
+GNU:     pointer to member function called, but not in class scope
+Borland: Call of nonfunction
+</pre></blockquote>
+
+The <a href="STLAlgorithmsImplementation.html#FOR_EACH">for_each</a> generic algorithm.
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<ul>
+<li>The algorithms require either an <i>object</i> (function object), or a <i>pointer to a function</i>. 
+<li><i>Foo::print</i> is neither type.
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width=90%>
+<p>
+<b>Member Functions vs. Ordinary Functions</b>
+<p>
+
+<blockquote>
+<table>
+<tr><th>Member function</th><th></th><th>Ordinary function</th></tr>
+<tr>
+<td>
+<pre>
+<b>int</b> Foo::member_func()
+{
+  <b>return</b> 0;
+}
+</pre>
+</td>
+
+<td width=30>
+</td>
+
+<td>
+<pre>
+<b>int</b> ordinary_func()
+{
+  <b>return</b> 0;
+}
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+Examples:
+
+<pre class="sourcecode"><code><b>void</b> f21()
+{
+    <font color="#003399"><i>// pointer to function</i></font>
+  <b>int</b> (*pof)() = ordinary_func;
+
+    <font color="#003399"><i>// pointer to member function (& is required)</i></font>
+  <b>int</b> (Foo::*pmf)() = &amp;Foo::member_func;
+
+  Foo fobj;       <font color="#003399"><i>// Create a Foo object</i></font>
+  Foo *pfobj;     <font color="#003399"><i>// Pointer to Foo object</i></font>
+  pfobj = &amp;fobj;  <font color="#003399"><i>// Assign address of fobj to pfobj</i></font>
+
+  ordinary_func();     <font color="#003399"><i>// &quot;ordinary&quot; function call</i></font>
+  pof();               <font color="#003399"><i>// call ordinary function through pointer</i></font>
+
+  fobj.member_func();  <font color="#003399"><i>// call member function through object</i></font>
+  pfobj-&gt;member_func();<font color="#003399"><i>// call member function through pointer to object</i></font>
+
+  pmf();               <font color="#003399"><i>// Error, pmf is not a function or pointer to function</i></font>
+  (fobj.*pmf)();       <font color="#003399"><i>// call member function with pointer to member and object</i></font>
+  (pfobj-&gt;*pmf)();     <font color="#003399"><i>// call member function with pointer to member and ptr to object</i></font>
+}</code></pre>
+
+<p>
+We need to use a function adapter designed for member functions:
+
+
+<blockquote>
+<table>
+<tr><th>Function Adapter</th><th></th><th>Meaning</th></tr>
+<tr>
+
+<td>
+<pre>
+mem_fun_ref(<i>Op</i>)
+mem_fun(<i>Op</i>)
+</pre>
+</td>
+
+<td width=20>
+</td>
+
+<td>
+<pre>
+Calls a method on an object: e.g. <i>Object.*Op()</i>
+Calls a method on a pointer: e.g. <i>pObject->*Op()</i>
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+This will work as expected (Reminder: There is a conversion between integer and <a href="STL-2-all.html#FOO_CLASS">Foo</a>):
+
+<pre class="sourcecode"><code>  <font color="#003399"><i>// Create containers all set to 0</i></font>
+std::list&lt;Foo&gt; cont1(10);
+
+  <font color="#003399"><i>// Fill lists with random values: 2  8  15  1  10  5  19  19  3  5</i></font>
+<font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(1, 20));
+print5(cont1);
+
+  <font color="#003399"><i>// Print all elements: 28151105191935</i></font>
+<font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), std::mem_fun_ref(&amp;Foo::print));</code></pre>
+
+Of course, we can declare the variable on its own as well:
+
+<blockquote><pre>
+<b>void</b> (Foo::*foo_print)() <b>const</b> = &amp;Foo::print;
+std::for_each(cont1.begin(), cont1.end(), std::mem_fun_ref(foo_print));
+</pre></blockquote>
+
+
+
+What about calling this method that requires a parameter?
+
+<blockquote><pre>
+  <font color="#003399"><i>// print out the value of x_ with spaces</i></font>
+<b>void</b> printpad (<b>int</b> width) <b>const</b> {
+  std::cout &lt;&lt; std::setw(width) &lt;&lt; x_;
+</pre></blockquote>
+
+Use another function adapter:
+
+<blockquote><pre>
+<font color="#003399"><i>// Print all elements:    2    8   15    1   10    5   19   19    3    5</i></font>
+std::for_each(cont1.begin(), cont1.end(), 
+              std::bind2nd(std::mem_fun_ref(&Foo::printpad), 5));
+</pre></blockquote>
+
+<!--
+Issues to deal with for non-standard implementations:
+<ul>
+<li>Microsoft's (6.0) default implementation will not accept <b>void</b> methods nor <b>const</b> methods:
+<blockquote><pre>
+<b>int</b> print() {
+  std::cout &lt;&lt; x_;
+  <b>return</b> 0;<font color="#003399"><i>// Return a dummy value</i></font>
+}
+</pre></blockquote>
+<li>Microsoft's default implementation also won't accept this:
+<blockquote><pre>
+std::for_each(cont1.begin(), cont1.end(), 
+              std::bind2nd(std::mem_fun_ref(&Foo::printpad), 5));
+</pre></blockquote>
+<li>Using STLport with MSVC++ 6.0 will allow <b>const</b> and <b>void</b> methods.
+<li>Both Borland (5.6 and later) and GNU (3.2 and later) accepted the code as originally written with <b>void</b> and <b>const</b>.
+<li>Microsoft's VC++ 7.1 and later will also accept the code with <b>void</b> and <b>const</b>. 
+</ul>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Using Ordinary Functions with Adapters
+</p>
+	
+
+
+Counting the number of elements divisible by 6:
+<blockquote><pre>
+<b>int</b> count = std::count_if(cont1.begin(), cont1.end(), DivBy6);
+</pre></blockquote>
+
+Counting the number of elements NOT divisible by 6:
+<blockquote><pre>
+  <font color="#003399"><i>// Compiler error</i></font>
+<b>int</b> count = std::count_if(cont1.begin(), cont1.end(), std::not1(DivBy6));
+</pre></blockquote>
+
+The problem is that <i>DivBy6</i> is not a function object. It's an ordinary function, which has
+limited use.
+<p>
+Of course, there's yet another function adapter to handle this situation.
+
+<blockquote>
+<table>
+<tr><th>Function Adapter</th><th></th><th>Meaning</th></tr>
+<tr valign=top>
+
+<td>
+<pre>
+ptr_fun(<i>Op</i>)
+</pre>
+</td>
+
+<td width=20>
+</td>
+
+<td>
+<pre>
+<i>*Op</i>(<i>Element<i>)
+<i>*Op</i>(<i>Element1<i>, <i>Element2<i>)
+</pre>
+</td>
+
+</tr>
+</table>
+</blockquote>
+
+This leads to this correct version:
+
+<blockquote><pre>
+<b>int</b> count = std::count_if(cont1.begin(), cont1.end(), std::not1(std::ptr_fun(DivBy6)));
+</pre></blockquote>
+
+Full example:
+
+<pre class="sourcecode"><code><b>void</b> f22()
+{
+    <font color="#003399"><i>// Create containers all set to 0</i></font>
+  std::list&lt;<b>int</b>&gt; cont1(10);
+
+    <font color="#003399"><i>// Fill lists with random values between 1 and 30</i></font>
+    <font color="#003399"><i>// 12  18  5  11  30  5  19  19  23  15</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), cRandomInt3(1, 30));
+  print5(cont1);
+
+    <font color="#003399"><i>// Count elements divisible by 6: 3</i></font>
+  <b>int</b> count = <font color="blue"><b>std::count_if</b></font>(cont1.begin(), cont1.end(), DivBy6);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nNumber of elements divisible by 6: &quot;</font> &lt;&lt; count &lt;&lt; std::endl;
+  
+    <font color="#003399"><i>// Count elements NOT divisible by 6: 7</i></font>
+  count = <font color="blue"><b>std::count_if</b></font>(cont1.begin(), cont1.end(), std::not1(std::ptr_fun(DivBy6)));
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nNumber of elements NOT divisible by 6: &quot;</font> &lt;&lt; count &lt;&lt; std::endl;
+}</code></pre>
+
+<b>Output:</b>
+<blockquote><pre>
+14  17  28  26  24  26  17  13  10  2  
+
+Number of elements divisible by 6: 1
+
+Number of elements NOT divisible by 6: 9
+</pre></blockquote>
+
+<b>Note:</b>
+<p>
+<tt>ptr_fun</tt> has been deprecated in C++11 and removed in C++17. You should use one
+of the alternatives below:
+
+
+<blockquote><pre>
+count = <font color="black">std::count_if</font>(cont1.begin(), cont1.end(), std::not1(<a href="https://en.cppreference.com/w/cpp/utility/functional/ref"><b>std::ref</b></a>(DivBy6)));
+count = <font color="black">std::count_if</font>(cont1.begin(), cont1.end(), std::not1(<a href="https://en.cppreference.com/w/cpp/utility/functional/function"><b>std::function</a>&lt;bool(int)&gt;</b>(DivBy6)));
+</pre></blockquote>
+
+
+<br><br><br>
+
+</div>
+   
+</body>
+</html>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

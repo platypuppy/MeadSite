@@ -1,0 +1,91 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>List.cpp</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+<body>
+
+<pre class="sourcecode"><code><b>#include</b> &lt;iostream&gt; <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> &lt;iomanip&gt;  <font color="#003399"><i>// setw</i></font>
+<b>#include</b> <font color="#9933CC">&quot;List.h&quot;</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  CS170::ListLab::Node *list1 = 0;
+  CS170::ListLab::Node *list2 = 0; 
+  <b>const</b> <b>int</b> numbers[] = {
+                         12, 34, 21, 56, 38, 94, 23, 22, 
+                         67, 56, 88, 19, 59, 10, 17
+                        };
+  size_t size = <b>sizeof</b>(numbers) / <b>sizeof</b>(*numbers);
+
+    <font color="#003399"><i>// Create two lists</i></font>
+  <b>for</b> (size_t i = 0; i &lt; size; i++)
+  {
+    CS170::ListLab::AddToEnd(&amp;list1, numbers[i]);
+    CS170::ListLab::AddToFront(&amp;list2, numbers[i]);
+
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; CS170::ListLab::Count(list1) &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    CS170::ListLab::PrintList(list1);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List2 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; CS170::ListLab::Count(list2) &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    CS170::ListLab::PrintList(list2);
+    std::cout &lt;&lt; std::endl;
+  }
+
+    <font color="#003399"><i>// Find an existing value</i></font>
+  <b>int</b> value = 56;
+  CS170::ListLab::Node *node = CS170::ListLab::FindItem(list1, value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.\n\n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.\n\n&quot;</font>;
+
+    <font color="#003399"><i>// Find a non-existant value</i></font>
+  value = 123;
+  node = CS170::ListLab::FindItem(list1, value);
+  <b>if</b> (node)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; node-&gt;number &lt;&lt; <font color="#9933CC">&quot; was found.\n\n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Value: &quot;</font> &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; was not found.\n\n&quot;</font>;
+
+    <font color="#003399"><i>// Release the nodes</i></font>
+  CS170::ListLab::FreeList(list1);
+  CS170::ListLab::FreeList(list2);
+
+    <font color="#003399"><i>// Inserting</i></font>
+  list1 = 0;
+  <b>for</b> (<b>int</b> i = 0; i &lt; 5; i++)
+  {
+    CS170::ListLab::AddToEnd(&amp;list1, numbers[i]);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List1 (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; CS170::ListLab::Count(list1) &lt;&lt; <font color="#9933CC">&quot; nodes): &quot;</font>;
+    CS170::ListLab::PrintList(list1);
+    std::cout &lt;&lt; std::endl;
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Inserting...\n&quot;</font>;
+  CS170::ListLab::Insert(&amp;list1, 91, 3);
+  CS170::ListLab::PrintList(list1);
+  CS170::ListLab::Insert(&amp;list1, 92, 0);
+  CS170::ListLab::PrintList(list1);
+  CS170::ListLab::Insert(&amp;list1, 93, 7);
+  CS170::ListLab::PrintList(list1);
+  CS170::ListLab::Insert(&amp;list1, 94, 9);
+  CS170::ListLab::PrintList(list1);
+
+  CS170::ListLab::FreeList(list1);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

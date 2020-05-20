@@ -1,0 +1,273 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Namespaces Examples</title>
+</head>
+
+<body>  
+<center><h1>Namespaces - Examples</h1></center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+This code is fine:
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt; 
+<b>using</b> <b>namespace</b> std;
+
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>int</b> foo = 21;  <font color="#003399"><i>// global, (Also Known As ::foo)</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, (Also Known As ::bar)</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo), 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global, 21</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global, 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+Notice the <i>using directive</i> and its placement:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>using</b> <b>namespace</b> Stuff;  <font color="#003399"><i>// foo is now an alias for Stuff::foo</i></font>
+                        
+<b>int</b> foo = 21;  <font color="#003399"><i>// global, ::foo</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, ::bar</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, ambiguous: global (::foo) or alias (Stuff::foo)?</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, ambiguous: global (::foo) or alias (Stuff::foo)?</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global, 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+The same <i>using directive</i> is moved and produces different results:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>int</b> foo = 21;  <font color="#003399"><i>// global, ::foo</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, ::bar</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo), 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>using</b> <b>namespace</b> Stuff;  <font color="#003399"><i>// foo is now an alias for Stuff::foo</i></font>
+                        <font color="#003399"><i>// bar is now an alias for Stuff::bar</i></font>
+                        
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, ambiguous: global (::foo) or alias (Stuff::foo)?</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global, 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+The same <i>using directive</i> is placed within a function (scope is only in the function):
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>int</b> foo = 21;  <font color="#003399"><i>// global, ::foo</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, ::bar</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  <b>using</b> <b>namespace</b> Stuff;  <font color="#003399"><i>// foo is now an alias for Stuff::foo</i></font>
+                          <font color="#003399"><i>// bar is now an alias for Stuff::bar</i></font>
+                        
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, ambiguous: global (::foo) or alias (Stuff::foo)?</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo), 21</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global, 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+The same <i>using directive</i> is placed in <b>main</b> after some code:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>int</b> foo = 21;  <font color="#003399"><i>// global, ::foo</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, ::bar</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo), 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo), 21</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global, 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+
+  <b>using</b> <b>namespace</b> Stuff;  <font color="#003399"><i>// foo is now an alias for Stuff::foo</i></font>
+                          <font color="#003399"><i>// bar is now an alias for Stuff::bar</i></font>
+                        
+  cout &lt;&lt; foo &lt;&lt; endl;    <font color="#003399"><i>// unqualified, ambiguous: global (::foo) or alias (Stuff::foo)?</i></font>
+  
+  <b>int</b> foo = 41;           <font color="#003399"><i>// local, hides alias from Stuff::foo</i></font>
+  cout &lt;&lt; foo &lt;&lt; endl;    <font color="#003399"><i>// unqualified, local, 41</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;  <font color="#003399"><i>// qualified, global (::foo), 21</i></font>
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+Now, we are employing the <i>using declaration</i>, and we get very different behavior:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>using</b> Stuff::foo; <font color="#003399"><i>// declare foo (from Stuff) here in global namespace</i></font>
+                  <font color="#003399"><i>//   (it's now the global ::foo)!</i></font>
+
+<b>int</b> foo = 21;  <font color="#003399"><i>// error, redefinition, foo already declared (must remove this to compile)</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, (Also Known As ::bar)</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo aka Stuff::foo), 11</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>void</b> f2(<b>void</b>)
+{
+  <b>int</b> foo = 31;               <font color="#003399"><i>// local, hides global (OK, declaration at different scope)</i></font>
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, local, 31</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (::foo aka Stuff::foo), 11</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global (::foo aka Stuff::foo), 11 </i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+
+  <b>int</b> foo = 41;           <font color="#003399"><i>// local, hides alias Stuff::foo (OK, declaration at different scope)</i></font>
+  cout &lt;&lt; foo &lt;&lt; endl;    <font color="#003399"><i>// unqualified, local, 41</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;  <font color="#003399"><i>// qualified, global (::foo aka Stuff::foo), 11</i></font>
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+Move <i>using declaration</i> into a new scope (in main):
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  <font color="#003399"><i>// Stuff::foo    </i></font>
+  <b>int</b> bar = 12;  <font color="#003399"><i>// Stuff::bar</i></font>
+}
+
+<b>int</b> foo = 21;  <font color="#003399"><i>// global, (Also Known As ::foo)</i></font>
+<b>int</b> bar = 22;  <font color="#003399"><i>// global, (Also Known As ::bar)</i></font>
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global ::foo, 21</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>void</b> f2(<b>void</b>)
+{
+  <b>int</b> foo = 31;               <font color="#003399"><i>// local, hides global (OK, declaration at different scope)</i></font>
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, local, 31</i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11 </i></font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        <font color="#003399"><i>// unqualified, global (aka ::foo), 21</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;      <font color="#003399"><i>// qualified, global ::foo, 21 </i></font>
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; <font color="#003399"><i>// qualified, Stuff::foo, 11</i></font>
+  
+  <b>using</b> Stuff::foo; <font color="#003399"><i>// declare foo (from Stuff) here locally to main</i></font>
+
+  <b>int</b> foo = 41;           <font color="#003399"><i>//error, redefinition, foo already declared in this scope (remove to compile)</i></font>
+  cout &lt;&lt; foo &lt;&lt; endl;    <font color="#003399"><i>// unqualified, local (aka Stuff::foo), 11</i></font>
+  cout &lt;&lt; ::foo &lt;&lt; endl;  <font color="#003399"><i>// qualified, global (::foo), 21</i></font>
+  
+  <b>return</b> 0;
+}
+
+</code></pre> 
+
+
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

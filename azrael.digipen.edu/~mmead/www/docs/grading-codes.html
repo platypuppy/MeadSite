@@ -1,0 +1,251 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Grading Codes</title>
+</head>
+
+<body>  
+
+<center><h1>Grading Codes</h1></center>
+
+<!--
+<xcenter>
+<blockquote>
+<i>"My definition of an expert in any field is a person who knows enough about
+what's really going on to be scared."</i> -- P.J. Plauger 
+</blockquote>
+</xcenter>
+-->
+
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+What Do They Mean?
+</p>
+
+There are several aspects on which all of your programming assignments will be graded. Each aspect
+is associated with a code, usually 2 letters, but sometimes more. The meaning of the most common ones
+are explained below.
+
+<ul>
+<!--
+<li><tt><b>CW</b></tt> Compiler Warnings - This means that your code had one or more compiler warnings.
+  Generally, you'll lose 15% of the points for failure to follow instructions. 
+  Since the compiler tells you what is wrong, there is <b>absolutely no excuse</b> 
+  to ever submit a program that has any warnings whatsoever. (If you can't figure out the warning, 
+  you should ask one of the many tutors or ask the instructor.) Of course, waiting until the last minute
+  to do your homework may mean that no TAs are around.
+<p>
+<li><tt><b>NC</b></tt> No Compile - Similar to above except that you had a severe error that prohibited
+  the compiler from performing its function. This is severe because, if your program doesn't compile,
+  it surely won't run and produce any output, which will cause you to lose a significant amount of points,
+  (and likely receive a 0).
+<p>
+-->
+<tt><b></b></tt>
+
+<li><tt><b>CW</b></tt> - Compiler warnings. This is no longer necessary since programs that won't
+  compile cleanly will be rejected by the submission server.</li>
+<p>
+<li><tt><b>NC</b></tt> - No Compile (error). This is no longer necessary since programs that won't
+  compile will be rejected by the submission server.</li>
+<p>
+
+<li><tt><b>OUT</b></tt> Output - Your output did not match the expected output. If you only had
+  a very minor discrepency, you may lose as few as one point. If you had no output or all of it was
+  incorrect, you may lose all of the points. A diff tool is always used to verify the output.
+<p>
+<li><tt><b>LEAK</b></tt> - There are memory leaks as reported by Valgrind or Dr. Memory</li>
+<p>
+
+<li><tt><b>FHC</b></tt> File Header Comment - Each program file <b>must</b> include a file header that 
+  includes the information specified. This is an example of a file header from CS120. All lines are required:
+<blockquote><pre>
+/*****************************************************************************
+filename    foo.cpp
+author      Artie Fufkin
+DP email    afufkin2@digipen.edu
+course      CS170 <!--section     A-->
+assignment  1
+due date    9/19/2026
+
+Brief Description:
+  This program calculates the distance to the moon using only a compass
+  and a straight-edge. Functions include:
+  - Distance
+  - Calculate
+  - Convert
+  - Convolve
+  - Contort
+
+*****************************************************************************/
+</pre></blockquote>
+<p>
+
+Doxygenized version:
+<blockquote><pre>
+/****************************************************************************/
+/*!
+\file    foo.cpp
+\author  Artie Fufkin
+\par     DP email: afufkin2@digipen.edu
+\par     Course: CS170
+\par     Section: A
+\par     Assignment: 1
+\date    9/19/2026
+
+\brief
+  This program calculates the distance to the moon using only a compass
+  and a straight-edge. Functions include:
+  
+  - Distance
+  - Calculate
+  - Convert
+  - Convolve
+  - Contort
+ 
+*/
+/****************************************************************************/
+
+</pre></blockquote>
+
+<li><tt><b>FNH</b></tt> Function Header Comment - Each function must have a comment describing its purpose,
+  return values (if any), and any input/output parameters. Here's an example from CS120. 
+  All lines are required:
+   
+<blockquote><pre>
+/*****************************************************************************
+   Function: EDetect
+   
+Description: Transforms a bitmap picture by darkening the edges that
+             were detected by the edge-detect algorithm.
+
+     Inputs: picture    - A pointer to the image that will be transformed.
+             resolution - The degree to which the transformation will occur.
+
+    Outputs: The number of processor cycles required by the algorithm.
+*****************************************************************************/
+</pre></blockquote>
+
+Doxygenized version:
+
+<blockquote><pre>
+/****************************************************************************/
+/*!
+  \brief   
+    Transforms a bitmap picture by darkening the edges that were detected by 
+    the edge-detect algorithm.
+
+  \param picture
+    A pointer to the image that will be transformed. 
+      
+  \param resolution
+    The degree to which the transformation will occur.
+
+  \return
+    The number of processor cycles required by the algorithm.
+*/
+/****************************************************************************/
+</pre></blockquote>
+
+   
+<p>
+<li><tt><b>CRASH</b></tt> -  The program crashed. This may or may not be easily
+detectable, depending on the nature of the crash.</li>
+<p>
+<li><tt><b>HANG</b></tt> -  The program hung. This is no longer necessary as
+the Watchdog timer terminates a hung or inefficient program. Points are deducted
+from the test that caused the hang.</li>
+<p>
+<li><tt><b>ID</b></tt> Internal Documentation - Essentially, these are comments in the code. 
+  All code is required to have some documentation in the form of inline comments. Code that 
+  has no comments or very few will lose points.
+<p>
+<li><tt><b>CQ</b></tt> Code Quality - This is simply a gauge of the quality of your code. 
+  I posted a link to the
+  <a class="pdf-icon" href="CodeQuality.pdf">Code Quality Guidelines</a>
+  which list some of 
+  these items. Not all will be applicable at this time. As we progress, more and more of these 
+  should concern you.
+<p>
+<!--
+<li><tt><b>FN</b></tt> File Naming - It is imperative that you follow the guidelines <i>exactly</i> 
+  when naming your files. The assignment handout describes how to name the programming files. 
+  Examples: (assume you're submitting programming assignment #2 and the C++ 
+  file is supposed to be named <b>mileage.cpp</b>)<p>
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr><th>Correct</th><th>Incorrect</th></tr>
+<tr>
+<td>
+  <pre>mileage.cpp</pre>
+</td>
+<td>
+  <pre>Mileage.cpp<br>mileage.CPP<br>MILEAGE.cpp<br>assignment2.cpp</pre>
+</td>
+</tr>
+</table>   
+</blockquote>
+<p>
+-->
+
+<!--
+<li><tt><b>HC</b></tt> Hard Copy - This is the print out that you will submit. Exactly what needs to be printed out
+  is listed in the handout for each assignment. Not all files that you submit electronically (in the .zip file) will
+  need to printed out. Things that relate to the hard copy:
+  <ul>
+  <li>No word wrapping or line truncation. Make sure that your lines are short enough so that the printer doesn't
+    automatically truncate the line or break the line in two. C/C++ is a free form language so you can manually
+    break the lines anywhere (with a few exceptions). Another thing that can cause your lines not to print
+    out the way they look on the screen is the margin settings. If you have wide left and right margins setup
+    for printing, you will get significantly less characters printed per line.
+  <li>The font size should be between 7 and 10 points. This will usually ensure that your lines won't be wrapped
+    or broken by the printer. 
+  <li>The font <b>must</b> be a fixed-pitch font (e.g. Courier New). No variable-pitch font (e.g. Arial or Times Roman).
+</ul>
+-->
+<p>
+<li><tt><b>DW</b></tt> Doxygen Warnings - Doxygen may emit warnings just like the compiler does. 
+  You must not have any Doxygen warnings.
+
+<p>
+<li><tt><b>MEMBUGS</b></tt> Dr. Memory or Valgrind problems - These tools detect problems with your code at 
+  runtime. These can include things overwriting the end of an array or trying to free memory using free
+  when the memory was allocated with new. These deductions
+  are separate from memory leak deductions listed above.
+<p>
+<li><tt><b>EC</b></tt> - Extra Credit. Some assignments have extra credit tests.</li>
+<p>
+
+
+
+
+
+</ul>
+
+<!--
+<p>
+<hr width="90%">
+<p>
+The distribution of points varies between assignments. For example, an assignment might have this distribution:
+
+<ul>
+<li><tt><b>CW/NC</b></tt> 15 points (Not compiling will likely earn 0 points.)
+<li><tt><b>OUT</b></tt> 35 points
+<li><tt><b>FH</b></tt> 10 points
+<li><tt><b>FNH</b></tt> 10 points
+<li><tt><b>ID</b></tt> 10 points
+<li><tt><b>CQ</b></tt> 10 points
+<li><tt><b>DW</b></tt> 10 points
+-->
+<hr>
+
+</body>
+</html>
+
+<tt><b></b></tt>
+<blockquote><pre>
+</pre></blockquote>
+

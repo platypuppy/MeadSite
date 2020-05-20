@@ -1,0 +1,88 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>String.cpp</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#ifndef</b> EMPLOYEE_H
+<b>#define</b> EMPLOYEE_H
+
+<b>#include</b> &lt;string&gt;
+
+<b>class</b> Employee           
+{
+  <b>public</b>:             
+    Employee(<b>const</b> std::string&amp; first, <b>const</b> std::string&amp; last, <b>float</b> sal, <b>int</b> yrs);
+    <b>void</b> setName(<b>const</b> std::string&amp; first, <b>const</b> std::string&amp; last);
+    <b>void</b> setSalary(<b>float</b> newSalary);
+    <b>void</b> setYears(<b>int</b> numYears);
+    <b>friend</b> std::ostream&amp; <b>operator</b>&lt;&lt;(std::ostream&amp; os, <b>const</b> Employee&amp; emp);
+
+    <b>const</b> std::string&amp; getFirstName() <b>const</b>;
+    <b>const</b> std::string&amp; getLastName() <b>const</b>;
+    <b>float</b> getSalary() <b>const</b>;
+    <b>int</b> getYears() <b>const</b>;
+    
+  <b>private</b>:               
+    std::string firstName_;  
+    std::string lastName_;   
+    <b>float</b> salary_;    
+    <b>int</b> years_;       
+};
+<b>#endif</b>
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

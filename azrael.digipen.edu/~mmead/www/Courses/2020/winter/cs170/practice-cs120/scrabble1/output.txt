@@ -1,0 +1,7 @@
+Enter a word: Scrabble value is : 9
+Enter a word: Scrabble value is : 9
+Enter a word: Scrabble value is : 9
+Enter a word: Scrabble value is : 8
+Enter a word: Scrabble value is : 16
+Enter a word: Scrabble value is : 41
+Enter a word: Scrabble value is : 41

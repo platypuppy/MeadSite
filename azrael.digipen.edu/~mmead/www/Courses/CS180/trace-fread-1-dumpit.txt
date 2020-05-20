@@ -1,0 +1,48 @@
+execve("./a.out", ["./a.out", "dumpit.exe", "dumpit2.exe"], [/* 45 vars */]) = 0
+brk(0)                                  = 0x96d5000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb78c6000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY)      = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=94651, ...}) = 0
+mmap2(NULL, 94651, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb78ae000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/tls/i686/cmov/libc.so.6", O_RDONLY) = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0000m\1\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0755, st_size=1405508, ...}) = 0
+mmap2(NULL, 1415592, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x8fa000
+mprotect(0xa4d000, 4096, PROT_NONE)     = 0
+mmap2(0xa4e000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x153) = 0xa4e000
+mmap2(0xa51000, 10664, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xa51000
+close(3)                                = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb78ad000
+set_thread_area({entry_number:-1 -> 6, base_addr:0xb78ad6c0, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
+mprotect(0xa4e000, 8192, PROT_READ)     = 0
+mprotect(0x8049000, 4096, PROT_READ)    = 0
+mprotect(0x417000, 4096, PROT_READ)     = 0
+munmap(0xb78ae000, 94651)               = 0
+brk(0)                                  = 0x96d5000
+brk(0x96f6000)                          = 0x96f6000
+open("dumpit.exe", O_RDONLY)            = 3
+open("dumpit2.exe", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 4
+fstat64(3, {st_mode=S_IFREG|0644, st_size=16617, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb78c5000
+read(3, "MZ\220\0\3\0\0\0\4\0\0\0\377\377\0\0\270\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 4096) = 4096
+fstat64(4, {st_mode=S_IFREG|0250, st_size=0, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb78c4000
+read(3, "@P\0\0\0\0\0\0\0\0\0\0008R\0\0\234P\0\0\214P\0\0\0\0\0\0\0\0\0\0"..., 4096) = 4096
+write(4, "MZ\220\0\3\0\0\0\4\0\0\0\377\377\0\0\270\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 4096) = 4096
+read(3, "\0\1\0\0\1\0\0\0\3\1^\0\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0.dat"..., 4096) = 4096
+write(4, "@P\0\0\0\0\0\0\0\0\0\0008R\0\0\234P\0\0\214P\0\0\0\0\0\0\0\0\0\0"..., 4096) = 4096
+read(3, "\31\0\0\0\2\0\0\0\0\0\0\0\0\0\0\0\0\0.data\0\0\0\f\0\0\0\2\0"..., 4096) = 4096
+write(4, "\0\1\0\0\1\0\0\0\3\1^\0\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0.dat"..., 4096) = 4096
+read(3, "egister_frame_info\0__major_image"..., 4096) = 233
+write(4, "\31\0\0\0\2\0\0\0\0\0\0\0\0\0\0\0\0\0.data\0\0\0\f\0\0\0\2\0"..., 4096) = 4096
+read(3, "", 4096)                       = 0
+close(3)                                = 0
+munmap(0xb78c5000, 4096)                = 0
+write(4, "egister_frame_info\0__major_image"..., 233) = 233
+close(4)                                = 0
+munmap(0xb78c4000, 4096)                = 0
+exit_group(0)                           = ?

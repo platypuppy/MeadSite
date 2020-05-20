@@ -1,0 +1,324 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.cpp</title>
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cin, cout, endl</font>
+<font color="990099">#include &quot;Point.h&quot;  // Point class</font>
+
+<b>using</b> CS170::Point;
+<b>using</b> std::cout;
+<b>using</b> std::endl;
+<b>using</b> std::cin;
+
+<b>void</b> ConstructorTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Constructor test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  Point pt2;
+  Point pt3(pt1);
+  Point pt4 = pt1;
+  Point pt5;
+ 
+  pt5 = pt4;
+
+  <font color="#003399"><i>// DO NOT ALLOW THIS SYNTAX:</i></font>
+  <font color="#003399"><i>//Point p6 = 4; // this should not compile</i></font>
+  <font color="#003399"><i>//Point p7(4);  // this should not compile</i></font>
+
+  cout &lt;&lt; <font color="#9933CC">&quot;Point pt1(3, 4): &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;Point pt2: &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;Point pt3(pt1): &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;Point pt4 = pt1: &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt5 = pt4: &quot;</font> &lt;&lt; pt5 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+}
+
+<b>void</b> TranslateTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Translate test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  Point pt2(7, 12);
+  Point pt3;
+
+  pt3 = pt1 + pt2;
+  cout &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; + &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  pt3 = pt1 + 5;
+  cout &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; + 5 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  pt3 = 7 + pt1;
+  cout &lt;&lt; <font color="#9933CC">&quot;7 + &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  pt3 = pt1 - 2;
+  cout &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; - 2 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  pt3 = pt1 + -2;
+  cout &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; + -2 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  <font color="#003399"><i>// THIS SHOULD NOT COMPILE</i></font>
+  <font color="#003399"><i>//pt3 = 2 - pt1;</i></font>
+
+  cout &lt;&lt; endl;
+}
+
+<b>void</b> ScaleTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Scale test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  Point pt2 = pt1 * 3;
+  cout &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; * 3 = &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+
+  Point pt3(5, 8);
+  Point pt4 = 5 * pt3;
+  cout &lt;&lt; <font color="#9933CC">&quot;5 * &quot;</font> &lt;&lt; pt3 &lt;&lt; <font color="#9933CC">&quot; = &quot;</font> &lt;&lt; pt4 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+}
+
+<b>void</b> RotateTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Rotate test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(-50, -50);
+  <b>double</b> angle = 45;
+
+  Point pt2 = pt1 % angle;
+
+  cout.setf(std::ios_base::fixed, std::ios::floatfield);
+  std::cout.precision(3);
+  cout &lt;&lt; <font color="#9933CC">&quot;Point &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; rotated &quot;</font> &lt;&lt; angle &lt;&lt; <font color="#9933CC">&quot; degrees is &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+
+  pt1 = Point(-6, -6);
+  angle = 45;
+
+  pt2 = pt1 % angle;
+  cout &lt;&lt; <font color="#9933CC">&quot;Point &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; rotated &quot;</font> &lt;&lt; angle &lt;&lt; <font color="#9933CC">&quot; degrees is &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+  cout.unsetf(std::ios_base::fixed);
+  std::cout.precision(6);
+}
+
+<b>void</b> DistanceTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Distance test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  Point pt2(7, 12);
+  <b>double</b> distance;
+ 
+  distance = pt2 - pt1;
+  cout.setf(std::ios_base::fixed, std::ios::floatfield);
+  std::cout.precision(3);
+  cout &lt;&lt; <font color="#9933CC">&quot;Distance between &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; distance &lt;&lt; endl;
+ 
+  distance = pt1 - pt2;
+  cout &lt;&lt; <font color="#9933CC">&quot;Distance between &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; distance &lt;&lt; endl;
+
+  pt1 = Point(-5, 3);
+  pt2 = Point(-1, -7);
+
+  distance = pt2 - pt1;
+  cout &lt;&lt; <font color="#9933CC">&quot;Distance between &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; distance &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+  cout.unsetf(std::ios_base::fixed);
+  std::cout.precision(6);
+}
+
+<b>void</b> MidpointTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Midpoint test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  Point pt2(7, 12);
+
+  Point pt3 = pt1 ^ pt2;
+  cout.setf(std::ios_base::fixed, std::ios::floatfield);
+  std::cout.precision(3);
+  cout &lt;&lt; <font color="#9933CC">&quot;Midpoint of &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  pt1 = Point(-5, 3);
+  pt2 = Point(-1, -7);
+  pt3 = pt1 ^ pt2;
+  cout &lt;&lt; <font color="#9933CC">&quot;Midpoint of &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+  cout.unsetf(std::ios_base::fixed);
+  std::cout.precision(6);
+}
+
+<b>void</b> InputTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;Input test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1, pt2;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;Enter an X Y pair (e.g. 3 7): &quot;</font>;
+  cin &gt;&gt; pt1;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;Enter an X Y pair (e.g. 3 7): &quot;</font>;
+  cin &gt;&gt; pt2;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;Midpoint of &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; (pt1 ^ pt2) &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;Distance between &quot;</font> &lt;&lt; pt1 &lt;&lt; <font color="#9933CC">&quot; and &quot;</font> &lt;&lt; pt2 &lt;&lt; <font color="#9933CC">&quot; is &quot;</font> &lt;&lt; (pt1 - pt2) &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+}
+
+<b>void</b> AssignmentTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Assignment test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  Point pt2(-5, 1);
+
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+  pt1 += pt2;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 += pt2&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+
+  Point pt3(3, 4);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 += 5&quot;</font> &lt;&lt; endl;
+  pt3 += 5;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+
+  pt1 += pt2 += pt3;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 += pt2 += pt3&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+}
+
+<b>void</b> IncDecTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Inc/Dec test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+
+  Point pt2 = pt1++;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = pt1++&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+
+
+  Point pt3(6, 8);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+
+  Point pt4 = ++pt3;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt4 = ++pt3&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt4 = &quot;</font> &lt;&lt; pt4 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+
+  Point pt5(3, 4);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt5 = &quot;</font> &lt;&lt; pt5 &lt;&lt; endl;
+
+  Point pt6 = pt5--;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt6 = pt5--&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt5 = &quot;</font> &lt;&lt; pt5 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt6 = &quot;</font> &lt;&lt; pt6 &lt;&lt; endl;
+
+  Point pt7(6, 8);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt7 = &quot;</font> &lt;&lt; pt7 &lt;&lt; endl;
+
+  Point pt8 = --pt7;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt8 = --pt7&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt7 = &quot;</font> &lt;&lt; pt7 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt8 = &quot;</font> &lt;&lt; pt8 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+
+  Point pt9 = (--pt7)++; 
+  cout &lt;&lt; <font color="#9933CC">&quot;pt9 = (--pt7)++&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt7 = &quot;</font> &lt;&lt; pt7 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt9 = &quot;</font> &lt;&lt; pt9 &lt;&lt; endl;
+
+  Point pt10 = (++pt7)--; 
+  cout &lt;&lt; <font color="#9933CC">&quot;pt10 = (++pt7)--&quot;</font> &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt7 = &quot;</font> &lt;&lt; pt7 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt9 = &quot;</font> &lt;&lt; pt9 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt10 = &quot;</font> &lt;&lt; pt10 &lt;&lt; endl;
+
+    <font color="#003399"><i>// These should fail to compile.</i></font>
+    <font color="#003399"><i>// If it compiles, your code is wrong.</i></font>
+  <font color="#003399"><i>//Point pt21 = ++(pt7--); </i></font>
+  <font color="#003399"><i>//Point pt22 = --(pt7++); </i></font>
+
+  <font color="#003399"><i>//Point pt11 = ++( pt7 % 45.0 );</i></font>
+  <font color="#003399"><i>//Point pt12 = ++( pt7 ^ pt8 );</i></font>
+  <font color="#003399"><i>//Point pt13 = ++( pt7 - 5.0 );</i></font>
+  <font color="#003399"><i>//Point pt14 = ++( -pt7 );</i></font>
+  <font color="#003399"><i>//Point pt15 = ++( pt7 + pt8 );</i></font>
+  <font color="#003399"><i>//Point pt16 = ++( pt7 + 5.0 );</i></font>
+  <font color="#003399"><i>//Point pt17 = ++( pt7 * 5.0 );</i></font>
+  <font color="#003399"><i>//Point pt18 = ++( 5.0 + pt7 );</i></font>
+  <font color="#003399"><i>//Point pt19 = ++( 5.0 * pt7 );</i></font>
+
+}
+
+<b>void</b> UnaryTest()
+{
+  cout &lt;&lt; <font color="#9933CC">&quot;\n********** Unary test ********** &quot;</font> &lt;&lt; endl;
+
+  Point pt1(3, 4);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  Point pt2 = -pt1;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = -pt1&quot;</font> &lt;&lt; endl;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;pt1 = &quot;</font> &lt;&lt; pt1 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt2 = &quot;</font> &lt;&lt; pt2 &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+
+  Point pt3(-3, 4);
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+  Point pt4 = - - -pt3;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt4 = - - -pt3&quot;</font> &lt;&lt; endl;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;pt3 = &quot;</font> &lt;&lt; pt3 &lt;&lt; endl;
+  cout &lt;&lt; <font color="#9933CC">&quot;pt4 = &quot;</font> &lt;&lt; pt4 &lt;&lt; endl;
+}
+
+<b>int</b> main()
+{
+  ConstructorTest();
+  TranslateTest();
+  ScaleTest();
+  RotateTest();
+  DistanceTest();
+  MidpointTest();
+  <font color="#003399"><i>//InputTest();</i></font>
+  AssignmentTest();
+  IncDecTest();
+  UnaryTest();
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+</body>
+</html>
+  

@@ -1,0 +1,165 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>reversewords</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(reversewords.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Before writing any code, you should write down the steps (<b>in English</b> or your native language) 
+you need to take to solve these problems. This is your <i>pseudocode</i>. Once you have your 
+pseudocode written, you can convert it into C code. If you can't write down the steps in English, 
+you certainly can't write
+it in C.
+</p>
+
+Both of the functions you'll be writing deal with NUL-terminated C-style strings.  The only header file
+you can include is <tt>string.h</tt>, and you'll only need the <tt>strlen</tt> function.
+
+<ol>
+<li>The first function will reverse the words in a string. For example:
+	
+<blockquote><pre>
+Four score and seven years ago
+</pre></blockquote>
+
+becomes
+	
+<blockquote><pre>
+ago years seven and score Four
+</pre></blockquote>
+
+Notice that you are not reversing the characters in the words, just the words. The function prototype is:
+
+<blockquote><pre>
+<b>void</b> reverse_words1(<b>const</b> <b>char</b> input[], <b>char</b> output[]);
+</pre></blockquote>
+
+The input is a valid NUL-terminated C-style string and the output is the same size as the input, so you will have
+enough room for all of the characters including the NULL terminator. 
+<p>
+Hint: Walk the input string backwards looking for a space character. Then copy each character of the word to its right into
+the output. Do this until you get to the beginning of the string and copy the first word as the last word of the output.
+<p>
+If you need a hint, here are <a href="diagrams.html">some diagrams</a> to help get you started.
+<p>
+<font color="blue">Approximate number of lines of code: 25.</font>
+
+<p>
+<hr width=90%>
+<p>
+
+<li>The second function is very similar to the first function except that you will reverse the
+  words in place. This means there is no extra memory required. The prototype looks like this:
+
+<blockquote><pre>
+<b>void</b> reverse_words2(<b>char</b> input[]);
+</pre></blockquote>
+
+There's a clever trick that will make this easier than the first reverse function. First, reverse
+the entire string character-by-character:
+
+<blockquote><pre>
+This is a string
+</pre></blockquote>
+
+becomes 
+
+<blockquote><pre>
+gnirts a si sihT
+</pre></blockquote>
+
+This is pretty trivial to do. 
+You'll notice that all of the words are in their proper position. They're just reversed. Now, simply
+reverse the letters of each word. To make this simpler, you should create a helper function that
+reverses all of the characters between two pointers:
+
+<blockquote><pre>
+<font color="#003399"><i>/* Helper function to reverse a range a characters */</i></font>
+<b>void</b> reverse(<b>char</b> *start, <b>char</b> *end)
+{
+  <font color="#003399"><i>/* Reverse the characters from start to end */</i></font>
+}
+</pre></blockquote>
+
+You can even use this function to reverse the entire string at the start.
+<p>
+<font color="blue">Approximate number of lines of code: 15.</font>
+
+<p>
+<hr width="90%">
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+</ol>	
+
+Both of the functions go in a C file named <tt>reversewords.c</tt>. 
+The command line to build the program is:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c reversewords.c -o reverse
+</pre></blockquote>
+
+This is a partial <tt>reversewords.c</tt> with functions to get you started.
+
+<table border=0 cellpadding=10 cellspacing=10>
+<tr><td>
+<pre class="sourcecode"><code><b>#include</b> &lt;string.h&gt;
+
+<b>void</b> reverse_words1(<b>const</b> <b>char</b> input[], <b>char</b> output[])
+{
+
+}
+
+<b>void</b> reverse_words2(<b>char</b> string[])
+{
+
+}
+</code></pre>
+</td>
+</tr></table>
+<p>
+
+Here is <tt>main.c</tt>: &nbsp;&nbsp;<a href="main.c.html">HTML</a> &nbsp;&nbsp;&nbsp;<a href="main.c">Text</a>
+<p>
+Notice the use of the <tt>#if 0 ... #endif</tt> in the file. This is a simple way to enable/disable a bunch
+of code in the file. You shouldn't try to pass every test at once. Work on the first test, which is very simple.
+When you get that test working, move the <tt>#if 0</tt> around the next one and see if you pass that test. Continue
+in this way until you pass all of the tests. All the header files that you need are already included.
+<p>
+
+<a href="output.txt">Output for the sample tests<a/><br>	
+	
+</ol>		
+<br>
+<br>
+<br>
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,1688 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Pointers</title>
+</head>
+
+<body>  
+<center><h1>Pointers</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Pointer Basics
+</p>
+
+<ul>
+<li>Memory is a vast collection of <i>bits</i>, either 0 or 1.</li>
+<li>Bits are grouped into 8-bit blocks called <i>bytes</i>. (8 is arbitrary but most modern computers
+use this.)</li>
+<li>Bytes are grouped into <i>words</i> depending on the <i>wordsize</i> of the computer:</li>
+<ul>
+<li>A 16-bit machine has 2 bytes per word</li>
+<li>A 32-bit machine has 4 bytes per word</li>
+<li>A 64-bit machine has 8 bytes per word</li>
+</ul>
+<li>Every byte in a computer's memory is uniquely identified by it's location in memory.</li>
+<li>Each location is a <i>cell</i> and has two attributes: an <i>address</i> (the cell's location in memory) and a 
+<i>value</i> (contents of cell)</li>
+<li>Addresses and contents are known as <i>l-values</i> and <i>r-values</i>, respectively.</li>
+<li>Note that even though a word is made up of multiple bytes, it only has a single address.</li>
+<ul>
+  <li>A byte is the smallest addressable unit (i.e. you can't address a single bit)</li>
+</ul>
+<li>All data in memory has an address from 0 up to the size of memory. 4 GB of memory would look like this (the contents are arbitrary)</li>
+
+<blockquote><pre>
+<img src="AllMemory-AsBytes.png">
+</pre></blockquote>
+
+<li>We can find out the address of a variable by simply using the <i>address operator</i> (which we've already seen with <tt><b>scanf</b></tt>)
+	
+<blockquote><pre>
+<b>int</b> i = 10;
+
+printf(<font color="#9933CC">&quot;The address of i is %p\n&quot;</font>, (<b>void</b> *)&amp;i); <font color="#003399"><i>/* Use <b><big>&amp;</big></b> to get the address */</i></font>
+printf(<font color="#9933CC">&quot;The contents of i is %i\n&quot;</font>, i);
+
+<b>Output:</b>
+The address of i is 0x22cca4
+The contents of i is 10
+</pre></blockquote>
+
+</ul>
+
+On computers where integers and addresses have the same range, it's possible to interchange them.
+However, in general, you can't do this, and may likely get a warning from the compiler.
+<ul>
+<li>Addresses <i>look</i> like integers, but they are different. (e.g. just like 3.0 is not the same as 3.0F or 3)
+<blockquote><pre>
+3     00000000000000000000000000000011 (int)
+3.0F  01000000010000000000000000000000 (float)
+3.0   0100000000001000000000000000000000000000000000000000000000000000 (double)
+</pre></blockquote>
+<li>The compiler will complain if you treat an address like an integer and vice-versa.
+<li>The type of the address depends on what is stored there. (e.g. the address of an integer is not the same type as an address of a float)
+<li>Up until now, all of the addresses (variables) the compiler has been using for data have contained integer, float, and double values.
+<li>An address (variable) that holds the address of another variable is called a <i>pointer</i>.
+</ul>
+
+We can declare pointer variables easily:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i;  <font color="#003399"><i>/* i can only store integer values            */</i></font>
+          <font color="#003399"><i>/* The value of i is undefined at this point  */</i></font>
+
+  <b>int</b> *p; <font color="#003399"><i>/* p can only store the address of an integer */</i></font>
+          <font color="#003399"><i>/* The value of p is undefined at this point  */</i></font>
+
+  p = &amp;i; <font color="#003399"><i>/* The value of p is now the address of i     */</i></font>
+          <font color="#003399"><i>/* The value of p is now defined              */</i></font>
+          
+  i = 10; <font color="#003399"><i>/* The value of i is now 10                   */</i></font>
+          <font color="#003399"><i>/* The value of i is now defined              */</i></font>
+}
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+This is the notation that will be used when talking about identifiers in memory:
+
+<blockquote><pre>
+<img src="PointerNotation.png">
+</pre></blockquote>
+
+<ul>
+<li><b>identifier</b> - The name of the identifier</li>
+<li><b>address</b> - The arbitrary address (the actual values are meaningless, but are useful for discussion purposes)</li>
+<li><b>contents</b> - The value stored at this location. ???? means it is undefined.</li>
+<li>When looking at arrays, since each cell is anonymous (unnamed), I'll only show the address above the first cell.</li>
+</ul>
+<p>
+
+Visualizing the code above:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>After declarations for i and p</th><th>After assignment to p</th><th>After assignment to i</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Pointers-PI-1.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PI-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PI-3.png">
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Note</b>: Be sure not to confuse the asterisk ( <b><tt><big>*</big></tt></b> ) used for multiplication with the asterisk
+used to declare pointers. They are the same token, but have very different meanings.
+</p>
+</blockquote>
+
+Other examples:
+
+<blockquote><pre>
+<b>int</b>    *pi; <font color="#003399"><i>/* pi can only &quot;point&quot; to integers */</i></font>
+<b>float</b>  *pf; <font color="#003399"><i>/* pf can only &quot;point&quot; to floats   */</i></font>
+<b>double</b> *pd; <font color="#003399"><i>/* pd can only &quot;point&quot; to doubles  */</i></font>
+<b>short</b>  *ps; <font color="#003399"><i>/* ps can only &quot;point&quot; to shorts   */</i></font>
+<b>long</b>   *pL; <font color="#003399"><i>/* pL can only &quot;point&quot; to longs    */</i></font>
+
+<b>unsigned</b> <b>short</b> *pus; <font color="#003399"><i>/* pus can only &quot;point&quot; to unsigned shorts */</i></font>
+<b>unsigned</b> <b>int</b>   *pui; <font color="#003399"><i>/* pui can only &quot;point&quot; to unsigned ints   */</i></font>
+
+<font color="#003399"><i>/* etc.... you get the idea   */</i></font>
+</pre></blockquote>
+
+
+Unfortunately, we're not done abusing the asterisk ( <b><tt><big>*</big></tt></b> ). It has a third meaning as the <i>indirection operator</i>
+also known as the <i>dereference operator</i>. <a href="../../docs/OperatorPrecedence.html">Operator precedence chart</a>
+
+
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i = 10;
+  <b>int</b> *p = &amp;i; <font color="#003399"><i>/* operator * is used as a declaration here */</i></font>
+
+  printf(<font color="#9933CC">&quot;The value of i is %i\n&quot;</font>, i);
+  printf(<font color="#9933CC">&quot;The address of i is %p\n&quot;</font>, (<b>void</b> *)&amp;i);
+
+  printf(<font color="#9933CC">&quot;The value of p is %p\n&quot;</font>, (<b>void</b> *)p);
+  printf(<font color="#9933CC">&quot;The address of p is %p\n&quot;</font>, (<b>void</b> *)&amp;p);
+  printf(<font color="#9933CC">&quot;The value of what p is pointing at is %i\n&quot;</font>, *p); <font color="#003399"><i>/* operator * is dereferencing the pointer p */</i></font>
+}
+
+<b>Output:</b>
+The value of i is 10
+The address of i is 0x22cca4
+The value of p is 0x22cca4
+The address of p is 0x22cca0
+The value of what p is pointing at is 10
+</pre></blockquote>
+
+Once we have a pointer to some data, we can read/write the data <i>through</i> the pointer:
+
+
+<blockquote><pre>
+<b>void</b> f5(<b>void</b>)
+{
+  <b>int</b> i = 10;  <font color="#003399"><i>/* i has the value 10     */</i></font>
+  <b>int</b> *p = &amp;i; <font color="#003399"><i>/* p has the address of i */</i></font>
+  <b>int</b> j;       <font color="#003399"><i>/* j has undefined value  */</i></font> 
+
+  printf(<font color="#9933CC">&quot;The value of i is %i\n&quot;</font>, i);
+  printf(<font color="#9933CC">&quot;The value of *p is %i\n&quot;</font>, *p);
+
+  j = *p;  <font color="#003399"><i>/* j has the value of i   */</i></font>
+  *p = 20; <font color="#003399"><i>/* i has the value 20     */</i></font>
+
+  printf(<font color="#9933CC">&quot;The value of j is %i\n&quot;</font>, j);
+  printf(<font color="#9933CC">&quot;The value of i is %i\n&quot;</font>, i);
+}
+
+<b>Output:</b>
+The value of i is 10
+The value of *p is 10
+The value of j is 10
+The value of i is 20	
+</pre></blockquote>
+
+Visually:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>After declarations for i, p, j</th><th>After <tt>j = *p</tt></th><th>After <tt>*p = 20</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Pointers-PIJ-1.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PIJ-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PIJ-3.png">
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Watch out for these illegal expressions:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i = 10;  <font color="#003399"><i>/* i has the value 10     */</i></font>
+  <b>int</b> *p = &amp;i; <font color="#003399"><i>/* p has the address of i */</i></font>
+  <b>int</b> j;       <font color="#003399"><i>/* j has undefined value  */</i></font> 
+
+  j = p;  <font color="#003399"><i>/* ILLEGAL: different types (compiler won't implicitly convert) */</i></font>
+  p = 20; <font color="#003399"><i>/* ILLEGAL: different type (compiler won't implicitly convert)  */</i></font>
+}
+</pre></blockquote>
+
+Also, watch out for this as well. The compiler may not even warn you about it.
+<blockquote><pre>
+<b>void</b> f7(<b>void</b>)
+{
+  <b>int</b> *p;  <font color="#003399"><i>/* p has undefined value (some random memory location)      */</i></font>
+  *p = 10; <font color="#003399"><i>/* BAD: writing the value 10 to some random memory location */</i></font>
+}
+</pre></blockquote>
+
+
+You can have multiple pointers to the same address. The code below gives us three different ways to modify the 
+contents of <tt>i</tt>:
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i = 10; <font color="#003399"><i>/* i gets value 10 */</i></font>
+  <b>int</b> *p;     <font color="#003399"><i>/* undefined       */</i></font>
+  <b>int</b> *q;     <font color="#003399"><i>/* undefined       */</i></font>
+
+  p = &amp;i;   <font color="#003399"><i>/* p gets address of i              */</i></font>
+  q = p;    <font color="#003399"><i>/* q gets value of p (address of i) */</i></font>
+
+  *p = 20;  <font color="#003399"><i>/* i gets value 20 (*p and *q evaluate to 20) */</i></font>
+  *q = 30;  <font color="#003399"><i>/* i gets value 30 (*p and *q evaluate to 30) */</i></font>
+}
+</pre></blockquote>
+
+Visually:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>After declarations for p, q, i</th><th>After <tt>p = &i</tt></th><th>After <tt>q = p</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Pointers-PIQ-1.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PIQ-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PIQ-3.png">
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>After <tt>*p = 20</tt></th><th>After <tt>*q = 30</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Pointers-PIQ-4.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Pointers-PIQ-5.png">
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+	
+<!--
+	This address
+is the address of the first byte (lowest address) byte in the word. (<a href="OperatorsAndExpressions.html#ENDIAN">Endian</a>)
+-->
+</ul>
+
+<p class="technote">
+<b>Self-check:</b> Given the code below, which of the assignment statements are illegal and why? 
+What does the compiler say about the illegal statements?
+</p>
+
+<blockquote><pre>
+<b>int</b> i;   
+<b>int</b> *pi; 
+
+pi = i;   <font color="#003399"><i>/* 1. ??? */</i></font>
+pi = 5;   <font color="#003399"><i>/* 2. ??? */</i></font>
+pi = &amp;i;  <font color="#003399"><i>/* 3. ??? */</i></font>
+*pi = i;  <font color="#003399"><i>/* 4. ??? */</i></font>
+*pi = 5;  <font color="#003399"><i>/* 5. ??? */</i></font>
+*pi = &amp;i; <font color="#003399"><i>/* 6. ??? */</i></font>
+</pre></blockquote>
+
+<!--
+Invalid 1, 2, 5
+-->
+
+Given these declarations:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Assume addresses of variables are */</i></font>
+  <font color="#003399"><i>/* a:100, b:104, c:108, d:112, e:116 */</i></font>
+  <font color="#003399"><i>/* Assume a 32-bit computer          */</i></font>
+<b>int</b> a = 10;
+<b>int</b> b = 108;
+<b>float</b> c = 3.14F;
+<b>int</b> *d = &amp;a;
+<b>float</b> *e = &amp;c;
+</pre></blockquote>
+
+Diagram: (looks like an array, but it's not)
+<blockquote><pre>
+<img src="Pointers-abcde-1.png">
+</pre></blockquote>
+
+Showing the pointer arrows:
+<blockquote><pre>
+<img src="Pointers-abcde-2.png">
+</pre></blockquote>
+
+We can evaluate the expressions as such:
+
+<blockquote><pre>
+Expression    Type         Value
+---------------------------------
+     a         int           10
+     b         <b>int</b>          <b>108</b>
+     c        float        3.14
+     d        int *         100
+     e       <b>float *</b>        <b>108</b>
+    *d         int           10
+    *e        float        3.14
+    &amp;a        int *         100
+    &amp;d        int * *       112
+    *a       illegal       -----
+    *b       illegal       -----
+    *c       illegal       -----
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+<xhr width="90%">
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="SWAP"></a>
+<p class="SectionHeader">
+Passing Pointers to Functions
+</p>
+
+A major benefit of using pointers is realized when we need another function to modify a value. The
+simple example is <tt><b>scanf</b></tt>:
+
+<blockquote><pre>
+<b>int</b> a, b, c;
+scanf(<font color="#9933CC">&quot;%d%d%d&quot;</font>, &amp;a, &amp;b, &amp;c);
+</pre></blockquote>
+
+We want <tt><b>scanf</b></tt> to modify our local variables, but <tt><b>scanf</b></tt> is unable to
+access them (local scope). So, we need to pass them to <tt><b>scanf</b></tt>. We need to pass the addresses of 
+the local variables. If we just passed the values to <tt><b>scanf</b></tt>, any
+changes made to them would be lost after returning from the function.
+
+<p>
+
+Suppose we want to write a function that exchanges the values of two integers. 
+Here's our first (failed) attempt:
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> x = 10;
+  <b>int</b> y = 20;
+
+  printf(<font color="#9933CC">&quot;Before: x = %i, y = %i\n&quot;</font>, x, y);
+  swap(x, y);
+  printf(<font color="#9933CC">&quot; After: x = %i, y = %i\n&quot;</font>, x, y);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Exchanges the values of the parameters */</i></font>
+<b>void</b> swap(<b>int</b> a, <b>int</b> b)
+{
+  <b>int</b> temp = a; <font color="#003399"><i>/* Save a for later      */</i></font>
+  a = b;        <font color="#003399"><i>/* a gets value of b     */</i></font>
+  b = temp;     <font color="#003399"><i>/* b gets <b>old value</b> of a */</i></font>
+}
+
+<font color="blue">
+<b>Output:
+Before swap: x = 10, y = 20
+ After swap: x = 10, y = 20
+</b></font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+Note that to swap we can't just do this:
+
+<blockquote><pre>
+a = b; <font color="#003399"><i>/* value of a is lost */</i></font>
+b = a;
+</pre></blockquote>
+
+
+What went wrong?
+<p>
+
+Visually:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Initialize values, pass to swap</th><th>Make copy of a in temp</th><th>Exchange a,b</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Swap-Value-1.png">
+<p>
+<img src="Swap-Value-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Swap-Value-3.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Swap-Value-4.png">
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Try it again, the correct way:
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Exchanges the values of the parameters */</i></font>
+<b>void</b> swap(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a; <font color="#003399"><i>/* Save a for later      */</i></font>
+  *a = *b;       <font color="#003399"><i>/* a gets value of b     */</i></font>
+  *b = temp;     <font color="#003399"><i>/* b gets old value of a */</i></font>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> x = 10;
+  <b>int</b> y = 20;
+
+  printf(<font color="#9933CC">&quot;Before swap: x = %i, y = %i\n&quot;</font>, x, y);
+  swap(&amp;x, &amp;y);
+  printf(<font color="#9933CC">&quot; After swap: x = %i, y = %i\n&quot;</font>, x, y);
+
+  <b>return</b> 0;
+}
+
+<font color="blue">
+<b>Output:
+Before swap: x = 10, y = 20
+ After swap: x = 20, y = 10
+</b></font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+Visually:
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>In main<br>before swap</th><th>Call swap, pass addresses</th><th>Make copy of a for later</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Swap-Pointer-1.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Swap-Pointer-2.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Swap-Pointer-3.png">
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>Copy *b to *a (y to x in main)</th><th>Copy temp to *b (temp to y in main)</th><th>After swap</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<img src="Swap-Pointer-4.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Swap-Pointer-5.png">
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Swap-Pointer-6.png">
+</pre></blockquote>
+</td>
+</tr></table>
+
+Notes to remember:
+<ul>
+<li>The correct swap function takes <i>pointers to integers</i> as parameters:
+<blockquote><pre>
+<b>void</b> swap(<b>int</b> *a, <b>int</b> *b); <font color="#003399"><i>/* a and b are pointers to integers */</i></font>
+</pre></blockquote>
+<li>You must pass the address of the integers you wish to swap:
+<blockquote><pre>
+<b>int</b> x = 10;
+<b>int</b> y = 20;
+swap(&amp;x, &amp;y); <font color="#003399"><i>/* Must pass the addresses (pointers) of a and b */</i></font>
+</pre></blockquote>
+<li>You must dereference the pointers in the function to get the contents:
+<blockquote><pre>
+<b>int</b> temp = *a; <font color="#003399"><i>/* Dereference the pointer with the * operator */</i></font>
+</pre></blockquote>
+</ul>
+
+<p>
+<xhr width="90%">
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="PASSINGARRAYS"></a>
+<p class="SectionHeader">
+Passing Arrays to Functions (review)
+</p>
+
+<!--http://dit805.digipen.edu/~mmead/www/Courses/CS120/Pointers-1.html#PASSINGARRAYS-->
+
+In C, we can't pass an array to a function. We can only pass the address of the first element
+(pointer to the first element). However, when we pass a pointer to some data, it is possible
+for the function receiving the pointer to modify the data directly, as opposed to modifying
+a <i>copy</i> of the data. 
+<p>
+Let's see how this might be a problem.
+<p>
+This example works as expected (It finds the largest element in an array of integers). 
+A pointer to the first element is passed to the function
+<i>find_largest</i>, along with the size (number of elements) in the array. Since the function
+has a pointer to the first element, it can access every element of the array using the 
+subscript operator:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6};
+  <b>int</b> largest;
+
+  printf(<font color="#9933CC">&quot;Array before:\n&quot;</font>);
+  print_array(a, 8);
+
+  largest = find_largest(a, 8);
+  printf(<font color="#9933CC">&quot;Largest value: %i\n&quot;</font>, largest);
+
+  printf(<font color="#9933CC">&quot;Array after:\n&quot;</font>);
+  print_array(a, 8);
+
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+Array before:
+    4    5    3    9    5    2    7    6
+Largest value: 9
+Array after:
+    4    5    3    9    5    2    7    6
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Assumes there is at least */</i></font>
+<font color="#003399"><i>/* one element in the array  */</i></font>
+<b>int</b> find_largest(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest */</i></font>
+
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i];  <font color="#003399"><i>/* found a larger one */</i></font>
+
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+Let's modify the function to do something unexpected.
+<p>
+Now, the function is modifying the original data (not a copy). It seems that passing a pointer
+to the data, rather than a copy, could be dangerous if the function does something we don't
+expect.
+<p>
+Passing a pointer to a function allows the function to modify our data <i>even if we don't want it to</i>:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Modifies the array the was passed in!! */</i></font>
+<b>int</b> find_largest_BAD(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest */</i></font>
+  a[0] = 0;       <font color="#003399"><i>/* <b>change first element!</b> */</i></font>
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i];  <font color="#003399"><i>/* found a larger one */</i></font>
+    a[i] = 0;      <font color="#003399"><i>/* <b>set element to 0!!</b> */</i></font>
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>Output:</b>
+Array before:
+    4    5    3    9    5    2    7    6
+Largest value: 9
+Array after:
+    0    0    0    0    0    0    0    0
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+There is a solution to this problem. If we need to pass an array to a function, we must
+pass a pointer, which gives the function the ability to mess with the data. If we want to
+prevent the function from modifying the data in the array, we use the <b><tt>const</tt></b> 
+keyword to prevent the function from modify the elements of the array. 
+This makes the elements <i>constant</i>, meaning it is illegal to modify them:
+
+<blockquote><pre>
+<font color="#003399"><i>/* Unable to modify the array since it's const */</i></font>
+<b>int</b> find_largest_BAD(<font color="blue"><b>const</b></font> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest       */</i></font>
+  <font color="red"><b>a[0] = 0;</b></font>       <font color="#003399"><i>/* <b>ILLEGAL: elements are const</b> */</i></font>
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i]; <font color="#003399" ><i>/* found a larger one          */</i></font>
+    <font color="red"><b>a[i] = 0;</b></font>     <font color="#003399"><i>/* <b>ILLEGAL: elements are const</b> */</i></font>
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+
+<b>Compiler errors:</b>
+<blockquote><pre>
+main.c: In function `find_largest_BAD':
+main.c:161: error: assignment of read-only location
+main.c:166: error: assignment of read-only location
+</pre></blockquote>
+
+Going back to the original non-const version of this function:
+<blockquote><pre>
+<b>int</b> find_largest(<b>int</b> a[], <b>int</b> size);
+</pre></blockquote>
+
+If we really don't want our array to change, we declare it with the <tt><b>const</b></tt> keyword:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>const</b> <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6}; <font color="#003399"><i>/* Elements are constant (can't be changed)  */</i></font>
+  <b>int</b> largest = find_largest(a, 8);         <font color="#003399"><i>/* <b>ILLEGAL: Function expects non-const array</b> */</i></font>
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Compiler error:
+<blockquote><pre>
+main.c:185: warning: passing arg 1 of `find_largest' discards qualifiers from pointer target type
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Important</b>: When you create a function that will accept arrays as parameters, be sure to mark them as <tt><b>const</b></tt> 
+if you do not intend to modify them. If you don't make them <tt><b>const</b></tt>, a lot of code will not be able to use your
+function.
+</p>
+</blockquote>
+
+The <tt><b>const</b></tt> keyword can be used to protect the pointer as well as what's being pointed at (the pointee?).
+
+
+<p>
+<hr width="90%">
+<p>
+
+Now that we know that when passing arrays to functions, we are really just passing a pointer, 
+these function declarations are 100% identical. Period. Absolutely NO difference. At. All.
+It is purely cosmetic, the compiler treats them exactly the same, always, without exception.
+<blockquote><pre>
+<b>int</b> find_largest(<b>int</b> a[], <b>int</b> size); <font color="#003399"><i>/* Use array notation   */</i></font>
+<b>int</b> find_largest(<b>int</b> *a, <b>int</b> size);  <font color="#003399"><i>/* Use pointer notation */</i></font>
+</pre></blockquote>
+
+
+
+Finally, never do this! Never return a pointer to a local variable. Ever. In other words, don't do this:
+
+<blockquote><pre>
+<font color="#003399"><i>/* Function returns a pointer to an int */</i></font>
+<b>int</b> *foo(<b>void</b>)
+{
+  <b>int</b> i = 10; <font color="#003399"><i>/* i is local (on the stack) */</i></font>
+  <b>return</b> &amp;i;  <font color="#003399"><i>/* This will be undefined!!  */</i></font>
+}
+</pre></blockquote>
+
+Fortunately, most compilers today will point out the sheer insanity of your code:
+<blockquote><pre>
+main.c: In function `foo':
+main.c:174: warning: function returns address of local variable
+</pre></blockquote>
+Some compilers may even treat this as an error due to the abomination that it is
+(because it is always a bug in the code).
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+More on <tt>const</tt>
+</p>
+
+Sometimes you want to make sure that you don't accidentally change values in your programs. The safest
+way to do this is to mark the identifiers with the <tt><b>const</b></tt> keyword. 
+<p>
+With pointers, you have more flexibility with <tt><b>const</b></tt>. You can make the pointer itself constant, 
+which means once it points at something, it can never be changed to point at something else. Or, you can make
+the data pointed at constant, which means that although you can change the pointer to point at something else,
+you can't change what's being pointed at. 
+<p>
+Here are the four cases:
+
+<ol>
+<li>Neither the pointer nor the data being pointed at (the pointee) is <tt><b>const</b></tt>. Both can be changed:
+<blockquote><pre>
+<b>int</b> *pi; <font color="#003399"><i>/* pi is a (non-const) pointer to a (non-const) int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-non-const-non-const-1.png">
+</blockquote>
+<li>The pointer is not <tt><b>const</b></tt>, but the data pointed at (the pointee) is <tt><b>const</b></tt>. The data is protected. 
+Only the pointer can change:
+<blockquote><pre>
+<b>const</b> <b>int</b> *pci; <font color="#003399"><i>/* pci is a pointer to a const int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-non-const-const-2.png">
+</blockquote>
+<li>The pointer is <tt><b>const</b></tt> but the data being pointed at is non-const. The pointer is protected. The data can be changed through the pointer.
+<blockquote><pre>
+<b>int</b> * <b>const</b> cpi = &amp;i; <font color="#003399"><i>/* cpi is a const pointer to an int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-const-non-const-3.png">
+</blockquote>
+<li>Both the pointer and the data being pointed at are <tt><b>const</b></tt>. Both are protected. Neither can be changed:
+<blockquote><pre>
+<b>const</b> <b>int</b> * <b>const</b> cpci = &amp;ci;  <font color="#003399"><i>/* cpci is a const pointer to a const int */</i></font>
+</pre></blockquote>
+<blockquote>
+<img src="Pointers-const-const-4.png">
+</blockquote>
+</ol>
+
+Points to remember:
+<ul>
+<li>If you mark something as <tt><b>const</b></tt>, you are indicating that it should not change.
+<li>If you DO NOT mark something as <tt><b>const</b></tt>, you are indicating that it should change.
+<li>Therefore, if you are not going to change some data in your program, make sure to mark it <tt><b>const</b></tt>.
+<li>Note that with function parameters, these rules really only apply to pointers (addresses) and arrays. Why?
+<li>When reading pointer declarations with <tt><b>const</b></tt>, read it from right to left.</li>
+<li>The <tt><b>const</b></tt> is a <i>qualifier</i> on the type.</li>
+</ul>
+
+Here is an example that shows the <tt><b>const</b></tt> keyword in action in various ways. <b>Make sure you understand every statement.</b>
+
+<!--
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i = 5;           <font color="#003399"><i>/* i is a non-constant int */</i></font>
+  <b>int</b> j = 6;           <font color="#003399"><i>/* j is a non-constant int */</i></font>
+  <b>const</b> <b>int</b> ci = 10;  <font color="#003399"><i>/* ci is a constant int    */</i></font>
+  <b>const</b> <b>int</b> cj = 11;  <font color="#003399"><i>/* cj is a constant int    */</i></font>
+
+  <b>int</b> *pi;                         <font color="#003399"><i>/* pi is a pointer to an int              */</i></font>
+  <b>const</b> <b>int</b> *pci;                 <font color="#003399"><i>/* pci is a pointer to a const int        */</i></font>
+  <b>int</b> * <b>const</b> cpi = &amp;i;           <font color="#003399"><i>/* cpi is a const pointer to an int       */</i></font>
+  <b>const</b> <b>int</b> * <b>const</b> cpci = &amp;ci;  <font color="#003399"><i>/* cpci is a const pointer to a const int */</i></font>
+
+  i = 6;      <font color="#003399"><i>/* Ok, i is not const    */</i></font>
+  j = 7;      <font color="#003399"><i>/* Ok, j is not const    */</i></font>
+  <font color="red"><b>ci = 8;</b></font>    <font color="#003399"><i>/* ERROR: ci is const    */</i></font>
+  <font color="red"><b>cj = 9;</b></font>    <font color="#003399"><i>/* ERROR: cj is const    */</i></font>
+
+  pi = &amp;i;    <font color="#003399"><i>/* Ok, pi is not const   */</i></font>
+  *pi = 8;    <font color="#003399"><i>/* Ok, *pi is not const  */</i></font>
+  pi = &amp;j;    <font color="#003399"><i>/* Ok, pi is not const   */</i></font>
+  *pi = 9;    <font color="#003399"><i>/* Ok, *pi is not const  */</i></font>
+
+  pci = &amp;ci;  <font color="#003399"><i>/* Ok, pci is not const  */</i></font>
+  <font color="red"><b>*pci = 8;</b></font>  <font color="#003399"><i>/* ERROR: *pci is const  */</i></font>
+  pci = &amp;cj;  <font color="#003399"><i>/* Ok, pci is not const  */</i></font>
+  <font color="red"><b>*pci = 9;</b></font>  <font color="#003399"><i>/* ERROR: *pci is const  */</i></font>
+
+  <font color="red"><b>cpi = &amp;j;</b></font>  <font color="#003399"><i>/* ERROR: cpi is const   */</i></font>
+  *cpi = 10;  <font color="#003399"><i>/* Ok, *cpi is not const */</i></font>
+  *cpi = 11;  <font color="#003399"><i>/* Ok, *cpi is not const */</i></font>
+
+  <font color="red"><b>cpci = &amp;j;</b></font>  <font color="#003399"><i>/* ERROR: cpci is const  */</i></font>
+  <font color="red"><b>*cpci = 10;</b></font> <font color="#003399"><i>/* ERROR: *cpci is const */</i></font>
+  
+  pi = &amp;ci;   <font color="#003399"><i>/* DANGER: constant ci can be changed through pi  */</i></font>
+  cpi = &amp;ci;  <font color="#003399"><i>/* DANGER: constant ci can be changed through cpi */</i></font>
+}
+</pre></blockquote>
+-->
+
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>int</b> i = 5;          <font color="#003399"><i>/* 1. i is a non-constant int */</i></font>
+  <b>int</b> j = 6;          <font color="#003399"><i>/* 2. j is a non-constant int */</i></font>
+  <b>const</b> <b>int</b> ci = 10;  <font color="#003399"><i>/* 3. ci is a constant int    */</i></font>
+  <b>const</b> <b>int</b> cj = 11;  <font color="#003399"><i>/* 4. cj is a constant int    */</i></font>
+
+  <b>int</b> *pi;                      <font color="#003399"><i>/* 5. pi is a pointer to an int              */</i></font>
+  <b>const</b> <b>int</b> *pci;               <font color="#003399"><i>/* 6. pci is a pointer to a const int        */</i></font>
+  <b>int</b> * <b>const</b> cpi = &amp;i;         <font color="#003399"><i>/* 7. cpi is a const pointer to an int       */</i></font>
+  <b>const</b> <b>int</b> * <b>const</b> cpci = &amp;ci; <font color="#003399"><i>/* 8. cpci is a const pointer to a const int */</i></font>
+
+  i = 6;     <font color="#003399"><i> /*  9. Ok, i is not const    */</i></font>
+  j = 7;     <font color="#003399"><i> /* 10. Ok, j is not const    */</i></font>
+  <font color="red"><b>ci = 8;</b></font>     <font color="#003399"><i>/* 11. ERROR: ci is const    */</i></font>
+  <font color="red"><b>cj = 9;</b></font>     <font color="#003399"><i>/* 12. ERROR: cj is const    */</i></font>
+
+  pi = &amp;i;   <font color="#003399"><i> /* 13. Ok, pi is not const   */</i></font>
+  *pi = 8;   <font color="#003399"><i> /* 14. Ok, *pi is not const  */</i></font>
+  pi = &amp;j;   <font color="#003399"><i> /* 15. Ok, pi is not const   */</i></font>
+  *pi = 9;   <font color="#003399"><i> /* 16. Ok, *pi is not const  */</i></font>
+
+  pci = &amp;ci; <font color="#003399"><i> /* 17. Ok, pci is not const  */</i></font>
+  <font color="red"><b>*pci = 8;</b></font>   <font color="#003399"><i>/* 18. ERROR: *pci is const  */</i></font>
+  pci = &amp;cj; <font color="#003399"><i> /* 19. Ok, pci is not const  */</i></font>
+  <font color="red"><b>*pci = 9;</b></font>   <font color="#003399"><i>/* 20. ERROR: *pci is const  */</i></font>
+
+  <font color="red"><b>cpi = &amp;j;</b></font>   <font color="#003399"><i>/* 21. ERROR: cpi is const   */</i></font>
+  *cpi = 10; <font color="#003399"><i> /* 22. Ok, *cpi is not const */</i></font>
+  *cpi = 11; <font color="#003399"><i> /* 23. Ok, *cpi is not const */</i></font>
+
+  <font color="red"><b>cpci = &amp;j;</b></font>  <font color="#003399"><i>/* 24. ERROR: cpci is const  */</i></font>
+  <font color="red"><b>*cpci = 10;</b></font> <font color="#003399"><i>/* 25. ERROR: *cpci is const */</i></font>
+  
+  pi = &amp;ci;  <font color="#003399"><i> /* 26. DANGER: constant ci can be changed through pi */</i></font>
+}
+</pre></blockquote>
+  <!--cpi = &amp;ci;  <font color="#003399"><i>/* DANGER: constant ci can be changed through cpi */</i></font>-->
+
+<p>
+<a href="const-examples.html">Detailed messages</a>
+<p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<xdiv>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Short Array Review 
+</p>
+
+
+Suppose we had an array of 8 chars (8-bits per char) and assigned a value to each char:
+<blockquote><pre>
+<b>unsigned</b> <b>char</b> bytes[8];
+
+bytes[0] = <font color="#9933CC">'J'</font>;  <font color="#003399"><i>/* 0x4A */</i></font>
+bytes[1] = <font color="#9933CC">'o'</font>;  <font color="#003399"><i>/* 0x6F */</i></font>
+bytes[2] = <font color="#9933CC">'h'</font>;  <font color="#003399"><i>/* 0x68 */</i></font>
+bytes[3] = <font color="#9933CC">'n'</font>;  <font color="#003399"><i>/* 0x6E */</i></font>
+bytes[4] = 205;  <font color="#003399"><i>/* 0xCD */</i></font>
+bytes[5] = 204;  <font color="#003399"><i>/* 0xCC */</i></font>
+bytes[6] = 76;   <font color="#003399"><i>/* 0x4C */</i></font>
+bytes[7] = 62;   <font color="#003399"><i>/* 0x3E */</i></font>
+</pre></blockquote>
+
+Remember that we can initialize the array as such:
+<blockquote><pre>
+<b>unsigned char</b> bytes[] = {'J', 'o', 'h', 'n', 205, 204, 76, 62};
+</pre></blockquote>
+
+
+If we assume that the address of the <b>bytes</b> variable is 1000, the raw bits of the array would look like
+this in memory:
+
+
+<blockquote><pre>
+<img src="BytesWords-1.gif">
+</pre></blockquote>
+
+Each of the 8 chars is uniquely identified by it's address:
+
+<blockquote><pre>
+ Address (l-value)        Contents (r-value)
+(shown in decimal)        (shown in binary)
+----------------------------------------------
+&bytes[0] ==> 1000      bytes[0] ==> 01001010 
+&bytes[1] ==> 1001      bytes[1] ==> 01101111
+&bytes[2] ==> 1002      bytes[2] ==> 01101000
+&bytes[3] ==> 1003      bytes[3] ==> 01101110
+&bytes[4] ==> 1004      bytes[4] ==> 11001101
+&bytes[5] ==> 1005      bytes[5] ==> 11001100
+&bytes[6] ==> 1006      bytes[6] ==> 01001100
+&bytes[7] ==> 1007      bytes[7] ==> 00111110
+</pre></blockquote>
+
+We can draw the diagram any way that we like, the computer doesn't care. 
+<p>
+As single printable characters:
+<p>
+<blockquote><pre>
+<img src="MemoryAsChars.gif">
+</pre></blockquote>
+<p>
+
+As integer equivalents of the characters (ASCII values):
+<p>
+<blockquote><pre>
+<img src="MemoryAsBytes.gif">
+</pre></blockquote>
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<a name="POINTER_ARITHMETIC">
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Pointer Arithmetic
+</p>
+</a>
+
+You can perform limited arithmetic with pointers:
+<ol>
+<li>pointer + integer (result is a pointer)
+<li>pointer - integer (result is a pointer)
+<li>pointer - pointer (result is a signed integer, <tt>ptrdiff_t</tt>)
+</ol>
+
+<b>When adding/subtracting integers:</b>
+<p>
+The integers that are added to pointers are <b>scaled</b> by the size of the type of pointer.
+The sizes of <tt>*p</tt> assume a 32-bit machine:
+
+<blockquote><pre>
+Expression      Type of p        Size of *p            Value added 
+--------------------------------------------------------------------
+  p + 1           char *     sizeof(char)   == 1            1
+  p + 1          short *     sizeof(short)  == 2            2
+  p + 1            int *     sizeof(int)    == 4            4
+  p + 1          float *     sizeof(float)  == 4            4
+  p + 1         double *     sizeof(double) == 8            8
+  p + 1            Foo *     sizeof(Foo)    == X            X
+
+  p + 2           char *     sizeof(char)   == 1            2
+  p + 2          short *     sizeof(short)  == 2            4
+  p + 2            int *     sizeof(int)    == 4            8
+  p + 2          float *     sizeof(float)  == 4            8
+  p + 2         double *     sizeof(double) == 8           16
+  p + 2            Foo *     sizeof(Foo)    == X           2 * X
+  
+  p + 3           char *     sizeof(char)   == 1            3
+  p + 3          short *     sizeof(short)  == 2            6
+  p + 3            int *     sizeof(int)    == 4           12
+  p + 3          float *     sizeof(float)  == 4           12
+  p + 3         double *     sizeof(double) == 8           24
+  p + 3            Foo *     sizeof(Foo)    == X           3 * X
+</pre></blockquote>
+
+In the table above, <b>Foo</b> is some user-defined object that requires <b>X</b> bytes in memory. The compiler
+will know about <b>Foo</b> and will scale the value by the appropriate amount. For example, if <tt><b>sizeof(Foo)</b></tt>
+is 20, then <tt>2 * X</tt> would be 40 and <tt>3 * X</tt> would be 60.
+
+<p class="technote">
+<b>Note</b>: Pointer arithmetic is only valid if the pointer is pointing into an array.
+If the pointer is not pointing inside an array, the behavior is undefined. When subtracting
+two pointers, both pointers must be pointing into the same array, otherwise the result
+is undefined.
+</p>
+
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Using Pointers with Arrays
+</p>
+
+	
+We can use pointers with arrays instead of subscripts. Given this array and integer pointer:
+
+<blockquote><pre>
+<b>int</b> a[5];
+<b>int</b> *pi;
+</pre></blockquote>
+
+We have this layout:
+
+<blockquote>
+<img src="Pointers-Array-1.png">
+</blockquote>
+
+
+Initializing each element of an integer array to 0:
+<p>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th></th><th>After the first iteration</th></tr>
+<tr valign="center">
+<td>
+<blockquote><pre>
+<b>for</b> (pi = &amp;a[0]; pi &lt; &amp;a[5]; pi++)
+  *pi = 0;
+</pre></blockquote>
+</td>
+<td>
+<blockquote>
+<img src="Pointers-Array-2.png">
+</blockquote>
+</td>
+</tr></table>
+<p>
+
+We can combine the increment and dereference operators. All of these loops do the same thing.
+You may want to refer to your <a href="../../docs/OperatorPrecedence.html">precedence chart</a>.
+
+<blockquote><pre>
+<b>for</b> (pi = &amp;a[0]; pi &lt; &amp;a[5];)
+  *pi++ = 0;
+</pre></blockquote>
+
+or:   
+  
+<blockquote><pre>
+pi = &amp;a[0];
+<b>while</b> (pi &lt; &amp;a[5])
+  *pi++ = 0;
+</pre></blockquote>
+
+or
+  
+<blockquote><pre>
+<b>for</b> (pi = &amp;a[5]; pi &gt; a;)
+  *--pi = 0;
+</pre></blockquote>
+
+<!--
+or: (this is actually problematic)
+  
+<blockquote><pre>
+<b>for</b> (pi = &amp;array[4]; pi &gt;= array;)
+  *pi-- = 0;
+</pre></blockquote>
+-->
+  
+<b>Subtracting pointers</b>
+
+<ul>
+<li>Subtracting two pointers (finding the difference) is only valid when both 
+pointers point into the same array.
+<li>The difference is in elements, not bytes, so:
+
+<blockquote><pre>
+<b>int</b> a[5];
+
+<b>int</b> *pi1 = &amp;a[1];
+<b>int</b> *pi2 = &amp;a[4];
+<b>int</b> diff = pi2 - pi1;  <font color="#003399"><i>/* diff is 3  */</i></font>
+diff = pi1 - pi2;      <font color="#003399"><i>/* diff is -3 */</i></font>
+</pre></blockquote>
+</ul>
+
+Visually:
+<blockquote>
+<img src="Pointers-Array-diff.png">
+</blockquote>
+
+
+
+<b>Comparing Pointers</b>
+<p>
+
+<ul>
+<li>Both pointers must point into the same array if the result is to have any meaning.
+<li>You can use the operators: <, <=, >, >= with pointers that point into the same array.
+<li>You can use the equality operators, = =, != with arbitrary pointers.
+</ul>
+
+
+
+Notes on using pointers with arrays:
+<ul>
+<li>The results of pointer arithmetic are only defined if the pointer is pointing
+at an element of an array.</li>
+<li>Pointing at an element <i>before</i> the start of the array is undefined (as per the Standard).</li>
+<li>Pointing at an element one past the end of the array is legal, but dereferencing
+it is not.</li>
+<li>Technically, the type returned from subtracting two points is <tt>ptrdiff_t</tt>, but
+  an integer can be used in most cases. (The exception is if the number of elements
+  between the pointers is larger than what a signed integer can hold, which is pretty large.)</li>
+
+</ul>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Pointers vs. Arrays
+</p>
+
+The short Q and A:
+<blockquote>
+<b>Q:</b> Are pointers the same as arrays?<br>
+<b>A:</b> No. Never. Ever. Any questions? 
+(Read all about the <a href="../../docs/Chistory.html">historical accident or mistake</a> that confuses beginning programmers.)
+</blockquote>
+<p>
+
+Moving on...
+<p>
+
+<blockquote>
+<img src="Pointers-Array-3.png">
+</blockquote>
+
+Simple points:
+<ul>
+<li>The address of the array, <tt>a</tt>, is 100.
+<li>The address of the first element, <tt>a[0]</tt>, in the array is also 100.
+<li>The type of <tt>a</tt> is <i>array of 5 ints</i>.
+<li>The type of <tt>a[0]</tt> is <i>int</i>.
+<li>The type of <tt>&a</tt> is <i>pointer to array of 5 ints</i>.
+<li>The type of <tt>&a[0]</tt> is <i>pointer to int</i>.
+</ul>
+
+Suppose we pass this array to some function:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Call the function</th><th>The function definition</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+foo(a, 5);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> foo(<b>int</b> x[], <b>int</b> elements)
+{
+  <font color="#003399"><i>/* do whatever... */</i></font>
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+We know we can't pass an array by value, we can only pass an address. (The address 100 in this example.) But which "100"?
+The <i>array</i> or the <i>int</i>?
+
+<blockquote>
+<p class="technote">
+<b>Important note:</b>
+When passing an array to a function, the compiler passes 
+a <i>pointer to the first element</i>
+	(i.e. the address of the first element) to the function.
+</p>
+</blockquote>
+
+Understanding the above statement is critical. <i>Read it. Learn it. Live it.</i>
+<p>
+This means that these two function prototypes have the exact same meaning:
+<p>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Using array notation</th><th>Using pointer notation</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> foo(<b>int</b> x[], <b>int</b> elements);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> foo(<b>int</b> *x, <b>int</b> elements);
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+	
+Two functions that print an array of integers: (all functions do the same exact thing)
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Using array notation</th><th>Using pointer notation</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> print_array1(<b>int</b> x[], <b>int</b> elements)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; elements; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, <font color="blue"><b>x[i]</b></font>);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> print_array2(<b>int</b> x[], <b>int</b> elements)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; elements; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, <font color="blue"><b>*x++</b></font>);
+}
+</pre></blockquote>
+</td>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> print_array1(<b>int</b> *x, <b>int</b> elements)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; elements; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, <font color="blue"><b>x[i]</b></font>);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> print_array2(<b>int</b> *x, <b>int</b> elements)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; elements; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, <font color="blue"><b>*x++</b></font>);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+Of course, we'd really want to make sure not to modify the array elements:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Using array notation</th><th>Using pointer notation</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> print_array1(<font color="blue"><b>const</b></font> <b>int</b> x[], <b>int</b> elements)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; elements; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, x[i]);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> print_array2(<font color="blue"><b>const</b></font> <b>int</b> *x, <b>int</b> elements)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; elements; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, *x++);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+This means that, when dealing with arrays, we can use subscript notation or
+pointer notation.
+<p>
+
+The Basic Rule:
+
+<blockquote><pre>
+array[index]  
+</pre></blockquote>
+
+<i>is the same as</i>  
+
+<blockquote><pre>
+*(array + index)
+</pre></blockquote>
+
+where:
+<ul>
+<li><i>array</i> is an array of any type
+<li><i>index</i> is any integral expression
+</ul>
+
+This means:
+<ul>
+<li>Referencing an element of an array is done using a pointer and an offset.
+<li>The <i>pointer</i> is usually the address of the start of the array (which is the address of the first element).
+<li>The <i>offset</i> is scaled by the size of the element type. (Pointer arithmetic)
+<li>The compiler converts all array references to a pointer/offset, so:
+
+<blockquote><pre>
+<b>void</b> f(<b>void</b>)
+{
+  <b>int</b> array[] = {5, 10, 15, 20, 25};
+  <b>int</b> index = 3;
+
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, array[index]); <font color="#003399"><i>/* 20 */</i></font>
+}
+</pre></blockquote>
+</ul>
+
+<!--
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, index[array]); <font color="#003399"><i>// ???</i></font>
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, 3[array]);     <font color="#003399"><i>// ???</i></font>
+
+index[array] ==>                      *(index + array) 
+3[array]     ==>                      *(  3   + array)
+
+What's going on in the second and third <tt>printf</tt> statements? (Besides job security)
+<p>
+-->
+
+According to the Basic Rule:
+
+<blockquote><pre>
+array[index] ==> *(array + index)
+</pre></blockquote>
+
+Don't forget that due to C's built-in pointer arithmetic, the addition (e.g. array + 3) is scaled:
+<blockquote><pre>
+array[3] ==> *(array + 3 * <b>sizeof(int)</b>) ==> *(array + 12 <i>bytes</i>)
+</pre></blockquote>
+
+The above means: <i>the fourth element is 12 bytes from the address of array</i>. You
+can see this from looking at a similar diagram:
+
+<blockquote>
+<img src="Pointers-Array-3.png">
+</blockquote>
+
+As a final note, since addition is commutative, these are equivalent:
+
+<blockquote><pre>
+array[3]
+3[array]
+</pre></blockquote>
+
+because they lead to this:
+
+<blockquote><pre>
+array[3] ==> *(array + 3)
+3[array] ==> *(3 + array)
+</pre></blockquote>
+
+The compiler is doing all of the pointer arithmetic behind the scenes. It goes without saying, but
+I'm going to say it anyway: <i>"Never, ever use the second form above!"</i>.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width="90%">
+<h2>Relationship Between Subscripts and Pointers</h2>
+
+Using the rule to convert a subscript to a pointer/offset, we get:
+
+<blockquote><pre>
+ a[i] ==> *(a + i)
+&a[i] ==> &(*(a + i))
+&a[i] ==> &*(a + i)
+&a[i] ==> a + i
+</pre></blockquote>
+
+This shows that the address of any element is just the base address of the array plus the index (scaled).
+
+<blockquote><pre>
+<b>char</b> a[] = <font color="#9933CC">&quot;abcdef&quot;</font>;
+<b>char</b> *p = a;
+
+printf(<font color="#9933CC">&quot;%p, %p, %p, %p, %p\n&quot;</font>, (<b>void</b> *)a, 
+                               (<b>void</b> *)(a + 2), 
+                               (<b>void</b> *)&amp;*(a + 2), 
+                               (<b>void</b> *)(p + 2), 
+                               (<b>void</b> *)&amp;*(p + 2));
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+<b>0012FED4, 0012FED6, 0012FED6, 0012FED6, 0012FED6</b>
+</pre></blockquote>
+
+Other equivalences:
+
+<blockquote><pre>
+ a[i] ==> *(a + i)
+ a[0] ==> *(a + 0)
+ a[0] ==> *a
+&a[0] ==> &*a
+&a[0] ==> a
+</pre></blockquote>
+
+These calls are equivalent:
+
+<blockquote><pre>
+f1(*a);    <font color="#9933CC">/* pass first element of array */</font>
+f1(a[0]);  <font color="#9933CC">/* pass first element of array */</font>
+</pre></blockquote>
+
+and so are these:
+
+<blockquote><pre>
+f2(&a[0]); <font color="#9933CC">/* pass address of first element */</font>
+f2(a);     <font color="#9933CC">/* pass address of first element */</font>
+</pre></blockquote>
+
+<!--
+Given this declaration:
+
+<blockquote><pre>
+<b>int</b> array[] = {2, 4, 6, 8};
+</pre></blockquote>
+
+The following expressions are all equivalent:
+
+<blockquote><pre>
+      array = 0012FF1C
+    &*array = 0012FF1C
+  &*&*array = 0012FF1C
+&*&*&*array = 0012FF1C
+
+      array[0] = 2
+    *&array[0] = 2
+  *&*&array[0] = 2
+*&*&*&array[0] = 2
+</pre></blockquote>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr width="90%">
+<h2>Pointer Expressions and Arrays</h2>
+
+Given this code:
+
+<blockquote><pre>
+<b>int</b> a[10] = {5, 8, 3, 2, 1, 9, 0, 4, 7, 6};
+<b>int</b> *p = a + 2;
+</pre></blockquote>
+
+Abstract diagram:
+<p>
+<blockquote>
+<img src="1D-Array-1.gif">
+</blockquote>
+<p>
+
+or shown with concrete values (addresses are arbitrary, as usual):
+
+<p>
+<blockquote>
+<img src="1D-Array-2.gif">
+</blockquote>
+<p>
+
+Give the equivalent expression using <b>a</b>. (Hint: Determine the type of each expression first)
+</p>
+
+<blockquote><pre><ol><li>p
+<li>p[0]
+<li>*p
+<li>p + 3
+<li>*p + 5
+<li>*(p + 6)
+<li>p[6]
+<li>&p
+<li>p[-1]
+<li>p[9]
+</ol></pre></blockquote>
+<p class="technote">
+<b>You will most certainly see this kind of question on quizzes and exams as it checks to 
+see if you really understand C/C++ programming. Make no mistake, this is one of the most important 
+concepts you need to understand if you're going to be a C/C++ programmer (i.e. a game programmer).</b>
+</p>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+</body>
+</html>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

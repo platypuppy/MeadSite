@@ -1,0 +1,240 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment<p></h1>
+
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Please read this entire page before starting to write code. You'll be glad you did.
+</p>
+
+<ul>
+	
+<li>You are to create a program that prompts the users for 2 dates and then prints
+	out if the first date comes before or after the second date. Here are some <i>interactive</i>
+  examples
+	when executing the program. (The numbers in <font color="red"><b>RED</b></font> were
+	typed in by the user and then the Enter key was pressed.)
+
+<blockquote><pre>
+Enter the first date: (mm/dd/yyyy) <font color="red"><b>07/25/2018</b></font>
+Enter the second date: (mm/dd/yyyy) <font color="red"><b>12/01/2018</b></font>
+07/25/2018 comes before 12/01/2018.
+</pre></blockquote>
+
+<blockquote><pre>
+Enter the first date: (mm/dd/yyyy) <font color="red"><b>12/01/2018</b></font>
+Enter the second date: (mm/dd/yyyy) <font color="red"><b>04/23/2020</b></font>
+12/01/2018 comes before 04/23/2020.
+</pre></blockquote>
+
+<blockquote><pre>
+Enter the first date: (mm/dd/yyyy) <font color="red"><b>04/24/2017</b></font>   
+Enter the second date: (mm/dd/yyyy) <font color="red"><b>04/22/2017</b></font>
+04/24/2017 comes after 04/22/2017.
+</pre></blockquote>
+
+<blockquote><pre>
+Enter the first date: (mm/dd/yyyy) <font color="red"><b>09/21/2023</b></font>
+Enter the second date: (mm/dd/yyyy) <font color="red"><b>09/21/2023</b></font>
+09/21/2023 and 09/21/2023 are the same date.
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+There are only 3 possible outcomes:
+<p>
+<ol>
+	<li>The first date comes <i>before</i> the second date.</li>
+	<li>The first date comes <i>after</i> the second date.</li>
+	<li>The first date is the same as the second date.</li>
+</ol>
+<p>
+
+You will create a file called <tt>dates.c</tt> and implement it there. It's really not 
+a difficult task. You will have to use some conditional (if) statements, of course. 
+Pay attention to the formatting. You will need to use the <b>diff</b> tool and redirection 
+that you learned earlier. Don't forget that you may need to use 
+the <tt>--strip-trailing-cr</tt> switch with <b>diff</b>.
+<blockquote>
+<p class="technote">
+You don't have to worry about invalid input at this point. (That requires a lot
+more code and logic to deal with.) You can assume that the user will only be
+entering valid dates. That is, 3 integers (base 10), formatted exactly as shown.
+There will be 2 digits for the month and day, and 4 digits for the year, all
+separated by a forward slash with no extra spaces. Each date will contain exactly
+10 characters.
+
+</p>
+</blockquote>
+
+You'll do something like this for each date:
+<blockquote><pre>
+  <font color="#003399"><i>/* Prompt the user to enter the first date */</i></font>
+printf(<font color="#9933CC">&quot;Enter the first date: (mm/dd/yyyy) &quot;</font>);
+scanf(<font color="#9933CC">&quot;%d/%d/%d&quot;</font>, <font color="blue"><b>[variables for the first date here]</b></font>);
+</pre></blockquote>
+
+
+<li>Command line for compiling:
+<blockquote><pre>
+<big>gcc -O -Werror -Wall -Wextra -ansi -pedantic -Wno-unused-result dates.c -o dates</big>
+</pre></blockquote>
+
+<p>
+<li>These are the simple steps (algorithm) that you need to implement in C code.</li>
+<p>
+<ol>
+<li>Declare the necessary variables that you will need. Hints:
+<ul>
+	<li>use integers for all variables</li> 
+	<li>use meaning full names</li>
+</ul>
+<li>Display the prompt and accept the user input into the first set of variables
+	(for the first date)</li>
+<li>Display the prompt and accept the user input into the second set of variables
+	(for the second date)</li>
+<li>Using <b><tt>if</tt></b>, <b><tt>else</tt></b>, and <b><tt>else if</tt></b>,
+	figure out if the first date comes before or after the second date and print
+	the appropriate message. If the	dates are the same, print the appropriate message.
+  Hints: </li>
+	<ol type="A">
+		<li>Compare the years first</li>
+    <ul>
+      <li>If the years are different, you know which date comes first and can stop comparing.</li>
+    </ul>
+		<li>Then compare the months</li>
+    <ul>
+      <li>If the months are different, you know which date comes first and can stop comparing.</li>
+    </ul>
+		<li>Finally, compare the days</li>
+    <ul>
+      <li>If the days are different, you know which date comes first and can stop comparing.</li>
+    </ul>
+    <li>Otherwise, the dates are the same</li>
+	</ol>
+
+</ul>
+	
+<ul>
+<li>Here's some code (with comments) to get you started:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt; /* printf, scanf */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="#003399"><i>/* 1. Declare the necessary variables.                                 */</i></font>
+ 
+  <font color="#003399"><i>/* 2. Display the prompt and accept the user input (first date).       */</i></font>
+ 
+  <font color="#003399"><i>/* 3. Display the prompt and accept the user input (second date).      */</i></font>
+ 
+  <font color="#003399"><i>/* 4. Figure out which date comes first and print appropriate message. */</i></font>
+
+  <b>return</b> 0; <font color="#003399"><i>/* Return success to the OS. */</i></font>
+}
+</code></pre>	
+</li>
+
+<p>
+<li>Pay attention to your code formatting. You can look at all of the code samples
+	that are posted in the online notes. These are examples of good programming style. 
+	Also, look at the <a href="../../../../../../docs/CS120StyleGuide.pdf">style guide</a> 
+	that is posted on the home page for CS120.</li>
+<p>
+
+
+<li>Make sure you test your code thoroughly. Here are some sample input files 
+	(and associated output files) for you to test with. 
+	<p>
+<ol>
+	<li><a href="input1.txt">input1.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output1.txt">output1.txt</a> </li>
+	<li><a href="input2.txt">input2.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output2.txt">output2.txt</a> </li>
+	<li><a href="input3.txt">input3.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output3.txt">output3.txt</a> </li>
+	<li><a href="input4.txt">input4.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output4.txt">output4.txt</a> </li>
+	<li><a href="input5.txt">input5.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output5.txt">output5.txt</a> </li>
+	<li><a href="input6.txt">input6.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output6.txt">output6.txt</a> </li>
+	<li><a href="input7.txt">input7.txt</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="output7.txt">output7.txt</a> </li>
+</ol>
+<p>
+Remember, these output files were created by using redirection, so you should be
+creating your output files as such:
+
+<blockquote><pre>
+dates &lt; input1.txt &gt; myoutput1.txt
+dates &lt; input2.txt &gt; myoutput2.txt
+dates &lt; input3.txt &gt; myoutput3.txt
+
+<i>and so on...</i>
+</pre></blockquote>
+
+Remember that, if you use redirection, you won't see what the user typed or have
+the extra newlines in the file. For example, this is what the input1.txt file looks like:
+
+<blockquote><pre>
+03/22/2013
+03/22/2014
+</pre></blockquote>
+
+and this is what the output1.txt file looks like:
+<blockquote><pre>
+Enter the first date: (mm/dd/yyyy) Enter the second date: (mm/dd/yyyy) 03/22/2013 comes before 03/22/2014.
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+Then, using <tt><b>diff</b></tt>:
+
+<blockquote><pre>
+diff myoutput.txt output1.txt --strip-trailing-cr
+</pre></blockquote>
+
+<!--
+<p>
+If you want to see how it's supposed to run, download and run this program:
+<ul>
+	<li><a href="fibonacci.exe">Windows fibonacci.exe</a></li>
+</ul>
+-->
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>

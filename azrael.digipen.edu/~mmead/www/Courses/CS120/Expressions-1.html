@@ -1,0 +1,914 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Expressions</title>
+</head>
+
+<body>  
+<center><h1>Expressions</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Expressions</p>
+
+In C, expressions are used to calculate some value. The simplest expressions are constants and
+variables. There is practically no limit to how complex an expression can be.
+<p>
+	
+Examples:
+
+<blockquote><pre>
+i
+5
+3.1415
+a + b
+rate * time
+x * (a + b / 7.0) - value / y
+x*(a+b/7.0)-value/y
+x   *(a+   b/     7.0)-    value    / y
+sqrt(25.8) + b * abs(c)
+</pre></blockquote>
+
+<ul>
+<li>All expressions consist of <i>operators</i> and <i>operands</i>, just like formulas/equations from high-school
+algebra.
+<li>The <i>type</i> of an expression is based on the type of its operands.
+<li>All expressions evaluate to a (usually single) <i>value</i> and <i>type</i>.
+<li>If there are operands of different types (mixed mode), then some of the operands will be
+	converted to the other type. (The conversion rules can be quite involved.)
+<li>There are <i>many</i> different <a href="../../docs/OperatorPrecedence.html">operators in C</a>. (Some will be used more than others.)
+<li>The basic operators that all languages have are:
+	<ul>
+		<li>Arithmetic operators - for calculating values (e.g. add, subtract, multiply, divide, etc.)
+		<li>Relational operators - for comparing values (e.g. greater than, less than, equal to, etc.)
+ 		<li>Logical operators - for combining operators (e.g. greater than 7 <i>and</i> less than 12)
+  </ul>
+<li>Note that there is no semi-colon after the expressions above, as they are not C <i>statements</i>. Sometimes,
+	as we'll see, we may have a semi-colon after an expression (an <i>expression statement</i>).
+<li>There are <i>unary</i> operators and <i>binary</i> operators. Most are binary operators. There is even a <i>ternary</i> operator (3 operands).
+</ul>
+
+Examples:
+<blockquote><pre>
+-i
++5
+a + b
+rate * time
+</pre></blockquote>
+
+Simple arithmetic unary operators:
+<blockquote>
+<table style="text-align: left; xwidth: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Unary operator</td>
+      <td style="text-align: center; font-weight: bold;">Meaning</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>+</big></big></td>
+      <td style="text-align: center;">Positive (redundant)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>-</big></big></td>
+      <td style="text-align: center;">Negation</td>
+    </tr>
+    </tr>
+  </tbody>
+
+</table>
+</blockquote>
+
+Some simple arithmetic binary operators:
+<blockquote>
+<table style="text-align: left; xwidth: 100px;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Binary operator</td>
+      <td style="text-align: center; font-weight: bold;">Meaning</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>+</big></big></td>
+      <td style="text-align: center;">Add</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>-</big></big></td>
+      <td style="text-align: center;">Subtract</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>*</big></big></td>
+      <td style="text-align: center;">Multiply</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>/</big></big></td>
+      <td style="text-align: center;">Divide</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><big><big>%</big></big></td>
+      <td style="text-align: center;">Modulo<br>
+(Remainder)</td>
+    </tr>
+  </tbody>
+
+</table>
+</blockquote>
+
+With the exception of the modulus operator, all other operators above can work with <i>integral</i> (whole numbers) and <i>floating point</i>
+types. The modulus operator can only be used with integral types.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Precedence and Associativity</p>
+
+Just as in mathematics, all operators have a certain <i>precedence</i>. Simply put, when more than
+one operator is used in an expression, precedence determines which one gets evaluated first.
+<p>
+
+<blockquote><pre>
+3 + 4 * 2 is 11 and is the same as 3 + (4 * 2), although the parentheses are redundant
+
+(3 + 4) * 2 is 14
+
+-4 + 7 is 3 and is the same as (-4) + 7, although the parentheses are redundant
+
+-(4 + 7) is -11
+</pre></blockquote>
+	
+When two or more operators with the same precedence are used in an expression, you must look at the
+operator's <i>associativity</i> to determine the order of evaluation. The order is either left-to-right (L-R) or
+right-to-left (R-L).
+
+<blockquote><pre>
+3 + 4 + 2 is 9 and is the same as (3 + 4) + 2
+
+3 * 4 * 2 is 24 and is the same as (3 * 4) * 2
+
+2 * 6 / 4 is 3 and is the same as (2 * 6) / 4
+
+2 * (6 / 4) is 2
+
+</pre></blockquote>
+
+This <a href="../../docs/OperatorPrecedence.html">precedence chart</a> shows that there are 
+quite a few different levels of precedence within the C operators. Each division (separated by a horizontal line -----)
+is a different precedence level.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Assignment Operators</p>
+
+The assignment operator is very common. There are <i>simple</i> assignments and <i>compound</i> assignments.
+<p>
+	
+Simple assignment statements:
+<blockquote><pre>
+a = 1;
+b = 2;
+a = b;
+a = 3 * b;
+a = 4 - 3 * b / 8;
+</pre></blockquote>
+
+Note that the <tt>=</tt> operator is <i>assignment</i>, not <i>equality</i> (which is <tt>==</tt>, by the way).
+
+<p>
+
+Examples:
+<blockquote><pre>
+<b>int</b> i;    <font color="#003399"><i>/* i holds an undefined value  */</i></font>
+<b>double</b> d; <font color="#003399"><i>/* d holds an undefined value  */</i></font>
+
+i = 10;    <font color="#003399"><i>/* i now holds the value 10   */</i></font>
+i = 12.8;  <font color="#003399"><i>/* i now holds the value 12   */</i></font>
+d = 10;    <font color="#003399"><i>/* d now holds the value 10.0 */</i></font>
+d = 12.8;  <font color="#003399"><i>/* d now holds the value 12.8 */</i></font>
+</pre></blockquote>
+
+The assignment operator is unique compared to the arithmetic operators we've seen so far:
+<ul>
+<li>Most operators <i>do not</i> modify their operands.
+<li>Assignment operators <i>modify</i> the left operand. 
+<li>The left operand must be able to represent a memory location.
+<li>Any expression that can represent a memory location is considered an <i>l-value</i> (or lvalue or lval).
+</ul>
+
+Example:
+<blockquote><pre>
+<b>int</b> a, b, c; <font color="#003399"><i>/* all are undefined */</i></font>
+
+b = 5;       <font color="#003399"><i>/* b is now 5  */</i></font>
+c = 10;      <font color="#003399"><i>/* c is now 10 */</i></font>
+
+a = b + c;   <font color="#003399"><i>/* a is now 15, b and c are unchanged */</i></font>
+a = b * c;   <font color="#003399"><i>/* a is now 50, b and c are unchanged */</i></font>
+</pre></blockquote>
+
+Because of the <i>associativity</i> of the assignment operator, we can do this:
+
+<blockquote><pre>
+a = b = c = 5; <font color="#003399"><i>/* all are now 5 */</i></font>
+</pre></blockquote>
+
+This is the same as this:
+<blockquote><pre>
+a = (b = (c = 5)); <font color="#003399"><i>/* all are now 5 */</i></font>
+</pre></blockquote>
+
+Note that this is very different (and is illegal):
+<blockquote><pre>
+((a = b) = c) = 5; <font color="#003399"><i>/* This is not legal C code */</i></font>
+</pre></blockquote>
+
+This is because the assignment operator requires an l-value, so we can store a value. These are illegal as well:
+
+<blockquote><pre>
+10 = 5;    <font color="#003399"><i>/* Illegal */</i></font>
+10 = a;    <font color="#003399"><i>/* Illegal */</i></font>
+a + b = 8; <font color="#003399"><i>/* Illegal */</i></font>
+10 = 10;   <font color="#003399"><i>/* Illegal */</i></font>
+</pre></blockquote>
+
+Remember, this is <i>assignment</i> <b>not</b> <i>equality</i>. (The value on the left side is changing.)
+
+<p>
+<hr width="90%">
+<p>
+	
+<h2>Compound Assignment</h2>
+
+Often, we'd like to add or subtract a value from a variable, and assign the new value back to the variable.
+This is completely legal (and sane):
+
+<blockquote><pre>
+  <font color="#003399"><i>/* get the current value of a, add 5 to it, */</i></font>
+  <font color="#003399"><i>/* and put the new value back into a        */</i></font>
+a = a + 5;  
+
+  <font color="#003399"><i>/* get the current value of b, subtract 6 from it, */</i></font>
+  <font color="#003399"><i>/* and put the new value back into b               */</i></font>
+b = b - 6;  
+</pre></blockquote>
+
+These can be done more succinctly with <i>compound assignment operators</i> or <i>arithmetic assignment operators</i>:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* get the current value of a, add 5 to it, */</i></font>
+  <font color="#003399"><i>/* and put the new value back into a        */</i></font>
+a += 5;  
+
+  <font color="#003399"><i>/* get the current value of b, subtract 6 from it, */</i></font>
+  <font color="#003399"><i>/* and put the new value back into b               */</i></font>
+b -= 6;  
+</pre></blockquote>
+
+Note that <big><tt><b>+=</b></tt></big> and <big><b><tt>-=</tt></b></big> are single tokens. You cannot insert a space. There is also
+a <big><b><tt>*=</tt></b></big> operator and a <big><b><tt>/=</tt></b></big> operator. (There are several more, which we'll see later.)
+<p>
+
+<p>
+<hr width="90%">
+<p>
+	
+
+<h2>Increment and Decrement Operators</h2>
+
+Adding one or subtracting one from a variable is a very common occurrence. Because of this, there are
+a few operators that are dedicated to this.
+<p>
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Pre-increment</td>
+      <td style="font-weight: bold;">Post-increment </td>
+      <td style="font-weight: bold;">Pre-decrement</td>
+      <td style="font-weight: bold;">Post-decrement</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; font-family: monospace;"><big>++i</big></td>
+      <td style="text-align: center; font-family: monospace;"><big>i++</big></td>
+      <td style="text-align: center; font-family: monospace;"><big>--i</big></td>
+      <td style="font-family: monospace; text-align: center;"><big>i--</big></td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+	
+	
+These three assignment expressions are similar:
+<p>
+	
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold;">Assignment</td>
+      <td style="font-weight: bold;">Compound Assignment </td>
+      <td style="font-weight: bold;">Increment/Decrement</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; text-align: center;"><big>a = a + 1</big></td>
+      <td style="font-family: monospace; text-align: center;"><big>a += 1</big></td>
+      <td style="font-family: monospace; text-align: center;"><big>&nbsp;a++<br>++a</big></td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace; text-align: center;"><big>a = a - 1</big></td>
+      <td style="font-family: monospace; text-align: center;"><big>a -= 1</big></td>
+      <td style="font-family: monospace; text-align: center;"><big>a--<br>--a</big></td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+There is an important but subtle difference between the <i>prefix</i> and <i>postfix</i> versions of the increment/decrement
+operators which causes the above to be not quite true. In other words, the value of these <i>expressions</i> are the same:
+<blockquote><pre>
+a = a + 1       a += 1      ++a
+</pre></blockquote>
+
+Notice the missing <tt>a++</tt> expression. This means that if you displayed these expressions using <tt>printf</tt>, you'd see:
+
+<blockquote><pre>
+a = 5;
+printf(<font color="#9933CC">&quot;value is %i\n&quot;</font>, a = a + 1); <font color="#003399"><i>/* value is 6 */</i></font>
+
+a = 5;
+printf(<font color="#9933CC">&quot;value is %i\n&quot;</font>, a += 1); <font color="#003399"><i>/* value is 6 */</i></font>
+
+a = 5;
+printf(<font color="#9933CC">&quot;value is %i\n&quot;</font>, ++a); <font color="#003399"><i>/* value is 6 */</i></font>
+
+a = 5;
+printf(<font color="#9933CC">&quot;value is %i\n&quot;</font>, a++); <font color="#003399"><i>/* value is 5 */</i></font>
+</pre></blockquote>
+
+However, as <i>statements</i>, these are all equivalent:
+
+<blockquote><pre>
+a = a + 1;
+a += 1;
+++a;
+a++;
+</pre></blockquote>
+
+
+
+<p>
+	
+<blockquote><pre>
+</pre></blockquote>
+
+More examples: Assuming that <tt>a</tt> is an integer:
+<p>
+	
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=2>
+<tr><th>Statements</th><th>Output</th></tr>
+<tr>
+<td valign="top">
+<blockquote><pre>
+a = 5;
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, ++a);
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, a);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+	
+The value of a is 6
+The value of a is 6
+</pre></blockquote>
+</td>
+</tr>	
+
+<td valign="top">
+<blockquote><pre>
+a = 5;
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, a++);
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, a);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+	
+The value of a is 5
+The value of a is 6
+</pre></blockquote>
+</td>
+</tr>	
+<tr>
+<td valign="top">
+<blockquote><pre>
+a = 5;
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, --a);
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, a);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+	
+The value of a is 4
+The value of a is 4
+</pre></blockquote>
+</td>
+</tr>	
+<tr>
+<td valign="top">
+<blockquote><pre>
+a = 5;
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, a--);
+printf(<font color="#9933CC">&quot;The value of a is %i\n&quot;</font>, a);
+
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+	
+The value of a is 5
+The value of a is 4
+</pre></blockquote>
+</td>
+</tr>	
+</table>
+</blockquote>
+
+<!-- 
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+-->
+
+Looking closer, this statement:
+<blockquote><pre>
+c = a++ + ++b;
+</pre></blockquote>
+
+is equivalent to these statements:
+<blockquote><pre>
+b = b + 1;
+c = a + b;
+a = a + 1;
+</pre></blockquote>
+
+
+
+Look closely at the expressions below to determine the output:
+<p>
+	
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=2>
+<tr><th>Statements</th><th>Output</th></tr>
+<tr valign="bottom">
+<td>
+<blockquote><pre>
+a = 5;
+b = 3;
+c = a++ + b++;
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i\n&quot;</font>, a, b, c);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color=black>
+a = 6, b = 4, c = 8
+</font>
+</pre></blockquote>
+</td>
+</tr>	
+<tr valign="bottom">
+<td>
+<blockquote><pre>
+a = 5;
+b = 3;
+c = ++a + b++;
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i\n&quot;</font>, a, b, c);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color=white>
+a = 6, b = 4, c = 9
+</font>
+</pre></blockquote>
+</td>
+</tr>	
+
+<tr valign="bottom">
+<td>
+<blockquote><pre>
+a = 5;
+b = 3;
+c = a++ + ++b;
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i\n&quot;</font>, a, b, c);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color=white>
+a = 6, b = 4, c = 9
+</font>
+</font>
+</pre></blockquote>
+</td>
+</tr>	
+
+<tr valign="bottom">
+<td>
+<blockquote><pre>
+a = 5;
+b = 3;
+c = ++a + ++b;
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i\n&quot;</font>, a, b, c);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color=white>
+a = 6, b = 4, c = 10
+</font>
+</pre></blockquote>
+</td>
+</tr>	
+</table>
+</blockquote>
+
+
+The statement below modifies the values of <tt>a, b, and c</tt>:
+<blockquote><pre>
+c = a++ + ++b;
+</pre></blockquote>
+
+<!--
+<ul>
+<li>Which one is modified first?</li>
+<li>Which one is modified last?</li>
+</ul>
+-->
+
+Remember, to <i>modify</i> a variable means to change the value that is stored at the memory location
+represented by the variable. Graphically, <tt>a++</tt> would look (simplified) something like this:
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><td>Fetch value from memory</td><td>Increment the value by 1</td><td>Store the new value in memory</td></tr>
+<tr align="center">
+<td>
+<img src="CPU-Memory-INC-1.png">
+</td>
+<td>
+<img src="CPU-Memory-INC-2.png">
+</td>
+<td>
+<img src="CPU-Memory-INC-3.png">
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+Notice that there is a time when both the old value and the new value exist. This is key to understanding the increment/decrement
+operators.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Order of Evaluation</p>
+
+Example expressions:
+<blockquote><pre>
+<b>int</b> w = 1;
+<b>int</b> x = 2;
+<b>int</b> y = 3;
+<b>int</b> z = 4;
+<b>int</b> r;
+
+r = w * x + y * z;     <font color="#003399"><i>/* 1. same as: (w * x) + (y * z) */</i></font>
+r = w + x * y + z;     <font color="#003399"><i>/* 2. same as: w + (x * y) + z   */</i></font>
+r = (w + x) * (y + z); <font color="#003399"><i>/* 3. only way to write this     */</i></font>
+</pre></blockquote>
+
+In the <i>compound expressions</i> above, there are actually several <i>subexpressions</i> in each.
+In this expression:
+
+<blockquote><pre>
+r = w * x + y * z     <font color="#003399"><i>/* 1. same as: (w * x) + (y * z) */</i></font>
+</pre></blockquote>
+
+<ol>
+  <li>How many operators are there?</li>
+  <li>Which arithmetic operation is performed <i>last</i>?</li>
+  <li>Which arithmetic operation is performed <i>first</i>?</li>
+</ol>
+
+ In other words, the assignment expression must perform each of these evaluations: 
+ (The registers used here are completely arbitrary, but you should get the idea.)
+
+<ol>
+<li>The value stored at <tt><b>w</b></tt> must be fetched from memory. (Put in register A)
+<li>The value stored at <tt><b>x</b></tt> must be fetched from memory. (Put in register B)
+<li>The value stored at <tt><b>y</b></tt> must be fetched from memory. (Put in register C)
+<li>The value stored at <tt><b>z</b></tt> must be fetched from memory. (Put in register D)
+<li>The value in register A must be multiplied by the value in register B. (Put result in register E)
+<li>The value in register C must be multiplied by the value in register D. (Put result in register F)
+<li>The value in register E is added to the value in register F. (Put result in register G)
+<li>The value in register G is stored in memory location <tt><b>r</b></tt>.
+</ol>
+
+Interestingly, the order of some of these operations is <i>undefined</i>. For example, the first four instructions could
+actually be these:
+<ol>
+<li>The value stored at <tt><b>z</b></tt> is fetched from memory. (Put in register A)
+<li>The value stored at <tt><b>w</b></tt> is fetched from memory. (Put in register B)
+<li>The value stored at <tt><b>x</b></tt> is fetched from memory. (Put in register C)
+<li>The value stored at <tt><b>y</b></tt> is fetched from memory. (Put in register D)
+</ol>
+
+The instructions could be ordered like this:
+<ol>
+<li>The value stored at <tt><b>w</b></tt> is fetched from memory. (Put in register A)
+<li>The value stored at <tt><b>x</b></tt> is fetched from memory. (Put in register B)
+<li>The value in register A is multiplied by the value in register B. (Put result in register C)
+<li>The value stored at <tt><b>y</b></tt> is fetched from memory. (Put in register A)
+<li>The value stored at <tt><b>z</b></tt> is fetched from memory. (Put in register B)
+<li>The value in register A is multiplied by the value in register B. (Put result in register D)
+<li>The value in register C is added to the value in register D. (Put result in register E)
+<li>The value in register E is stored in memory location <tt><b>r</b></tt>.
+</ol>
+
+Or, the instructions could even be like this:
+<ol>
+<li>The value stored at <tt><b>w</b></tt> is fetched from memory. (Put in register A)
+<li>The value stored at <tt><b>x</b></tt> is fetched from memory. (Put in register B)
+<li>The value in register A is multiplied by the value in register B. (Put result in register C)
+<li>The value stored at <tt><b>y</b></tt> is fetched from memory. (Put in register A)
+<li>The value stored at <tt><b>z</b></tt> is fetched from memory. (Put in register B)
+<li>The value in register A is multiplied by the value in register B. (Put result in register A)
+<li>The value in register A is added to the value in register C. (Put result in register B)
+<li>The value in register B is stored in memory location <tt><b>r</b></tt>.
+</ol>
+
+There are many other orderings that are equally valid. However, some subexpressions must be in a
+particular order. For example:
+
+<ul>
+<li><tt><b>w</b></tt> and <tt><b>x</b></tt> must be fetched before they can be multiplied.</li>
+<li><tt><b>y</b></tt> and <tt><b>z</b></tt> must be fetched before they can be multiplied.</li>
+<li><tt><b>w</b></tt> and <tt><b>x</b></tt> must be multiplied before adding to the product of <tt><b>y</b></tt> and <tt><b>z</b></tt>.</li>
+<li>All fetching and arithmetic operations must be done before storing the result into <tt><b>r</b></tt>,
+  which is always the last step.</li>
+</ul>
+
+So, even though the statement:	
+<blockquote><pre>
+r = w * x + y * z;     <font color="#003399"><i>/* 1. same as: (w * x) + (y * z) */</i></font>
+</pre></blockquote>
+
+can be <i>evaluated</i> in a multitude of ways, the result will <b>always be the same</b>: 14
+<p>
+Notes:
+<ul>
+  <li>This is how <i>optimizing compilers</i> work.</li>
+  <li>The compiler can (and will) re-order your code in ways that will make it execute faster.</li>
+  <li>Of course, the compiler must not change the logic of the code (that would be a bug in the compiler.)</li>
+  <li>This kind optimization is where most of the current work on compilers is being done.</li>
+</ul>
+<p class="SectionHeader">Side-effects in Expressions</p>
+
+
+Anytime an operator causes a value in memory to change, it is called a <i>side-effect</i> operator. The most obvious 
+side-effect operator is the assignment operator:
+
+<blockquote><pre>
+e = a * b + c * d;  <font color="#003399"><i>/* Changes the value stored at <b>e</b> */</i></font>
+</pre></blockquote>
+
+However, this statement is actually performing three assignments:
+
+<blockquote><pre>
+e = a++ * b++;  <font color="#003399"><i>/* 3 modifications */</i></font>
+</pre></blockquote>
+
+After the statement completely executes, <tt><b>e</b></tt>, <tt><b>a</b></tt>, and <tt><b>b</b></tt> will have different values.
+<p>
+	
+This is problematic, though:
+<blockquote><pre>
+e = a++ * a;  <font color="#003399"><i>/* dangerous code! */</i></font>
+</pre></blockquote>
+
+Since <tt><b>a</b></tt> is used twice, it will be evaluated twice. And, depending on when the increment to <tt><b>a</b></tt> occurs, 
+the result will be different:
+
+<blockquote><pre>
+a = 2;
+e = a++ * a;  <font color="#003399"><i>/* <b>e</b> is either 4 or 6 */</i></font>
+</pre></blockquote>
+
+In fact, the GNU gcc compiler will actually warn you about it:
+
+<blockquote><pre>
+warning: operation on 'a' may be undefined
+</pre></blockquote>
+
+
+Here's a nasty example of undefined code:
+<p>
+<blockquote><pre>
+<b>#include</b> &lt;stdio.h&gt;
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a = 5;
+  a = a-- - --a * (a = -3) * a++ + ++a;
+  printf(<font color="#9933CC">&quot;a = %i\n&quot;</font>, a);
+
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Depending on which compiler you use, you may get different results:
+
+<blockquote>
+<table border=1 cellspacing=1 cellpadding=10>
+<tr><th>Compiler</th><th>Output</th></tr>
+<tr valign="top">
+<td>GNU gcc</td>
+<td>
+<pre>
+<big>a = 31</big>
+</pre>
+</td>
+</tr>
+<tr>
+<td>Clang</td>
+<td>
+<pre>
+<big>a = -23</big>
+</pre>
+</td>
+</tr>
+<td>Microsoft</td>
+<td>
+<pre>
+<big>a = 4</big>
+</pre>
+</td>
+</tr>
+<tr>
+<td>Borland</td>
+<td>
+<pre>
+<big>a = 21</big>
+</pre>
+</td>
+</tr></table>
+</blockquote>
+
+Fortunately, the GNU compiler will warn you about this:
+
+<blockquote><pre>
+main.c: In function `main':
+main.c:6: warning: operation on `a' may be undefined
+main.c:6: warning: operation on `a' may be undefined
+main.c:6: warning: operation on `a' may be undefined
+main.c:6: warning: operation on `a' may be undefined
+main.c:6: warning: operation on `a' may be undefined
+</pre></blockquote>
+
+Some side-effect operators:
+<blockquote><pre>
+=  +=  -=  *=  /=  
+++ (pre/post increment)  
+-- (pre/post decrement)
+</pre></blockquote>
+
+
+There are 4 side-effect operators in this <i>completely valid</i> expression: (How many tokens are in the expression?)
+<blockquote><pre>
+a = b += c++ - d + --e / -f	
+</pre></blockquote>
+
+What will be printed by this code? The first thing you should do is identify which variables are going to have their values
+changed. You'll definitely want to refer to the <a href="../../docs/OperatorPrecedence.html">precedence chart</a>.
+<blockquote><pre>
+<b>int</b> a = 1;
+<b>int</b> b = 2;
+<b>int</b> c = 3;
+<b>int</b> d = 4;
+<b>int</b> e = 5;
+<b>int</b> f = 6;
+
+a = b += c++ - d + --e / -f;
+
+printf(<font color="#9933CC">&quot;a = %i, b = %i, c = %i, d = %i, e = %i, f = %i\n&quot;</font>, a, b, c, d, e, f);
+</pre></blockquote>
+<!--
+a = 1, b = 1, c = 4, d = 4, e = 4, f = 6
+-->
+
+To better understand the expression above, you should add parentheses to explicitly show the order of evaluation.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<!--
+<p>
+<hr>
+<h2>Expression Evaluation</h2>
+
+Expressions are evaluated based on:
+<ul>
+<li>Operator precedence
+<li>Operator associativity
+</ul>
+-->
+<p>
+	
+
+Given this code:
+<blockquote><pre>
+<b>int</b> x = a * b + c * d + e * f;
+</pre></blockquote>
+
+Which value is fetched from memory first? (Compiler-dependent)
+<p>
+
+There are rules that dictate precedence and associativity, but there may still be ambiguity (due to side-effect operations).
+<p>
+More complex example (with visible side-effects):
+
+<blockquote><pre>
+<b>int</b> PrintAndReturn(<b>int</b> value)
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, value);
+  <b>return</b> value;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> x, y;
+  
+  x = PrintAndReturn(1) + PrintAndReturn(2) + PrintAndReturn(3);
+  printf(<font color="#9933CC">&quot;x = %i\n&quot;</font>, x);
+  
+  y = PrintAndReturn(1) + PrintAndReturn(2) * PrintAndReturn(3);
+  printf(<font color="#9933CC">&quot;y = %i\n&quot;</font>, y);
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+<br><br>
+
+The order in which expressions are evalutated is more relevant when the expressions have
+side effects. All compilers will not generate the same output.
+
+<!--
+ Test Sequence1    Test Sequence1   Test Sequence1
+x[0] = 0          x[0] = 0         x[0] = 0
+x[1] = 1          x[1] = 1         x[1] = 1
+x[2] = 0          x[2] = 0         x[2] = 0
+x[3] = 0          x[3] = 0         x[3] = 0
+                                   
+y[0] = 0          y[0] = 0         y[0] = 0
+y[1] = 2          y[1] = 0         y[1] = 0
+y[2] = 0          y[2] = 2         y[2] = 2
+y[3] = 0          y[3] = 0         y[3] = 0
+ Test Sequence2    Test Sequence2   Test Sequence2
+c = -2            c = -2           c = -3
+ Test Sequence3    Test Sequence3   Test Sequence3
+-->
+<blockquote><pre>
+GNU               MS               Borland
+1                 1                1
+2                 2                2
+3                 3                3
+x = 6             x = 6            x = 6
+1                 1                2
+2                 2                3
+3                 3                1
+y = 7             y = 7            y = 7
+</pre></blockquote>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

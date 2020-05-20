@@ -1,0 +1,117 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>inode</title>
+
+
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*
+ * Keep mostly read-only and often accessed (especially for
+ * the RCU path lookup and 'stat' data) fields at the beginning
+ * of the 'struct inode'
+ */</i></font>
+<b>struct</b> inode {
+  umode_t     i_mode;
+  <b>unsigned</b> <b>short</b>    i_opflags;
+  uid_t     i_uid;
+  gid_t     i_gid;
+  <b>unsigned</b> <b>int</b>    i_flags;
+
+<font color="990099">#ifdef CONFIG_FS_POSIX_ACL</font>
+  <b>struct</b> posix_acl  *i_acl;
+  <b>struct</b> posix_acl  *i_default_acl;
+<font color="990099">#endif</font>
+
+  <b>const</b> <b>struct</b> inode_operations *i_op;
+  <b>struct</b> super_block  *i_sb;
+  <b>struct</b> address_space  *i_mapping;
+
+<font color="990099">#ifdef CONFIG_SECURITY</font>
+  <b>void</b>      *i_security;
+<font color="990099">#endif</font>
+
+  <font color="#003399"><i>/* Stat data, not accessed from path walking */</i></font>
+  <b>unsigned</b> <b>long</b>   i_ino;
+  <font color="#003399"><i>/*
+   * Filesystems may only read i_nlink directly.  They shall use the
+   * following functions for modification:
+   *
+   *    (set|clear|inc|drop)_nlink
+   *    inode_(inc|dec)_link_count
+   */</i></font>
+  <b>union</b> {
+    <b>const</b> <b>unsigned</b> <b>int</b> i_nlink;
+    <b>unsigned</b> <b>int</b> __i_nlink;
+  };
+  dev_t     i_rdev;
+  <b>struct</b> timespec   i_atime;
+  <b>struct</b> timespec   i_mtime;
+  <b>struct</b> timespec   i_ctime;
+  spinlock_t    i_lock; <font color="#003399"><i>/* i_blocks, i_bytes, maybe i_size */</i></font>
+  <b>unsigned</b> <b>short</b>          i_bytes;
+  blkcnt_t    i_blocks;
+  loff_t      i_size;
+
+<font color="990099">#ifdef __NEED_I_SIZE_ORDERED</font>
+  seqcount_t    i_size_seqcount;
+<font color="990099">#endif</font>
+
+  <font color="#003399"><i>/* Misc */</i></font>
+  <b>unsigned</b> <b>long</b>   i_state;
+  <b>struct</b> mutex    i_mutex;
+
+  <b>unsigned</b> <b>long</b>   dirtied_when; <font color="#003399"><i>/* jiffies of first dirtying */</i></font>
+
+  <b>struct</b> hlist_node i_hash;
+  <b>struct</b> list_head  i_wb_list;  <font color="#003399"><i>/* backing dev IO list */</i></font>
+  <b>struct</b> list_head  i_lru;    <font color="#003399"><i>/* inode LRU list */</i></font>
+  <b>struct</b> list_head  i_sb_list;
+  <b>union</b> {
+    <b>struct</b> list_head  i_dentry;
+    <b>struct</b> rcu_head   i_rcu;
+  };
+  atomic_t    i_count;
+  <b>unsigned</b> <b>int</b>    i_blkbits;
+  u64     i_version;
+  atomic_t    i_dio_count;
+  atomic_t    i_writecount;
+  <b>const</b> <b>struct</b> file_operations  *i_fop; <font color="#003399"><i>/* former -&gt;i_op-&gt;default_file_ops */</i></font>
+  <b>struct</b> file_lock  *i_flock;
+  <b>struct</b> address_space  i_data;
+<font color="990099">#ifdef CONFIG_QUOTA</font>
+  <b>struct</b> dquot    *i_dquot[MAXQUOTAS];
+<font color="990099">#endif</font>
+  <b>struct</b> list_head  i_devices;
+  <b>union</b> {
+
+
+
+    <b>struct</b> pipe_inode_info  *i_pipe;
+    <b>struct</b> block_device *i_bdev;
+    <b>struct</b> cdev   *i_cdev;
+  };
+
+  __u32     i_generation;
+
+<font color="990099">#ifdef CONFIG_FSNOTIFY</font>
+  __u32     i_fsnotify_mask; <font color="#003399"><i>/* all events this inode cares about */</i></font>
+  <b>struct</b> hlist_head i_fsnotify_marks;
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef CONFIG_IMA</font>
+  atomic_t    i_readcount; <font color="#003399"><i>/* struct files open RO */</i></font>
+<font color="990099">#endif</font>
+  <b>void</b>      *i_private; <font color="#003399"><i>/* fs or device private pointer */</i></font>
+};
+</code></pre>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>

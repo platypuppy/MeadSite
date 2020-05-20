@@ -1,0 +1,1315 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>xutility.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>// xutility internal header</i></font>
+<b>#pragma</b> once
+<b>#ifndef</b> _XUTILITY_
+<b>#define</b> _XUTILITY_
+<b>#include</b> &lt;climits&gt;
+<b>#include</b> &lt;utility&gt;
+
+<b>#pragma</b> pack(push,8)
+<b>#pragma</b> <b>warning</b>(push,3)
+
+<b>#pragma</b> <b>warning</b>(<b>disable</b>:4284 4786)
+_STD_BEGIN
+
+<font color="#003399"><i>//  ITERATOR STUFF (from &lt;iterator&gt;)</i></font>
+
+    <font color="#003399"><i>// ITERATOR TAGS</i></font>
+<b>struct</b> input_iterator_tag
+  { <font color="#003399"><i>// identifying tag for input iterators</i></font>
+  };
+
+<b>struct</b> output_iterator_tag
+  { <font color="#003399"><i>// identifying tag for output iterators</i></font>
+  };
+
+<b>struct</b> forward_iterator_tag
+  : <b>public</b> input_iterator_tag
+  { <font color="#003399"><i>// identifying tag for forward iterators</i></font>
+  };
+
+<b>struct</b> bidirectional_iterator_tag
+  : <b>public</b> forward_iterator_tag
+  { <font color="#003399"><i>// identifying tag for bidirectional iterators</i></font>
+  };
+
+<b>struct</b> random_access_iterator_tag
+  : <b>public</b> bidirectional_iterator_tag
+  { <font color="#003399"><i>// identifying tag for random-access iterators</i></font>
+  };
+
+<b>struct</b> _Int_iterator_tag
+  { <font color="#003399"><i>// identifying tag for integer types, not an iterator</i></font>
+  };
+
+    <font color="#003399"><i>// POINTER ITERATOR TAGS</i></font>
+<b>struct</b> _Nonscalar_ptr_iterator_tag
+  { <font color="#003399"><i>// pointer to unknown type</i></font>
+  };
+<b>struct</b> _Scalar_ptr_iterator_tag
+  { <font color="#003399"><i>// pointer to scalar type</i></font>
+  };
+
+    <font color="#003399"><i>// TEMPLATE CLASS iterator</i></font>
+<b>template</b>&lt;<b>class</b> _Category,
+  <b>class</b> _Ty,
+  <b>class</b> _Diff = ptrdiff_t,
+  <b>class</b> _Pointer = _Ty *,
+  <b>class</b> _Reference = _Ty&amp;&gt;
+    <b>struct</b> iterator
+  { <font color="#003399"><i>// base type for all iterator classes</i></font>
+  <b>typedef</b> _Category iterator_category;
+  <b>typedef</b> _Ty value_type;
+  <b>typedef</b> _Diff difference_type;
+  <b>typedef</b> _Diff distance_type;  <font color="#003399"><i>// retained</i></font>
+  <b>typedef</b> _Pointer pointer;
+  <b>typedef</b> _Reference reference;
+  };
+
+<b>template</b>&lt;<b>class</b> _Ty,
+  <b>class</b> _Diff,
+  <b>class</b> _Pointer,
+  <b>class</b> _Reference&gt;
+  <b>struct</b> _Bidit
+    : <b>public</b> iterator&lt;bidirectional_iterator_tag, _Ty, _Diff,
+      _Pointer, _Reference&gt;
+  { <font color="#003399"><i>// base for bidirectional iterators</i></font>
+  };
+
+<b>template</b>&lt;<b>class</b> _Ty,
+  <b>class</b> _Diff,
+  <b>class</b> _Pointer,
+  <b>class</b> _Reference&gt;
+  <b>struct</b> _Ranit
+    : <b>public</b> iterator&lt;random_access_iterator_tag, _Ty, _Diff,
+      _Pointer, _Reference&gt;
+  { <font color="#003399"><i>// base for random-access iterators</i></font>
+  };
+
+<b>struct</b> _Outit
+  : <b>public</b> iterator&lt;output_iterator_tag, <b>void</b>, <b>void</b>,
+    <b>void</b>, <b>void</b>&gt;
+  { <font color="#003399"><i>// base for output iterators</i></font>
+  };
+
+    <font color="#003399"><i>// TEMPLATE CLASS iterator_traits</i></font>
+<b>template</b>&lt;<b>class</b> _Iter&gt;
+  <b>struct</b> iterator_traits
+  { <font color="#003399"><i>// get traits from iterator _Iter</i></font>
+  <b>typedef</b> <b>typename</b> _Iter::iterator_category iterator_category;
+  <b>typedef</b> <b>typename</b> _Iter::value_type value_type;
+  <b>typedef</b> <b>typename</b> _Iter::difference_type difference_type;
+  <b>typedef</b> difference_type distance_type;  <font color="#003399"><i>// retained</i></font>
+  <b>typedef</b> <b>typename</b> _Iter::pointer pointer;
+  <b>typedef</b> <b>typename</b> _Iter::reference reference;
+  };
+
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+  <b>struct</b> iterator_traits&lt;_Ty *&gt;
+  { <font color="#003399"><i>// get traits from pointer</i></font>
+  <b>typedef</b> random_access_iterator_tag iterator_category;
+  <b>typedef</b> _Ty value_type;
+  <b>typedef</b> ptrdiff_t difference_type;
+  <b>typedef</b> ptrdiff_t distance_type;  <font color="#003399"><i>// retained</i></font>
+  <b>typedef</b> _Ty *pointer;
+  <b>typedef</b> _Ty&amp; reference;
+  };
+
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+  <b>struct</b> iterator_traits&lt;<b>const</b> _Ty *&gt;
+  { <font color="#003399"><i>// get traits from const pointer</i></font>
+  <b>typedef</b> random_access_iterator_tag iterator_category;
+  <b>typedef</b> _Ty value_type;
+  <b>typedef</b> ptrdiff_t difference_type;
+  <b>typedef</b> ptrdiff_t distance_type;  <font color="#003399"><i>// retained</i></font>
+  <b>typedef</b> <b>const</b> _Ty *pointer;
+  <b>typedef</b> <b>const</b> _Ty&amp; reference;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;_Bool&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>char</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>signed</b> <b>char</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>unsigned</b> <b>char</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+ <font color="990099">#ifdef _NATIVE_WCHAR_T_DEFINED</font>
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>wchar_t</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+ <font color="990099">#endif /* _NATIVE_WCHAR_T_DEFINED */</font>
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>short</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>unsigned</b> <b>short</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>int</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>unsigned</b> <b>int</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>long</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;<b>unsigned</b> <b>long</b>&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+ <font color="990099">#ifdef _LONGLONG</font>
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;_LONGLONG&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+
+<b>template</b>&lt;&gt; <b>struct</b> iterator_traits&lt;_ULONGLONG&gt;
+  { <font color="#003399"><i>// get traits from integer type</i></font>
+  <b>typedef</b> _Int_iterator_tag iterator_category;
+  };
+ <font color="990099">#endif /* _LONGLONG */</font>
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION _Iter_cat</i></font>
+<b>template</b>&lt;<b>class</b> _Iter&gt; <b>inline</b>
+  <b>typename</b> iterator_traits&lt;_Iter&gt;::iterator_category
+    _Iter_cat(<b>const</b> _Iter&amp;)
+  { <font color="#003399"><i>// return category from iterator argument</i></font>
+  <b>typename</b> iterator_traits&lt;_Iter&gt;::iterator_category _Cat;
+  <b>return</b> (_Cat);
+  }
+
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION _Ptr_cat</i></font>
+<b>template</b>&lt;<b>class</b> _T1,
+  <b>class</b> _T2&gt; <b>inline</b>
+  _Nonscalar_ptr_iterator_tag _Ptr_cat(_T1&amp;, _T2&amp;)
+  { <font color="#003399"><i>// return pointer category from arbitrary arguments</i></font>
+  _Nonscalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+  _Scalar_ptr_iterator_tag _Ptr_cat(_Ty **, _Ty **)
+  { <font color="#003399"><i>// return pointer category from pointer to pointer arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+  _Scalar_ptr_iterator_tag _Ptr_cat(_Ty **, <b>const</b> _Ty **)
+  { <font color="#003399"><i>// return pointer category from pointer to pointer arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+  _Scalar_ptr_iterator_tag _Ptr_cat(_Ty *<b>const</b> *, _Ty **)
+  { <font color="#003399"><i>// return pointer category from pointer to pointer arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+  _Scalar_ptr_iterator_tag _Ptr_cat(_Ty *<b>const</b> *, <b>const</b> _Ty **)
+  { <font color="#003399"><i>// return pointer category from pointer to pointer arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+    <font color="#003399"><i>// INTEGER FUNCTION _Ptr_cat</i></font>
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(_Bool *, _Bool *)
+  { <font color="#003399"><i>// return pointer category from pointer to bool arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> _Bool *, _Bool *)
+  { <font color="#003399"><i>// return pointer category from pointer to bool arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>char</b> *, <b>char</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to char arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>char</b> *, <b>char</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to char arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>signed</b> <b>char</b> *, <b>signed</b> <b>char</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to signed char arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>signed</b> <b>char</b> *, <b>signed</b> <b>char</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to signed char arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>unsigned</b> <b>char</b> *, <b>unsigned</b> <b>char</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned char arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>unsigned</b> <b>char</b> *,
+  <b>unsigned</b> <b>char</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned char arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+ <font color="990099">#ifdef _NATIVE_WCHAR_T_DEFINED</font>
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>wchar_t</b> *, <b>wchar_t</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to wchar_t arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>wchar_t</b> *, <b>wchar_t</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to wchar_t arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+ <font color="990099">#endif /* _NATIVE_WCHAR_T_DEFINED */</font>
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>short</b> *, <b>short</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to short arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>short</b> *, <b>short</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to short arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>unsigned</b> <b>short</b> *,
+  <b>unsigned</b> <b>short</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned short arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>unsigned</b> <b>short</b> *,
+  <b>unsigned</b> <b>short</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned short arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>int</b> *, <b>int</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to int arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>int</b> *, <b>int</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to int arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>unsigned</b> <b>int</b> *, <b>unsigned</b> <b>int</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned int arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>unsigned</b> <b>int</b> *, <b>unsigned</b> <b>int</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned int arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>long</b> *, <b>long</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>long</b> *, <b>long</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>unsigned</b> <b>long</b> *, <b>unsigned</b> <b>long</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>unsigned</b> <b>long</b> *,
+  <b>unsigned</b> <b>long</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to unsigned long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>float</b> *, <b>float</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to float arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>float</b> *, <b>float</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to float arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>double</b> *, <b>double</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to double arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>double</b> *, <b>double</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to double arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>long</b> <b>double</b> *, <b>long</b> <b>double</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to long double arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> <b>long</b> <b>double</b> *, <b>long</b> <b>double</b> *)
+  { <font color="#003399"><i>// return pointer category from pointer to long double arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+ <font color="990099">#ifdef _LONGLONG</font>
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(_LONGLONG *, _LONGLONG *)
+  { <font color="#003399"><i>// return pointer category from pointer to long long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> _LONGLONG *, _LONGLONG *)
+  { <font color="#003399"><i>// return pointer category from pointer to long long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(_ULONGLONG *, _ULONGLONG *)
+  { <font color="#003399"><i>// return pointer category from pointer to ulong long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+
+<b>inline</b> _Scalar_ptr_iterator_tag _Ptr_cat(<b>const</b> _ULONGLONG *, _ULONGLONG *)
+  { <font color="#003399"><i>// return pointer category from pointer to ulong long arguments</i></font>
+  _Scalar_ptr_iterator_tag _Cat;
+  <b>return</b> (_Cat);
+  }
+ <font color="990099">#endif /* _LONGLONG */</font>
+
+
+    <font color="#003399"><i>// TEMPLATE FUNCTIONS distance and _Distance</i></font>
+<b>template</b>&lt;<b>class</b> _InIt,
+  <b>class</b> _Diff&gt; <b>inline</b>
+    <b>void</b> _Distance2(_InIt _First, _InIt _Last, _Diff&amp; _Off,
+      input_iterator_tag)
+  { <font color="#003399"><i>// add to _Off distance between input iterators</i></font>
+  <b>for</b> (; _First != _Last; ++_First)
+    ++_Off;
+  }
+
+<b>template</b>&lt;<b>class</b> _FwdIt,
+  <b>class</b> _Diff&gt; <b>inline</b>
+    <b>void</b> _Distance2(_FwdIt _First, _FwdIt _Last, _Diff&amp; _Off,
+      forward_iterator_tag)
+  { <font color="#003399"><i>// add to _Off distance between forward iterators (redundant)</i></font>
+  <b>for</b> (; _First != _Last; ++_First)
+    ++_Off;
+  }
+
+<b>template</b>&lt;<b>class</b> _BidIt,
+  <b>class</b> _Diff&gt; <b>inline</b>
+    <b>void</b> _Distance2(_BidIt _First, _BidIt _Last, _Diff&amp; _Off,
+      bidirectional_iterator_tag)
+  { <font color="#003399"><i>// add to _Off distance between bidirectional iterators (redundant)</i></font>
+  <b>for</b> (; _First != _Last; ++_First)
+    ++_Off;
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt,
+  <b>class</b> _Diff&gt; <b>inline</b>
+    <b>void</b> _Distance2(_RanIt _First, _RanIt _Last, _Diff&amp; _Off,
+      random_access_iterator_tag)
+  { <font color="#003399"><i>// add to _Off distance between random-access iterators</i></font>
+
+
+  _Off += _Last - _First;
+  }
+
+<b>template</b>&lt;<b>class</b> _InIt&gt; <b>inline</b>
+  <b>typename</b> iterator_traits&lt;_InIt&gt;::difference_type
+    distance(_InIt _First, _InIt _Last)
+  { <font color="#003399"><i>// return distance between iterators</i></font>
+  <b>typename</b> iterator_traits&lt;_InIt&gt;::difference_type _Off = 0;
+  _Distance2(_First, _Last, _Off, _Iter_cat(_First));
+  <b>return</b> (_Off);
+  }
+
+
+<b>template</b>&lt;<b>class</b> _InIt,
+  <b>class</b> _Diff&gt; <b>inline</b>
+    <b>void</b> _Distance(_InIt _First, _InIt _Last, _Diff&amp; _Off)
+  { <font color="#003399"><i>// add to _Off distance between iterators</i></font>
+  _Distance2(_First, _Last, _Off, _Iter_cat(_First));
+  }
+
+    <font color="#003399"><i>// TEMPLATE CLASS reverse_iterator</i></font>
+<b>template</b>&lt;<b>class</b> _RanIt&gt;
+  <b>class</b> reverse_iterator
+    : <b>public</b> iterator&lt;
+      <b>typename</b> iterator_traits&lt;_RanIt&gt;::iterator_category,
+      <b>typename</b> iterator_traits&lt;_RanIt&gt;::value_type,
+      <b>typename</b> iterator_traits&lt;_RanIt&gt;::difference_type,
+      <b>typename</b> iterator_traits&lt;_RanIt&gt;::pointer,
+      <b>typename</b> iterator_traits&lt;_RanIt&gt;::reference&gt;
+  { <font color="#003399"><i>// wrap iterator to run it backwards</i></font>
+<b>public</b>:
+  <b>typedef</b> reverse_iterator&lt;_RanIt&gt; _Myt;
+  <b>typedef</b> <b>typename</b> iterator_traits&lt;_RanIt&gt;::difference_type difference_type;
+  <b>typedef</b> <b>typename</b> iterator_traits&lt;_RanIt&gt;::pointer pointer;
+  <b>typedef</b> <b>typename</b> iterator_traits&lt;_RanIt&gt;::reference reference;
+  <b>typedef</b> _RanIt iterator_type;
+
+  reverse_iterator()
+    { <font color="#003399"><i>// construct with default wrapped iterator</i></font>
+    }
+
+  <b>explicit</b> reverse_iterator(_RanIt _Right)
+    : current(_Right)
+    { <font color="#003399"><i>// construct wrapped iterator from _Right</i></font>
+    }
+
+  <b>template</b>&lt;<b>class</b> _Other&gt;
+    reverse_iterator(<b>const</b> reverse_iterator&lt;_Other&gt;&amp; _Right)
+    : current(_Right.base())
+    { <font color="#003399"><i>// initialize with compatible base</i></font>
+    }
+
+  _RanIt base() <b>const</b>
+    { <font color="#003399"><i>// return wrapped iterator</i></font>
+    <b>return</b> (current);
+    }
+
+  reference <b>operator</b>*() <b>const</b>
+    { <font color="#003399"><i>// return designated value</i></font>
+    _RanIt _Tmp = current;
+    <b>return</b> (*--_Tmp);
+    }
+
+  pointer <b>operator</b>-&gt;() <b>const</b>
+    { <font color="#003399"><i>// return pointer to class object</i></font>
+    <b>return</b> (&amp;**<b>this</b>);
+    }
+
+  _Myt&amp; <b>operator</b>++()
+    { <font color="#003399"><i>// preincrement</i></font>
+    --current;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>++(<b>int</b>)
+    { <font color="#003399"><i>// postincrement</i></font>
+    _Myt _Tmp = *<b>this</b>;
+    --current;
+    <b>return</b> (_Tmp);
+    }
+
+  _Myt&amp; <b>operator</b>--()
+    { <font color="#003399"><i>// predecrement</i></font>
+    ++current;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>--(<b>int</b>)
+    { <font color="#003399"><i>// postdecrement</i></font>
+    _Myt _Tmp = *<b>this</b>;
+    ++current;
+    <b>return</b> (_Tmp);
+    }
+
+  <b>bool</b> _Equal(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test for iterator equality</i></font>
+    <b>return</b> (current == _Right.current);
+    }
+
+<font color="#003399"><i>// N.B. functions valid for random-access iterators only beyond this point</i></font>
+
+  _Myt&amp; <b>operator</b>+=(difference_type _Off)
+    { <font color="#003399"><i>// increment by integer</i></font>
+    current -= _Off;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>+(difference_type _Off) <b>const</b>
+    { <font color="#003399"><i>// return this + integer</i></font>
+    <b>return</b> (_Myt(current - _Off));
+    }
+
+  _Myt&amp; <b>operator</b>-=(difference_type _Off)
+    { <font color="#003399"><i>// decrement by integer</i></font>
+    current += _Off;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>-(difference_type _Off) <b>const</b>
+    { <font color="#003399"><i>// return this - integer</i></font>
+    <b>return</b> (_Myt(current + _Off));
+    }
+
+  reference <b>operator</b>[](difference_type _Off) <b>const</b>
+    { <font color="#003399"><i>// subscript</i></font>
+    <b>return</b> (*(*<b>this</b> + _Off));
+    }
+
+  <b>bool</b> _Less(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test if this &lt; _Right</i></font>
+    <b>return</b> (_Right.current &lt; current);
+    }
+
+  difference_type _Minus(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// return difference of iterators</i></font>
+    <b>return</b> (_Right.current - current);
+    }
+
+<b>protected</b>:
+  _RanIt current; <font color="#003399"><i>// the wrapped iterator</i></font>
+  };
+
+    <font color="#003399"><i>// reverse_iterator TEMPLATE OPERATORS</i></font>
+<b>template</b>&lt;<b>class</b> _RanIt,
+  <b>class</b> _Diff&gt; <b>inline</b>
+  reverse_iterator&lt;_RanIt&gt; <b>__cdecl</b> <b>operator</b>+(_Diff _Off,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// return reverse_iterator + integer</i></font>
+  <b>return</b> (_Right + _Off);
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>typename</b> reverse_iterator&lt;_RanIt&gt;::difference_type
+    <b>__cdecl</b> <b>operator</b>-(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// return difference of reverse_iterators</i></font>
+  <b>return</b> (_Left._Minus(_Right));
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>==(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for reverse_iterator equality</i></font>
+  <b>return</b> (_Left._Equal(_Right));
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>!=(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for reverse_iterator inequality</i></font>
+  <b>return</b> (!(_Left == _Right));
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>&lt;(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for reverse_iterator &lt; reverse_iterator</i></font>
+  <b>return</b> (_Left._Less(_Right));
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>&gt;(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for reverse_iterator &gt; reverse_iterator</i></font>
+  <b>return</b> (_Right &lt; _Left);
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>&lt;=(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for reverse_iterator &lt;= reverse_iterator</i></font>
+  <b>return</b> (!(_Right &lt; _Left));
+  }
+
+<b>template</b>&lt;<b>class</b> _RanIt&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>&gt;=(<b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Left,
+    <b>const</b> reverse_iterator&lt;_RanIt&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for reverse_iterator &gt;= reverse_iterator</i></font>
+  <b>return</b> (!(_Left &lt; _Right));
+  }
+
+    <font color="#003399"><i>// TEMPLATE CLASS reverse_bidirectional_iterator (retained)</i></font>
+<b>template</b>&lt;<b>class</b> _BidIt,
+  <b>class</b> _Ty,
+  <b>class</b> _Reference = _Ty&amp;,
+  <b>class</b> _Pointer = _Ty *,
+  <b>class</b> _Diff = ptrdiff_t&gt;
+  <b>class</b> reverse_bidirectional_iterator
+    : <b>public</b> _Bidit&lt;_Ty, _Diff, _Pointer, _Reference&gt;
+  { <font color="#003399"><i>// wrap bidirectional iterator to run it backwards</i></font>
+<b>public</b>:
+  <b>typedef</b> reverse_bidirectional_iterator&lt;_BidIt, _Ty, _Reference,
+    _Pointer, _Diff&gt; _Myt;
+  <b>typedef</b> _BidIt iterator_type;
+
+  reverse_bidirectional_iterator()
+    { <font color="#003399"><i>// construct with default wrapped iterator</i></font>
+    }
+
+  <b>explicit</b> reverse_bidirectional_iterator(_BidIt _Right)
+    : current(_Right)
+    { <font color="#003399"><i>// construct wrapped iterator from _Right</i></font>
+    }
+
+  _BidIt base() <b>const</b>
+    { <font color="#003399"><i>// return wrapped iterator</i></font>
+    <b>return</b> (current);
+    }
+
+  _Reference <b>operator</b>*() <b>const</b>
+    { <font color="#003399"><i>// return designated value</i></font>
+    _BidIt _Tmp = current;
+    <b>return</b> (*--_Tmp);
+    }
+
+  _Pointer <b>operator</b>-&gt;() <b>const</b>
+    {       <font color="#003399"><i>// return pointer to class object</i></font>
+    _Reference _Tmp = **<b>this</b>;
+    <b>return</b> (&amp;_Tmp);
+    }
+
+  _Myt&amp; <b>operator</b>++()
+    { <font color="#003399"><i>// preincrement</i></font>
+    --current;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>++(<b>int</b>)
+    { <font color="#003399"><i>// postincrement</i></font>
+    _Myt _Tmp = *<b>this</b>;
+    --current;
+    <b>return</b> (_Tmp);
+    }
+
+  _Myt&amp; <b>operator</b>--()
+    { <font color="#003399"><i>// predecrement</i></font>
+    ++current;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>--(<b>int</b>)
+    { <font color="#003399"><i>// postdecrement</i></font>
+    _Myt _Tmp = *<b>this</b>;
+    ++current;
+    <b>return</b> (_Tmp);
+    }
+
+  <b>bool</b> <b>operator</b>==(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test for iterator equality</i></font>
+    <b>return</b> (current == _Right.current);
+    }
+
+  <b>bool</b> <b>operator</b>!=(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test for iterator inequality</i></font>
+    <b>return</b> (!(*<b>this</b> == _Right));
+    }
+
+<b>protected</b>:
+  _BidIt current; <font color="#003399"><i>// the wrapped iterator</i></font>
+  };
+
+    <font color="#003399"><i>// TEMPLATE CLASS _Revbidit</i></font>
+<b>template</b>&lt;<b>class</b> _BidIt,
+  <b>class</b> _BidIt2 = _BidIt&gt;
+  <b>class</b> _Revbidit
+    : <b>public</b> iterator&lt;
+      <b>typename</b> iterator_traits&lt;_BidIt&gt;::iterator_category,
+      <b>typename</b> iterator_traits&lt;_BidIt&gt;::value_type,
+      <b>typename</b> iterator_traits&lt;_BidIt&gt;::difference_type,
+      <b>typename</b> iterator_traits&lt;_BidIt&gt;::pointer,
+      <b>typename</b> iterator_traits&lt;_BidIt&gt;::reference&gt;
+  { <font color="#003399"><i>// wrap bidirectional iterator to run it backwards</i></font>
+<b>public</b>:
+  <b>typedef</b> _Revbidit&lt;_BidIt, _BidIt2&gt; _Myt;
+  <b>typedef</b> <b>typename</b> iterator_traits&lt;_BidIt&gt;::difference_type _Diff;
+  <b>typedef</b> <b>typename</b> iterator_traits&lt;_BidIt&gt;::pointer _Pointer;
+  <b>typedef</b> <b>typename</b> iterator_traits&lt;_BidIt&gt;::reference _Reference;
+  <b>typedef</b> _BidIt iterator_type;
+
+  _Revbidit()
+    { <font color="#003399"><i>// construct with default wrapped iterator</i></font>
+    }
+
+  <b>explicit</b> _Revbidit(_BidIt _Right)
+    : current(_Right)
+    { <font color="#003399"><i>// construct wrapped iterator from _Right</i></font>
+    }
+
+  _Revbidit(<b>const</b> _Revbidit&lt;_BidIt2&gt;&amp; _Other)
+    : current (_Other.base())
+    { <font color="#003399"><i>// const converter or copy constructor</i></font>
+    }
+
+  _BidIt base() <b>const</b>
+    { <font color="#003399"><i>// return wrapped iterator</i></font>
+    <b>return</b> (current);
+    }
+
+  _Reference <b>operator</b>*() <b>const</b>
+    { <font color="#003399"><i>// return designated value</i></font>
+    _BidIt _Tmp = current;
+    <b>return</b> (*--_Tmp);
+    }
+
+  _Pointer <b>operator</b>-&gt;() <b>const</b>
+    { <font color="#003399"><i>// return pointer to class object</i></font>
+    _Reference _Tmp = **<b>this</b>;
+    <b>return</b> (&amp;_Tmp);
+    }
+
+  _Myt&amp; <b>operator</b>++()
+    { <font color="#003399"><i>// preincrement</i></font>
+    --current;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>++(<b>int</b>)
+    { <font color="#003399"><i>// postincrement</i></font>
+    _Myt _Tmp = *<b>this</b>;
+    --current;
+    <b>return</b> (_Tmp);
+    }
+
+  _Myt&amp; <b>operator</b>--()
+    { <font color="#003399"><i>// predecrement</i></font>
+    ++current;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>--(<b>int</b>)
+    { <font color="#003399"><i>// postdecrement</i></font>
+    _Myt _Tmp = *<b>this</b>;
+    ++current;
+    <b>return</b> (_Tmp);
+    }
+
+  <b>bool</b> <b>operator</b>==(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test for iterator equality</i></font>
+    <b>return</b> (current == _Right.current);
+    }
+
+  <b>bool</b> <b>operator</b>!=(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test for iterator inequality</i></font>
+    <b>return</b> (!(*<b>this</b> == _Right));
+    }
+
+<b>protected</b>:
+  _BidIt current;
+  };
+
+    <font color="#003399"><i>// TEMPLATE CLASS istreambuf_iterator</i></font>
+<b>template</b>&lt;<b>class</b> _Elem,
+  <b>class</b> _Traits&gt;
+  <b>class</b> istreambuf_iterator
+    : <b>public</b> iterator&lt;input_iterator_tag,
+      _Elem, <b>typename</b> _Traits::off_type, _Elem *, _Elem&amp;&gt;
+  { <font color="#003399"><i>// wrap stream buffer as input iterator</i></font>
+<b>public</b>:
+  <b>typedef</b> istreambuf_iterator&lt;_Elem, _Traits&gt; _Myt;
+  <b>typedef</b> _Elem char_type;
+  <b>typedef</b> _Traits traits_type;
+  <b>typedef</b> basic_streambuf&lt;_Elem, _Traits&gt; streambuf_type;
+  <b>typedef</b> basic_istream&lt;_Elem, _Traits&gt; istream_type;
+  <b>typedef</b> <b>typename</b> traits_type::int_type int_type;
+
+  istreambuf_iterator(streambuf_type *_Sb = 0) _THROW0()
+    : _Strbuf(_Sb), _Got(_Sb == 0)
+    { <font color="#003399"><i>// construct from stream buffer _Sb</i></font>
+    }
+
+  istreambuf_iterator(istream_type&amp; _Istr) _THROW0()
+    : _Strbuf(_Istr.rdbuf()), _Got(_Istr.rdbuf() == 0)
+    { <font color="#003399"><i>// construct from stream buffer in istream _Istr</i></font>
+    }
+
+  _Elem <b>operator</b>*() <b>const</b>
+    { <font color="#003399"><i>// return designated value</i></font>
+    <b>if</b> (!_Got)
+      ((_Myt *)<b>this</b>)-&gt;_Peek();
+    <b>return</b> (_Val);
+    }
+
+  _Myt&amp; <b>operator</b>++()
+    { <font color="#003399"><i>// preincrement</i></font>
+    _Inc();
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt <b>operator</b>++(<b>int</b>)
+    { <font color="#003399"><i>// postincrement</i></font>
+    <b>if</b> (!_Got)
+      _Peek();
+    _Myt _Tmp = *<b>this</b>;
+    ++*<b>this</b>;
+    <b>return</b> (_Tmp);
+    }
+
+  <b>bool</b> equal(<b>const</b> _Myt&amp; _Right) <b>const</b>
+    { <font color="#003399"><i>// test for equality</i></font>
+    <b>if</b> (!_Got)
+      ((_Myt *)<b>this</b>)-&gt;_Peek();
+    <b>if</b> (!_Right._Got)
+      ((_Myt *)&amp;_Right)-&gt;_Peek();
+    <b>return</b> (_Strbuf == 0 &amp;&amp; _Right._Strbuf == 0
+      || _Strbuf != 0 &amp;&amp; _Right._Strbuf != 0);
+    }
+
+<b>private</b>:
+  <b>void</b> _Inc()
+    { <font color="#003399"><i>// skip to next input element</i></font>
+    <b>if</b> (_Strbuf == 0
+      || traits_type::eq_int_type(traits_type::eof(),
+        _Strbuf-&gt;sbumpc()))
+      _Strbuf = 0, _Got = true;
+    <b>else</b>
+      _Got = <b>false</b>;
+    }
+
+  _Elem _Peek()
+    { <font color="#003399"><i>// peek at next input element</i></font>
+    int_type _Meta;
+    <b>if</b> (_Strbuf == 0
+      || traits_type::eq_int_type(traits_type::eof(),
+        _Meta = _Strbuf-&gt;sgetc()))
+      _Strbuf = 0;
+    <b>else</b>
+      _Val = traits_type::to_char_type(_Meta);
+    _Got = true;
+    <b>return</b> (_Val);
+    }
+
+  streambuf_type *_Strbuf;  <font color="#003399"><i>// the wrapped stream buffer</i></font>
+  <b>bool</b> _Got;  <font color="#003399"><i>// true if _Val is valid</i></font>
+  _Elem _Val; <font color="#003399"><i>// next element to deliver</i></font>
+  };
+
+    <font color="#003399"><i>// istreambuf_iterator TEMPLATE OPERATORS</i></font>
+<b>template</b>&lt;<b>class</b> _Elem,
+  <b>class</b> _Traits&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>==(
+    <b>const</b> istreambuf_iterator&lt;_Elem, _Traits&gt;&amp; _Left,
+    <b>const</b> istreambuf_iterator&lt;_Elem, _Traits&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for istreambuf_iterator equality</i></font>
+  <b>return</b> (_Left.equal(_Right));
+  }
+
+<b>template</b>&lt;<b>class</b> _Elem,
+  <b>class</b> _Traits&gt; <b>inline</b>
+  <b>bool</b> <b>__cdecl</b> <b>operator</b>!=(
+    <b>const</b> istreambuf_iterator&lt;_Elem, _Traits&gt;&amp; _Left,
+    <b>const</b> istreambuf_iterator&lt;_Elem, _Traits&gt;&amp; _Right)
+  { <font color="#003399"><i>// test for istreambuf_iterator inequality</i></font>
+  <b>return</b> (!(_Left == _Right));
+  }
+
+    <font color="#003399"><i>// TEMPLATE CLASS ostreambuf_iterator</i></font>
+<b>template</b>&lt;<b>class</b> _Elem,
+  <b>class</b> _Traits&gt;
+  <b>class</b> ostreambuf_iterator
+    : <b>public</b> _Outit
+  { <font color="#003399"><i>// wrap stream buffer as output iterator</i></font>
+  <b>typedef</b> ostreambuf_iterator&lt;_Elem, _Traits&gt; _Myt;
+<b>public</b>:
+  <b>typedef</b> _Elem char_type;
+  <b>typedef</b> _Traits traits_type;
+  <b>typedef</b> basic_streambuf&lt;_Elem, _Traits&gt; streambuf_type;
+  <b>typedef</b> basic_ostream&lt;_Elem, _Traits&gt; ostream_type;
+
+  ostreambuf_iterator(streambuf_type *_Sb) _THROW0()
+    : _Failed(<b>false</b>), _Strbuf(_Sb)
+    { <font color="#003399"><i>// construct from stream buffer _Sb</i></font>
+    }
+
+  ostreambuf_iterator(ostream_type&amp; _Ostr) _THROW0()
+    : _Failed(<b>false</b>), _Strbuf(_Ostr.rdbuf())
+    { <font color="#003399"><i>// construct from stream buffer in _Ostr</i></font>
+    }
+
+  _Myt&amp; <b>operator</b>=(_Elem _Right)
+    { <font color="#003399"><i>// store element and increment</i></font>
+    <b>if</b> (_Strbuf == 0
+      || traits_type::eq_int_type(_Traits::eof(),
+        _Strbuf-&gt;sputc(_Right)))
+      _Failed = true;
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt&amp; <b>operator</b>*()
+    { <font color="#003399"><i>// pretend to get designated element</i></font>
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt&amp; <b>operator</b>++()
+    { <font color="#003399"><i>// pretend to preincrement</i></font>
+    <b>return</b> (*<b>this</b>);
+    }
+
+  _Myt&amp; <b>operator</b>++(<b>int</b>)
+    { <font color="#003399"><i>// pretend to postincrement</i></font>
+    <b>return</b> (*<b>this</b>);
+    }
+
+  <b>bool</b> failed() <b>const</b> _THROW0()
+    { <font color="#003399"><i>// return true if any stores failed</i></font>
+    <b>return</b> (_Failed);
+    }
+
+<b>private</b>:
+  <b>bool</b> _Failed; <font color="#003399"><i>// true if any stores have failed</i></font>
+  streambuf_type *_Strbuf;  <font color="#003399"><i>// the wrapped stream buffer</i></font>
+  };
+
+<font color="#003399"><i>//  ALGORITHM STUFF (from &lt;algorithm&gt;)</i></font>
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION copy</i></font>
+<b>template</b>&lt;<b>class</b> _InIt,
+  <b>class</b> _OutIt&gt; <b>inline</b>
+  _OutIt _Copy_opt(_InIt _First, _InIt _Last, _OutIt _Dest,
+    _Nonscalar_ptr_iterator_tag)
+  { <font color="#003399"><i>// copy [_First, _Last) to [_Dest, ...), arbitrary iterators</i></font>
+  <b>for</b> (; _First != _Last; ++_Dest, ++_First)
+    *_Dest = *_First;
+  <b>return</b> (_Dest);
+  }
+
+<b>template</b>&lt;<b>class</b> _InIt,
+  <b>class</b> _OutIt&gt; <b>inline</b>
+  _OutIt _Copy_opt(_InIt _First, _InIt _Last, _OutIt _Dest,
+    _Scalar_ptr_iterator_tag)
+  { <font color="#003399"><i>// copy [_First, _Last) to [_Dest, ...), pointers to scalars</i></font>
+  ptrdiff_t _Off = _Last - _First;  <font color="#003399"><i>// NB: non-overlapping move</i></font>
+  <b>return</b> ((_OutIt)::memmove(&amp;*_Dest, &amp;*_First,
+    _Off * <b>sizeof</b> (*_First)) + _Off);
+  }
+
+<b>template</b>&lt;<b>class</b> _InIt,
+  <b>class</b> _OutIt&gt; <b>inline</b>
+  _OutIt copy(_InIt _First, _InIt _Last, _OutIt _Dest)
+  { <font color="#003399"><i>// copy [_First, _Last) to [_Dest, ...)</i></font>
+  <b>return</b> (_Copy_opt(_First, _Last, _Dest, _Ptr_cat(_First, _Dest)));
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION copy_backward</i></font>
+<b>template</b>&lt;<b>class</b> _BidIt1,
+  <b>class</b> _BidIt2&gt; <b>inline</b>
+  _BidIt2 _Copy_backward_opt(_BidIt1 _First, _BidIt1 _Last, _BidIt2 _Dest,
+    _Nonscalar_ptr_iterator_tag)
+  { <font color="#003399"><i>// copy [_First, _Last) backwards to [..., _Dest), arbitrary iterators</i></font>
+  <b>while</b> (_First != _Last)
+    *--_Dest = *--_Last;
+  <b>return</b> (_Dest);
+  }
+
+<b>template</b>&lt;<b>class</b> _InIt,
+  <b>class</b> _OutIt&gt; <b>inline</b>
+  _OutIt _Copy_backward_opt(_InIt _First, _InIt _Last, _OutIt _Dest,
+    _Scalar_ptr_iterator_tag)
+  { <font color="#003399"><i>// copy [_First, _Last) backwards to [..., _Dest), pointers to scalars</i></font>
+  ptrdiff_t _Off = _Last - _First;  <font color="#003399"><i>// NB: non-overlapping move</i></font>
+  <b>return</b> ((_OutIt)memmove(&amp;*_Dest - _Off, &amp;*_First,
+    _Off * <b>sizeof</b> (*_First)));
+  }
+
+<b>template</b>&lt;<b>class</b> _BidIt1,
+  <b>class</b> _BidIt2&gt; <b>inline</b>
+  _BidIt2 copy_backward(_BidIt1 _First, _BidIt1 _Last, _BidIt2 _Dest)
+  { <font color="#003399"><i>// copy [_First, _Last) backwards to [..., _Dest)</i></font>
+  <b>return</b> (_Copy_backward_opt(_First, _Last, _Dest,
+    _Ptr_cat(_First, _Dest)));
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION mismatch</i></font>
+<b>template</b>&lt;<b>class</b> _InIt1,
+  <b>class</b> _InIt2&gt; <b>inline</b>
+  pair&lt;_InIt1, _InIt2&gt;
+    mismatch(_InIt1 _First1, _InIt1 _Last1, _InIt2 _First2)
+  { <font color="#003399"><i>// return [_First1, _Last1) and [_First2, _Last2) mismatch</i></font>
+  <b>for</b> (; _First1 != _Last1 &amp;&amp; *_First1 == *_First2; )
+    ++_First1, ++_First2;
+  <b>return</b> (pair&lt;_InIt1, _InIt2&gt;(_First1, _First2));
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION mismatch WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _InIt1,
+  <b>class</b> _InIt2,
+  <b>class</b> _Pr&gt; <b>inline</b>
+  pair&lt;_InIt1, _InIt2&gt;
+    mismatch(_InIt1 _First1, _InIt1 _Last1, _InIt2 _First2, _Pr _Pred)
+  { <font color="#003399"><i>// return [_First1, _Last1) and [_First2, _Last2) mismatch using _Pred</i></font>
+  <b>for</b> (; _First1 != _Last1 &amp;&amp; _Pred(*_First1, *_First2); )
+    ++_First1, ++_First2;
+  <b>return</b> (pair&lt;_InIt1, _InIt2&gt;(_First1, _First2));
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION equal</i></font>
+<b>template</b>&lt;<b>class</b> _InIt1,
+  <b>class</b> _InIt2&gt; <b>inline</b>
+  <b>bool</b> equal(_InIt1 _First1, _InIt1 _Last1, _InIt2 _First2)
+  { <font color="#003399"><i>// compare [_First1, _Last1) to [First2, ...)</i></font>
+  <b>return</b> (mismatch(_First1, _Last1, _First2).first == _Last1);
+  }
+
+<b>inline</b> <b>bool</b> equal(<b>const</b> <b>char</b> *_First1,
+  <b>const</b> <b>char</b> *_Last1, <b>const</b> <b>char</b> *_First2)
+  { <font color="#003399"><i>// compare [_First1, _Last1) to [First2, ...), for chars</i></font>
+  <b>return</b> (::memcmp(_First1, _First2, _Last1 - _First1) == 0);
+  }
+
+<b>inline</b> <b>bool</b> equal(<b>const</b> <b>signed</b> <b>char</b> *_First1,
+  <b>const</b> <b>signed</b> <b>char</b> *_Last1, <b>const</b> <b>signed</b> <b>char</b> *_First2)
+  { <font color="#003399"><i>// compare [_First1, _Last1) to [First2, ...), for signed chars</i></font>
+  <b>return</b> (::memcmp(_First1, _First2, _Last1 - _First1) == 0);
+  }
+
+<b>inline</b> <b>bool</b> equal(<b>const</b> <b>unsigned</b> <b>char</b> *_First1,
+  <b>const</b> <b>unsigned</b> <b>char</b> *_Last1, <b>const</b> <b>unsigned</b> <b>char</b> *_First2)
+  { <font color="#003399"><i>// compare [_First1, _Last1) to [First2, ...), for unsigned chars</i></font>
+  <b>return</b> (::memcmp(_First1, _First2, _Last1 - _First1) == 0);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION equal WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _InIt1,
+  <b>class</b> _InIt2,
+  <b>class</b> _Pr&gt; <b>inline</b>
+  <b>bool</b> equal(_InIt1 _First1, _InIt1 _Last1, _InIt2 _First2, _Pr _Pred)
+  { <font color="#003399"><i>// compare [_First1, _Last1) to [First2, ...) using _Pred</i></font>
+  <b>return</b> (mismatch(_First1, _Last1, _First2, _Pred).first == _Last1);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION fill</i></font>
+<b>template</b>&lt;<b>class</b> _FwdIt,
+  <b>class</b> _Ty&gt; <b>inline</b>
+  <b>void</b> fill(_FwdIt _First, _FwdIt _Last, <b>const</b> _Ty&amp; _Val)
+  { <font color="#003399"><i>// copy _Val through [_First, _Last)</i></font>
+  <b>for</b> (; _First != _Last; ++_First)
+    *_First = _Val;
+  }
+
+<b>inline</b> <b>void</b> fill(<b>char</b> *_First, <b>char</b> *_Last, <b>int</b> _Val)
+  { <font color="#003399"><i>// copy char _Val through [_First, _Last)</i></font>
+  ::memset(_First, _Val, _Last - _First);
+  }
+
+<b>inline</b> <b>void</b> fill(<b>signed</b> <b>char</b> *_First, <b>signed</b> <b>char</b> *_Last, <b>int</b> _Val)
+  { <font color="#003399"><i>// copy signed char _Val through [_First, _Last)</i></font>
+  ::memset(_First, _Val, _Last - _First);
+  }
+
+<b>inline</b> <b>void</b> fill(<b>unsigned</b> <b>char</b> *_First, <b>unsigned</b> <b>char</b> *_Last, <b>int</b> _Val)
+  { <font color="#003399"><i>// copy unsigned char _Val through [_First, _Last)</i></font>
+  ::memset(_First, _Val, _Last - _First);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION fill_n</i></font>
+<b>template</b>&lt;<b>class</b> _OutIt,
+  <b>class</b> _Diff,
+  <b>class</b> _Ty&gt; <b>inline</b>
+  <b>void</b> fill_n(_OutIt _First, _Diff _Count, <b>const</b> _Ty&amp; _Val)
+  { <font color="#003399"><i>// copy _Val _Count times through [_First, ...)</i></font>
+  <b>for</b> (; 0 &lt; _Count; --_Count, ++_First)
+    *_First = _Val;
+  }
+
+<b>inline</b> <b>void</b> fill_n(<b>char</b> *_First, size_t _Count, <b>int</b> _Val)
+  { <font color="#003399"><i>// copy char _Val _Count times through [_First, ...)</i></font>
+  ::memset(_First, _Val, _Count);
+  }
+
+<b>inline</b> <b>void</b> fill_n(<b>signed</b> <b>char</b> *_First, size_t _Count, <b>int</b> _Val)
+  { <font color="#003399"><i>// copy signed char _Val _Count times through [_First, ...)</i></font>
+  ::memset(_First, _Val, _Count);
+  }
+
+<b>inline</b> <b>void</b> fill_n(<b>unsigned</b> <b>char</b> *_First, size_t _Count, <b>int</b> _Val)
+  { <font color="#003399"><i>// copy unsigned char _Val _Count times through [_First, ...)</i></font>
+  ::memset(_First, _Val, _Count);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION lexicographical_compare</i></font>
+<b>template</b>&lt;<b>class</b> _InIt1,
+  <b>class</b> _InIt2&gt; <b>inline</b>
+  <b>bool</b> lexicographical_compare(_InIt1 _First1, _InIt1 _Last1,
+    _InIt2 _First2, _InIt2 _Last2)
+  { <font color="#003399"><i>// order [_First1, _Last1) vs. [First2, Last2)</i></font>
+  <b>for</b> (; _First1 != _Last1 &amp;&amp; _First2 != _Last2; ++_First1, ++_First2)
+    <b>if</b> (*_First1 &lt; *_First2)
+      <b>return</b> (true);
+    <b>else</b> <b>if</b> (*_First2 &lt; *_First1)
+      <b>return</b> (<b>false</b>);
+  <b>return</b> (_First1 == _Last1 &amp;&amp; _First2 != _Last2);
+  }
+
+<b>inline</b> <b>bool</b> lexicographical_compare(
+  <b>const</b> <b>unsigned</b> <b>char</b> *_First1, <b>const</b> <b>unsigned</b> <b>char</b> *_Last1,
+  <b>const</b> <b>unsigned</b> <b>char</b> *_First2, <b>const</b> <b>unsigned</b> <b>char</b> *_Last2)
+  { <font color="#003399"><i>// order [_First1, _Last1) vs. [First2, Last2), for unsigned char</i></font>
+  ptrdiff_t _Num1 = _Last1 - _First1;
+  ptrdiff_t _Num2 = _Last2 - _First2;
+  <b>int</b> _Ans = ::memcmp(_First1, _First2, _Num1 &lt; _Num2 ? _Num1 : _Num2);
+  <b>return</b> (_Ans &lt; 0 || _Ans == 0 &amp;&amp; _Num1 &lt; _Num2);
+  }
+
+ <font color="990099">#if CHAR_MAX == UCHAR_MAX</font>
+<b>inline</b> <b>bool</b> lexicographical_compare(
+  <b>const</b> <b>char</b> *_First1, <b>const</b> <b>char</b> *_Last1,
+  <b>const</b> <b>char</b> *_First2, <b>const</b> <b>char</b> *_Last2)
+  { <font color="#003399"><i>// order [_First1, _Last1) vs. [First2, Last2), for nonnegative char</i></font>
+  ptrdiff_t _Num1 = _Last1 - _First1;
+  ptrdiff_t _Num2 = _Last2 - _First2;
+  <b>int</b> _Ans = ::memcmp(_First1, _First2, _Num1 &lt; _Num2 ? _Num1 : _Num2);
+  <b>return</b> (_Ans &lt; 0 || _Ans == 0 &amp;&amp; _Num1 &lt; _Num2);
+  }
+ <font color="990099">#endif /* CHAR_MAX == UCHAR_MAX */</font>
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION lexicographical_compare WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _InIt1,
+  <b>class</b> _InIt2,
+  <b>class</b> _Pr&gt; <b>inline</b>
+  <b>bool</b> lexicographical_compare(_InIt1 _First1, _InIt1 _Last1,
+    _InIt2 _First2, _InIt2 _Last2, _Pr _Pred)
+  { <font color="#003399"><i>// order [_First1, _Last1) vs. [First2, Last2) using _Pred</i></font>
+  <b>for</b> (; _First1 != _Last1 &amp;&amp; _First2 != _Last2; ++_First1, ++_First2)
+    <b>if</b> (_Pred(*_First1, *_First2))
+      <b>return</b> (true);
+    <b>else</b> <b>if</b> (_Pred(*_First2, *_First1))
+      <b>return</b> (<b>false</b>);
+  <b>return</b> (_First1 == _Last1 &amp;&amp; _First2 != _Last2);
+  }
+
+ <font color="990099">#ifndef _cpp_max</font>
+  <font color="990099">#define _cpp_max  max /* retained */</font>
+  <font color="990099">#define _cpp_min  min /* retained */</font>
+ <font color="990099">#endif</font>
+
+ <font color="990099">#ifndef _MAX /* avoid collision with common (nonconforming) macros */</font>
+  <font color="990099">#define _MAX  (max)</font>
+  <font color="990099">#define _MIN  (min)</font>
+ <font color="990099">#endif</font>
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION max</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+  <b>const</b> _Ty&amp; _MAX(<b>const</b> _Ty&amp; _Left, <b>const</b> _Ty&amp; _Right)
+  { <font color="#003399"><i>// return larger of _Left and _Right</i></font>
+  <b>return</b> (_Left &lt; _Right ? _Right : _Left);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION max WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _Ty,
+  <b>class</b> _Pr&gt; <b>inline</b>
+  <b>const</b> _Ty&amp; _MAX(<b>const</b> _Ty&amp; _Left, <b>const</b> _Ty&amp; _Right, _Pr _Pred)
+  { <font color="#003399"><i>// return larger of _Left and _Right using _Pred</i></font>
+  <b>return</b> (_Pred(_Left, _Right) ? _Right : _Left);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION min</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt; <b>inline</b>
+  <b>const</b> _Ty&amp; _MIN(<b>const</b> _Ty&amp; _Left, <b>const</b> _Ty&amp; _Right)
+  { <font color="#003399"><i>// return smaller of _Left and _Right</i></font>
+  <b>return</b> (_Right &lt; _Left ? _Right : _Left);
+  }
+
+    <font color="#003399"><i>// TEMPLATE FUNCTION min WITH PRED</i></font>
+<b>template</b>&lt;<b>class</b> _Ty,
+  <b>class</b> _Pr&gt; <b>inline</b>
+  <b>const</b> _Ty&amp; _MIN(<b>const</b> _Ty&amp; _Left, <b>const</b> _Ty&amp; _Right, _Pr _Pred)
+  { <font color="#003399"><i>// return smaller of _Left and _Right using _Pred</i></font>
+  <b>return</b> (_Pred(_Right, _Left) ? _Right : _Left);
+  }
+
+
+<b>#pragma</b> <b>warning</b>(<b>default</b>:4284 4786)
+
+_STD_END
+<b>#pragma</b> <b>warning</b>(pop)
+<b>#pragma</b> pack(pop)
+
+<b>#endif</b> <font color="#003399"><i>/* _XUTILITY_ */</i></font>
+
+<font color="#003399"><i>/*
+ * Copyright (c) 1992-2002 by P.J. Plauger.  ALL RIGHTS RESERVED.
+ * Consult your license regarding permissions and restrictions.
+ */</i></font>
+
+<font color="#003399"><i>/*
+ * This file is derived from software bearing the following
+ * restrictions:
+ *
+ * Copyright (c) 1994
+ * Hewlett-Packard Company
+ *
+ * Permission to use, copy, modify, distribute and sell this
+ * software and its documentation for any purpose is hereby
+ * granted without fee, provided that the above copyright notice
+ * appear in all copies and that both that copyright notice and
+ * this permission notice appear in supporting documentation.
+ * Hewlett-Packard Company makes no representations about the
+ * suitability of this software for any purpose. It is provided
+ * &quot;as is&quot; without express or implied warranty.
+ V3.13:0009 */</i></font>
+
+</code></pre>
+
+
+</body>
+</html>
+

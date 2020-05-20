@@ -1,0 +1,9 @@
+Faults: 74
+Faults: 62
+Faults: 46
+Faults: 40
+Faults: 23
+Faults: 17
+Faults: 11
+Faults: 8
+Faults: 8

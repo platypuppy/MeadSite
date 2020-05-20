@@ -1,0 +1,329 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>functional.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>// functional standard header</i></font>
+
+<b>if</b>     _MSC_VER &gt; 1000
+<b>pragma</b> once
+<b>endif</b>
+
+<b>ifndef</b> _FUNCTIONAL_
+<b>define</b> _FUNCTIONAL_
+<b>include</b> &lt;xstddef&gt;
+
+<b>ifdef</b>  _MSC_VER
+<b>pragma</b> pack(push,8)
+<b>endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+_STD_BEGIN
+		<font color="#003399"><i>// TEMPLATE STRUCT unary_function</i></font>
+<b>template</b>&lt;<b>class</b> _A, <b>class</b> _R&gt;
+	<b>struct</b> unary_function {
+	<b>typedef</b> _A argument_type;
+	<b>typedef</b> _R result_type;
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT binary_function</i></font>
+<b>template</b>&lt;<b>class</b> _A1, <b>class</b> _A2, <b>class</b> _R&gt;
+	<b>struct</b> binary_function {
+	<b>typedef</b> _A1 first_argument_type;
+	<b>typedef</b> _A2 second_argument_type;
+	<b>typedef</b> _R result_type;
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT plus</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> plus : binary_function&lt;_Ty, _Ty, _Ty&gt; {
+	_Ty <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X + _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT minus</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> minus : binary_function&lt;_Ty, _Ty, _Ty&gt; {
+	_Ty <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X - _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT multiplies</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> multiplies : binary_function&lt;_Ty, _Ty, _Ty&gt; {
+	_Ty <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X * _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT divides</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> divides : binary_function&lt;_Ty, _Ty, _Ty&gt; {
+	_Ty <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X / _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT modulus</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> modulus : binary_function&lt;_Ty, _Ty, _Ty&gt; {
+	_Ty <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X % _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT negate</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> negate : unary_function&lt;_Ty, _Ty&gt; {
+	_Ty <b>operator</b>()(<b>const</b> _Ty&amp; _X) <b>const</b>
+		{<b>return</b> (-_X); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT equal_to</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> equal_to : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X == _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT not_equal_to</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> not_equal_to : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X != _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT greater</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> greater : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X &gt; _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT less</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> less : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X &lt; _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT greater_equal</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> greater_equal : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X &gt;= _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT less_equal</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> less_equal : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X &lt;= _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT logical_and</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> logical_and : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X &amp;&amp; _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT logical_or</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> logical_or : binary_function&lt;_Ty, _Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X, <b>const</b> _Ty&amp; _Y) <b>const</b>
+		{<b>return</b> (_X || _Y); }
+	};
+		<font color="#003399"><i>// TEMPLATE STRUCT logical_not</i></font>
+<b>template</b>&lt;<b>class</b> _Ty&gt;
+	<b>struct</b> logical_not : unary_function&lt;_Ty, <b>bool</b>&gt; {
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ty&amp; _X) <b>const</b>
+		{<b>return</b> (!_X); }
+	};
+		<font color="#003399"><i>// TEMPLATE CLASS unary_negate</i></font>
+<b>template</b>&lt;<b>class</b> _Ufn&gt;
+	<b>class</b> unary_negate
+	: <b>public</b> unary_function&lt;_Ufn::argument_type, <b>bool</b>&gt; {
+<b>public</b>:
+	<b>explicit</b> unary_negate(<b>const</b> _Ufn&amp; _X)
+		: _Fn(_X) {}
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Ufn::argument_type&amp; _X) <b>const</b>
+		{<b>return</b> (!_Fn(_X)); }
+<b>protected</b>:
+	_Ufn _Fn;
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION not1</i></font>
+<b>template</b>&lt;<b>class</b> _Ufn&gt; <b>inline</b>
+	unary_negate&lt;_Ufn&gt; not1(<b>const</b> _Ufn&amp; _X)
+		{<b>return</b> (unary_negate&lt;_Ufn&gt;(_X)); }
+		<font color="#003399"><i>// TEMPLATE CLASS binary_negate</i></font>
+<b>template</b>&lt;<b>class</b> _Bfn&gt;
+	<b>class</b> binary_negate
+	: <b>public</b> binary_function&lt;_Bfn::first_argument_type,
+		_Bfn::second_argument_type, <b>bool</b>&gt; {
+<b>public</b>:
+	<b>explicit</b> binary_negate(<b>const</b> _Bfn&amp; _X)
+		: _Fn(_X) {}
+	<b>bool</b> <b>operator</b>()(<b>const</b> _Bfn::first_argument_type&amp; _X,
+		<b>const</b> _Bfn::second_argument_type&amp; _Y) <b>const</b>
+		{<b>return</b> (!_Fn(_X, _Y)); }
+<b>protected</b>:
+	_Bfn _Fn;
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION not2</i></font>
+<b>template</b>&lt;<b>class</b> _Bfn&gt; <b>inline</b>
+	binary_negate&lt;_Bfn&gt; not2(<b>const</b> _Bfn&amp; _X)
+		{<b>return</b> (binary_negate&lt;_Bfn&gt;(_X)); }
+		<font color="#003399"><i>// TEMPLATE CLASS binder1st</i></font>
+<b>template</b>&lt;<b>class</b> _Bfn&gt;
+	<b>class</b> binder1st
+	: <b>public</b> unary_function&lt;_Bfn::second_argument_type,
+		_Bfn::result_type&gt; {
+<b>public</b>:
+	binder1st(<b>const</b> _Bfn&amp; _X,
+		<b>const</b> _Bfn::first_argument_type&amp; _Y)
+		: op(_X), value(_Y) {}
+	result_type <b>operator</b>()(<b>const</b> argument_type&amp; _X) <b>const</b>
+		{<b>return</b> (op(value, _X)); }
+<b>protected</b>:
+	_Bfn op;
+	_Bfn::first_argument_type value;
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION bind1st</i></font>
+<b>template</b>&lt;<b>class</b> _Bfn, <b>class</b> _Ty&gt; <b>inline</b>
+	binder1st&lt;_Bfn&gt; bind1st(<b>const</b> _Bfn&amp; _X, <b>const</b> _Ty&amp; _Y)
+		{<b>return</b> (binder1st&lt;_Bfn&gt;(_X,
+			_Bfn::first_argument_type(_Y))); }
+		<font color="#003399"><i>// TEMPLATE CLASS binder2nd</i></font>
+<b>template</b>&lt;<b>class</b> _Bfn&gt;
+	<b>class</b> binder2nd
+	: <b>public</b> unary_function&lt;_Bfn::first_argument_type,
+		_Bfn::result_type&gt; {
+<b>public</b>:
+	binder2nd(<b>const</b> _Bfn&amp; _X,
+		<b>const</b> _Bfn::second_argument_type&amp; _Y)
+		: op(_X), value(_Y) {}
+	result_type <b>operator</b>()(<b>const</b> argument_type&amp; _X) <b>const</b>
+		{<b>return</b> (op(_X, value)); }
+<b>protected</b>:
+	_Bfn op;
+	_Bfn::second_argument_type value;
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION bind2nd</i></font>
+<b>template</b>&lt;<b>class</b> _Bfn, <b>class</b> _Ty&gt; <b>inline</b>
+	binder2nd&lt;_Bfn&gt; bind2nd(<b>const</b> _Bfn&amp; _X, <b>const</b> _Ty&amp; _Y)
+		{<b>return</b> (binder2nd&lt;_Bfn&gt;(_X,
+			_Bfn::second_argument_type(_Y))); }
+		<font color="#003399"><i>// TEMPLATE CLASS pointer_to_unary_function</i></font>
+<b>template</b>&lt;<b>class</b> _A, <b>class</b> _R&gt;
+	<b>class</b> pointer_to_unary_function
+		: <b>public</b> unary_function&lt;_A, _R&gt; {
+<b>public</b>:
+	<b>explicit</b> pointer_to_unary_function(_R (<b>__cdecl</b> *_X)(_A))
+		: _Fn(_X) {}
+	_R <b>operator</b>()(_A _X) <b>const</b>
+		{<b>return</b> (_Fn(_X)); }
+<b>protected</b>:
+	_R (<b>__cdecl</b> *_Fn)(_A);
+	};
+		<font color="#003399"><i>// TEMPLATE CLASS pointer_to_binary_function</i></font>
+<b>template</b>&lt;<b>class</b> _A1, <b>class</b> _A2, <b>class</b> _R&gt;
+	<b>class</b> pointer_to_binary_function
+		: <b>public</b> binary_function&lt;_A1, _A2, _R&gt; {
+<b>public</b>:
+	<b>explicit</b> pointer_to_binary_function(
+		_R (<b>__cdecl</b> *_X)(_A1, _A2))
+		: _Fn(_X) {}
+	_R <b>operator</b>()(_A1 _X, _A2 _Y) <b>const</b>
+		{<b>return</b> (_Fn(_X, _Y)); }
+<b>protected</b>:
+	_R (<b>__cdecl</b> *_Fn)(_A1, _A2);
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION ptr_fun</i></font>
+<b>template</b>&lt;<b>class</b> _A, <b>class</b> _R&gt; <b>inline</b>
+	pointer_to_unary_function&lt;_A, _R&gt;
+		ptr_fun(_R (<b>__cdecl</b> *_X)(_A))
+		{<b>return</b> (pointer_to_unary_function&lt;_A, _R&gt;(_X)); }
+<b>template</b>&lt;<b>class</b> _A1, <b>class</b> _A2, <b>class</b> _R&gt; <b>inline</b>
+	pointer_to_binary_function&lt;_A1, _A2, _R&gt;
+		ptr_fun(_R (<b>__cdecl</b> *_X)(_A1, _A2))
+		{<b>return</b> (pointer_to_binary_function&lt;_A1, _A2, _R&gt;(_X)); }
+		<font color="#003399"><i>// TEMPLATE CLASS mem_fun_t</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty&gt;
+	<b>class</b> mem_fun_t : <b>public</b> unary_function&lt;_Ty *, _R&gt; {
+<b>public</b>:
+	<b>explicit</b> mem_fun_t(_R (_Ty::*_Pm)())
+		: _Ptr(_Pm) {}
+	_R <b>operator</b>()(_Ty *_P) <b>const</b>
+		{<b>return</b> ((_P-&gt;*_Ptr)()); }
+<b>private</b>:
+	_R (_Ty::*_Ptr)();
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION mem_fun</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty&gt; <b>inline</b>
+	mem_fun_t&lt;_R, _Ty&gt; mem_fun(_R (_Ty::*_Pm)())
+	{<b>return</b> (mem_fun_t&lt;_R, _Ty&gt;(_Pm)); }
+		<font color="#003399"><i>// TEMPLATE CLASS mem_fun1_t</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty, <b>class</b> _A&gt;
+	<b>class</b> mem_fun1_t : <b>public</b> binary_function&lt;_Ty *, _A, _R&gt; {
+<b>public</b>:
+	<b>explicit</b> mem_fun1_t(_R (_Ty::*_Pm)(_A))
+		: _Ptr(_Pm) {}
+	_R <b>operator</b>()(_Ty *_P, _A _Arg) <b>const</b>
+		{<b>return</b> ((_P-&gt;*_Ptr)(_Arg)); }
+<b>private</b>:
+	_R (_Ty::*_Ptr)(_A);
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION mem_fun1</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty, <b>class</b> _A&gt; <b>inline</b>
+	mem_fun1_t&lt;_R, _Ty, _A&gt; mem_fun1(_R (_Ty::*_Pm)(_A))
+	{<b>return</b> (mem_fun1_t&lt;_R, _Ty, _A&gt;(_Pm)); }
+		<font color="#003399"><i>// TEMPLATE CLASS mem_fun_ref_t</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty&gt;
+	<b>class</b> mem_fun_ref_t : <b>public</b> unary_function&lt;_Ty, _R&gt; {
+<b>public</b>:
+	<b>explicit</b> mem_fun_ref_t(_R (_Ty::*_Pm)())
+		: _Ptr(_Pm) {}
+	_R <b>operator</b>()(_Ty&amp; _X) <b>const</b>
+		{<b>return</b> ((_X.*_Ptr)()); }
+<b>private</b>:
+	_R (_Ty::*_Ptr)();
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION mem_fun_ref</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty&gt; <b>inline</b>
+	mem_fun_ref_t&lt;_R, _Ty&gt; mem_fun_ref(_R (_Ty::*_Pm)())
+	{<b>return</b> (mem_fun_ref_t&lt;_R, _Ty&gt;(_Pm)); }
+		<font color="#003399"><i>// TEMPLATE CLASS mem_fun1_ref_t</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty, <b>class</b> _A&gt;
+	<b>class</b> mem_fun1_ref_t : <b>public</b> binary_function&lt;_Ty *, _A, _R&gt; {
+<b>public</b>:
+	<b>explicit</b> mem_fun1_ref_t(_R (_Ty::*_Pm)(_A))
+		: _Ptr(_Pm) {}
+	_R <b>operator</b>()(_Ty&amp; _X, _A _Arg) <b>const</b>
+		{<b>return</b> ((_X.*_Ptr)(_Arg)); }
+<b>private</b>:
+	_R (_Ty::*_Ptr)(_A);
+	};
+		<font color="#003399"><i>// TEMPLATE FUNCTION mem_fun1_ref</i></font>
+<b>template</b>&lt;<b>class</b> _R, <b>class</b> _Ty, <b>class</b> _A&gt; <b>inline</b>
+	mem_fun1_ref_t&lt;_R, _Ty, _A&gt; mem_fun1_ref(_R (_Ty::*_Pm)(_A))
+	{<b>return</b> (mem_fun1_ref_t&lt;_R, _Ty, _A&gt;(_Pm)); }
+_STD_END
+<b>ifdef</b>  _MSC_VER
+<b>pragma</b> pack(pop)
+<b>endif</b>  <font color="#003399"><i>/* _MSC_VER */</i></font>
+
+<b>endif</b> <font color="#003399"><i>/* _FUNCTIONAL_ */</i></font>
+
+<font color="#003399"><i>/*
+ * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
+ * Consult your license regarding permissions and restrictions.
+ */</i></font>
+
+<font color="#003399"><i>/*
+ * This file is derived from software bearing the following
+ * restrictions:
+ *
+ * Copyright (c) 1994
+ * Hewlett-Packard Company
+ *
+ * Permission to use, copy, modify, distribute and sell this
+ * software and its documentation for any purpose is hereby
+ * granted without fee, provided that the above copyright notice
+ * appear in all copies and that both that copyright notice and
+ * this permission notice appear in supporting documentation.
+ * Hewlett-Packard Company makes no representations about the
+ * suitability of this software for any purpose. It is provided
+ * &quot;as is&quot; without express or implied warranty.
+ */</i></font>
+
+</code></pre>
+
+
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Ocean.h</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="990099">#ifndef OCEAN_H</font>
+<font color="990099">#define OCEAN_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+
+<font color="990099">#include &quot;WarBoats.h&quot;</font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> WarBoats
+  {
+    <b>const</b> <b>int</b> HIT_OFFSET = 100; <font color="#003399"><i>//!&lt; Add this to the boat ID</i></font>
+
+    <font color="#003399"><i>/*!
+      This class represents the &quot;board&quot; in WarBoats
+    */</i></font>
+    <b>class</b> Ocean
+    {
+      <b>public</b>:
+        
+        <font color="#003399"><i>// Public methods...</i></font>
+
+          <font color="#003399"><i>// Provided</i></font>
+        <b>const</b> <b>int</b> *GetGrid(<b>void</b>) <b>const</b>;
+        Point GetDimensions(<b>void</b>) <b>const</b>;
+
+      <b>private</b>:
+        <b>int</b> *grid_;        <font color="#003399"><i>//!&lt; The 2D ocean</i></font>
+        <b>int</b> x_quadrants_;  <font color="#003399"><i>//!&lt; Ocean size along x-axis</i></font>
+        <b>int</b> y_quadrants_;  <font color="#003399"><i>//!&lt; Ocean size along y-axis</i></font>
+        
+        <font color="#003399"><i>// Other private members...</i></font>
+
+    }; <font color="#003399"><i>// class Ocean</i></font>
+
+  } <font color="#003399"><i>// namespace WarBoats</i></font>
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+<font color="990099">#endif // OCEAN_H</font>
+<font color="#003399"><i>////////////////////////////////////////////////////////////////////////////////</i></font>
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

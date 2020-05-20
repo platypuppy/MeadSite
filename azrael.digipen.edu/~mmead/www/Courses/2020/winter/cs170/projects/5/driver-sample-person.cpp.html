@@ -1,0 +1,693 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver-sample.cpp</title>
+</head>
+
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;cstdio&gt;   // sprintf</font>
+<font color="990099">#include &lt;cstring&gt;  // strcpy</font>
+<font color="990099">#include &quot;List.h&quot;</font>
+
+<b>const</b> <b>unsigned</b> ID_LEN = 6;
+<b>struct</b> Person
+{
+  <b>char</b> ID[ID_LEN + 1];
+  <b>char</b> lastName[26];   
+  <b>char</b> firstName[26];  
+  <b>float</b> salary;        
+  <b>unsigned</b> years;           
+};
+
+<b>struct</b> Person PEOPLE[] = 
+{
+  {<font color="#9933CC">&quot;101000&quot;</font>, <font color="#9933CC">&quot;Last&quot;</font>,       <font color="#9933CC">&quot;First&quot;</font>,        0,  0},
+  {<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,      80000, 10},
+  {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,    90000, 12},
+  {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,      50000,  4},
+  {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,     50000,  4},
+  {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,      40000,  1},
+  {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,    80000, 10},
+  {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,    90000, 12},
+  {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   120000,  8},
+  {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   250000, 22},
+  {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  5},
+  {<font color="#9933CC">&quot;111001&quot;</font>, <font color="#9933CC">&quot;McLochness&quot;</font>, <font color="#9933CC">&quot;Ross&quot;</font>,     60000,  5},
+  {<font color="#9933CC">&quot;112001&quot;</font>, <font color="#9933CC">&quot;Pudding&quot;</font>,    <font color="#9933CC">&quot;Ronnie&quot;</font>,   50000,  2},
+  {<font color="#9933CC">&quot;113001&quot;</font>, <font color="#9933CC">&quot;Schindler&quot;</font>,  <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  3},
+  {<font color="#9933CC">&quot;114001&quot;</font>, <font color="#9933CC">&quot;Pettibone&quot;</font>,  <font color="#9933CC">&quot;Jeanine&quot;</font>,  85000,  3},
+  {<font color="#9933CC">&quot;115001&quot;</font>, <font color="#9933CC">&quot;Fame&quot;</font>,       <font color="#9933CC">&quot;Duke&quot;</font>,     95000,  8},
+  {<font color="#9933CC">&quot;116001&quot;</font>, <font color="#9933CC">&quot;Fufkin&quot;</font>,     <font color="#9933CC">&quot;Artie&quot;</font>,    45000,  1},
+  {<font color="#9933CC">&quot;117001&quot;</font>, <font color="#9933CC">&quot;DiBergi&quot;</font>,    <font color="#9933CC">&quot;Marty&quot;</font>,    15000,  7},
+  {<font color="#9933CC">&quot;118001&quot;</font>, <font color="#9933CC">&quot;Floyd&quot;</font>,      <font color="#9933CC">&quot;Pink&quot;</font>,     25000,  6},
+  {<font color="#9933CC">&quot;119001&quot;</font>, <font color="#9933CC">&quot;Zeppelin&quot;</font>,   <font color="#9933CC">&quot;Led&quot;</font>,      35000,  3},
+  {<font color="#9933CC">&quot;120001&quot;</font>, <font color="#9933CC">&quot;Mason&quot;</font>,      <font color="#9933CC">&quot;Nick&quot;</font>,     15000,  7},
+  {<font color="#9933CC">&quot;121001&quot;</font>, <font color="#9933CC">&quot;Wright&quot;</font>,     <font color="#9933CC">&quot;Richard&quot;</font>,  17000,  9},
+  {<font color="#9933CC">&quot;122001&quot;</font>, <font color="#9933CC">&quot;Waters&quot;</font>,     <font color="#9933CC">&quot;Roger&quot;</font>,    10000,  3},
+  {<font color="#9933CC">&quot;123001&quot;</font>, <font color="#9933CC">&quot;Gilmore&quot;</font>,    <font color="#9933CC">&quot;David&quot;</font>,    19000,  5}
+};
+
+Person **PersonRecs;
+
+<b>void</b> FreePersonRecs()
+{
+  <b>int</b> count = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(PEOPLE) / <b>sizeof</b>(*PEOPLE));
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    <b>delete</b> PersonRecs[i];
+
+  <b>delete</b>[] PersonRecs;
+}
+
+<b>void</b> FillPersonRecs()
+{
+  <b>int</b> count = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(PEOPLE) / <b>sizeof</b>(*PEOPLE));
+  PersonRecs = <b>new</b> Person*[count];
+
+  <b>int</b> index = 0;
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    Person *person = <b>new</b> Person;
+    std::strcpy(person-&gt;ID, PEOPLE[i].ID);
+    std::strcpy(person-&gt;lastName, PEOPLE[i].lastName);
+    std::strcpy(person-&gt;firstName, PEOPLE[i].firstName);
+    person-&gt;salary = PEOPLE[i].salary;
+    person-&gt;years = PEOPLE[i].years;
+    PersonRecs[index++] = person;
+  }
+}
+
+std::ostream&amp; <b>operator</b>&lt;&lt;(std::ostream &amp;os, <b>const</b> Person &amp;person)
+{
+  <b>char</b> buffer[200];
+  std::sprintf(buffer, <font color="#9933CC">&quot;Key: %8s, Name: %12s, %12s    Salary:%7.0f, Years: %2d&#92;n&quot;</font>, 
+                  person.ID, person.lastName, person.firstName, person.salary, 
+                  person.years);
+  os &lt;&lt; buffer;
+  <b>return</b> os;
+}
+
+<b>void</b> TestPushFront()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushFront...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushBack()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushBack...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_back(*PersonRecs[i]);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushFrontBack()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushFrontBack...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list.push_front(*PersonRecs[i]);
+    list.push_back(*PersonRecs[i + 10]);
+  }
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPopFront()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPopFront...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; list;
+  <b>while</b> (!list.empty())
+  {
+    Person item = list.front();
+    list.pop_front();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;First item was: &quot;</font> &lt;&lt; item &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;New list:&#92;n&quot;</font>;
+    std::cout &lt;&lt; list;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  }
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestArray1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestArray1...&quot;</font> &lt;&lt; std::endl;
+
+  Person array[] = {{<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,      80000, 10},
+                    {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,      50000,  4},
+                    {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,     50000,  4},
+                    {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,      40000,  1},
+                    {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,    80000, 10},
+                    {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   120000,  8},
+                    {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   250000, 22},
+                    {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  5}
+                   };
+
+  <b>int</b> size = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(array) / <b>sizeof</b>(*array));
+
+    <font color="#003399"><i>// Construct from array</i></font>
+  CS170::List&lt;Person&gt; list(array, size);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestArray2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestArray2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>const</b>
+  Person array[] = {{<font color="#9933CC">&quot;101001&quot;</font>, <font color="#9933CC">&quot;Faith&quot;</font>,      <font color="#9933CC">&quot;Ian&quot;</font>,      80000, 10},
+                    {<font color="#9933CC">&quot;102001&quot;</font>, <font color="#9933CC">&quot;Tufnel&quot;</font>,     <font color="#9933CC">&quot;Nigel&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;103001&quot;</font>, <font color="#9933CC">&quot;Savage&quot;</font>,     <font color="#9933CC">&quot;Viv&quot;</font>,      50000,  4},
+                    {<font color="#9933CC">&quot;104001&quot;</font>, <font color="#9933CC">&quot;Shrimpton&quot;</font>,  <font color="#9933CC">&quot;Mick&quot;</font>,     50000,  4},
+                    {<font color="#9933CC">&quot;105001&quot;</font>, <font color="#9933CC">&quot;Besser&quot;</font>,     <font color="#9933CC">&quot;Joe&quot;</font>,      40000,  1},
+                    {<font color="#9933CC">&quot;106001&quot;</font>, <font color="#9933CC">&quot;Smalls&quot;</font>,     <font color="#9933CC">&quot;Derek&quot;</font>,    80000, 10},
+                    {<font color="#9933CC">&quot;107001&quot;</font>, <font color="#9933CC">&quot;St.Hubbins&quot;</font>, <font color="#9933CC">&quot;David&quot;</font>,    90000, 12},
+                    {<font color="#9933CC">&quot;108001&quot;</font>, <font color="#9933CC">&quot;Fleckman&quot;</font>,   <font color="#9933CC">&quot;Bobbi&quot;</font>,   120000,  8},
+                    {<font color="#9933CC">&quot;109001&quot;</font>, <font color="#9933CC">&quot;Eton-Hogg&quot;</font>,  <font color="#9933CC">&quot;Denis&quot;</font>,   250000, 22},
+                    {<font color="#9933CC">&quot;110001&quot;</font>, <font color="#9933CC">&quot;Upham&quot;</font>,      <font color="#9933CC">&quot;Danny&quot;</font>,    60000,  5}
+                   };
+
+  <b>int</b> size = <b>static_cast</b>&lt;<b>int</b>&gt;(<b>sizeof</b>(array) / <b>sizeof</b>(*array));
+
+    <font color="#003399"><i>// Construct from array</i></font>
+  CS170::List&lt;Person&gt; list(array, size);
+
+  std::cout &lt;&lt; list;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestCopyConstructor1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestCopyConstructor1...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;Person&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  CS170::List&lt;Person&gt; list2(list1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestCopyConstructor2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestCopyConstructor2...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;Person&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  <b>const</b> CS170::List&lt;Person&gt; list2(list1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  <b>if</b> (list2.empty())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List 2 is empty&#92;n&quot;</font>;
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;List 2 is not empty&#92;n&quot;</font>;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in List2: &quot;</font>;
+  std::cout &lt;&lt; list2.size();
+  std::cout &lt;&lt; std::endl;
+  
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAssignment1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAssignment1...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;Person&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list2 = list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAssignment2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAssignment2...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::List&lt;Person&gt; list1, list2, list3;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  list3 = list2 = list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  list1 = list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After self assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddition1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddition1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(*PersonRecs[i]);
+    list2.push_front(*PersonRecs[i + 10]);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  CS170::List&lt;Person&gt; list3;
+  list3 = list1 + list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list3;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddition2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddition2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(*PersonRecs[i]);
+    list2.push_front(*PersonRecs[i + 10]);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  <b>const</b> CS170::List&lt;Person&gt; list3(list1 + list2);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  CS170::List&lt;Person&gt; list4;
+  list4 = list1 + list2 + list3;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 4:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list4;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list4.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(*PersonRecs[i]);
+    list2.push_front(*PersonRecs[i + 5]);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list1 += list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list1 += list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign3()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign3...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list1, list2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_front(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+
+  list2 += list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAddAssign4()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAddAssign4...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 5;
+  CS170::List&lt;Person&gt; list1, list2, list3;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    list1.push_front(*PersonRecs[i]);
+    list2.push_front(*PersonRecs[i + 8]);
+    list3.push_front(*PersonRecs[i + 15]);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list3;
+
+  list1 += list2 += list3;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After addition:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 1:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 2:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list2;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List 3:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list3;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the list: &quot;</font> &lt;&lt; list1.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestSubscript1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestSubscript1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::List&lt;Person&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_back(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;list[0] = &quot;</font> &lt;&lt; list1[0];
+  std::cout &lt;&lt; <font color="#9933CC">&quot;list[5] = &quot;</font> &lt;&lt; list1[5];
+  std::cout &lt;&lt; <font color="#9933CC">&quot;list[9] = &quot;</font> &lt;&lt; list1[9];
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestSubscript2()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestSubscript2...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::List&lt;Person&gt; list1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    list1.push_back(*PersonRecs[i]);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Original list:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+
+  list1[0] = *PersonRecs[12];
+  list1[5] = *PersonRecs[15];
+  list1[9] = *PersonRecs[19];
+  list1[7] = list1[2];
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Modified list:&#92;n&quot;</font>;
+  std::cout &lt;&lt; list1;
+}
+
+<b>void</b> InUse()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;============================================&#92;n&quot;</font>;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Total number of Nodes in use: &quot;</font>;
+  std::cout &lt;&lt; CS170::List&lt;Person&gt;::node_count();
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;============================================&#92;n&quot;</font>;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>int</b> main()
+{
+  FillPersonRecs();
+
+  <b>try</b> {
+    TestPushFront();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPushFront revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestPushBack();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPushBack revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestPushFrontBack();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPushFrontBack revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestPopFront();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestPopFront revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestArray1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestArray1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestArray2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestArray2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestCopyConstructor1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestCopyConstructor1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestCopyConstructor2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestCopyConstructor2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAssignment1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAssignment1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAssignment2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAssignment2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign3();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign3 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddAssign4();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddAssign4 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestSubscript1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestSubscript1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestSubscript2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestSubscript2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddition1();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddition1 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  <b>try</b> {
+    TestAddition2();
+    InUse();
+  }
+  <b>catch</b> (...) {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;***TestAddition2 revealed something bad in the List class&quot;</font> &lt;&lt; std::endl;
+  }
+
+  InUse();
+
+  FreePersonRecs();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+
+</body>
+</html>
+  

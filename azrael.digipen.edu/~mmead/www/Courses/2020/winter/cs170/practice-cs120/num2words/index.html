@@ -1,0 +1,182 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>num2words</title>
+
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Trivia
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: #ffffff; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thick;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+</head>
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(num2words.c)
+</center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="INTRO"></a>
+<p class="SectionHeader">Information</p>
+
+<ol>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<li>Write a program that prompts the user for a two-digit integer and then prints the English
+  words for the number.
+<p>
+Here is the output from the program run interactively:
+<blockquote><pre>
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>22</b></font>
+twenty-two
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>47</b></font>
+forty-seven
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>99</b></font>
+ninety-nine
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>50</b></font>
+fifty
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>10</b></font>
+ten
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>18</b></font>
+eighteen
+Enter a two-digit integer (10-99)? (0=quit) <font color="red"><b>0</b></font>
+</pre></blockquote>
+
+<!--
+<font color="red"><b>100</b></font>
+-->
+
+<p>
+The program continues to run until the user types in 0 (zero) to terminate.
+<p>
+
+The name of the file should be <tt>num2words.c</tt> and the command to compile it will look like this:
+<blockquote><pre>
+gcc -Werror -Wall -Wextra -ansi -pedantic -O2 -Wno-unused-result -o num2words num2words.c main.c
+</pre></blockquote>
+
+<b>Files:</b>
+<p>
+<ul>
+  <li>I am providing you with a driver (<tt>main.c</tt>: <a href="main.c.html">HTML</a> <a href="main.c">Text</a>) 
+    that will do the prompting. Your file (<tt>num2words.c</tt>) has one function in it and it is 
+    prototyped as such:
+<blockquote><pre>
+<b>void</b> number_to_words(<b>int</b> number);
+</pre></blockquote>
+  You only need to include one header file (<tt>stdio.h</tt>) in your file.
+<p>
+  <li>Here is a sample <a href="input.txt">input</a> file and <a href="output.txt">output</a> file for 
+you do diff with. Remember, using redirection will not show the actual numbers or provide a 
+newline. The input file includes every number from 10 to 99, because that is all of the two-digit
+numbers. 
+<p>
+By the way, I didn't type those 91 numbers in the file. I was too lazy to type all of those numbers
+manually, so I wrote a simple program to create them instead. (See, we programmers are lazy!)
+</li>
+</ul>
+
+</ol>
+
+<a name="NOTES"></a>
+<p class="SectionHeader">Notes</p>
+
+
+<ul>
+  <li>You don't have to worry about invalid input. Since my driver file is doing the prompting, you
+    can assume that the number you are given is in the range 10-99.
+    <p>
+  <li>Hint: There are kind of two things to print, and they are different. The first is the tens
+    digit, the second is the ones digit. Print the tens digit first, then print the ones. So, if the 
+    number was 38, you would first print:
+<blockquote><pre>
+thirty
+</pre></blockquote>
+and then you would print:
+<blockquote><pre>
+-eight
+</pre></blockquote>
+The numbers from 10 to 19 are kind of unique and you should handle them separately. However you 
+choose to do this: <b>Do NOT have 90 separate <tt>if</tt> statements!!!!</b> (Think before you start.)
+You will have several <tt>if...else if</tt> statements, so don't be alarmed.
+<p>
+<li><font color="blue">Approximate number of lines of code: 60.</font>
+That's because there are a lot of different cases to handle, so you'll have lots
+of if statements, but it's not that complicated.
+<p>
+  <li>To run the code non-interactively (redirecting input and output), you would do this:
+<blockquote><pre>
+num2words &lt; input.txt &gt; myoutput.txt
+</pre></blockquote>
+and then diff with the provided output.</li>
+<p>
+  <li>This practice exercise is mostly testing your ability to use conditional statements such as
+    <tt><b>if</b></tt>, <tt><b>else</b></tt>, and <tt><b>switch</b></tt>. You can decide whether
+    you want to use <tt><b>if</b></tt> statments or the <tt><b>switch</b></tt> statement. I would
+    recommend using both, just so you can practice them.
+<p>
+
+<li><b>DO NOT UPLOAD ANYTHING UNTIL YOU HAVE TESTED YOUR CODE WITH REDIRECTION.</b></li>
+</ul>
+
+<p class="trivia">  
+<b>Advanced students:</b> <font color="blue">If you've already programmed before, you may know that this is
+  more easily done with pointers and arrays, and you may want to use those. After we learn about 
+  pointers and arrays, I'll suggest that all students should re-code this program using those techniques.
+  In fact, with pointers and arrays, you could handle 3-digit and 4-digit numbers easily with only a 
+  few <tt><b>if...else if</b></tt> statements.</font>
+  </p>
+
+<p>
+
+
+<p>
+
+</ol>
+
+<br>
+<p><hr><p>
+
+
+
+
+</ol>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

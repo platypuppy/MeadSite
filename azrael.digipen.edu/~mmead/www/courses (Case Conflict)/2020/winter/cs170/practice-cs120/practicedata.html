@@ -1,0 +1,352 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Practice</title>
+</head>
+
+<style>
+body {
+   background : #ffffff;
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>
+
+<center>
+<h1>CS 120 - Practice Assignments</h1>
+<br>
+</center>
+
+<p class="technote">
+The purpose of these practices is to, well, practice your programming skills. Some of them are very easy,
+and others can be a little challenging. You are not required to do any of these, but it is highly
+recommended as an additional way to improve your programming skills.
+<br><br>
+<b>Reminder</b>: If you wish to enroll in CS180 next semester, you must do these. Also, if
+you want to be recommended as a TA in a future semester, do yourself a favor and do these. I'm always
+asked by other instructors to recommend students for TA positions. Of course, I will look at your grade
+in the course, but I will also choose TAs based on how many practices they've done. The more practices
+you do (especially the more difficult ones at the bottom), the more likely you will be selected for a
+TA position.
+<br><br>
+<b>Important:</b> Since all 6 of my TAs are graduating this semester, I will be looking to replace
+all of them. Students that wish to be considered should do as many of these practices as they can. Since everyone has
+already completed CS120, these practices should be even easier than before.
+</p>
+
+<font color="black">
+<b>IMPORTANT:</b>
+<ol>
+	<li>DO NOT USE INTERNET EXPLORER IN THIS CLASS. (Unless instructed to do so. Even then, 
+		question it!)</li>
+	<p>
+	<li>When downloading files, DO NOT save the web page, save the file.
+		To save the file with Firefox, right-click on the link and choose "Save Link As..."
+		This is so that all of the formatting in the file is preserved.</li>
+	<p>
+	<li>Don't forget that you may need to use the <b><tt>--strip-trailing-cr</tt></b> 
+		switch with <tt>diff</tt>
+		if it's telling you that all of the lines are different.</li>
+	<p>
+
+	<li><a href="https://pontus.digipen.edu/cgi-bin/submission.cgi">Online submission page</a> for 
+		the practice assignments. Your username and password are the same as your Digipen login.
+
+<!--
+<p class="technote">
+	All code for the labs <b>MUST</b> follow the 
+	<a href="../../../../../docs/CS120StyleGuide.pdf">Style Guide for CS120</a>. The
+	<b>tablen</b> program must be run on your files, as well.
+</p>
+-->
+<p>
+	
+<li>In order to help automate the testing of your code, the submission server will use input/output
+redirection. If you understand this simple concept, it will help you automate your own testing.
+<p>
+Normally, output (e.g. <tt><b>printf</b></tt>) sends its output to the screen. To send it
+to a file instead, use the greater-than (&gt;) symbol:
+
+<blockquote><pre>
+myprogram &gt; out.txt
+</blockquote>
+
+Any output from <i>myprogram</i> will go to a file named <i>out.txt</i> and you will see nothing on
+the screen. 
+<p>
+Normally, input (e.g. <tt><b>scanf</b></tt>) is read from the keyboard. To have the program read input
+from a file instead, use the less-than (&lt;) symbol:
+
+<blockquote><pre>
+myprogram &lt; in.txt
+</blockquote>
+
+All input to <i>myprogram</i> is read from <i>in.txt</i>, and the keyboard is ignored. Also, none of the 
+characters that are in the file will show on the screen.
+<p>
+You can redirect both input and output at the same time like this:
+<blockquote><pre>
+myprogram &lt; in.txt &gt; out.txt
+</blockquote>
+
+<blockquote>
+<p class="technote">
+There are additional practices <a href="general/practice-general.html">here</a>.
+Many of these are simpler than the ones on this page. So, if you're having a little
+difficulty with the practices on this page, try the simpler ones first.
+<br><br>
+<!--
+<b>If you
+are doing practices to be able to take CS180 next semester or be recommended for a TA
+position next year, you don't have to do these easier ones. However, you must follow the 
+<a class="pdf-icon" href="../../../../../docs/CS120StyleGuide.pdf">Style Guide</a>
+and the <a class="pdf-icon" href="../../../../../docs/CS120StyleGuide-addendum.pdf">Style Guide Addendum</a>
+and fully document all of your code. Failure to do so will disqualify you.</b>
+<br><br>
+-->
+
+<b>The deadline to submit all practices is Friday, April 17, 2020 at 10:00 pm.</b>
+</p>
+</blockquote>
+<!--
+-->
+
+</li>
+
+</ol>
+</font>
+
+<p>
+<hr width=100%>
+<p>
+
+These practices are roughly listed in order of difficulty, from easy to less easy.
+If you don't think you'll have time to do all of them, I would recommend that you work in
+reverse order. In other words, do the ones at the bottom first.
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=8>
+<tr><th>Name</th><th>Main topics</th></tr>
+
+<tr valign="top">
+<td align="left">
+1. <a href="squares1/index.html">squares1</a>
+</td>
+<td>Looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+2. <a href="squares2/index.html">squares2</a>
+</td>
+<td>Looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+3. <a href="squares3/index.html">squares3</a>
+</td>
+<td>Looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+4. <a href="numdigits/index.html">numdigits</a></a>
+</td>
+<td>Looping, operators</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+5. <a href="sumdigits/index.html">sumdigits</a></a>
+</td>
+<td>Looping, operators</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+6. <a href="dice1/index.html">dice1</a></a>
+</td>
+<td>Looping, random numbers</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+7. <a href="num2words/index.html">num2words</a></a>
+</td>
+<td>Conditionals using <tt><b>if</b></tt> and/or <tt><b>switch</b></tt></td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+8. <a href="scrabble1/index.html">scrabble1</a></a>
+</td>
+<td>Conditionals using <b><tt>switch</tt><b></td>
+</tr>
+<tr valign="top">
+<td align="left">
+9. <a href="bsort/index.html">bsort</a></a>
+</td>
+<td>Looping, arrays, sorting</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+10. <a href="anagram/index.html">anagram</a></a>
+</td>
+<td>Looping, arrays</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+11. <a href="reversewords/index.html">reversewords</a></a>
+</td>
+<td>Strings, looping, pointers</td>
+</tr>
+
+
+<tr valign="top">
+<td align="left">
+12. <a href="slots1/index.html">slots1</a></a>
+</td>
+<td>Looping, conditionals, random numbers</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+13. <a href="coins/index.html">coins</a></a>
+</td>
+<td>Nested loops, conditionals</td>
+</tr>
+
+
+<tr valign="top">
+<td align="left">
+14. <a href="fileconv/index.html">fileconv</a></a>
+</td>
+<td>File I/O, looping, conditionals</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+15. <a href="commatize/index.html">commatize</a></a>
+</td>
+<td><font color="black">Strings, pointers, looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+16. <a href="inttostr/index.html">inttostr</a></a>
+</td>
+<td>Arrays, looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+17. <a href="strtoint/index.html">strtoint</a></a>
+</td>
+<td>Strings, looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+18. <a href="wordlen/index.html">wordlen</a></a>
+</td>
+<td>Strings, pointers, looping</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+19. <a href="encoder/index.html">encoder</a></a>
+</td>
+<td>File I/O</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+20. <a href="fractions/index.html">fractions</a></a>
+</td>
+<td>Structures</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+21. <a href="replacestr/index.html">replacestr</a>
+</td>
+<td>File I/O, pointers, strings</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+22. <a href="proper/index.html">proper</a>
+</td>
+<td>File I/O, pointers, strings</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+23. <a href="stripcom/index.html">stripcom</a>
+</td>
+<td>File I/O, pointers, strings</td>
+</tr>
+
+
+<tr valign="top">
+<td align="left">
+24. <a href="randwalk/index.html">randwalk</a>
+</td>
+<td>2D arrays, random numbers</td>
+</tr>
+
+<tr valign="top">
+<td align="left">
+25. <a href="magic/index.html">magic</a>
+</td>
+<td>2D arrays</td>
+</tr>
+
+
+
+
+<!--
+-->
+
+
+</table>
+</blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+</ul>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+

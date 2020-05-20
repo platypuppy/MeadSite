@@ -1,0 +1,1131 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Iteration</title>
+</head>
+
+<body>  
+<center><h1>Iteration</h1></center>
+
+
+<blockquote>
+<i>
+	
+</i>
+</blockquote>
+
+
+<i>Iteration</i>, repetition, or looping, they all mean the same thing. When you want to repeat some
+portion of the program, you will use some form of iteration. Looping is a very common term to describe
+this.
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="WHILELOOP">
+<p class="SectionHeader">
+The <tt>while</tt> Statement
+</p>
+
+The most basic looping construct is the <tt><b>while</b></tt> statement. The form is identical to the 
+<tt><b>if</b></tt> statement, but uses the keyword <tt><b>while</b></tt> instead:
+
+<blockquote>  
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>Single statement</th><th></th><th>Multiple statements (braces required)</th></tr>
+<tr valign="top">
+
+<td><pre><b>while</b> <b>(</b> <i>expression</i> <b>)</b>
+  <i>statement</i>
+</pre>
+</td>
+<td width="20"></td>
+<td><pre>
+<b>while</b> <b>(</b> <i>expression</i> <b>)</b>
+{
+  <i>statements</i>
+}
+</pre>
+</td>
+</tr></table>
+</blockquote>  
+<p>
+
+
+Whereas the <tt><b>if</b></tt> statement caused <i>statement</i> to be executed exactly once if <i>expression</i>
+was true, the <tt><b>while</b></tt> statement causes <i>statement</i> to be executed repeatedly as long as
+<i>expression</i> remains true. If <i>expression</i> becomes false, then the repetition stops.
+<p>
+
+Simple example:
+<blockquote><pre>
+<b>int</b> count = 5;
+<b>int</b> i = 0;
+
+<b>while</b> (i &lt; count)  <font color="#003399"><i>/* controlling expression  */</i></font>
+  i++;             <font color="#003399"><i>/* body of the loop        */</i></font>
+</pre></blockquote>
+
+Example with output (and a review of expressions). Note that, like the <b><tt>if</tt></b> statement, the braces are only
+required with multiple (compound) statements:
+
+<blockquote>	
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Version #1 (braces required)</th><th>Version #2 (braces optional)</th><th>Version #3 (braces optional)</th></tr>
+<tr valign="top">
+
+<td
+<blockquote><pre>
+<b>int</b> count = 5;
+<b>int</b> i = 0;
+
+<b>while</b> (i &lt; count)
+{
+  i++;
+  printf(<font color="#9933CC">&quot;i is %i\n&quot;</font>, i);
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>int</b> count = 5;
+<b>int</b> i = 0;
+
+<b>while</b> (i &lt; count)
+{
+  printf(<font color="#9933CC">&quot;i is %i\n&quot;</font>, ++i);
+}
+</pre></blockquote>
+</td>
+
+<td
+<blockquote><pre>
+<b>int</b> count = 5;
+<b>int</b> i = 0;
+
+<b>while</b> (i++ &lt; count)
+  printf(<font color="#9933CC">&quot;i is %i\n&quot;</font>, i);
+</pre></blockquote>
+</td>
+
+</tr></table>
+<p>
+</blockquote>	
+
+The output from all 3 examples:
+<blockquote><pre>
+i is 1
+i is 2
+i is 3
+i is 4
+i is 5
+</pre></blockquote>
+
+Bart Simpson could have used C to make his punishment less painful:
+
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>while</b> (i &lt;= 100)
+{
+  printf(<font color="#9933CC">&quot;I will include the course and section in the email subject.\n&quot;</font>);
+  i++;
+}
+</pre></blockquote>
+
+(Partial) output:
+<p>
+	
+<blockquote>
+<table bgcolor=black color=white border=0 cellspacing=0 cellpadding=0>
+<tr><td>
+<pre><font color="white">
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ I will include the course and section in the email subject.
+ 
+
+
+
+ 
+ 
+   
+  
+ 
+ 
+</font></pre>
+</td>
+<td valign="bottom"><img src="bartchalkboard-black-2.png"></td>
+</tr></table>
+<p>
+</blockquote>	
+
+Notes:
+<ul>
+<li>The body of the loop is not guaranteed to execute at all. 
+<li>The controlling expression: 
+<ul>
+<li>is executed once before the body of the loop is executed.
+<li>is executed again after each repetition of the body.
+<li>usually it will eventually evaluate to false, to stop the repetition. 
+</ul>
+<li>If the controlling expression <i>never</i> evaluates to false, the while loop
+	is called <i>an infinite loop</i>, because it never stops.
+
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Infinite loop #1</th><th>Infinite loop #2</th><th>Infinite loop #3</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>while</b> (i != 10)
+  i += 2;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 0;
+<b>while</b> (i &lt; 10)
+  printf(<font color="#9933CC">&quot;i is %i\n&quot;</font>, i);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>while</b> (1)
+  printf(<font color="#9933CC">&quot;This loop never ends...\n&quot;</font>);
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+</ul>
+
+<blockquote>
+<p class="technote">
+<b>Tip:</b> If you are running your program from the command prompt and it is running
+in an infinite loop, pressing <b>Ctrl-C</b> will terminate the program.</li>
+</p>
+</blockquote>
+
+
+
+<!--
+100000000
+200000000
+300000000
+400000000
+500000000
+600000000
+700000000
+800000000
+900000000
+1000000000
+1100000000
+1200000000
+1300000000
+1400000000
+1500000000
+1600000000
+1700000000
+1800000000
+1900000000
+2000000000
+2100000000
+-2100000000
+-2000000000
+-1900000000
+-1800000000
+-1700000000
+-1600000000
+-1500000000
+-1400000000
+-1300000000
+-1200000000
+-1100000000
+-1000000000
+-900000000
+-800000000
+-700000000
+-600000000
+-500000000
+-400000000
+-300000000
+-200000000
+-100000000
+0
+100000000
+200000000
+300000000
+400000000
+500000000
+600000000
+700000000
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="DOLOOP">
+<p class="SectionHeader">
+The <tt>do</tt> Statement
+</p>
+</a>
+
+Also sometimes referred to as the <tt><b>do...while</b></tt> statement. The basic format is:
+
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Single statement</th><th>Multiple statements</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>do</b> 
+  <i>statement</i>
+<b>while (</b> <i>expression</i> <b>);</b>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>do</b>
+<b>{</b> 
+  <i>statements</i>
+<b>}
+</b><b>while (</b> <i>expression</i> <b>);</b>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+The primary difference between the <tt><b>while</b></tt> statement and the <tt><b>do</b></tt> statement is that the 
+body of the <tt><b>do</b></tt> statement is guaranteed to execute at least once. This is simply because the
+controlling expression is executed <i>after</i> the first iteration of the loop body:
+
+
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Body executes 0 or more times</th><th>Body executes 1 or more times</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>while (</b> <i>expression</i> <b>)</b> 
+  <i>statement</i>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>do</b> 
+  <i>statement</i>
+<b>while (</b> <i>expression</i> <b>);</b>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+Example:
+<blockquote><pre>
+<b>int</b> number;
+<b>int</b> choice;
+
+<b>do</b> 
+{
+  printf(<font color="#9933CC">&quot;Enter a number: &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;number);
+  printf(<font color="#9933CC">&quot;You entered %i\n&quot;</font>, number);
+
+  printf(<font color="#9933CC">&quot;Enter another number? (1=yes,0=no) &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d&quot;</font>, &amp;choice);
+}
+<b>while</b> (choice);
+</pre></blockquote>
+
+Sample run:
+
+<blockquote><pre>
+Enter a number: <font color=red><b>23</b></font>
+You entered 23
+Enter another number? (1=yes,0=no) <font color=red><b>1</b></font>
+Enter a number: <font color=red><b>10</b></font>
+You entered 10
+Enter another number? (1=yes,0=no) <font color=red><b>1</b></font>
+Enter a number: <font color=red><b>5</b></font>
+You entered 5
+Enter another number? (1=yes,0=no) <font color=red><b>3</b></font>
+Enter a number: <font color=red><b>12</b></font>
+You entered 12
+Enter another number? (1=yes,0=no) <font color=red><b>0</b></font>
+</pre></blockquote>
+
+There really isn't much difference between <tt><b>while</b></tt> statement and the <tt><b>do</b></tt> statement. If you need
+the loop to execute at least once, then the <tt><b>do</b></tt> statement is the one to use.
+<p>
+In computer science, there are 3 general kinds of repetitions regarding the number of 
+repetitions and the technique used:
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>Repetitions</th><th>Keyword</th></tr>
+<tr align="center"><td>0 or 1 time</td><td><b><tt>if</tt></b></td></tr>
+<tr align="center"><td>0 or more times</td><td><b><tt>while</tt></b></td></tr>
+<tr align="center"><td>1 or more times</td><td><b><tt>do...while</tt></b></td></tr>
+</table>
+</blockquote>
+Technically, the <b><tt>if</tt></b> isn't repeating anything. However, keep these keywords
+in mind when you have to do something in one of those three ways.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FORLOOP">
+<p class="SectionHeader">
+The <tt>for</tt> Statement
+</p>
+
+Now we get to the most complex of the looping mechanisms: the <tt><b>for</b></tt> statement. The general
+form is:
+
+<blockquote><pre>
+<b>for</b> <b>(</b> <i>expression<sub>1</sub></i> <b>;</b> <i>expression<sub>2</sub></i> <b>;</b> <i>expression<sub>3</sub></i> <b>)</b>
+  <i>statement</i>
+</pre></blockquote>
+
+and the compound version:
+<blockquote><pre>
+<b>for</b> <b>(</b> <i>expression<sub>1</sub></i> <b>;</b> <i>expression<sub>2</sub></i> <b>;</b> <i>expression<sub>3</sub></i> <b>)</b>
+<b>{</b>
+  <i>statements</i>
+<b>}</b>
+</pre></blockquote>
+
+
+The meaning of this is a little involved:
+<ol>
+<li>First, evaluate <i>expression<sub>1</sub></i>. This is executed and evaluated exactly once at the beginning of the loop.
+<li>Evaluate <i>expression<sub>2</sub></i>.
+<li>If <i>expression<sub>2</sub></i> is true, execute <i>statement</i>. (If it's not true, jump out of the loop.)
+<li>Evaluate <i>expression<sub>3</sub></i>.
+<li>Goto step 2.
+</ol>
+
+This process can be written using an equivalent <tt><b>while</b></tt> statement:
+<blockquote><pre>
+<i>expression<sub>1</sub></i>;
+<b>while</b> <b>(</b> <i>expression<sub>2</sub></i> <b>)</b>
+{
+  <i>statements</i>
+  <i>expression<sub>3</sub></i>;
+}
+</pre></blockquote>
+
+This also means that any <tt><b>for</b></tt> loop can be written as a <tt><b>while</b></tt> loop and vice-versa.
+<p>
+
+Simple examples to print the numbers 1 through 10:	
+
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>for loop #1</th><th>for loop #2</th><th>while loop</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>for</b> (i = 1; i &lt;= 10; i++)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>for</b> (i = 0; i &lt; 10; i++)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i + 1);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>while</b> (i &lt;= 10)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+The <tt><b>for</b></tt> loops above show the typical ways in which they are used. The variable <i>i</i> is sometimes called
+the <i>loop control variable</i> (or simply the <i>counter</i>) because it controls when the loop continues or stops. 
+The three expressions generally do these things:
+
+<ol>
+<li><i>expression<sub>1</sub></i> - initializes the loop variable (counter)
+<li><i>expression<sub>2</sub></i> - compares the counter with some value
+<li><i>expression<sub>3</sub></i> - modifies the counter (usually add or subtract 1)
+</ol>
+
+These are just typical uses of the expressions. You can do practically anything with those expressions.
+
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Count to 20 by 2</th><th>Count down from 30 by 3</th><th>Squares of 1 to 10</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>for</b> (i = 2; i &lt;= 20; i += 2)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+  
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>for</b> (i = 30; i &gt;= 3; i -= 3)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+  
+30
+27
+24
+21
+18
+15
+12
+9
+6
+3
+  
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>for</b> (i = 1; i &lt;= 10; i++)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i * i);
+  
+1
+4
+9
+16
+25
+36
+49
+64
+81
+100
+  
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+Of course, all of these could be written as <tt><b>while</b></tt> loops as well.
+
+
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Count to 20 by 2</th><th>Count down from 30 by 3</th><th>Squares of 1 to 10</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i = 2;
+<b>while</b> (i &lt;= 20)
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+  i += 2;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 30;
+<b>while</b> (i &gt;= 3)
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+  i -= 3;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>while</b> (i &lt;= 10)
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i * i); 
+  i++;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+<!--
+Or, if you prefer compact expressions:
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Count to 20 by 2</th><th>Count down from 30 by 3</th><th>Squares of 1 to 10</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+i = 0;
+<b>while</b> ( (i += 2)  &lt;= 20)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+i = 33;
+<b>while</b> ( (i -= 3) &gt;= 3)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+i = 0;
+<b>while</b> (++i &lt;= 10)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i * i); 
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+However, I would strongly discourage the use of the last examples above. <i>Just because C allows you to do something, doesn't mean you
+should.</i> If you forget the parentheses in the first two examples, the compiler will say nothing, but you won't get the correct output.
+<p>
+-->
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="MORELOOPING">
+<p class="SectionHeader">
+More on Looping
+</p>
+</a>
+
+Note that any or all of the expressions in the <tt><b>for</b></tt> loop can be omitted:
+<p>
+
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>for</b> (; i &lt;= 10;)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+</pre></blockquote>
+
+Of course, this is nothing but a strange-looking while loop now.
+
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>while</b> (i &lt;= 10)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+</pre></blockquote>
+
+You can even omit the second expression, but this would lead to an infinite loop, since the default <i>empty</i> expression
+is true!
+
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>for</b> (;;)
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+</pre></blockquote>
+
+If you want to exit from the loop prematurely, you can use the <tt><b>break</b></tt> statement:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>breaking out of infinite <tt>for</tt></th><th>breaking out of infinite <tt>while</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>for</b> (;;)
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+  <b>if</b> (i &gt; 10)
+    <b>break</b>;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 1;
+<b>while</b> (1)
+{
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+  <b>if</b> (i &gt; 10)
+    <b>break</b>;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+The <tt><b>break</b></tt> statement can be used in any of the looping mechanisms as well as the <tt><b>switch</b></tt> statement.
+
+<p>
+<hr width="90%">
+<p>
+		
+You can also have multiple expressions in between the semicolons:
+
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Using a <tt>for</tt> loop</th><th>Using a <tt>while</tt> loop</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>int</b> j;
+<b>for</b> (i = 0, j = 0; i &lt; 16 || j &lt; 3; i +=2, j++)
+  printf(<font color="#9933CC">&quot;%i * %i = %i\n&quot;</font>, i, j, i * j);
+  
+0 * 0 = 0
+2 * 1 = 2
+4 * 2 = 8
+6 * 3 = 18
+8 * 4 = 32
+10 * 5 = 50
+12 * 6 = 72
+14 * 7 = 98  
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 0;
+<b>int</b> j = 0;
+<b>while</b> (i &lt; 16 || j &lt; 3)
+{
+  printf(<font color="#9933CC">&quot;%i * %i = %i\n&quot;</font>, i, j, i * j);
+  i += 2;
+  j++;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+Note the use of the <i>comma</i> operator used in the expressions. This operator has the form:
+
+<blockquote><pre>
+<i>expression<sub>1</sub></i> <b>,</b> <i>expression<sub>2</sub></i> <b>,</b> <i>expression<sub>3</sub></i> <b>,</b> etc...
+</pre></blockquote>
+
+<ul>
+<li>The expressions are evaluated in order, left to right. 
+<li>This order of evaluation is well defined and guaranteed. (Few other operators can make this guarantee).
+<li>The result of the entire expression is the value of the <b>last</b> expression.
+<li>What are the values of <tt>i</tt>, <tt>j</tt>, and <tt>c</tt> below? 
+  Assume they have been declared as integers. (Look carefully!!) You'll need the 
+  <a href="../../docs/OperatorPrecedence.html">precedence chart</a> for this.
+
+<p>
+<table border=0 cellspacing=0 cellpadding=1>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+i = 5;
+j = 3;
+c = ++i, ++j, j + i;
+printf(<font color="#9933CC">&quot;%i, %i, %i\n&quot;</font>, i, j, c);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+i = 5;
+j = 3;
+c = (++i), (++j), (j + i);
+printf(<font color="#9933CC">&quot;%i, %i, %i\n&quot;</font>, i, j, c);
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+i = 5;
+j = 3;
+c = (++i, ++j, j + i);
+printf(<font color="#9933CC">&quot;%i, %i, %i\n&quot;</font>,i , j, c);
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+</ul>
+
+
+<p>
+<hr width="90%">
+<p>
+		
+		
+
+
+
+
+
+<!--
+assignment has higher precedence than comma
+i = 6, j = 4, c = 6
+i = 6, j = 4, c = 6
+i = 6, j = 4, c = 10
+-->
+
+The <tt><b>continue</b></tt> statement is similar to the <tt><b>break</b></tt> statement in that it causes the loop to deviate from
+its prescribed course. The difference is subtle, but very important. 
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th><tt>break</tt> statement</th><th><tt>continue</tt> statement</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>for</b> (<font color="#003399"><i>/* expressions */</i></font>)
+{
+  <font color="#003399"><i>/* first statement in loop  */</i></font>
+  <font color="#003399"><i>/* second statement in loop */</i></font>
+  <font color="#003399"><i>/* etc...                   */</i></font>
+
+  <b>break</b>;
+
+  <font color="#003399"><i>/* last statement in loop   */</i></font>
+}
+<font color="red"><b>[break jumps to here]</b></font>
+<font color="#003399"><i>/* first statement after loop */</i></font>
+
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>for</b> (<font color="#003399"><i>/* expressions */</i></font>)
+{
+  <font color="#003399"><i>/* first statement in loop  */</i></font>
+  <font color="#003399"><i>/* second statement in loop */</i></font>
+  <font color="#003399"><i>/* etc...                   */</i></font>
+
+  <b>continue</b>;
+
+  <font color="#003399"><i>/* last statement in loop   */</i></font>
+  <font color="red"><b>[continue jumps to here]</b></font>
+}
+<font color="#003399"><i>/* first statement after loop */</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+This prints the even numbers from 2 to 20:
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>using <tt>for</tt></th><th>using <tt>while</tt></th><th>using <tt>while</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>for</b> (i = 2; i &lt;= 20; i++)
+{
+  <b>if</b> ( (i % 2) == 1 )
+    <b>continue</b>;
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i);
+}
+
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+i = 2;
+<b>while</b> (i &lt;= 20)
+{
+  <b>if</b> ( (i % 2) == 1 )
+  {
+    i++;
+    <b>continue</b>;
+  }
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i++);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+i = 2;
+<b>while</b> (i &lt;= 20)
+{
+  <b>if</b> ( (i++ % 2) == 1 )
+    <b>continue</b>;
+  printf(<font color="#9933CC">&quot;%i\n&quot;</font>, i - 1);
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<p class="technote">
+The <b><tt>break</tt></b> and <b><tt>continue</tt></b> statements are not used all that often
+inside of a loop, but when you need this behavior, they come in handy.
+</p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="NESTEDLOOPS">
+<p class="SectionHeader">
+Nested Loops
+</p>
+
+Sometimes we need to have one loop inside another. This is very popular when printing
+a table of some sort. For example, printing your times tables for the values from
+1 to 10 would look something like this:
+
+
+<blockquote><pre>
+    1    2    3    4    5    6    7    8    9   10
+    2    4    6    8   10   12   14   16   18   20
+    3    6    9   12   15   18   21   24   27   30
+    4    8   12   16   20   24   28   32   36   40
+    5   10   15   20   25   30   35   40   45   50
+    6   12   18   24   30   36   42   48   54   60
+    7   14   21   28   35   42   49   56   63   70
+    8   16   24   32   40   48   56   64   72   80
+    9   18   27   36   45   54   63   72   81   90
+   10   20   30   40   50   60   70   80   90  100
+</pre></blockquote>
+
+And the code would look something like this:
+
+<blockquote><pre>
+<b>int</b> i, j;
+
+<b>for</b> (i = 1; i &lt;= 10; i++)
+{
+  <b>for</b> (j = 1; j &lt;= 10; j++)
+    printf(<font color="#9933CC">&quot;%5i&quot;</font>, i * j);
+
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+</pre></blockquote>
+
+You will see this a lot if you work with matrices (2-dimensional arrays) where
+one variable will be traversing the rows of the matrix and the other variable will
+be traversing the columns of the matrix. Essentially, any time that you are dealing
+with a table that has rows and columns, you will be using nested loops.
+<p>
+Sometimes you may even need to have 3 loops nested. Suppose you want to produce
+a table that shows all combinations of the integers, 1, 2, and 3 as well as the 
+sum of the integers. This would yield 27 (3 * 3 * 3) rows of 3 columns:
+
+<blockquote><pre>
+1,1,1, sum is 3
+1,1,2, sum is 4
+1,1,3, sum is 5
+1,2,1, sum is 4
+1,2,2, sum is 5
+1,2,3, sum is 6
+1,3,1, sum is 5
+1,3,2, sum is 6
+1,3,3, sum is 7
+2,1,1, sum is 4
+2,1,2, sum is 5
+2,1,3, sum is 6
+2,2,1, sum is 5
+2,2,2, sum is 6
+2,2,3, sum is 7
+2,3,1, sum is 6
+2,3,2, sum is 7
+2,3,3, sum is 8
+3,1,1, sum is 5
+3,1,2, sum is 6
+3,1,3, sum is 7
+3,2,1, sum is 6
+3,2,2, sum is 7
+3,2,3, sum is 8
+3,3,1, sum is 7
+3,3,2, sum is 8
+3,3,3, sum is 9
+</pre></blockquote>
+
+This is how you might code it:
+
+<blockquote><pre>
+<b>int</b> i, j, k;
+<b>int</b> size = 3;
+
+<b>for</b> (i = 1; i &lt;= size; i++)
+  <b>for</b> (j = 1; j &lt;= size; j++)
+    <b>for</b> (k = 1; k &lt;= size; k++)
+      printf(<font color="#9933CC">&quot;%i,%i,%i&#92;n&quot;</font>, i, j, k);
+</pre></blockquote>
+
+The <b><tt>break</tt></b> statement is often used in nested loops, when you find that,
+in an inner loop, you no longer need to keep looping. However, remember that the
+<b><tt>break</tt></b> statement only breaks out of the <i>current</i> (inner)
+loop, not all of them. If you want to break all the way out, you need to have some
+kind of variable (called a <i>flag</i>) that indicates this. 
+<p>
+For example, given the code above, supposed we wanted to stop printing results
+when the sum of the three numbers (<i>i, j, k</i>) is 8. This is an example of
+how we might do that:
+
+<blockquote><pre>
+<b>void</b> break3a(<b>void</b>)
+{
+  <b>int</b> i, j, k;    <font color="#003399"><i>/* Loop counters                         */</i></font>
+  <b>int</b> size = 3;   <font color="#003399"><i>/* The max value for each loop           */</i></font>
+  <b>int</b> target = 8; <font color="#003399"><i>/* Stop when the sum reaches this number */</i></font>
+  <b>int</b> done = 0;   <font color="#003399"><i>/* Flag that indicates to stop looping   */</i></font>
+
+    <font color="#003399"><i>/* Print all combinations until they add up to target */</i></font>
+    <font color="#003399"><i>/* The braces are required for multiple statements    */</i></font>
+  <b>for</b> (i = 1; i &lt;= size; i++)
+  {
+    <b>for</b> (j = 1; j &lt;= size; j++)
+    {
+      <b>for</b> (k = 1; k &lt;= size; k++)
+      {
+        <b>int</b> sum = i + j + k; <font color="#003399"><i>/* We want to stop when they add up to <b>target</b> */</i></font>
+
+        printf(<font color="#9933CC">&quot;%i,%i,%i, sum is %i&#92;n&quot;</font>, i, j, k, sum);
+        <b>if</b> (sum == target)
+        {
+          done = 1; <font color="#003399"><i>/* Need to communicate with the outer loops */</i></font>
+          <b>break</b>;
+        }
+      }
+        <font color="#003399"><i>/* If the numbers add up to <b>target</b>, we're done, otherwise, keep going */</i></font>
+      <b>if</b> (done)
+        <b>break</b>;
+    }
+      <font color="#003399"><i>/* If the numbers add up to <b>target</b>, we're done, otherwise, keep going */</i></font>
+    <b>if</b> (done)
+      <b>break</b>;
+  }
+}
+</pre></blockquote>
+
+This is the output:
+<blockquote><pre>
+1,1,1, sum is 3
+1,1,2, sum is 4
+1,1,3, sum is 5
+1,2,1, sum is 4
+1,2,2, sum is 5
+1,2,3, sum is 6
+1,3,1, sum is 5
+1,3,2, sum is 6
+1,3,3, sum is 7
+2,1,1, sum is 4
+2,1,2, sum is 5
+2,1,3, sum is 6
+2,2,1, sum is 5
+2,2,2, sum is 6
+2,2,3, sum is 7
+2,3,1, sum is 6
+2,3,2, sum is 7
+2,3,3, sum is 8
+</pre></blockquote>
+
+This is another way to achieve the same results:
+
+<blockquote><pre>
+<b>void</b> break3b(<b>void</b>)
+{
+  <b>int</b> i, j, k;    <font color="#003399"><i>/* Loop counters                         */</i></font>
+  <b>int</b> size = 3;   <font color="#003399"><i>/* The max value for each loop           */</i></font>
+  <b>int</b> target = 8; <font color="#003399"><i>/* Stop when the sum reaches this number */</i></font>
+  <b>int</b> done = 0;   <font color="#003399"><i>/* Flag that indicates to stop looping   */</i></font>
+
+    <font color="#003399"><i>/* Print all combinations until they add up to target */</i></font>
+  <b>for</b> (i = 1; i &lt;= size &amp;&amp; !done; i++)
+  {
+    <b>for</b> (j = 1; j &lt;= size &amp;&amp; !done; j++)
+    {
+      <b>for</b> (k = 1; k &lt;= size &amp;&amp; !done; k++)
+      {
+        <b>int</b> sum = i + j + k; <font color="#003399"><i>/* We want to stop when they add up to target */</i></font>
+
+        printf(<font color="#9933CC">&quot;%i,%i,%i, sum is %i&#92;n&quot;</font>, i, j, k, sum);
+        <b>if</b> (sum == target)
+          done = 1; <font color="#003399"><i>/* Need to communicate with all of the loops */</i></font>
+      }
+    }
+  }
+}
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<!--
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+</td>
+</tr></table>
+</blockquote>
+<p>
+
+<tt><b></b></tt>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+-->
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+

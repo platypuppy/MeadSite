@@ -1,0 +1,263 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+During this week's lab you'll continue to add functionality to the 
+List class you created previously. There are 4 new methods that you 
+will add to the List class. Two of the methods are overloaded to
+take different parameters. Please pay attention to this. 
+
+<p class="technote">
+Please
+read all of the notes below before starting the lab or asking
+for help. Most of your questions have been answered below.
+</p>
+
+<p class="technote">
+<b>Note:</b> You should not modify the previous labs. You should make a copy
+of the previous lab and use that as the starting point for the newer labs. This
+allows you to go back to any of the original labs.
+</p>
+
+Below are the prototypes for the new methods that will manipulate the list, 
+as well as simple diagrams showing the results:
+<ol>
+	<pre>
+   <font color="#003399"><i>// Inserts a new node at the specified position (first node is position 0)</i></font>
+   <font color="#003399"><i>// <b>This is from before, but it is overloaded in this lab. (~ 14 lines)</b></i></font>
+<li><b>void</b> Insert(<b>int</b> value, <b>int</b> position);
+
+  Example:
+<blockquote><table border=1 cellpadding=0 cellspacing=0>
+<tr>
+<td>
+<pre>  List: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 1
+  List.Insert(8, 2);
+  List: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 8 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 1	
+</code></pre>
+</td></tr>
+
+</table></blockquote>
+   <font color="#003399"><i>// Inserts a new node at the correct position of a sorted list (sorted small to large)</i></font>
+   <font color="#003399"><i>// This is overloaded. (~ 14 lines)</i></font>
+<li><b>void</b> Insert(<b>int</b> value);
+
+  Example:
+<blockquote><table border=1 cellpadding=0 cellspacing=0>
+<tr>
+<td>
+<pre>  List: 1 <big><big>&rarr;</big></big> 2 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 9	
+  List.Insert(5);
+  List: 1 <big><big>&rarr;</big></big> 2 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 5 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 9	
+</pre>
+</td></tr>
+</table></blockquote>
+   <font color="#003399"><i>// Deletes a node with the specified value (first occurrence only)</i></font>
+   <font color="#003399"><i>// This is overloaded. (~ 8 lines)</i></font>
+<li><b>void</b> Delete(<b>int</b> value);
+
+  Example:
+<blockquote><table border=1 cellpadding=0 cellspacing=0>
+<tr>
+<td>
+<pre>  List: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 6 <big><big>&rarr;</big></big> 4	
+  List.Delete(4);
+  List: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 6 <big><big>&rarr;</big></big> 4	
+</pre>
+</td></tr>
+</table></blockquote>
+   <font color="#003399"><i>// Deletes all of the values in the List that are in Items</i></font>
+   <font color="#003399"><i>// The List passed into the function is unchanged. (It's <b>const</b>)</i></font>
+   <font color="#003399"><i>// This is overloaded. (~ 6 lines)</i></font>
+<li><b>void</b> Delete(<b>const</b> List&amp; Items);
+
+  Example:
+<blockquote><table border=1 cellpadding=0 cellspacing=0>
+<tr>
+<td>
+<pre>  List1: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 6 <big><big>&rarr;</big></big> 4  
+  List2: 2 <big><big>&rarr;</big></big> 5 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 1
+  List1.Delete(List2);
+  List1: 7 <big><big>&rarr;</big></big> 6
+  List2: 2 <big><big>&rarr;</big></big> 5 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 1
+</pre>
+</td></tr>
+</table></blockquote>
+   <font color="#003399"><i>// Concatenates two lists</i></font>
+   <font color="#003399"><i>// The List passed into the function is unchanged. (It's <b>const</b>) (~ 10 lines)</i></font>
+<li><b>void</b> Concat(<b>const</b> List&amp; Source);
+
+  Example:
+<blockquote><table border=1 cellpadding=0 cellspacing=0>
+<tr>
+<td>
+<pre>  List1: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 6 <big><big>&rarr;</big></big> 4 
+  List2: 2 <big><big>&rarr;</big></big> 5 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 1
+  List1.Concat(List2);
+  List1: 5 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 6 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 2 <big><big>&rarr;</big></big> 5 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 1  
+  List2: 2 <big><big>&rarr;</big></big> 5 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 3 <big><big>&rarr;</big></big> 1
+</pre>
+</td></tr>
+</table></blockquote>
+</pre>
+</ol>
+
+Notice that none of these methods are marked <b>const</b>. That's because all of these methods modify the list.
+<p>
+Also notice that the <i>Insert</i> and <i>Delete</i> methods are overloaded:
+<ul>
+	<li>The first <i>Insert</i> method will insert the value at the position supplied. 
+		You've already done this in a previous lab, but it is overloaded now.
+		See the test driver and output below for more examples.</li>
+	<ul>
+		<li>Note that if position is greater than the number of items in the list (or negative), nothing is inserted.
+      This means that you need to make sure that the insert position is valid.</li>
+	</ul>
+	<li>The second <i>Insert</i> method takes just a value. It will insert the integer based on its value. This will allow the 
+		user to keep the list sorted. So, if I insert the values 4, 7, 1, 9, 2 in that order, the list will look like this:
+		<blockquote>
+			<tt>1 <big><big>&rarr;</big></big> 2 <big><big>&rarr;</big></big> 4 <big><big>&rarr;</big></big> 7 <big><big>&rarr;</big></big> 9	</tt>
+		</blockquote>
+	<li>Note that this will only work if the second <i>Insert</i> is used to add all of the items. If you call the second <i>Insert</i> when the 
+	list is not sorted, you won't get the correct results. That's fine. We are <b>NOT</b> going to try and do a sorted insert into an unsorted list at this point.
+	The driver is not going to mix the two <i>Insert</i> methods on the same list.</li>
+  <p>
+	<li>The first <i>Delete</i> method searches (from the beginning of the list) for the first occurrence of <i>value</i> and removes it from the list.
+		If there is no occurrence of <i>value</i>, nothing is deleted.</li>
+	<li>The second <i>Delete</i> method takes a second List. For each item on the second list, <b>all occurrences</b> of that item/value are deleted from the object. See the test driver 
+	and output to see how it works.</li>
+  <p>
+	<li>The <i>Concat</i> method must allocate a new node for each node in <i>List2</i>. If you just point
+		the last node from <i>List1</i> at the first node in <i>List2</i>, you are going to have serious
+		problems when the destructors for each list are called.</li>
+</ul>
+
+<p>
+<hr width="100%">
+<p>
+
+These are the two steps for this week's lab:
+<ol>
+<li>Implement the functions in a file called <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/List.cpp">List.cpp</a>. You should use the one that you started implementing last week and add to that file.
+	Here's the header file <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/List.h">List.h</a> to start with. You may need to add to the private section.
+	<p>
+	Hints:
+<ol type="a">
+	<li>Since you are not using <i>PrintList</i> anymore (you are overloading <tt><b>operator<<</b></tt>),
+		you must implement this first. A partial implementation is in the .cpp file already.
+		All of the tests in the driver rely on this function.</li>
+	<li>If you create a private helper function that finds an item in the list and also returns the previous node in the list, you will be able to
+		use that function in <i>FindItem</i> and also in the first <i>Delete</i> function. This will make your code shorter and easier to
+		write and maintain.
+	<li>The second <i>Delete</i> function should call the first one. (That's why it requires the least amount of code.)
+    It won't be the most efficient method, but it will make your
+		code easier to read, write, and debug. This is the primary goal during the first year of programming:
+		<i>Correctness</i> and <i>Readability</i>.
+    <p>
+     This is also related to the concept of
+    <i>Premature optimization is the root of all evil</i> and is a trap that many beginning programmers fall into.</li>
+	<li>Remember, if you create helper functions, put them in the private section so they are hidden from the clients.</li>
+	<li>You can work on the functions in any order you like.</li>	
+	<li>Make sure you are freeing the deleted nodes (using <b>delete</b>) or you'll have memory leaks.</li>
+  <li>Use a memory debugger to verify that you have no memory leaks.</li>
+</ol>
+<p>
+
+<p>
+<hr width="100%">
+<p>
+
+<li>Add a Doxygen file header comment to <tt><b>List.cpp</b></tt>. Make a bullet list of the functions in the file. 
+	Create doxygen function header comments for each function. 
+<p>
+
+<p>
+<hr width="100%">
+<p>
+
+
+Here's some test code in driver.cpp: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/driver.cpp.html">HTML</a> &nbsp <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/driver.cpp">Text</a> 
+<p>
+Command line:
+
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -g -Wall -Wextra -Werror -ansi -pedantic -Wconversion driver.cpp List.cpp
+</pre></blockquote>
+
+<!--
+Compiling with Microsoft's compiler (for use with Dr. Memory)
+<blockquote><pre>
+<b>cl</b> <a href="https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level">/Wv:18</a> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp List.cpp
+</pre></blockquote>
+-->
+<!--<b>clang++</b> -c -O2 -g -Wall -Wextra -Werror -ansi -pedantic -Wconversion driver.cpp List.cpp<br>-->
+
+To run a test, you have to supply the test number on the command line you wish to run. If you want to run
+all of the tests, one after the other, don't provide any number on the command line. For example, to run
+test #5 (Concat test):
+<blockquote><pre>
+gnu 5
+</pre></blockquote>
+
+Outputs:
+
+<blockquote>
+	<ol>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-add.txt">Add</a> (This is from the previous lab.)</li>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-find.txt">Find</a> (This is from the previous lab.)</li>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-insert1.txt">Insert1</a> (This is from the previous lab.)</li>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-insert2.txt">Insert2</a></li>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-concat.txt">Concat</a></li>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-delete1.txt">Delete1</a></li>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-delete2.txt">Delete2</a></li>
+		<p>
+		<li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/labs/week6/output-all.txt">Output from all functions</a></li>
+	</ol>
+</blockquote>
+
+
+</blockquote>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program
+to ignore the newlines between GNU's output and the other compilers.
+Also, please be sure to run your program with a memory debugger at all times.
+<p>
+<br>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

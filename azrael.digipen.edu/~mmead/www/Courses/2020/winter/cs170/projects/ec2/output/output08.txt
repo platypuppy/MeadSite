@@ -1,0 +1,10 @@
+TestAssignment2...
+Before assignment:
+stack1: 10 9 8 7 6 5 4 3 2 1 
+stack2: 
+stack3: 
+After assignment:
+stack1: 10 9 8 7 6 5 4 3 2 1 
+stack2: 10 9 8 7 6 5 4 3 2 1 
+stack3: 10 9 8 7 6 5 4 3 2 1 
+

@@ -1,0 +1,1201 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+
+
+<link rel="stylesheet" type="text/css" href="../../css/styles.css">
+<link rel="stylesheet" type="text/css"  href="../../css/mktooltip.css"/>
+<script type="text/javascript" src="../../css/mktooltip.js"></script>
+<div id="mktipmsg" class="mktipmsg"></div>
+
+
+<title>Overview of File Input and Output</title>
+</head>
+
+<body>  
+<center><h1>Overview of File Input and Output</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Overview of File Output
+</p>
+
+Basics:
+<ul>
+<li>In C, we used global functions like <tt><b>fopen</b></tt>, <tt><b>fgets</b></tt>, <tt><b>fputs</b></tt>, <tt><b>fprintf</b></tt>, and <tt><b>fclose</b></tt> to
+	open, read, write, and close files.
+<li>In C++, we will be using <i>stream objects</i> (instantiated from stream classes) to perform all of the file input and output.
+<li>This will give us a consistent interface for all I/O.
+<li>If you know how to use <tt><b>cin</b></tt> and <tt><b>cout</b></tt>, then you have 90% of the necessary knowledge.
+	(<tt><b>cin</b></tt> and <tt><b>cout</b></tt> are stream objects themselves.)
+<li>As a <tt><b>class</b></tt>, the stream objects have many members that you can access. The most important ones
+	are the overloaded operators: <tt><b>operator&lt;&lt;</b></tt> and <tt><b>operator&gt;&gt;</b></tt>
+</ul>
+
+
+To read and write files, you must include the appropriate header file:
+
+<blockquote><pre>
+<b>#include</b> &lt;fstream&gt; <font color="#003399"><i>// No .h extension</i></font>
+</pre></blockquote>
+
+The <tt>fstream</tt> header actually contains definitions for two types: <tt>ifstream</tt> and <tt>ofstream</tt>.
+<ul>
+<li><tt>ifstream</tt> is an input file stream (for reading input)
+<li><tt>ofstream</tt> is an output file stream (for writing output)
+<li>Unlike the default input/output streams <tt>cin</tt>, <tt>cout</tt> and <tt>cerr</tt>, there are no default file streams. 
+	You must explicitly open them yourself.
+</ul>
+
+<!--
+<blockquote>
+<table cellspacing=5 cellpadding=5>
+<tr><th>Simplified partial class hierarchy</th></tr>
+<tr>
+<td>
+<img src="StreamHierarchy-1.png">
+</td>
+</tr></table>
+</blockquote>
+<p>
+-->
+	
+Output example:
+<p>	
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Output in <tt>foo.txt</tt> (showing the new lines)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f1()
+{
+  std::ofstream outfile;   <font color="#003399"><i>// instantiate an output stream object</i></font>
+  outfile.open(<font color="#9933CC">&quot;foo.txt&quot;</font>); <font color="#003399"><i>// associate a disk file</i></font>
+
+    <font color="#003399"><i>// Write some data to the file</i></font>
+  outfile &lt;&lt; <font color="#9933CC">&quot;This is a line of text&quot;</font> &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;Another line of text&quot;</font> &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;An integer: &quot;</font> &lt;&lt; 42 &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;A double: &quot;</font> &lt;&lt; 3.1415 &lt;&lt; std::endl;
+
+  outfile.close(); <font color="#003399"><i>// close the file [optional]</i></font>
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+This is a line of text<font color="red">&lt;NL&gt;</font>
+Another line of text<font color="red">&lt;NL&gt;</font>
+An integer: 42<font color="red">&lt;NL&gt;</font>
+A double: 3.1415<font color="red">&lt;NL&gt;</font></pre></blockquote>
+</td>
+</tr></table>
+	
+<blockquote><pre>
+</pre></blockquote>
+
+<br>
+
+For automatic objects (stack-based), we don't need to call
+<tt><b>close</b></tt> since it will be done in the destructor.
+<p>
+We can open the file in the constructor:
+
+<blockquote><pre>
+<b>void</b> f2()
+{
+    <font color="#003399"><i>// instantiate and open output file</i></font>
+  std::ofstream outfile(<font color="#9933CC">&quot;foo.txt&quot;</font>); 
+
+    <font color="#003399"><i>// Write some data to the file</i></font>
+  outfile &lt;&lt; <font color="#9933CC">&quot;This is a line of text&quot;</font> &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;Another line of text&quot;</font> &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;An integer: &quot;</font> &lt;&lt; 42 &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;A double: &quot;</font> &lt;&lt; 3.1415 &lt;&lt; std::endl;
+
+}  <font color="#003399"><i>// stream is closed in ~ofstream()</i></font>
+</pre></blockquote>
+<p>
+	
+Streaming a user-defined type:
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Output (in <tt>file1.txt</tt>)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f3()
+{
+  Student st1(<font color="#9933CC">&quot;jdoe&quot;</font>, 22, 4, 3.76F);
+  StopWatch sw1(90);
+
+    <font color="#003399"><i>// Send to a file</i></font>
+  std::ofstream outfile(<font color="#9933CC">&quot;file1.txt&quot;</font>);
+  outfile &lt;&lt; st1;
+  outfile &lt;&lt; sw1;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+login: jdoe<font color="red">&lt;NL&gt;</font>
+  age: 22<font color="red">&lt;NL&gt;</font>
+ year: 4<font color="red">&lt;NL&gt;</font>
+  GPA: 3.76<font color="red">&lt;NL&gt;</font>
+00:01:30<font color="red">&lt;NL&gt;</font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+Of course, this assumes an overloaded <tt><b>operator&lt;&lt;</b></tt> for both classes:
+<p>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th><tt>Student</tt> class</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+std::ostream&amp; <b>operator</b>&lt;&lt;(std::ostream&amp; os, <b>const</b> Student&amp; s)
+{
+  os &lt;&lt; <font color="#9933CC">&quot;login: &quot;</font> &lt;&lt; s.get_login() &lt;&lt; std::endl;
+  os &lt;&lt; <font color="#9933CC">&quot;  age: &quot;</font> &lt;&lt; s.get_age() &lt;&lt; std::endl;
+  os &lt;&lt; <font color="#9933CC">&quot; year: &quot;</font> &lt;&lt; s.get_year() &lt;&lt; std::endl;
+  os &lt;&lt; <font color="#9933CC">&quot;  GPA: &quot;</font> &lt;&lt; s.get_GPA() &lt;&lt; std::endl;
+
+  <b>return</b> os;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+	
+Hopefully, now you understand why it is important to use the <tt>ostream</tt> parameter passed into the
+function and NOT simply hard-code <tt><b>cout</b></tt>.
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th><tt>StopWatch</tt> class</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+std::ostream&amp; <b>operator</b>&lt;&lt;(std::ostream&amp; os, <b>const</b> StopWatch&amp; rhs)
+{
+  <b>int</b> hours, minutes, seconds;
+
+  hours = rhs.seconds_ / 3600;
+  minutes = (rhs.seconds_ - (hours * 3600)) / 60;
+  seconds = rhs.seconds_ % 60;
+
+  os.fill(<font color="#9933CC">'0'</font>);
+  os &lt;&lt; std::setw(2) &lt;&lt; hours &lt;&lt; <font color="#9933CC">':'</font>;
+  os &lt;&lt; std::setw(2) &lt;&lt; minutes &lt;&lt; <font color="#9933CC">':'</font>;
+  os &lt;&lt; std::setw(2) &lt;&lt; seconds &lt;&lt; std::endl;
+
+  <b>return</b> os;
+}
+
+</pre></blockquote>
+</td>
+</tr></table>
+	
+
+Of course, it is important to check the status of the stream before using it:
+<p>
+	
+<blockquote><pre>
+<b>void</b> f4()
+{
+    <font color="#003399"><i>// Open and check file status</i></font>
+  std::ofstream outfile(<font color="#9933CC">&quot;foo.txt&quot;</font>); 
+  <b>if</b> (outfile.is_open())
+  {
+      <font color="#003399"><i>// Write some data to the file</i></font>
+    outfile &lt;&lt; <font color="#9933CC">&quot;This is a line of text&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Another line of text&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;An integer: &quot;</font> &lt;&lt; 42 &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;A double: &quot;</font> &lt;&lt; 3.1415 &lt;&lt; std::endl;
+  }
+  <b>else</b>
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file for output.\n&quot;</font>;
+} 
+</pre></blockquote>
+
+<p>
+Rebinding files:
+<p>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Output (in files)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f7()
+{
+  std::ofstream outfile;
+  <b>const</b> <b>char</b>* fnames[] = {<font color="#9933CC">&quot;file1.txt&quot;</font>, 
+                          <font color="#9933CC">&quot;file2.txt&quot;</font>, 
+                          <font color="#9933CC">&quot;file3.txt&quot;</font>
+                         };
+
+  <b>int</b> size = <b>sizeof</b>(fnames) / <b>sizeof</b>(*fnames);
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    outfile.open(fnames[i]);
+    <b>if</b> (!outfile.is_open())
+      <b>continue</b>;
+
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile.close();
+  }
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>file1.txt:</b>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+
+
+<b>file2.txt:</b>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+
+
+<b>file3.txt:</b>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+Blah, blah, blah<font color="red">&lt;NL&gt;</font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+Aside:
+<ol>
+<li>What is <tt><b>sizeof</b>(fnames)</tt>
+<a style="border: 1px solid #dddddd;color: #cc00FF;text-decoration: none;" href="javascript:void(0)" onmouseout="hidetip();"
+onmouseover="showtip(event,'32-bit:12, 64-bit:24');"
+>
+?
+</a>
+
+	
+	
+<li>What is <tt><b>sizeof</b>(fnames[1])</tt>
+<a style="border: 1px solid #dddddd;color: #cc00FF;text-decoration: none;" href="javascript:void(0)" onmouseout="hidetip();"
+onmouseover="showtip(event,'32-bit:4, 64-bit:8');"
+>
+?
+</a>
+	
+	
+<li>What is <tt><b>sizeof</b>(*fnames[1])</tt>
+<a style="border: 1px solid #dddddd;color: #cc00FF;text-decoration: none;" href="javascript:void(0)" onmouseout="hidetip();"
+onmouseover="showtip(event,'1');"
+>
+?
+</a>
+</ol>
+
+<!--
+<br><br>
+
+<ol>
+<li>12 (array of 3 pointers to const char)
+<li>4 (pointer to const char)
+<li>1 (const char)
+</ol>
+-->
+	
+Comparing the use of <tt>vector</tt> and <tt>string</tt> instead of an array:
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th><tt>vector&lt;<b>const char *</b>&gt;</tt></th><th><tt>vector&lt;string&gt;</tt></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f8()
+{
+  std::ofstream outfile;
+  std::vector&lt;<font color="blue"><b><b>const</b> <b>char</b> *</b></font>&gt; fnames;
+
+  fnames.push_back(<font color="#9933CC">&quot;file1.txt&quot;</font>);
+  fnames.push_back(<font color="#9933CC">&quot;file2.txt&quot;</font>);
+  fnames.push_back(<font color="#9933CC">&quot;file3.txt&quot;</font>);
+
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; fnames.size(); i++)
+  {
+    outfile.open(<font color="blue"><b>fnames[i]</b></font>);
+    <b>if</b> (!outfile.is_open())
+      <b>continue</b>;
+
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile.close();
+  }
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> f8()
+{
+  std::ofstream outfile;
+  std::vector&lt;<font color="blue"><b>std::string</b></font>&gt; fnames;
+
+  fnames.push_back(<font color="#9933CC">&quot;file1.txt&quot;</font>);
+  fnames.push_back(<font color="#9933CC">&quot;file2.txt&quot;</font>);
+  fnames.push_back(<font color="#9933CC">&quot;file3.txt&quot;</font>);
+
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; fnames.size(); i++)
+  {
+    outfile.open(<font color="blue"><b>fnames[i].c_str()</b></font>);
+    <b>if</b> (!outfile.is_open())
+      <b>continue</b>;
+
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+    outfile.close();
+  }
+}
+</pre></blockquote>
+</td>
+</tr></table>
+
+Aside:
+<ul>
+<li>What is <tt><b>sizeof</b>(fnames)</tt>? In other words, what is <tt><b>sizeof</b>(std::vector&lt;<b>const char *</b>&gt;)</tt>
+<a style="border: 1px solid #dddddd;color: #cc00FF;text-decoration: none;" href="javascript:void(0)" onmouseout="hidetip();"
+onmouseover="showtip(event,'Old 32-bit - GNU:12, MS:20, Borland:32\nNow 32-bit - GNU:12, Clang:12, MS:12\nNow 64-bit - GNU:24, Clang:24, MS:24');"
+>
+?
+</a></li>
+
+<li>Newer compilers (libraries) overload <tt>ofstream.open()</tt> to take <tt>std::string</tt></li>
+<!--
+>= clang 6.0 
+>= g++ 6
+-->
+
+
+
+</ul>
+
+<!--
+		GNU: 12
+		Borland: 32
+		MS: 20
+-->
+
+Suppose the program used a <tt>list</tt> instead of a <tt>vector</tt>. What other changes would need to be made?
+<!--
+No subscript operator. Students may not have been introduced to std::list yet.
+-->
+<p>
+<br><br><br><br>
+This code will work with any container:
+
+<blockquote><pre>
+std::vector&lt;std::string&gt;::iterator it;
+<b>for</b> (it = fnames.begin(); it != fnames.end(); ++it)
+{
+  outfile.open((*it).c_str());  <font color="#003399"><i>// could use it-&gt;c_str()</i></font>
+  <b>if</b> (!outfile.is_open())
+    <b>continue</b>;
+
+    <font color="#003399"><i>// Other code...</i></font>
+}
+</pre></blockquote>
+
+This demonstrates again how iterators are very powerful and flexible and why using
+iterators instead of subscript operators can lead to more useful (reusable) code.
+<p>
+An even more C++-like implementation might look like this:
+	
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr>
+<td>
+<pre>
+<b>void</b> f8c()
+{
+  std::vector&lt;std::string&gt; fnames;
+  
+  fnames.push_back(<font color="#9933CC">&quot;file1.txt&quot;</font>);
+  fnames.push_back(<font color="#9933CC">&quot;file2.txt&quot;</font>);
+  fnames.push_back(<font color="#9933CC">&quot;file3.txt&quot;</font>);
+  
+  for_each(fnames.begin(), fnames.end(), PrintToFile);
+}
+</pre>	
+</td>
+<td width=20></td>
+<td>
+<pre>
+<b>void</b> PrintToFile(<b>const</b> std::string&amp; fname)
+{
+  std::ofstream outfile(fname.c_str());
+  <b>if</b> (!outfile.is_open())
+    <b>return</b>;
+
+  outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+  outfile &lt;&lt; <font color="#9933CC">&quot;Blah, blah, blah&quot;</font> &lt;&lt; std::endl;
+}
+</pre>
+</td>
+</tr>
+</table>
+<p>
+</blockquote>
+
+Or with C++11 <i>uniform initializer syntax</i>:
+
+<blockquote><pre>
+<b>void</b> f8d()
+{
+  std::vector&lt;std::string&gt; fnames {<font color="#9933CC">&quot;file1.txt&quot;</font>, <font color="#9933CC">&quot;file2.txt&quot;</font>, <font color="#9933CC">&quot;file3.txt&quot;</font>};
+  for_each(fnames.begin(), fnames.end(), PrintToFile);
+}
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">Overview of File Input
+</p>
+
+File input is very similar to the use of <tt>cin</tt>. 
+<p>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Given the text in the file <tt>foo.txt</tt> from above and showing the spaces and newlines:
+	
+<blockquote><pre>
+This&middot;is&middot;a&middot;line&middot;of&middot;text&para;
+Another&middot;line&middot;of&middot;text&para
+An&middot;integer:&middot;42&para
+A&middot;double:&middot;3.1415&para
+</pre></blockquote>
+
+We can read the words back into the program one at at time:
+<p>
+	
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f5()
+{
+  std::ifstream infile(<font color="#9933CC">&quot;foo.txt&quot;</font>);
+  <b>if</b> (!infile.is_open())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+  <b>else</b>
+  {
+    std::string str;
+    <b>while</b> (!infile.eof())
+    {
+      infile &gt;&gt; str;
+      std::cout &lt;&lt; str &lt;&lt; std::endl;
+    }
+  }
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+This
+is
+a
+line
+of
+text
+Another
+line
+of
+text
+An
+integer:
+42
+A
+double:
+3.1415
+<font color="red"><b>3.1415</b></font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<p>
+	
+<a href="Strings-STL-1.html#GETNUMBERS1">Previous examples</a>
+	
+	
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Using FILE pointers</th><th>Using C++ streams</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> get_numbers2()
+{
+    <font color="#003399"><i>// Holds unlimited integers</i></font>
+  std::vector&lt;<b>int</b>&gt; numbers; 
+
+    <font color="#003399"><i>// Open the file for reading</i></font>
+  FILE *fp = fopen(<font color="#9933CC">&quot;numbers.txt&quot;</font>, <font color="#9933CC">&quot;r&quot;</font>);
+  <b>if</b> (!fp)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+
+  <font color="#003399"><i>// Do something else or exit function?</i></font>    
+
+    <font color="#003399"><i>// Process the entire file</i></font>
+  <b>while</b> (!feof(fp))
+  {
+    <b>int</b> number;
+
+      <font color="#003399"><i>// Read next integer</i></font>
+    <b>if</b> (fscanf(fp, <font color="#9933CC">&quot;%i&quot;</font>, &amp;number) == 0)
+      <b>break</b>;
+
+
+      <font color="#003399"><i>// Add number to the end</i></font>
+    numbers.push_back(number);
+  }
+
+    <font color="#003399"><i>// Close the file</i></font>
+  fclose(fp);
+
+    <font color="#003399"><i>// Print the vector</i></font>
+  print_vector(numbers);
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> get_numbers3()
+{
+    <font color="#003399"><i>// Holds unlimited integers</i></font>
+  std::vector&lt;<b>int</b>&gt; numbers; 
+
+    <font color="#003399"><i>// Open the file for reading</i></font>
+  <font color="blue"><b>std::ifstream infile(<font color="#9933CC">&quot;numbers.txt&quot;</font>);</b></font>
+  <b>if</b> (<font color="blue"><b>!infile.is_open()</b></font>)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+
+  <font color="#003399"><i>// Do something else or exit function?</i></font>    
+
+    <font color="#003399"><i>// Process the entire file</i></font>
+  <b>while</b> (<font color="blue"><b>!infile.eof()</b></font>)
+  {
+    <b>int</b> number;
+
+      <font color="#003399"><i>// Read next integer</i></font>
+    <font color="blue"><b>infile &gt;&gt; number;</b></font>
+    <b>if</b> (infile.eof())
+       <b>break</b>;
+
+      <font color="#003399"><i>// Add number to the end</i></font>
+    numbers.push_back(number);
+  }
+  
+  
+  
+  
+    <font color="#003399"><i>// Print the vector</i></font>
+  print_vector(numbers);
+} <font color="#003399"><i>// File is closed here</i></font>
+</pre></blockquote>
+</td>
+</tr></table>
+
+<p>
+<hr width="90%">
+<p>
+
+Reading in an entire line at a time:
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Using FILE pointers w/C-style strings</th><th>Using streams w/std::string</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f10()
+{
+  FILE *infile = fopen(<font color="#9933CC">&quot;foo.txt&quot;</font>, <font color="#9933CC">&quot;rt&quot;</font>);
+  <b>if</b> (!infile)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+  <b>else</b>
+  {
+    <b>while</b> (!feof(infile))
+    {
+      <b>char</b> str[100];
+      fgets(str, 100, infile);
+      std::cout &lt;&lt; str;
+    }
+    fclose(infile);
+  }
+}
+
+<b>Output:</b>
+This is a line of text
+Another line of text
+An integer: 42
+A double: 3.1415
+A double: 3.1415
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> f11()
+{
+  std::ifstream infile(<font color="#9933CC">&quot;foo.txt&quot;</font>);
+  <b>if</b> (!infile.is_open())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+  <b>else</b>
+  {
+    std::string str;
+    <b>while</b> (!infile.eof())
+    {
+      std::getline(infile, str);
+      std::cout &lt;&lt; str &lt;&lt; std::endl;
+    }
+  }
+}
+
+<b>Output:</b>
+This is a line of text
+Another line of text
+An integer: 42
+A double: 3.1415
+[empty line here]
+</pre></blockquote>
+</td>
+</tr></table>
+
+A corrected version:
+
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Using FILE pointers w/C-style strings</th><th>Using streams w/std::string</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>void</b> f10()
+{
+  FILE *infile = fopen(<font color="#9933CC">&quot;foo.txt&quot;</font>, <font color="#9933CC">&quot;rt&quot;</font>);
+  <b>if</b> (!infile)
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+  <b>else</b>
+  {
+    <b>while</b> (!feof(infile))
+    {
+      <b>char</b> str[100];
+      <font color="blue"><b>if</b> (!fgets(str, 100, infile))
+        <b>break</b>;</font>
+      std::cout &lt;&lt; str;
+    }
+    fclose(infile);
+  }
+}
+
+<b>Output:</b>
+This is a line of text
+Another line of text
+An integer: 42
+A double: 3.1415
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>void</b> f11()
+{
+  std::ifstream infile(<font color="#9933CC">&quot;foo.txt&quot;</font>);
+  <b>if</b> (!infile.is_open())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file.\n&quot;</font>;
+  <b>else</b>
+  {
+    std::string str;
+    <b>while</b> (!infile.eof())
+    {
+      <font color="blue"><b>if</b> (std::getline(infile, str).eof())
+        <b>break</b>;</font>
+      std::cout &lt;&lt; str &lt;&lt; std::endl;
+    }
+  }
+}
+
+
+<b>Output:</b>
+This is a line of text
+Another line of text
+An integer: 42
+A double: 3.1415
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+Refer to <a href="http://www.cplusplus.com/doc/tutorial/files/">
+  Input/output with files</a> for information on state flags
+  (search for Checking state flags).
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">File Modes
+</p>
+
+
+In C, we opened files with the <tt>fopen</tt> function. It had a signature like this:
+
+<blockquote><pre>
+FILE *fopen( <b>const</b> <b>char</b> *filename, <b>const</b> <b>char</b> *mode );
+</pre></blockquote>
+
+The <i>mode</i> parameter specified different attributes of the file:
+
+<blockquote><pre>
+        | Read (input)   Write (output)  Append (output)
+--------+----------------------------------------------        
+Text    |      "rt"          "wt"            "at"
+Binary  |      "rb"          "wb"            "ab"
+Depends |      "r"           "w"             "a"
+</pre></blockquote>
+
+C++ streams use a slightly different approach to modes using <i>flags</i>. These flags are very similar to the ones
+used by the <tt>cin</tt> and <tt>cout</tt> objects and modify their behavior. 
+<a href="IO-Intro-1.html#SETF">Intro to I/O</a>.
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=10>
+<tr><th>Mode</th><th>Meaning</th></tr>
+<tr><td><tt>ios_base::in</tt></td><td>Open file for input (default for <tt>ifstream</tt>)</td></tr>	
+<tr><td><tt>ios_base::out</tt></td><td>Open file for output (default for <tt>ofstream</tt>)</td></tr>	
+<tr><td><tt>ios_base::app</tt></td><td>Seek to the end before each write (append)</td></tr>	
+<tr><td><tt>ios_base::trunc</tt></td><td>Truncate file (delete contents) after opening  (default for <tt>ofstream</tt>)</td></tr>	
+<!--
+<tr><td><tt>ios_base::ate</tt></td><td>Seek to the end once after opening</td></tr>	
+-->
+<tr><td><tt>ios_base::binary</tt></td><td>Open file in binary mode</td></tr>	
+</table>
+</blockquote>
+
+<p>	
+Sample usage:
+<blockquote><pre>
+ofstream os;
+os.open("somefile.bin", ios::app | ios::binary | ios::out); 
+</pre></blockquote>  
+
+
+<p>
+<a href="http://www.cppreference.com/cppio/index.html">More information</a> on C++ streams
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">In-Depth Example
+</p>
+
+The assignment is to create a program similar to the Unix (Cygwin) program <tt><b>wc</b></tt>. 
+(<a href="http://man7.org/linux/man-pages/man1/wc.1.html">Reference</a>)
+<p>
+
+<blockquote><pre>
+ Directory of E:\Data\Courses\Notes\CS170\Code\mywc
+
+03/19/2020  03:10p                 819 Circle.cpp
+03/19/2020  03:10p               2,191 fibonacci.cpp
+03/19/2020  03:10p               4,246 Ocean.cpp
+03/19/2020  03:10p              11,959 Polygon.cpp
+03/19/2020  03:10p                 164 WarBoats.cpp
+               5 File(s)         19,379 bytes
+               0 Dir(s)   5,421,133,824 bytes free	
+</pre></blockquote>
+
+Running the command:
+
+
+<blockquote><pre>
+wc Circle.cpp fibonacci.cpp Ocean.cpp Polygon.cpp WarBoats.cpp
+</pre></blockquote>
+
+produces this output:
+
+<blockquote><pre>
+   50   110   819 Circle.cpp
+   87   265  2191 fibonacci.cpp
+  158   450  4246 Ocean.cpp
+  402  1353 11959 Polygon.cpp
+   14    20   164 WarBoats.cpp
+  711  2198 19379 total
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>High-Level Plan</th><th></th><th>Detailed Plan</th></tr>
+<tr valign="top">
+<td>
+<ol>
+<li>Read the filenames from the command line
+<li>For each file given on the command line
+	<ol>
+		<li><font color="blue">Process the file</font>
+		</ol>
+	</ol>
+</td>
+<td width="5"></td>
+<td>
+<ol>
+<li>Read the filenames from the command line
+<li>For each file given on the command line
+	<ol>
+		<li><font color="blue">Open the file</font>
+		<li><font color="blue">Initialize counters</font>
+		<li><font color="blue">For each line in the file</font>
+			<ol>
+				<li><font color="blue">Read a line of text</font>
+		    <li><font color="blue">Increment the line count</font>
+		    <li><font color="blue">Count the characters in the line </font>
+			  <ul>
+				  <li><font color="blue">Increment the character count</font>
+			  </ul>
+		    <li><font color="blue">Count the words in the line</font>
+			  <ul>
+				  <li><font color="blue">Increment the word count</font>
+		    </ul>
+		  </ol>
+		<li><font color="blue">Print out the counts and filename</font>
+		<li><font color="blue">Close the file</font>
+	</ol>
+</ol>
+</td>
+</tr></table>
+
+Helper function to format and print the counts and filename:
+<pre class="sourcecode"><code><font color="#003399"><i>// Print the counts and filename formatted</i></font>
+<b>void</b> print_results(size_t char_count, size_t word_count, 
+                   size_t line_count, <b>const</b> std::string&amp; filename)
+{
+  std::cout &lt;&lt; std::setw(10) &lt;&lt; line_count;
+  std::cout &lt;&lt; std::setw(10) &lt;&lt; word_count;
+  std::cout &lt;&lt; std::setw(10) &lt;&lt; char_count;
+  std::cout &lt;&lt; <font color="#9933CC">&quot; &quot;</font> &lt;&lt; filename &lt;&lt; std::endl;
+}
+</code></pre>
+
+The function where the "real" work is done: (<font color="blue">Process the file</font>)
+
+<pre class="sourcecode"><code><b>void</b> CountLWC(<b>const</b> std::string&amp; filename)
+{
+    <font color="#003399"><i>// Open the text file for reading</i></font>
+  std::ifstream infile(filename.c_str());
+  <b>if</b> (!infile.is_open())
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Can't open file: &quot;</font> &lt;&lt; filename &lt;&lt; std::endl;
+  <b>else</b>
+  {
+      <font color="#003399"><i>// Initialize the counters</i></font>
+    size_t char_count = 0; <font color="#003399"><i>// characters</i></font>
+    size_t word_count = 0; <font color="#003399"><i>// words</i></font>
+    size_t line_count = 0; <font color="#003399"><i>// lines</i></font>
+
+      <font color="#003399"><i>// For each line in the file</i></font>
+    <b>while</b> (!infile.eof())
+    {
+        <font color="#003399"><i>// Read an entire line from the file</i></font>
+      std::string line;
+      <b>if</b> (std::getline(infile, line).eof())
+        <b>break</b>;
+
+        <font color="#003399"><i>// Increment lines and characters</i></font>
+      line_count++;
+      char_count += line.size() + 1; <font color="#003399"><i>// Account for newline</i></font>
+    
+        <font color="#003399"><i>// Count words in the line        </i></font>
+      std::string word;
+      std::stringstream words(line);
+      <b>while</b> (!words.eof())
+      {
+        words &gt;&gt; word;     <font color="#003399"><i>// Try to read next word</i></font>
+        <b>if</b> (!words.fail()) <font color="#003399"><i>// If there was a next word</i></font>
+          word_count++;    <font color="#003399"><i>//   count it</i></font>
+      }
+    }
+      <font color="#003399"><i>// Display the results from this file</i></font>
+    print_results(char_count, word_count, line_count, filename);
+  }
+}  <font color="#003399"><i>// File is closed automatically in the destructor</i></font>
+</code></pre>
+
+The <tt>main</tt> function:
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+    <font color="#003399"><i>// Need at least one filename</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Usage: mywc &lt;textfile1&gt; [textfile2] ...\n&quot;</font>;
+    <b>return</b> 1;
+  }
+    
+    <font color="#003399"><i>// files to process</i></font>   
+  std::vector&lt;std::string&gt; filenames;
+  <!--filenames.reserve(argc - 1);         <font color="#003399"><i>// size the vector once (slight optimization)</i></font>-->
+    <font color="#003399"><i>// Put the filenames into the vector</i></font>
+  <b>for</b> (<b>int</b> i = 1; i &lt; argc; i++)
+    filenames.push_back(argv[i]);
+
+    <font color="#003399"><i>// Count the chars, words, and lines and print them</i></font>
+  <b>for</b> (size_t i = 0; i &lt; filenames.size(); i++)
+    CountLWC(filenames[i]);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<br><br>
+
+Variation #1 on the <tt>main</tt> function (<tt>std::for_each</tt>):
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+    <font color="#003399"><i>// Need at least one filename</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Usage: mywc &lt;textfile1&gt; [textfile2] ...\n&quot;</font>;
+    <b>return</b> 1;
+  }
+    
+    <font color="#003399"><i>// files to process</i></font>   
+  std::vector&lt;std::string&gt; filenames;
+  <!--filenames.reserve(argc - 1);         <font color="#003399"><i>// size the vector once (slight optimization)</i></font>-->
+    <font color="#003399"><i>// Put the filenames into the vector</i></font>
+  <b>for</b> (<b>int</b> i = 1; i &lt; argc; i++)
+    filenames.push_back(argv[i]);
+
+    <font color="#003399"><i>// Count the chars, words, and lines and print them</i></font>
+  std::for_each(filenames.begin(), filenames.end(), CountLWC);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+<br><br>
+
+
+Variation #2 on the <tt>main</tt> function (no intermediate vector):
+
+<pre class="sourcecode"><code><b>int</b> main(<b>int</b> argc, <b>char</b> *argv[])
+{
+    <font color="#003399"><i>// Need at least one filename</i></font>
+  <b>if</b> (argc &lt; 2)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Usage: mywc &lt;textfile1&gt; &lt;textfile2&gt; ...\n&quot;</font>;
+    <b>return</b> 1;
+  }
+    <font color="#003399"><i>// Count the chars, words, and lines and print them</i></font>
+  std::for_each(argv + 1, argv + argc, CountLWC);
+  <b>return</b> 0;
+}
+</code></pre>
+
+A closer look at <i>for_each</i>:
+
+<blockquote><pre>
+<b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Op&gt; 
+  Op <font color=blue>for_each</font>(InputIt first, InputIt last, Op op);
+<pre></blockquote>
+
+Implementation:
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Op&gt;
+Op for_each(InputIt first, InputIt last, Op op)
+{
+  <b>while</b> (first != last)
+  {
+    op(*first);
+    ++first;
+  }
+  <font color="blue"><b>return</b> op;</font>
+}</code></pre>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+These are the files that need to be included:
+
+<blockquote><pre>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/iostream">iostream</a>&gt;   <font color="#003399"><i>// cout, endl</i></font>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/iomanip">iomanip</a>&gt;    <font color="#003399"><i>// setw</i></font>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/vector">vector</a>&gt;     <font color="#003399"><i>// vector</i></font>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/string">string</a>&gt;     <font color="#003399"><i>// string</i></font>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/fstream">fstream</a>&gt;    <font color="#003399"><i>// ifstream</i></font>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/sstream">sstream</a>&gt;    <font color="#003399"><i>// stringstream</i></font>
+<b>#include</b> &lt;<a href="http://www.cplusplus.com/reference/algorithm">algorithm</a>&gt;  <font color="#003399"><i>// for_each</i></font>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+Running the program:
+
+<blockquote><pre>
+mywc Circle.cpp fibonacci.cpp Ocean.cpp Polygon.cpp WarBoats.cpp
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+        50       110       819  Circle.cpp
+        87       265      2191  fibonacci.cpp
+       158       450      4246  Ocean.cpp
+       402      1353     11959  Polygon.cpp
+        14        20       164  WarBoats.cpp
+</pre></blockquote>
+        
+
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Cygwin/macOS/Linux (<tt>wc</tt>)</th><th>Our program (<tt>mywc</tt>)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+   50   110   819 Circle.cpp
+   87   265  2191 fibonacci.cpp
+  158   450  4246 Ocean.cpp
+  402  1353 11959 Polygon.cpp
+   14    20   164 WarBoats.cpp
+  711  2198 19379 total
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+    50       110       819  Circle.cpp
+    87       265      2191  fibonacci.cpp
+   158       450      4246  Ocean.cpp
+   402      1353     11959  Polygon.cpp
+    14        20       164  WarBoats.cpp
+</pre></blockquote>
+</td>
+</tr></table>
+<p>
+        
+        
+The <a href="mywc.html">complete program</a>.
+
+<p class="technote">
+<b>Exercise for students:</b> Add the totals to the output.
+<br><br>
+Also, there is a caveat with this program: 
+It reads files in one line-at-a-time and assumes that the files are text files. It also assumes
+that newlines are a single-character (LF) 
+like Linux/Mac OS X, not two characters (CR/LF) like Windows. You would need to modify the
+file reading logic to handle both systems. Or, read in characters instead of lines
+and then account for whitespace to delimit words and newlines to delimit lines.
+This example chose to keep it simple to illustrate the file I/O.
+</p>
+
+		
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<table><tr valign="top"><td>
+</td>
+<td width=30></td>
+<td>
+</td></tr></table>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<tt><b></b></tt>
+<tt><b></b></tt>
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+

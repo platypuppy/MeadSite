@@ -1,0 +1,536 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's C++ References</title>
+
+<style type="text/css">
+blockquote.std { color: #000000; background-color: #FFFFFF;
+                 border: 0px solid #D1D1D1;
+                 padding-left: 0.5em; padding-right: 0.5em; }
+blockquote.stddel { text-decoration: line-through;
+                    color: #000000; background-color: #FFA0A0;
+                    border: 1px solid #ECD7EC;
+                    padding-left: 0.5em; padding-right: 0.5em; }
+
+blockquote.stdins { color: #000000; background-color: #A0FFA0;
+                    border: 1px solid #B3EBB3; padding: 0.5em; }
+
+blockquote.stdrepl { color: #000000; background-color: #FFFFA0;
+                    border: 1px solid #EBEBB3; padding: 0.5em; }
+
+
+mmghide { background-color:#FFFFFF; text-decoration: none; }
+#hidedel:checked ~ * mmghide, #hidedel:checked ~ * mmghide * { display:none; visibility:hidden }
+
+tab { padding-left: 4em; }
+tab3 { padding-left: 3em; }
+
+
+.book-border {border-width: 1px; border-color: gray; border-style: solid; } 
+
+</style>
+
+</head>
+<body>  
+
+<!--
+
+ins { background-color:#A0FFA0; text-decoration: none }
+
+
+blockquote.std { color: #000000; background-color: #F1F1F1;
+                 border: 1px solid #D1D1D1;
+                 padding-left: 0.5em; padding-right: 0.5em; }
+
+del { background-color:#FFA0A0; text-decoration: line-through; }
+using for template aliases, typedef
+
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0619r0.html#3.2
+default member functions: creating a dtor, assign op prevents copy ctor and other stuff
+
+explicit conversion functions (like conversion constructors)
+
+deleted methods and default methods, = delete, = default
+final methods?
+
+
+<p></p>
+
+<input type="checkbox" id="hidedel">Hide text</input>
+<blockquote class="std">
+<mmghide>In closing, I will defer again to the experts. In this case, Herb Sutter:</mmghide>
+</blockquote>
+
+style="padding:10px;"
+
+-->
+
+<center><h1>
+Mead's C++ References
+</h1></center>
+
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="REFERENCES">
+<p class="sectionheader">
+References
+</p>
+</a>
+
+There are many, many resources available for C++. Here are just a few that I consider to
+be worthy reading for anyone that wishes to be a competent C++ developer. The books are 
+listed in no particular order.
+
+<p>
+
+<b>Books:</b>
+<p>
+
+<blockquote>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+<a href="https://www.amazon.com/dp/0321334876">
+  <img src="effective-cpp.jpg" width="100" height="134" align="left" hspace="10" class="book-border">
+</a>
+
+<a href="https://www.amazon.com/dp/0321334876">
+  Effective C++: 55 Specific Ways to Improve Your Programs and Designs (3rd Edition)</a> (<b>Scott Meyers</b>):
+
+The first two editions of <i>Effective C++</i> were embraced by hundreds of thousands
+of programmers worldwide. The reason is clear: Scott Meyers' practical approach to C++
+describes the rules of thumb used by the experts &emdash; the things they almost always
+do or almost always avoid doing &emdash; to produce clear, correct, efficient code.
+<p>
+<b>Mead's Take:</b> This is a good place to start. You don't need to be an expert to
+be able to understand a lot of the advice. Since it was written in 2005, it doesn't cover
+any <i>modern C++ features</i>, but there is a newer book that focuses on those
+topics. This book focuses on the core of the C++ language. A few of the topics
+are outdated due to improvements in the C++ language (C++11), but the bulk of the book
+is still relevant today.
+<p>
+ Scott also wrote a book called
+<a href="https://www.amazon.com/dp/020163371X">More Effective C++: 35 New Ways to Improve Your Programs and Designs</a>
+which is older yet. It may have some information that this book doesn't.
+</td></tr></table>
+
+<p>
+<hr width="100%">
+<p>
+
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+<a href="https://www.amazon.com/dp/0201749629">
+  <img src="effective-cpp.jpg" width="100" height="134" align="left" hspace="10" class="book-border">
+</a>
+
+<a href="https://www.amazon.com/dp/0201749629">
+  Effective STL: 50 Specific Ways to Improve Your Use of the Standard Template Library</a> (<b>Scott Meyers</b>):
+
+Written for the intermediate or advanced C++ programmer, renowned C++ expert Scott Meyers 
+provides essential techniques for getting more out of the Standard Template Library in
+Effective STL, a tutorial for doing more with this powerful library.
+
+STL is a hugely powerful feature of today's C++, but one with a well-earned reputation
+for complexity. The book is organized into 50 tips that explore different areas of
+the STL. Besides providing a list of dos and don'ts, Meyers presents a lot of
+background on what works and what doesn't with STL. Each tip is demonstrated with
+in-depth coding samples, many of which make use of two-color printing to highlight
+the most important lines of code. (Advanced developers will enjoy Meyers's in-depth
+explanations, while those who are in a hurry can skip ahead to the recommended tip itself.)   
+<p>
+<b>Mead's Take:</b> This is another gem from Scott Meyers. He does to the STL what his
+other books do to the C++ language itself. This book was written in 1996, which seems
+like an eternity in software development, but a lot of the advice is still relevant. 
+Obviously, it doesn't cover any of the newer features of the STL, but it is still
+worth the read. Even though it's pretty old, used copies are still selling for about the same
+as new copies. That's how good it is. If Scott ever updates this book to include
+the new features, I would buy it in a heartbeat!
+</td></tr></table>
+
+<p>
+<hr width="100%">
+<p>
+
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+<a href="https://www.amazon.com/Tour-C-Depth/dp/0321958314">
+  <img src="tour-of-cpp.jpg" width="100" height="134" align="left" hspace="10">
+</a>
+
+<a href="https://www.amazon.com/Tour-C-Depth/dp/0321958314">A Tour of C++</a> (<b>Bjarne Stroustrup</b>):
+
+The C++11 standard allows programmers to express ideas more clearly, simply, and directly, and 
+to write faster, more efficient code. Bjarne Stroustrup, the designer and original implementer
+of C++, thoroughly covers the details of this language and its use in his definitive reference,
+<i>The C++ Programming Language, Fourth Edition</i>.
+<p>
+<b>Mead's Take:</b> This is a quick-start book for experienced C++ programmers. It's only about 180 pages, so
+it really is just a brief overview. If you already know C++ pretty well, it's a good place to start.
+However, when I got this book a couple of years ago, there were a lot of typos in it, which could
+confuse new programmers. They may have been fixed now.
+</td></tr></table>
+
+<p>
+<hr width="100%">
+<p>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.amazon.com/Effective-Modern-Specific-Ways-Improve/dp/1491903996">
+  <img src="effective-modern-cpp.jpg" width="100" height="134" align="left" hspace="10" class="book-border">
+</a>
+
+<a href="https://www.amazon.com/Effective-Modern-Specific-Ways-Improve/dp/1491903996">Effective Modern C++</a> (<b>Scott Meyers</b>):
+
+Coming to grips with C++11 and C++14 is more than a matter of familiarizing yourself with 
+the features they introduce (e.g., auto type declarations, move semantics, lambda expressions, 
+and concurrency support). The challenge is learning to use those features effectively&mdash;so 
+that your software is correct, efficient, maintainable, and portable. That's where this 
+practical book comes in. It describes how to write truly great software using C++11 
+and C++14, i.e. using modern C++.
+<p>
+<b>Mead's Take:</b> Written by Scott Meyers, this is a detailed-oriented book on some of the new (and difficult to understand) features
+in C++.  Scott is very likely one of the most knowlegable C++ developers
+around and his books are always highly-rated. A must read for anyone that really wants all of
+the gory details. Be warned, though, that this book is meant for C++ programmers that are very
+familiar with the core of C++.
+</td></tr></table>
+
+<p>
+<hr width="100%">
+<p>
+
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.artima.com/shop/overview_of_the_new_cpp">
+<img src="cpp11Cover240x185.gif" width="100" height="134" align="left" hspace="10">  
+</a>
+<a href="https://www.artima.com/shop/overview_of_the_new_cpp">Overview of the New C++ (C++11/14)</a> (<b>Scott Meyers</b>):
+
+This PDF document consists of Scott Meyers' extensively annotated presentation materials for 
+his training course on C++11 and C++14. This intensively technical seminar introduces the most
+important new features in C++11 and C++14 and explains how to get the most out of them.
+<p>
+<b>Mead's Take:</b> Also written by Scott Meyers, this is a PDF of the new features of C++.
+They are probably best when you are reading them while
+Scott is speaking. But, they are very well written, and you can easily follow the examples without
+Scott being there. Because it's a PDF only (electronic), it is still being updated.
+<p>
+</td></tr></table>
+
+
+
+<p>
+<hr width="100%">
+<p>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.amazon.com/dp/0321623215">
+  <img src="cpp-standard-library2-josuttis.jpg" width="100" height="134" align="left" hspace="10" xclass="book-border">
+</a>
+<a href="https://www.amazon.com/dp/0321623215">The C++ Standard Library: A Tutorial and Reference (2nd Edition)</a> (<b>Nicolai Josuttis</b>):
+
+The C++ standard library provides a set of common classes and interfaces that greatly 
+extend the core C++ language. The library, however, is not self-explanatory. To make
+full use of its components–and to benefit from their power–you need a resource that
+does far more than list the classes and their functions.
+<p>
+<i>The C++ Standard Library: A Tutorial and Reference, Second Edition</i>, describes
+this library as now incorporated into the new ANSI/ISO C++ language standard (C++11).
+The book provides comprehensive documentation of each library component, including
+an introduction to its purpose and design; clearly written explanations of complex
+concepts; the practical programming details needed for effective use; traps and
+pitfalls; the exact signature and definition of the most important classes and
+functions; and numerous examples of working code. The book focuses in particular
+on the Standard Template Library (STL), examining containers, iterators,
+function objects, and STL algorithms.<p>
+<p>
+
+<b>Mead's Take:</b> This is the second edition of Nicolai Josuttis' best selling
+book. If you are going to have only one reference for the STL, this is it. It was
+updated to include the changes to the library when C++11 was released. As the
+title indicates, this is both a tutorial and reference that you will refer to 
+often. This makes it valuable to both beginners and experienced C++ programmers alike.
+<p>
+</td></tr></table>
+
+<p>
+<hr width="100%">
+<p>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://leanpub.com/cpp17">
+  <img src="josuttis-cpp17.png" width="100" height="134" align="left" hspace="10" xclass="book-border">
+</a>
+<a href="https://leanpub.com/cpp17">C++17 - The Complete Guide</a> (<b>Nicolai Josuttis</b>):
+
+C++17 is the next evolution in modern C++ programming, which is already at least partially
+supported by the latest version of gcc, clang, and Visual C++. Although it is not as
+big a step as C++11, it contains a large number of small and valuable language and library
+features, which will change the way we program in C++. As usual, not everything is
+self-explanatory, combining new features gives even more power, and there are hidden traps.
+<p>
+This book presents all the new language and library features in C++17. It covers the 
+motivation and context of each new feature with examples and background information.
+The focus is on how these features impact day-to-day programming, what it means to
+combine them, and how to benefit from this in practice.<p>
+
+<p>
+
+<b>Mead's Take:</b> I have only just started to read this because it isn't actually finished
+yet! The author, Nicolai Josuttis, is a superstar in the C++ world. I went to his talk on
+C++17 at 
+<a href="https://cppcon.org/cppcon-2017-program/">CppCon&nbsp;2017</a> and got a free copy of this eBook. He's actually publishing it as a PDF 
+(and other eBook formats) so that if you buy it now, you will get free updates/fixes while he works on it. It's a 
+new and refreshing way to publish books, which also makes the book significantly cheaper than
+the usual hard copy books. Check it out at the link above.
+<p>
+I'll update this once I've had a chance to go through it more.
+<p>
+</td></tr></table>
+
+
+<p>
+<hr width="100%">
+<p>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.amazon.com/dp/0201543303">
+  <img src="stroustrup-d-e-of-cpp.jpg" width="100" height="134" align="left" hspace="10" xclass="book-border">
+</a>
+<a href="https://www.amazon.com/dp/0201543303">The Design and Evolution of C++</a> (<b>Bjarne Stroustrup</b>):
+
+This book focuses on the principles, processes and decisions made during the development 
+of the C++ programming language. As the inventor of the language, Stroustrup presents his
+insight into the decisions which resulted in the features of C++ - the praised, the
+controversial and even some of the rejected ones. By writing this book the author presents
+his object-oriented programming philosophy to the interested programming community. 
+His vehicle is the C++ language but his focus is on real object-oriented programming
+language development for the working programmer rather than as a abstract approach
+to the OOP paradigm.
+<p>
+
+<b>Mead's Take:</b> This book was written in 1994 by the man himself, Bjarne
+Stroustrup. It's not a book on how to program in C++, but, rather it's a history of
+how the language and its features came about. Want to know why the keyword is
+<b><tt>this</tt></b> or why the insertion (output) operator is <tt>&lt;&lt;</tt>, or
+why there is no power operator (e.g. as in N<sup>3</sup>)? Then this book is for you.
+
+No decisions were arbitrary. There were solid reasons and long, though-out discussions
+about every facet of the language.
+
+This book is for those that really want to know all of the nitty gritty details about how
+C++ came to be. If you ever want to design your own programming language, you first
+need to understand what others have done so you don't make the same mistakes or
+go down the same dead-ends.
+<p>
+As of today (April 2018), it sells for $57 on Amazon. Even used
+copies are $20 for a relatively small paperback. That's how good it is. I'm glad
+I bought mine years ago! It would be nice to have an updated version for all of the new 
+features added in C++11, C++14, and C++17, but I suspect with the internet, a lot of
+those discussions are already available. Still, I'd like to have it all in one place
+and written by Stroustrup. That would be pure gold!
+</td></tr></table>
+
+
+<p>
+<hr width="100%">
+<p>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.amazon.com/dp/0201514591">
+  <img src="cpp-arm.jpg" width="100" height="134" align="left" hspace="10" xclass="book-border">
+</a>
+<a href="https://www.amazon.com/dp/0201514591">The Annotated C++ Reference Manual</a> (<b>Bjarne Stroustrup</b>):
+
+This book provides a complete reference for the C++ programming language. It consists
+of the C++ reference manual, approved as the base document for ANSI standardization of
+the language, plus annotations and commentary. The annotations and commentary 
+discuss what is not included in the language, why certain features are defined as
+they are, and how one might implement particular features. The commentaries also help
+the reader to understand the relationships between parts of the language.
+Comparisons with C and examples explain the more subtle points of the language.
+Sixteen chapters cover the latest version of C++ including multiple inheritance,
+abstract classes, templates, exception handling, and more. A final chapter describes 
+resolutions by the ANSI/ISO committee including new features such as run-time type
+information and namespaces. Appendices summarize the grammar and evolution of the language,
+and explain in detail the differences between C and C++. The Annotated C++ Reference Manual 
+will appeal to language implementors and expert C++ programmers. 
+
+<p>
+
+<b>Mead's Take:</b> This book also gives a lot of history of C++. It's not as dry
+as reading the formal standards document as it's written more informally. You'll
+get a lot of gory details here that you won't find anywhere else, with the exception of
+the C++ ISO Standard Document. This book answers more of the <i>how</i> or <i>why</i> questions
+instead of just the <i>what</i> questions. Want to know <i>how</i> to implement multiple
+inheritance using virtual base classes (you already know <i>what</i> that is) or <i>why</i> the
+assignment operator must be a member function? This book is for you.
+
+<p>
+<hr width="100%">
+<p>
+
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+
+<a href="https://www.amazon.com/dp/0201834545">
+  <img src="inside-the-cpp-object-model.jpg" width="100" height="134" align="left" hspace="10" xclass="book-border">
+</a>
+<a href="https://www.amazon.com/dp/0201834545">Inside the C++ Object Model</a> (<b>Stanley B. Lippman</b>):
+
+Inside the C++ Object Model focuses on the underlying mechanisms that support object-oriented
+programming within C++: constructor semantics, temporary generation, support for encapsulation,
+inheritance and "the virtuals" - virtual functions and virtual inheritance. This book shows how
+your understanding the underlying implementation models can help you code more efficiently and
+with greater confidence. Lippman dispells the misinformation and myths about the overhead and
+complexity associated with C++, while pointing out areas in which costs and trade-offs,
+sometimes hidden, do exist. He then explains how the various implementation models arose,
+points out areas where they are likely to evolve, and why they are what they are. He covers
+the semantic implications of the C++ object model and how that model affects you programs.
+<p>
+
+<b>Mead's Take:</b> This book is definitely not for the novice. If you really want to
+get the most out of this, you'll probably need to have been programming in C++ for a few
+years. However, you can still get a good understanding of the complexity that is involved
+in writing a C++ compiler. I particularly liked <i>Chapter 6 - Runtime Semantics</i>, which
+shows a lot of what is going on behind the scenes at runtime, especially the generation
+of temporaries and their associated lifetimes. It won't help you to write a C++ compiler,
+or to necessarily become a better C++ programmer, but it will shed some light on what
+that entails. It's a little old, but most of the information is still worthy of the read.
+However, some of the information may be deprecated with respect to the modern C++ standards
+(e.g. C++11, C++14, etc.) For example, some previous behavior of the language is compiler-dependent,
+whereas those behaviors have now been standardized and are required to be implemented
+in the same way on all standards-compliant compilers.
+
+
+</td></tr></table>
+
+
+
+<p>
+
+</blockquote>
+
+<p>
+<hr width="100%">
+<p>
+
+
+<!--
+-->
+
+<blockquote>
+</blockquote>
+
+
+</ul>
+<b>Other resources</b>
+<ul>
+
+
+<p>
+<li><a href="http://www.aristeia.com/books.html">Scott Meyers' books</a> at his website</a></li>
+<li><a href="http://www.stroustrup.com/C++11FAQ.html">C++11FAQ</a> at Stroustrup's site</li>
+<li><a href="http://www.stroustrup.com/bs_faq.html">Bjarne Stroustrup's FAQ</a></li>
+<li><a href="https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list">The Definitive C++ Book Guide and List</a>
+This is from Stack Overflow. As expected, most of the books they list are the same ones I've listed
+here. I've probably read about 20 of the books listed.</li>
+<li><a href="n4606.pdf">Latest C++ Standard Draft</a> This is a local copy and is 1500+ pages.</li>
+<li><a href="http://en.cppreference.com/w/cpp/keyword">C++ keywords</a> This is a list of <i>reserved keywords</i> in C++.</li>
+<p>
+
+
+
+</ul>
+
+<p>
+<b>Compiler support for C++:</b>
+<ul>
+<li><a href="http://clang.llvm.org/cxx_status.html">Clang's support for</a>
+  C++98, C++11, C++14, and C++1z.</li>
+
+
+<li>GCC's support for <a href="https://gcc.gnu.org/projects/cxx-status.html#cxx11">C++11</a>
+  ,<a href="https://gcc.gnu.org/projects/cxx-status.html#cxx14">C++14</a>,
+  and <a href="https://gcc.gnu.org/projects/cxx-status.html#cxx1z">C++1z</a>.</li>
+
+<li>Microsoft's support for <a href="http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx">Modern C++</a>.</li>
+</ul>
+
+
+<!--
+ins { background-color:#A0FFA0; text-decoration: none }
+del { background-color:#FFA0A0; text-decoration: line-through; }
+#hidedel:checked ~ * del, #hidedel:checked ~ * del * { display:none; visibility:hidden }
+
+
+-->
+
+
+
+</ul>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

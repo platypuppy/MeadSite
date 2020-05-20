@@ -1,0 +1,39 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>scrabble1-partial.c</title>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt; /* printf  */</font>
+<font color="990099">#include &lt;ctype.h&gt; /* toupper */</font>
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> sum = 0; <font color="#003399"><i>/* The total value of the word */</i></font>
+  <b>int</b> letter;  <font color="#003399"><i>/* Each character in the word  */</i></font>
+
+    <font color="#003399"><i>/* Prompt the user for a word */</i></font>
+  printf(<font color="#9933CC">&quot;Enter a word: &quot;</font>);
+
+    <font color="#003399"><i>/* Read the first character */</i></font>
+  letter = getchar();
+
+    <font color="#003399"><i>/* While it's not the newline (end of the word) */</i></font>
+  <b>while</b> (letter != <font color="#9933CC">'&#92;n'</font>)
+  {
+
+    <font color="#003399"><i>/* Your code here */</i></font>
+
+
+      <font color="#003399"><i>/* Read next character in the word */</i></font>
+    letter = getchar();
+  }
+
+  printf(<font color="#9933CC">&quot;Scrabble value is : %d&#92;n&quot;</font>, sum);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

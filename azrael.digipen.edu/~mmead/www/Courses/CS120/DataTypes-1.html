@@ -1,0 +1,869 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Data Types</title>
+
+<style>
+tr {
+  height: 4px;
+}
+</style>
+
+</head>
+
+<body>
+<center><h1>Data Types</h1></center>
+
+
+<blockquote>
+<i>
+
+</i>
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Integral Types
+</p>
+
+An integral data type is a type that is fundamentally an integer. That is, it has no fractional portion.
+Integral types come in different sizes.
+
+<ul>
+<li>The size determines how many bytes are required to store values.
+<li>The size also determines how large that value can be.
+<li>Integral types can be either <i>signed</i> or <i>unsigned</i>:
+	<ul>
+	<li>signed values can include positive and negative numbers (including zero)
+	<li>unsigned values only include positive numbers (including zero)
+</ul>
+<li>You usually want to use a data type that relates to the values it will contain.
+<ul>
+	<li>If the data type is too large, there is wasted space.
+	<li>If the data type is too small, there is a loss of data.
+</ul>
+
+</ul>
+
+
+There are 8 different integer types and their sizes are dependent on the computer/compiler.
+Most of the computers and compilers
+we are using are running 64-bit software. This is a diagram of the relative sizes:
+
+<blockquote>
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><th>Relative size of data types (typical 64-bit computer: LP64)</th></tr>
+<tr><td><img src="DataSizes-4.png"></td></tr>
+</table>
+</blockquote>
+<p>
+
+<blockquote>
+<p class="technote">
+It is an unfortuante historical accident that the smallest integer type is named <i>char</i>, which
+is short for character. It's unfortunate because, too often, students and beginner programmers
+equate the term <i>char</i> with "a letter of the English alphabet". There is nothing about the <i>char</i>
+data type that implies anything about the English alphabet. A better name, used in other programming languages,
+would have been <i>byte</i>, as that is more accurately what it represents: a single byte.
+This is even more obvious when you consider that a <i>char</i> can be negative, which certainly
+doesn't (and can't) represent any letter. Keep this in mind when dealing with the <i>char</i>
+data type. It's simply a very small integer.
+</blockquote>
+
+Note that the C Standard does not specify the sizes of any of the types except <b>char</b>
+which is always 1 byte. The sizes shown above are the <i>minimum</i> sizes that the
+types must support on a 64-bit computer.
+<p>
+
+This table shows the range of values for the integral types on a typical, modern 64-bit (LP64) computer:
+
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: center;">Type</td>
+      <td style="font-weight: bold; text-align: center;">Bytes</td>
+      <td style="font-weight: bold; text-align: center;">Also called</td>
+      <td style="font-weight: bold; text-align: center;">Range of values<br> (Binary)</td>
+      <td style="font-weight: bold; text-align: center;">Range of values<br> (Decimal)</td>
+      <!--<td style="font-weight: bold; text-align: center;">Format specifier</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed char</td>
+      <td style="text-align: center;">1</td>
+      <td style="font-family: monospace;">char<br>(compiler-dependent)</td>
+      <td style="font-family: monospace; text-align: center;"><big>-2<sup>7</sup> to 2<sup>7</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-128 to 127</td>
+      <!--<td style="font-family: monospace; text-align: center;">%i (numeric)</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned char</td>
+      <td style="text-align: center;">1</td>
+      <td style="font-family: monospace;">char<br>(compiler-dependent)</td>
+      <td style="font-family: monospace; text-align: center;"><big>0&nbsp;to 2<sup>8</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 255</td>
+      <!--<td style="font-family: monospace; text-align: center;">%i (numeric)</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed short int</td>
+      <td style="text-align: center;">2</td>
+      <td style="font-family: monospace;">short<br>short int<br>signed short</td>
+      <td style="text-align: center; font-family: monospace;"><big>-2<sup>15</sup> to 2<sup>15</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-32,768 to 32,767</td>
+      <!--<td style="font-family: monospace; text-align: center;">%hi</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned short int</td>
+      <td style="text-align: center;">2</td>
+      <td style="font-family: monospace;">unsigned short</td>
+      <td style="text-align: center; font-family: monospace;"><big>0&nbsp;to 2<sup>16</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 65,535</td>
+      <!--<td style="font-family: monospace; text-align: center;">%hu</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed int</td>
+      <td style="text-align: center;">4</td>
+      <td style="font-family: monospace;">int<br>signed</td>
+      <td style="text-align: center; font-family: monospace;"><big>-2<sup>31</sup> to 2<sup>31</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-2,147,483,648 to<br> 2,147,483,647</td>
+      <!--<td style="font-family: monospace; text-align: center;">%i</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned int</td>
+      <td style="text-align: center;">4</td>
+      <td style="font-family: monospace;">unsigned</td>
+      <td style="text-align: center; font-family: monospace;"><big>0&nbsp;to 2<sup>32</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 4,294,967,295</td>
+      <!--<td style="font-family: monospace; text-align: center;">%u</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed long int</td>
+      <td style="text-align: center;">8</td>
+      <td style="font-family: monospace;">long<br>long int<br>signed long</td>
+      <td style="text-align: center; font-family: monospace;"><big>-2<sup>63</sup> to 2<sup>63</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-9,223,372,036,854,775,808 to<br> 9,223,372,036,854,775,807</td>
+      <!--<td style="font-family: monospace; text-align: center;">%li</td>-->
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned long int</td>
+      <td style="text-align: center;">8</td>
+      <td style="font-family: monospace;">unsigned long</td>
+      <td style="text-align: center; font-family: monospace;"><big>0&nbsp;to 2<sup>64</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 18,446,744,073,709,551,615</td>
+      <!--<td style="font-family: monospace; text-align: center;">%lu</td>-->
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+<p>
+
+The ranges for data types are defined in <a href="stdint.h.html">stdint.h</a>.
+Here's a sample from the header file:
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Minimum for largest signed integral type. */</i></font>
+<b>define</b> INTMAX_MIN   (-__INT64_C(9223372036854775807)-1)
+  <font color="#003399"><i>/* Maximum for largest signed integral type. */</i></font>
+<b>define</b> INTMAX_MAX   (__INT64_C(9223372036854775807))
+</pre></blockquote>
+<p>
+
+<!--
+Why is <i>INTMAX_MIN</i> essentially defined as this:
+
+<blockquote><pre>
+9223372036854775807 - 1
+</pre></blockquote>
+
+instead of this:
+
+<blockquote><pre>
+9223372036854775808
+</pre></blockquote>
+
+There's a fairly technical description
+<a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52661">here</a>
+(only for the not-too-faint-of-heart student).
+-->
+
+<blockquote><pre>
+</pre></blockquote>
+<p>
+
+
+
+Technically, there is just <b>char</b> and <b>int</b>, but the <b>int</b> types are extended with modifiers:
+<i>signed, unsigned, short, long</i>, which gives the possible combinations listed above. 
+The order of the type and modifiers are ignored. These all mean the same thing:
+
+<blockquote><pre>
+unsigned long int
+unsigned int long
+long int unsigned
+long unsigned int
+int long unsigned
+int unsigned long
+</pre></blockquote>
+
+Also, when used with <i>long</i> or <i>short</i> the <b>int</b> is optional (these are the same as above):
+<p>
+<blockquote><pre>
+unsigned long
+long unsigned
+</pre></blockquote>
+
+
+<p>
+However, most code would commonly present the above as: <i>unsigned long int</i> or <i>unsigned long</i>
+(You should stick to this convention.)
+
+<p>
+This table shows the sizes of long integers used in Microsoft Windows (LLP64).
+(Most of the rest of the world uses 8 bytes as above. Keep this in mind if you plan on
+working with Windows.)
+ <p>
+
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr bgcolor="#dddddd">
+      <td style="font-family: monospace;">signed long int</td>
+      <td style="text-align: center;">4</td>
+      <td style="font-family: monospace;">long<br>long int<br>signed long</td>
+      <td style="text-align: center; font-family: monospace;"><big>-2<sup>31</sup> to 2<sup>31</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">-2,147,483,648 to<br> 2,147,483,647</td>
+    </tr>
+    <tr bgcolor="#dddddd">
+      <td style="font-family: monospace;">unsigned long int</td>
+      <td style="text-align: center;">4</td>
+      <td style="font-family: monospace;">unsigned long</td>
+      <td style="text-align: center; font-family: monospace;"><big>0&nbsp;to 2<sup>32</sup> - 1</big></td>
+      <td style="font-family: monospace; text-align: center;">0 to 4,294,967,295</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+ <p>
+
+The only other thing that the Standard states is this:
+<blockquote><pre>
+sizeof(char) &lt;= sizeof(short) &lt;= sizeof(int) &lt;= sizeof(long) &lt;= sizeof(long long)
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+C99 introduces the <i>long long</i> type, which is 8-bytes on almost all modern 64-bit systems.
+Since the <i>long</i> type is also 8-bytes on most systems, this currently doesn't improve things
+(except when working with Microsoft Windows).
+</p>
+</blockquote>
+
+This table includes the binary values:
+
+<blockquote>
+<table style="text-align: left;" border="1"
+ cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Type</td>
+      <td style="text-align: center; font-weight: bold;">Binary Range</td>
+      <td style="text-align: center; font-weight: bold;">Decimal Range</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed char</td>
+      <td style="font-family: monospace; text-align: center;">10000000
+      <br>
+to <br>
+01111111&nbsp;
+      </td>
+      <td style="text-align: center;">-128 <br>
+to <br>
+127</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned char</td>
+      <td style="font-family: monospace; text-align: center;">00000000
+      <br>
+to <br>
+11111111</td>
+      <td style="text-align: center;">0 <br>
+to <br>
+255</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed short</td>
+      <td style="font-family: monospace; text-align: center;">1000000000000000
+      <br>
+to <br>
+0111111111111111</td>
+      <td style="text-align: center;">-32,768<br>
+to<br>
+32,767</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned short</td>
+      <td style="font-family: monospace; text-align: center;">0000000000000000
+      <br>
+to <br>
+1111111111111111</td>
+      <td style="text-align: center;">0 <br>
+to <br>
+65,535</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed int</td>
+      <td style="font-family: monospace; text-align: center;">10000000000000000000000000000000
+      <br>
+to<br>
+01111111111111111111111111111111
+      </td>
+      <td style="text-align: center;">-2,147,483,648 <br>
+to
+      <br>
+2,147,483,647</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned int</td>
+      <td style="font-family: monospace; text-align: center;">00000000000000000000000000000000
+      <br>
+to<br>
+11111111111111111111111111111111</td>
+      <td style="text-align: center;">0 <br>
+to <br>
+4,294,967,295</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">signed long</td>
+      <td style="font-family: monospace; text-align: center;">1 followed by 63 zeros
+      <br>
+to<br>
+0 followed by 63 ones</td>
+      <td style="text-align: center;">-9,223,372,036,854,775,808 <br>
+to <br>
+ 9,223,372,036,854,775,807</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">unsigned long</td>
+      <td style="font-family: monospace; text-align: center;">[ 64 zeros ]
+      <br>
+to<br>
+[ 64 ones ]</td>
+      <td style="text-align: center;">0 <br>
+to <br>
+18,446,744,073,709,551,615</td>
+    </tr>
+
+  </tbody>
+</table>
+</blockquote>
+
+
+A signed integer that is 32 bits wide and can store values in the range: -2,147,483,648 to 2,147,483,647
+<p>
+A signed char that is 8 bits wide and can store values in the range: -128 to 127
+<p>
+What happens when you try to store a value that is too large for the data type? With unsigned values, it just
+"wraps" back around to 0. Think of the bits being sort of like an odometer on a car. Once the odometer gets
+to 999999, it will "wrap" back around to 0. So, an unsigned char with a value of 255 will become 0:
+
+<blockquote><pre>
+ 11111111
++       1
+---------
+000000000
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+With signed numbers, the result is undefined. It could be anything and do anything, including crashing the
+program. It's up to the particular system. Sometimes you may get kind of a "wrapping" like with unsigned,
+but this is not guaranteed.
+The difference is that instead of going from the largest positive value back to 0, the bits go from
+the largest positive value to the smallest negative value. (e.g. 127 + 1 is -128).
+<p>
+
+<a href="BitPatterns-1.html">Overflow example</a>
+<p>
+<a href="https://en.wikipedia.org/wiki/LLP64#64-bit_data_models">64-bit data models</a>
+<p>
+Here's a <a href="../../docs/sizes.c.html">sample</a>.
+<p>
+Why did Microsoft choose the <a href="https://blogs.msdn.microsoft.com/oldnewthing/20050131-00/?p=36563">LLP64 model</a>
+instead of LP64 like everyone else? Incidentally, that article is written by
+<a href="https://devblogs.microsoft.com/oldnewthing/author/oldnewthing">Raymond Chen</a>. 
+He is the Best. Microsoft. Blogger. Ever. If you want to become an expert Windows programmer, you need to know this!
+<p>
+ Other interesting information for the curious student:
+<a href="http://stackoverflow.com/questions/384502/what-is-the-bit-size-of-long-on-64-bit-windows">here</a>,
+<a href="http://stackoverflow.com/questions/13398630/why-are-c-int-and-long-types-both-4-bytes">here</a>,
+and <a href="http://queue.acm.org/detail.cfm?id=1165766">here</a>
+(<a href="TheLongRoadTo64Bits.pdf">PDF</a>).
+
+<!--
+<blockquote><pre>
+        -128 is 10000000
+         127 is 01111111
+      -32768 is 1000000000000000
+       32767 is 0111111111111111
+ -2147483648 is 10000000000000000000000000000000
+  2147483647 is 01111111111111111111111111111111
+ -2147483648 is 10000000000000000000000000000000
+  2147483647 is 01111111111111111111111111111111
+           0 is 00000000
+         255 is 11111111
+           0 is 0000000000000000
+       65535 is 1111111111111111
+           0 is 00000000000000000000000000000000
+  4294967295 is 11111111111111111111111111111111
+           0 is 00000000000000000000000000000000
+  4294967295 is 11111111111111111111111111111111
+</pre></blockquote>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Literal Constants
+</p>
+
+<!--
+Can use either uppercase or lowercase: U, F, L or u, f, l (never use lowercase L)
+-->
+
+We know that a literal constant like 42 is an <tt><b>int</b></tt> and that a literal constant like 42.0 is a <tt><b>double</b></tt>.
+<ul>
+<li>If a literal is too large for an <tt><b>int</b></tt>, its type will be <tt><b>long int</b></tt>.
+<li>To force a smaller literal number to a particular type, append a suffix:
+	<ul>
+	<li>Append the letter 'F' to a floating point value to make it a <tt><b>float</b></tt>.
+<blockquote><pre>
+42.0F
+</pre></blockquote>
+	<li>Append the letter 'L' to an integral value to make it a <tt><b>long int</b></tt>. (Never use lowercase.)
+<blockquote><pre>
+42L vs. 42l
+</pre></blockquote>
+	<li>Append the letter 'U' to an integral value to make it an <tt><b>unsigned int</b></tt>.
+<blockquote><pre>
+42U
+</pre></blockquote>
+	<li>You can combine them to make an <tt><b>unsigned long int</b></tt>. (The order doesn't matter)
+<blockquote><pre>
+42UL or 42LU
+</pre></blockquote>
+</ul>
+<li>Also, be aware that in C, the type of a literal <tt><b>char</b></tt> is an <tt><b>int</b></tt>:
+
+
+<blockquote><pre>
+<b>char</b> c = <font color="#9933CC">'A'</font>;
+printf(<font color="#9933CC">&quot;sizeof(c)   is %2i\n&quot;</font>, <b>sizeof</b>(c));   <font color="#003399"><i>/* char variable */</i></font>
+printf(<font color="#9933CC">&quot;sizeof('A') is %2i\n&quot;</font>, <b>sizeof</b>(<font color="#9933CC">'A'</font>)); <font color="#003399"><i>/* char literal  */</i></font>
+</pre></blockquote>
+Output:
+
+<blockquote><pre>
+sizeof(c)   is  1
+sizeof('A') is  4
+</pre></blockquote>
+
+
+
+</ul>
+
+Don't forget that when you are reading/writing (<tt><b>scanf</b></tt> and <tt><b>printf</b></tt>) shorts and longs that
+you need to use modifiers on the type. <tt><b>h</b></tt> for <i>short</i> and <tt><b>l</b></tt> (lowercase L) for <i>long</i>.
+Refer to them <a href="../../docs/OperatorPrecedence.html#PRINTF">here</a>.
+<p>
+
+<p>
+<hr width="90%">
+<p>
+
+Usually, we write literal integral values using decimal (base 10) notation. C provides two other forms: octal (base 8) and hexadecimal (base 16)
+(C++14 adds a binary literal. Woohoo!)
+<ul>
+<li>Numbers in octal (base 8) can only use the digits 0..7
+<li>Octal numbers can be disguished from decimal and hexadecimal by using a leading zero:
+<blockquote><pre>
+01  014  077  01472  077634L 
+</pre></blockquote>
+<li>Numbers in hexadecimal (base 16) use the digits 0..9 and then the letters A..F
+<li>Hexadecimal (or just hex) numbers have a leading 0x (a zero followed by the letter X)
+<blockquote><pre>
+0x10  0X10  0x14  0x17AF  0xFFFF  0xabF10CD8L
+</pre></blockquote>
+
+<li>Octal and hexadecimal are unsigned only.
+</ul>
+
+<blockquote>
+<p class="technote">
+Be careful not to include a leading 0 (zero) when writing decimal integers. In mathematics,
+these numbers both have the same value: <tt>77</tt> and <tt>077</tt>. However, in C, the
+number <tt>077</tt> is actually an octal number and has the decimal value of 56.
+</blockquote>
+
+<p>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Floating Point Types
+</p>
+
+Unlike the integral types, floating point types are not divided into signed and unsigned. All floating
+point types are signed only. Floating point numbers follow the IEEE-754 Floating Point Standard. Here's
+more information <a href="http://docs.sun.com/source/806-3568/ncg_goldberg.html">about floating point numbers</a>
+than you'll probably ever need.
+
+<!--
+<p>
+<a href="http://www.h-schmidt.net/FloatApplet/IEEE754.html">Fun with floating point numbers</a>
+<p>
+-->
+
+Here are the approximate ranges of the IEEE-754 floating point numbers on Intel x86 computers:
+
+<blockquote>
+<table style="text-align: left;" border="1" cellpadding="10" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="text-align: center; font-weight: bold;">Type</td>
+      <td style="text-align: center; font-weight: bold;">Size</td>
+      <td style="text-align: center; font-weight: bold;">Smallest
+Postive Value</td>
+      <td style="font-weight: bold; text-align: center;">Largest
+Positive Value</td>
+      <td style="font-weight: bold; text-align: center;">Precision</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">float</td>
+      <td style="text-align: center;">4</td>
+      <td style="text-align: center; font-family: monospace;"><big>1.1754&nbsp;x
+10<sup>-38</sup></big></td>
+      <td style="text-align: center; font-family: monospace;"><big>3.4028&nbsp;x
+10<sup>38</sup></big></td>
+      <td style="text-align: center;">6 digits</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">double</td>
+      <td style="text-align: center;">8</td>
+      <td style="font-family: monospace; text-align: center;"><big>2.2250&nbsp;x
+10<sup>-308</sup></big></td>
+      <td style="font-family: monospace; text-align: center;"><big>1.7976&nbsp;x
+10<sup>308</sup></big></td>
+      <td style="text-align: center;">15 digits</td>
+    </tr>
+    <tr>
+      <td style="font-family: monospace;">long double</td>
+      <td style="text-align: center;">10<sup>*</sup></td>
+      <td style="font-family: monospace; text-align: center;"><big>3.3621&nbsp;x
+10<sup>-4932</sup></big></td>
+      <td style="font-family: monospace; text-align: center;"><big>1.1897&nbsp;x
+10<sup>4932</sup></big></td>
+      <td style="text-align: center;">19 digits</td>
+    </tr>
+  </tbody>
+</table>
+</blockquote>
+
+Some floating point constants. These are all of type <tt><b>double</b></tt>:
+<blockquote><pre>
+42.0  42.0e0  42.  4.2e1  4.2E+1  .42e2  420.e-1  42e0  42.E0
+</pre></blockquote>
+
+To indicate that the type is <tt><b>float</b></tt>, you must append the letter <tt><b>f</b></tt> or <tt><b>F</b></tt>:
+
+<blockquote><pre>
+42.0f  42.0e0f  42.F  4.2e1F  etc...
+</pre></blockquote>
+
+To indicate that the type is <tt><b>long double</b></tt>, you must append the letter <tt><b>l</b></tt> (lowercase 'L') or <tt><b>L</b></tt>:
+
+<blockquote><pre>
+42.0L  42.0e0L  42.l  4.2e1l  etc...
+</pre></blockquote>
+
+In practice, <b>NEVER</b> use the lowercase L (which looks very similar to the number one: 1), as it will certainly cause confusion. (See above.)
+<p>
+
+<blockquote>
+<p class="technote">
+A literal float, double, or long double must contain at least one decimal point or be written in
+scientific notation (e.g. with <i>e</i> notation) as the examples above show.
+</p>
+</blockquote>
+<sup>*</sup>Here are the sizes of floating point numbers on various C compilers under 32-bit:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th>GNU gcc</th><th>Borland</th><th>Microsoft</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+sizeof(42.0)  is  8
+sizeof(42.0F) is  4
+<b>sizeof(42.0L) is 12</b>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+sizeof(42.0)  is  8
+sizeof(42.0F) is  4
+<b>sizeof(42.0L) is 10</b>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+sizeof(42.0)  is  8
+sizeof(42.0F) is  4
+<b>sizeof(42.0L) is  8</b>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+With 64-bit, all of the sizes shown above are the same except the <b><tt>long double</tt></b> which is 16 bytes
+for GCC/MinGW/Clang.
+<p>
+
+
+<tt><b></b></tt>
+<tt><b></b></tt>
+
+<a href="partial-float.h.html">Partial float.h</a> listing
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<a href="BinConverter.exe">Another toy</a>
+<p>
+
+Here's another <a href="../../docs/sizes-all.c.html">sample with all</a> types.
+
+<p>
+See this <a href="../CS220/IEEE754.html">refresher on IEEE-754 notation</a> for more information.
+</p>
+
+<b>Comparison of data sizes with various compilers:</b>
+<p>
+
+<blockquote>
+<table border=1 cellspacing=0 cellpadding=8>
+  <tr><th>Compiler</th><th><b>char</b></th><th><b>short</b></th><th><b>int</b></th><th bgcolor="yellow"><b>long</b></th><th><b>long long</b></th><th><b>float</b></th><th><b>double</b></th><th bgcolor="yellow"><b>long double</b></th><th><b>void*</b></th><th>size_t</th><th>intptr_t</th></tr>
+  <tr align="center"><td>32-bit Microsoft</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">4</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">8</td><td>4</td><td>4</td><td>4</td></tr>
+  <tr align="center"><td>32-bit GNU gcc</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">4</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">12</td><td>4</td><td>4</td><td>4</td></tr>
+  <tr align="center"><td>32-bit Clang</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">4</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">12</td><td>4</td><td>4</td><td>4</td></tr>
+  <tr style="height:2px" bgcolor="darkgray"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr align="center"><td>64-bit Microsoft</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">4</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">8</td><td>8</td><td>8</td><td>8</td></tr>
+  <tr align="center"><td>64-bit GNU gcc</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">8</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">16</td><td>8</td><td>8</td><td>8</td></tr>
+  <tr align="center"><td>64-bit Clang</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">8</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">16</td><td>8</td><td>8</td><td>8</td></tr>
+  <tr align="center"><td>64-bit MinGW</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">4</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">16</td><td>8</td><td>8</td><td>8</td></tr>
+</table>
+</blockquote>
+
+
+<!--
+  <tr align="center" style="border-bottom:10px solid black"><td>32-bit Clang</td><td>1</td><td>2</td><td>4</td><td bgcolor="yellow">4</td><td>8</td><td>4</td><td>8</td><td bgcolor="yellow">16</td><td>4</td><td>4</td><td>4</td></tr>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="TYPEDEF">
+<p class="SectionHeader">
+The <tt>typedef</tt> Keyword
+</p>
+</a>
+
+Suppose we want to add a boolean type to C. (There isn't one, so we typically use <tt><b>int</b></tt>
+in place of a boolean.) We've already done it using <tt>#define</tt>:
+
+<a href="Conditionals-1.html#BOOLEAN">here</a>
+<p>
+
+To declare a variable, we simply do this:
+
+<blockquote><pre>
+<b>int</b> a;             <font color="#003399"><i>/* Create an integer named a               */</i></font>
+<b>unsigned</b> <b>char</b> b;   <font color="#003399"><i>/* Create an unsigned char named b         */</i></font>
+<b>short</b> <b>int</b> c;       <font color="#003399"><i>/* Create a short integer named c          */</i></font>
+<b>float</b> d;           <font color="#003399"><i>/* Create a float named d                  */</i></font>
+<b>unsigned</b> <b>char</b> * e; <font color="#003399"><i>/* Create an unsigned char pointer named e */</i></font>
+</pre></blockquote>
+
+These cause the compiler to allocate space for each variable, based on it's type.
+<p>
+If we want to create a new type (instead of a new variable), we add the <tt>typedef</tt> keyword:
+
+<blockquote><pre>
+<b>typedef</b> <b>int</b> a;             <font color="#003399"><i>/* Create a new type named a */</i></font>
+<b>typedef</b> <b>unsigned</b> <b>char</b> b;   <font color="#003399"><i>/* Create a new type named b */</i></font>
+<b>typedef</b> <b>short</b> <b>int</b> c;       <font color="#003399"><i>/* Create a new type named c */</i></font>
+<b>typedef</b> <b>float</b> d;           <font color="#003399"><i>/* Create a new type named d */</i></font>
+<b>typedef</b> <b>unsigned</b> <b>char</b> * e; <font color="#003399"><i>/* Create a new type named e */</i></font>
+</pre></blockquote>
+
+You can think of these type definitions as <i>aliases</i> for other types. To create a new variable of type <tt>a</tt>:
+
+<blockquote><pre>
+a i; <font color="#003399"><i>/* Create an 'a' variable named i */</i></font>
+b j; <font color="#003399"><i>/* Create a 'b' variable named j  */</i></font>
+</pre></blockquote>
+
+Of course, this makes no sense whatsoever. For any real use, you need to give the typedefs meaningful names. Compare
+to <tt><b>#define</b></tt>:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Create new types using <b>typedef</b> */</i></font>
+<b>typedef</b> <b>int</b> BOOL;
+<b>typedef</b> <b>unsigned</b> <b>char</b> BYTE;
+<b>typedef</b> <b>short</b> <b>int</b> FAST_INT;
+<b>typedef</b> <b>float</b> CURRENCY;
+<b>typedef</b> <b>unsigned</b> <b>char</b> * PCHAR;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+  <font color="#003399"><i>/* Create new types using <b>#define</b> */</i></font>
+<b>#define</b> BOOL <b>int</b>
+<b>#define</b> BYTE <b>unsigned</b> <b>char</b>
+<b>#define</b> FAST_INT <b>short</b> <b>int</b>
+<b>#define</b> CURRENCY <b>float</b>
+<b>#define</b> PCHAR <b>unsigned</b> <b>char</b> *
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Examples:
+<blockquote><pre>
+BOOL playing, paused;   <font color="#003399"><i>/* Booleans for a DVD player    */</i></font>
+BYTE next, previous;    <font color="#003399"><i>/* For scanning bytes in memory */</i></font>
+CURRENCY tax, discount; <font color="#003399"><i>/* To calculate total price     */</i></font>
+PCHAR inbuf, outbuf;    <font color="#003399"><i>/* To manipulate strings        */</i></font>
+</pre></blockquote>
+
+
+Summary:
+<ul>
+<li>Use <tt>typedef</tt> when you want to create an alias for another type (easier to change later)
+<li>Use <tt>typedef</tt> to simplify the name of a type
+
+<blockquote><pre>
+  <font color="#003399"><i>/* Each is an array of 10 unsigned char pointers */</i></font>
+<b>unsigned</b> <b>char</b> *a[10];
+<b>unsigned</b> <b>char</b> *b[10];
+<b>unsigned</b> <b>char</b> *c[10];
+<b>unsigned</b> <b>char</b> *d[10];
+</pre></blockquote>
+
+This is the same:
+
+<blockquote><pre>
+<b>typedef</b> <b>unsigned</b> <b>char</b> *ShortString[10]; <font color="#003399"><i>/* ShortString is a new type */</i></font>
+
+  <font color="#003399"><i>/* An array of 10 unsigned char pointers */</i></font>
+ShortString a, b, c, d;
+</pre></blockquote>
+<li>Unlike <tt>#define</tt>, the <tt>typedef</tt> keyword obeys the scope rules.
+<blockquote><pre>
+<b>void</b> foo(<b>void</b>)
+{
+  <b>typedef</b> <b>int</b> BOOL; <font color="#003399"><i>/* Is visible only in this function            */</i></font>
+  <b>#define</b> BOOL <b>int</b>  <font color="#003399"><i>/* Is visible in every function below this one */</i></font>
+
+  <b>if</b> (<font color="#003399"><i>/* whatever */</i></font>)
+  {
+    <b>typedef</b> <b>int</b> INT32; <font color="#003399"><i>/* Visible only in if */</i></font>
+    <font color="#003399"><i>/* Other stuff */</i></font>
+  }
+  <font color="#003399"><i>/* Other stuff */</i></font>
+}
+</pre></blockquote>
+<li><tt>#define</tt> is an unsophisticated "search and replace" by the preprocessor:
+
+<blockquote><pre>
+<b>#define</b> CPTR1 <b>char</b> *
+<b>typedef</b> <b>char</b> * CPTR2;
+
+CPTR1 p1, p2; <font color="#003399"><i>/* What is the type of p1 and p2? */</i></font>
+CPTR2 p3, p4; <font color="#003399"><i>/* What is the type of p3 and p4? */</i></font>
+
+printf(<font color="#9933CC">&quot;%i, %i\n&quot;</font>, <b>sizeof</b>(p1), <b>sizeof</b>(p2));
+printf(<font color="#9933CC">&quot;%i, %i\n&quot;</font>, <b>sizeof</b>(p3), <b>sizeof</b>(p4));
+</pre></blockquote>
+
+
+
+</ul>
+
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<br><br>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<tt><b></b></tt>
+

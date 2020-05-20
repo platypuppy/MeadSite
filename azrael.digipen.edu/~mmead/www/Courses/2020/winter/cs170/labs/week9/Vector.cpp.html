@@ -1,0 +1,76 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Vector.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &quot;Vector.h&quot;</font>
+<font color="990099">#include &lt;iostream&gt;  // cout</font>
+<font color="990099">#include &lt;cstdlib&gt;   // abort</font>
+
+<b>namespace</b> CS170
+{
+
+Vector::Vector() : array_(0), size_(0), capacity_(0), allocs_(0)
+{
+}
+
+<b>bool</b> Vector::empty() <b>const</b>
+{
+  <b>return</b> size_ == 0;
+}
+
+<b>unsigned</b> Vector::size() <b>const</b>
+{
+  <b>return</b> size_;
+}
+
+<b>unsigned</b> Vector::capacity() <b>const</b>
+{
+  <b>return</b> capacity_;
+}
+
+<b>unsigned</b> Vector::allocations() <b>const</b>
+{
+  <b>return</b> allocs_;
+}
+
+<font color="#003399"><i>///////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>///////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>// private </i></font>
+<font color="#003399"><i>///////////////////////////////////////////////////////////////////////////////</i></font>
+<font color="#003399"><i>///////////////////////////////////////////////////////////////////////////////</i></font>
+
+<b>void</b> Vector::check_bounds(<b>unsigned</b> index) <b>const</b>
+{
+    <font color="#003399"><i>// Don't have to check for &lt; 0 because index is unsigned</i></font>
+  <b>if</b> (index &gt;= size_)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Attempting to access index &quot;</font> &lt;&lt; index &lt;&lt; <font color="#9933CC">&quot;.&quot;</font>;
+    std::cout &lt;&lt; <font color="#9933CC">&quot; The size of the array is &quot;</font> &lt;&lt; size_ &lt;&lt; <font color="#9933CC">&quot;. Aborting...&#92;n&quot;</font>;
+    std::abort();
+  }
+}
+
+<b>void</b> Vector::grow()
+{
+    <font color="#003399"><i>// Double the capacity</i></font>
+  <b>if</b> (capacity_)
+    capacity_ *= 2;
+  <b>else</b>
+    capacity_ = 1;
+    
+    <font color="#003399"><i>// Rest of the code here...</i></font>
+
+}
+
+} <font color="#003399"><i>// namespace CS170</i></font>
+</code></pre>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

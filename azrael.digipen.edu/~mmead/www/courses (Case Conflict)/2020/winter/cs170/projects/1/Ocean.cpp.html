@@ -1,0 +1,82 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Ocean.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &quot;WarBoats.h&quot;</font>
+<font color="990099">#include &quot;Ocean.h&quot;</font>
+<font color="990099">#include &lt;iostream&gt; // cout, endl</font>
+<font color="990099">#include &lt;iomanip&gt;  // setw</font>
+
+<b>namespace</b> CS170
+{
+  <b>namespace</b> WarBoats
+  {
+    <b>const</b> <b>int</b> BOAT_LENGTH = 4;  <font color="#003399"><i>//!&lt; Length of a boat</i></font>
+    <b>const</b> <b>int</b> HIT_OFFSET = 100; <font color="#003399"><i>//!&lt; Add this to the boat ID</i></font>
+
+
+    <font color="#003399"><i>/*
+     * ALL STUDENT IMPLEMENTATION GOES HERE 
+     */</i></font>
+
+
+    <font color="#003399"><i>/******************************************************************************/</i></font>
+    <font color="#003399"><i>/*!
+      \brief
+        Prints the grid (ocean) to the screen.
+      
+      \param ocean
+        The Ocean to print
+      
+      \param field_width
+        How much space each position takes when printed.
+      
+      \param extraline
+        If true, an extra line is printed after each row. If false, no extra
+        line is printed.
+        
+      \param showboats
+        If true, the boats are shown in the output. (Debugging feature)
+    */</i></font>
+    <font color="#003399"><i>/******************************************************************************/</i></font>
+    <b>void</b> DumpOcean(<b>const</b> CS170::WarBoats::Ocean &amp;ocean,
+                                    <b>int</b> field_width, 
+                                    <b>bool</b> extraline, 
+                                    <b>bool</b> showboats)
+    {
+        <font color="#003399"><i>// For each row</i></font>
+      <b>for</b> (<b>int</b> y = 0; y &lt; ocean.y_quadrants; y++)
+      {
+          <font color="#003399"><i>// For each column</i></font>
+        <b>for</b> (<b>int</b> x = 0; x &lt; ocean.x_quadrants; x++)
+        {
+             <font color="#003399"><i>// Get value at x/y position</i></font>
+          <b>int</b> value = ocean.grid[y * ocean.x_quadrants + x];
+    
+            <font color="#003399"><i>// Is it a boat that we need to keep hidden?</i></font>
+          <b>if</b> ( (value &gt; 0) &amp;&amp; (value &lt; HIT_OFFSET) &amp;&amp; (showboats == <b>false</b>) )
+            value = 0;
+    
+          std::cout &lt;&lt; std::setw(field_width) &lt;&lt; value;
+        }
+        std::cout &lt;&lt; std::endl;
+        <b>if</b> (extraline)
+          std::cout &lt;&lt; std::endl;
+      }
+    }
+
+  } <font color="#003399"><i>// namespace WarBoats</i></font>
+} <font color="#003399"><i>// namespace CS170</i></font>
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

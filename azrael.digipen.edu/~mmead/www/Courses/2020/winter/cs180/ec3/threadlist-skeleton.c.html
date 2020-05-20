@@ -1,0 +1,83 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>cachelist-skeleton.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;      /* printf              */</font>
+<font color="990099">#include &lt;stdlib.h&gt;     /* malloc, free, exit  */</font>
+<font color="990099">#include &lt;string.h&gt;     /* strncpy             */</font>
+<font color="990099">#include &quot;threadlist.h&quot; /* threadlist stuff    */</font>
+
+<font color="#003399"><i>/* This is the shared list (head of the list) */</i></font>
+<b>static</b> tl_node *gTList = NULL;
+
+<font color="#003399"><i>/* To enable/disable locks */</i></font>
+<b>static</b> <b>bool</b> USE_LOCKS = <b>true</b>;
+
+<font color="#003399"><i>/*!
+********************************************************************************
+  &#92;brief 
+    Locks the static mutex.
+
+  &#92;return 
+    0 on success, non-zero on failure
+*******************************************************************************/</i></font>
+<b>static int</b> Lock(<b>void</b>)
+{
+}
+
+<font color="#003399"><i>/*!
+********************************************************************************
+  &#92;brief 
+    Unlocks the static mutex.
+
+  &#92;return 
+    0 on success, non-zero on failure
+*******************************************************************************/</i></font>
+<b>static int</b> Unlock(<b>void</b>)
+{
+}
+
+<b>static</b> tl_node *make_node(<b>int</b> value, <b>const</b> <b>char</b> *label)
+{
+  tl_node *node = (tl_node *)malloc(<b>sizeof</b>(tl_node));
+  <b>if</b> (!node)
+  {
+    printf(<font color="#9933CC">&quot;Can't allocate new node.&#92;n&quot;</font>);
+    exit(1);
+  }
+
+  node-&gt;value = value;
+  node-&gt;next = NULL;
+
+    <font color="#003399"><i>/* Be sure not to overwrite memory */</i></font>
+  strncpy(node-&gt;label, label, LABEL_SIZE - 1);
+  node-&gt;label[LABEL_SIZE - 1] = 0;
+
+  <b>return</b> node;
+}
+
+<b>void</b> tl_dump(<b>const</b> tl_node *list)
+{
+  <b>while</b> (list)
+  {
+    printf(<font color="#9933CC">&quot;%6i: %s&#92;n&quot;</font>, list-&gt;value, list-&gt;label);
+    list = list-&gt;next;
+  }
+}
+</code></pre>
+
+</body>
+</html>

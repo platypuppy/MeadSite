@@ -1,0 +1,121 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>STL - Function Adapters</title>
+</head>
+<body>  
+
+Given this statement:
+<p>
+<blockquote><pre>
+  <font color="#003399"><i>// Count elements &lt; 10: 6</i></font>
+count = count_if(cont1.begin(), cont1.end(), bind2nd(less&lt;<b>int</b>&gt;(), 10));
+</pre></blockquote>
+
+The function adapter class, <tt><i>less</i></tt>, (and base class):
+<p>
+Base class (<i>binary_function</i>), merely serves as a class to hold templated typedef's:
+<p>
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> LeftT, <b>typename</b> RightT , <b>typename</b> ResultT&gt;
+<b>class</b> binary_function 
+{
+  <b>public</b>:
+    <b>typedef</b> LeftT first_argument_type;
+    <b>typedef</b> RightT second_argument_type;
+    <b>typedef</b> ResultT result_type;
+};
+</code></pre>
+
+Function adapter class (<i>less</i>):
+<pre class="sourcecode"><code><b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> less : <b>public</b> binary_function&lt;T, T, <b>bool</b>&gt; 
+{
+  <b>public</b>:
+    <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; a, <b>const</b> T &amp;b) <b>const</b>
+    {
+      <b>return</b> a &lt; b;
+    }
+};
+</code></pre>
+
+Instantiating <tt>less&lt;int&gt;()</tt>:
+
+<pre class="sourcecode"><code><b>class</b> less
+{
+  <b>public</b>:
+    <b>typedef</b> <b>int</b> first_argument_type;
+    <b>typedef</b> <b>int</b> second_argument_type;
+    <b>typedef</b> <b>bool</b> result_type;
+    <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; a, <b>const</b> T &amp;b) <b>const</b>
+    {
+      <b>return</b> a &lt; b;
+    }
+};
+</code></pre>
+
+
+
+The <tt><i>count_if</i></tt> algorithm:
+<p>
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> InputIt, <b>typename</b> Pred&gt; <b>inline</b>
+<b>int</b> count_if(InputIt first, InputIt last, Pred pred)
+{
+  <b>int</b> result = 0;
+  <b>while</b> (first != last) 
+  {
+    <b>if</b> (pred(*first))
+      ++result;
+    ++first;
+  }
+  <b>return</b> result;
+}
+</code></pre>
+
+
+The unary function class:
+<p>
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>class</b> T, <b>class</b> ResultT&gt;
+<b>struct</b> unary_function 
+{
+  <b>typedef</b> T argument_type;
+  <b>typedef</b> ResultT result_type;
+};</code></pre>
+
+The function adapter <tt>bind2nd</tt>:
+<p>
+
+<pre class="sourcecode"><code><b>template</b>&lt;<b>typename</b> BinFn&gt;
+<b>class</b> binder2nd : <b>public</b> unary_function&lt;<b>typename</b> BinFn::first_argument_type, <b>typename</b> BinFn::result_type&gt; 
+{
+  <b>public</b>:
+    binder2nd(<b>const</b> BinFn&amp; fn, <b>const</b> <b>typename</b> BinFn::second_argument_type&amp; val): op(fn), value(val)
+    {
+    }
+
+    <b>typename</b> BinFn::result_type <b>operator</b>()(<b>const</b> argument_type&amp; X) <b>const</b>
+    {
+      <b>return</b> op(X, value); 
+    }
+  <b>protected</b>:
+    BinFn op;
+    <b>typename</b> BinFn::second_argument_type value;
+};
+
+<b>template</b>&lt;<b>typename</b> BinFn, <b>typename</b> T&gt; <b>inline</b>
+binder2nd&lt;BinFn&gt; bind2nd(<b>const</b> BinFn&amp; fn, <b>const</b> T&amp; val)
+{
+  <b>return</b> binder2nd&lt;BinFn&gt;(fn, val); 
+}</code></pre>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+

@@ -1,0 +1,140 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.pp</title>
+
+</head>
+<body>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<tt><b>main.pp</b></tt>:
+<p>
+Install Free Pascal:
+<blockquote><pre>
+sudo apt-get install fp-compiler
+</pre></blockquote>
+
+Compile: (Ignore any warning about missing a <tt>-T</tt> switch. It's supposedly a 
+<a href="https://www.freepascal.org/faq.var#unix-ld219">linker bug</a>.)
+<blockquote><pre>
+fpc main.pp -omainp
+</pre></blockquote>
+
+Run:
+<blockquote><pre>
+./mainp
+</pre></blockquote>
+
+<pre class="sourcecode"><code><b>Uses</b> dynlibs; <font color="#003399"><i>{LoadLibrary, GetProcAddress, FreeLibrary}</i></font>
+
+<b>Var</b>
+  Lib     : THandle;
+  Add     : <b>Function</b>(a, b : Integer) : Integer; <b>Stdcall</b>;
+  PrintMe : <b>Procedure</b>(a : PChar); <b>Stdcall</b>;
+<b>Begin</b>
+  <font color="#003399"><i>{ Load the library from disk }</i></font>
+  Lib := LoadLibrary(<font color="#9933CC">'./libhello.so'</font>);
+
+  <font color="#003399"><i>{ Check for success }</i></font>
+  <b>If</b> Lib &gt;= 32 <b>Then</b> 
+  <b>Begin</b>
+
+    <font color="#003399"><i>{ Locate add function and, if found, call it }</i></font>
+    Pointer(Add) := GetProcAddress(Lib, <font color="#9933CC">'add'</font>);
+    <b>If</b> Add = <b>Nil</b> <b>Then</b>
+      WriteLn(<font color="#9933CC">'Unable to find add.'</font>)
+    <b>Else</b>
+      WriteLn(<font color="#9933CC">'The result is: '</font>, Add(5, 6));
+
+    <font color="#003399"><i>{ Locate the printme procedure and, if found, call it }</i></font>
+    Pointer(PrintMe) := GetProcAddress(Lib, <font color="#9933CC">'printme'</font>);
+    <b>If</b> PrintMe = <b>Nil</b> <b>Then</b>
+      WriteLn(<font color="#9933CC">'Unable to find printme.'</font>)
+    <b>Else</b>
+      PrintMe(<font color="#9933CC">'Hello from Free Pascal!'</font>);
+
+    <font color="#003399"><i>{ Clean up }</i></font>
+    FreeLibrary(Lib);
+  <b>End</b>
+  <b>Else</b>
+    WriteLn(<font color="#9933CC">'Failed to load library: ./libhello.so'</font>);
+<b>End</b>.
+</code></pre>
+
+Output:
+<blockquote><pre>
+The result is: 11
+Hello from library: Hello from Free Pascal!
+</pre></blockquote>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+
+<table border=0>
+	<tr><td></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+
+-->

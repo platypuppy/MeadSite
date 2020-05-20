@@ -1,0 +1,224 @@
+execve("/bin/cp", ["cp", "test.pdf", "test2.pdf"], [/* 45 vars */]) = 0
+brk(0)                                  = 0x8250000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb772c000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY)      = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=94651, ...}) = 0
+mmap2(NULL, 94651, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7714000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/libselinux.so.1", O_RDONLY)  = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0@G\0\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0644, st_size=104148, ...}) = 0
+mmap2(NULL, 109432, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xbcf000
+mmap2(0xbe8000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x18) = 0xbe8000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/libacl.so.1", O_RDONLY)      = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\320\26\0\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0644, st_size=30312, ...}) = 0
+mmap2(NULL, 28964, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f1000
+mmap2(0x7f7000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0x7f7000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/libattr.so.1", O_RDONLY)     = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\r\0\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0644, st_size=17860, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7713000
+mmap2(NULL, 20588, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xf27000
+mmap2(0xf2b000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3) = 0xf2b000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/tls/i686/cmov/libc.so.6", O_RDONLY) = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0000m\1\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0755, st_size=1405508, ...}) = 0
+mmap2(NULL, 1415592, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x110000
+mprotect(0x263000, 4096, PROT_NONE)     = 0
+mmap2(0x264000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x153) = 0x264000
+mmap2(0x267000, 10664, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x267000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/tls/i686/cmov/libdl.so.2", O_RDONLY) = 3
+read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0@\n\0\0004\0\0\0"..., 512) = 512
+fstat64(3, {st_mode=S_IFREG|0644, st_size=9736, ...}) = 0
+mmap2(NULL, 12408, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xf1d000
+mmap2(0xf1f000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xf1f000
+close(3)                                = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7712000
+set_thread_area({entry_number:-1 -> 6, base_addr:0xb7712930, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
+mprotect(0xf1f000, 4096, PROT_READ)     = 0
+mprotect(0x264000, 8192, PROT_READ)     = 0
+mprotect(0xf2b000, 4096, PROT_READ)     = 0
+mprotect(0x7f7000, 4096, PROT_READ)     = 0
+mprotect(0xbe8000, 4096, PROT_READ)     = 0
+mprotect(0x805f000, 4096, PROT_READ)    = 0
+mprotect(0xf09000, 4096, PROT_READ)     = 0
+munmap(0xb7714000, 94651)               = 0
+statfs64("/selinux", 84, {f_type="EXT2_SUPER_MAGIC", f_bsize=4096, f_blocks=4807077, f_bfree=3325676, f_bavail=3081488, f_files=1221600, f_ffree=1023598, f_fsid={-2054291313, -1909830639}, f_namelen=255, f_frsize=4096}) = 0
+brk(0)                                  = 0x8250000
+brk(0x8271000)                          = 0x8271000
+open("/proc/filesystems", O_RDONLY|O_LARGEFILE) = 3
+fstat64(3, {st_mode=S_IFREG|0444, st_size=0, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb772b000
+read(3, "nodev\tsysfs\nnodev\trootfs\nnodev\tb"..., 1024) = 331
+read(3, "", 1024)                       = 0
+close(3)                                = 0
+munmap(0xb772b000, 4096)                = 0
+open("/usr/lib/locale/locale-archive", O_RDONLY|O_LARGEFILE) = -1 ENOENT (No such file or directory)
+open("/usr/share/locale/locale.alias", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=2570, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb772b000
+read(3, "# Locale name alias data base.\n#"..., 4096) = 2570
+read(3, "", 4096)                       = 0
+close(3)                                = 0
+munmap(0xb772b000, 4096)                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_IDENTIFICATION", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_IDENTIFICATION", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=373, ...}) = 0
+mmap2(NULL, 373, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb772b000
+close(3)                                = 0
+open("/usr/lib/gconv/gconv-modules.cache", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=26048, ...}) = 0
+mmap2(NULL, 26048, PROT_READ, MAP_SHARED, 3, 0) = 0xb7724000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_MEASUREMENT", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_MEASUREMENT", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=23, ...}) = 0
+mmap2(NULL, 23, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7723000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_TELEPHONE", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_TELEPHONE", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=59, ...}) = 0
+mmap2(NULL, 59, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7722000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_ADDRESS", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_ADDRESS", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=155, ...}) = 0
+mmap2(NULL, 155, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7721000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_NAME", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_NAME", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=77, ...}) = 0
+mmap2(NULL, 77, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7720000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_PAPER", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_PAPER", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=34, ...}) = 0
+mmap2(NULL, 34, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb771f000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_MESSAGES", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_MESSAGES", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+close(3)                                = 0
+open("/usr/lib/locale/en_US.utf8/LC_MESSAGES/SYS_LC_MESSAGES", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=57, ...}) = 0
+mmap2(NULL, 57, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb771e000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_MONETARY", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_MONETARY", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=286, ...}) = 0
+mmap2(NULL, 286, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb771d000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_COLLATE", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_COLLATE", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=1170770, ...}) = 0
+mmap2(NULL, 1170770, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb75f4000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_TIME", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_TIME", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=2454, ...}) = 0
+mmap2(NULL, 2454, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb771c000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_NUMERIC", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_NUMERIC", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=54, ...}) = 0
+mmap2(NULL, 54, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb771b000
+close(3)                                = 0
+open("/usr/lib/locale/en_US.UTF-8/LC_CTYPE", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib/locale/en_US.utf8/LC_CTYPE", O_RDONLY) = 3
+fstat64(3, {st_mode=S_IFREG|0644, st_size=256324, ...}) = 0
+mmap2(NULL, 256324, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb75b5000
+close(3)                                = 0
+open("/proc/filesystems", O_RDONLY|O_LARGEFILE) = 3
+fstat64(3, {st_mode=S_IFREG|0444, st_size=0, ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb75b4000
+read(3, "nodev\tsysfs\nnodev\trootfs\nnodev\tb"..., 1024) = 331
+read(3, "", 1024)                       = 0
+close(3)                                = 0
+munmap(0xb75b4000, 4096)                = 0
+geteuid32()                             = 1000
+stat64("test2.pdf", {st_mode=S_IFREG|0666, st_size=950639, ...}) = 0
+stat64("test.pdf", {st_mode=S_IFREG|0666, st_size=950639, ...}) = 0
+stat64("test2.pdf", {st_mode=S_IFREG|0666, st_size=950639, ...}) = 0
+open("test.pdf", O_RDONLY|O_LARGEFILE)  = 3
+fstat64(3, {st_mode=S_IFREG|0666, st_size=950639, ...}) = 0
+open("test2.pdf", O_WRONLY|O_TRUNC|O_LARGEFILE) = 4
+fstat64(4, {st_mode=S_IFREG|0666, st_size=0, ...}) = 0
+read(3, "%PDF-1.2\r%\342\343\317\323\r\n1333 0 obj\r<< \r/"..., 32768) = 32768
+write(4, "%PDF-1.2\r%\342\343\317\323\r\n1333 0 obj\r<< \r/"..., 32768) = 32768
+read(3, "der [ 0 0 0 ] \r/H /N \r>> \rendobj"..., 32768) = 32768
+write(4, "der [ 0 0 0 ] \r/H /N \r>> \rendobj"..., 32768) = 32768
+read(3, "\240\340\r\227+%\266\265\374L\246\6\350\246c\376}#d\266\275\225/\10\3\322>\27?\244\336i"..., 32768) = 32768
+write(4, "\240\340\r\227+%\266\265\374L\246\6\350\246c\376}#d\266\275\225/\10\3\322>\27?\244\336i"..., 32768) = 32768
+read(3, ",J\235\226\24\205\311\214\v\304\226\325\354\223\264)\362\247\244\246|Bjr&5>>\252H\36\0"..., 32768) = 32768
+write(4, ",J\235\226\24\205\311\214\v\304\226\325\354\223\264)\362\247\244\246|Bjr&5>>\252H\36\0"..., 32768) = 32768
+read(3, "\303*\0019\270\321\1\357K+\311\rU\34\35\330\33\36\216P\323h\343\255}\215\304\221\226J\201\277"..., 32768) = 32768
+write(4, "\303*\0019\270\321\1\357K+\311\rU\34\35\330\33\36\216P\323h\343\255}\215\304\221\226J\201\277"..., 32768) = 32768
+read(3, "\244 '\246W\203\371\221\216O\344uk4\266\365\26r\366\244\274N;\236\362\30\25P\214\216<M"..., 32768) = 32768
+write(4, "\244 '\246W\203\371\221\216O\344uk4\266\365\26r\366\244\274N;\236\362\30\25P\214\216<M"..., 32768) = 32768
+read(3, ";\231\300\342\331\"*=d\221\210\315\22\251\r',\233\243\0242\337Oj\204\245\21519JN\216"..., 32768) = 32768
+write(4, ";\231\300\342\331\"*=d\221\210\315\22\251\r',\233\243\0242\337Oj\204\245\21519JN\216"..., 32768) = 32768
+read(3, "43 0 R /TT10 703 0 R >> \r/ExtGSt"..., 32768) = 32768
+write(4, "43 0 R /TT10 703 0 R >> \r/ExtGSt"..., 32768) = 32768
+read(3, "`\314\276\222\361\367\231h\240\177\6M\335\21\203y\16\320\207\23\202\253w=K\306\375\240\2606\366\t"..., 32768) = 32768
+write(4, "`\314\276\222\361\367\231h\240\177\6M\335\21\203y\16\320\207\23\202\253w=K\306\375\240\2606\366\t"..., 32768) = 32768
+read(3, "Q\366U\272\"\v%\225\301\365z\32~dF\316S\313\362P\211\314+\335\350\r\301Ml\357L\226"..., 32768) = 32768
+write(4, "Q\366U\272\"\v%\225\301\365z\32~dF\316S\313\362P\211\314+\335\350\r\301Ml\357L\226"..., 32768) = 32768
+read(3, "\336=\306\333cq\2227\303\256\351n\247)`\376\346L\2569\245%\273\353Zs\372S\33\v\207\323"..., 32768) = 32768
+write(4, "\336=\306\333cq\2227\303\256\351n\247)`\376\346L\2569\245%\273\353Zs\372S\33\v\207\323"..., 32768) = 32768
+read(3, "cSet [ /PDF /Text ] \r/Font << /F"..., 32768) = 32768
+write(4, "cSet [ /PDF /Text ] \r/Font << /F"..., 32768) = 32768
+read(3, "\212\r\227\322)\30\202g\333me\1+\363\20\2315\225\367F-\257I\232,\27EwN\261M\273"..., 32768) = 32768
+write(4, "\212\r\227\322)\30\202g\333me\1+\363\20\2315\225\367F-\257I\232,\27EwN\261M\273"..., 32768) = 32768
+read(3, "X\321\236>;\257\317g\366n\201a\314m\33\255D\n\t\201\32\21\250\16\35B-\337\352\22\342="..., 32768) = 32768
+write(4, "X\321\236>;\257\317g\366n\201a\314m\33\255D\n\t\201\32\21\250\16\35B-\337\352\22\342="..., 32768) = 32768
+read(3, "213 672 283 684 ] \r/C [ 0 0 0 ] "..., 32768) = 32768
+write(4, "213 672 283 684 ] \r/C [ 0 0 0 ] "..., 32768) = 32768
+read(3, "\335\ng\201\362j\214\223\370\16\326\334\222\364$\272\337x\327\373\334\3/\340\376\316iD\35\271\246\10"..., 32768) = 32768
+write(4, "\335\ng\201\362j\214\223\370\16\326\334\222\364$\272\337x\327\373\334\3/\340\376\316iD\35\271\246\10"..., 32768) = 32768
+read(3, "\r\6vh\2k,\275`\243\226\201\370\266\35EJ2\236\240\337\267_\276l\202\350\361\3537\352\212"..., 32768) = 32768
+write(4, "\r\6vh\2k,\275`\243\226\201\370\266\35EJ2\236\240\337\267_\276l\202\350\361\3537\352\212"..., 32768) = 32768
+read(3, "p\370\365\237&L\361-\4\10\210=\205\33fn\330\241\24\n\225\2462\350\336\276\275a8\306\353G"..., 32768) = 32768
+write(4, "p\370\365\237&L\361-\4\10\210=\205\33fn\330\241\24\n\225\2462\350\336\276\275a8\306\353G"..., 32768) = 32768
+read(3, "(,\\LZ?~F\351}O\337\21O\273\266VJ\325\372\314\325\357\303\304\245R\343\331\n\17:"..., 32768) = 32768
+write(4, "(,\\LZ?~F\351}O\337\21O\273\266VJ\325\372\314\325\357\303\304\245R\343\331\n\17:"..., 32768) = 32768
+read(3, "k\232VOq\205\323\262\274\24\7\254\35n\216z\330u{\262wBf\262\227f?\\\3535\327w"..., 32768) = 32768
+write(4, "k\232VOq\205\323\262\274\24\7\254\35n\216z\330u{\262wBf\262\227f?\\\3535\327w"..., 32768) = 32768
+read(3, "\307\372<\25\2615\276\35\247\32\266v{\f\33`\244\303\300\241\247\221\321\4\2144G\277\373G\360)"..., 32768) = 32768
+write(4, "\307\372<\25\2615\276\35\247\32\266v{\f\33`\244\303\300\241\247\221\321\4\2144G\277\373G\360)"..., 32768) = 32768
+read(3, "\371r\306\320J-0\212Z}\331\fh\327\353\32\277\3346\352V\223\234a\347\370L\355\6\20\34\314"..., 32768) = 32768
+write(4, "\371r\306\320J-0\212Z}\331\fh\327\353\32\277\3346\352V\223\234a\347\370L\355\6\20\34\314"..., 32768) = 32768
+read(3, "\307\267\373Ju\237\213\254\343wb\212\5#\22\357+\16\36t\0033\324\242\345\372\364\321\245\2522q"..., 32768) = 32768
+write(4, "\307\267\373Ju\237\213\254\343wb\212\5#\22\357+\16\36t\0033\324\242\345\372\364\321\245\2522q"..., 32768) = 32768
+read(3, "]\22E\277\331-=\272f\361\230\353\33\311\365\361\310f}u{\371}\272\2255K\237\323\"\32\334"..., 32768) = 32768
+write(4, "]\22E\277\331-=\272f\361\230\353\33\311\365\361\310f}u{\371}\272\2255K\237\323\"\32\334"..., 32768) = 32768
+read(3, "S1 1344 0 R >> \r/ColorSpace << /"..., 32768) = 32768
+write(4, "S1 1344 0 R >> \r/ColorSpace << /"..., 32768) = 32768
+read(3, "\210\376$}?r\201\374\200n\33r{\251J\2303=\22;j\276\327\213\263\36t\237\3\263\370\207"..., 32768) = 32768
+write(4, "\210\376$}?r\201\374\200n\33r{\251J\2303=\22;j\276\327\213\263\36t\237\3\263\370\207"..., 32768) = 32768
+read(3, "4 0 R \r/Next 770 0 R \r/First 785"..., 32768) = 32768
+write(4, "4 0 R \r/Next 770 0 R \r/First 785"..., 32768) = 32768
+read(3, "> \rendobj\r1046 0 obj\r<< \r/Title "..., 32768) = 32768
+write(4, "> \rendobj\r1046 0 obj\r<< \r/Title "..., 32768) = 32768
+read(3, "> \rendobj\r1287 0 obj\r<< \r/Title "..., 32768) = 32768
+write(4, "> \rendobj\r1287 0 obj\r<< \r/Title "..., 32768) = 32768
+read(3, "0000 n\r\n0000922040 00000 n\r\n0000"..., 32768) = 367
+write(4, "0000 n\r\n0000922040 00000 n\r\n0000"..., 367) = 367
+read(3, "", 32768)                      = 0
+close(4)                                = 0
+close(3)                                = 0
+close(0)                                = 0
+close(1)                                = 0
+close(2)                                = 0
+exit_group(0)                           = ?

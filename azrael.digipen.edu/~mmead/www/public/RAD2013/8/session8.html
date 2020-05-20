@@ -1,0 +1,276 @@
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>RAD Lecture Series: #8</title>
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+
+<center>
+<h1>Session 8</h1>
+Tree View
+<br>
+(TTreeView, TTreeNode, ShellExecute, drag and drop, traversing the Windows file system recursively)
+</center>
+<p>
+	
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Session #8
+</p>
+
+<ol>
+<li><b>Trees</b>
+<p>
+First up is another very powerful component, the <i>TTreeView</i>. This is the
+primary component used in Windows Explorer. It's used whenever you want to represent a hierarchy or parent-child
+relationship. There's not a lot on this page, but there is a ton of stuff going on in the project that you can see by
+downloading the code.
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr>
+<tr valign="top">
+<td>
+<img border=0 src="treeview1/TreeView1.png">
+</td>
+<td>
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/treeview1/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/treeview1/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/treeview1/TreeView1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/treeview1/TreeView1-XE3.zip">(XE3)</a> - to build it yourself. 	
+	<ul>
+		<a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/treeview1/TreeView1.exe">Executable</a>
+	</ul>
+	<p>
+Although you can't tell by looking at the screenshot, you can drag and drop files/folders from Windows Explorer.
+	That's the real power in this example project. Some of the things to try:
+<ul>
+<li>Ctrl-left click on an item (toggles an image)
+<li>Double-click on an item ("opens" the item, depending on the kind of item).
+<li>In-place editing of the item string.
+<li>Drag and drop nodes (subtrees) onto other nodes.
+</ul>
+<p>
+There are several 3rd-party add-on tree view controls out there. One of the best (and possibly <i>the</i> best) is 
+<a href="http://www.soft-gems.net/index.php?option=com_content&task=view&id=12&Itemid=33">Virtual Treeview</a>. It is
+free, comes with source (Delphi) and has been used in 
+<a href="http://www.soft-gems.net/index.php?option=com_content&task=view&id=16&Itemid=33">countless real-world applications</a>. 
+It has a steep learning curve, but, if you're serious about UI design and need a tree view component, check it out.
+There are other freeware and commercial tree view components as well.
+</ul>
+</td>
+</tr></table>
+<p>
+
+<!--
+Finally, a simple demo to show how to capture all message sent to the window and how to capture
+events when idle.
+
+
+<p>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr></tr>
+<tr valign="top">
+<td>
+<ul>
+<li><a href="winproc1/WinProcMain.h.html">WinProcMain.h</a> - The definition of the main form.
+<li><a href="winproc1/WinProcMain.cpp.html">WinProcMain.cpp</a> - The implementation.
+<li><a href="winproc1/WinProc1.zip">Project .zip file</a> - Project files to build it yourself. 	
+</ul>
+</td>
+<td width=20></td>
+<td>
+<img border=0 src="winproc1/WinProc1.png">
+</td>
+</tr></table>
+<p>
+-->
+
+<p>
+<hr width="90%">
+<p>
+<li><b>Component Templates</b>
+<p>
+I also spent some time demonstrating how the IDE provides a very productive environment
+for GUI development. The IDE may not be up to par with Microsoft's debugger and project manager, but the
+GUI-related tools are pretty nice. These screenshots and code samples won't really show that.
+<P>
+The first thing to understand is a Component Template. I created a simple program that had some components
+(group boxes, radio buttons, edit boxes, spin edits, labeled edits) on a panel. I added event handlers
+to the components so that they did something when the user clicked or typed. You can run the application
+and look at the code to see what's going on. The code is trivial (which seems to be a recurring theme with a good RAD tool).
+<p>
+After creating the interface, select the panel, and from the main menu in the IDE choose "Component | Create Component Template...".
+Give the component a name (e.g. <i>TMonsterPanel</i>) and choose which page in the component palette to put it (e.g. <i>My Components</i>).
+Optionally, you can choose a custom icon if you'd like. Press <i>OK</i> and you'll see a new <i>My Components</i> category created
+and a new component in that category named <i>TMonsterPanel</i>. It doesn't get much easier than that to reuse components. 
+
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Create component template</th><th></th><th>Name the component</th><th></th><th>New category/component</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="templates/ComponentTemplate-1.png">
+</td>
+<td width=0></td>
+<td>
+<img border=0 src="templates/ComponentTemplate-2.png">
+</td>
+<td width=0></td>
+<td>
+<img border=0 src="templates/ComponentTemplate-3.png">
+</td>
+</tr></table>
+<p>
+
+Once you've created the component template, create a new application ("File | New | VCL Forms Application - C++ Builder"), and drop the <i>TMonsterPanel</i>
+on the form. Press F9 to compile, link, and run, and you'll see all of the functionality from the component template works in the application. (Again, it
+doesn't get much easier than this.)
+<blockquote>
+</blockquote>
+
+<blockquote>
+</blockquote>
+	
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/templates/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/templates/MainForm.cpp.html">MainForm.cpp</a> - The implementation.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/templates/ComponentTemplate1.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/templates/ComponentTemplate1-XE3.zip">(XE 3)</a> - to build it yourself. 	
+<li>There is a short description on creating and using component templates on page 165 (and 1603) of the 
+	<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/Help.pdf">Help Guide</a>.
+</ul>
+
+<p>
+<hr width="90%">
+<p>
+	
+<li><b>Frames</b>
+<p>
+Somtimes you need something more powerful than a simple component template. The component to use is <i>TFrame</i> and it's a very powerful component. Think of it
+as a light-weight TForm component. It's a container component that is used to hold other visual components for flexible component <i>and</i> code reuse.
+One limitation of the component template demonstrated above was that only event handling code was reused. If you had helper functions or classes that
+were needed by the event handlers, that code would have to be copied manually to each new application. That's not a good form of code reuse. 
+Frames allow you to include not only the components and their associated event handlers, but any other code (functions, classes, data, etc.) that might
+be needed.
+<p>
+To see how this works, create a new VCL Application like you did above ("File | New | VCL Forms Application - C++ Builder"). Next, add a new frame to the project,
+"File | New | Other...". In the tree view on the left select "C++ Builder Files", in the right pane click on "Frame", and then click OK. You'll have
+what looks like a Form, without any borders. This is what a <i>TFrame</i> is. Now, drop a <i>TMonsterPanel</i> (that you created above) onto the frame.
+Essentially, you're done! 
+
+
+<p>
+Well, there are a couple of things that need to be modified since applications are going to use the <i>TMonsterFrame</i> instead
+of the <i>TMonsterPanel</i>. If you look at the code from the application above that used the component template, <i>TMonsterPanel</i>, you'll see that
+the event handlers change attributes of the main form (<tt><b>this</b>->Color</tt> and <tt><b>this</b>->Caption</tt>). This works fine because the
+<b>this</b> pointer is the main form. However, in the <i>TMonsterFrame</i>, the <b>this</b> pointer refers to the <i>TFrame</i> itself, not the main form (<i>TForm</i>)
+that contains the frame. (Think about it.) 
+<p>
+Since we want to be able to use the <i>TMonsterFrame</i> with <i>any</i> form of <i>any</i> application, we need
+to tell the frame what form it should work with. This is easily done by adding a public property or field to the <i>TMonsterFrame</i> class. This
+field will simply be this:
+
+<blockquote><pre>
+<b>public</b>:
+  TForm *theMainForm;
+</pre></blockquote>
+
+and in the application where the <i>TMonsterFrame</i> is used, add this to the <i>FormCreate</i> method:
+
+<blockquote><pre>
+frameMonster-&gt;theMainForm = <b>this</b>; <font color="#003399"><i>// assumes the name of the frame is frameMonster</i></font>
+</pre></blockquote>
+
+Now, the frame will work for any application. See the code for details. (It's all trivial.)
+<p>
+In order to make the new <i>TMonsterFrame</i> easily available for other applications, you should add it to the component palette. This is
+done similarly to how you added a component template. For frames, right click on the frame and choose "Add To <u>P</u>alette". You will
+be prompted for a name and a component page where to put it. 
+
+<p>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Add frame to component palette</th><th></th><th>Name the component</th><th></th><th>New category/component</th></tr>
+<tr valign="top">
+<td>
+<img border=0 src="frames/Frame-1.png">
+</td>
+<td width=0></td>
+<td>
+<img border=0 src="frames/Frame-2.png">
+</td>
+<td width=0></td>
+<td>
+<img border=0 src="frames/Frame-3.png">
+</td>
+</tr></table>
+<p>
+
+<ul>
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/frames/MainForm.h.html">MainForm.h</a> - The definition of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/frames/MainForm.cpp.html">MainForm.cpp</a> - The implementation of the main form.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/frames/MonsterFrame.h.html">MonsterFrame.h</a> - The definition of the Monster frame.
+<li><a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/frames/MonsterFrame.cpp.html">MonsterFrame.cpp</a> - The implementation of the Monster frame.
+<li>Project files <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/frames/Frame.zip">(Turbo C++)</a> <a href="https://azrael.digipen.edu/~mmead/www/public/RAD2013/8/frames/Frame-XE3.zip">(XE 3)</a> - to build it yourself. 	
+<li>There is a short description on working with frames starting on page 1603 of the 
+	<a href="https://faculty.digipen.edu/~mmead/www/Files/Borland/Help.pdf">Help Guide</a>.
+</ul>
+
+</ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Exercises
+</p>
+<ol>
+<li>Currently, the <i>TTimer</i> object is always enabled and updating the counts several times each second.
+	Modify it so that the timer is only active while the files/folders are being searched. In other words,
+	it is de-activated after the search completes.
+</ol>
+	
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>

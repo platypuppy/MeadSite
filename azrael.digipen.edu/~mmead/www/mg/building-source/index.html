@@ -1,0 +1,1238 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="../../css/styles.css">
+
+<title>Mead's Guide to Building Software from Source under Linux Mint</title>
+
+</head>
+
+<body>  
+
+<center>
+<h1>Mead's Guide to Building Software from Source under Linux Mint</h1>
+<h4>(Most of this will apply to any Debian-based distribution)</h4>
+</center>
+
+<!--
+Ctrl .         href
+Crlt+Shift+M   wiki-ize
+-->
+
+<!--
+<table border=0 cellspacing=5 cellpadding=5>
+<tr valign="top">
+<td>
+	<ul>
+		<li><a href="#INTRO">Introduction</a></li>
+		<li><a href="#CASE">Case Study (VirtualBox)</a></li>
+		<li><a href="#INSTALLVBOX">Installing VirtualBox</a></li>
+		<li><a href="#CREATING">Create a Virtual Machine</a></li>
+</td>
+<td width=30></td>
+<td>
+		<li><a href="#INSTALLSOFT">Installing Software</a></li>
+		<li><a href="#SHARING">Sharing Folders with Windows</a></li>
+		<li><a href="#MOUNTING">Mounting Shares</a></li>
+</td>
+</tr></table>
+-->
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="INTRO">
+<p class="sectionheader">
+Introduction
+</p>
+</a>
+
+As you can imagine, building a software project from the source code is going to be more
+complicated than installing pre-built software. There are many reasons why you would want
+to build the software yourself, 
+and some are more obvious than others. To build software, you need to make sure that:
+<ul>
+	<li>you can get access to the source code.</li>
+	<li>you have the correct compilers and tool chain.</li>
+	<li>you have all of the dependencies installed (e.g. header files, libraries, etc.).
+	<li>you have the permissions to install the dependencies.
+</ul>
+
+Most of the time, these issues will be easy to solve with Linux, as you can freely access
+all of the resources required. Each software project will have it's own unique requirements,
+but many of them are common to all.
+<p>
+This example will show you the details of downloading source code from the repository,
+building the project, and installing it into the system. Along the way, issues such as
+dependencies will be tackled.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="INTRO">
+<p class="sectionheader">
+Downloading/Installing Software
+</p>
+</a>
+
+There are several ways to install software in Linux, and you will use a different
+technique, depending on how you want to do it.
+
+
+<ol>
+<li><b>Install from the repositories</b>
+	<p>
+	The preferred way to install software is from the official repositories
+	using <tt><b>apt-get</b></tt>. If you know the
+	name of the package/software you want to install, you can just run the command. Often,
+	if you try to run a program that is in the repositories, but is NOT installed, you will
+	be instructed how to install it. 
+<p>
+	For example, a good program to have is called
+	<i>htop</i>. If <i>htop</i> is not installed and you try to run it, you will see
+	this:
+
+<blockquote><pre>
+The program 'htop' is currently not installed. You can install it by typing:
+sudo apt-get install htop
+</pre></blockquote>
+
+So, to install it, you simply do what it says and type:
+<blockquote><pre>
+sudo apt-get install htop
+</pre></blockquote>
+
+and you'll see something like this:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following NEW packages will be installed:
+  htop
+0 upgraded, 1 newly installed, 0 to remove and 379 not upgraded.
+Need to get 68.0 kB of archives.
+After this operation, 188 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty/universe htop amd64 1.0.2-3 [68.0 kB]
+Fetched 68.0 kB in 0s (209 kB/s)
+Selecting previously unselected package htop.
+(Reading database ... 238332 files and directories currently installed.)
+Preparing to unpack .../htop_1.0.2-3_amd64.deb ...
+Unpacking htop (1.0.2-3) ...
+Processing triggers for mime-support (3.54ubuntu1.1) ...
+Processing triggers for gnome-menus (3.10.1-0ubuntu2) ...
+Processing triggers for desktop-file-utils (0.22-1ubuntu1) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+Setting up htop (1.0.2-3) ...
+</pre></blockquote>
+
+Now, just type <i>htop</i> and you're all set. You can install other packages
+that you need such as <i>doxygen</i>, <i>g++</i>, <i>valgrind</i>, etc.
+
+<p><hr width="100%"><p>
+
+
+<p>
+<!--**************************************************************************************-->
+<li><b>Install from a package</b>
+	<p>
+	However, sometimes
+you want to install software that isn't in the repositories. You may have downloaded it
+from some website.
+<p>
+There are several ways to "install" software that isn't in the repositories. The method 
+used will depend on what kind of file(s) you are trying to install. Linux Mint is based
+on Ubuntu and Ubuntu is based on Debian. Debian has its own package format and the
+files are generally
+referred to as DEB (or deb) files because they have a .deb extension.
+<p>
+A .deb file is a package and you can kind of think of it as an archive (like a .zip file). 
+There is a command called <tt><b>dpkg</b></tt> (Debian Package Manager) 
+that you use to unpack and install a Debian
+package. The simplest form is:
+<blockquote><pre>
+dpkg -i <i>package_name</i>
+</pre></blockquote> 
+
+So, for example, to install the Atom text editor, you would first download the .deb file
+(e.g. atom-amd64.deb) from the <a href="https://atom.io/">Atom website</a>. 
+Then, use <tt><b>dpkg</b></tt> to install it:
+
+<blockquote><pre>
+sudo dpkg -i atom-amd64.deb
+</pre></blockquote>
+
+Since you're installing it into the system, you must use <tt><b>sudo</b></tt>. The output
+on my computer looks like this:
+
+<blockquote><pre>
+Selecting previously unselected package atom.
+(Reading database ... 235182 files and directories currently installed.)
+Preparing to unpack atom-amd64.deb ...
+Unpacking atom (1.7.3) ...
+Setting up atom (1.7.3) ...
+Processing triggers for mime-support (3.54ubuntu1.1) ...
+Processing triggers for gnome-menus (3.10.1-0ubuntu2) ...
+Processing triggers for desktop-file-utils (0.22-1ubuntu1) ...
+</pre></blockquote>
+
+Now, from the command line (or GUI), type:
+
+<blockquote>
+atom
+</blockquote>
+
+and it will run. To have it open a file, provide that on the command line as well:
+
+<blockquote>
+atom &nbsp; <i>somefile.txt</i>
+</blockquote>
+
+<p><hr width="100%"><p>
+		
+<p>
+<!--**************************************************************************************-->
+<li><b>Installing from the source code (not in the repositories)</b>
+<p>
+Because most software on Linux is free and open source, you may not get a pre-built
+binary package. You may actually get the source code and you'll have to compile
+it yourself. This is generally trivial as there is a <i>makefile</i> that is
+included that will do the work for you. 
+<p>
+<b>Example:</b> Let's pretend that <i>htop</i> wasn't in the repositories, so we couldn't install it using
+our simple command:
+<blockquote><pre>
+sudo apt-get install htop
+</pre></blockquote>
+
+If it's not in the repository, you'll see an error message like this:
+
+<blockquote><pre>
+E: Unable to locate package htop
+</pre></blockquote>
+
+Let's say we downloaded an archive of the source code from its website and that the archive is named
+<b><tt>htop-1.0.2.tar.gz</tt></b>, which is a <i>compressed tar</i> file. The details about
+tar (<b>t</b>ape <b>ar</b>chive) files are not important. You can't just think that a compressed
+tar file is like a .zip file. This is a very common archive format in the Linux world.
+If you want to practice this example, you can download the archive here:
+<a href="https://azrael.digipen.edu/~mmead/www/mg/building-source/htop-1.0.2.tar.gz">htop-1.0.2.tar.gz</a>. It may be outdated by the time you
+read this, in which case you can just get the latest version from the downloads area here:
+<a href="http://hisham.hm/htop/">http://hisham.hm/htop/</a>.
+<p>
+The first thing to do is to create a new directory on your system (preferably in your home
+directory somewhere) and put the archive there. I'm going to assume that you have a
+<b><tt>source</tt></b> directory in your home directory and the file is there. So, for user <i>jdoe</i>,
+the path would be <i>/home/jdoe/source</i>. To extract the files from the archive, use this
+command: (Consult the man pages: <tt>man tar</tt> or type <tt>tar --help</tt> for information on the 
+options.)
+
+<blockquote><pre>
+tar xzvf htop-1.0.2.tar.gz
+</pre></blockquote>
+
+This will create a directory named <i>htop-1.0.2</i> and place all of the files in that
+directory. Change into that directory and you'll see about 100 files, mostly <i>.c</i>
+and <i>.h</i> files. There are 2 files that you may need to look at: <i>README</i> and
+<i>INSTALL</i>. These files tell you how to build the program. 99% of the time, there
+are 3 commands you need to run:
+
+<blockquote><pre>
+./configure
+make
+sudo make install
+</pre></blockquote>
+
+<ol>
+<li>The <i>configure</i> script checks that you have all of the necessary compilers, header files,
+and libraries (a.k.a dependecies) needed to build the program. (If you are missing anything, 
+it will tell you what's missing and then you can install those missing dependencies and re-run
+<i>configure</i>). After checking your system, <i>configure</i> will create a file called
+<i>Makefile</i>, which will be used by <i>make</i> in the next step.</li>
+<blockquote>
+<p class="technote">
+If the <i>configure</i> script fails due to missing dependencies, read section #4 below which
+explains how to handle that situation. Most of the explanation below pertains to this technique,
+as well.
+</p>
+</blockquote>
+<p>
+<li>You should be familiar with the <i>make</i> command, as it will do the actual building of
+the program. Depending on how large the program is and how fast your computer is, this could 
+take a few seconds or a few hours. Building the <i>gcc</i> and <i>clang</i> compilers can take a very long
+time. Building <i>htop</i> should take only a few seconds.</li>
+<blockquote>
+<p class="technote">
+<b>Hot tip:</b> When building with <i>make</i>, you can specify how many files to compile at the
+same time. If you have multiple cores on your CPU (and you probably do), this can
+dramatically speed up the build process. Just specify the <b>-j</b> option with the number of 
+concurrent files to compile. For example, <b>make -j4</b> will compile 4 files simultaneously.
+If you're not sure how many cores you have, you can just run the
+<i>nproc</i> command and it will tell you. Better yet, just run <i>make</i> like this:
+<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>make -j`nproc`</tt>
+
+<br><br>
+(those are backticks surrounding <i>nproc</i>) 
+and it will match the number of cores to the number of simultaneous compiles. On my computer,
+running <i>make</i> without <b>-j</b> takes about 4.5 seconds. With <b>-j`nproc`</b> it takes
+about 1.2 seconds. Running <i>nproc</i> on my computer shows the value 8.
+</p>
+</blockquote>
+<p>
+<p>
+<li>After you've successfully built the program, you need to install it. To install it, you have to
+use <i>sudo</i>, because it's going to put the file (usually) in the <i>/usr/bin</i> directory,
+which is owned by root.</li>
+
+</ol>
+<p>
+Now, you should be able to just type <i>htop</i> and it will run. Easy, peasy, lemon squeezy!
+
+<p class="technote">
+I said that you will use this process <i>99% of the time</i> to install from source. However,
+not all programs follow this standard procedure. In that case, reading the README and INSTALL
+files is important because it will explain what you have to do. Explaining all of those
+possibilities is beyond the scope of this small example.
+</p>
+
+
+
+<p>
+<!--**************************************************************************************-->
+<center>
+<h1>Downloading/installing the source code from the repositories</h1>
+</center>
+
+<li>This example is much more involved, but will show you many aspects that you may need
+to be aware of when attempting to build a program from source.</li>
+
+</ol>
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="PREPARE">
+<p class="sectionheader">
+Preparing the System
+</p>
+</a>
+
+Most projects in Linux are written in the C programming language. Some may be written
+in C++, Java, Python, and other languages. This example will use <i>htop</i> as the target,
+which is written in C (C99, to be exact). I'm also going to use Linux Mint 17.3 as the system, although other
+Debian-based distributions will be very similar.
+<p>
+Most distributions, including Mint, will have the GNU gcc compiler installed by default. If
+it's not installed, you can simply install it:
+
+<blockquote><pre>
+sudo apt-get install gcc
+</pre></blockquote>
+
+If you think you're going to be compiling C++ source code, you can also install that, while you're
+at it:
+
+<blockquote><pre>
+sudo apt-get install g++
+</pre></blockquote>
+
+Most distributions are 64-bit, but if you need to build 32-bit software, install these as well:
+
+<blockquote><pre>
+sudo apt-get install gcc-multilib
+sudo apt-get install g++-multilib
+</pre></blockquote>
+
+Since we are going to be downloading the source code from the Mint/Ubuntu repositories, we're 
+going to need a couple of other packages to help us. When you download the source from the
+repository, you may not just get C files. It's likely that you will get a <i>tar archive</i>,
+which is like a <i>zip file</i> of C files. You may also get a set of <i>patches</i>, which
+are modifications made to the base set of source files. This really won't concern you, because
+the system will take care of creating directories and extracting the source code for you.
+<p>
+In order for the system to be able to extract the source files and patch them, you'll need 
+another tool installed (which likely isn't installed by default). That package is the
+<i>dpkg-dev</i> tool. To install it:
+
+<blockquote><pre>
+sudo apt-get install dpkg-dev
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  libdpkg-perl
+Suggested packages:
+  <b>debian-keyring</b>
+Recommended packages:
+  build-essential libalgorithm-merge-perl
+The following NEW packages will be installed:
+  dpkg-dev
+The following packages will be upgraded:
+  libdpkg-perl
+1 upgraded, 1 newly installed, 0 to remove and 280 not upgraded.
+Need to get 905 kB of archives.
+After this operation, 1,674 kB of additional disk space will be used.
+Do you want to continue? [Y/n] 
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libdpkg-perl all 1.17.5ubuntu5.6 [179 kB]
+Get:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/main dpkg-dev all 1.17.5ubuntu5.6 [726 kB]
+Fetched 905 kB in 0s (1,027 kB/s)
+(Reading database ... 163230 files and directories currently installed.)
+Preparing to unpack .../libdpkg-perl_1.17.5ubuntu5.6_all.deb ...
+Unpacking libdpkg-perl (1.17.5ubuntu5.6) over (1.17.5ubuntu5.4) ...
+Selecting previously unselected package dpkg-dev.
+Preparing to unpack .../dpkg-dev_1.17.5ubuntu5.6_all.deb ...
+Unpacking dpkg-dev (1.17.5ubuntu5.6) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+Setting up libdpkg-perl (1.17.5ubuntu5.6) ...
+Setting up dpkg-dev (1.17.5ubuntu5.6) ...
+</pre></blockquote>
+
+In the output above, I highlighted the <i>debian-keyring</i> package that was suggested. We will
+also want to install this. This is kind of a security feature that will ensure that the downloaded
+source code really is the official source code and not some Trojan malware that may have replaced
+the actual source code. 
+<p>
+If you're curious, more information about the keyring can be found here:
+<ul>
+	<li><a href="https://keyring.debian.org/">https://keyring.debian.org/</a></li>
+	<li><a href="https://debian-administration.org/article/82/Working_with_Debian_GPG_Keys">
+		https://debian-administration.org/article/82/Working_with_Debian_GPG_Keys</a></li>
+</ul>
+
+
+Install the keyring:
+
+<blockquote><pre>
+sudo apt-get install debian-keyring
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following NEW packages will be installed:
+  debian-keyring
+0 upgraded, 1 newly installed, 0 to remove and 280 not upgraded.
+Need to get 48.7 MB of archives.
+After this operation, 55.6 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty/universe debian-keyring all 2014.03.03 [48.7 MB]
+Fetched 48.7 MB in 6s (7,345 kB/s)                                             
+Selecting previously unselected package debian-keyring.
+(Reading database ... 163469 files and directories currently installed.)
+Preparing to unpack .../debian-keyring_2014.03.03_all.deb ...
+Unpacking debian-keyring (2014.03.03) ...
+Setting up debian-keyring (2014.03.03) ...
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Note #1</b>: When you execute the command: <i>apt-get source htop</i> and you see 
+warnings along the lines of <i>"Can't check signature..."</i> or 
+<i>"...failed to verify signature..."</i>, install the debian keyring:
+<br><br>
+<tt>sudo apt-get install debian-keyring</tt>
+</p>
+</blockquote>
+
+At this point, we're ready to start downloading the actual source code that we want to build.
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="DOWNLOAD">
+<p class="sectionheader">
+Dowloading the Source Code (from the Repositories)
+</p>
+</a>
+
+Downloading the source code from the repositories is trivial. Before downloading, though, make
+a new directory for the source code. You DO NOT want to download to your normal <i>Downloads</i>
+directory because you may end up with thousands of source files polluting that directory. I'm
+just going to create a directory called <i>source</i> in my home directory and use that.
+<p>
+Once you're in the <i>source</i> directory, you can download, extract, and patch the source code.
+We use <i>apt-get</i>, as usual, but instead of <i>install</i>, we specify <i>source</i>:
+
+<blockquote><pre>
+apt-get <b>source</b> htop
+</pre></blockquote>
+
+You'll notice that I didn't use <i>sudo</i>. This is simply because I'm putting it (the source code)
+in my home directory, so I don't need special permissions to do so. This is the output from the
+command above:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+E: You must put some 'source' URIs in your sources.list
+</pre></blockquote>
+
+You can see we got an error, and it tells us what the problem is: 
+We need to put some source URIs in the sources.list file. Duh.
+
+<blockquote>
+<p class="technote">
+<b>Note</b>: If you get an error saying: <i>E: Unable to find a source package for htop</i>
+or <i>E: You must put some 'source' URIs in your sources.list</i>,
+it means that you haven't configured <i>apt-get</i> to download the sources. There are many
+ways to enable the sources, and each distribution has its own way. For this, since I'm
+primarily talking about Linux Mint, I'm going to use the GUI. This is the most straight-forward
+way for people new to building from source.
+<br><br>
+From the command line, run <i>mintsources</i>. <!--, then from the menus, choose Edit | Software sources.-->
+Make sure the checkbox named <i>Enable source code repositories</i> is checked, then click
+on the button labeled <i>Update the cache</i>. Now, you should be able to download the
+source files from the repositories using the command shown above.
+<br><br>
+See the screenshot below for guidance.
+</p>
+</blockquote>
+
+<p>
+
+<a href="SoftwareSources2.png"><img src="SoftwareSources2.png" width=699 height=466></a>
+<p>
+
+<blockquote>
+<p class="technote">
+Adding the source repositories from the command line is a much more involved task because you
+have to know a exactly which distribution (version) you're running. The GUI knows all of this stuff.
+If you're running another Debian-based distribution, you can run a GUI program called <i>synaptic</i>.
+Then go to <i>Settings | Repositories</i> and you should be able to find an option that will let
+you enable the source code repositories.
+</blockquote>
+
+Now, rerun the command:
+
+<blockquote><pre>
+apt-get <b>source</b> htop
+</pre></blockquote>
+
+And you should see something like this:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Need to get 400 kB of source archives.
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty/universe htop 1.0.2-3 (dsc) [1,137 B]
+Get:2 http://archive.ubuntu.com/ubuntu/ trusty/universe htop 1.0.2-3 (tar) [388 kB]
+Get:3 http://archive.ubuntu.com/ubuntu/ trusty/universe htop 1.0.2-3 (diff) [10.8 kB]
+Fetched 400 kB in 0s (547 kB/s)
+dpkg-source: info: extracting htop in htop-1.0.2
+dpkg-source: info: unpacking htop_1.0.2.orig.tar.gz
+dpkg-source: info: applying htop_1.0.2-3.diff.gz
+</pre></blockquote>
+
+The output shows that:
+
+<ul>
+	<li><i>apt-get</i> has downloaded 3 files:</li>
+	<ol>
+		<li>a <i>dsc</i> file - A Debian source control text file. This file provides information about
+			dependencies needed to build it, among other things.</li>
+		<li>a <i>tar</i> file - A tar (tape archive) file that contains the main source code.</li>
+		<li>a <i>diff</i> file - A text file that contains the modifications that have been made 
+			since the developer of <i>htop</i> last updated it.</li>
+	</ol>
+	<p>
+	<li><i>dpkg-source</i> (from the <i>dpkg-dev</i> package we installed earlier) performed 
+		3 steps:
+		<ol>
+			<li>created a directory named <i>htop-1.0.2</i></li>
+			<li>extracted the compressed archive into the directory</li>
+			<li>patched the original source code with the latest modifications (diffs)</li>
+		</ol>
+</ul>
+
+A directory listing (<tt>ls -l</tt>) shows this:
+
+<blockquote><pre>
+total 400
+drwxr-xr-x 5 mmead mmead   4096 May 19 17:44 htop-1.0.2
+-rw-r--r-- 1 mmead mmead  10829 Oct 21  2013 htop_1.0.2-3.diff.gz
+-rw-r--r-- 1 mmead mmead   1137 Oct 21  2013 htop_1.0.2-3.dsc
+-rw-r--r-- 1 mmead mmead 388499 Dec  2  2012 htop_1.0.2.orig.tar.gz
+</pre></blockquote>
+
+You can see the original archive is dated <i>Dec 2, 2012</i> and the diff is dated
+<i>Oct 21, 2013</i>, which was the last time it was modified. Only the changes were provided,
+most likely because only a few lines of code have changed. This is common in the open source world.
+<p>
+The <i>diff</i> program is used to determine which lines of code have changed.
+It can also provide more details that show <i>how</i> the lines were changed. This information,
+coupled with another program called <i>patch</i>, makes it very easy to just send the changes
+(or patches) to users so they can upgrade their software without having to re-download possibly
+tens of thousands of lines of (unchanged) code they already have.
+<p>
+If you're interested, you can read more about the details here: 
+<a href="../../docs/DiffAndPatch.pdf">Comparing and Merging Files with GNU diff and patch</a>.
+(Online copy <a href="https://www.gnu.org/software/diffutils/manual/html_mono/diff.html">here</a>.)
+<p>
+Okay, now we're ready to build the software.
+
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="BUILD">
+<p class="sectionheader">
+Building the Program
+</p>
+</a>
+
+The first thing to do is to change directory into the <i>htop-1.0.2</i> directory, since
+that's where the source code is located. There are over 100 files in that directory, so
+I won't show them here. However, there are a few that you need to know about.
+I'll show them with this command:
+
+<blockquote><pre>
+ls -l configure INSTALL README
+</pre></blockquote>
+
+This is the long listing:
+
+<blockquote><pre>
+-rwxr-xr-x 1 mmead mmead 436739 Oct  3  2012 configure
+-rw-r--r-- 1 mmead mmead   9240 Aug 26  2011 INSTALL
+-rw-r--r-- 1 mmead mmead   1942 Aug 26  2011 README
+</pre></blockquote>
+
+<ol>
+	<li><i>configure</i> - This is an executable shell script that contains about 15,000 lines!
+		You run this program to, well, configure the build process. It does a lot of stuff, such
+		as checking that you have a functional C compiler, the necessary header files and
+		libraries, and lots of other stuff. You can use this script to make customizations
+		to the build process. But, for this simple example, we will just use the defaults.</li>
+	<li><i>INSTALL</i> - This is a text file that explains how to configure, build, and
+		install the software, including any custom options you might want to use. Go ahead
+		and look at it. It's about 200 lines. Many INSTALL files are very similar, and once
+		you've seen one, you'll quickly check it and see it's pretty much the same as
+		many others.</li>
+	<li><i>README</i> - This is much like other <i>readme</i> files you have seen. It's just
+		a brief synopsis of what the program does.</li>
+</ol>
+
+Here are the relevant lines from the <i>INSTALL</i> file:
+
+
+<blockquote><pre>
+The simplest way to compile this package is:
+
+  1. `cd' to the directory containing the package's source code and type
+     `./configure' to configure the package for your system.  If you're
+     using `csh' on an old version of System V, you might need to type
+     `sh ./configure' instead to prevent `csh' from trying to execute
+     `configure' itself.
+
+     Running `configure' takes awhile.  While running, it prints some
+     messages telling which features it is checking for.
+
+  2. Type `make' to compile the package.
+
+  3. Optionally, type `make check' to run any self-tests that come with
+     the package.
+
+  4. Type `make install' to install the programs and any data files and
+     documentation.
+
+  5. You can remove the program binaries and object files from the
+     source code directory by typing `make clean'.  To also remove the
+     files that `configure' created (so you can compile the package for
+     a different kind of computer), type `make distclean'.  There is
+     also a `make maintainer-clean' target, but that is intended mainly
+     for the package's developers.  If you use it, you may have to get
+     all sorts of other programs in order to regenerate files that came
+     with the distribution.
+</pre></blockquote>
+
+It's pretty much boiler-plate information on how to build most simple programs in Linux. It's 
+the same 3 steps you may have seen before:
+
+<blockquote><pre>
+./configure
+make
+sudo make install
+</pre></blockquote>
+
+<ol>
+<li>The <i>configure</i> script checks that you have all of the necessary compilers, header files,
+and libraries (a.k.a dependecies) needed to build the program. (If you are missing anything, 
+it will tell you what's missing and then you can install those missing dependencies and re-run
+<i>configure</i>). After checking your system, <i>configure</i> will create a file called
+<i>Makefile</i>, which will be used by <i>make</i> in the next step.</li>
+<p>
+<li>You should be familiar with the <i>make</i> command, as it will do the actual building of
+the program. Depending on how large the program is and how fast your computer is, this could 
+take a few seconds or a few hours. (For example, building the <i>gcc</i> and <i>clang</i> 
+compilers can take a very long time.) Building <i>htop</i> should take only a few seconds.</li>
+<p>
+<li>After you've successfully built the program, you need to install it. To install it, you have to
+use <i>sudo</i> because it's going to put the file (usually) in the <i>/usr/bin</i> directory,
+which is owned by root.</li>
+</ol>
+
+Because this is more-or-less a tutorial, I'm going to show you how the <i>configure</i> script
+is going to fail (several times, actually). This is because, on a freshly installed Linux Mint 
+system, you don't have all of the necessary libraries installed. The <i>configure</i> script 
+will tell you what's missing,
+
+and then we'll just use
+<blockquote><pre>
+sudo apt-get install &lt;missing-package&gt;
+</pre></blockquote>
+
+to install it and then re-run <i>configure</i>. This is quite common and isn't really a big deal in Linux.
+<p>
+
+<blockquote>
+<p class="technote">
+<b>Note</b>: I'm using a freshly installed Linux Mint 17.3 (rosa) with the Cinnamon desktop.
+I ran <i>sudo apt-get update</i> and <i>sudo apt-get upgrade</i> immediately after the installation
+to ensure my system was up-to-date.
+<br><br>
+Depending on which version of Mint (or any Linux distribution, for that matter) and which
+desktop you're using, you may have more or less of the required packages installed. This means
+you may have to install packages that aren't listed here. However, the process will be the same,
+meaning, whatever <i>configure</i> complains is missing, you'll need to install those packages.
+</p>
+</blockquote>
+
+
+
+Ok, running:
+
+<blockquote><pre>
+./configure
+</pre></blockquote>
+
+will print out many lines of code. We're only going to be interested in the last few lines, which
+are going to indicate the problem. Here's the output immediately after I run <i>./configure</i>:
+
+<blockquote><pre>
+checking for gcc... gcc
+checking whether the C compiler works... no
+configure: error: in `/home/mmead/source/htop-1.0.2':
+configure: error: C compiler cannot create executables
+See `config.log' for more details.
+</pre></blockquote>
+
+The first line checks to see if <i>gcc</i> is installed, and it is. The second line checks to
+see if it works, which it doesn't. There's very little information about why it doesn't work,
+but it's a pretty common problem. Without going into all of the details and reasons why this doesn't
+work, suffice it to say that you need a few other development packages installed if you're going to
+develop (build) software on the system. There's a
+package called <i>build-essential</i> that contains the basic programs to build software.
+We just need to install that:
+
+<blockquote><pre>
+sudo apt-get install build-essential
+</pre></blockquote>
+
+And this is what it says is going to be installed:
+
+<blockquote><pre>
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  <b>g++ g++-4.8 libc-dev-bin libc6-dev libstdc++-4.8-dev</b>
+Suggested packages:
+  g++-multilib g++-4.8-multilib gcc-4.8-doc libstdc++6-4.8-dbg glibc-doc
+  libstdc++-4.8-doc
+The following NEW packages will be installed:
+  <b>build-essential g++ g++-4.8 libc-dev-bin libc6-dev libstdc++-4.8-dev</b>
+0 upgraded, 6 newly installed, 0 to remove and 1 not upgraded.
+Need to get 21.2 MB of archives.
+After this operation, 52.9 MB of additional disk space will be used.
+Do you want to continue? [Y/n] 
+</pre></blockquote>
+
+You can see that it's going to install the <i>g++</i> compiler and some other libraries. This problem
+is very common on a new installation of Linux. In fact, if you were to write a simple "Hello, world!"
+program in C:
+
+<blockquote><pre>
+#include &lt;stdio.h&gt;
+
+int main(void)
+{
+  printf("Hello, world!\n");
+  return 0;
+}
+</pre></blockquote>
+
+
+and try to build it:
+
+<blockquote><pre>
+gcc hello.c
+</pre></blockquote>
+
+You would see this:
+
+<blockquote><pre>
+hello.c:1:19: fatal error: stdio.h: No such file or directory
+ #include &lt;stdio.h&gt;
+                   ^
+compilation terminated.
+</pre></blockquote>
+
+This is the tell-tale sign that you don't have the necessary libraries installed. That's why you
+need to install the <i>build-essential</i> package.
+<p>
+
+OK, so now we run <i>configure</i> again to see if we need anything else:
+<blockquote><pre>
+./configure
+</pre></blockquote>
+
+This will output about 100 lines, and at the end you may see this error:
+
+<blockquote><pre>
+checking for refresh in -lncursesw... no
+configure: error: You may want to use --disable-unicode or install libncursesw.
+</pre></blockquote>
+
+It can't find the <a href="https://en.wikipedia.org/wiki/Ncurses"><i>ncurses</i></a> library,
+which <i>htop</i> requires. So, we simply install it:
+
+<blockquote><pre>
+sudo apt-get install libncursesw.
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Notice the period at the end. That is part of the name! (Yeah, that took me a while to figure out!)
+</p>
+</blockquote>
+
+Once the <i>ncurses</i> library is installed, re-run <i>configure</i>, and at the end of the 
+output is this error:
+
+<blockquote><pre>
+configure: error: missing headers:  curses.h
+</pre></blockquote>
+
+We need to install another <i>ncurses</i> package. The first one was for 
+<a href="https://en.wikipedia.org/wiki/Unicode">unicode</a>, and this is for ASCII. This header
+file is in a package named <i>libncurses5-dev</i>. Install it:
+
+<blockquote><pre>
+sudo apt-get install libncurses5-dev
+</pre></blockquote>
+
+and re-run <i>configure</i>. About another 100 lines of code will be displayed. However, this
+time, there will be no errors! This means that we can <i>finally</i> actually build the program.
+One interesting side-note: If you look at the last few lines of output, you will see this line:
+
+<blockquote><pre>
+config.status: creating Makefile
+</pre></blockquote>
+
+This is one of the main purposes of <i>configure</i>: It creates <i>Makefile</i>, which is
+a 1500 line makefile! Now, just type <i>make</i>
+
+<blockquote><pre>
+make
+</pre></blockquote>
+
+and, after about 5 seconds, the program will be built. We can see the executable by typing:
+
+<blockquote><pre>
+ls -l htop
+</pre></blockquote>
+
+and this is what we see:
+
+<blockquote><pre>
+-rwxr-xr-x 1 mmead mmead 652548 May 19 21:43 htop
+</pre></blockquote>
+
+It's about a 650,000 byte executable which we can now run:
+
+<blockquote><pre>
+./htop
+</pre></blockquote>
+
+Now we have the <i>htop</i> program built from the source code we downloaded from the repository.
+<p>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="PREPARE">
+<p class="sectionheader">
+Installing the Software on the System
+</p>
+</a>
+
+There is one final step that we would normally do, and that is to <i>install</i> it into the 
+system. Right now, the executable is in a directory called <i>source/htop-1.0.2</i> in our home
+directory. We'd like to make it available system wide by putting it into a public directory.
+This is easily accomplished with this command:
+
+<blockquote><pre>
+sudo make install
+</pre></blockquote>
+
+We have to use <i>sudo</i> now because we need to copy the executable to <i>/usr/bin</i> (most likely), 
+as well as installing the man pages for the program and possibly a bunch of other files.
+This will make all of the files and documention available from anywhere on the system by any user. 
+If you already have version 1.0.2 of <i>htop</i> installed, you really don't have to do this as 
+this was just an example of how to install from the source code from the repository. But,
+if you downloaded a newer version and you want to replace the older version, you would want to
+over write it. Also, some 
+users prefer to build all of the software themselves and build it with specific optimizations for their 
+particular hardware.
+
+<p>
+Because this was the first time we built software for our newly installed Linux Mint system, we had
+to install a bunch of other packages first. As you build more and more packages, you'll have to
+install less and less dependencies because they will already be on the system. If we had built
+several other packages before attempting to build <i>htop</i>, we would likely have only 
+needed to do this:
+
+<blockquote><pre>
+apt-get source htop
+cd htop-1.0.2
+./configure
+make
+make install
+</pre></blockquote>
+
+That would have done <b><i>everything</i></b> and we wouldn't have had to keep installing missing
+dependencies. This is why it is so trivial to build and install software on Linux. Trying to do this
+on "other operating systems" can be a total nightmare!
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+*****************************************************************************************
+*****************************************************************************************
+*****************************************************************************************
+-->
+<a name="PREPARE">
+<p class="sectionheader">
+Miscellany
+</p>
+</a>
+
+I'll have to admit, there was a little <i>hand-waving</i> going on above. Where exactly? Look at this
+error message when we ran <i>configure</i>:
+
+<blockquote><pre>
+configure: error: missing headers:  curses.h
+</pre></blockquote>
+
+Then, I went on to say that we need to install another <i>ncurses</i> package. This header
+file is in a package named <i>libncurses5-dev</i>.
+
+That's correct, but how did I know which package contained <i>curses.h</i>? If I would have just
+done this:
+
+<blockquote><pre>
+sudo apt-get install curses.h
+</pre></blockquote>
+
+It may have <i>appeared</i> to install it, but it didn't. Also, depending on what you have already
+installed on your system, you may get this error instead:
+
+<blockquote><pre>
+checking for refresh in -lncurses... no
+checking for curses.h... (cached) no
+configure: error: missing libraries:  libncurses
+</pre></blockquote>
+
+This says you're missing the <i>ncurses</i> library, not the header file. Either way, you need
+to install the same package:
+
+<blockquote><pre>
+sudo apt-get install libncurses5-dev
+</pre></blockquote>
+
+But, again, how did I know which package to install? There are several ways to find out, and
+I'm going to show you one method. It's a program called <i>apt-file</i>. First, you have to 
+install it:
+
+<blockquote><pre>
+sudo apt-get install apt-file
+</pre></blockquote>
+
+It will install a bunch of files and at the end you'll see something like this:
+
+<blockquote><pre>
+The system-wide cache is empty. You may want to run 'apt-file update'
+as root to update the cache. You can also run 'apt-file update' as
+normal user to use a cache in the user's home directory.
+Processing triggers for libc-bin (2.19-0ubuntu6.7) ...
+</pre></blockquote>
+
+This tells us to update the cache:
+
+<blockquote><pre>
+sudo apt-file update
+</pre></blockquote>
+
+This could take a few minutes, and when it's done you'll see something like this:
+<blockquote><pre>
+Downloading complete file http://packages.linuxmint.com/dists/rosa/Contents-amd64.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  238k  100  238k    0     0   582k      0 --:--:-- --:--:-- --:--:--  584k
+Downloading complete file http://extra.linuxmint.com/dists/rosa/Contents-amd64.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 17766  100 17766    0     0  88763      0 --:--:-- --:--:-- --:--:-- 88830
+Downloading complete file http://archive.ubuntu.com/ubuntu/dists/trusty/Contents-amd64.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 28.0M  100 28.0M    0     0   885k      0  0:00:32  0:00:32 --:--:-- 5016k
+Downloading complete file http://archive.ubuntu.com/ubuntu/dists/trusty-updates/Contents-amd64.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 27.4M  100 27.4M    0     0  1153k      0  0:00:24  0:00:24 --:--:-- 1333k
+Downloading complete file http://security.ubuntu.com/ubuntu/dists/trusty-security/Contents-amd64.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 24.8M  100 24.8M    0     0  5507k      0  0:00:04  0:00:04 --:--:-- 6575k
+Ignoring source without Contents File:
+  http://archive.canonical.com/ubuntu/dists/trusty/Contents-amd64.gz
+</pre></blockquote>
+
+Now, we can search through the cache:
+
+<blockquote><pre>
+apt-file search curses.h
+</pre></blockquote>
+
+The output looks like this:
+
+<blockquote><pre>
+autoconf-archive: /usr/share/doc/autoconf-archive/html/ax_005fwith_005fcurses.html
+doc-linux-ja-html: /usr/share/doc/HOWTO/ja-html/LFS-BOOK/appendixa/ncurses.html
+doc-linux-ja-html: /usr/share/doc/HOWTO/ja-html/LFS-BOOK/chapter05/ncurses.html
+doc-linux-ja-html: /usr/share/doc/HOWTO/ja-html/LFS-BOOK/chapter06/ncurses.html
+ekg2-core: /usr/share/doc/ekg2-core/book-en/plugin-ncurses.html
+ekg2-core: /usr/share/doc/ekg2-core/book-pl/plugin-ncurses.html
+latrace: /etc/latrace.d/headers/ncurses.h
+libghc-hscurses-doc: /usr/lib/ghc-doc/haddock/hscurses-1.4.1.2/hscurses.haddock
+libghc-ncurses-doc: /usr/lib/ghc-doc/haddock/ncurses-0.2.1/ncurses.haddock
+<b>libncurses5-dev: /usr/include/curses.h</b>
+libncurses5-dev: /usr/include/ncurses.h
+libncursesw5-dev: /usr/include/ncursesw/curses.h
+libncursesw5-dev: /usr/include/ncursesw/ncurses.h
+libpython2.7-dbg: /usr/include/python2.7_d/py_curses.h
+libpython2.7-dev: /usr/include/python2.7/py_curses.h
+libpython3.4-dbg: /usr/include/python3.4dm/py_curses.h
+libpython3.4-dev: /usr/include/python3.4m/py_curses.h
+libslang2-dev: /usr/include/slcurses.h
+lua-curses-dev: /usr/include/lua5.1/lua-curses.h
+lua-curses-dev: /usr/include/lua5.2/lua-curses.h
+lua-curses-dev: /usr/share/doc/lua-curses-dev/curses.html
+php-doc: /usr/share/doc/php-doc/html/book.ncurses.html
+php-doc: /usr/share/doc/php-doc/html/intro.ncurses.html
+php-doc: /usr/share/doc/php-doc/html/ref.ncurses.html
+pypy-doc: /usr/share/doc/pypy-doc/html/config/objspace.usemodules._minimal_curses.html
+python2.7-doc: /usr/share/doc/python2.7/html/howto/curses.html
+python2.7-doc: /usr/share/doc/python2.7/html/library/curses.html
+python3.4-doc: /usr/share/doc/python3.4/html/howto/curses.html
+python3.4-doc: /usr/share/doc/python3.4/html/library/curses.html
+</pre></blockquote>
+
+I've highlighted the package that we need to install.
+<p>
+Sometimes you'll see a lot of output and you have to try and figure out which package you need. If 
+you know exactly where the header file belongs (<tt>/usr/include/curses.h</tt>), then you can
+search for this:
+
+<blockquote><pre>
+apt-file search /usr/include/curses.h
+</pre></blockquote>
+
+and it will display this:
+
+<blockquote><pre>
+libncurses5-dev: /usr/include/curses.h
+</pre></blockquote>
+
+Which tells you definitively what package you need. As a rule-of-thumb, when you are missing header
+files or libraries, they are likely going to be in a package that starts with <tt><b>lib</b></tt>, and ends
+with <tt><b>-dev</b></tt>. This tells you it's in a <b>lib</b>rary package, and it's a 
+<b>dev</b>elopment package (i.e. it's for building software, not just simply running software.)
+You'll also see <tt><b>-doc</b></tt> (<b>doc</b>umentation) packages and <tt><b>-dbg</b></tt>, which
+are <b>d</b>e<b>b</b>u<b>g</b> packages (to help you find bugs in programs).
+
+
+<a name="PREPARE">
+<p class="sectionheader">
+Additional References
+</p>
+</a>
+
+More information can be found here. Just Google for much more information on each tool. Some tools
+are lower level (e.g. dpkg) and others are higher level (e.g. Synaptic).
+
+<ul>
+	<li><a href="https://www.debian.org/doc/manuals/debian-faq/ch-pkgtools.en.html">
+		The Debian package management tools</a>
+		There are multiple tools that are used to manage Debian packages, from graphic or text-based 
+		interfaces to the low level tools used to install packages
+	<p>
+	<li><a href="https://wiki.debian.org/apt-file">apt-file</a> - A software package that indexes the 
+		contents of packages in your available repositories and allows you to search for a particular 
+		file among all available packages.</li>
+<p>
+	<li><a href="https://wiki.debian.org/Aptitude">Aptitude</a> - An ncurses based front-end 
+		to Apt, the debian package manager. Since it is text based, it is run from a terminal or 
+		a CLI (command line interface)</li>
+<p>
+	<li><a href="https://wiki.debian.org/Synaptic">Synaptic</a> - a Gtk+ (GUI) based front-end to the 
+		Debian package manager. It provides the same functionality as the aptitude utility plus more, 
+		and is targeted at ease of use. <a href="http://www.nongnu.org/synaptic/">Homepage</a>
+<p>
+	<li><a href="https://wiki.debian.org/Apt">apt</a> - The Advanced Package Tool is the advanced 
+		interface to the Debian packaging system and provides the apt-get program.
+<p>
+	<li><a href="https://wiki.debian.org/dpkg">dpkg</a> - This is the main package management program.
+<p>
+	<li><a href="https://debian-handbook.info/browse/stable/apt.html">The APT Tools</a> 
+		This is a link to the	APT section of the
+		<a href="https://debian-handbook.info/browse/stable/">Debian Administrator's Handbook</a>,
+		which contains information on all aspects of the system.
+
+</ul>
+
+Others (non-developer)
+<ul>
+	<li>There is a program called <i>mintinstall</i> that is like an AppStore for Linux Mint. Just
+		run it and see all of the programs that are available.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+  
+  
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!--
+
+<big>&rarr;</big>
+
+	<span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009</span>
+	
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr><td><img src="ComputerComponents-1.png"></td></tr>
+	<tr><td align="right"><span class="attrib">Operating System Concepts - 8th Edition Silberschatz, Galvin, Gagne &copy;2009&nbsp;&nbsp;</span></td></tr>
+</table>
+</blockquote>
+	
+-->

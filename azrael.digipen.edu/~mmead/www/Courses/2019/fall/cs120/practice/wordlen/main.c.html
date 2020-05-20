@@ -1,0 +1,84 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;  /* printf, fopen, fgets, feof, fclose, FILE */</font>
+<font color="990099">#include &lt;stdlib.h&gt; /* exit                                     */</font>
+
+<font color="#003399"><i>/* Longest line in the file */</i></font>
+<font color="990099">#define BUFFER_SIZE 1000</font>
+<b>double</b> average_word_length(<b>const</b> <b>char</b> *text);
+
+<b>static</b> <b>void</b> print(<b>const</b> <b>char</b> *text, <b>double</b> average)
+{
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, text);
+  printf(<font color="#9933CC">&quot;Average word length: %.2f&#92;n&quot;</font>, average);
+  printf(<font color="#9933CC">&quot;--------------------------&#92;n&quot;</font>);
+}
+
+<b>void</b> test(<b>const</b> <b>char</b> *text)
+{
+  <b>double</b> average = average_word_length(text);
+  print(text, average);
+}
+
+<b>void</b> test1(<b>void</b>)
+{
+  test(<font color="#9933CC">&quot;This is a simple test.&quot;</font>);
+  test(<font color="#9933CC">&quot;one one one one one one&quot;</font>);
+  test(<font color="#9933CC">&quot;abcdefghijkl&quot;</font>);
+  test(<font color="#9933CC">&quot;ab c de f gh i jk l&quot;</font>);
+  test(<font color="#9933CC">&quot;a b c d e f g h i j k l&quot;</font>);
+  test(<font color="#9933CC">&quot;   This is   &#92;tanother   &#92;t&#92;t test.   &quot;</font>);
+  test(<font color="#9933CC">&quot;&quot;</font>);
+  test(<font color="#9933CC">&quot;     &quot;</font>);
+}
+
+<b>void</b> test2(<b>void</b>)
+{
+  <b>const</b> <b>char</b> *filename = <font color="#9933CC">&quot;quotes.txt&quot;</font>; <font color="#003399"><i>/* File containing the strings */</i></font>
+  <b>char</b> buffer[BUFFER_SIZE];            <font color="#003399"><i>/* Max length of a string      */</i></font>
+  <b>double</b> average;                      <font color="#003399"><i>/* Average word length         */</i></font>
+
+    <font color="#003399"><i>/* Open the file, abort if unsuccessful */</i></font>
+  FILE *fp = fopen(filename, <font color="#9933CC">&quot;rt&quot;</font>);
+  <b>if</b> (!fp)
+  {
+    printf(<font color="#9933CC">&quot;Can't open %s for read. Aborting.&#92;n&quot;</font>, filename);
+    exit(1);
+  }
+
+    <font color="#003399"><i>/* Read all the lines, one-at-a-time */</i></font>
+  <b>while</b> (!feof(fp))
+  {
+      <font color="#003399"><i>/* If we got a line, calculate average word length and print */</i></font>
+    <b>if</b> (fgets(buffer, BUFFER_SIZE, fp))
+    {
+      average = average_word_length(buffer);
+      print(buffer, average);
+    } 
+  }
+
+    <font color="#003399"><i>/* Close the file */</i></font>
+  fclose(fp);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  test1(); <font color="#003399"><i>/* Work with these simple tests first    */</i></font>
+  <font color="#003399"><i>/*test2();*/</i></font> <font color="#003399"><i>/* Do these tests after the simple tests */</i></font>
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

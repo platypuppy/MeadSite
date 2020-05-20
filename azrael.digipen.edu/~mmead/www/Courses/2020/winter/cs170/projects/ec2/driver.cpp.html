@@ -1,0 +1,488 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>driver.cpp</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt;</font>
+<font color="990099">#include &lt;iomanip&gt;</font>
+<font color="990099">#include &lt;cstdlib&gt;</font>
+<font color="990099">#include &quot;Stack.h&quot;</font>
+<font color="990099">#include &quot;PRNG.h&quot;</font>
+
+<font color="990099">#include &lt;list&gt;</font>
+
+<b>void</b> TestPush()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPush...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack.push(i);
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushPop()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushPop...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack.push(i);
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Popping all items...&quot;</font> &lt;&lt; std::endl;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack.pop();
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushPopEmpty()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushPopEmpty...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack.push(i);
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Popping all items...&quot;</font> &lt;&lt; std::endl;
+  <b>while</b> (!stack.empty())
+    stack.pop();
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushTopPop()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushTopPop...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack.push(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    <b>int</b> value = stack.top();
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Pop: &quot;</font> &lt;&lt; std::setw(2) &lt;&lt; value &lt;&lt; <font color="#9933CC">&quot; (size: &quot;</font> 
+              &lt;&lt; std::setw(2) &lt;&lt; stack.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+    stack.pop();
+    stack.print(<b>false</b>);
+  }
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestSwap1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestSwap1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack1, stack2;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    stack1.push(i);
+    stack2.push(i + 100);
+  }
+
+    <font color="#003399"><i>// Remove the top 3</i></font>
+  stack1.pop();
+  stack1.pop();
+  stack1.pop();
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack2: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack2.print(<b>false</b>);
+
+  stack1.swap(stack2);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Swapped stacks:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack2: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack2.print(<b>false</b>);
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestCopyConstructor1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestCopyConstructor1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack1.push(i);
+
+  CS170::Stack stack2(stack1);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack2: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack2.print(<b>false</b>);
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestAssignment1()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAssignment1...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack1;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack1.push(i);
+
+  CS170::Stack stack2;
+
+  stack2 = stack1;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack2: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack2.print(<b>false</b>);
+
+  stack1 = stack1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; std::setw(2) &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack1.print(<b>false</b>);
+
+  std::cout &lt;&lt; std::endl;
+}
+
+
+<b>void</b> TestAssignment2(<b>void</b>)
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestAssignment2...&quot;</font> &lt;&lt; std::endl;
+  <b>int</b> size = 10;
+  CS170::Stack stack1, stack2, stack3;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack1.push(i);
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Before assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;stack1: &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;stack2: &quot;</font>;
+  stack2.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;stack3: &quot;</font>;
+  stack3.print(<b>false</b>);
+
+  stack3 = stack2 = stack1;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;After assignment:&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;stack1: &quot;</font>;
+  stack2.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;stack2: &quot;</font>;
+  stack2.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;stack3: &quot;</font>;
+  stack3.print(<b>false</b>);
+
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPushException()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPushException...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack(5);
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    <b>try</b> 
+    {
+      stack.push(i);
+    }
+    <b>catch</b> (<b>const</b> CS170::StackError&amp; se)
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Exception thrown in TestPushException.&quot;</font> &lt;&lt; std::endl;
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Message: &quot;</font> &lt;&lt; se.what() &lt;&lt; std::endl;
+    }
+  }
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestPopException()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestPopException...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack(10);
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+  {
+    <b>try</b> 
+    {
+      stack.push(i);
+    }
+    <b>catch</b> (<b>const</b> CS170::StackError&amp; se)
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Exception thrown in TestPushException.&quot;</font> &lt;&lt; std::endl;
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Message: &quot;</font> &lt;&lt; se.what() &lt;&lt; std::endl;
+    }
+  }
+
+    <font color="#003399"><i>// Should NOT throw</i></font>
+  <b>while</b> (!stack.empty())
+  {
+    <b>try</b> 
+    {
+      stack.pop();
+    }
+    <b>catch</b> (<b>const</b> CS170::StackError&amp; se)
+    {
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Exception thrown in TestPopException.&quot;</font> &lt;&lt; std::endl;
+      std::cout &lt;&lt; <font color="#9933CC">&quot;Message: &quot;</font> &lt;&lt; se.what() &lt;&lt; std::endl;
+    }
+  }
+
+    <font color="#003399"><i>// Should throw</i></font>
+  <b>try</b> 
+  {
+    stack.pop();
+  }
+  <b>catch</b> (<b>const</b> CS170::StackError&amp; se)
+  {
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Exception thrown in TestPopException.&quot;</font> &lt;&lt; std::endl;
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Message: &quot;</font> &lt;&lt; se.what() &lt;&lt; std::endl;
+  }
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestClear()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestClear...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 10;
+  CS170::Stack stack;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= size; i++)
+    stack.push(i);
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Clearing the stack...&quot;</font> &lt;&lt; std::endl;
+  stack.clear();
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Push 5 more...&quot;</font> &lt;&lt; std::endl;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= 5; i++)
+    stack.push(i);
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestArray()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestArray...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> array[] = {2, 4, 6, 8, 1, 3, 5, 7, 9};
+  CS170::Stack stack(array, <b>sizeof</b>(array) / <b>sizeof</b>(*array));
+
+  stack.print();
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in the stack: &quot;</font> &lt;&lt; stack.size() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+<b>void</b> TestALot()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestALot...&quot;</font> &lt;&lt; std::endl;
+
+  CS170::Stack stack1, stack2, stack3;
+  <b>for</b> (<b>int</b> i = 1; i &lt;= 10; i++)
+  {
+    stack1.push(CS170::Utils::Random(10, 99));
+    stack2.push(CS170::Utils::Random(100, 999));
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[&quot;</font> &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;] &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;[&quot;</font> &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;] &quot;</font>;
+  stack2.print(<b>false</b>);
+
+  <b>for</b> (<b>int</b> i = 0; i &lt;= 5; i++)
+  {
+    stack3.push(stack1.top());
+    stack1.pop();
+    stack2.push(stack1.top());
+  }
+
+  <b>while</b> (stack1.size() || stack2.size() || stack3.size())
+  {
+    <b>try</b>
+    {
+      <b>if</b> (!(CS170::Utils::Random(1, 10) % 3))
+        stack1.push(100);
+      <b>else</b> 
+        stack1.pop();
+
+      <b>if</b> (!(CS170::Utils::Random(1, 10) % 3))
+        stack2.push(100);
+      <b>else</b> 
+        stack2.pop();
+
+      <b>if</b> (!(CS170::Utils::Random(1, 10) % 3))
+        stack3.push(100);
+      <b>else</b> 
+        stack3.pop();
+    }
+    <b>catch</b> (<b>const</b> CS170::StackError&amp; se)
+    {
+      std::cout &lt;&lt; se.what() &lt;&lt; std::endl;
+    }
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+    stack1.print(<b>false</b>);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack2: (&quot;</font> &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+    stack2.print(<b>false</b>);
+    std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack3: (&quot;</font> &lt;&lt; stack3.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+    stack3.print(<b>false</b>);
+    std::cout &lt;&lt; std::endl;
+  }
+}
+
+<b>void</b> TestSwapStress()
+{
+  std::cout &lt;&lt; <font color="#9933CC">&quot;-----------------------------------------------&quot;</font> &lt;&lt; std::endl;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;TestSwapStress...&quot;</font> &lt;&lt; std::endl;
+
+  <b>int</b> size = 1000000;
+  <b>int</b> swaps = 100000;
+  CS170::Stack stack1, stack2, stack3;
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Pushing &quot;</font> &lt;&lt; size &lt;&lt; <font color="#9933CC">&quot; items...&quot;</font> &lt;&lt; std::endl;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    stack1.push(i / 2);
+    stack2.push(i);
+    stack3.push(i * 2);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Swapping &quot;</font> &lt;&lt; swaps &lt;&lt; <font color="#9933CC">&quot; times...&quot;</font> &lt;&lt; std::endl;
+  <b>for</b> (<b>int</b> i = 0; i &lt; swaps; i++)
+  {
+    stack1.swap(stack2);
+    stack2.swap(stack3);
+    stack3.swap(stack1);
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Popping all but 10 items...&quot;</font> &lt;&lt; std::endl;
+  <b>for</b> (<b>int</b> i = 0; i &lt; size - 10; i++)
+  {
+    stack1.pop();
+    stack2.pop();
+    stack3.pop();
+  }
+
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack1: (&quot;</font> &lt;&lt; stack1.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack1.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack2: (&quot;</font> &lt;&lt; stack2.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack2.print(<b>false</b>);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Items in stack3: (&quot;</font> &lt;&lt; stack3.size() &lt;&lt; <font color="#9933CC">&quot;) &quot;</font>;
+  stack3.print(<b>false</b>);
+  std::cout &lt;&lt; std::endl;
+}
+
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>typedef</b> <b>void</b> (*TestFn)();
+  <b>struct</b> Test
+  {
+    TestFn test;
+    <b>const</b> <b>char</b> *name;
+  };
+  
+  Test tests[] = {TestPush,             <font color="#9933CC">&quot;TestPush&quot;</font>,                <font color="#003399"><i>//  1</i></font>
+                  TestPushPop,          <font color="#9933CC">&quot;TestPushPop&quot;</font>,             <font color="#003399"><i>//  2</i></font>
+                  TestPushPopEmpty,     <font color="#9933CC">&quot;TestPushPopEmpty&quot;</font>,        <font color="#003399"><i>//  3</i></font>
+                  TestPushTopPop,       <font color="#9933CC">&quot;TestPushTopPop&quot;</font>,          <font color="#003399"><i>//  4</i></font>
+                  TestSwap1,            <font color="#9933CC">&quot;TestSwap1&quot;</font>,               <font color="#003399"><i>//  5</i></font>
+                  TestCopyConstructor1, <font color="#9933CC">&quot;TestCopyConstructor1&quot;</font>,    <font color="#003399"><i>//  6</i></font>
+                  TestAssignment1,      <font color="#9933CC">&quot;TestAssignment1&quot;</font>,         <font color="#003399"><i>//  7</i></font>
+                  TestAssignment2,      <font color="#9933CC">&quot;TestAssignment2&quot;</font>,         <font color="#003399"><i>//  8</i></font>
+                  TestPushException,    <font color="#9933CC">&quot;TestPushException&quot;</font>,       <font color="#003399"><i>//  9</i></font>
+                  TestPopException,     <font color="#9933CC">&quot;TestPopException&quot;</font>,        <font color="#003399"><i>// 10</i></font>
+                  TestClear,            <font color="#9933CC">&quot;TestClear&quot;</font>,               <font color="#003399"><i>// 11</i></font>
+                  TestArray,            <font color="#9933CC">&quot;TestArray&quot;</font>,               <font color="#003399"><i>// 12</i></font>
+                  TestALot,             <font color="#9933CC">&quot;TestALot&quot;</font>,                <font color="#003399"><i>// 13</i></font>
+                  TestSwapStress,       <font color="#9933CC">&quot;TestSwapStress&quot;</font>,          <font color="#003399"><i>// 14</i></font>
+                };
+
+  <b>int</b> count = <b>sizeof</b>(tests) / <b>sizeof</b>(*tests);
+  <b>int</b> testno = 0;
+  <b>int</b> i;
+
+  CS170::Utils::srand(3, 4);
+
+  <b>if</b> (argc &gt; 1)
+    testno = std::atoi(argv[1]);
+
+ <b>if</b> (testno &gt; count || testno &lt; 0)
+   testno = 0;
+
+  <b>if</b> (testno == 0)
+  {
+    <b>for</b> (i = 0; i &lt; count; i++)
+    {
+      <b>try</b> {
+        tests[i].test();
+      }
+      <b>catch</b> (...) {
+        std::cout &lt;&lt; <font color="#9933CC">&quot;***&quot;</font> &lt;&lt; tests[i].name 
+                  &lt;&lt; <font color="#9933CC">&quot; revealed something bad in the Stack class&quot;</font> &lt;&lt; std::endl;    
+      }
+    }
+  }
+  <b>else</b>
+    tests[testno - 1].test();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>sample-driver.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;      // printf, sprintf, fflush</font>
+<font color="990099">#include &lt;stdlib.h&gt;     //  malloc, free, abort, atoi</font>
+<font color="990099">#include &lt;stdbool.h&gt;    // true, false               </font>
+<font color="990099">#include &lt;pthread.h&gt;    // thread create/join/exit</font>
+<font color="990099">#include &quot;threadlist.h&quot; // threadlist stuff           </font>
+<font color="990099">#include &quot;PRNG.h&quot;       // RandomInt, ut_srand       </font>
+
+<b>typedef</b> <b>struct</b> ThreadData
+{
+  <b>int</b> id;
+  <b>int</b> array_size;
+  <b>int</b> low;
+  <b>int</b> high;
+  <b>int</b> *data;
+}ThreadData;
+
+<b>void</b> SwapInt(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+<b>void</b> Shuffle(<b>int</b> *array, <b>int</b> count)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    <b>int</b> r = RandomInt(0, count - 1);
+    SwapInt(&amp;array[i], &amp;array[r]);
+  }
+}
+
+<b>void</b> PrintArray(<b>int</b> *array, <b>int</b> count)
+{
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+    printf(<font color="#9933CC">&quot;%i  &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>void</b>* test_thread1(<b>void</b> *p)
+{
+  ThreadData *data = (ThreadData *)p;
+  <b>int</b> size = data-&gt;high - data-&gt;low;
+  <b>char</b> buffer[11]; <font color="#003399"><i>// 11 is max digits in an int + NUL char</i></font>
+  sprintf(buffer, <font color="#9933CC">&quot;%i&quot;</font>, data-&gt;id);
+  <b>int</b> offset = size * (data-&gt;id - 1);
+
+<font color="990099">#if 0</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    printf(<font color="#9933CC">&quot;ID: %2i: %i&#92;n&quot;</font>, data-&gt;id, data-&gt;data[offset + i]);
+  }
+<font color="990099">#endif</font>
+  tl_insert_values(data-&gt;data + offset, size, buffer);
+
+  <b>return</b> NULL;
+}
+
+<b>void</b>* test_thread2(<b>void</b> *p)
+{
+  ThreadData *data = (ThreadData *)p;
+  <b>int</b> size = data-&gt;high - data-&gt;low;
+  <b>int</b> offset = size * (data-&gt;id - 1);
+
+<font color="990099">#if 0</font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; size; i++)
+  {
+    printf(<font color="#9933CC">&quot;ID: %2i: %i&#92;n&quot;</font>, data-&gt;id, data-&gt;data[offset + i]);
+  }
+<font color="990099">#endif</font>
+  tl_remove_values(data-&gt;data + offset, size);
+
+  <b>return</b> NULL;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+    <font color="#003399"><i>// There are 5 required args</i></font>
+  <b>if</b> (argc &lt; 6)
+  {
+    printf(<font color="#9933CC">&quot;Usage: threadlist TEST_NUM  THREAD_COUNT  ARRAY_SIZE  USE_LOCKS  REMOVE_THREAD_COUNT&#92;n&quot;</font>);
+    printf(<font color="#9933CC">&quot;ARRAY_SIZE must be equally divisible by THREAD_COUNT (or it will be modified).&#92;n&quot;</font>);
+    printf(<font color="#9933CC">&quot;REMOVE_THREAD_COUNT must be &lt;= THREAD_COUNT (otherwise, undefined).&#92;n&#92;n&quot;</font>);
+    printf(<font color="#9933CC">&quot;ex: threadlist 1 8 32 1 4&#92;n&quot;</font>);
+    <b>return</b> 1;
+  }
+
+  ut_srand(1, 2);
+
+  <b>int</b> test_num = atoi(argv[1]);            <font color="#003399"><i>// which test number to run</i></font>
+  <b>int</b> thread_count = atoi(argv[2]);        <font color="#003399"><i>// number of threads to create (insert)</i></font>
+  <b>int</b> array_size = atoi(argv[3]);          <font color="#003399"><i>// size of the data</i></font>
+  <b>int</b> locks = atoi(argv[4]);               <font color="#003399"><i>// enable/disable locks</i></font>
+  <b>int</b> delete_thread_count = atoi(argv[5]); <font color="#003399"><i>// how many threads will delete items</i></font>
+
+    <font color="#003399"><i>/* 
+       If the array size isn't evenly divisible by thread_count, we need
+       to make it so. This just keeps things simpler.
+    */</i></font>
+  <b>int</b> extra = array_size % thread_count;
+  <b>if</b> (extra)
+    array_size += thread_count - extra;
+
+    <font color="#003399"><i>// Thread IDs</i></font>
+  pthread_t *thread_ids = malloc(thread_count * <b>sizeof</b>(pthread_t));
+  <b>if</b> (!thread_ids)
+  {
+    printf(<font color="#9933CC">&quot;Malloc:1 failed.&#92;n&quot;</font>);
+    <b>return</b> 2;
+  }
+
+    <font color="#003399"><i>// Thread data</i></font>
+  ThreadData *tdata = malloc(thread_count * <b>sizeof</b>(ThreadData));
+  <b>if</b> (!tdata)
+  {
+    printf(<font color="#9933CC">&quot;Can't malloc tdata&#92;n&quot;</font>);
+    free(thread_ids);
+    <b>return</b> 2;
+  }
+
+    <font color="#003399"><i>// Integer data</i></font>
+  <b>int</b> *intdata = malloc(array_size * <b>sizeof</b>(<b>int</b>));
+  <b>if</b> (!intdata)
+  {
+    printf(<font color="#9933CC">&quot;Can't malloc intdata&#92;n&quot;</font>);
+    free(thread_ids);
+    free(tdata);
+    <b>return</b> 3;
+  }
+
+    <font color="#003399"><i>// Create data</i></font>
+  <b>for</b> (<b>int</b> i = 0; i &lt; array_size; i++)
+    intdata[i] = i + 1;
+
+    <font color="#003399"><i>// Mix it up</i></font>
+  Shuffle(intdata, array_size);
+
+    <font color="#003399"><i>// Make sure the list is set to NULL</i></font>
+  tl_resetlist();
+
+    <font color="#003399"><i>// Enable/disable locking (to see failures w/o locks)</i></font>
+  <b>if</b> (locks)
+    tl_uselocks(<b>true</b>);
+  <b>else</b>
+    tl_uselocks(<b>false</b>);
+
+  <b>int</b> count = 0;
+  tl_node * <b>const</b> *list;                 <font color="#003399"><i>// a pointer to the list in threadlist.c</i></font>
+  <b>int</b> slice = array_size / thread_count; <font color="#003399"><i>// how many each thread gets</i></font>
+
+  <b>switch</b> (test_num)
+  {
+      <font color="#003399"><i>//////////////////////////////////////////////////////////////////////</i></font>
+      <font color="#003399"><i>//////////////////////////////////////////////////////////////////////</i></font>
+    <b>case</b> 1:
+      <font color="990099">#if 1</font>
+        <font color="#003399"><i>// inserting w/multiple threads</i></font>
+      <b>for</b> (<b>int</b> i = 0; i &lt; thread_count; ++i)
+      {
+        tdata[i].id = i + 1;
+        tdata[i].array_size = array_size;
+        tdata[i].low = count;
+        tdata[i].high = count + slice;
+        tdata[i].data = intdata;
+        pthread_create(&amp;thread_ids[i], NULL, test_thread1, &amp;tdata[i]);
+        count += slice;
+      }
+
+      <b>for</b> (<b>int</b> i = 0; i &lt; thread_count; ++i)
+      {
+        pthread_join(thread_ids[i], NULL);
+      }
+
+      list = tl_getlist();
+      tl_dump(*list);
+      <font color="990099">#endif</font>
+
+      <font color="990099">#if 1</font>
+      printf(<font color="#9933CC">&quot;------------------&#92;n&quot;</font>);
+      count = 0;
+
+        <font color="#003399"><i>//////////////////////////////////////////////////////////////////////</i></font>
+        <font color="#003399"><i>//////////////////////////////////////////////////////////////////////</i></font>
+        <font color="#003399"><i>// removing w/multiple threads</i></font>
+      <b>for</b> (<b>int</b> i = 0; i &lt; delete_thread_count; ++i)
+      {
+        tdata[i].id = i + 1;
+        tdata[i].array_size = array_size;
+        tdata[i].low = count;
+        tdata[i].high = count + slice;
+        tdata[i].data = intdata;
+        pthread_create(&amp;thread_ids[i], NULL, test_thread2, &amp;tdata[i]);
+        count += slice;
+      }
+
+      <b>for</b> (<b>int</b> i = 0; i &lt; delete_thread_count; ++i)
+      {
+        pthread_join(thread_ids[i], NULL);
+      }
+
+      <b>if</b> (delete_thread_count)
+      {
+        list = tl_getlist();
+        tl_dump(*list);
+        tl_destroy(*list);
+      }
+      <font color="990099">#endif</font>
+      <b>break</b>;
+
+    <b>case</b> 2:
+      <font color="990099">#if 1</font>
+      <font color="#003399"><i>//printf(&quot;------------------&#92;n&quot;);</i></font>
+      count = 0;
+
+        <font color="#003399"><i>//////////////////////////////////////////////////////////////////////</i></font>
+        <font color="#003399"><i>//////////////////////////////////////////////////////////////////////</i></font>
+        <font color="#003399"><i>// inserting/removing simultaneously w/multiple threads</i></font>
+      <b>for</b> (<b>int</b> i = 0; i &lt; thread_count; ++i)
+      {
+        tdata[i].id = i + 1;
+        tdata[i].array_size = array_size;
+        tdata[i].low = count;
+        tdata[i].high = count + slice;
+        tdata[i].data = intdata;
+
+        <font color="#003399"><i>/*
+          This is non-deterministic because, if a remove thread runs before an
+          insert thread, the item to be removed may not exist in the list. This
+          means the insert method will insert it, but it won't be removed. But,
+          if the insert thread runs first, the remove method will actually have
+          something to remove.
+         */</i></font>
+        <b>if</b> (i % 2)
+          pthread_create(&amp;thread_ids[i], NULL, test_thread2, &amp;tdata[i / 2]); <font color="#003399"><i>// remove</i></font>
+        <b>else</b>
+          pthread_create(&amp;thread_ids[i], NULL, test_thread1, &amp;tdata[i / 2]); <font color="#003399"><i>// insert</i></font>
+
+        count += slice;
+      }
+
+      <b>for</b> (<b>int</b> i = 0; i &lt; thread_count; ++i)
+      {
+        pthread_join(thread_ids[i], NULL);
+      }
+
+      list = tl_getlist();
+      tl_dump(*list);
+      tl_destroy(*list);
+      <font color="990099">#endif</font>
+      <b>break</b>;
+  }
+
+ 
+  free(thread_ids);
+  free(tdata);
+  free(intdata);
+
+  <b>return</b> 0;
+
+}
+</code></pre>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>mem.bugs.cpp</title>
+</head>
+
+<style>
+</style>
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt;</font>
+<font color="990099">#include &lt;cstdlib&gt;</font>
+<font color="990099">#include &lt;cstring&gt;</font>
+
+<b>void</b> test1()
+{
+  <b>new</b> <b>char</b>[123];
+}
+
+<b>void</b> test2()
+{
+  <b>char</b> *p = <b>new</b> <b>char</b>[123];
+  <b>delete</b> p;
+}
+
+<b>void</b> test3()
+{
+  <b>char</b> *p = <b>new</b> <b>char</b>;
+  <b>delete</b> [] p;
+}
+
+<b>void</b> test4()
+{
+  <b>char</b> *p = (<b>char</b> *)malloc(123);
+  <b>delete</b> p;
+}
+
+<b>void</b> test5()
+{
+  <b>char</b> *p = <b>new</b> <b>char</b>;
+  free(p);
+}
+
+<b>void</b> test6()
+{
+  <b>char</b> *p = <b>new</b> <b>char</b>[5];
+  std::strcpy(p, <font color="#9933CC">&quot;ksdfd&quot;</font>);
+  <b>delete</b> [] p;
+}
+
+<b>void</b> test7()
+{
+  <b>char</b> a[10];
+  std::cout &lt;&lt; a &lt;&lt; std::endl;
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>unsigned</b> test = 1;
+  <b>if</b> (argc &gt; 1)
+    test = std::atoi(argv[1]);
+
+  <b>void</b> (*tests[])() = {test1, <font color="#003399"><i>// leak</i></font>
+                       test2, <font color="#003399"><i>// new[]/delete</i></font>
+                       test3, <font color="#003399"><i>// new/delete[]</i></font>
+                       test4, <font color="#003399"><i>// malloc/delete</i></font>
+                       test5, <font color="#003399"><i>// new/free</i></font>
+                       test6, <font color="#003399"><i>// buffer overflow</i></font>
+                       test7, <font color="#003399"><i>// uninitialized read</i></font>
+                      };
+
+  <b>unsigned</b> size = <b>sizeof</b>(tests) / <b>sizeof</b>(*tests);
+  <b>if</b> (test &gt; size)
+    test = 1;
+
+  <b>if</b> (test == 0)
+  {
+    <b>for</b> (<b>unsigned</b> i = 0; i &lt; size; i++)
+      tests[i]();
+  }
+  <b>else</b>
+    tests[test - 1]();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

@@ -1,0 +1,59 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c.html</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>void</b> inttostr(<b>int</b> number, <b>char</b> string[]);
+
+<b>void</b> test1(<b>void</b>)
+{
+  <b>char</b> buffer[12];
+  
+  inttostr(1, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(12, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(123, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(1234, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(1234567890, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(0, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(-1, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(-12, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(-123, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(-1234, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+
+  inttostr(-1234567890, buffer);
+  printf(<font color="#9933CC">&quot;|%s|&#92;n&quot;</font>, buffer);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  test1();  
+
+  <b>return</b> 0;
+}
+</code></pre>

@@ -1,0 +1,92 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>stack.h</title>
+</head>
+<body>  
+
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+\file   stack.h
+\author Artie Fufkin
+\par    email: cooldude234\@hotmail.com
+\par    DigiPen login: afufkin
+\par    Course: CS170
+\par    Section C
+\par    Assignment #1
+\date   7/20/2021
+\brief  
+  This is the interface file for all member functions
+  of a class called Stack.  
+  
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+
+
+<font color="#003399"><i>/******************************************************************************/</i></font>
+<font color="#003399"><i>/*!
+  \class Stack
+  \brief  
+    The stack class implements a Last-In-First-Out (LIFO) data
+    structure for storing/retrieving integers.
+
+    Operations include:
+
+    - Add an item to the stack
+    - Remove an item from the stack
+    - Read item on top of the stack
+    - Check to see if the stack is empty
+    - Check to see if the stack is full
+    - Output the stack to a stream
+    - Return the number of items on the stack
+    - Return the size of the stack
+
+  \deprecated 
+    The &lt;b&gt;isEmpty&lt;/b&gt; method should be used in place of the &lt;b&gt;isNotFull&lt;/b&gt; 
+    method.
+
+  \bug  
+    Pushing the number 42 onto the stack causes a segmentation fault.
+  \bug
+    Popping the number 11 causes day to become night. (Maybe that's a feature?)
+
+*/</i></font>
+<font color="#003399"><i>/******************************************************************************/</i></font>
+
+
+<font color="990099">#include &lt;ostream&gt;</font>
+
+<font color="#003399"><i>//! Maximum size of a stack </i></font>
+<b>const</b> <b>int</b> MAX_SIZE = 10;
+
+<b>class</b> Stack
+{
+  <b>public</b>:
+    Stack();
+    Stack(<b>int</b> initial_size);
+    <b>void</b> pushItem(<b>int</b> item);
+    <b>int</b> popItem(<b>void</b>);
+    <b>int</b> peekAtTop(<b>void</b>) <b>const</b>;
+    <b>bool</b> isEmpty(<b>void</b>) <b>const</b>;
+    <b>bool</b> isFull(<b>void</b>) <b>const</b>;
+    <b>void</b> print(<b>void</b>) <b>const</b>;
+    <b>void</b> print(std::ostream &amp;stream, <b>int</b> width) <b>const</b>;
+    <b>int</b> getCount(<b>void</b>) <b>const</b>;
+    <b>int</b> getSize(<b>void</b>) <b>const</b>;
+  <b>private</b>:
+      <font color="#003399"><i>//! The index of the top of the stack</i></font>
+    <b>int</b> top;             
+      <font color="#003399"><i>//! The current size of the stack     </i></font>
+    <b>int</b> size;            
+      <font color="#003399"><i>//! The array of integers (stack)</i></font>
+    <b>int</b> items[MAX_SIZE]; 
+};
+
+</code></pre>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1608 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Arrays</title>
+</head>
+
+<body>  
+<center><h1>Arrays</h1></center>
+
+<blockquote>
+<i>
+"... the results are undefined, and we all know what 'undefined' means: it means it works 
+during development, it works during testing, and it blows up in your most important 
+customers' faces."</i> -- Scott Meyers<!--, Effective C++	-->
+
+</blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+The <tt>sizeof</tt> Operator
+</p>
+
+C has an operator that returns the size (in bytes) of a value or type. It's a unary operator and it
+is listed in the <a href="../../docs/OperatorPrecedence.html">precedence chart</a>.
+<p>
+
+General form is:
+<blockquote><pre>
+<b>sizeof</b>(<i>expression or type</i>)
+</pre></blockquote>
+
+<p>
+
+Examples:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>Code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i;    <font color="#003399"><i>/* uninitialized */</i></font>
+<b>float</b> f;  <font color="#003399"><i>/* uninitialized */</i></font>
+<b>double</b> d; <font color="#003399"><i>/* uninitialized */</i></font>
+
+printf(<font color="#9933CC">&quot;sizeof(i) is %u\n&quot;</font>, <b>sizeof</b>(i));
+printf(<font color="#9933CC">&quot;sizeof(int) is %u\n&quot;</font>, <b>sizeof</b>(<b>int</b>));
+printf(<font color="#9933CC">&quot;sizeof(42) is %u\n&quot;</font>, <b>sizeof</b>(42));
+printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+printf(<font color="#9933CC">&quot;sizeof(f) is %u\n&quot;</font>, <b>sizeof</b>(f));
+printf(<font color="#9933CC">&quot;sizeof(float) is %u\n&quot;</font>, <b>sizeof</b>(<b>float</b>));
+printf(<font color="#9933CC">&quot;sizeof(42.0F) is %u\n&quot;</font>, <b>sizeof</b>(42.0F));
+printf(<font color="#9933CC">&quot;\n&quot;</font>);
+
+printf(<font color="#9933CC">&quot;sizeof(d) is %u\n&quot;</font>, <b>sizeof</b>(d));
+printf(<font color="#9933CC">&quot;sizeof(double) is %u\n&quot;</font>, <b>sizeof</b>(<b>double</b>));
+printf(<font color="#9933CC">&quot;sizeof(42.0) is %u\n&quot;</font>, <b>sizeof</b>(42.0));
+printf(<font color="#9933CC">&quot;\n&quot;</font>);
+</pre></blockquote>
+</td>
+<td>
+<xblockquote><pre>
+
+
+
+
+sizeof</b>(i) is 4
+sizeof</b>(int) is 4
+sizeof</b>(42) is 4
+
+
+sizeof</b>(f) is 4
+sizeof</b>(float) is 4
+sizeof</b>(42.0F) is 4
+
+
+sizeof(d) is 8
+sizeof(double) is 8
+sizeof(42.0) is 8
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+The	<tt><b>sizeof</b></tt> operator is also unique in that it can determine the value at <i>compile time</i>. The program
+does not need to be executed to obtain the results. Also, the operand to the <tt><b>sizeof</b></tt> operator can
+be an expression. For example, given these declarations:
+<p>
+
+<blockquote><pre>
+<b>int</b> i;    <font color="#003399"><i>/* uninitialized */</i></font>
+<b>int</b> j;    <font color="#003399"><i>/* uninitialized */</i></font>
+<b>double</b> d; <font color="#003399"><i>/* uninitialized */</i></font>
+</pre></blockquote>
+
+This is the result of applying the <tt><b>sizeof</b></tt> operator to these expressions:
+
+<blockquote><pre>
+sizeof(i + j) is 4            (int)
+sizeof(i * j - 20) is 4       (int)
+sizeof(i * j * d) is 8        (double)
+sizeof(i + 2.0) is 8          (double)
+sizeof(10 + 3.2F - 5.4) is 8  (double)
+</pre></blockquote>
+
+Note that the <tt><b>sizeof</b></tt> operator doesn't use the values of the variables.
+It's just looking at the types. (Which is why using uninitialized variables is not a problem.)
+
+	
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+One-Dimensional Arrays
+</p>
+
+An array is an <i>aggregate</i> data structure. This means that it consists of multiple values, all
+of which are the same type. Contrast this to <i>scalar</i> data types like <tt><b>float</b></tt> and
+<tt><b>int</b></tt>, which are single values. Each value in an array is called an <i>element</i>.
+<p>
+Because all of the values in an array have the same type, an array is called a <i>homogeneous</i> data
+structure. To declare an array, you must specify an additional piece of information: the size.
+<p>
+The general form is:
+
+<blockquote><pre>
+<i>type</i> <i>identifier</i>[<i>non-negative_compile-time-integer_constant</i>];
+</pre></blockquote>
+
+This declares an array of 10 integers. The array is called <i>a</i> and has room for 10 elements:
+
+<blockquote><pre>
+<b>int</b> a[10]; <font color="#003399"><i>/* a is an <b>array</b> of <b>10</b> <b>integers</b> */</i></font>
+</pre></blockquote>
+
+Visually, we can think of the array in memory like this:
+<blockquote><pre>
+<img src="Arrays-a-1.png">
+</pre></blockquote>
+
+Also, like local scalar variables, the values of the array are undefined:
+
+<blockquote><pre>
+<img src="Arrays-a-2.png">
+</pre></blockquote>
+
+
+
+Examples:
+<blockquote><pre>
+<b>int</b> touchdowns[10];     <font color="#003399"><i>/* array of 10 integers, 40 bytes */</i></font>
+<b>float</b> distances[20];    <font color="#003399"><i>/* array of 20 floats, 80 bytes   */</i></font>
+<b>double</b> temperatures[2]; <font color="#003399"><i>/* array of 2 doubles, 16 bytes   */</i></font>
+</pre></blockquote>
+
+Visually:
+<blockquote><pre>
+<img src="Arrays-touchdowns.png"><br>
+<img src="Arrays-distances.png"><br>
+<img src="Arrays-temperatures.png">
+</pre></blockquote>
+
+
+The <tt><b>sizeof</b></tt> operator will also determine number of bytes required for an array. Examples:
+<p>
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><th>Code</th><th>Output</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> touchdowns[10];
+<b>float</b> distances[20];
+<b>double</b> temperatures[2];
+
+printf(<font color="#9933CC">&quot;sizeof(touchdowns) is %u\n&quot;</font>, <b>sizeof</b>(touchdowns));
+printf(<font color="#9933CC">&quot;sizeof(distances) is %u\n&quot;</font>, <b>sizeof</b>(distances));
+printf(<font color="#9933CC">&quot;sizeof(temperatures) is %u\n&quot;</font>, <b>sizeof</b>(temperatures));
+</pre></blockquote>
+</td>
+<td>
+<xblockquote><pre>
+
+
+
+
+sizeof(touchdowns) is 40
+sizeof(distances) is 80
+sizeof(temperatures) is 16
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Technically speaking, these are called <i>static</i> arrays because the size is determined at compile-time and their
+size cannot change. Later, we will learn about <i>dynamic</i> arrays. Dynamic arrays can change their sizes (grow and shrink)
+at runtime.
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Accessing Array Elements
+</p>
+
+<ul>
+<li>The name for the array applies to the <i>entire</i> array; all of the elements. 
+<li>Each individual element is anonymous, in that it doesn't have a name. 
+<li>So how do we access these elements if they don't have a name?
+<li>We access them as <i>offsets</i> into the array.
+<li>The first element has an offset of 0. (The offset is also called an <i>index</i>.)
+<li>Arrays in C are known as zero-based arrays (since they start at index 0).
+<center>
+<blockquote>
+	<p class="technote">Note that the addresses shown below are completely arbitrary and for discussion purposes only.</p>
+</blockquote>
+</center>
+</ul>
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="center">
+<td>
+<blockquote><pre>
+<img src="Arrays-a-3.png"><br>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Arrays-address-subscript-1.png"><br>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+Most work with arrays is done with some kind of looping construct:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th>Assigning values to each element</th><th>Printing out the values</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> a[10];
+<b>int</b> i;
+<b>for</b> (i = 0; i &lt; 10; i++)
+  a[i] = i * 2;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>for</b> (i = 0; i &lt; 10; i++)
+  printf(<font color="#9933CC">&quot;%i  &quot;</font>, a[i]);
+
+  
+<b>Output</b>: 0  2  4  6  8  10  12  14  16  18
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote>
+<p class="technote"><big><big>
+It is crucial that you understand that there is absolutely, positively no boundary checking when reading/writing an array.
+Your program is completely undefined in the event you read/write out of bounds (even if it <i>appears</i> to work correctly).
+</big></big>
+</p>
+</blockquote>
+
+Writing past the end of the array:
+<blockquote><pre>
+<b>int</b> a[10];
+<b>int</b> i;
+<b>for</b> (i = 0; i &lt; 15; i++)
+  a[i] = i * 2;
+</pre></blockquote>
+
+The output at runtime:
+<blockquote><pre>
+     21 [main] a 3672 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+    546 [main] a 3672 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+     21 [main] a 3672 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+    546 [main] a 3672 open_stackdumpfile: Dumping stack trace to a.exe.stackdump
+  63187 [main] a 3672 _cygtls::handle_exceptions: Exception: STATUS_ACCESS_VIOLATION
+  68303 [main] a 3672 _cygtls::handle_exceptions: Error while dumping state (probably corrupted stack)
+</pre></blockquote>
+
+
+Note that <i>undefined</i> means just that. This similar code may or may not result in an infinite loop:
+<br><br>
+
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th>Code</th><th>Possible memory layout</th></tr>
+<tr></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>int</b> a[10];
+
+  <font color="#003399"><i>/* initialize elements WRONG */</i></font>
+<b>for</b> (i = 0; i <font color="red"><b>&lt;=</b></font> 10; i++)
+  a[i] = 0;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<img src="Arrays-iloop-1.png"><br>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Arrays and looping go hand-in-hand. 
+
+
+<blockquote>
+<table border=0 cellspacing=10 cellpadding=10>
+<tr><th><tt>for</tt></th><th><tt>while</tt></th><th><tt>while</tt> (compact)</th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> i;
+<b>int</b> a[10];
+
+<b>for</b> (i = 0; i &lt; 10; i++)
+  a[i] = 0;
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 0;
+<b>int</b> a[10];
+
+<b>while</b> (i &lt; 10)
+{
+  a[i] = 0;
+  i++;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>int</b> i = 0;
+<b>int</b> a[10];
+
+<b>while</b> (i &lt; 10)
+  a[i++] = 0;
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+Unlike scalar types, you can't assign one array to another. This confuses many new C programmers.
+Instead, you must "manually" copy each element from one array to the other:
+
+<blockquote><pre>
+<b>void</b> assign1(<b>void</b>)
+{
+  <b>#define</b> SIZE 10
+
+  <b>int</b> a[SIZE]; <font color="#003399"><i>/* 10 integers */</i></font>
+  <b>int</b> b[SIZE]; <font color="#003399"><i>/* 10 integers */</i></font>
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* set elements to i squared */</i></font>
+    <font color="#003399"><i>/* 0, 1, 4, 9, 16, etc...    */</i></font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    b[i] = i * i; 
+
+    <font color="#003399"><i>/* Assign elements of b to a */</i></font>
+    <font color="#003399"><i>/* This is not legal         */</i></font>
+  <font color="red"><b>a = b;</b></font>
+
+    <font color="#003399"><i>/* Assign elements of b to a    */</i></font>
+    <font color="#003399"><i>/* This is how to assign arrays */</i></font>
+  <b>for</b> (i = 0; i &lt; SIZE; i++)
+    a[i] = b[i];
+}
+</pre></blockquote>
+
+<p class="SectionHeader">
+Initializing Arrays
+</p>
+
+When we declare an array and provide its size, the array is called a <i>static array</i>. The size of the array is set in stone and
+will never change. Ever. 
+<p>
+We can perform static initialization of an array:
+
+<blockquote><pre>
+<b>void</b> some_function(<b>void</b>)
+{
+  <b>int</b> array1[5] = {1, 2, 3, 4, 5};  <font color="#003399"><i>/* All elements are initialized */</i></font>
+  ...
+}
+</pre></blockquote>
+
+
+In partial initialization, if we "run out" of initializers, the remaining elements are set to 0
+(they are <b>NOT</b> undefined):
+<blockquote><pre>
+<b>int</b> array3[5] = {1, 2, 3};          <font color="#003399"><i>/* 1, 2, 3, 0, 0 */</i></font>
+</pre></blockquote>
+
+However, it is an error to provide too many initializers:
+<blockquote><pre>
+<b>int</b> array4[5] = {1, 2, 3, 4, 5, 6}; <font color="#003399"><i>/* error: too many initializers */</i></font>
+</pre></blockquote>
+
+C has a convenient feature that allows us to leave the size of the array empty. The compiler automatically
+fills in the size based on the number of initializers provided:
+<blockquote><pre>
+<b>int</b> array5[] = {1, 2, 3};          <font color="#003399"><i>/* array5 has 3 elements */</i></font>
+<b>int</b> array6[] = {1, 2, 3, 4, 5, 6}; <font color="#003399"><i>/* array6 has 6 elements */</i></font>
+</pre></blockquote>
+
+
+A very convenient (and efficient) way to initialize all elements to 0:
+<blockquote><pre>
+<b>int</b> array3[50] = {0};             <font color="#003399"><i>/* All 50 elements are set to 0 */</i></font>
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+	
+Example: Given a date in the form of <tt><b>month/day</b></tt>, print out the day of the year. For example:
+<blockquote><pre>
+Day of Year for 1/1 is 1
+Day of Year for 2/1 is 32
+Day of Year for 5/13 is 133
+Day of Year for 12/31 is 365
+</pre></blockquote>
+
+<pre class="sourcecode"><code><b>void</b> DayOfYear(<b>void</b>)
+{
+    <font color="#003399"><i>/* The number of days in each month, assume non-leap year */</i></font>
+  <b>int</b> jan = 31;  <b>int</b> feb = 28;  <b>int</b> mar = 31;
+  <b>int</b> apr = 30;  <b>int</b> may = 31;  <b>int</b> jun = 30;
+  <b>int</b> jul = 31;  <b>int</b> aug = 31;  <b>int</b> sep = 30;
+  <b>int</b> oct = 31;  <b>int</b> nov = 30;  <b>int</b> dec = 31;
+  
+  <b>int</b> month, day; <font color="#003399"><i>/* Current month and day */</i></font>
+  <b>int</b> count = 0;  <font color="#003399"><i>/* Total count of days   */</i></font>
+
+    <font color="#003399"><i>/* Prompt the user for month/day */</i></font>
+  printf(<font color="#9933CC">&quot;Enter a date (m/d): &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d/%d&quot;</font>, &amp;month, &amp;day);
+
+    <font color="#003399"><i>/* Add up the days in previous months      */</i></font>
+    <font color="#003399"><i>/* <b>break</b> statements intentionally missing */</i></font>
+  <b>switch</b> (month)
+  {
+    <b>case</b> 12: 
+      count += nov;
+    <b>case</b> 11: 
+      count += oct;
+    <b>case</b> 10: 
+      count += sep;
+    <b>case</b>  9: 
+      count += aug;
+    <b>case</b>  8: 
+      count += jul;
+    <b>case</b>  7: 
+      count += jun;
+    <b>case</b>  6: 
+      count += may;
+    <b>case</b>  5: 
+      count += apr;
+    <b>case</b>  4: 
+      count += mar;
+    <b>case</b>  3: 
+      count += feb;
+    <b>case</b>  2: 
+      count += jan;
+
+    <b>default</b>: 
+      count += day; <font color="#003399"><i>/* Add in this month's days */</i></font>
+  }
+
+    <font color="#003399"><i>/* Format and print out the results */</i></font>
+  printf(<font color="#9933CC">&quot;The date %i/%i is day number %i\n&quot;</font>, month, day, count);
+}
+</code></pre>
+
+The same problem using an array:
+
+<pre class="sourcecode"><code><b>void</b> DayOfYear(<b>void</b>)
+{
+    <font color="#003399"><i>/* The number of days in each month */</i></font>
+  <b>int</b> months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+  <b>int</b> month, day; <font color="#003399"><i>/* Current month and day */</i></font>
+  <b>int</b> count = 0;  <font color="#003399"><i>/* Total count of days   */</i></font>
+  <b>int</b> i;          <font color="#003399"><i>/* Loop counter          */</i></font>
+
+    <font color="#003399"><i>/* Prompt the user for month/day */</i></font>
+  printf(<font color="#9933CC">&quot;Enter a date (mm/dd): &quot;</font>);
+  scanf(<font color="#9933CC">&quot;%d/%d&quot;</font>, &amp;month, &amp;day);
+
+    <font color="#003399"><i>/* Add up the days in previous months */</i></font>
+  <b>for</b> (i = 0; i &lt; month - 1; i++)
+    count += months[i];
+
+    <font color="#003399"><i>/* Add in this month's days */</i></font>
+  count += day;
+
+    <font color="#003399"><i>/* Format and print out the results */</i></font>
+  printf(<font color="#9933CC">&quot;The date %i/%i is day number %i\n&quot;</font>, month, day, count);
+}
+</code></pre>
+
+One final note about arrays: If you initialize array elements, the initializers must
+be constant expressions, i.e. their values must be known at compile-time.
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>int</b> foo(<b>int</b> a, <b>int</b>  b)
+{
+  <b>return</b> a + b;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+    <font color="#003399"><i>/* Not allowed in C89/90 */</i></font>
+  <b>int</b> array[3] = {1, 2, foo(3, 4)};
+
+  <b>return</b> array[0];
+}
+</code></pre>
+
+Warnings from gcc:
+<blockquote><pre>
+warning: initializer element is not computable at load time [-Wpedantic]
+</pre></blockquote>
+
+Warnings from clang:
+<blockquote><pre>
+warning: initializer for aggregate is not a compile-time constant [-Wc99-extensions]
+</pre></blockquote>
+
+Warnings from Microsoft's compiler:
+<blockquote><pre>
+warning C4204: nonstandard extension used: non-constant aggregate initializer
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="PASSINGARRAYS"></a>
+<p class="SectionHeader">
+Passing Arrays to Functions
+</p>
+
+<!--http://dit805.digipen.edu/~mmead/www/Courses/CS120/Pointers-1.html#PASSINGARRAYS-->
+Arrays in C are treated differently than other types:
+<ul>
+  <li>In C, we can't pass an entire array to a function.</li>
+  <li>We can only pass the address of the first element.</li>
+  <ul>
+    <li>This means that the receiving function <b>has no information about the size of the array</b>.</li>
+    <li>Remember, when we pass the address of some data, it is possible for the function receiving the 
+address to modify the data directly (as opposed to modifying a <i>copy</i> of the data).</li>
+    <li>This is exactly how <tt>scanf</tt> is able to modify the variables we pass to it.</li>
+  </ul>
+  <li>Generally, when we pass an array to a function, we have to pass additional information that
+    tells the function the size of the array (i.e. the number of elements it holds.)</li>
+    <ul>
+      <li>This is usually just another integer parameter that holds the size of the array.</li>
+    </ul>
+  <li>Another name for address is <i>pointer</i>, so we generally say we're passing a pointer
+    to the first element of the array. (We'll talk a lot more about pointers later.)</li>
+</ul>
+
+<p>
+Let's see how this might be a problem.
+<p>
+This example works as expected (It finds the largest element in an array of integers). 
+A pointer to the first element is passed to the function
+<i>find_largest</i>, along with the size (number of elements) in the array. Since the function
+has a pointer to the first element, it can access every element of the array using the 
+subscript operator:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6};
+  <b>int</b> largest;
+
+  printf(<font color="#9933CC">&quot;Array before:\n&quot;</font>);
+  print_array(a, 8);
+
+  largest = find_largest(a, 8);
+  printf(<font color="#9933CC">&quot;Largest value: %i\n&quot;</font>, largest);
+
+  printf(<font color="#9933CC">&quot;Array after:\n&quot;</font>);
+  print_array(a, 8);
+
+  <b>return</b> 0;
+}
+
+<b>Output:</b>
+Array before:
+    4    5    3    9    5    2    7    6
+Largest value: 9
+Array after:
+    4    5    3    9    5    2    7    6
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Assumes there is at least */</i></font>
+<font color="#003399"><i>/* one element in the array  */</i></font>
+<b>int</b> find_largest(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest */</i></font>
+
+  <b>for</b> (i = 1; i &lt; size; i++)
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i];  <font color="#003399"><i>/* found a larger one */</i></font>
+
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+Let's modify the function to do something unexpected.
+<p>
+Now, the function is modifying the original data (not a copy). It seems that passing a pointer
+to the data, rather than a copy, could be dangerous if the function does something we don't
+expect.
+<p>
+Passing a pointer to a function allows the function to modify our data <i>even if we don't want it to</i>:
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+<font color="#003399"><i>/* Modifies the array the was passed in!! */</i></font>
+<b>int</b> find_largest_BAD(<b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest */</i></font>
+  a[0] = 0;       <font color="#003399"><i>/* <b>change first element!</b> */</i></font>
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i];  <font color="#003399"><i>/* found a larger one */</i></font>
+    a[i] = 0;      <font color="#003399"><i>/* <b>set element to 0!!</b> */</i></font>
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+<b>Output:</b>
+Array before:
+    4    5    3    9    5    2    7    6
+Largest value: 9
+Array after:
+    0    0    0    0    0    0    0    0
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+There is a solution to this problem. 
+<ul>
+  <li>If we need to pass an array to a function, we must pass a pointer (no way around it).</li>
+  <ul>
+    <li>But this gives the function the ability to mess with the data. (We may not be 
+      comfortable with that.)</li>
+  </ul>
+  <li>If we want to prevent the function from modifying the data in the array:</li>
+  <ul>
+    <li>Use the <b><tt>const</tt></b> keyword to prevent the function from modify the elements
+     of the array.</li>
+    <li>This makes the elements <i>constant</i>, meaning it is illegal to modify them:</li>
+  </ul>
+
+<blockquote><pre>
+<font color="#003399"><i>/* Unable to modify the array since it's const */</i></font>
+<b>int</b> find_largest_BAD(<font color="blue"><b>const</b></font> <b>int</b> a[], <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>int</b> max = a[0]; <font color="#003399"><i>/* assume 1st is largest       */</i></font>
+  <font color="red"><b>a[0] = 0;</b></font>       <font color="#003399"><i>/* <b>ILLEGAL: elements are const</b> */</i></font>
+  <b>for</b> (i = 1; i &lt; size; i++)
+  {
+    <b>if</b> (a[i] &gt; max) 
+      max = a[i]; <font color="#003399" ><i>/* found a larger one          */</i></font>
+    <font color="red"><b>a[i] = 0;</b></font>     <font color="#003399"><i>/* <b>ILLEGAL: elements are const</b> */</i></font>
+  }
+  <b>return</b> max;
+}
+</pre></blockquote>
+
+<b>Compiler errors:</b>
+<blockquote><pre>
+main.c: In function `find_largest_BAD':
+main.c:161: error: assignment of read-only location
+main.c:166: error: assignment of read-only location
+</pre></blockquote>
+
+</ul>
+
+Going back to the original non-const version of this function:
+<blockquote><pre>
+<b>int</b> find_largest(<b>int</b> a[], <b>int</b> size);
+</pre></blockquote>
+
+If we really don't want our array to change, we declare it with the <tt><b>const</b></tt> keyword:
+
+<blockquote><pre>
+<b>int</b> main(<b>void</b>)
+{
+  <b>const</b> <b>int</b> a[] = {4, 5, 3, 9, 5, 2, 7, 6}; <font color="#003399"><i>/* Elements are constant (can't be changed)  */</i></font>
+  <b>int</b> largest = find_largest(a, 8);         <font color="#003399"><i>/* <b>ILLEGAL: Function expects non-const array</b> */</i></font>
+  
+  <b>return</b> 0;
+}
+</pre></blockquote>
+
+Compiler error:
+<blockquote><pre>
+main.c:185: warning: passing arg 1 of `find_largest' discards qualifiers from pointer target type
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+<b>Important</b>: When you create functions that will accept arrays as parameters, be sure to mark them as <tt><b>const</b></tt> 
+if you do not intend to modify them. If you don't make them <tt><b>const</b></tt>, a lot of code will not be able to use your
+functions.
+</p>
+</blockquote>
+<!--
+The <tt><b>const</b></tt> keyword can be used to protect the pointer as well as what's being pointed at (the pointee?).
+
+<p>
+<hr width="90%">
+<p>
+Never return a pointer to a local variable. Ever. In other words, don't do this:
+
+<blockquote><pre>
+<font color="#003399"><i>/* Function returns a pointer to an int */</i></font>
+<b>int</b> *foo(<b>void</b>)
+{
+  <b>int</b> i = 10; <font color="#003399"><i>/* i is local (on the stack) */</i></font>
+  <b>return</b> &amp;i;  <font color="#003399"><i>/* This will be undefined!!  */</i></font>
+}
+</pre></blockquote>
+
+Fortunately, most compilers today will point out the sheer insanity of your code:
+<blockquote><pre>
+main.c: In function `foo':
+main.c:174: warning: function returns address of local variable
+</pre></blockquote>
+-->
+
+<div style="display: none;">
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Multidimensional Arrays
+</p>
+
+
+An array with more than one <i>dimension</i> is called a <i>multidimensional array</i>. 
+
+<blockquote><pre>
+<b>int</b> matrix[5][10];  <font color="#003399"><i>/* array of 5 arrays of 10 int; a 5x10 array of int */</i></font>
+</pre></blockquote>
+
+Building up multidimensional arrays:
+
+<blockquote><pre>
+<b>int</b> a;            <font color="#003399"><i>/* int                                     */</i></font>
+<b>int</b> b[10];        <font color="#003399"><i>/* array of 10 int                         */</i></font>
+<b>int</b> c[5][10];     <font color="#003399"><i>/* array of 5 arrays of 10 int             */</i></font>
+<b>int</b> d[3][5][10];  <font color="#003399"><i>/* array of 3 arrays of 5 arrays of 10 int */</i></font>
+
+<b>int</b> e[10][5][3];  <font color="#003399"><i>/* array of 10 arrays of 5 arrays of 3 int */</i></font>
+</pre></blockquote>
+
+
+<b>Storage order</b><br>
+Arrays in C are stored in <i>row major</i> order. This means that the rightmost subscript varies the
+most rapidly.
+<p>
+
+Given the declaration of <i>points</i>:
+
+<blockquote><pre>
+<b>double</b> points[3][4];
+</pre></blockquote>
+
+<ul>
+<li>An array of 3 arrays of 4 doubles
+<li>A 3x4 array of doubles
+</ul>
+
+We could diagram the arrays like this:
+
+<blockquote><pre>
+<img src="PointsArray-0.gif">
+</pre></blockquote>
+
+With details:
+<blockquote><pre>
+<img src="PointsArray-1.gif">
+</pre></blockquote>
+
+Or draw it contiguously (as it really is in memory):
+
+<blockquote><pre>
+ <img src="PointsArray-2.gif">
+</pre></blockquote>
+
+Or horizontally:
+<blockquote><pre>
+<img src="PointsArray-3.gif">
+</pre></blockquote>
+
+
+<!-- 
+
+We can use <i>points</i> in various expressions. 
+
+<blockquote><pre>
+Expression                   Type                           Description
+------------------------------------------------------------------------------
+points           array of 3 pointers to an array of doubles     entire matrix
+*points          pointer to a double                first row, first column
+**points         double                             first row, second column
+points[1]        pointer to a double                second row, first column
+*points[1]       double                             second row, first column
+points + 1       pointer to an array of 4 doubles   second row
+*points + 1      pointer to a double                first row, second column
+points[1][1]     double                             second row, second column
+points[1] + 1    pointer to a double                second row, second column
+</pre></blockquote>
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p>
+<hr width="90%">
+<p>
+
+Giving concrete values to the 2D array of doubles will help visualize the arrays. Note
+how the initialization syntax helps us visualize the "array of arrays" notion:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+</pre></blockquote>
+
+or even formatted as a 3x4 matrix:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = { 
+                        {1.0,  2.0,  3.0,  4.0}, 
+                        {5.0,  6.0,  7.0,  8.0}, 
+                        {9.0, 10.0, 11.0, 12.0}
+                      };
+</pre></blockquote>
+
+<!--
+This will work in most compilers, but you may get warnings:
+
+<blockquote><pre>
+  <b>double</b> points[3][4] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
+</pre></blockquote>
+-->
+
+Diagram:
+
+
+<blockquote><pre>
+<img src="PointsArray-4.gif">
+</pre></blockquote>
+
+
+Some expressions involving <i>points</i>:
+
+
+<blockquote><pre>
+Addresses                             Type
+-------------------------------------------------------------
+points        = 0012F5A4    An array of 3 arrays of 4 doubles
+&points       = 0012F5A4    A pointer to an array of 3 arrays of 4 doubles
+points[0]     = 0012F5A4    An array of 4 doubles
+&points[0]    = 0012F5A4    A pointer to an array of 4 doubles
+*points       = 0012F5A4    An array of 4 doubles
+&points[0][0] = 0012F5A4    A pointer to a double
+
+Contents
+------------------------
+**points      = 1.000000
+*points[0]    = 1.000000
+points[0][0]  = 1.000000
+
+Sizes
+-------------------------
+sizeof(points)       = 96
+sizeof(*points)      = 32
+sizeof(**points)     =  8
+sizeof(points[0])    = 32
+sizeof(points[0][0]) =  8
+</pre></blockquote>
+
+
+<a href="2DCode-1.html">Code</a> to display above tables.
+<p>
+
+
+<!--
+<p class="technote">
+Self-check:
+</p>
+
+Given this declaration:
+
+<blockquote><pre>
+<b>double</b> points[3][4];
+</pre></blockquote>
+
+which of the statements are valid? warnings/errors? (You need to look at the types on both sides
+of the assignment)
+
+
+<blockquote><pre>
+<ol>
+<li> <b>double</b> *pd0 = points[0][1];  
+<li> <b>double</b> *pd1 = &amp;points[0][1]; 
+<li> <b>double</b> *pd2 = &amp;points[5][7]; 
+<li> <b>double</b> *pd3 = &amp;**points;     
+<li> <b>double</b> (*p4d0)[4] = points[0]; 
+<li> <b>double</b> (*p4d1)[4] = &amp;points[0];
+<li> <b>double</b> (*p4d2)[4] = (<b>double</b> (*)[4])points[0];    
+<li> <b>double</b> (*p4d3)[4] = (<b>double</b> (*)[4])&amp;points[0][0];
+<li> <b>double</b> (*p4d4)[] = &amp;points[0]; 
+<li> <b>double</b> (*p4d5)[3][4] = points; 
+<li> <b>double</b> (*p4d6)[3][4] = &amp;points;
+<li> <b>double</b> (*p4d7)[][4] = &amp;points; 
+<li> <b>double</b> (*p4d8)[][] = &amp;points;  
+</ol>
+</pre></blockquote>
+-->
+
+<!--
+<blockquote><pre>
+<ol>
+<li>  <b>double</b> *pd0 = points[0][1];  <font color="#003399"><i>// error: illegal indirection (pointer to double != double)</i></font>
+<li>  <b>double</b> *pd1 = &amp;points[0][1]; <font color="#003399"><i>// OK, (pointer to double = pointer to double) </i></font>
+<li>  <b>double</b> *pd2 = &amp;points[5][7]; <font color="#003399"><i>// OK, but runtime problem</i></font>
+<li>  <b>double</b> *pd3 = &amp;**points;     <font color="#003399"><i>// OK</i></font>
+
+<li>  <b>double</b> (*p4d0)[4] = points[0]; <font color="#003399"><i>// warning: different levels of indirection </i></font>
+                                 <font color="#003399"><i>//   pointer to array of 4 doubles != array of 4 doubles</i></font>
+
+<li>  <b>double</b> (*p4d1)[4] = &amp;points[0];                   <font color="#003399"><i>// OK, pointer to an array of 4 doubles</i></font>
+<li>  <b>double</b> (*p4d2)[4] = (<b>double</b> (*)[4])points[0];     <font color="#003399"><i>// OK, cast to pointer to array of 4 doubles</i></font>
+<li>  <b>double</b> (*p4d3)[4] = (<b>double</b> (*)[4])&amp;points[0][0]; <font color="#003399"><i>// OK, cast to pointer to array of 4 doubles</i></font>
+
+<li>  <b>double</b> (*p4d4)[] = &amp;points[0];   <font color="#003399"><i>// warning: suspicious pointer conversion </i></font>
+<li>  <b>double</b> (*p4d5)[3][4] = points;   <font color="#003399"><i>// warning: pointer to 3x4 array != 3x4 array  OR</i></font>
+                                   <font color="#003399"><i>//   pointer to 3x4 array != pointer to array of 4 doubles</i></font>
+
+<li>  <b>double</b> (*p4d6)[3][4] = &amp;points;  <font color="#003399"><i>// OK</i></font>
+<li>  <b>double</b> (*p4d7)[][4] = &amp;points;   <font color="#003399"><i>// warning: different subscripts</i></font>
+<li>  <b>double</b> (*p4d8)[][] = &amp;points;    <font color="#003399"><i>// error: missing subscript</i></font>
+</pre></blockquote>
+-->
+<!--
+
+<p>
+<hr width="90%">
+<p>
+
+<p class="technote">
+Self-check:
+</p>
+
+Given this code:
+
+<blockquote><pre>
+<b>double</b> points[3][4] = { {1.0,  2.0,  3.0,  4.0}, 
+                        {5.0,  6.0,  7.0,  8.0}, 
+                        {9.0, 10.0, 11.0, 12.0}};
+                        
+<b>double</b> *pd = &amp;points[0][1];
+<b>double</b> (*p4d)[4] = &amp;points[0];
+</pre></blockquote>
+
+What does this code display?
+
+<blockquote><pre>
+pd = &amp;points[0][1];
+printf(<font color="#9933CC">&quot;First value is %g\n&quot;</font>, *pd);
+printf(<font color="#9933CC">&quot;Second value is %g\n&quot;</font>, *++pd);
+printf(<font color="#9933CC">&quot;Third value is %g\n\n&quot;</font>, *++pd);
+</pre></blockquote>
+
+What does this code display?
+
+<blockquote><pre>
+p4d = &amp;points[0];
+printf(<font color="#9933CC">&quot;First value is %g\n&quot;</font>, **p4d);
+printf(<font color="#9933CC">&quot;Second value is %g\n&quot;</font>, **++p4d);
+printf(<font color="#9933CC">&quot;Third value is %g\n&quot;</font>, **++p4d);
+</pre></blockquote>
+
+And this?
+
+<blockquote><pre>
+pd = &amp;points[0][1];
+printf(<font color="#9933CC">&quot;First value is %g\n&quot;</font>, *pd);
+printf(<font color="#9933CC">&quot;Second value is %g\n&quot;</font>, ++*pd);
+printf(<font color="#9933CC">&quot;Third value is %g\n&quot;</font>, ++*pd);
+printf(<font color="#9933CC">&quot;points[0][1] is %g\n&quot;</font>, points[0][1]);
+</pre></blockquote>
+
+<xblockquote>
+<p class="technote">
+Traversing multi-dimension <b>static</b> arrays using simple pointers to traverse row boundaries
+is known as <i>flattening</i> the array and is technically illegal according to the Standard. However,
+it usually works, but you should be aware of the non-standard behavior.
+<p>
+</xblockquote>
+
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Accessing Elements in a 2-D Array
+</p>
+
+<blockquote><pre>
+<b>short</b> matrix[3][8]; <font color="#9933CC">/* 24 shorts, 3x8 array */</font>
+</pre></blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+matrix
+</pre>
+</td>
+<td width=40></td>
+<td>
+<img src="2D-Array-5.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+  matrix[0]
+*(matrix + 0)
+   *matrix
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-2.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+  matrix[1]
+*(matrix + 1)
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-3.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+  matrix[2]
+*(matrix + 2)
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-4.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<pre>
+     matrix[1][2]
+*(*(matrix + 1) + 2)
+</pre>
+</td>
+<td width=10></td>
+<td>
+<img src="2D-Array-1.gif">
+</td>
+</tr>
+</table>
+</blockquote>
+
+Remember the rule:
+
+<blockquote><pre>
+array[i] == *(array + i)
+</pre></blockquote>
+
+where:
+<ul>
+<li><i>array</i> is an array of any type
+<li><i>i</i> is any integer expression
+</ul>
+
+With multidimensional arrays, the rule becomes:
+
+<blockquote><pre>
+array[i][j] == *(*(array + i) + j)
+array[i][j][k] == *(*(*(array + i) + j) + k)
+etc...
+</pre></blockquote>
+
+Pointer arithmetic is used to locate each element. (Base address + Offset)
+<p>
+Given this declaration:
+
+<blockquote><pre>
+<b>short</b> matrix[3][8];
+</pre></blockquote>
+
+The value of <b>sizeof</b> varies with the argument:
+
+<blockquote><pre>
+Sizes
+-------------------------
+sizeof(matrix)       = 48   ; entire matrix
+sizeof(matrix[0])    = 16   ; first row
+sizeof(matrix[1])    = 16   ; second row
+sizeof(matrix[0][0]) = 2    ; first short element
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Passing 2D Arrays to Functions
+</p>
+
+
+Putting values in the matrix and printing it:
+
+<blockquote><pre>
+Fill3x8Matrix(matrix);  <font color="#003399"><i>/* Put values in the matrix */</i></font>
+Print3x8Matrix(matrix); <font color="#003399"><i>/* Print the matrix         */</i></font>
+</pre></blockquote>
+
+
+Implementations:
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      matrix[i][j] = i * 8 + j + 1; 
+}
+
+<b>void</b> Print3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      printf(<font color="#9933CC">&quot;%i &quot;</font>, matrix[i][j]);
+  printf(<font color="#9933CC">&quot;\n&quot;</font>);
+}
+</pre></blockquote>
+
+These functions could have specified the parameters this way: (<a href="../../docs/OperatorPrecedence.html">precedence chart</a>)
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> (*matrix)[8])
+<b>void</b> Print3x8Matrix(<b>short</b> (*matrix)[8])
+</pre></blockquote>
+
+<!--
+or 
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[3][8]);
+<b>void</b> Print3x8Matrix(<b>short</b> matrix[3][8]);
+</pre></blockquote>
+-->
+
+Why are they not declared like this?:
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][]);
+<b>void</b> Print3x8Matrix(<b>short</b> matrix[][]);
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p class="technote">
+The compiler needs to know the size of each <i>element</i> in each dimension. It doesn't need to 
+(and can't) know the number of elements in the first dimension. The size of each element
+in the first dimension is determined by the other dimensions and the <i>type</i> of the elements.
+</p>
+
+
+<blockquote><pre>
+<b>void</b> Test(<b>int</b> a[], <b>int</b> b[][6], <b>int</b> c[][3][5])
+{
+  printf(<font color="#9933CC">&quot;a = %p, b = %p, c = %p\n&quot;</font>, (<b>void</b> *)a, (<b>void</b> *)b, (<b>void</b> *)c);
+  a++;
+  b++;
+  c++;
+  printf(<font color="#9933CC">&quot;a = %p, b = %p, c = %p\n&quot;</font>, (<b>void</b> *)a, (<b>void</b> *)b, (<b>void</b> *)c);
+}
+
+<b>Output:</b>
+a = 0012FEE8, b = 0012FF38, c = 0012FEFC  
+a = 0012FEEC, b = 0012FF50, c = 0012FF38  
+</pre></blockquote>
+
+In decimal:
+
+<blockquote><pre>
+<b>Output:</b>
+a = 1244904, b = 1244984, c = 1244924
+a = 1244908, b = 1245008, c = 1244984
+</pre></blockquote>
+
+The function <b>Test</b> is equivalent to this:
+
+<blockquote><pre>
+<b>void</b> Test(<b>int</b> *a, <b>int</b> (*b)[6], <b>int</b> (*c)[3][5])
+</pre></blockquote>
+
+Other methods for filling the matrix use explicit pointer arithmetic:
+
+<blockquote><pre>
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      *(*(matrix + i) + j) = i * 8 + j + 1; 
+}
+
+<b>void</b> Fill3x8Matrix(<b>short</b> matrix[][8])
+{
+  <b>int</b> i, j;
+  <b>for</b> (i = 0; i &lt; 3; i++)
+  {
+    <b>short</b> *pmat = *(matrix + i);
+    <b>for</b> (j = 0; j &lt; 8; j++)
+      *pmat++ = i * 8 + j + 1;
+  }
+}
+</pre></blockquote>
+
+Assuming this definition:
+<blockquote><pre>
+<b>short</b> matrix[3][8]; <font color="#9933CC">/* 24 shorts, 3x8 array */</font>
+</pre></blockquote>
+
+and then filled with values:
+
+<blockquote><pre>
+<img src="2D-Array-6.gif">
+</pre></blockquote>
+
+How does the compiler calculate the address (offset) for the element below?
+
+<blockquote><pre>
+matrix[1][2];
+</pre></blockquote>
+
+
+Using address offsets we get:
+
+<blockquote><pre>
+&matrix[1][2] ==> &*(*(matrix + 1) + 2) ==> *(matrix + 1) + 2
+</pre></blockquote>
+
+
+<ol>
+<li><tt>matrix</tt> is an array of 3 arrays of 8 shorts.</li>
+<ul>
+  <li><tt>matrix + 1</tt> is a pointer to the second row.</li>
+  <li><tt>*(matrix + 1)</tt> is the second row (an array of 8 shorts).</li>
+  <li><tt>*(matrix + 1) + 2</tt> is a pointer to the 3rd element in the second row.</li>
+  <li><tt>*(*(matrix + 1) + 2)</tt> is the 3rd element in the second row (same as <tt>matrix[1][2]</tt>).</li>
+</ul>
+<li>First dimension - Each element of matrix is an array of 8 shorts, so each element is 16 bytes.
+<li>Second dimension - Each element of each element of matrix is a short, so it's 2 bytes.
+</ol>
+
+<!--
+So, if <b>matrix</b> is at address 100:
+
+<blockquote><pre>
+==> &matrix[1][2] 
+==> *(matrix + 1) + 2 
+==> *( base address + index1 * sizeof(elements1) ) + index2 * sizeof(elements2) 
+==> *(    100       +   1    *        16         ) +   2    *       2 
+==> 120
+</pre></blockquote>
+
+At compile-time, the compiler can actually reduce this to:
+
+<blockquote><pre>
+*(base-address + 16) + 4
+</pre></blockquote>
+
+-->
+
+Given these declarations:
+
+<blockquote><pre>
+<b>short</b> matrix[3][8]        
+<b>short</b> array[10]
+</pre></blockquote>
+
+We can calculate the size of any portion:
+
+<blockquote><pre>
+Expression             Meaning                 Size (bytes)
+-----------------------------------------------------------
+array                Entire array                  20
+array[]              Element in 1st dimension       2
+matrix               Entire array                  48
+matrix[]             Element in 1st dimension      16
+matrix[][]           Element in 2nd dimension       2
+</pre></blockquote>
+
+
+Recap:
+
+<ul>
+<li>The compiler needs to know the size of each of the <i>elements</i>, in each dimension.
+<li>Since the size of each dimension relies on the fundamental type (int, double, etc.) of
+the array(s), there is an implicit size specified. 
+<li>In a two-dimensional array, knowing the size of the second dimension (number of columns) and the 
+data type of the array is sufficient to perform pointer arithmetic on the first dimension.
+<li>This seemingly convoluted way of locating array elements is required since memory is
+laid out in one dimension by the compiler. The multiple dimension syntax (e.g. <tt>[][]</tt>) is just a convenience for the programmer.
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Dynamically Allocated 2D Arrays
+</p>
+
+
+Recall the 2D points static array and how a dynamically allocated array would look:
+<p>
+
+<table border=0 cellspacing=5>
+<tr>
+<td valign="top">
+<blockquote><pre>
+<b>double</b> points[3][4];
+
+
+<p>
+<img src="PointsArray-2.gif">
+</pre></blockquote>
+</td>
+<td>
+</td>
+<td valign="top">
+<blockquote><pre>
+<b>double</b> *pd = malloc(3 * 4 * <b>sizeof</b>(<b>double</b>));
+<p>
+<img src="PointsArrayDynamic-1.gif">
+</pre></blockquote>
+</td>
+</tr></table>
+
+Given a row and column:
+
+<blockquote><pre>
+<b>int</b> row = 1, column = 2;
+<b>double</b> value;
+</pre></blockquote>
+
+<ul>
+<li>The static 2D array can be accessed using subscripts, but the dynamic "2D array" can 
+only be indexed with a single subscript.
+<blockquote><pre>
+value = points[row][column]; <font color="#003399"><i>/* OK      */</i></font>
+value = pd[row][column];     <font color="#003399"><i>/* ILLEGAL */</i></font>
+</pre></blockquote>
+
+<li>We (the programmers) have to do all of the arithmetic to locate an element using two subscripts:
+<blockquote><pre>
+value = pd[row * 4 + column];
+</pre></blockquote>
+
+<li>The compiler is still doing some of the work for us:
+
+<blockquote><pre>
+value = *(address-of-pd + (row * 4 + column) * sizeof(double));
+</pre></blockquote>
+
+<li>What does the number <b>4</b> in the above calculations represent?
+
+<!--
+The number of elements in the first dimension.
+There are 3 elements in points, each element is an array of 4 doubles.
+-->
+</ul>
+
+
+If we want to use two subscripts on a dynamic 2D array, we have to set things up a little differently.
+<p>
+<hr width=90%>
+<p>
+Using these definitions from above:
+
+<blockquote><pre>
+<b>#define</b> ROWS 3
+<b>#define</b> COLS 4
+<b>double</b> *pd = malloc(ROWS * COLS * <b>sizeof</b>(<b>double</b>));
+</pre></blockquote>
+
+Create a variable that is a <i>pointer</i> to a <i>pointer</i> to a <b>double</b>
+
+<blockquote><pre>
+<b>double</b> **ppd;
+</pre></blockquote>
+
+Allocate an array of 3 (ROWS) pointers to doubles and point <i>ppd</i> at it:
+
+<blockquote><pre>
+ppd = malloc(ROWS * <b>sizeof</b>(<b>double</b> *));
+</pre></blockquote>
+
+<blockquote><pre>
+<img src="PointsArrayDynamic-2.gif">
+</pre></blockquote>
+
+
+
+Point each element of <i>ppd</i> at an array of 4 doubles:
+
+<blockquote><pre>
+ppd[0] = pd;
+ppd[1] = pd + 4;
+ppd[2] = pd + 8;
+</pre></blockquote>
+
+Of course, for a large array, or an array whose size is not known at compile time,
+you would want to set these in a loop:
+
+<blockquote><pre>
+<b>int</b> row;
+<b>for</b> (row = 0; row &lt; ROWS; row++)
+  ppd[row] = pd + (COLS * row);
+</pre></blockquote>
+
+
+
+This yields the diagram:
+
+<blockquote><pre>
+<img src="PointsArrayDynamic-3.gif">
+</pre></blockquote>
+
+Given a row and column, we can access elements through the single pointer or double pointer variable:
+
+<blockquote><pre>
+<b>int</b> row = 1, column = 3;
+<b>double</b> value;
+
+  <font color="#003399"><i>/* Access via double pointer using subscripting */</i></font>
+value = ppd[row][column];            
+
+  <font color="#003399"><i>/* Access via single pointer using pointer arithmetic        */</i></font>
+  <font color="#003399"><i>/* and/or subscripting. These statements are all equivalent. */</i></font>
+value = pd[row * COLS + column];
+value = *(pd + row * COLS + column);
+value = (pd + row * COLS)[column];
+</pre></blockquote>
+
+</div>
+
+<!--
+If you wanted to let the compiler do the work, you could do this:
+
+<blockquote><pre>
+<b>#define</b> ROWS 3
+<b>#define</b> COLS 4
+<b>double</b> *pd = malloc(ROWS * COLS * <b>sizeof</b>(<b>double</b>));
+
+  <font color="#003399"><i>/* ppd is a pointer to an array of 4 doubles (need the cast) on the right */</i></font>
+<b>double</b> (*ppd)[COLS] = (<b>double</b> (*)[COLS]) pd;
+</pre></blockquote>
+-->
+<br><br>
+</body>
+</html>
+
+<!--
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<tt><b></b></tt>
+-->
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+

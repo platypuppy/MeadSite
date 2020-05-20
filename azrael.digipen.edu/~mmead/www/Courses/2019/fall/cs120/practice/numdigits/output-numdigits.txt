@@ -1,0 +1,10 @@
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 1 is 1.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 42 is 2.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 555 is 3.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 1729 is 4.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 65535 is 5.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 142857 is 6.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 8675309 is 7.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 63288349 is 8.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 999999937 is 9.
+Enter an integer (1 to 2,147,483,647 without commas): The number of digits in 2147483647 is 10.

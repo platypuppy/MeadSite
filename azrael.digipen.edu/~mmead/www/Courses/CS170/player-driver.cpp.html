@@ -1,0 +1,346 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>driver.cpp</title>
+
+<style>
+	
+.hidden { 
+position: absolute; 
+top: -9999px; 
+}
+</style>
+
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;iostream&gt;</font>
+<font color="990099">#include &lt;vector&gt;</font>
+<font color="990099">#include &lt;ctime&gt;</font>
+<font color="990099">#include &lt;cstdlib&gt;</font>
+<font color="990099">#include &lt;cstdio&gt;</font>
+
+<font color="990099">#include &quot;Player.h&quot;</font>
+<font color="990099">#include &quot;Scout.h&quot;</font>
+<font color="990099">#include &quot;Soldier.h&quot;</font>
+<font color="990099">#include &quot;Pyro.h&quot;</font>
+
+<b>using</b> std::cout;
+<b>using</b> std::endl;
+<b>using</b> std::vector;
+
+<b>int</b> Random(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> r1 = <b>static_cast</b>&lt;<b>int</b>&gt;( std::rand() / 2 - 1 );
+  <b>return</b> r1 % (high - low + 1) + low;
+}
+
+ <font color="#003399"><i>//********************************************************************</i></font>
+<b>void</b> TestSimple1()
+{
+    <font color="#003399"><i>// No polymorphism</i></font>
+  Scout scout(<font color="#9933CC">&quot;Moe&quot;</font>, 100, 1, 5);
+  Soldier soldier(<font color="#9933CC">&quot;Larry&quot;</font>, 150, 2, 10);
+  Pyro pyro(<font color="#9933CC">&quot;Curly&quot;</font>, 200, 3, 15);
+
+  cout &lt;&lt; scout.WhoAmI() &lt;&lt; endl;
+  cout &lt;&lt; soldier.WhoAmI() &lt;&lt; endl;
+  cout &lt;&lt; pyro.WhoAmI() &lt;&lt; endl;
+}
+
+<font color="#003399"><i>//********************************************************************</i></font>
+<b>void</b> TestSimple2()
+{
+    <font color="#003399"><i>// Take the default values</i></font>
+  Player *p[] = {<b>new</b> Scout(<font color="#9933CC">&quot;Moe&quot;</font>), <b>new</b> Soldier(<font color="#9933CC">&quot;Larry&quot;</font>), <b>new</b> Pyro(<font color="#9933CC">&quot;Curly&quot;</font>)};
+
+  <font color="#003399"><i>// Polymorphism</i></font>
+  <b>for</b> (<b>unsigned</b> i = 0; i &lt; <b>sizeof</b>(p) / <b>sizeof</b>(*p); i++)
+  {
+    cout &lt;&lt; p[i]-&gt;WhoAmI() &lt;&lt; endl;
+    <b>delete</b> p[i];
+  }
+}
+
+<b>bool</b> isAlive(<b>const</b> vector&lt;Player *&gt;&amp; team)
+{
+  vector&lt;Player *&gt;::const_iterator it;
+  <b>for</b> (it = team.begin(); it != team.end(); ++it)
+    <b>if</b> ((*it)-&gt;isAlive())
+      <b>return</b> <b>true</b>;
+
+  <b>return</b> <b>false</b>;
+}
+
+<b>void</b> print_results(<b>const</b> vector&lt;Player *&gt;&amp; team1, <b>const</b> vector&lt;Player *&gt;&amp; team2)
+{
+  vector&lt;Player *&gt;::const_iterator it;
+
+    <font color="#003399"><i>// team1 won</i></font>
+  <b>if</b> (isAlive(team1))
+  {
+    cout &lt;&lt; <font color="#9933CC">&quot;Team 1 wins!&quot;</font> &lt;&lt; endl;
+    cout &lt;&lt; <font color="#9933CC">&quot;Team 1: &quot;</font>;
+    <b>for</b> (it = team1.begin(); it != team1.end(); ++it)
+      cout &lt;&lt; (*it)-&gt;getName() &lt;&lt; <font color="#9933CC">&quot;[&quot;</font> &lt;&lt; (*it)-&gt;getHealth() &lt;&lt; <font color="#9933CC">&quot;]  &quot;</font>;
+
+    cout &lt;&lt; endl;
+    cout &lt;&lt; <font color="#9933CC">&quot;Team 2: &quot;</font>;
+    <b>for</b> (it = team2.begin(); it != team2.end(); ++it)
+      cout &lt;&lt; (*it)-&gt;getName() &lt;&lt; <font color="#9933CC">&quot;[&quot;</font> &lt;&lt; (*it)-&gt;getHealth() &lt;&lt; <font color="#9933CC">&quot;]  &quot;</font>;
+    cout &lt;&lt; endl;
+  }
+  <b>else</b>
+  {
+    cout &lt;&lt; <font color="#9933CC">&quot;Team 2 wins!&quot;</font> &lt;&lt; endl;
+    cout &lt;&lt; <font color="#9933CC">&quot;Team 1: &quot;</font>;
+    <b>for</b> (it = team1.begin(); it != team1.end(); ++it)
+      cout &lt;&lt; (*it)-&gt;getName() &lt;&lt; <font color="#9933CC">&quot;[&quot;</font> &lt;&lt; (*it)-&gt;getHealth() &lt;&lt; <font color="#9933CC">&quot;]  &quot;</font>;
+
+    cout &lt;&lt; endl;
+    cout &lt;&lt; <font color="#9933CC">&quot;Team 2: &quot;</font>;
+    <b>for</b> (it = team2.begin(); it != team2.end(); ++it)
+      cout &lt;&lt; (*it)-&gt;getName() &lt;&lt; <font color="#9933CC">&quot;[&quot;</font> &lt;&lt; (*it)-&gt;getHealth() &lt;&lt; <font color="#9933CC">&quot;]  &quot;</font>;
+    cout &lt;&lt; endl;
+  }
+}
+
+<font color="990099">#define VERBOSEx</font>
+
+<b>void</b> fight(<b>const</b> vector&lt;Player *&gt;&amp; team1, <b>const</b> vector&lt;Player *&gt;&amp; team2)
+{
+  vector&lt;Player *&gt;::const_iterator it;
+  cout &lt;&lt; <font color="#9933CC">&quot;Team 1:&quot;</font> &lt;&lt; endl;
+  <b>for</b> (it = team1.begin(); it != team1.end(); ++it)
+    cout &lt;&lt; (*it)-&gt;WhoAmI() &lt;&lt; endl;
+
+  cout &lt;&lt; <font color="#9933CC">&quot;Team 2:&quot;</font> &lt;&lt; endl;
+  <b>for</b> (it = team2.begin(); it != team2.end(); ++it)
+    cout &lt;&lt; (*it)-&gt;WhoAmI() &lt;&lt; endl;
+
+  cout &lt;&lt; endl;
+
+    <font color="#003399"><i>// While at least one team member is still alive</i></font>
+  <b>while</b> (isAlive(team1) &amp;&amp; isAlive(team2))
+  {
+    <b>int</b> attacker, attackee;
+    Player *player1, *player2;
+
+      <font color="#003399"><i>// If 1, team1 attacks team2</i></font>
+    <b>if</b> (Random(0, 1))
+    {
+        <font color="#003399"><i>// Choose a player from Team 1 that is still alive</i></font>
+      <b>do</b>
+      {
+        attacker = Random(0, team1.size() - 1);
+        player1 = team1[attacker];
+      }
+      <b>while</b> (!player1-&gt;isAlive());
+
+        <font color="#003399"><i>// Choose a player from Team 2 that is still alive</i></font>
+      <b>do</b>
+      {
+        attackee = Random(0, team2.size() - 1);
+        player2 = team2[attackee];
+      }
+      <b>while</b> (!player2-&gt;isAlive());
+
+        <font color="#003399"><i>// 0=attack, 1=attack2</i></font>
+      <b>if</b> (Random(0, 1)) 
+        player1-&gt;Attack2(*player2);
+      <b>else</b>
+        player1-&gt;Attack(*player2);
+
+      <font color="990099">#ifdef VERBOSE</font>
+        cout &lt;&lt; player1-&gt;getName() &lt;&lt; <font color="#9933CC">&quot; is attacking &quot;</font>
+             &lt;&lt; player2-&gt;getName() &lt;&lt; <font color="#9933CC">&quot; (health=&quot;</font> &lt;&lt; player2-&gt;getHealth() &lt;&lt; <font color="#9933CC">&quot;)&quot;</font> &lt;&lt; endl;
+      <font color="990099">#endif</font>
+
+      <b>if</b> (!player2-&gt;isAlive())
+        cout &lt;&lt; player2-&gt;getName() &lt;&lt; <font color="#9933CC">&quot; was killed by &quot;</font> &lt;&lt; player1-&gt;getName() &lt;&lt; endl;
+
+    }
+    <b>else</b> <font color="#003399"><i>// team2 attacks team1</i></font>
+    {
+        <font color="#003399"><i>// Choose a player from Team 2 that is still alive</i></font>
+      <b>do</b>
+      {
+        attacker = Random(0, team2.size() - 1);
+        player2 = team2[attacker];
+      }
+      <b>while</b> (!player2-&gt;isAlive());
+
+        <font color="#003399"><i>// Choose a player from Team 1 that is still alive</i></font>
+      <b>do</b>
+      {
+        attackee = Random(0, team1.size() - 1);
+        player1 = team1[attackee];
+      }
+      <b>while</b> (!player1-&gt;isAlive());
+
+        <font color="#003399"><i>// 0=attack, 1=attack2</i></font>
+      <b>if</b> (Random(0, 1)) 
+        player2-&gt;Attack2(*player1);
+      <b>else</b>
+        player2-&gt;Attack(*player1);
+
+      <font color="990099">#ifdef VERBOSE</font>
+        cout &lt;&lt; player2-&gt;getName() &lt;&lt; <font color="#9933CC">&quot; is attacking &quot;</font>
+             &lt;&lt; player1-&gt;getName() &lt;&lt; <font color="#9933CC">&quot; (health=&quot;</font> &lt;&lt; player1-&gt;getHealth() &lt;&lt; <font color="#9933CC">&quot;)&quot;</font> &lt;&lt; endl;
+      <font color="990099">#endif</font>
+
+      <b>if</b> (!player1-&gt;isAlive())
+        cout &lt;&lt; player1-&gt;getName() &lt;&lt; <font color="#9933CC">&quot; was killed by &quot;</font> &lt;&lt; player2-&gt;getName() &lt;&lt; endl;
+    }
+  }
+}
+
+<b>void</b> delete_team(<b>const</b> vector&lt;Player *&gt;&amp; team)
+{
+  vector&lt;Player *&gt;::const_iterator it;
+  <b>for</b> (it = team.begin(); it != team.end(); ++it)
+    <b>delete</b> *it;
+}
+
+<b>void</b> TestFight()
+{
+    <font color="#003399"><i>// Red team</i></font>
+  vector&lt;Player *&gt; red_team;
+  red_team.push_back(<b>new</b> Scout(<font color="#9933CC">&quot;Moe&quot;</font>, 20, 1, 5));
+  red_team.push_back(<b>new</b> Soldier(<font color="#9933CC">&quot;Larry&quot;</font>, 30, 2, 3));
+  red_team.push_back(<b>new</b> Pyro(<font color="#9933CC">&quot;Curly&quot;</font>, 40, 3, 2));
+
+    <font color="#003399"><i>// Blue team</i></font>
+  vector&lt;Player *&gt; blue_team;
+  blue_team.push_back(<b>new</b> Scout(<font color="#9933CC">&quot;Fred&quot;</font>, 20, 1, 5));
+  blue_team.push_back(<b>new</b> Soldier(<font color="#9933CC">&quot;Barney&quot;</font>, 30, 2, 3));
+  blue_team.push_back(<b>new</b> Pyro(<font color="#9933CC">&quot;Wilma&quot;</font>, 40, 3, 2));
+
+  fight(red_team, blue_team);
+  print_results(red_team, blue_team);
+
+  delete_team(red_team);
+  delete_team(blue_team);
+}
+
+std::vector&lt;Player *&gt; make_team(<b>int</b> count, <b>int</b> team)
+{
+  <b>const</b> <b>int</b> MAXNAME = 20;
+  std::vector&lt;Player *&gt; players;
+
+  <b>for</b> (<b>int</b> i = 0; i &lt; count; i++)
+  {
+    <b>char</b> name[MAXNAME];
+    <b>int</b> type = Random(0, 2); <font color="#003399"><i>// Scout, Soldier, or Pyro</i></font>
+    Player *player;
+    <b>int</b> health, damage1, damage2;
+
+    <b>if</b> (type == 0) <font color="#003399"><i>// Scout</i></font>
+    {
+      health = Random(20, 30);
+      damage1 = Random(1, 5);
+      damage2 = Random(3, 7);
+      std::sprintf(name, <font color="#9933CC">&quot;Scout%i-%02i&quot;</font>, team, i);
+      player = <b>new</b> Scout(name, health, damage1, damage2);
+    }
+    <b>else</b> <b>if</b> (type == 1) <font color="#003399"><i>// Soldier</i></font>
+    {
+      health = Random(30, 50);
+      damage1 = Random(3, 7);
+      damage2 = Random(5, 10);
+      std::sprintf(name, <font color="#9933CC">&quot;Soldier%i-%02i&quot;</font>, team, i);
+      player = <b>new</b> Soldier(name, health, damage1, damage2);
+    }
+    <b>else</b> <font color="#003399"><i>// Pyro</i></font>
+    {
+      health = Random(50, 90);
+      damage1 = Random(5, 9);
+      damage2 = Random(10, 12);
+      std::sprintf(name, <font color="#9933CC">&quot;Pyro%i-%02i&quot;</font>, team, i);
+      player = <b>new</b> Pyro(name, health, damage1, damage2);
+    }
+
+    players.push_back(player);
+  }
+
+  <b>return</b> players;
+}
+
+<b>void</b> stress(<b>int</b> count)
+{
+  std::vector&lt;Player *&gt; team1 = make_team(count, 1);
+  std::vector&lt;Player *&gt; team2 = make_team(count, 2);
+
+  fight(team1, team2);
+  print_results(team1, team2);
+
+  delete_team(team1);
+  delete_team(team2);
+}
+
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  std::srand(std::time(0));
+  <b>int</b> count = 10;
+  <font color="#003399"><i>//TestSimple1();</i></font>
+  <font color="#003399"><i>//TestSimple2();</i></font>
+  <font color="#003399"><i>//TestFight();</i></font>
+
+  <b>if</b> (argc &gt; 1)
+    count = std::atoi(argv[1]);
+
+  stress(count);
+
+  <b>return</b> 0;
+}
+</code></pre>
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<table><tr valign="top"><td>
+</td>
+<td width=30></td>
+<td>
+</td></tr></table>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<table><tr valign="top"><td>
+</td>
+<td width=30></td>
+<td>
+</td></tr></table>
+
+
+<table><tr valign="top"><td>
+</td>
+<td width=30></td>
+<td>
+</td></tr></table>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

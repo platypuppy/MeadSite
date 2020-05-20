@@ -1,0 +1,20 @@
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 1 is 1.
+The product of the digits in 1 is 1.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 42 is 6.
+The product of the digits in 42 is 8.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 555 is 15.
+The product of the digits in 555 is 125.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 1729 is 19.
+The product of the digits in 1729 is 126.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 65535 is 24.
+The product of the digits in 65535 is 2250.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 142857 is 27.
+The product of the digits in 142857 is 2240.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 8675309 is 38.
+The product of the digits in 8675309 is 0.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 63288349 is 43.
+The product of the digits in 63288349 is 248832.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 999999937 is 73.
+The product of the digits in 999999937 is 100442349.
+Enter an integer (1 to 2,147,483,647 without commas): The sum of the digits in 2147483647 is 46.
+The product of the digits in 2147483647 is 903168.

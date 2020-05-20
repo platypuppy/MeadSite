@@ -1,0 +1,299 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+   
+.Warning
+{
+  margin-left: 0;
+  font-size : 12pt;
+  font-weight : bold;
+  background-color: #FFFF00; 
+  border-style: solid;
+  border-color: blue;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}   
+</style>
+
+<body>  
+<center>
+<h1>CS 170 - Lab Assignment<p></h1>
+</center>
+
+<p class="technote">
+<b>Note:</b> 
+You will be required to submit all of the functions that have been writing for the <i>List</i> 
+class so far. There is a mega-driver at the bottom of this page that will be used to test 
+all of your functions. This should be trivial for you to test since there is only one 
+additional function to write. Make sure your code is 
+cleanly written and properly formatted per the style guidelines. You also need to make 
+sure you have Doxygenized the code (file headers, function headers, etc.) just as if you 
+were submitting a "regular" assignment. Again, since you were supposed to have done all of 
+this in previous labs, this should only take you a few minutes to prepare. Of course, if you 
+haven't been doing the required lab work, you may not have time to submit much.
+</p>
+
+
+
+<p class="SectionHeader">
+Information
+</p>
+
+For this week's lab, you will only be adding one simple method. Of course, you're 
+starting with the previous week's lab, so you already have all of the rest of the 
+functionality required (creating, inserting, deleting, printing, merging, etc.). Once you have 
+successfully implemented and tested your method, you will 
+submit it to the server as you normally do each week. The submission is called 
+<tt><b>lab08_list5</b></tt>.
+
+<p>
+<hr width="100%">
+<p>
+
+
+<ol>
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<li>In this lab, you will remove duplicates from a <b>sorted</b> list. For example, 
+  given the list below, the items in <font color="blue">BLUE</font> will be removed:
+
+<blockquote><pre>
+List1 (16 nodes): 12   <font color="blue"><b>12   12   12   12   12   12   12</b></font>   24   27   <font color="blue"><b>27   27</b></font>   34   <font color="blue"><b>34</b></font>   59   88
+</pre></blockquote>
+
+The result of removing the duplicates looks like this:
+
+<blockquote><pre>
+Duplicates removed: 10
+List1 ( 6 nodes): 12   24   27   34   59   88	
+</pre></blockquote>
+
+The call will look like this:
+
+<blockquote><pre>
+<b>int</b> removed = List1.RemoveDuplicates(); <font color="#003399"><i>// Removes all duplicates leaving only 1 of each.</i></font>
+</pre></blockquote>
+
+Modify your <tt>List.h</tt> header file to include a method called <tt>RemoveDuplicates</tt>. The lines in <font color="blue">BLUE</font> are new. 
+<blockquote><pre>
+<b>class</b> List
+{
+  <b>public</b>:
+
+      <font color="#003399"><i>// Takes the <b>sorted</b> list and removes all of the duplicates. In other words,</i></font>
+      <font color="#003399"><i>// it removes all but the first element in every consecutive group of </i></font>
+      <font color="#003399"><i>// equal elements. Returns the number of elements that were removed.</i></font>
+    <font color="blue"><b>int</b> RemoveDuplicates();</font>
+
+    
+      <font color="#003399"><i>// Other existing public methods</i></font>
+
+  <b>private</b>:
+    Node *head_;
+    Node* MakeNode(<b>int</b> value) <b>const</b>;   
+    
+    <font color="#003399"><i>// Any other helper functions you need</i></font>
+};
+</pre></blockquote>
+
+This is what your current <a href="List.h"><tt>List.h</tt></a> (<a href="List.h.html">HTML</a>) file should look like.
+(Yours will have Doxygen comments in it as well as other private stuff.)
+Add the methods to your <tt>List.cpp</tt> file and implement it there.
+
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<p>
+<hr width="100%">
+<p>
+
+<li>Add a Doxygen file header comment to <tt><b>List.h</b></tt> and <tt><b>List.cpp</b></tt>. 
+  Make a bullet list of the  functions in the .cpp file. Create doxygen function header comments for 
+  each function. 
+  You already have Doxygen comments for all of the functions, so it's just a matter of adding 
+  the new one.
+
+<p>
+<hr width="100%">
+<p>
+
+Here's some test code in <a href="driver.cpp">driver.cpp</a>. (<a href="driver.cpp.html">HTML</a>)
+<p>
+Output from the tests.
+<blockquote>
+<a href="output1.txt">TestDuplicates1</a>&nbsp;&nbsp;&nbsp;
+<a href="output2.txt">TestDuplicates2</a>&nbsp;&nbsp;&nbsp;
+<a href="output3.txt">TestDuplicates3</a>&nbsp;&nbsp;&nbsp;
+<a href="output4.txt">TestDuplicates4</a>&nbsp;&nbsp;&nbsp;
+<a href="output5.txt">TestDuplicates5</a>&nbsp;&nbsp;&nbsp;
+<a href="output6.txt">TestDuplicates6</a>&nbsp;&nbsp;&nbsp;
+<a href="output7.txt">TestDuplicates7</a>&nbsp;&nbsp;&nbsp;
+<p>
+<a href="output-all.txt">All tests</a>&nbsp;&nbsp; (<b>Updated: March 02, 2020 at 15:13:37</b>)
+	
+</blockquote>
+
+Command lines: 
+<p>
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp List.cpp PRNG.cpp<br>
+</pre></blockquote>
+
+<!--
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe driver.cpp List.cpp PRNG.cpp
+-->
+<!--<b>clang++</b> -o clan -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic driver.cpp List.cpp PRNG.cpp<br>-->
+The stress test (test #7) uses random numbers, so here's a pseudo-random number generator so all 
+compilers get the same output:
+<p>
+
+Random number generator files (we've used them in previous assignments)
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.cpp): <a href="PRNG.cpp.html">HTML</a> <a href="PRNG.cpp">Text</a>
+  </ul>
+
+<p>
+
+To run an individual test, provide the test number on the command line. For example, 
+to run <i>TestMerge3</i>, do this:
+
+<blockquote><pre>
+gnu 3
+</pre></blockquote>
+
+To run all tests, don't provide any number on the command line.
+<p>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore 
+the newlines between GNU's output and the other compilers. 
+<p>
+<p class="technote">
+After you finish these 2 parts, you can upload the files to the submission server 
+to get credit for the lab. The next part will be uploaded as a different 
+assignment, so you will not upload it with this lab.
+</p>
+</blockquote>
+
+</ol>
+
+<big>
+<center>
+<a name="LISTLAB">
+<p class="Warning">
+This concludes the linked list portion of the labs.
+</p>
+</a>
+</center>
+</big>
+
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<!--******************************************************************************************************-->
+<p>
+<xhr width="100%">
+<p>
+<br>
+
+Now that you have completed all of the necessary methods of the <tt>List</tt> class, 
+you need to make sure that you can pass the tests in this <a href="megadriver.cpp">megadriver.cpp</a>. 
+  (<a href="megadriver.cpp.html">HTML</a>) After you successfully pass the tests, you will submit 
+  it like any
+  other assignment. (<b>Updated: March 03, 2020 at 13:26:19</b>)
+  <p>
+  This driver has 22 tests, plus a stress test for a total of 23 tests. 
+<p>
+
+Output of all tests except the stress test:
+<blockquote>
+<a href="output-mega.txt">Output</a>&nbsp;&nbsp;&nbsp;
+</blockquote>
+<p>
+
+<blockquote>
+<a href="output-stress.txt">Output (stress only)</a> <!--&nbsp;&nbsp;&nbsp; <a href="output-raw.txt">Raw output</a> (for debugging)-->
+<p>
+</blockquote>
+
+
+Command lines: 
+<p>
+<blockquote><pre>
+<b>g++</b> -o gnu -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic megadriver.cpp List.cpp PRNG.cpp<br>
+</pre></blockquote>
+<!--
+<b>cl</b> /W4 /WX /Zi /MT /EHsc /Oy- /Ob0 /Fems.exe megadriver.cpp List.cpp PRNG.cpp
+<b>clang++</b> -o clan -O2 -g -Wconversion -Wall -Wextra -Werror -ansi -pedantic megadriver.cpp List.cpp PRNG.cpp<br>
+-->
+To run an individual test, provide the test number on the command line. For example, to 
+run <i>TestMerge7</i>, do this:
+
+<blockquote><pre>
+gnu 14
+</pre></blockquote>
+
+To run all tests, don't provide any number on the command line. See the <tt>main</tt> 
+function in the driver to see
+which number runs which test.
+<p>
+
+Don't forget to add <tt>--strip-trailing-cr</tt> to the <tt>diff</tt> program to ignore the 
+newlines between GNU's output and the other compilers.
+<p>
+</blockquote>
+
+<xcenter>
+<p class="Warning">
+After completing this final part, be sure to zip up your files 
+(<tt>List.h and List.cpp</tt>)
+and submit them to the 
+appropriate submission page by the due date/time.
+This assignment is called <tt>assign_listlab</tt> on the submission server.
+Because this final part is an <i>assignment</i> rather than a <i>lab</i>, the
+submission server is doing nothing but building your program. This means that
+<strong>YOU</strong> must run Doxygen, tablen, etc.
+
+I will build it
+on my computer and give the results to the TAs to grade. Afterwards, the results will be
+placed in your Returned folders.
+</p>
+</xcenter>
+
+
+
+
+
+<br><br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

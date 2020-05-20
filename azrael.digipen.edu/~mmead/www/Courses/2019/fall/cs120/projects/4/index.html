@@ -1,0 +1,275 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 120 - Programming Assignment #4</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   }
+</style>
+
+<body>  
+<center>
+<h1>CS 120 - Programming Assignment #4<p></h1>
+</center>
+
+<!--
+<p class="technote">
+</p>
+-->
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ul>
+<li><a href="cs120-programming-assignment-bytes.pdf">Handout</a>
+
+<p class="technote">
+You absolutely, positively, MUST read and understand <b>EXACTLY</b> what each of the functions are doing.
+If you don't, you will waste a lot of time doing the wrong thing. It should go without saying,
+but, sadly, there are still too many students that think they can waste other people's time
+because they FAILED to follow the instructions.
+<br><br>
+READ the handout and LOOK at the driver. This will answer all of your questions. If you
+still have a question after doing both of those tasks, then you may ask a question on the Moodle
+forums.
+<br><br>
+Also, when dealing with pointers, it is very helpful if you draw pictures while trying
+to figure out what you're doing.
+</p>
+
+<table cellspacing=1 cellpadding=10 border=1>
+<tr><th>Functions and Descriptions</th></tr>
+
+<tr><td>
+<pre><b>const</b> <b>char</b> *find_byte(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>char</b> byte);</pre>
+Given two pointers(<i>from</i> and <i>to</i>), scan the range looking for the first occurrence of <i>byte</i>, returning a 
+pointer to it. If <i>byte</i> is not found, return NULL. The pointers are guaranteed to be pointing into 
+the same array and that the address of <i>from</i> is less than or equal to the address of <i>to</i>.
+</td></tr>
+
+<tr><td>
+<pre><b>const</b> <b>char</b> *find_any_byte(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>const</b> <b>char</b> *bytes, <b>int</b> count);</pre>
+Given two pointers (<i>from</i> and <i>to</i>), scan the range looking for the first occurrence of any byte 
+that is in the <i>bytes</i> array, returning a pointer to it. If none of the characters in the <i>bytes</i> array 
+is found, return NULL. The <i>count</i> parameter tells you how many characters are in the <i>bytes</i> array. The 
+pointers are guaranteed to be pointing into the same array and that the address of <i>from</i> is less than or
+equal to the address of <i>to</i>.
+<br><br>
+This call: <tt>find_any_bytes("bcdafg", "abc");</tt> would stop at the 'a' (fourth byte) before the 'b' (first byte)
+because you search the input string from 'b' to 'g' looking for the 'a' <i>before</i> looking for a 'b'.
+</td></tr>
+
+<tr><td>
+<pre><b>int</b> count_bytes(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>char</b> byte);</pre>
+Given two pointers(<i>from</i> and <i>to</i>), scan the range counting the number of occurrences of <i>byte</i>. The return
+value is the number of times that <i>byte</i> appeared in the range. returning a pointer to it. The pointers 
+are guaranteed to be pointing into the same array and that the address of <i>from</i> is less than or equal 
+to the address of <i>to</i>.
+</td></tr>
+
+<tr><td>
+<pre><b>int</b> count_any_bytes(<b>const</b> <b>char</b> *from, <b>const</b> <b>char</b> *to, <b>const</b> <b>char</b> *bytes, <b>int</b> count);</pre>
+Given two pointers (<i>from</i> and <i>to</i>), scan the range counting occurrences of any character that is in 
+the <i>bytes</i> array. The return value is the sum of all of the characters found. The <i>count</i> parameter tells 
+you how many characters are in the <i>bytes</i> array. The pointers are guaranteed to be pointing into the 
+same array and that the address of <i>from</i> is less than or equal to the address of <i>to</i>.
+</td></tr>
+
+<tr><td>
+<pre><b>int</b> compare_bytes(<b>const</b> <b>char</b> *location1, <b>const</b> <b>char</b> *location2, <b>int</b> count);</pre>
+Given two pointers(<i>location1</i> and <i>location2</i>), compare each character byte-by-byte to determine if the
+ranges are the same (i.e. contain the same characters in the same order). If the bytes (characters) 
+are all the same, the function returns 0. If the the bytes pointed to by <i>location1</i> are less than the 
+bytes pointed to by <i>location2</i>, the function returns a negative number (any negative number). Otherwise, 
+the function returns a positive number (any positive number). The <i>count</i> tells the function how many 
+bytes to compare.
+</td></tr>
+
+<tr><td>
+<pre><b>void</b> exchange_bytes(<b>char</b> *location1, <b>char</b> *location2, <b>int</b> count);</pre>
+Given two pointers(<i>location1</i> and <i>location2</i>), exchange (swap) the bytes from each. The <i>count</i> parameter 
+tells you how many bytes to swap. You are guaranteed that the two locations do not overlap in memory. 
+Notice that the pointers are not marked const. This is because you are modifying the characters in both 
+ranges. You are not allowed to create any arrays. You must do the exchange within the ranges provided. 
+</td></tr>
+
+<tr><td>
+<pre><b>void</b> copy_bytes(<b>char</b> *from, <b>char</b> *to, <b>int</b> count);</pre>
+Given two pointers(<i>from</i> and <i>to</i>), copy <i>count</i> bytes (characters) from the <i>from</i> pointer to the <i>to</i> 
+pointer. The <i>count</i> parameter tells you how many bytes to copy. It is possible that the two ranges 
+overlap, so you must handle this! This means you will need to think before you write any code. Notice 
+that the pointers are not marked const, meaning that you are modifying the arrays in-place. You are 
+not allowed to create any new arrays in your code.
+</td></tr>
+
+</table>
+</p>
+
+
+<!--
+<pre class="sourcecode"><code><b>void</b> testX(<b>void</b>)
+{
+  <b>char</b> string1[] = <font color="#9933CC">&quot;There's a fine line between clever and stupid.&quot;</font>;
+  <b>const</b> <b>char</b> *string2 = <font color="#9933CC">&quot;abcdefghijklm&quot;</font>;
+  <b>const</b> <b>char</b> *string3 = <font color="#9933CC">&quot;abcdehijklmno&quot;</font>;
+  <b>int</b> length = strlen(string1);
+  <b>const</b> <b>char</b> *found;
+  <b>const</b> <b>char</b> *bytes;
+  <b>int</b> count;
+
+  <font color="#003399"><i>/* Finds 'b' in the range 'fine line between' and returns a pointer to it */</i></font>
+  found = find_byte(string1 + 10, string1 + 26, <font color="#9933CC">'b'</font>);
+  printf(<font color="#9933CC">&quot;Found %c at offset %li&#92;n&quot;</font>, *found, found - string1);
+
+  <font color="#003399"><i>/* Doesn't find 'z' in the range 'There's a fi' and returns NULL */</i></font>
+  found = find_byte(string1, string1 + 11, <font color="#9933CC">'z'</font>);
+
+  <font color="#003399"><i>/*
+   * Finds the 'l' in the entire range of characters and returns pointer to it.     
+   * It first looks for x, then y, then z, and then l. It stops after finding 
+   * the l, and doesn't look for a, b, or c.                                  
+   */</i></font>
+  bytes = <font color="#9933CC">&quot;xyzlabc&quot;</font>;
+  found = find_any_byte(string1, string1 + length, bytes, 7);
+  printf(<font color="#9933CC">&quot;Found %c at offset %li&#92;n&quot;</font>, *found, found - string1);
+
+  <font color="#003399"><i>/* Returns 3, the number of time 'e' is in range 'There's a fine '  */</i></font>
+  count = count_bytes(string1, string1 + 15, <font color="#9933CC">'e'</font>);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns 15, the number of times a vowel appears in the entire string  */</i></font>
+  bytes = <font color="#9933CC">&quot;aeiou&quot;</font>;
+  count = count_any_bytes(string1, string1 + length, bytes, 5);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns 0 as the ranges 'abcde' and 'abcde' are the same */</i></font>
+  count = compare_bytes(string2, string3, 5);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns negative number as 'abcdef' is less than 'abcdeh' */</i></font>
+  count = compare_bytes(string2, string3, 6);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns positive number as 'bcd' is greater than 'abc' */</i></font>
+  count = compare_bytes(string2 + 1, string3, 3);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Returns 0 as the ranges 'jklm' and 'jklm' are the same */</i></font>
+  count = compare_bytes(string2 + 9, string3 + 7, 4);
+  printf(<font color="#9933CC">&quot;count is %i&#92;n&quot;</font>, count);
+
+  <font color="#003399"><i>/* Changes string to &quot;There's a line fine between clever and stupid.&quot; */</i></font>
+  exchange_bytes(string1 + 10, string1 + 15, 4);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+  <font color="#003399"><i>/* Changes string to &quot;There's a line fine between stupid and clever.&quot; */</i></font>
+  exchange_bytes(string1 + 28, string1 + 39, 6);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+  <font color="#003399"><i>/* Changes string to &quot;There's a line line fine between stand clever.&quot; */</i></font>
+  copy_bytes(string1 + 10, string1 + 15, 20);
+  printf(<font color="#9933CC">&quot;%s&#92;n&quot;</font>, string1);
+
+}
+</code></pre>
+-->
+
+<p>
+
+  <p>
+
+<ul>
+
+
+<!--
+<li><font color="blue">This assignment will require about 50 lines of code.</font></li>
+-->
+</ul>
+
+<li>Sample <a href="driver.c">driver.c</a>&nbsp;&nbsp;&nbsp;(<a href="driver.c.html">HTML</a>)
+The driver does a lot of pointer arithmetic, so you might be able to learn something by reading
+through it. (You should do this with every driver you're given.)
+All of the functions are tested so you can see examples of how the functions are supposed to work.
+<p>
+File to start with: <a href="bytes-start.c">bytes-start.c</a>
+&nbsp;&nbsp;&nbsp;(<a href="bytes-start.c.html">HTML</a>)
+<p>
+  
+Command line:
+<blockquote><pre>
+gcc -Wall -Wextra -ansi -pedantic -Werror -O -g driver.c bytes.c PRNG.c -o bytes
+</pre></blockquote>
+<p>
+
+Outputs:
+<p>
+<ol>
+	<li><a href="output1.txt">test1</a></li>
+	<li><a href="output2.txt">test2</a></li>
+	<li><a href="output3.txt">test3</a></li>
+	<li><a href="output4.txt">test4</a></li>
+	<li><a href="output5.txt">test5</a></li>
+	<li><a href="output6.txt">test6</a></li>
+	<li><a href="output7.txt">test7</a></li>
+	<li><a href="output8.txt">test8</a></li>
+	<li><a href="output-all.txt">test-all</a></li>
+</ol>
+<p>
+
+
+<li>Output from testX in the driver:</li>
+
+<blockquote><pre>
+Found b at offset 20
+Found l at offset 15
+count is 3
+count is 15
+count is 0
+count is -2
+count is 1
+count is 0
+There's a line fine between clever and stupid.
+There's a line fine between stupid and clever.
+There's a line line fine between stand clever.
+</pre></blockquote>
+
+<li>Random number generator files
+  <ul>
+    <li> - Header file (PRNG.h): <a href="PRNG.h.html">HTML</a> <a href="PRNG.h">Text</a>
+    <li> - Implementation (PRNG.c): <a href="PRNG.c.html">HTML</a> <a href="PRNG.c">Text</a>
+  </ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+
+<p><br><br>
+<hr>
+<p>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

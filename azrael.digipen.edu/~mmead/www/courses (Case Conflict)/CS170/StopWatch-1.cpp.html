@@ -1,0 +1,109 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>StopWatch-1.cpp</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt;
+<b>#include</b> &lt;iomanip&gt;
+<b>#include</b> <font color="#9933CC">&quot;StopWatch.h&quot;</font>
+
+StopWatch::StopWatch()
+{
+  seconds_ = 0;
+}
+
+StopWatch::StopWatch(<b>int</b> seconds)
+{
+  seconds_ = seconds;
+}
+
+StopWatch::StopWatch(<b>int</b> hour, <b>int</b> minutes, <b>int</b> seconds)
+{
+  seconds_ = (hour * 3600) + (minutes * 60) + seconds;
+}
+
+<b>void</b> StopWatch::Increment(<b>int</b> seconds)
+{
+  seconds_ += seconds;
+}
+
+<b>void</b> StopWatch::Reset()
+{
+  seconds_ = 0;
+}
+
+<b>void</b> StopWatch::Display() <b>const</b>
+{
+  <b>int</b> hours, minutes, seconds;
+
+  hours = seconds_ / 3600;
+  minutes = (seconds_ - (hours * 3600)) / 60;
+  seconds = seconds_ % 60;
+
+  std::cout.fill(<font color="#9933CC">'0'</font>);
+  std::cout &lt;&lt; std::setw(2) &lt;&lt; hours &lt;&lt; <font color="#9933CC">':'</font>;
+  std::cout &lt;&lt; std::setw(2) &lt;&lt; minutes &lt;&lt; <font color="#9933CC">':'</font>;
+  std::cout &lt;&lt; std::setw(2) &lt;&lt; seconds &lt;&lt; std::endl;
+}
+
+<b>int</b> StopWatch::GetSeconds() <b>const</b>
+{
+  <b>return</b> seconds_;
+}
+
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<tt><b></b></tt>
+
+
+<blockquote>
+<table border=0 cellspacing=5 cellpadding=5>
+<tr><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+

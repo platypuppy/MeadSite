@@ -1,0 +1,169 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>proper</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+
+.Extra
+{
+  margin-left: 0;
+  /*font-size : 12pt;*/
+  /*font-weight : bold;*/
+  background-color: rgb(255,255,220); 
+  border-style: solid;
+  border-color: teal;
+  border-width: thin;
+  vertical-align: top;
+  padding-top: 3px;
+  padding-bottom : 3px;
+  padding-left: 3px;
+  padding-right: 3px;
+}   
+
+
+</style>
+
+
+<body>  
+<center>
+<h1>Practice Assignment</h1>
+(proper.c)
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<ol>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+  
+<li>For this practice assignment you will write a function that takes a text file that
+  is in all UPPERCASE and converts it to Proper Case. Proper case means that the first word
+  of each sentence is capitalized, and everything else is lowercase. Example:
+
+<p>
+This is the input file: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/input1.txt">input1.txt</a>:
+
+<blockquote><pre><p class="Extra">ASSUME THAT A STUDENT IS TYPING HIS FINAL REPORT FOR ENGLISH CLASS
+INTO A TEXT FILE. AFTER COMPLETING THE REPORT, HE REALIZED THAT
+HE MISTAKENLY HAD THE CAPS LOCK KEY ON THROUGHOUT THE TYPING PROCESS. HE SAID
+OH MY GOSH! WHAT HAVE I DONE? HOW AM I GOING TO FIX THIS? BUT THEN HE KNEW C.
+SO HE SAID "I WILL WRITE ME A C PROGRAM".
+</p></pre></blockquote>
+
+The file after running the program on it: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/output1.txt">output1.txt</a>
+
+<blockquote><pre><p class="Extra">Assume that a student is typing his final report for english class
+into a text file. After completing the report, he realized that
+he mistakenly had the caps lock key on throughout the typing process. He said
+oh my gosh! What have i done? How am i going to fix this? But then he knew c.
+So he said "i will write me a c program".
+</p></pre></blockquote>
+
+This is the prototype for the function:
+
+<blockquote><pre>
+<b>void</b> proper(<b>const char</b> *filename);
+</pre></blockquote>
+
+and this is the command line to compile it:
+
+<blockquote><pre>
+gcc -O -Werror -Wall -Wextra -ansi -pedantic main.c proper.c -o proper
+</pre></blockquote>
+
+Additional tests:
+<ul>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/input2.txt">input2.txt</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/output2.txt">output2.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/input3.txt">input3.txt</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/output3.txt">output3.txt</a></li>
+  <li><a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/input4.txt">input4.txt</a> and <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/output4.txt">output4.txt</a></li>
+</ul>
+<p>
+Here's a driver (main.c) for you: <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/main.c.html">HTML</a>&nbsp;&nbsp;
+<a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs170/practice-cs120/proper/main.c">Text</a>
+
+</ol>
+
+<p>
+<hr width="95%">
+<p>
+
+
+<b>Notes:</b>
+<ol>
+  <li>A sentence ends with either a period, exclamation, or question mark. You don't have to support any
+  other characters. <b>ONLY</b> the first character of a sentence is capitalized, 
+  <b>NOTHING ELSE</b>. (Yes, it's not proper English, but that is outside the scope of this simple program.)</li>
+  <p>
+  <li>Except for the first sentence in the file, all sentences will have at least one white space character
+    in front. This means that the decimal point in the floating point number in the text below is NOT
+    marking the end of the sentence:
+    <ul>
+<blockquote><pre>
+The floating point number 3.e+10 is written using scientific notation.
+</pre></blockquote>
+</ul>
+<p>
+  <li>You can assume that the longest line in a file is 200 characters.</li>
+  <p>
+  <li>Open the file for input in text/translate mode (i.e. <tt>"r"</tt>) and write
+    the output to <b>stdout</b>.
+  It is probably easiest to read one character at a time (<a href="http://www.cplusplus.com/reference/cstdio/fgetc/">fgetc</a>)
+  and then write one character at a time.
+
+  
+</li>
+  <p>
+  <li>You should use the <a href="http://www.cplusplus.com/reference/cctype/tolower/">tolower</a>
+    function to convert the uppercase characters to lower case.</li>
+  <p>
+  <li>You also might want to look at the <tt><a href="http://www.cplusplus.com/reference/cctype/isspace/">isspace</a></tt>
+    function that returns true if the character passed to it is a whitespace character and the
+    <a href="http://www.cplusplus.com/reference/cstdio/ungetc/">ungetc</a> function that lets you 
+    put a character back in the input stream.</li>
+      <p>
+  <li>If you can't open the file, you are to print out a message like this:
+<blockquote><pre>
+Can't open filename.
+</pre></blockquote>
+with <i>filename</i> replaced by the actual file you were trying to open.</li>
+<p>
+
+
+  <li>If you want to make your own text files (for testing) that are all uppercase, you can use
+    the <a href="http://pubs.opengroup.org/onlinepubs/9699919799/utilities/tr.html">tr</a> command
+    to convert text files:
+<blockquote><pre>
+tr '[:lower:]' '[:upper:] &lt; somefile.txt
+</pre></blockquote>
+Windows does not provide this tool, but it is available as part of the Cygwin tools. (It should already be installed and avialable on
+ Linux and Mac).</li>
+
+
+</ol> 
+
+<br><br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

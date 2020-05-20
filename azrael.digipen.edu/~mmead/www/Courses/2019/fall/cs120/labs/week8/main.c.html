@@ -1,0 +1,131 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<b>void</b> print_calendar(<b>int</b> month, <b>int</b> year);
+<b>int</b> is_leapyear(<b>int</b> year);
+<b>int</b> day_of_the_week(<b>int</b> day, <b>int</b> month, <b>int</b> year);
+
+<b>static</b> <b>char</b> *day_name[] = {<font color="#9933CC">&quot;Sunday&quot;</font>, <font color="#9933CC">&quot;Monday&quot;</font>, <font color="#9933CC">&quot;Tuesday&quot;</font>, <font color="#9933CC">&quot;Wednesday&quot;</font>, 
+                         <font color="#9933CC">&quot;Thursday&quot;</font>, <font color="#9933CC">&quot;Friday&quot;</font>, <font color="#9933CC">&quot;Saturday&quot;</font>};
+
+<b>void</b> test_leapyear(<b>void</b>)
+{
+  <b>int</b> year;
+  <b>int</b> i;
+
+  year = 1700;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 1900;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 1901;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 1904;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 1999;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 2000;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 2300;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+  year = 2400;
+  printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, year, is_leapyear(year) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+
+  <b>for</b> (i = 2001; i &lt; 2020; i++)
+    printf(<font color="#9933CC">&quot;%4i %s a leap year&#92;n&quot;</font>, i, is_leapyear(i) ? <font color="#9933CC">&quot;is&quot;</font> : <font color="#9933CC">&quot;is not&quot;</font>);
+}
+
+<b>void</b> test_day(<b>void</b>)
+{
+  <b>int</b> day, month, year;
+  <b>int</b> day_of_week;
+  <b>int</b> i;
+
+  day = 1;
+  month = 1;
+  year = 2014;
+  day_of_week = day_of_the_week(day, month, year);
+  printf(<font color="#9933CC">&quot;day: %i, month: %i, year: %i is on day %i&#92;n&quot;</font>, 
+          day, month, year, day_of_week);
+
+  day = 1;
+  month = 2;
+  year = 2014;
+  day_of_week = day_of_the_week(day, month, year);
+  printf(<font color="#9933CC">&quot;day: %i, month: %i, year: %i is on day %i&#92;n&quot;</font>, 
+          day, month, year, day_of_week);
+
+  day = 1;
+  month = 3;
+  year = 2014;
+  day_of_week = day_of_the_week(day, month, year);
+  printf(<font color="#9933CC">&quot;day: %i, month: %i, year: %i is on day %i&#92;n&quot;</font>, 
+          day, month, year, day_of_week);
+
+  day = 1;
+  month = 4;
+  year = 2014;
+  day_of_week = day_of_the_week(day, month, year);
+  printf(<font color="#9933CC">&quot;day: %i, month: %i, year: %i is on day %i&#92;n&quot;</font>, 
+          day, month, year, day_of_week);
+
+  day = 1;
+  month = 5;
+  year = 2014;
+  day_of_week = day_of_the_week(day, month, year);
+  printf(<font color="#9933CC">&quot;day: %i, month: %i, year: %i is on day %i&#92;n&quot;</font>, 
+          day, month, year, day_of_week);
+
+  <b>for</b> (i = 1; i &lt;= 31; i++)
+  {
+    day_of_week = day_of_the_week(i, 10, 2014);
+    printf(<font color="#9933CC">&quot;day: %i, month: %i, year: %i is on day %i (%s)&#92;n&quot;</font>, 
+            i, 10, 2014, day_of_week, day_name[day_of_week - 1]);
+  }
+}
+
+<b>void</b> test_calendar(<b>void</b>)
+{
+  <b>int</b> i;
+
+  print_calendar(10, 2014);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  print_calendar(7, 1776);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  print_calendar(7, 2776);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+
+  <b>for</b> (i = 1; i &lt;= 12; i++)
+  {
+    print_calendar(i, 2014);
+    printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  }
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="#003399"><i>/*test_leapyear();*/</i></font>
+  <font color="#003399"><i>/*test_day();*/</i></font>
+  <font color="#003399"><i>/*test_calendar();*/</i></font>
+  <b>return</b> 0;
+}
+</code></pre>
+</body>
+</html>

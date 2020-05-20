@@ -1,0 +1,463 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>CS 120 - Lab Assignment</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../../images/notebook.jpg");
+   }
+</style>
+
+
+<body>  
+<center>
+<h1>CS 120 - Lab Assignment</h1>
+</center>
+
+<p class="SectionHeader">
+Information
+</p>
+
+<p class="technote">
+Before starting to code, please READ THE ENTIRE WEB PAGE FIRST. Then, experiment with the 
+<tt><b>dumpit</b></tt> program to observe how the program works and how the formatting of 
+the characters in the files is done. (The <tt><b>dumpit</b></tt> program is already installed
+on the computers at Digipen). You simply type:
+<br><br>
+<tt>&nbsp;&nbsp;dumpit filename</tt>
+<br><br>
+where <tt>filename</tt> is the name of any file in your current directory. 
+There is a <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dumpit.exe">Windows version (dumpit.exe)</a>, a <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dumpit">Linux version (dumpit)</a>,
+and a <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dumpit-mac">MacOS version (dumpit-mac)</a> to download
+for your own computers. There are sample files at the bottom of this web page for you to download
+and run with <tt><b>dumpit</b></tt>.
+</p>
+
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<ol>
+	
+<li>This lab has you dealing with NUL-terminated C-style strings and file input. You will write
+  two functions. The first function is called <i>format</i> and is prototyped as such:
+<blockquote><pre>
+<b>void</b> format(<b>const char</b>* inbuf, <b>char</b> *outbuf, <b>int</b> count, <b>int</b> offset);
+</pre></blockquote>
+The four parameters are:
+<p>
+<ol>
+  <li><i>inbuf</i> - This is a pointer to the first character in an array of bytes (characters). You
+    will only <b>read</b> from this array.</li>
+  <li><i>outbuf</i> - This is a pointer to the first character in an empty array of bytes. You
+    will only <b>write</b> to this array. This array is guaranteed to be large enough.</li>
+  <li><i>count</i> - This is the number of characters that are in <i>inbuf</i>. The maximum value of
+    <i>count</i> is 16.</li>
+  <li><i>offset</i> - This is the value that you will format (in hexadecimal) at the beginning of
+    <i>outbuf</i>. More details are below.</li>
+</ol>
+<p>
+The purpose of this function is to format an array of characters (<i>inbuf</i>) in two ways:
+<ol>
+  <li>As hexadecimal values</li>
+  and
+  <li>If the decimal value of the character is greater than 31 and less than 127 (printable characters):</li>
+  <ul>
+    <li>Print the character (for example, the value <tt>65</tt> would print as <tt>A</tt>)</li>
+  </ul>
+  If the decimal value is outside of the range (non-printable characters):</li>
+  <ul>
+    <li>Print a period.</li>
+  </ul>
+
+</ol>
+
+<p class="technote">
+Both <i>inbuf</i> and <i>outbuf</i> are simple character arrays. They are <b>NOT</b> strings, meaning
+that the arrays are not NUL-terminated. That's why we're passing <i>count</i> to the function.
+</p>
+For example, assume that <i>inbuf</i> contains these characters:
+<blockquote><pre>
+Violets are blue
+</pre></blockquote>
+
+Converting each character into its <i>hexadecimal</i> value would result in these values:
+<blockquote><pre>
+56 69 6F 6C 65 74 73 20 61 72 65 20 62 6C 75 65
+</pre></blockquote>
+That's because the character 'V' is 56, 'i' is 69, 'o' is 6F, etc. Since all of these characters are
+greater than 31 and less than 127, you would just print the characters. This is what the partial
+<i>outbuf</i> would look like:
+<blockquote><pre>
+56 69 6F 6C 65 74 73 20  61 72 65 20 62 6C 75 65   Violets are blue
+</pre></blockquote>
+
+Notice that there is an extra space between the 8th and 9th hexadecimal values and 3 spaces between
+the 16th value and letter <tt>V</tt>. Shown with dots <big><big>&middot;</big></big> representing spaces:
+<p>
+
+<blockquote><pre>
+56<big>&middot;</big>69<big>&middot;</big>6F<big>&middot;</big>6C<big>&middot;</big>65<big>&middot;</big>74<big>&middot;</big>73<big>&middot;</big>20<big>&middot;</big><big>&middot;</big>61<big>&middot;</big>72<big>&middot;</big>65<big>&middot;</big>20<big>&middot;</big>62<big>&middot;</big>6C<big>&middot;</big>75<big>&middot;</big>65<big>&middot;</big><big>&middot;</big><big>&middot;</big>Violets<big>&middot;</big>are<big>&middot;</big>blue
+</pre></blockquote>
+<p>  
+Assume that a call like this was made:
+<blockquote><pre>
+format("Violets are blue", outbuf, 16, 32):
+</pre></blockquote>
+
+The resulting characters in <i>outbuf</i> would look like this:
+<blockquote><pre>
+000020 56 69 6F 6C 65 74 73 20  61 72 65 20 62 6C 75 65   Violets are blue
+</pre></blockquote>
+
+The first "field" in the array is the <i>offset</i> parameter, 32 in the example, formatted as a
+hexadecimal value. (More details on that below.)
+The <i>outbuf</i> array contains <b>exactly</b> 75 elements. There are 74 characters plus the NUL byte
+at the end. If <i>inbuf</i> contains less than 16 characters, you have to make sure to deal with the 
+missing characters. For example, 
+<blockquote><pre>
+format("Roses are red", outbuf, 13, 32);
+</pre></blockquote>
+
+The resulting characters in <i>outbuf</i> would look like this:
+<blockquote><pre>
+000020 52 6F 73 65 73 20 61 72  65 20 72 65 64            Roses are red
+</pre></blockquote>
+
+Here is another sample that shows how it might be called with 16 characters including a Linux/Mac OS X newline:
+<blockquote><pre>
+char *p = "Roses are red.\nV";
+</pre></blockquote>
+
+Calling the <b><tt>format</tt></b> function like this:
+<blockquote><pre>
+<b>#define</b> MAX_STR_LENGTH 75
+char outbuf[MAX_STR_LENGTH]; 
+format(p, outbuf, strlen(p), 0);
+</pre></blockquote>
+
+yields this string in <tt>outbuf</tt>:
+<blockquote><pre>
+000000 52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0A 56   Roses are red..V
+</pre></blockquote>
+
+See <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/main.c.html">main.c</a></b> and the <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/output-format.txt">output</a> for more examples. 
+
+<p>
+<hr width="95%">
+<p>
+
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<!--**********************************************************************************************-->
+<li>The second function you are to write is called <i>dump</i> and it is prototyped like this:
+<blockquote><pre>
+<b>void</b> dump(<b>const char</b> *filename);
+</pre></blockquote>
+The function will read in bytes from a file, format them (using the function you wrote above), and
+print the formatted string.
+<p>
+The function will work similar to the <i>dump</i> or the <i>od</i> programs that are part of the 
+Cygwin utilities. For example, if you ran <i>dump</i> on this text file 
+named <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/poem-win.txt">poem-win.txt</a> (the <tt>&lt;NL&gt;</tt> represents the 
+invisible new-line at the end of each line):
+
+<blockquote><pre>
+Roses are red.&lt;NL&gt;
+Violets are blue.&lt;NL&gt;
+Some poems rhyme.&lt;NL&gt;
+But not this one.&lt;NL&gt;
+</pre></blockquote>
+
+you would see this displayed on the screen:
+
+<blockquote><pre>
+<b>(Command line)  dump poem-win.txt</b>
+
+poem-win.txt:
+00000000  526f 7365 7320 6172 6520 7265 642e 0d0a Roses are red...
+00000010  5669 6f6c 6574 7320 6172 6520 626c 7565 Violets are blue
+00000020  2e0d 0a53 6f6d 6520 706f 656d 7320 7268 ...Some poems rh
+00000030  796d 652e 0d0a 4275 7420 6e6f 7420 7468 yme...But not th
+00000040  6973 206f 6e65 2e0d 0a                  is one...
+</pre></blockquote>
+
+Compare this with the outputs from the octal dump program:
+
+<blockquote><pre>
+<b>(Command line) </b> <b>od -a poem-win.txt</b>
+
+0000000   R   o   s   e   s  sp   a   r   e  sp   r   e   d   .  cr  nl
+0000020   V   i   o   l   e   t   s  sp   a   r   e  sp   b   l   u   e
+0000040   .  cr  nl   S   o   m   e  sp   p   o   e   m   s  sp   r   h
+0000060   y   m   e   .  cr  nl   B   u   t  sp   n   o   t  sp   t   h
+0000100   i   s  sp   o   n   e   .  cr  nl
+0000111
+
+<b>(Command line) </b> <b>od -c poem-win.txt</b>
+
+0000000   R   o   s   e   s       a   r   e       r   e   d   .  \r  \n
+0000020   V   i   o   l   e   t   s       a   r   e       b   l   u   e
+0000040   .  \r  \n   S   o   m   e       p   o   e   m   s       r   h
+0000060   y   m   e   .  \r  \n   B   u   t       n   o   t       t   h
+0000100   i   s       o   n   e   .  \r  \n
+0000111
+</pre></blockquote>
+
+The program you will write (<i>dumpit</i>) will format the output as such:
+
+<blockquote><pre>
+<b>(Command line)  dumpit poem-win.txt</b>
+
+
+poem-win.txt:
+       00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
+--------------------------------------------------------------------------
+<font color="blue">000000</font> <font color="red">52 6F 73 65 73 20 61 72  65 20 72 65 64 2E 0D 0A</font>   <font color="green">Roses are red...</font>
+<font color="blue">000010</font> <font color="red">56 69 6F 6C 65 74 73 20  61 72 65 20 62 6C 75 65</font>   <font color="green">Violets are blue</font>
+<font color="blue">000020</font> <font color="red">2E 0D 0A 53 6F 6D 65 20  70 6F 65 6D 73 20 72 68</font>   <font color="green">...Some poems rh</font>
+<font color="blue">000030</font> <font color="red">79 6D 65 2E 0D 0A 42 75  74 20 6E 6F 74 20 74 68</font>   <font color="green">yme...But not th</font>
+<font color="blue">000040</font> <font color="red">69 73 20 6F 6E 65 2E 0D  0A                     </font>   <font color="green">is one...</font>
+</pre></blockquote>
+
+The colors are shown here just to highlight the sections discussed below. 
+<b>Your code will not produce colored output.</b>
+<p>
+<b>Notes and Hints</b>:
+<p>
+<ol>
+<li>You are opening the files as <b>binary</b> for input/reading (mode: "rb"). This is because you
+want to read every character as-is (without translating the newline) from the file. </li>
+<p>
+<li>You are writing text to stdout (printf, puts, etc.)</li>
+<p>
+<li>The first line you write is the name of the file with a colon following it.</li>
+<p>
+<li>The next two lines are the header lines.</li>
+
+  <p>
+<li>The rest of the lines are the data from the file itself. The lines contain at most 74 characters, so
+  you need a buffer of 75 characters (to account for the NUL byte at the end). You might want to
+  make a <b><tt>#define</tt></b> for this.
+  <p>
+<ol>
+<li>The first section (<font color="blue">blue</font>) is the six-character byte offset into the file, 
+  followed by a space. You format that
+  number using the format specifier: <tt>%06X</tt>. This value is the last (fourth) parameter to the 
+  <b>format</b> function described above.
+  <p>
+<li>The next 16 columns (<font color="red">red</font>) are the 2-byte hexadecimal values of each 
+  character in the buffer separated by a space character. 
+  You format each byte with <tt>%02X</tt>. 
+  Notice the extra space character in the middle of the hex output (between the 8th and 9th columns).
+  This helps with the readability of the output.
+  <p>
+<li>At the end (<font color="green">green</font>) are the 16 characters printed as ASCII. Only characters 
+  between 32 and 126 are to be printed. You 
+  should print a period for all others. (Notice the <tt>0D</tt> and <tt>0A</tt> characters, 
+  decimal 13 and 10, are shown as periods.)
+  <p>
+<li>There are 3 spaces between the hexadecimal values and the ASCII values.
+  <p>
+<li>Be careful with the last line, as it will likely not have exactly 16 characters.
+</ol>
+<p>
+<li>To format each line, you should format the six-character offset first, then use <tt>strcat</tt> to add
+  each of the remaining characters. For example, to build up the string <tt>000010 01 20 41</tt>,
+  assuming you have a 75-byte buffer, and a scratch buffer called <tt>next</tt> (that only needs to
+  be able to hold a few bytes at most), it looks something like this:
+  <blockquote><pre>
+sprintf(buffer, "%06X ", 16);   <font color="blue">===>  "000010 "</font>
+sprintf(next, "%02X", 1);       <font color="red">===>  "01"</font>
+strcat(buffer, next);           <font color="blue">===>  "000010 01"</font>
+strcat(buffer, " ");            <font color="blue">===>  "000010 01 "</font>
+sprintf(next, "%02X", 32);      <font color="red">===>  "20"</font>
+strcat(buffer, next);           <font color="blue">===>  "000010 01 20"</font>
+strcat(buffer, " ");            <font color="blue">===>  "000010 01 20 "</font>
+sprintf(next, "%02X", 'A');     <font color="red">===>  "41"</font>
+strcat(buffer, next);           <font color="blue">===>  "000010 01 20 41"</font>
+</pre></blockquote>
+The <font color="blue">blue</font> text is what is currently in <font color="blue">buffer</font>
+and the <font color="red">red</font> text is what is currently in <font color="red">next</font>.
+The double-quotes are not actually in the string, but are shown so you can see the trailing
+spaces in the string.
+<p>
+There are many ways to do this, but using <tt>sprintf</tt> and <tt>strcat</tt> is the easiest approach. 
+<b>You will actually be doing this in a loop for each character in the line as you build up the string.</b>
+<p>
+<li>If you are unable to open the file, you must emit an appropriate error message like this:
+  <blockquote><pre>
+Can't open foobar for binary read.
+  </pre></blockquote>
+  replacing <tt>foobar</tt> with the actual name of the file.</li>
+  <p>
+    <!--
+<li>Use <tt><b>unsigned char</b></tt> for each byte rather than a <tt><b>signed char</b></tt>.
+  Remember, the default signedness for <tt><b>char</b></tt> is compiler-dependent. Forcing it
+  to <tt><b>unsigned char</b></tt> will guarantee the same results on different compilers.
+  <p>
+  -->
+<li>Use the <tt>%X</tt> format specifier to format integers as hexadecimal. The integers/chars must 
+  be <tt><b>unsigned</b></tt>. You need to cast any signed characters to unsigned characters
+  when using <i>printf</i> or <i>sprintf</i>.
+  If you see a bunch of FFFFFFFF in your output, you're probably using signed characters.
+  <b>This will most likely happen when you are reading binary files.</b>
+  <p>
+<li>Remember to check the return value from <tt>fread</tt> so you know how many characters were read in. 
+  If you ask for 16 bytes, and you only get 10, you
+	have to be sure that you aren't trying to access more than the 10 bytes that were retrieved.
+  <p>
+<li>Other functions that you may need to use are <tt>printf</tt>, <tt>fopen</tt>, <tt>fclose</tt>, 
+  <tt>sprintf</tt>, <tt>fread</tt>, <tt>strcat</tt>, and <tt>strcpy</tt>.
+  <p>
+<li>Since there is a lot of hexadecimal formatting, I highly suggest that you use <tt>sprintf</tt> to help
+  with the formatting.</li>
+  <p>
+<li>When in doubt, stop and think about what you are trying to do. If you break this down into steps 
+  (using pseudocode), you'll see
+that it is fairly easy to implement. 
+<p>
+	
+<blockquote>
+<p class="technote">
+The key to completing this lab successfully is in the implementation of the <b>format</b> function. 
+This is where most of the work
+is done. Once you have the <b>format</b> function working, you are probably 80% done with the lab.
+Don't try to do any file reading or anything else until you have successfully implemented and tested 
+your <b>format</b> function.
+</blockquote>
+</ol>
+</ol>
+
+<p>
+<hr width="95%">
+<p>
+
+<ul>
+  <li>Here's a driver: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/main.c.html">HTML</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/main.c">Text</a></li>
+  <p>
+  <li>Here's the starting point for <tt>dumpit.c</tt>: 
+    <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dumpit.c.html">HTML</a>&nbsp;&nbsp;&nbsp;<a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dumpit.c">Text</a></li>
+<p>
+
+<li>Command line to compile the program:
+<blockquote><pre>
+gcc -O -Wall -Wextra -ansi -pedantic -Werror main.c dumpit.c -o dumpit
+</pre></blockquote>
+
+<li>Testing the <b>format</b> function:
+<p>
+<ul>
+  <li>This is the output for the formatting tests: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/output-format.txt">output-format.txt</a></li>
+</ul>
+
+<blockquote><pre>
+</pre></blockquote>
+<li>Testing the <b>dump</b> function:
+<ul>
+<p>
+<li>Text file input: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/decl-win.txt">decl-win.txt</a> &nbsp; &nbsp; &nbsp; 
+  Output: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/decl.dumpit.txt">decl.dumpit.txt</a></li>
+<p>
+<li>Binary file input: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/icon1.bmp">icon1.bmp</a> &nbsp; &nbsp; &nbsp; 
+  Output: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/icon1.dumpit.txt">icon1.dumpit.txt</a></li>
+<p>
+<li>Bigger binary file: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dude.jpg">dude.jpg</a> &nbsp; &nbsp; &nbsp; 
+  Output: <a href="https://azrael.digipen.edu/~mmead/www/Courses/2020/winter/cs180/practice/dumpit/cs120/dude.dumpit.txt">dude.dumpit.txt</a></li>
+<p>
+</ul>
+<li>The only header files you need to include are already included in <tt>dumpit.c</tt>.
+</ul>
+
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+
+<!--
+<p class="SectionHeader">
+For Outside the Lab (Self-study)
+</p>
+<p>
+<b>For outside the lab (after the semester ends so you can keep in "programming shape")</b>
+
+<ul>
+<li>Handle multiple files on the command line (no limit). You will have to edit <tt><b>main.c</b></tt> for this.
+<li>Allow the user to specify how many bytes for each line using a switch, <tt><b>-w<WIDTH></b></tt>. (See examples below.)
+<li>Add a header to the output displaying the byte offset (up to 0xFF, decimal 255)
+</ul>
+
+<p>
+For example, you should be able to handle these command lines:
+
+<blockquote><pre>
+dumpit decl-win.txt decl-mac.txt decl-lin.txt
+</pre></blockquote>
+
+<a href="all-16.txt">Output</a> from command above.
+
+<p>
+and these:
+
+<blockquote><pre>
+dumpit -w8 decl-win.txt decl-mac.txt decl-lin.txt  &nbsp;&nbsp; <a href="all-8.txt">Output</a> 
+dumpit -w16 decl-win.txt decl-mac.txt decl-lin.txt &nbsp;&nbsp; <a href="all-16.txt">Output</a> 
+dumpit -w20 decl-win.txt decl-mac.txt decl-lin.txt &nbsp;&nbsp; <a href="all-20.txt">Output</a> 
+dumpit -w32 decl-win.txt decl-mac.txt decl-lin.txt &nbsp;&nbsp; <a href="all-32.txt">Output</a> 
+dumpit -w64 decl-win.txt decl-mac.txt decl-lin.txt &nbsp;&nbsp; <a href="all-64.txt">Output</a> 
+</pre></blockquote>
+
+Here are the 3 text files with their different end-of-line character(s).
+
+<p>
+<blockquote>
+<a href="decl-win.txt">Windows</a> &nbsp;&nbsp;&nbsp; <a href="decl-lin.txt">Linux</a> &nbsp;&nbsp;&nbsp; <a href="decl-mac.txt">Mac</a>
+</blockquote>
+<p>
+Remember, you must save theses files directly to your disk. DO NOT SAVE THE WEBPAGE THAT DISPLAYS THE TEXT.
+<p>
+A working executable for testing is <a href="dumpit2.exe">here</a>. (Download the file and run from a command prompt.)
+
+
+<blockquote>
+<p class="technote"></p>
+</blockquote>
+-->
+
+
+<blockquote><pre>
+</pre></blockquote>
+	
+
+
+</ol>
+
+
+<p>
+<big><big>
+</big></big>
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<br><br><br><br>
+
+  
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

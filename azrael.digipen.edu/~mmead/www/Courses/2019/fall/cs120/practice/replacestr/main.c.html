@@ -1,0 +1,49 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>main.c</title>
+</head>
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt; /* printf */</font>
+<font color="990099">#include &quot;replacestr.h&quot;</font>
+
+<b>void</b> usage(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;Usage:  replacestr filename oldstring newstring&#92;n&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;where:  filename is the file to search through&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;        oldstring is the text to search for&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;        newstring is the text to replace oldstring with&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;Example: poem.txt are &#92;&quot;may be&#92;&quot;&#92;n&#92;n&quot;</font>);
+  printf(<font color="#9933CC">&quot;If either of the strings contain spaces,&quot;</font>);
+  printf(<font color="#9933CC">&quot; it must be surrounded by quotes.&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> **argv)
+{
+  <b>enum</b> FILE_ERR result; <font color="#003399"><i>/* File errors */</i></font>
+
+    <font color="#003399"><i>/* Must get 3 args on the command line */</i></font>
+  <b>if</b> (argc &lt; 4)
+  {
+    usage();
+    <b>return</b> 1;
+  }
+
+    <font color="#003399"><i>/* replacestr(filename, oldstring, newstring) */</i></font>
+  result = replacestr(argv[1], argv[2], argv[3]);
+  <b>if</b> (result == feINPUT)
+    perror(argv[1]);
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

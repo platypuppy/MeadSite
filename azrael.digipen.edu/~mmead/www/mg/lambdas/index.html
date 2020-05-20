@@ -1,0 +1,2083 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>Mead's Guide to Lambda Expressions</title>
+
+</head>
+
+<style>
+#empty {
+    height: 0px;
+    #width: 800px;
+    #margin: 0 auto;
+    overflow: hidden;
+   }
+</style>
+
+<body>  
+<center>
+  <h1>Mead's Guide to Lambda Expressions in C++11/14</h1>
+  <h2>(a.k.a. Anonymous Functions)
+</center>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Background
+</p>
+This topic is directly related to functions in C++. Functions are the basis for all
+programming in C and C++. But, for all of the power of functions, they have some glaring
+short-comings:
+<ol>
+  <li>You can't pass a function to a function. (You can pass a <i>pointer</i> to a function, though.)</li>
+  <li>You can't return a function from a function. (You can return a <i>pointer</i> to a function.)</li>
+  <li>You can't have an array of functions. (Again, you can have an array of function pointers.)</li>
+  <li>In C, all functions are at the global (or file) scope.</li>
+  <ul>In both C and C++ you can't have nested (or local) functions (i.e. a function defined 
+      inside of another function.)</li>
+  </ul>
+  <li>In C++, we can put functions into namespaces or classes to minimize the affect that one
+    function's name may clash with another function of the same name.</li>
+  <li>Using function pointers prevents the compiler from certain optimizations (such as
+    inlining).</li>
+    <ul>
+      <li>We can get the benefit of inlining from <i>function objects</i>, which are simply
+      objects instantiated from a class that overloads the function call operator.</li>
+      <li>Function objects can be passed to functions, returned from functions, and stored
+        in an array.</li>
+      <li>However, creating a class and overloading the function call operator for a simple 
+        function seems like overkill.</li>
+    </ul>
+  <li>If we need a simple, small function, we still need to give it a name that doesn't
+    conflict with any other symbol in scope. This function may be separated by some distance 
+    to the code that is actually going to use it (again, no local functions).</li>
+  <li>If we have lots of small, only-used-in-one-place kind of functions, we litter the code
+    with all of these seemingly-random functions all over the place.</li>
+</ol>
+However, even in spite of these <i>supposed limitations</i>, 
+they don't really seem to prevent programmers from writing massive and
+complex programs in C++. So, what <i>exactly</i> is the problem? As usual, I will demonstrate 
+with several code examples.
+
+<p class="technote">
+A lot of the code used on this web page requires a C++14-compliant compiler. This includes the GNU
+g++ compiler (version 5 or later) and the Clang compiler (version 3.4 or later). You will need to
+provide this option on the command line: <tt>-std=c++14</tt>. (This replaces <tt>-ansi</tt>.)
+Depending on the exact version of the compiler, you may have to use <tt>-std=c++1y</tt> instead. 
+I tested with g++ version 5.1 and Clang version 3.4 and both accepted <tt>-std=c++1y</tt>.
+<br><br>
+Microsoft's Visual Studio 2015 is supposed to be released soon with more support for C++11/14.
+Until then, you'll need to use one of the compliant compilers.
+<br>
+<b>Update:</b> Microsoft has
+released Visual Studio 2015 and is said to have full C++14 compiliance.
+<br>
+<b>Update 2:</b>
+Microsoft's Visual Studio 2017 includes a compiler that is fully C++17 compliant.
+</p> 
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FIRST_EXAMPLE"></a>
+<p class="SectionHeader">
+First Example
+</p>
+As it turns out, one of the most popular uses for lambda expressions is as parameters to
+the STL generic algorithms (functions). So, as a first example, let's look at the popular 
+<i>sort</i> algorithm in the STL using a vector of strings:
+<p>
+<b>Code:</b>
+<blockquote><pre>
+vector&lt;string&gt; animals {<font color="#9933CC">&quot;dog&quot;</font>, <font color="#9933CC">&quot;stringray&quot;</font>, <font color="#9933CC">&quot;alligator&quot;</font>, <font color="#9933CC">&quot;hippopotamus&quot;</font>,
+                        <font color="#9933CC">&quot;mouse&quot;</font>, <font color="#9933CC">&quot;chihuahua&quot;</font>, <font color="#9933CC">&quot;yak&quot;</font>, <font color="#9933CC">&quot;zebra&quot;</font>, <font color="#9933CC">&quot;uguisu&quot;</font>,
+                        <font color="#9933CC">&quot;rabbit&quot;</font>, <font color="#9933CC">&quot;cheetah&quot;</font>
+                       };
+
+cout &lt;&lt; <font color="#9933CC">&quot;Original order:&quot;</font> &lt;&lt; endl;
+printc(animals);
+</pre></blockquote>
+
+<b>Output:</b>
+
+<blockquote><pre>
+dog  stringray  alligator  hippopotamus  mouse  chihuahua  yak  zebra  uguisu  rabbit  cheetah
+</pre></blockquote>
+
+There's nothing really notable here, but there are a couple of things to point out:
+<ol>
+  <li>The vector is initialized with the Uniform Initializer (a.k.a. brace-enclosed initializer) 
+    syntax new in C++11. 
+    In the "olden days", we would have had to write it something like this:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Create the container</i></font>
+vector&lt;string&gt; animals;
+
+  <font color="#003399"><i>// Add items to the container</i></font>
+animals.push_back(<font color="#9933CC">&quot;dog&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;stringray&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;alligator&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;hippopotamus&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;mouse&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;chihuahua&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;yak&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;zebra&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;uguisu&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;rabbit&quot;</font>);
+animals.push_back(<font color="#9933CC">&quot;cheetah&quot;</font>);
+</pre></blockquote>
+</li>
+
+<li>There's a function template I wrote called <tt>printc</tt> that simply prints out 
+  the contents of most any container:
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>void</b> printc(<b>const</b> T&amp; v)
+{
+  <b>typename</b> T::const_iterator iter;
+  <b>for</b> (iter = v.begin(); iter != v.end(); ++iter)
+    cout &lt;&lt; *iter &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  cout &lt;&lt; endl;
+}
+</pre></blockquote>
+</ol>
+
+Now, let's say we want to sort the strings alphabetically in increasing order:
+
+<blockquote><pre>
+sort(animals.begin(), animals.end());
+cout &lt;&lt; <font color="#9933CC">&quot;Order by less:&quot;</font> &lt;&lt; endl;
+printc(animals);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Order by less:
+alligator  cheetah  chihuahua  dog  hippopotamus  mouse  rabbit  stringray  uguisu  yak  zebra
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+The default behavoir of <i>sort</i> is to use the standard function object <i>less</i>. 
+The above call to <i>sort</i> is equivalent to this:
+<blockquote><pre>
+sort(animals.begin(), animals.end(), less&lt;string&gt;());
+</pre></blockquote>
+
+So, if we want to sort the list in decreasing order, we would use <i>greater</i>, which
+is another pre-defined function object in the STL:
+
+<blockquote><pre>
+sort(animals.begin(), animals.end(), greater&lt;string&gt;());
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Order by greater:
+zebra  yak  uguisu  stringray  rabbit  mouse  hippopotamus  dog  chihuahua  cheetah  alligator  
+</pre></blockquote>
+
+
+A sample implementation of <i>greater</i>:
+<p>
+
+<blockquote><pre>
+<b>template</b> &lt;<b>typename</b> T&gt;
+<b>class</b> greater
+{
+  <b>public</b>:
+    <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; a, <b>const</b> T &amp;b) <b>const</b>
+    {
+      <b>return</b> a &gt; b;
+    }
+};
+</pre></blockquote>
+
+You can see that the <i>greater</i> class is just a glorified wrapper around the
+&gt; operator. Most function objects are simplistic like this.
+<p>
+
+Here are some other standard function objects that are available in the STL:
+<blockquote>
+<table border=0 cellpadding=0>
+
+<tr><th>Binary function objects</th><th></th><th>Meaning</th></tr>
+<tr>
+<td>
+<pre>
+less&lt;<i>type</i>&gt;()           
+greater&lt;<i>type</i>&gt;()        
+equal_to&lt;<i>type</i>&gt;()       
+not_equal_to&lt;<i>type</i>&gt;()   
+less_equal&lt;<i>type</i>&gt;()     
+greater_equal&lt;<i>type</i>&gt;()  
+logical_and&lt;<i>type</i>&gt;()     
+logical_or&lt;<i>type</i>&gt;()      
+plus&lt;<i>type</i>&gt;()            
+minus&lt;<i>type</i>&gt;()           
+multiplies&lt;<i>type</i>&gt;()      
+divides&lt;<i>type</i>&gt;()         
+modulus&lt;<i>type</i>&gt;()</pre>
+</td>
+<td width=20>
+&nbsp;
+</td>
+<td>
+<pre>
+lhs &lt; rhs
+lhs &gt; rhs
+lhs == rhs
+lhs != rhs
+lhs &lt;= rhs
+lhs &gt;= rhs
+lhs &amp;&amp; rhs
+lhs || rhs
+lhs + rhs
+lhs - rhs
+lhs * rhs
+lhs / rhs
+lhs % rhs</pre>
+</td>
+</tr></table></blockquote>
+
+But what if we need a custom sort method, say, sorting by string length? We have several
+options.
+
+<ol>
+  <li>Create a boolean function, <i>shorter</i>, that compares two strings to see which 
+    is shorter:
+
+<blockquote><pre>
+<b>bool</b> shorter(<b>const</b> string&amp; left, <b>const</b> string&amp; right)
+{
+  <b>return</b> left.size() &lt; right.size();
+}
+</pre></blockquote>
+
+This function will return <b>true</b> if the length of left string is less than the length of the 
+right string and <b>false</b> otherwise. We would call it like this:
+
+<blockquote><pre>
+sort(animals.begin(), animals.end(), shorter);
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+yak  dog  zebra  mouse  uguisu  rabbit  cheetah  stringray  chihuahua  alligator  hippopotamus
+</pre></blockquote>
+</li>
+
+<li>Create a class (called <i>Shorter</i>) and overload the function call operator to create 
+  a functor:
+
+<blockquote><pre>
+<b>class</b> Shorter
+{
+  <b>public</b>:
+    <b>bool</b> <b>operator</b>()(<b>const</b> string&amp; left, <b>const</b> string&amp; right)
+    {
+      <b>return</b> left.size() &lt; right.size();      
+    }
+};
+</pre></blockquote>
+
+We would call it like this:
+
+<blockquote><pre>
+sort(animals.begin(), animals.end(), Shorter());
+</pre></blockquote>
+
+with the output being the same. At least with function objects, you can define the class
+locally within a function (C++11 or later), giving you kind of the behavior of local or nested functions. You
+can't do that with a regular function, to wit:
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+<b>void</b> f1()
+{
+  vector&lt;string&gt; animals {<font color="#9933CC">&quot;dog&quot;</font>, <font color="#9933CC">&quot;stringray&quot;</font>, <font color="#9933CC">&quot;alligator&quot;</font>, <font color="#9933CC">&quot;hippopotamus&quot;</font>,
+                          <font color="#9933CC">&quot;mouse&quot;</font>, <font color="#9933CC">&quot;chihuahua&quot;</font>, <font color="#9933CC">&quot;yak&quot;</font>, <font color="#9933CC">&quot;zebra&quot;</font>, <font color="#9933CC">&quot;uguisu&quot;</font>,
+                          <font color="#9933CC">&quot;rabbit&quot;</font>, <font color="#9933CC">&quot;cheetah&quot;</font>
+   
+    <font color="#003399"><i>// This class can only be local to a function in C++11 or later.</i></font>
+    <font color="#003399"><i>// C++98 required it to be at the global scope.</i></font>
+  <b>class</b> Shorter
+  {
+    <b>public</b>:
+      <b>bool</b> <b>operator</b>()(<b>const</b> string&amp; left, <b>const</b> string&amp; right)
+      {
+        <b>return</b> left.size() &lt; right.size();      
+      }
+  };
+
+  cout &lt;&lt; <font color="#9933CC">&quot;Original order:&quot;</font> &lt;&lt; endl;
+  printc(animals);
+  cout &lt;&lt; endl;
+
+  sort(animals.begin(), animals.end(), Shorter());
+  cout &lt;&lt; <font color="#9933CC">&quot;Order by length (functor, shortest first)&quot;</font> &lt;&lt; endl;
+  printc(animals);
+  cout &lt;&lt; endl;
+}
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+Original order:
+dog  stringray  alligator  hippopotamus  mouse  chihuahua  yak  zebra  uguisu  rabbit  cheetah  
+
+Order by length (functor, shortest first)
+yak  dog  zebra  mouse  uguisu  rabbit  cheetah  stringray  chihuahua  alligator  hippopotamus  
+</pre></blockquote>
+
+
+
+Still, that's a lot of overhead for something so trivial.
+</ol>
+
+You can imagine that we might also like to sort from longest to shortest, sort by number of vowels, sort
+by the sum of the ASCII characters, etc. We could easily have a dozen or more functions and/or
+classes to deal with. Lots of code with very local and specific use.
+<p>
+This leads to a third alternative:
+<p>
+<ol start=3>
+  <li>Use a lambda expression. This is what we would <i>really</i> like to do (but it's not legal
+    syntax):
+
+<blockquote><pre>
+sort(animals.begin(), 
+     animals.end(), 
+     <b>bool</b> shorter(<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();}
+    );
+</pre></blockquote>
+
+See how I'm passing the entire function to <i>sort</i>? This, in a nutshell, is what it means
+to pass a "function" to another function. Well, that's not the exact syntax. Basically, you
+remove the return type and replace the function name with a pair of brackets:
+
+<blockquote><pre>
+sort(animals.begin(), 
+     animals.end(), 
+     <font color="blue"><b>[]</b></font>(<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();}
+    );
+</pre></blockquote>
+
+Notes:
+<p>
+<ul>
+  <li>It may appear that we are passing the entire "function body" to the <i>sort</i> algorithm
+inline! This is why lambda expressions are also known as <i>anonymous functions</i>;
+the function has no name.</li>
+<li>Its use is exactly where it is needed, no more, no less.</li>
+<li>It's also impossible to conflict with any other symbol in the program because there is no name.</li>
+<li>Also, this is just the basic syntax for a lambda expression. We will see shortly that we can
+put stuff inside the pair of brackets, as well as other annotations.</li>
+</ul>
+
+</ol>
+
+So, it appears that for smaller, inlined functions, lambda expressions are exactly what
+we've been waiting for. 
+<p>
+Incidentally, other languages have had this technique for years.
+The name lambda comes from 
+<a href="http://en.wikipedia.org/wiki/Lambda_calculus">Lambda Calculus</a> where this
+technique originated decades ago.
+<p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<p>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="FUNCTIONS_AS_PARAMETERS"></a>
+<p class="SectionHeader">
+Function Pointers as Parameters
+</p>
+
+<p class="technote">
+The following is an example that I have used in the past when discussing STL algorithms and
+function objects. I'm going to repeat it here so that we can compare and contrast with the 
+new version that uses lambda expressions instead.
+</p>
+
+We will use these simple functions, which should be self-explanatory:
+<p>
+
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top>
+
+<td>
+<blockquote><pre>
+<b>int</b> NextInt()
+{
+  <b>static</b> <b>int</b> i = 0;
+  <b>return</b> ++i;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>int</b> RandomInt()
+{
+  <b>return</b> rand();
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>void</b> TripleByRef(<b>int</b>&amp; value)
+{
+  value *= 3;
+}
+</pre></blockquote>
+</td>
+
+</tr>
+<tr valign=top>
+
+<td>
+<blockquote><pre>
+<b>int</b> TripleByVal(<b>int</b> value)
+{
+  <b>return</b> value * 3;
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>bool</b> DivBy6(<b>int</b> value)
+{
+  <b>return</b> !(value % 6);
+}
+</pre></blockquote>
+</td>
+
+<td>
+<blockquote><pre>
+<b>bool</b> IsEven(<b>int</b> value)
+{
+  <b>return</b> !(value % 2);
+}
+</pre></blockquote>
+</td>
+
+
+</tr>
+</table>
+
+Note 1: <tt>NextInt</tt> and <tt>RandomInt</tt> are called <i>generators</i>.
+<ul>
+  <li>A generator is a function with no inputs that returns a value (in some sequence, which may be random) each time it is called.</li>
+</ul>
+Note 2: <tt>DivBy6</tt> and <tt>IsEven</tt> are called <i>predicates</i>.
+<ul>
+  <li>A predicate is simply a function that returns <b>true</b> or <b>false</b>.</li>
+</ul>
+<p>
+
+
+
+This code uses the functions (pointers, actually) as parameters to the algorithms.
+Notice the lack of any looping or iteration. The algorithms do the looping for you. And as the wise-man,
+Bjarne Stroustrup, says: <i>"Prefer algorithms to loops"</i>.
+
+<pre class="sourcecode"><code><b>void</b> f5()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create a container all set to 0: 0  0  0  0  0  0  0  0  0  0</i></font>
+  ContainerType cont1(10);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Container all set to 0\n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Fill list with the value 5: 5  5  5  5  5  5  5  5  5  5</i></font>
+  <font color="blue"><b>std::fill</b></font>(cont1.begin(), cont1.end(), 5);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nContainer all set to 5\n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Fill list with values (1..10): 1  2  3  4  5  6  7  8  9  10</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), NextInt);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nContainer set sequentially from 1 to 10\n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3 (incorrect): 1  2  3  4  5  6  7  8  9  10</i></font>
+  <font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), TripleByVal);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nEach element multiplied by 3 (incorrect)\n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3: 3  6  9  12  15  18  21  24  27  30</i></font>
+  <font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), TripleByRef);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nEach element multiplied by 3\n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3: 9  18  27  36  45  54  63  72  81  90</i></font>
+  <font color="blue"><b>std::transform</b></font>(cont1.begin(), cont1.end(), cont1.begin(), TripleByVal);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nEach element multiplied by 3 (again)\n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Create another list (same size as first list)</i></font>
+  ContainerType cont2(cont1.size());
+
+    <font color="#003399"><i>// Count number of even elements: 5</i></font>
+  <b>int</b> count = <font color="blue"><b>std::count_if</b></font>(cont1.begin(), cont1.end(), IsEven);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nNumber of even elements: &quot;</font> &lt;&lt; count &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Copy values from list1 to list2 where element not divisible by 6</i></font>
+    <font color="#003399"><i>// 9  27  45  63  81  0  0  0  0  0</i></font>
+  <font color="blue"><b>std::remove_copy_if</b></font>(cont1.begin(), cont1.end(), cont2.begin(), DivBy6);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nCopy values from list1 to list2 where element not divisible by 6\n&quot;</font>;
+  printc(cont2);
+
+    <font color="#003399"><i>// Copy values from list1 to list2 where element not divisible by 6</i></font>
+    <font color="#003399"><i>// and trim the list</i></font>
+    <font color="#003399"><i>// List1: 9  18  27  36  45  54  63  72  81  90</i></font>
+    <font color="#003399"><i>// List2: 9  27  45  63  81</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;\nCopy values from list1 to list2 where element not divisible by 6 &quot;</font>;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;and trim the list\n&quot;</font>;
+  cont2.erase(<font color="blue"><b>std::remove_copy_if</b></font>(cont1.begin(), cont1.end(), cont2.begin(), DivBy6), 
+              cont2.end());
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1: &quot;</font>;
+  printc(cont1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2: &quot;</font>;
+  printc(cont2);
+}</code></pre>
+
+Full output:
+<blockquote><pre>
+Container all set to 0
+0  0  0  0  0  0  0  0  0  0
+
+Container all set to 5
+5  5  5  5  5  5  5  5  5  5
+
+Container set sequentially from 1 to 10
+1  2  3  4  5  6  7  8  9  10
+
+Each element multiplied by 3 (incorrect)
+1  2  3  4  5  6  7  8  9  10
+
+Each element multiplied by 3
+3  6  9  12  15  18  21  24  27  30
+
+Each element multiplied by 3 (again)
+9  18  27  36  45  54  63  72  81  90
+
+Number of even elements: 5
+
+Copy values from list1 to list2 where element not divisible by 6
+9  27  45  63  81  0  0  0  0  0
+
+Copy values from list1 to list2 where element not divisible by 6 and trim the list
+List1: 9  18  27  36  45  54  63  72  81  90
+List2: 9  27  45  63  81
+</pre></blockquote>
+
+In case you need a refresher, here are the details regarding the algorithms used in 
+the example:
+<p>
+<blockquote>
+<a href="STLAlgorithmsInterface.html">Declarations</a>
+<br>
+<a href="STLAlgorithmsImplementation.html">Implementations</a>
+</blockquote>
+<p>
+
+The same code using lambda expressions instead of the functions:
+
+<pre class="sourcecode"><code><b>void</b> f3()
+{
+    <font color="#003399"><i>// Make it easy to switch containers</i></font>
+  <b>typedef</b> std::list&lt;<b>int</b>&gt; ContainerType;
+
+    <font color="#003399"><i>// Create a container all set to 0: 0  0  0  0  0  0  0  0  0  0</i></font>
+  ContainerType cont1(10);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;Container all set to 0&#92;n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Fill list with the value 5: 5  5  5  5  5  5  5  5  5  5</i></font>
+  <font color="blue"><b>std::fill</b></font>(cont1.begin(), cont1.end(), 5);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nContainer all set to 5&#92;n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Fill list with values (1..10): 1  2  3  4  5  6  7  8  9  10</i></font>
+  <font color="blue"><b>std::generate</b></font>(cont1.begin(), cont1.end(), []{<b>static int</b> i = 0; <b>return</b> ++i;});
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nContainer set sequentially from 1 to 10&#92;n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3 (incorrect): 1  2  3  4  5  6  7  8  9  10</i></font>
+  <b>auto</b> TBV = [](<b>int</b> v){<b>return</b> v * 3;};
+  <font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), TBV);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nEach element multiplied by 3 (incorrect)&#92;n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3: 3  6  9  12  15  18  21  24  27  30</i></font>
+  <font color="blue"><b>std::for_each</b></font>(cont1.begin(), cont1.end(), [](<b>int</b>&amp; v){v *= 3;});
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nEach element multiplied by 3&#92;n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Multiply each element by 3: 9  18  27  36  45  54  63  72  81  90</i></font>
+  <font color="blue"><b>std::transform</b></font>(cont1.begin(), cont1.end(), cont1.begin(), TBV);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nEach element multiplied by 3 (again)&#92;n&quot;</font>;
+  printc(cont1);
+
+    <font color="#003399"><i>// Create another list (same size as first list)</i></font>
+  ContainerType cont2(cont1.size());
+
+    <font color="#003399"><i>// Count number of even elements: 5</i></font>
+  <b>int</b> count = <font color="blue"><b>std::count_if</b></font>(cont1.begin(), cont1.end(), [](<b>int</b> v){<b>return</b> !(v %2);});
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nNumber of even elements: &quot;</font> &lt;&lt; count &lt;&lt; std::endl;
+
+    <font color="#003399"><i>// Copy values from list1 to list2 where element not divisible by 6</i></font>
+    <font color="#003399"><i>// 9  27  45  63  81  0  0  0  0  0</i></font>
+  <b>auto</b> DB6 = [](<b>int</b> v){<b>return</b> !(v % 6);};
+  <font color="blue"><b>std::remove_copy_if</b></font>(cont1.begin(), cont1.end(), cont2.begin(), DB6);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nCopy values from list1 to list2 where element not divisible by 6&#92;n&quot;</font>;
+  printc(cont2);
+
+    <font color="#003399"><i>// Copy values from list1 to list2 where element not divisible by 6</i></font>
+    <font color="#003399"><i>// and trim the list</i></font>
+    <font color="#003399"><i>// List1: 9  18  27  36  45  54  63  72  81  90</i></font>
+    <font color="#003399"><i>// List2: 9  27  45  63  81</i></font>
+  std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;nCopy values from list1 to list2 where element not divisible by 6 &quot;</font>;
+  std::cout &lt;&lt; <font color="#9933CC">&quot;and trim the list&#92;n&quot;</font>;
+  cont2.erase(<font color="blue"><b>std::remove_copy_if</b></font>(cont1.begin(), cont1.end(), cont2.begin(), DB6), 
+              cont2.end());
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List1: &quot;</font>;
+  printc(cont1);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;List2: &quot;</font>;
+  printc(cont2);
+}
+</code></pre>
+
+The only things that need explaining at this point are the <b>auto</b> variables
+<i>TBV</i> (shorthand for TripleByValue) and <i>DB6</i> (shorthand for DivideBy6).
+<p>
+Yes, you can name your lambda expressions if you want, and this is one of the ways. I named
+them because I wanted to re-use them instead of typing the entire lambda expressions again.
+That's all it is.
+<p>
+Revisiting the <a href="index.html#FIRST_EXAMPLE">first example</a> we can see how we might name
+our lambda expressions.
+<p>
+The original, anonymous way:
+
+<blockquote><pre>
+sort(animals.begin(), 
+     animals.end(), 
+     [](<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();}
+    );
+</pre></blockquote>
+
+Declaring a variable of the correct type using <i>std::function</i> (harder):
+<blockquote><pre>
+function&lt;<b>bool</b>(<b>const</b> string&amp;, <b>const</b> string&amp;)&gt; comp1 = [](<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();};
+sort(animals.begin(), animals.end(), comp1);
+</pre></blockquote>
+
+Declaring a variable of the correct type using <b>auto</b> (easier):
+<blockquote><pre>
+<b>auto</b> comp2 = [](<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();};
+sort(animals.begin(), animals.end(), comp2);
+</pre></blockquote>
+
+This is where the <b><tt>auto</tt></b> keyword really shines. It's not so much about saving
+keystrokes here. You can imagine that complicated functions can be challenging to get the
+exact type correct. Compilers are not challenged and can figure this out in their sleep.
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="LAMBDA_EXPRESSIONS"></a>
+<p class="SectionHeader">
+Lambda Expressions (Details)
+</p>
+Up to this point, all of our lambda expressions (from here on simply called <i>lambdas</i>) 
+have been self-contained, meaning, the only
+data that was accessed were the parameters that were passed in. Let's take a step back and
+look at the canonical C++ program <i>Lambda-style</i>:
+
+<blockquote><pre>
+<b>int</b> main()
+{
+  []{cout &lt;&lt; <font color="#9933CC">&quot;Hello, World!&quot;</font> &lt;&lt; endl;}();
+}
+</pre></blockquote>
+
+Some points to make about this trivial lambda:
+<ol>
+  <li>The left bracket is what <i>introduces</i> the lambda. As we'll see, you can put
+    stuff inside the brackets.</li>
+  <li>There are no inputs, so the parentheses are optional and omitted here.</li>
+  <li>The left brace starts the body of the lambda (just like a function).</li>
+  <li>The only statement is the output statement, terminated by a semi-colon.</li>
+  <li>The right brace ends the body of the lambda (just like a function).</li>
+  <li>The empty parentheses at the end are the function call operator. Thus, invoking the 
+    lambda immediately.</li>
+  <li>The entire expression is terminated with a semi-colon.</li>
+</ol>
+
+This lambda is about as trivial as they come, no inputs, no outputs (returns), no access
+to anything outside but the global <i>cout/endl</i> symbols. It should come as no 
+surprise that lambdas can access global symbols just like any ordinary function/functor.
+<p>
+But, can lambdas access any of the symbols that are <i>local</i> to the function 
+(the <i>local environment</i>) that
+contains the lambda? The answer, of course, is yes.
+<p>
+Suppose we have a string that is local to the function and we try to access it:
+
+<blockquote><pre>
+<b>void</b> f4()
+{
+  string s(<font color="#9933CC">&quot;Hello&quot;</font>);
+
+    <font color="#003399"><i>// Define the lambda expression</i></font>
+  <b>auto</b> lambda1 = []{cout &lt;&lt; s &lt;&lt; endl;};
+
+    <font color="#003399"><i>// Call it</i></font>
+  lambda1();
+}
+</pre></blockquote>
+
+We are immediately met with this error message (the name of the source file is
+<tt>first.cpp</tt>):
+
+<blockquote><pre>
+first.cpp: In lambda function:
+first.cpp:361:28: error: 's' is not captured
+  auto lambda1 = []{cout &lt;&lt; s &lt;&lt; endl;};
+                            ^
+</pre></blockquote>
+
+Believe it or not, the message tells you <i>exactly</i> what the problem is: The variable
+<i>s</i> is not captured. Duh.
+<p>
+If you want to access a non-static local symbol, you need to <i>capture</i> it:
+
+<blockquote><pre>
+<b>void</b> f5()
+{
+  string s(<font color="#9933CC">&quot;Hello&quot;</font>);
+
+    <font color="#003399"><i>// Define the lambda expression</i></font>
+  <b>auto</b> lambda1 = [<font color="blue"><b>s</b></font>]{cout &lt;&lt; s &lt;&lt; endl;};
+
+    <font color="#003399"><i>// Call it</i></font>
+  lambda1();
+}
+</pre></blockquote>
+
+Notice the [<font color="blue"><b>s</b></font>] in the brackets. This is how you capture
+(gain access to) non-static local symbols. Now, the lambda will output the string as expected.
+<p>
+
+Notice the phrase <i>non-static local</i> in the sentences above. 
+<ul>
+  <li>You only need to capture non-static local symbols.</li>
+  <li>Local symbols that are <b>static</b> are captured automatically.</li> 
+  <li>In fact, any symbol that has static storage duration is automatically captured. 
+    So, in addition to static local symbols, this includes objects that are at the:</li>
+    <ul>
+      <li>global scope</li>
+      <li>file scope</li>
+      <li>namespace scope</li>
+    </ul>
+  <li>Attempting to capture an object that is automatically captured is an error.</li>
+  <ul>
+    <li>We'll see that C++14 relaxes this a bit with <i>generalized captures</i>.</li>
+  </ul>
+</ul>
+
+This short snippet demonstrates the automatic capturing:
+
+<blockquote><pre>
+<b>int</b> a = 1;                 <font color="#003399"><i>// global scope</i></font>
+<b>static</b> <b>int</b> b = 2;          <font color="#003399"><i>// file scope</i></font>
+<b>namespace</b> foo {<b>int</b> c = 3;} <font color="#003399"><i>// namespace scope</i></font>
+
+<b>void</b> f9()
+{
+  <b>static</b> <b>int</b> d = 4; <font color="#003399"><i>// local static</i></font>
+  <b>auto</b> lambda1 = []{cout &lt;&lt; a + b + foo::c + d &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+10
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+Ok, so now we know how to access (non-static) local variables. Going back to the previous
+example, suppose that the lambda wants to modify the string like this:
+
+<blockquote><pre>
+<b>void</b> f6()
+{
+  string s(<font color="#9933CC">&quot;Hello&quot;</font>);
+
+  <b>auto</b> lambda1 = [s]{s[0] = <font color="#9933CC">'C'</font>; cout &lt;&lt; s &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+We expect that the string will be changed from <tt>"Hello"</tt> to <tt>"Cello"</tt> but we
+are met with this error message:
+
+<blockquote><pre>
+first.cpp: In lambda function:
+first.cpp:382:26: error: assignment of read-only location 's.std::basic_string<_CharT, _Traits, _Alloc>::operator[]<char, std::char_traits<char>, std::allocator<char> >(0ul)'
+  auto lambda1 = [s]{s[0] = 'C'; cout &lt;&lt; s &lt;&lt; endl;};
+                          ^
+</pre></blockquote>
+Long story short, the symbol was captured <i>by value</i>. This is why the error message said
+you were trying to change a <i>read-only</i> location. By default, symbols are captured by
+value and they can't be change. The solution? Capture the symbol <i>by reference</i>:
+
+<blockquote><pre>
+<b>void</b> f7()
+{
+  string s(<font color="#9933CC">&quot;Hello&quot;</font>);
+
+  <b>auto</b> lambda1 = [<font color="blue"><b>&amp;s</b></font>]{s[0] = <font color="#9933CC">'C'</font>; cout &lt;&lt; s &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+Notice the [<font color="blue"><b>&s</b></font>] in the brackets. This is how you capture
+local symbols by reference. Now, the lambda can modify the string as expected:
+<p>
+Output:
+
+<blockquote><pre>
+Cello
+</pre></blockquote>
+
+To see it in context:
+
+<blockquote><pre>
+<b>void</b> f8()
+{
+  string s(<font color="#9933CC">&quot;Hello&quot;</font>);
+
+  cout &lt;&lt; s &lt;&lt; endl;
+  <b>auto</b> lambda1 = [&amp;s]{s[0] = <font color="#9933CC">'C'</font>;};
+  lambda1();
+  cout &lt;&lt; s &lt;&lt; endl;
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Hello
+Cello
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+<h2>Behind-the-scenes</h2>
+<p>
+We've seen that, before lambdas came along, we were using functions and function objects to provide the
+same kinds of behavior that the lambdas provide. How the compiler deals with lambdas isn't really that
+mysterious. Essentially, the lambda expression gives the compiler enough information for it to 
+create a class with an overloaded function call operator.
+<p>
+Also, realize that the Standard does not specify how a compiler implements lambdas. This is just a 
+high-level view of one possible way a compiler <i>might</i> implement the behavior.
+<p>
+Suppose we have a vector of numbers and we want to find out how many are between the numbers 3 and 7:
+
+<blockquote><pre>
+<b>void</b> f17()
+{
+  std::vector&lt;<b>int</b>&gt; v {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  <b>int</b> low = 3, high = 7;
+
+    <font color="#003399"><i>// prints the value 5</i></font>
+  count = std::count_if(v.begin(), v.end(), [low, high](<b>int</b> x){<b>return</b> (x &gt;= low &amp;&amp; x &lt;= high);});
+  cout &lt;&lt; <font color="#9933CC">&quot;Count is &quot;</font> &lt;&lt; count &lt;&lt; endl;
+}
+</pre></blockquote>
+
+The compiler will create a <i>closure class</i> (with some internal compiler-generated name), and 
+instantiate it where the lambda was:
+
+<blockquote><pre>
+<b>void</b> f17()
+{
+  std::vector&lt;<b>int</b>&gt; v {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  <b>int</b> low = 3, high = 7;
+
+  <font color="blue"><b>class</b> _xyz_INT_001
+  {
+    <b>public</b>:
+      _xyz_INT_001(<font color="red"><b>int</b> a, <b>int</b> b</font>) : a_(a), b_(b) {};
+      <b>bool</b> <b>operator</b>()(<b>int</b> x) <b>const</b> {<b>return</b> (x &gt;= a_ &amp;&amp; x &lt;= b_);}
+
+    <b>private</b>:<font color="red">
+      <b>int</b> a_;
+      <b>int</b> b_;</font>
+  };</font>
+
+    <font color="#003399"><i>// prints the value 5</i></font>
+  count = std::count_if(v.begin(), v.end(), <font color="blue">_xyz_INT_001(low, high)</font>);
+  cout &lt;&lt; <font color="#9933CC">&quot;Count is &quot;</font> &lt;&lt; count &lt;&lt; endl;
+}
+</pre></blockquote>
+
+The class name <b>_xyz_INT_001</b> above was something I made up. The compiler will generate a unique
+name for each closure class it creates. Had I captured the locals by reference:
+
+<blockquote><pre>
+  count = std::count_if(v.begin(), v.end(), [<font color="red">&amp;low, &amp;high</font>](<b>int</b> x){<b>return</b> (x &gt;= low &amp;&amp; x &lt;= high);});
+</pre></blockquote>
+
+The compiler would create a closure class something like this:
+
+<blockquote><pre>
+<font color="blue"><b>class</b> _xyz_INT_002
+{
+  <b>public</b>:
+    _xyz_INT_002(<font color="red"><b>int</b>&amp; a, <b>int</b>&amp; b</font>) : a_(a), b_(b) {};
+    <b>bool</b> <b>operator</b>()(<b>int</b> x) <b>const</b> {<b>return</b> (x &gt;= a_ &amp;&amp; x &lt;= b_);}
+
+  <b>private</b>:<font color="red">
+    <b>int</b>&amp; a_;
+    <b>int</b>&amp; b_;</font>
+};</font>
+</pre></blockquote>
+
+This is what allows the captured references to be modified within the <b>const</b> member function,
+if we needed that ability.
+
+<p>
+<hr width="90%">
+<p>
+<h2>What is <i>sizeof</i> a lambda?</h2>
+
+We often use the <i>sizeof</i> operator to give us insight into a data structure. We've seen above
+how a compiler might implement the lambda. Using the <i>sizeof</i> operator shows that this is pretty
+close. As usual, code is worth a 1,000 words:
+
+
+<blockquote><pre>
+<b>void</b> f34()
+{
+  <b>int</b> a = 5, b = 4, c = 3, d = 2;
+
+  <b>auto</b> lambda1 = [a]{cout &lt;&lt; a &lt;&lt; endl;};
+  <b>auto</b> lambda2 = [&amp;a]{cout &lt;&lt; a &lt;&lt; endl;};
+  <b>auto</b> lambda3 = [a, b]{cout &lt;&lt; a &lt;&lt; endl;};
+  <b>auto</b> lambda4 = [=]{cout &lt;&lt; a &lt;&lt; endl;};
+  <b>auto</b> lambda5 = [=]{cout &lt;&lt; (a + b + c + d) &lt;&lt; endl;};
+  <b>auto</b> lambda6 = [&amp;a, &amp;b, &amp;c]{cout &lt;&lt; a &lt;&lt; endl;};
+  <b>auto</b> lambda7 = [&amp;]{cout &lt;&lt; a &lt;&lt; endl;};
+  <b>auto</b> lambda8 = [&amp;]{cout &lt;&lt; (a + b + c + d) &lt;&lt; endl;};
+  <b>auto</b> lambda9 = []{cout &lt;&lt; <font color="#9933CC">&quot;Hello!&quot;</font> &lt;&lt; endl;};
+
+    <font color="#003399"><i>// Output when compiled as a 64-bit program</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda1) &lt;&lt; endl; <font color="#003399"><i>//  4</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda2) &lt;&lt; endl; <font color="#003399"><i>//  8</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda3) &lt;&lt; endl; <font color="#003399"><i>//  8</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda4) &lt;&lt; endl; <font color="#003399"><i>//  4</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda5) &lt;&lt; endl; <font color="#003399"><i>// 16</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda6) &lt;&lt; endl; <font color="#003399"><i>// 24</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda7) &lt;&lt; endl; <font color="#003399"><i>//  8</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda8) &lt;&lt; endl; <font color="#003399"><i>// 32</i></font>
+  cout &lt;&lt; <b>sizeof</b>(lambda9) &lt;&lt; endl; <font color="#003399"><i>//  1 (compiler dependent)</i></font>
+}
+</pre></blockquote>
+
+The reason that the "empty" lambda is 1 byte is to be compliant with the C++ Standard. Essentially,
+two distinct objects <i>must</i> have distinct addresses. With a size of at least 1 byte, two objects
+will have unique addresses. This is also why using <i>new</i> to allocate memory and providing a size of
+0 usually allocates 1 byte. Compilers can specify any size but 0, and they generally specify 1 byte.
+Empty base classes (i.e. interfaces) can 
+<a href="http://en.cppreference.com/w/cpp/language/ebo">optimize away</a> the 1 byte.
+Want to know more? Google is your buddy.
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+More on Capturing
+</p>
+There are a variety of ways that lambdas can be introduced, giving the programmer
+fine-grained control over how each symbol is captured.
+<ol>
+  <li><tt><b>[]</b></tt> - This is the simplest form. Nothing is captured, so the lambda has no
+    access to any non-static locals.</li>
+    <p>
+  <li><tt><b>[=]</b></tt> - Capture all non-static locals by value. This is convenient when you need access
+    to all of the locals. You don't have to list them individually. The captured symbols
+    are read-only.</li>
+    <p>
+  <li><tt><b>[&amp;]</b></tt> - Captures all non-static locals by reference. The captured symbols are read/write.</li>
+  <p>
+  <li><tt><b>[<i>capture-list</i>]</b></tt> - Symbols are explicitly captured by name in a 
+    comma-separated list:
+<blockquote><pre>
+<b>int</b> a = 1, b = 2, c = 3;              <font color="#003399"><i>// Assume these are locals</i></font>
+<b>auto</b> lambda1 = [a, &amp;c]{<font color="#003399"><i>/* ... */</i></font>};    <font color="#003399"><i>// Capture a by value and c by reference (b is not captured)</i></font>
+<b>auto</b> lambda2 = [a, &amp;c, b]{<font color="#003399"><i>/* ... */</i></font>}; <font color="#003399"><i>// Capture a by value, c by reference, and b by value</i></font>
+</pre></blockquote>
+</li>
+  <li><tt><b>[=, <i>capture-list</i>]</b></tt> - Captures all non-static locals by value except the 
+    symbols listed in the capture-list. Each symbol in the capture-list must be prefixed
+    with &amp; (they will be captured by reference).
+<blockquote><pre>
+<b>int</b> a = 1, b = 2, c = 3;           <font color="#003399"><i>// Assume these are locals</i></font>
+<b>auto</b> lambda1 = [=, &amp;c]{<font color="#003399"><i>/* ... */</i></font>}; <font color="#003399"><i>// Capture a and b by value, c by reference</i></font>
+</pre></blockquote>
+</li>
+  <li><tt><b>[&amp;, <i>capture-list</i>]</b></tt> - Captures all non-static locals by reference except
+    the symbols listed in the capture-list. Each symbol in the capture-list must NOT be 
+    prefixed with &amp; (they will be captured by value).
+<blockquote><pre>
+<b>int</b> a = 1, b = 2, c = 3;          <font color="#003399"><i>// Assume these are locals</i></font>
+<b>auto</b> lambda1 = [&amp;, a]{<font color="#003399"><i>/* ... */</i></font>}; <font color="#003399"><i>// Capture b and c by reference, a by value</i></font>
+</pre></blockquote>
+</li>
+</ol>
+
+A note about #5 and #6: The &amp; and = must come first in the brackets. 
+This [&amp;,&nbsp;a] is not the same as this [a,&nbsp;&amp;]. The latter is an error.
+<p>
+Deciding whether to capture by value or reference is much like how we decide if a function
+parameter is passed by value or reference. If you need to modify (write) the object, you
+must pass by reference. We also pass larger objects by reference for performance reasons.
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+<p>
+<hr width="90%">
+<p>
+
+<h2>Caveats when capturing by reference</h2>
+<p>
+Recall this previous example:
+<blockquote><pre>
+<b>auto</b> comp2 = [](<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();};
+sort(animals.begin(), animals.end(), comp2);
+</pre></blockquote>
+
+We have a lambda expression (right side) being assigned (stored) in 
+a variable (left side) named <i>comp2</i>. There 
+is a special name that is given to variables of this kind: We call it a <i>closure</i>. A
+closure includes not only the code, but the captured environment. In the example above,
+nothing is captured, so this closure is safe to use anywhere at anytime.
+
+<p>
+The fundamental problem when capturing by reference is that the captured environment may no
+longer exist when the closure is invoked. And, since we can store a closure for use at a later
+time and place, it's quite possible that the captured objects are no longer valid.
+<p>
+Example 1, capture by value:
+
+<blockquote><pre>
+std::function&lt;<b>int</b>(<b>void</b>)&gt; func0()
+{
+  <b>int</b> a = 1, b = 2, c = 3;
+  <b>auto</b> lambda1 = <font color="blue"><b>[a, c]</b></font>{<b>return</b> a + c;};
+  <b>return</b> lambda1;
+}
+
+<b>void</b> f13()
+{
+  <b>auto</b> x = func0();
+  <b>int</b> i = x();
+  cout &lt;&lt; i &lt;&lt; endl; <font color="#003399"><i>// prints 4</i></font>
+}
+</pre></blockquote>
+
+As you can see, there is no problem when capturing by value. However:
+<p>
+Example 2, capture by reference:
+
+<blockquote><pre>
+std::function&lt;<b>int</b>(<b>void</b>)&gt; func1()
+{
+  <b>int</b> a = 1, b = 2, c = 3;
+  <b>auto</b> lambda1 = <font color="blue"><b>[&amp;a, &amp;c]</b></font>{<b>return</b> a + c;};
+  <b>return</b> lambda1;
+}
+
+<b>void</b> f13()
+{
+  <b>auto</b> x = func1();
+  <b>int</b> i = x();
+  cout &lt;&lt; i &lt;&lt; endl; <font color="#003399"><i>// prints random values (undefined)</i></font>
+}
+</pre></blockquote>
+
+Of course, the result is the same that would occur if you returned a pointer or reference to
+a local variable in a regular function. The local variables, a, b, and c, are no longer
+valid after <i>func1</i> returns. But, we stored the closure (and references to the locals)
+in a variable and used it afterwards.
+<p>
+In the examples above, I use several temporary variables. I often do this so as not to make 
+the code so terse and cryptic for first-time learners. The above example can be shortened to
+this:
+
+<blockquote><pre>
+std::function&lt;<b>int</b>(<b>void</b>)&gt; func4()
+{
+  <b>int</b> a = 1, b = 2, c = 3;
+  <b>return</b> [&amp;a, &amp;c]{<b>return</b> a + c;};
+}
+
+<b>void</b> f14()
+{
+  cout &lt;&lt; func4()() &lt;&lt; endl; <font color="#003399"><i>// prints random values (undefined)</i></font>
+}
+</pre></blockquote>
+
+A note about this syntax:
+<blockquote><pre>
+std::function&lt;<b>int</b>(<b>void</b>)&gt; func()
+</pre></blockquote>
+
+This syntax was introduced in C++11. The return type is the exact type of the lambda. There
+is also this syntax (called the <i>trailing return type</i>) which is also available in C++11:
+
+<blockquote><pre>
+<b>auto</b> func() -&gt; std::function&lt;<b>int</b>(<b>void</b>)&gt;
+</pre></blockquote>
+
+And C++14 fixes things so we can just use the <b>auto</b> keyword alone:
+<blockquote><pre>
+<b>auto</b> func()
+</pre></blockquote>
+and the compiler will deduce the return type based on what is actually being returned.
+If nothing is returned, the type is <b>void</b>. So, the example above becomes this:
+
+<blockquote><pre>
+<font color="blue"><b>auto</b></font> func5()
+{
+  <b>int</b> a = 1, b = 2, c = 3;
+  <b>return</b> [&amp;a, &amp;c]{<b>return</b> a + c;};
+}
+
+<b>void</b> f15()
+{
+  cout &lt;&lt; func5()() &lt;&lt; endl; <font color="#003399"><i>// prints random values (undefined)</i></font>
+}
+</pre></blockquote>
+
+And that is why <b>auto</b> is so nice to have. Let the compiler figure things out, if it
+can. This is not your parents' C++ language!
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Deducing a Lambda's Return Type
+</p>
+
+<p>
+
+<p>
+Up until now, we haven't explicitly specified the return types from the lambdas. We just let
+the compiler deduce the correct type. Unfortunately, C++11 is very limited in this regard.
+C++11 can only deduce the type if the body is a single line return statement:
+
+<blockquote><pre>
+[](<b>const</b> string&amp; l, <b>const</b> string&amp; r){<b>return</b> l.size() &lt; r.size();}
+</pre></blockquote>
+
+All of the examples thus far have had lambdas with trivial bodies. This code is problematic
+in C++11:
+
+<blockquote><pre>
+<b>auto</b> lambda1 = [](<b>bool</b> x){<b>if</b> (x) <b>return</b> 1; <b>else</b> <b>return</b> 2;};
+</pre></blockquote>
+
+The above will fail to compile in C++11, so you need to help the compiler by explicitly
+specifying the return type using the trailing return type syntax:
+<blockquote><pre>
+<b>auto</b> lambda1 = [](<b>bool</b> x) <font color="blue">-&gt; int</font> {<b>if</b> (x) <b>return</b> 1; <b>else</b> <b>return</b> 2;};
+                          ^^^^^^
+</pre></blockquote>
+
+
+
+However, C++14 relaxes that restriction and will 
+handle it just fine. And while I'm on the subject, C++14 also supports return type deduction
+for <i>all</i> functions (regardless of their complexity), not just lambdas. So in C++ 14, lambdas
+can be as complex as you want them to be and the compiler will deduce the correct type.
+<p>
+Of course, you can't do things like this (returning two different types):
+
+<blockquote><pre>
+auto lambda1 = [x]{if (x) return 1; else return 2.0;};
+</pre></blockquote>
+
+Each return specifies different, incompatible, types. You'll see something like this error:
+
+<blockquote><pre>
+<font color="red">error:</font> inconsistent types 'int' and 'double' deduced for lambda return type
+</pre></blockquote>
+
+But, you can't do that with any function (without casting), so it's really not a limitation.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Lambdas in Member Functions
+</p>
+As is expected, you can create and use lambdas within member functions of a class. But, there are
+a few things to note about that. 
+<p>
+Suppose we have a lambda in a member function and we want to capture a member of that class:
+
+
+<blockquote><pre>
+<b>class</b> Foo
+{
+  <b>public</b>:
+    Foo(<b>int</b> a) : a_(a) {}
+    <b>void</b> bar() <b>const</b>
+    {
+      <b>auto</b> lam = [<font color="blue">a_</font>]{cout &lt;&lt; a_ &lt;&lt; endl;};
+      lam();
+    }
+
+  <b>private</b>:
+    <b>int</b> a_;
+};
+</pre></blockquote>
+
+The above leads to these errors:
+
+<blockquote><pre>
+first.cpp: In member function 'void Foo::bar() const':
+first.cpp:587:16: error: capture of non-variable 'Foo::a_' 
+    auto lam = [a_]{cout &lt;&lt; a_ &lt;&lt; endl;};
+                ^
+first.cpp:592:7: note: 'int Foo::a_' declared here
+   int a_;
+       ^
+first.cpp: In lambda function:
+first.cpp:587:28: error: 'this' was not captured for this lambda function
+    auto lam = [a_]{cout &lt;&lt; a_ &lt;&lt; endl;};
+                            ^
+first.cpp:587:28: error: invalid use of non-static data member 'Foo::a_'
+first.cpp:592:7: note: declared here
+   int a_;
+       ^
+</pre></blockquote>
+
+If you look closely at the errors, you can see what the problem is:
+<p>
+<blockquote><pre>
+error: 'this' was not captured for this lambda function  
+</pre></blockquote>
+
+You can't capture individual members; you must capture <b>this</b>. Change this code:
+
+<blockquote><pre>
+<b>auto</b> lam = [<font color="blue">a_</font>]{cout &lt;&lt; a_ &lt;&lt; endl;};
+</pre></blockquote>
+
+to this code:
+
+<blockquote><pre>
+<b>auto</b> lam = [<font color="blue">this</font>]{cout &lt;&lt; a_ &lt;&lt; endl;};
+</pre></blockquote>
+
+and the compiler will accept it. Note that you can use default capture modes to capture <b>this</b>:
+
+<blockquote><pre>
+<b>auto</b> lam = [<font color="blue">=</font>]{cout &lt;&lt; a_ &lt;&lt; endl;};
+</pre></blockquote>
+
+or
+
+<blockquote><pre>
+<b>auto</b> lam = [<font color="blue">&amp;</font>]{cout &lt;&lt; a_ &lt;&lt; endl;};
+</pre></blockquote>
+
+will work. But, you cannot capture <b>this</b> by reference directly:
+
+<blockquote><pre>
+<b>auto</b> lam = [<font color="blue">&amp;this</font>]{cout &lt;&lt; a_ &lt;&lt; endl;};
+</pre></blockquote>
+
+g++ error message:
+
+<blockquote><pre>
+first.cpp: In member function 'void Foo::bar() const':
+first.cpp:587:17: error: expected ','' before 'this'
+    auto lam = [&amp;this]{cout &lt;&lt; a_ &lt;&lt; endl;};
+                 ^
+</pre></blockquote>
+
+Clang++ error message (clearer):
+<blockquote><pre>
+first.cpp:587:17: error: 'this' cannot be captured by reference
+                        auto lam = [&amp;this]{cout &lt;&lt; a_ &lt;&lt; endl;};
+                                     ^
+1 error generated.
+</pre></blockquote>
+
+The <b>this</b> pointer is treated special, so all of these do the same thing (capture <b>this</b>
+by value):
+
+<blockquote><pre>
+[this]    [&amp;]    [=]    [&amp;, this]
+</pre></blockquote>
+
+These constructs are ill-formed in C++11/14:
+<blockquote><pre>
+[&amp;this]    [=, this]
+</pre></blockquote>
+
+Now, it's important to realize that what is being captured by value is the <i>this pointer</i>. Only
+the pointer is captured by value, meaning, a copy of the pointer is what we have. This is different
+than capturing the entire object by value:
+
+<blockquote><pre>
+[*this]
+</pre></blockquote>
+
+With C++11/14, this is illegal. However, with C++17, it is now legal to capture the object itself
+by value (copy). One situation where this might be necessary is when a lambda outlives the object that
+it is referencing. Capturing by value (copy) means that the object will be guaranteed to still be valid
+during the execution of the lambda. An example would be a lambda that's passed to another thread and
+is executed long after the object it references has gone out of scope and been destroyed.
+<p>
+
+C++2a (or whatever the version after C++17 will be called) will now accept this syntax:
+
+<blockquote><pre>
+[=, this]
+</pre></blockquote>
+
+
+
+<!--
+Good explanation here:
+http://stackoverflow.com/questions/16323032/capturing-of-this-in-lambda
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3649.html
+-->
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Generic (Polymorphic) Lambda Expressions
+</p>
+The ability to have generic lambdas (templates) was added in C++14. The syntax is a little different,
+though. Instead of using the keyword <b>template</b>, you use the <b>auto</b> keyword:
+
+<blockquote><pre>
+<b>void</b> f19()
+{
+  std::vector&lt;<b>int</b>&gt; iv {1, 2, 3, 4, 5};
+  std::vector&lt;<b>double</b>&gt; dv {1.1, 2.2, 3.3, 4.4, 5.5};
+  
+    <font color="#003399"><i>// This is a generic lambda</i></font>
+  <b>auto</b> lambda1 = [](<font color="blue"><b>auto</b></font> &amp;value){<b>return</b> value * value;};
+
+  std::transform(iv.begin(), iv.end(), iv.begin(), lambda1);
+  printc(iv);
+
+  std::transform(dv.begin(), dv.end(), dv.begin(), lambda1);
+  printc(dv);
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+1  4  9  16  25  
+1.21  4.84  10.89  19.36  30.25  
+</pre></blockquote>
+
+The compiler-generated closure class may look something like this:
+
+<blockquote><pre>
+<font color="black"><b>class</b> _xyz_INT_003
+{
+  <b>public</b>:
+    <b>template</b>&lt;<b>typename</b> T&gt;
+    <b>bool</b> <b>operator</b>()(<b>const</b> T&amp; x) <b>const</b> {<b>return</b> (return x * x);}
+};</font>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Generalized (Init) Captures 
+</p>
+C++14 has given more power to the capture lists. They're called <i>generalized captures</i>
+or <i>init captures</i> (because you must initialize them). Here are some examples. 
+<p>
+
+
+<blockquote><pre>
+<font color="#003399"><i>// "Normal" capture by value</i></font>  
+<b>void</b> f20()
+{
+  <b>int</b> level = 3;
+
+  <b>auto</b> lambda1 = [<font color="blue">level</font>]{cout &lt;&lt; level &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+<blockquote><pre>
+<font color="#003399"><i>// "Normal" capture by value</i></font>  
+<b>void</b> f21()
+{
+  <b>int</b> level = getLevel();
+
+  <b>auto</b> lambda1 = [<font color="blue">level</font>]{cout &lt;&lt; level &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+The two examples above use the "normal" capture syntax introduced in C++11. The next two
+examples show how you use the init capture.
+
+<blockquote><pre>
+<font color="#003399"><i>// Init capture</i></font>  
+<b>void</b> f22()
+{
+  <b>auto</b> lambda1 = [<font color="blue">level = getLevel()</font>]{cout &lt;&lt; level &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+The symbol <i>level</i> above is not a local symbol in the function. It's scope is only within
+the lambda. You don't have to declare its type like a regular symbol because the compiler
+will automatically deduce the type based on the initializer.
+
+<blockquote><pre>
+<font color="#003399"><i>// Init capture gives new name to symbol</i></font>  
+<b>void</b> f23()
+{
+  <b>int</b> level = getLevel();
+  <b>auto</b> lambda1 = [<font color="blue">lev = level</font>]{cout &lt;&lt; lev &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+The example above shows how you can "rename" a captured local. The symbol on the left side
+of the assignment operator is local to the lambda. In contrast, the symbol on the right side
+of the assignment operator is local to the function <i>f23</i>. When renaming the captured
+local, you can capture it as a reference:
+
+<blockquote><pre>
+<b>int</b> level = getLevel();
+<b>auto</b> lambda1 = [<font color="blue">&amp;lev = level</font>]{cout &lt;&lt; lev &lt;&lt; endl;};
+</pre></blockquote>
+
+
+One of the main reasons for this new functionality is because some objects can't be copied.
+It's not very common, but there are some. Also, capturing by reference can be problematic
+when storing the closure for later use, as we've seen earlier. The solution is to not make
+a copy of the object, but to <i>move</i> the object into the capture. 
+<p>
+Capturing by value with a non-copyable type produces an error:
+
+<blockquote><pre>
+<b>void</b> f24()
+{
+  std::unique_ptr&lt;<b>int</b>&gt; p = std::make_unique&lt;<b>int</b>&gt;(8);
+  <b>auto</b> lambda1 = [<font color="blue">p</font>]{<b>return</b> *p;};
+  cout &lt;&lt; lambda1() &lt;&lt; endl;
+}
+</pre></blockquote>
+
+Error from g++:
+<blockquote><pre>
+first.cpp: In function 'void f24()':
+first.cpp:661:17: error: use of deleted function 'std::unique_ptr&lt;_Tp, _Dp>::unique_ptr(const std::unique_ptr&lt;_Tp, _Dp>&gt;) [with _Tp = int; _Dp = std::default_delete&lt;int&gt;]'
+  auto lambda1 = [p]{return *p;};
+                 ^
+In file included from /usr/include/c++/5.1/memory:81:0,
+                 from first.cpp:8:
+/usr/include/c++/5.1/bits/unique_ptr.h:356:7: note: declared here
+       unique_ptr(const unique_ptr&amp;) = delete;
+       ^
+</pre></blockquote>
+
+
+Error from Clang++:
+<blockquote><pre>
+first.cpp:661:18: error: call to deleted constructor of 'std::unique_ptr&lt;int&gt;'
+        auto lambda1 = [p]{return *p;};
+                        ^
+/usr/include/c++/5.1/bits/unique_ptr.h:356:7: note: function has been explicitly marked deleted here
+      unique_ptr(const unique_ptr&amp;) = delete;
+      ^
+1 error generated.
+</pre></blockquote>
+
+
+So, when capturing non-copyable but moveable types, this is a common use:
+
+<blockquote><pre>
+<b>void</b> f25()
+{
+  std::unique_ptr&lt;<b>int</b>&gt; p = std::make_unique&lt;<b>int</b>&gt;(8);
+  <b>auto</b> lambda1 = [<font color="blue">myp = std::move(p)</font>]{<b>return</b> *myp;};
+  cout &lt;&lt; lambda1() &lt;&lt; endl;
+}
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+The details regarding <i>std::unique_ptr</i>, <i>std::make_unique</i>, and <i>std::move</i>
+are well beyond the scope of this introduction to lambda expressions.
+</p>
+</blockquote>
+
+<p>
+<hr width="95%">
+<p>
+
+Finally, with generalized captures, we can capture objects that were illegal to capture in C++11.
+Specifically, we can capture globals. Note these various ways of capturing a global:
+
+<blockquote><pre>
+<b>int</b> a = 1; <font color="#003399"><i>// global scope</i></font>
+
+<b>void</b> f9a()
+{
+    <font color="#003399"><i>// a is implicitly captured by reference</i></font>
+  <b>auto</b> lambda1 = []{cout &lt;&lt; a &lt;&lt; endl;};
+  a = 5; <font color="#003399"><i>// change the global a</i></font>
+  lambda1();
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+5
+</pre></blockquote>
+
+However, if we use generalized capture, we can do this and capture by value:
+
+<blockquote><pre>
+<b>int</b> a = 1; <font color="#003399"><i>// global scope</i></font>
+
+<b>void</b> f9b()
+{
+    <font color="#003399"><i>// a is captured by value</i></font>
+  <b>auto</b> lambda1 = [a=a]{cout &lt;&lt; a &lt;&lt; endl;};
+  a = 5; <font color="#003399"><i>// change the global a, doesn't affect the capture</i></font>
+  lambda1();
+}
+</pre></blockquote>
+Output:
+<blockquote><pre>
+1
+</pre></blockquote>
+
+Do we really need this? I'm not 100% sure, I'm just showing how it works. I believe the motivation
+for this was
+<ol>
+  <li>to allow the programmer to capture by value.</li>
+  <li>to allow the programmer to rename the global during the capture:</li>
+</ol>
+
+<blockquote><pre>
+<b>int</b> a = 1; <font color="#003399"><i>// global scope</i></font>
+
+<b>void</b> f9c()
+{
+    <font color="#003399"><i>// a is captured by value as g</i></font>
+  <b>auto</b> lambda1 = [g=a]{cout &lt;&lt; g &lt;&lt; endl;};
+  a = 5; <font color="#003399"><i>// change the global a, doesn't affect the capture</i></font>
+  lambda1();
+}
+</pre></blockquote>
+Output:
+<blockquote><pre>
+1
+</pre></blockquote>
+
+Capture by reference:
+
+<blockquote><pre>
+<b>int</b> a = 1; <font color="#003399"><i>// global scope</i></font>
+
+<b>void</b> f9a()
+{
+    <font color="#003399"><i>// a is captured by reference as g</i></font>
+  <b>auto</b> lambda1 = [&amp;g=a]{cout &lt;&lt; g &lt;&lt; endl;};
+  a = 5; <font color="#003399"><i>// change the global a, now affects the capture</i></font>
+  lambda1();
+}
+</pre></blockquote>
+Output:
+<blockquote><pre>
+5
+</pre></blockquote>
+
+Note that capturing with either these
+<blockquote><pre>
+[=]  [&amp;]
+</blockquote>
+does not affect the way globals are captured. 
+
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Function Pointers and Miscellany
+</p>
+If you have a lambda expression that does not capture anything, you can assign it directly
+to a function pointer as such:
+
+<blockquote><pre>
+<b>void</b> f27()
+{
+  <b>double</b> (*pf)(<b>double</b>) = [](<b>double</b> d){<b>return</b> sqrt(d);};
+
+    <font color="#003399"><i>// Prints 1.41421</i></font>
+  cout &lt;&lt; pf(2.0) &lt;&lt; endl;
+
+  <b>double</b> (*pfuns[])(<b>double</b>) = {
+                                [](<b>double</b> d){<b>return</b> sin(d);},
+                                [](<b>double</b> d){<b>return</b> cos(d);},
+                                [](<b>double</b> d){<b>return</b> tan(d);}
+                              };
+
+    <font color="#003399"><i>// Prints 0.382673  0.923884  0.4142</i></font>
+  <b>for</b> (<b>auto</b> f : pfuns)
+    cout &lt;&lt; f(3.1415 / 8) &lt;&lt; <font color="#9933CC">&quot;  &quot;</font>;
+  cout &lt;&lt; endl;
+}
+</pre></blockquote>
+
+
+This can be convenient, especially when interfacing with C code that expects maybe a function
+pointer as a callback function.
+
+<p>
+<hr width="90%">
+<p>
+<h2>Mutable lambdas</h2>
+
+We know that when capturing by value, a copy is made and that copy cannot be modified. What if you
+need to modify it? Since the overloaded functional call operator is marked <b>const</b>, there is
+no <b>const</b> to cast away. We do exactly what we would do with any member variable: mark it as
+<b>mutable</b>. 
+<p>
+We don't exactly mark the variable as mutable, we mark the lambda as mutable. Notice the empty
+parentheses after the lambda introducer. These are necessary when providing the mutable keyword,
+even though no parameters are expected.
+
+<blockquote><pre>
+<b>void</b> f31()
+{
+  <b>int</b> a = 5;
+
+  cout &lt;&lt; a &lt;&lt; endl;
+  <b>auto</b> lambda1 = [a]() <font color="blue"><b>mutable</b></font> {a++; cout &lt;&lt; a &lt;&lt; endl;};
+  lambda1();
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+5
+6
+</pre></blockquote>
+
+Without the mutable keyword, we would see an error along these lines:
+
+<blockquote><pre>
+first.cpp:746:26: error: cannot assign to a variable captured by copy in a non-mutable lambda
+        auto lambda1 = [a]()  {a++; cout &lt;&lt; a &lt;&lt; endl;};
+                               ~^
+1 error generated.
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+<hr width="90%">
+<p>
+
+<h2>Nested lambda expressions</h2>
+It is possible to define a lambda within a lambda:
+
+<blockquote><pre>
+<b>void</b> f26()
+{
+  <b>int</b> i = 1, j = 2;
+  <b>auto</b> lambda1 = [i1 = i, j1 = j]{
+    <b>int</b> i2 = 3, j2 = 4;
+    <b>auto</b> lambda2 = [=]{
+      cout &lt;&lt; i1 &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; j1 &lt;&lt; endl;
+      cout &lt;&lt; i2 &lt;&lt; <font color="#9933CC">&quot;, &quot;</font> &lt;&lt; j2 &lt;&lt; endl;
+    };
+    lambda2(); 
+  };
+  lambda1();
+}
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+1, 2
+3, 4
+</pre></blockquote>
+
+<p>
+<hr width="90%">
+<p>
+
+<h2>Recursive lambdas</h2>
+Here's a simple, classic recursive function that calculates Fibonacci numbers. (Yes, there are many
+ways to write this function. I'm just doing a simple, straight-forward implementation.)
+
+<blockquote><pre>
+<b>int</b> fib(<b>int</b> value)
+{
+  <b>if</b> (value == 0 || value == 1)
+    <b>return</b> value;
+  <b>else</b>
+    <b>return</b> fib(value - 1) + fib(value - 2);
+}
+</pre></blockquote>
+
+Call it like this:
+
+<blockquote><pre>
+  <font color="#003399"><i>// Prints 55</i></font>
+cout &lt;&lt; fib(10) &lt;&lt; endl;
+</pre></blockquote>
+
+As a lambda expression:
+
+<blockquote><pre>
+<b>void</b> f29()
+{
+  std::function&lt;<b>int</b>(<b>int</b>)&gt; fib = [&amp;fib](<b>int</b> value) {
+  <b>if</b> (value == 0 || value == 1)
+    <b>return</b> value;
+  <b>else</b>
+    <b>return</b> fib(value - 1) + fib(value - 2);
+  };
+
+    <font color="#003399"><i>// Prints 55</i></font>
+  cout &lt;&lt; fib(10) &lt;&lt; endl;
+}
+</pre></blockquote>
+
+Notes:
+<ul>
+  <li>You can't use <b>auto</b> with the recursive version because you need to know the 
+    type within the lambda expression.</li>
+  <li>Since we're refering to the name, you must capture the name of the closure that holds the 
+    lambda. It must be captured by reference.</li>
+  <li>Some of these things would be better as functions, not lambda expressions.</li>
+  <li>Is this the only way to create recursive lambdas? No, it's just an example.</li>
+  <li>Like many things in C++, <i>"Just because you <b>can</b> do something, doesn't mean that
+    you <b>should</b> do it!"</i>. Examples abound.</li>
+  <li>I'm sure that "clever" programmers will find many ways to use (and abuse) lambda
+    expressions that were never dreamed of by the designers.</li>
+  <li>The last two examples above are for the "Can you do X with lambdas?"-people and the
+    "What if you do Y with lambdas?"-people. There are probably many other odd tricks you
+    can do and if you're really interested in finding out, just start writing code and find out
+    for yourself!</li>
+</ul>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Lambdas and constexpr
+</p>
+
+As of C++17, lambdas are now implicitly <i>constexpr</i>. I've talked a little of that
+<a href="../moderncpp/index.html#GENERAL_CONSTEXPR">here</a>. The full details can be found in
+this document: <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2235.pdf">Generalized Constant Expressions</a>.
+<p>
+
+Before C++17, this was an error:
+
+<blockquote><pre>
+<b>void</b> f35()
+{
+  <b>auto</b> lam = [](<b>int</b> value) { <b>return</b> value * value;};
+
+  <b>constexpr int</b> result = lam(10); <font color="#003399"><i>// Error: the lambda isn't constexpr</i></font>
+  cout &lt;&lt; result &lt;&lt; endl;
+}
+</pre></blockquote>
+
+Error message:
+
+<blockquote><pre>
+first.cpp:844:17: error: constexpr variable 'result' must be initialized by a constant expression
+  constexpr int result = lam(10);
+                ^        ~~~~~~~
+</pre></blockquote>
+
+That's because this is how (not exactly, of course) the C++11/14 compiler generated the function:
+
+<blockquote><pre>
+<b>int</b> <b>operator</b>()(<b>int</b> value) <b>const</b> 
+{
+  <b>return</b> value * value;
+}
+</pre></blockquote>
+
+The function is not <i>constexpr</i>, so can't be used to initialize <i>result</i>. The C++17
+compiler will now generate this function:
+
+<blockquote><pre>
+<font color="blue"><b>constexpr</b></font> <b>int</b> <b>operator</b>()(<b>int</b> value) <b>const</b> 
+{
+  <b>return</b> value * value;
+}
+</pre></blockquote>
+
+The compiler will only mark the generated function with <i>constexpr</i> if it can do so. If you use
+constructs that can't be used with <i>constexpr</i>, then the function won't be marked as such. The code
+below is illegal because the lambda is no longer <i>constexpr</i> because of the use of <i>cin</i>:
+<p>
+
+<blockquote><pre>
+<b>void</b> f36()
+{
+  <b>auto</b> lam = [](<b>auto</b> value)
+  { 
+    <b>int</b> a = 0;
+    cin &gt;&gt; a;
+    <b>return</b> value * value * a;
+  };
+
+  <b>constexpr int</b> result = lam(10); <font color="#003399"><i>// Error: the lambda isn't constexpr</i></font>
+  cout &lt;&lt; result &lt;&lt; endl;
+}
+</pre></blockquote>
+
+Error message:
+
+<blockquote><pre>
+first.cpp:857:17: error: constexpr variable 'result' must be initialized by a constant expression
+  constexpr int result = lam(10);
+                ^        ~~~~~~~
+first.cpp:857:26: note: non-constexpr function 'operator()<int>' cannot be used in a constant expression
+  constexpr int result = lam(10);
+                         ^
+</pre></blockquote>
+
+
+With C++17, you can now explicitly mark lambdas as <i>constexpr</i> and have the compiler enforce the use
+of it:
+
+<blockquote><pre>
+<b>auto</b> lam = [](<b>int</b> value) <font color="blue"><b>constexpr</b></font>
+{ 
+  <b>int</b> a = 0;
+  cin &gt;&gt; a;
+  <b>return</b> value * value * a;
+};
+</pre></blockquote>
+
+Now, we'll get these compiler errors when the lambda is defined, not when it is called:
+
+<blockquote><pre>
+first.cpp:850:14: error: constexpr function never produces a constant expression [-Winvalid-constexpr]
+  auto lam = [](int value) constexpr
+             ^
+first.cpp:853:9: note: non-constexpr function 'operator>>' cannot be used in a constant expression
+    cin >> a;
+        ^
+</pre></blockquote>
+
+This helps the programmer detect lambdas that can't be used as a <i>constexpr</i>. It's always better
+to have the compiler detect errors sooner (lambda definition) than later (calling the lambda).
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+Summary
+</p>
+This has been a whirlwind introduction to lambda expressions in C++, so let's recap the
+interesting points:
+<ul>
+  <li>With the advent of C++14, there are very few things that functions can do that lambdas can't.</li>
+  <li>Lambdas automatically capture static, global, and namespace symbols.</li>
+  <li>Local non-static symbols must be specifically captured.</li>
+  <li>You can capture by value (copy) or by reference.</li>
+  <li>Default capture modes allow you to capture all local symbols easily, either by value or by
+    reference.</li>
+  <li>Closures can be assigned and stored for later use. (Use <b>auto</b> or std::function)</li>
+  <p>
+  <li>And, finally, lambdas are really meant to be short and used within a limited scope.
+    Don't try to replace your "normal" functions with lambdas.</li>
+</ul>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="SectionHeader">
+References
+</p>
+
+The examples above covered the most-used features of lambda expressions. For all of the gory details
+about them and more, refer to the following links:
+
+<ol>
+  <li><a href="http://en.cppreference.com/w/cpp/language/lambda">
+    http://en.cppreference.com/w/cpp/language/lambda</a>
+  </li>
+  <li><a href="http://www.cprogramming.com/c++11/c++11-lambda-closures.html">
+    http://www.cprogramming.com/c++11/c++11-lambda-closures.html</a>
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Anonymous_function">
+    http://en.wikipedia.org/wiki/Anonymous_function</a>
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Closure_(computer_programming)">
+    http://en.wikipedia.org/wiki/Closure_(computer_programming)</a>
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Lambda_calculus">
+    http://en.wikipedia.org/wiki/Lambda_calculus</a>
+  </li>
+</ol>
+
+C++11/14 support:
+<ul>
+<li><a href="http://clang.llvm.org/cxx_status.html">Clang</a>
+  CC++11/14/1z Support in Clang
+
+<li><a href="http://gcc.gnu.org/projects/cxx0x.html">GCC</a>
+  C++0x/C++11 Support in GCC (<a href="https://gcc.gnu.org/projects/cxx1y.html">
+  C++1y/C++14</a> support)
+
+
+</ul>
+
+<br><br><br><br>
+
+</body>
+</html>
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

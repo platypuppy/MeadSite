@@ -1,0 +1,280 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Namespaces Examples</title>
+</head>
+
+<body>  
+<center><h1>Namespaces - Examples</h1></center>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<p>
+<a href="NamespacesExamplesAnnotated.html">Annotated version</a> (Answers. Don't look here until you've determined which symbols are being referenced or which code is illegal.)
+<p>
+
+This code is fine:
+
+<pre class="sourcecode"><code>
+<b>#include</b> &lt;iostream&gt; 
+<b>using</b> <b>namespace</b> std;
+
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;
+  <b>int</b> bar = 12;
+}
+
+<b>int</b> foo = 21;
+<b>int</b> bar = 22;
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+Notice the <i>using directive</i> and its placement:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;
+  <b>int</b> bar = 12;
+}
+
+<b>using</b> <b>namespace</b> Stuff;
+                        
+                        
+<b>int</b> foo = 21;
+<b>int</b> bar = 22;
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+The same <i>using directive</i> is moved and produces different results:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  
+  <b>int</b> bar = 12;  
+}
+
+<b>int</b> foo = 21;  
+<b>int</b> bar = 22;  
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>using</b> <b>namespace</b> Stuff;  
+                        
+                        
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+The same <i>using directive</i> is placed within a function (scope is only in the function):
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  
+  <b>int</b> bar = 12;  
+}
+
+<b>int</b> foo = 21;  
+<b>int</b> bar = 22;  
+
+<b>void</b> f1(<b>void</b>)
+{
+  <b>using</b> <b>namespace</b> Stuff;  
+                          
+                        
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+The same <i>using directive</i> is placed in <b>main</b> after some code:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  
+  <b>int</b> bar = 12;  
+}
+
+<b>int</b> foo = 21;  
+<b>int</b> bar = 22;  
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+
+  <b>using</b> <b>namespace</b> Stuff;  
+                          
+                        
+  cout &lt;&lt; foo &lt;&lt; endl;    
+  
+  <b>int</b> foo = 41;           
+  cout &lt;&lt; foo &lt;&lt; endl;    
+  cout &lt;&lt; ::foo &lt;&lt; endl;  
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+
+Now, we are employing the <i>using declaration</i>, and we get very different behavior:
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  
+  <b>int</b> bar = 12;  
+}
+
+<b>using</b> Stuff::foo; 
+                  
+
+<b>int</b> foo = 21;  
+<b>int</b> bar = 22;  
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>void</b> f2(<b>void</b>)
+{
+  <b>int</b> foo = 31;               
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+
+  <b>int</b> foo = 41;           
+  cout &lt;&lt; foo &lt;&lt; endl;    
+  cout &lt;&lt; ::foo &lt;&lt; endl;  
+
+  <b>return</b> 0;
+}
+
+</code></pre>
+
+Move <i>using declaration</i> into a new scope (in main):
+
+<pre class="sourcecode"><code>
+<b>namespace</b> Stuff
+{
+  <b>int</b> foo = 11;  
+  <b>int</b> bar = 12;  
+}
+
+<b>int</b> foo = 21;  
+<b>int</b> bar = 22;  
+
+<b>void</b> f1(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>void</b> f2(<b>void</b>)
+{
+  <b>int</b> foo = 31;               
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  cout &lt;&lt; foo &lt;&lt; endl;        
+  cout &lt;&lt; ::foo &lt;&lt; endl;      
+  cout &lt;&lt; Stuff::foo &lt;&lt; endl; 
+  
+  <b>using</b> Stuff::foo; 
+
+  <b>int</b> foo = 41;           
+  cout &lt;&lt; foo &lt;&lt; endl;    
+  cout &lt;&lt; ::foo &lt;&lt; endl;  
+  
+  <b>return</b> 0;
+}
+
+</code></pre> 
+
+
+<p>
+<a href="NamespacesExamplesAnnotated.html">Annotated version</a>
+<p>
+
+
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

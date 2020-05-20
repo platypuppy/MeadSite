@@ -1,0 +1,167 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Code Documentation Examples and Tools</title>
+</head>
+<body>  
+
+<center>
+<h1>Doxygen-related stuff</h1>
+<h2>Code Documentation Examples and Tools</h2>
+<a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen Home Page</a>
+<p>
+</center>
+
+Think that documenting your code is all black and white? Think that there is one "right" way? Think that 
+all developers are in agreement? Think you can call yourself a professional without knowing how to properly
+document your code? Think again. This "religious" issue was
+<a href="http://developers.slashdot.org/developers/02/05/19/2216233.shtml">debated on slashdot</a>
+a while ago. 
+
+<p class="SectionHeader">
+Core Files and Stuff
+</p>
+
+<ul>
+<!--
+<li><a href="../../Files/Doxygen/doxygen-1.4.4-setup.exe"> Local download</a> This might not be the latest, but
+it is what is currently used at DigiPen. (Version 1.4.4)
+-->
+<li><a href="http://www.stack.nl/~dimitri/doxygen/download.html">Download from the web</a> This should
+always point to the latest version.
+<!--
+<li><a href="http://www.codeproject.com/macro/KingsTools.asp">Doxygen plugin for .NET</a> If you're using .NET,
+you can get a Doxygen plugin from here.
+-->
+<!--
+<li><a href="http://mypage.bluewin.ch/TheEdge/doxygen_index.html">DoxygenStudio</a> is a free Visual Studio-like
+IDE for Doxygen. 
+-->
+<li><a href="http://www.stack.nl/~dimitri/doxygen/helpers.html">Doxygen related tools</a> More helper
+tools and scripts for Doxygen.
+</ul>
+
+<blockquote>
+<p class="technote">
+There is an excellent help file that is included with Doxygen. It explains everything you need to know
+to use Doxygen. You'll find it in the directory where Doxygen is installed. (It's in the Start menu as well.)
+</p>
+</blockquote>
+
+
+
+
+<p class="SectionHeader">
+Simple Example (using yet-another Stack class)
+</p>
+
+<ul>
+<li>Sample <a href="stack.h.html">interface</a> file and 
+<a href="stack.cpp.html">implementation</a> file. 
+<!--
+There's a Visual Studio project 
+<a href="Stacks.zip">zipped up here</a>.
+-->
+<li><a href="html/index.html">HTML</a> version using Doxygen. 
+<!--
+<a href="html/index.chm">Compiled Help</a> version generated from Doxygen. 
+(May need to download it in order to view it.)
+-->
+<li>A sample <a href="Doxyfile.html">configuration template</a> for Doxygen used to produce the Stack documentation.
+Save this to your hard drive.
+</ul>
+
+<!--
+<p class="SectionHeader">
+Visual Studio Add-in, Macros, and Other Coolness
+</p>
+
+<ul>
+<li>You'll need the Microsoft <a href="http://www.digipen.edu/~mmead/www/Files/htmlhelp.zip">HTML Help Compiler</a>
+to create compiled HTML help (.chm) files.
+
+<p>
+Older files:
+<p>
+	
+<li>Macros for Visual Studio (may already be installed in VS 6.0 at DigiPen)
+<ul>
+<li><a href="../../Files/Doxygen/doxbar-0.12.bin.zip">Doxbar</a> is a free Visual Studio add-in that 
+integrates into the IDE for Visual Studio 6.0. It just doesn't get any easier than this. This version isn't the latest,
+but I find it works better with the version of Doxygen installed here at DigiPen.
+The official SourceForge project can be found <a href="http://sourceforge.net/projects/doxbar/">here.</a> 
+<ul>
+<li>Make sure you have a <b>TEMP</b> folder on your C: drive
+<li>When you enter <b>UserTool8</b> (or whatever the number happens to be on your computer), make sure
+you use uppercase <b>U</b> and <b>T</b>. (It will fail if you don't.)
+<li>You can ignore the <b>Using the HELP</b> section in the instructions.
+<li>You'll need to point the tool at a <b>Configuration Template</b>. Use the one listed above, or you
+can create one from the command line with Doxygen.exe. Read the Doxygen Help file for more details.
+</ul>
+	
+<li>If you want to automate the process of creating function header comments, I wrote a macro that you
+can download. It's a file named <a href="DoxMacros.dsm">DoxMacros.dsm</a>. This integrates with Visual Studio
+and will generate Doxygen-style function header comments. It's not 100%, but it handles
+a lot of the cases. To learn how to add macros to the IDE, choose <b><u>M</u>acro...</b> from the
+<b><u>T</u>ools</b> menu and then click on the <b>Macro <u>H</u>elp</b> button. 
+(This is a work in-progress. Also, don't be alarmed that it is limited. If you want a challenge, I invite
+you to write a C++ parser in VBScript. You'll get an automatic A in the class.)
+<li>Here is a simple <a href="VCMacros.exe">GUI "wizard"</a> for customizing the functionality
+of the macro above. (This is also a work in-progress. It allows you to "preview" some of the formatting
+capabilities of the macro.)
+</ul>
+</ul>
+-->
+
+<p class="SectionHeader">
+Non-Trivial Documentation Examples
+</p>
+
+<ul>
+<li>The <a href="http://www.metamod.org/sdk/dox">documentation</a> for the Halflife
+SDK created with Doxygen.
+<li><a href="http://www.nigels.com/glt/doc/">GLT documentation</a> GLT is an OpenGL C++ Toolkit
+<li>Still not convinced Doxygen can help you? 
+A <a href="http://www.stack.nl/~dimitri/doxygen/projects.html">Big List</a> of projects that have been documented
+with Doxygen.
+</ul>
+
+<p class="SectionHeader">
+Other Related Code Documentation Projects
+</p>
+
+<ul>
+<li>There are <i>lots</i> of other documentation tools available such as
+<a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a>, 
+<a href="http://docpp.sourceforge.net/">Doc++</a>, 
+<a href="http://www.joelinoff.com/ccdoc/">ccDoc</a>, 
+<a href="http://www.doc-o-matic.com/">Doc-O-Matic</a>, and
+<a href="http://www.talltree.com/home.php4">DocJet</a>.
+There's a list of free and commercial products 
+<a href="http://www.stack.nl/~dimitri/doxygen/links.html">here</a>.
+<p>
+
+<li><a href="http://www.literateprogramming.com/">Literate Programming</a> Interestingly, this concept has been
+around for about 20 years. 
+<blockquote>
+<b>From the FAQ:</b>
+<br>
+"In general, literate programs combine source and documentation in a single file. Literate 
+programming tools then parse the file to produce either readable documentation or compilable source."
+<p>
+<b>From Donald Knuth:</b>
+<br>
+"Let us change our traditional attitude to the construction of programs: Instead of imagining 
+that our main task is to instruct a computer what to do, let us concentrate rather on explaining 
+to human beings what we want a computer to do."
+</blockquote>
+<li><a href="http://www.literateprogramming.com/ftools.html">Tools for Literate Programming</a> Doxygen is just
+one of dozens of tools for professional developers. There are many other very powerful (some FREE!) tools 
+for communicating your code to humans.
+</ul>
+
+<p>
+<hr>
+
+</body>
+</html>

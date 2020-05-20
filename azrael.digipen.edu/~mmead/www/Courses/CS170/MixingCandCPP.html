@@ -1,0 +1,1017 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>C vs. C++</title>
+</head>
+
+<body>  
+<center><h1>Mixing C and C++</h1></center>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="sectionheader">
+Overview
+</p>
+
+The C++ compiler may modify the names of symbols when compiling C++ code:
+
+<ul>
+<li>This modification is called <i>name mangling</i> or <i>decorating</i>, and different compilers do it differently.</li>
+<li>One purpose of name mangling is to support overloaded functions.</li>
+<li>C compilers don't mangle names (at least not in the same way) and C doesn't have overloaded functions (at least not in the way that C++ does).</li>
+<li>It's the linker's job to deal with the mangled names (resolve the reference).</li>
+<li>Linker errors are generally harder to understand.</li>
+</ul>
+
+Using a C++ compiler, the following code compiles just fine, however, it generates a <i>linker</i> error: (<tt>main.cpp</tt>)
+
+<pre class="sourcecode"><code><b>int</b> NonExistentFunction(<b>int</b> a, <b>int</b> b);
+
+<b>int</b> main()
+{
+  <b>int</b> x = NonExistentFunction(1, 2);
+  <b>return</b> 0;    
+}</code></pre>
+
+
+This is the error message from the linker from GNU g++:
+
+<blockquote><pre>
+/tmp/ccl1aw52.o: In function `main':                                                        
+main.cpp:(.text+0x13): undefined reference to `NonExistentFunction(int, int)'               
+collect2: error: ld returned 1 exit status
+</pre></blockquote>
+
+and Microsoft's linker says this:
+
+<blockquote><pre>
+error LNK2001: unresolved external symbol "int __cdecl NonExistentFunction(int,int)" (?NonExistentFunction@@YAHHH@Z)
+</pre></blockquote>
+
+
+Pretty obvious what the problem is, huh?
+<p>
+
+To undecorate the name, you can use a tool that comes with Visual Studio called <i>undname</i>:
+
+<blockquote><pre>
+undname ?NonExistentFunction@@YAHHH@Z
+</pre></blockquote>
+
+and this is the output:
+
+<blockquote><pre>
+Microsoft (R) C++ Name Undecorator
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Undecoration of :- "?NonExistentFunction@@YAHHH@Z"
+is :- "int __cdecl NonExistentFunction(int,int)"
+</pre></blockquote>
+
+You can also use the <i>dumpbin</i> program from Microsoft to show all of the symbols in the
+object file:
+
+<blockquote><pre>
+dumpbin /symbols main.obj
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+Microsoft (R) COFF/PE Dumper Version 14.00.23026.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+Dump of file main.obj
+
+File Type: COFF OBJECT
+
+COFF SYMBOL TABLE
+000 010559F2 ABS    notype       Static       | @comp.id
+001 80000190 ABS    notype       Static       | @feat.00
+002 00000000 SECT1  notype       Static       | .drectve
+    Section length   2F, #relocs    0, #linenums    0, checksum        0
+004 00000000 SECT2  notype       Static       | .debug$S
+    Section length   90, #relocs    0, #linenums    0, checksum        0
+006 00000000 SECT3  notype       Static       | .text$mn
+    Section length   1E, #relocs    1, #linenums    0, checksum 63728334
+<font color="red">008 00000000 UNDEF  notype ()    External     | ?NonExistentFunction@@YAHHH@Z (int __cdecl NonExistentFunction(int,int))</font>
+009 00000000 SECT3  notype ()    External     | main
+00A 00000000 SECT3  notype       Label        | $LN3
+00B 00000000 SECT4  notype       Static       | .xdata
+    Section length    8, #relocs    0, #linenums    0, checksum 37887F31
+00D 00000000 SECT4  notype       Static       | $unwind$main
+00E 00000000 SECT5  notype       Static       | .pdata
+    Section length    C, #relocs    3, #linenums    0, checksum 69312319
+010 00000000 SECT5  notype       Static       | $pdata$main
+
+String Table Size = 0x3B bytes
+
+  Summary
+
+          90 .debug$S
+          2F .drectve
+           C .pdata
+          1E .text$mn
+           8 .xdata
+</pre></blockquote>
+
+To see the symbols from g++, use <i>objdump</i>
+
+<blockquote><pre>
+objdump -t main.o
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+main.o:     file format elf64-x86-64
+
+SYMBOL TABLE:
+0000000000000000 l    df *ABS*  0000000000000000 main.cpp
+0000000000000000 l    d  .text  0000000000000000 .text
+0000000000000000 l    d  .data  0000000000000000 .data
+0000000000000000 l    d  .bss   0000000000000000 .bss
+0000000000000000 l    d  .note.GNU-stack        0000000000000000 .note.GNU-stack
+0000000000000000 l    d  .eh_frame      0000000000000000 .eh_frame
+0000000000000000 l    d  .comment       0000000000000000 .comment
+0000000000000000 g     F .text  0000000000000021 main
+0000000000000000         *UND*  0000000000000000 _Z19NonExistentFunctionii
+</pre></blockquote>
+
+You can also use the <i>nm</i> tool:
+
+<blockquote><pre>
+nm main.o
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+0000000000000000 T main
+                 U _Z19NonExistentFunctionii
+</pre></blockquote>
+
+To undecorate the name, there is a tool called <i>c++filt</i>:
+<blockquote><pre>
+c++filt -t _Z19NonExistentFunctionii
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+NonExistentFunction(int, int)
+</pre></blockquote>
+
+You can do an entire object file by using <i>c++filt</i> as a <i>filter</i>
+
+<blockquote><pre>
+nm main.o | c++filt
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+0000000000000000 T main
+                 U NonExistentFunction(int, int
+</pre></blockquote>
+
+
+<p>
+The previous error was generated on purpose. Let's see how we might get it "not on purpose."
+<p>
+This is a C++ program that compiles and links just fine as expected: (<tt>main2.cpp</tt>)
+
+<pre class="sourcecode"><code><b>#include</b> &lt;iostream&gt;
+
+<b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+<b>int</b> main()
+{
+  <b>int</b> x = 1, y = 2;
+  cpp_swap_p(&amp;x, &amp;y);
+  std::cout &lt;&lt; <font color="#9933CC">&quot;x = &quot;</font> &lt;&lt; x &lt;&lt; <font color="#9933CC">&quot;, y = &quot;</font> &lt;&lt; y &lt;&lt; std::endl;
+
+  <b>return</b> 0;    
+}</code></pre>
+
+Now, suppose we want to use the swap function in a C program. We've created a file (<tt>cpp_swap.cpp</tt>)
+that contains the function:
+
+<blockquote><pre>
+<b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+</pre></blockquote>
+
+And we've got a C file: (<tt>main.c</tt>)
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;
+
+<font color="#003399"><i>// prototype (could be in a .h file)</i></font>
+<b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b);
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> a = 1, b = 2;
+  cpp_swap_p(&amp;a, &amp;b);
+  printf(<font color="#9933CC">&quot;a = %i, b = %i\n&quot;</font>, a, b);
+
+  <b>return</b> 0;    
+}</code></pre>
+
+Now we compile each file separately:
+<blockquote><pre>
+gcc -c main.c -o main.o
+g++ -c cpp_swap.cpp -o cpp_swap.o
+</pre></blockquote>
+
+Then we link them together:
+<blockquote><pre>
+gcc main.o cpp_swap.o
+</pre></blockquote>
+
+And we get a linker error:
+<blockquote><pre>
+main.o: In function `main':
+main.c:(.text+0x25): undefined reference to `cpp_swap_p'
+collect2: error: ld returned 1 exit status
+</pre></blockquote>
+
+We also get the same error if we try to link with <tt>g++</tt>. Given the example name mangling
+above, it should be clear what the problem is. 
+<ul>
+  <li>The C compiler left the name of the function alone:
+<blockquote><pre>
+cpp_swap_p
+</pre></blockquote></li>
+
+  <li>The C++ compiler mangled the name of the function:
+<blockquote><pre>
+_Z10cpp_swap_pPiS_
+</pre></blockquote></li>
+  <li>We have to be able to tell the C++ compiler to not do that.</li>
+</ul>
+
+Running <i>nm</i> on the C++ object file (<tt>cpp_swap.o</tt>) shows the mangled name:
+
+<blockquote><pre>
+0000000000000000 T _Z10cpp_swap_pPiS_
+</pre></blockquote>
+
+We can verify the actual name with <i>c++filt</i>
+<blockquote><pre>
+c++filt _Z10cpp_swap_pPiS_
+</pre></blockquote>
+
+Output:
+
+<blockquote><pre>
+cpp_swap_p(int*, int*)
+</pre></blockquote>
+
+
+
+We need to modify the C++ code so that C code can access it. We simply use the <b>extern</b> keyword
+and specify the language as a string:
+
+<blockquote><pre>
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b)
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+</pre></blockquote>
+
+To see that it works, run <i>nm</i> on the object file again:
+
+<blockquote><pre>
+0000000000000000 T cpp_swap_p
+</pre></blockquote>
+
+
+The <b>cpp_swap_p</b> function is now accessible from C and will link. Incidentally, you can put
+any language in the double quotes after the <tt><b>extern</b></tt> keyword as long as it's C.
+Actually, you can also put C++, but that's the default. This will mangle the name:
+
+<blockquote><pre>
+<b>extern</b> <font color="#9933CC">&quot;C++&quot;</font> <b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b)
+</pre></blockquote>
+
+<blockquote>
+<p class="technote">
+Another thing that should be clear: Each C++ compiler has it's own way of mangling names. This
+means that you can't compile some files with one compiler and other files with a different compiler
+and expect them to work together. They will only work if the compilers each output compatible object
+code.
+</p>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="sectionheader">
+Overloading example
+</p>
+
+
+Given this code:	
+<pre class="sourcecode"><code><b>void</b> fn();
+<b>void</b> fn(<b>int</b>);
+<b>void</b> fn(<b>double</b>);
+<b>void</b> fn(<b>int</b>, <b>double</b>);
+<b>void</b> fn(<b>double</b>, <b>int</b>);
+<b>int</b> fn(<b>int</b>, <b>int</b>);
+
+<b>int</b> main()
+{
+  fn();
+  fn(1);
+  fn(1.0);
+  fn(1, 1.0);
+  fn(1.0, 1);
+  fn(1, 1);
+  <b>return</b> 0;    
+}
+</code></pre>
+
+These are the errors that are emitted by the linker (Microsoft):
+<p>
+<blockquote><pre>
+error LNK2001: unresolved external symbol "int __cdecl fn(int,int)" (?fn@@YAHHH@Z)	
+error LNK2001: unresolved external symbol "void __cdecl fn(double,int)" (?fn@@YAXNH@Z)
+error LNK2001: unresolved external symbol "void __cdecl fn(int,double)" (?fn@@YAXHN@Z)
+error LNK2001: unresolved external symbol "void __cdecl fn(double)" (?fn@@YAXN@Z)
+error LNK2001: unresolved external symbol "void __cdecl fn(int)" (?fn@@YAXH@Z)
+error LNK2001: unresolved external symbol "void __cdecl fn(void)" (?fn@@YAXXZ)
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+Borland mangles the functions like this:
+<p>
+<blockquote>
+<table border=0 cellpadding=10>
+<tr><th>Function names</th><th>Mangled names</th></tr>
+<tr valign="top">
+<td>
+<pre>void fn(void)
+void fn(int)
+void fn(double)
+void fn(int, double)
+void fn(double, int)
+int fn(int, int)
+</pre>
+</td>
+<td>
+<pre>@fn$qv
+@fn$qi
+@fn$qd
+@fn$qid
+@fn$qdi
+@fn$qii        
+</pre>
+</td></tr></table>
+<p>
+</blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+GNU g++ mangles the functions like this (Clang is the same):
+<p>
+<blockquote>
+<table border=0 cellpadding=10>
+<tr><th>Function names</th><th>Mangled names</th></tr>
+<tr valign="top">
+<td>
+<pre>void fn(void)
+void fn(int)
+void fn(double)
+void fn(int, double)
+void fn(double, int)
+int fn(int, int)
+</pre>
+</td>
+<td>
+<pre>__Z2fnv
+__Z2fni
+__Z2fnd
+__Z2fnid
+__Z2fndi
+__Z2fnii
+</pre>
+</td></tr></table>
+</blockquote>
+<p>
+
+<hr width="90%">
+<p>
+
+More uses of <b>extern</b>:
+<p>
+This code would presumably be compiled with a C++ compiler:
+<p>
+
+<pre class="sourcecode"><code><b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b);
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> cpp_swap_r(<b>int</b> &amp;a, <b>int</b> &amp;b);
+
+<b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b)  <font color="#003399"><i>// using pointers</i></font>
+{
+  <b>int</b> temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+<b>void</b> cpp_swap_r(<b>int</b> &amp;a, <b>int</b> &amp;b)  <font color="#003399"><i>// using references</i></font>
+{
+  <b>int</b> temp = a;
+  a = b;
+  b = temp;
+}</code></pre>
+
+
+Or, we could tag a block of functions:
+
+<blockquote><pre>
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> 
+{
+  <b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b); <font color="#003399"><i>// using pointers</i></font>
+  <b>void</b> cpp_swap_r(<b>int</b> &amp;a, <b>int</b> &amp;b); <font color="#003399"><i>// using references</i></font>
+}
+</pre></blockquote>
+
+<p>
+<a href="WrappingCHeaders.html">Wrapping C header files in C++</a>
+<p>
+
+Note the C code using pointers instead of references:
+
+<pre class="sourcecode"><code><b>#include</b> &lt;stdio.h&gt;
+
+<font color="#003399"><i>// prototypes (could be in a .h file)</i></font>
+<b>void</b> cpp_swap_p(<b>int</b> *a, <b>int</b> *b);  <font color="#003399"><i>// using pointers</i></font>
+<b>void</b> cpp_swap_r(<b>int</b> *a, <b>int</b> *b);  <font color="#003399"><i>// using pointers (no references in C)</i></font>
+
+<b>int</b> main()
+{
+  <b>int</b> a = 1, b = 2;
+
+  cpp_swap_p(&amp;a, &amp;b);
+  printf(<font color="#9933CC">&quot;a = %i, b = %i\n&quot;</font>, a, b);
+  
+  cpp_swap_r(&amp;a, &amp;b);
+  printf(<font color="#9933CC">&quot;a = %i, b = %i\n&quot;</font>, a, b);
+  <b>return</b> 0;    
+}
+
+<b>Outupt:</b>
+a = 2, b = 1
+a = 1, b = 2
+</code></pre>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="sectionheader">
+Using the STL in C
+</p>
+
+Who knew?
+<p>
+<blockquote>
+<img src="c-stl-willis3.png">
+</blockquote>
+<p>
+Yes, you can do that. These examples are somewhat contrived, but you should be able to see the big
+picture. Suppose you want to sort an array of integers using <i>std::sort</i> from the STL. 
+(For now, ignore the fact that the C standard library already has a <i>sort</i> function...)
+<p>
+
+Here's our C-compatible sort function written in C++ that uses the STL: (<tt>sort.cpp</tt>)
+
+<!--
+
+<blockquote><pre>
+<font color="990099">#include &lt;algorithm&gt; // std::sort</font>
+
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> stl_sort(<b>int</b> *array, <b>int</b> size)
+{
+    <font color="#003399"><i>// iterators to the beginning and (one past the) end of the range</i></font>
+  std::sort(array, array + size);
+}
+</pre></blockquote>
+
+Here's a sample C driver that shows the usage:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &lt;stdlib.h&gt;</font>
+
+<font color="#003399"><i>/* Prototype for STL sort in C++ code */</i></font>
+<b>void</b> stl_sort(<b>int</b> *array, <b>int</b> size);
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>void</b> dump(<b>int</b> *array, <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%i &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> size = 200;
+  <b>int</b> *array = malloc(size * <b>sizeof</b>(<b>int</b>));
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Populate array with random integers */</i></font>
+  <b>for</b> (i = 0; i &lt; size; i++)
+    array[i] = RandomInt(100, 500);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Unsorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+    <font color="#003399"><i>/* Sort the array */</i></font>
+  stl_sort(array, size);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Sorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+  free(array);
+  <b>return</b> 0;
+}
+</code></pre>
+
+Output:
+<blockquote><pre>
+Unsorted:
+409 139 330 313 129 485 261 477 377 435 248 322 453 333 368 308 200 171 145 123 417 332 148 305 416
+445 293 117 206 400 312 187 440 214 473 141 198 234 190 475 241 338 369 193 243 310 475 343 454 119 
+440 370 425 488 175 340 104 441 357 283 340 168 371 279 356 416 393 454 222 483 101 437 393 370 129 
+136 252 176 452 206 269 464 476 193 451 223 105 456 163 362 238 404 102 181 255 358 170 148 385 292
+203 459 228 497 401 331 205 153 480 229 259 321 193 307 487 216 431 492 244 494 426 456 470 429 136
+225 359 279 346 316 144 121 274 345 190 175 248 295 301 228 498 460 121 190 339 108 306 269 500 451
+336 426 479 378 427 187 175 358 367 421 174 411 115 421 255 205 496 477 401 369 204 471 401 225 160
+240 306 439 409 306 462 317 304 440 195 303 127 270 160 394 264 234 377 279 228 204 384 223 180 357 
+
+Sorted:
+101 102 104 105 108 115 117 119 121 121 123 127 129 129 136 136 139 141 144 145 148 148 153 160 160
+163 168 170 171 174 175 175 175 176 180 181 187 187 190 190 190 193 193 193 195 198 200 203 204 204 
+205 205 206 206 214 216 222 223 223 225 225 228 228 228 229 234 234 238 240 241 243 244 248 248 252 
+255 255 259 261 264 269 269 270 274 279 279 279 283 292 293 295 301 303 304 305 306 306 306 307 308 
+310 312 313 316 317 321 322 330 331 332 333 336 338 339 340 340 343 345 346 356 357 357 358 358 359 
+362 367 368 369 369 370 370 371 377 377 378 384 385 393 393 394 400 401 401 401 404 409 409 411 416 
+416 417 421 421 425 426 426 427 429 431 435 437 439 440 440 440 441 445 451 451 452 453 454 454 456 
+456 459 460 462 464 470 471 473 475 475 476 477 477 479 480 483 485 487 488 492 494 496 497 498 500
+</pre></blockquote>
+
+Yes, it's contrived because we don't need to use the STL sort. Let's take it to the next level,
+anyway, and change it so the sort is largest to smallest. This has been added to the C++ file:
+
+<blockquote><pre>
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> stl_sort2(<b>int</b> *array, <b>int</b> size, <b>bool</b> (*compare)(<b>int</b> a, <b>int</b> b))
+{
+  std::sort(array, array + size, compare);
+}
+</pre></blockquote>
+
+And the new C driver program:
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &lt;stdlib.h&gt;</font>
+
+<font color="#003399"><i>/* Prototype for STL sort in C++ code */</i></font>
+<b>void</b> stl_sort(<b>int</b> *array, <b>int</b> size);
+<b>void</b> stl_sort2(<b>int</b> *array, <b>int</b> size, <b>int</b> (*compare)(<b>int</b> a, <b>int</b> b));
+
+<b>int</b> greater(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a &gt; b;
+}
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>void</b> dump(<b>int</b> *array, <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%i &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<font color="#003399"><i>/* Sorts from smallest to largest */</i></font>
+<b>int</b> test1(<b>void</b>)
+{
+  <b>int</b> size = 200;
+  <b>int</b> *array = malloc(size * <b>sizeof</b>(<b>int</b>));
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Populate array with random integers */</i></font>
+  <b>for</b> (i = 0; i &lt; size; i++)
+    array[i] = RandomInt(100, 500);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Unsorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+    <font color="#003399"><i>/* Sort the array */</i></font>
+  stl_sort(array, size);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Sorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+  free(array);
+  <b>return</b> 0;
+}
+
+<font color="#003399"><i>/* Sorts from largest to smallest */</i></font>
+<b>int</b> test2(<b>void</b>)
+{
+  <b>int</b> size = 100;
+  <b>int</b> *array = malloc(size * <b>sizeof</b>(<b>int</b>));
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Populate array with random integers */</i></font>
+  <b>for</b> (i = 0; i &lt; size; i++)
+    array[i] = RandomInt(100, 500);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Unsorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+    <font color="#003399"><i>/* Sort the array */</i></font>
+  stl_sort2(array, size, greater);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Sorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+  free(array);
+  <b>return</b> 0;
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <font color="#003399"><i>/*test1();*/</i></font>
+  test2();
+
+  <b>return</b> 0;
+}
+</code></pre>
+
+Output:
+<blockquote><pre>
+Unsorted:
+409 139 330 313 129 485 261 477 377 435 248 322 453 333 368 308 200 171 145 123 417 332 148 305 416 
+445 293 117 206 400 312 187 440 214 473 141 198 234 190 475 241 338 369 193 243 310 475 343 454 119 
+440 370 425 488 175 340 104 441 357 283 340 168 371 279 356 416 393 454 222 483 101 437 393 370 129 
+136 252 176 452 206 269 464 476 193 451 223 105 456 163 362 238 404 102 181 255 358 170 148 385 292 
+
+Sorted:
+488 485 483 477 476 475 475 473 464 456 454 454 453 452 451 445 441 440 440 437 435 425 417 416 416 
+409 404 400 393 393 385 377 371 370 370 369 368 362 358 357 356 343 340 340 338 333 332 330 322 313 
+312 310 308 305 293 292 283 279 269 261 255 252 248 243 241 238 234 223 222 214 206 206 200 198 193 
+193 190 187 181 176 175 171 170 168 163 148 148 145 141 139 136 129 129 123 119 117 105 104 102 101 
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+We can clean this up with just a single C++ function that sorts by any criteria:
+-->
+
+
+<blockquote><pre>
+<font color="990099">#include &lt;algorithm&gt; // sort</font>
+
+<b>extern</b> <font color="#9933CC">&quot;C&quot;</font> <b>void</b> stl_sort(<b>int</b> *array, <b>int</b> size, <b>bool</b> (*compare)(<b>int</b> a, <b>int</b> b))
+{
+  std::sort(array, array + size, compare);
+}
+</pre></blockquote>
+
+A C driver: (<tt>driver.c</tt>)
+
+<pre class="sourcecode"><code><font color="990099">#include &lt;stdio.h&gt;</font>
+<font color="990099">#include &lt;stdlib.h&gt;</font>
+
+<font color="#003399"><i>/* Prototype for STL sort in C++ code */</i></font>
+<b>void</b> stl_sort(<b>int</b> *array, <b>int</b> size, <b>int</b> (*compare)(<b>int</b> a, <b>int</b> b));
+
+<font color="#003399"><i>/* For sorting with greater than */</i></font>
+<b>int</b> greater(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a &gt; b;
+}
+
+<font color="#003399"><i>/* For sorting with less than */</i></font>
+<b>int</b> less(<b>int</b> a, <b>int</b> b)
+{
+  <b>return</b> a &lt; b;
+}
+
+<font color="#003399"><i>/* Calculate sum of digits */</i></font>
+<b>int</b> sumhelper(<b>int</b> a)
+{
+  <b>int</b> sum = 0;
+  <b>while</b> (a)
+  {
+    sum += a % 10;
+    a /= 10;
+  }
+  <b>return</b> sum;
+}
+
+<font color="#003399"><i>/* For sorting by sum of digits (greatest) */</i></font>
+<b>int</b> sumdigits(<b>int</b> a, <b>int</b> b)
+{
+  <b>int</b> suma = sumhelper(a);
+  <b>int</b> sumb = sumhelper(b);
+  <b>return</b> suma &gt; sumb;
+}
+
+<b>int</b> RandomInt(<b>int</b> low, <b>int</b> high)
+{
+  <b>int</b> number = rand() % (high - low + 1) + low;
+  <b>return</b> number;
+}
+
+<b>void</b> dump(<b>int</b> *array, <b>int</b> size)
+{
+  <b>int</b> i;
+  <b>for</b> (i = 0; i &lt; size; i++)
+    printf(<font color="#9933CC">&quot;%i &quot;</font>, array[i]);
+  printf(<font color="#9933CC">&quot;&#92;n&quot;</font>);
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  <b>int</b> size = 50;
+  <b>int</b> *array = malloc(size * <b>sizeof</b>(<b>int</b>));
+  <b>int</b> i;
+
+    <font color="#003399"><i>/* Populate array with random integers */</i></font>
+  <b>for</b> (i = 0; i &lt; size; i++)
+    array[i] = RandomInt(1, 500);
+
+    <font color="#003399"><i>/* Print out unsorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Unsorted:&#92;n&quot;</font>);
+  dump(array, size);
+
+    <font color="#003399"><i>/* Sort the array smallest to largest */</i></font>
+  stl_sort(array, size, less);
+
+    <font color="#003399"><i>/* Print out sorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Sorted small to large:&#92;n&quot;</font>);
+  dump(array, size);
+
+    <font color="#003399"><i>/* Sort the array largest to smallest */</i></font>
+  stl_sort(array, size, greater);
+
+    <font color="#003399"><i>/* Print out sorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Sorted large to small:&#92;n&quot;</font>);
+  dump(array, size);
+
+    <font color="#003399"><i>/* Sort the array by sum of digits */</i></font>
+  stl_sort(array, size, sumdigits);
+
+    <font color="#003399"><i>/* Print out sorted array */</i></font>
+  printf(<font color="#9933CC">&quot;Sorted by sum of digits:&#92;n&quot;</font>);
+  dump(array, size);
+
+  free(array);
+  <b>return</b> 0;
+}
+</code></pre>
+
+Compile the files and link them:
+<blockquote><pre>
+gcc -c driver.c -Wall -Wextra -ansi -pedantic -O2
+g++ -c sort.cpp -Wall -Wextra -ansi -pedantic -O2
+gcc driver.o sort.o -o sort
+</pre></blockquote>
+
+Output:
+<blockquote><pre>
+Unsorted:
+384 387 278 416 294 336 387 493 150 422 363 28 191 60 264 427 41 427 173 237 212 369 68 430 283 
+31 363 124 68 136 430 303 23 59 70 168 394 457 12 43 230 374 422 420 285 38 199 325 316 371 
+
+Sorted small to large:
+12 23 28 31 38 41 43 59 60 68 68 70 124 136 150 168 173 191 199 212 230 237 264 278 283 285 294 
+303 316 325 336 363 363 369 371 374 384 387 387 394 416 420 422 422 427 427 430 430 457 493 
+
+Sorted large to small:
+493 457 430 430 427 427 422 422 420 416 394 387 387 384 374 371 369 363 363 336 325 316 303 294 
+285 283 278 264 237 230 212 199 191 173 168 150 136 124 70 68 68 60 59 43 41 38 31 28 23 12 
+
+Sorted by sum of digits:
+199 369 387 387 278 493 394 457 168 285 384 294 68 68 59 374 283 427 427 363 336 363 237 264 173 
+38 191 416 371 28 325 136 316 422 422 43 430 124 70 430 420 60 150 303 41 212 230 23 31 12 
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="sectionheader">
+Using an Object-Oriented SpellChecker in C
+</p>
+
+Here's a more real-world example of calling a method on an C++ object.
+<p>
+
+<a href="FileStrings.h.html">FileStrings.h</a> (<a href="FileStrings.h">Text</a>)
+This file is the C++ interface that is used by the C++ code.
+<p>
+<a href="SpellChecker.h.html">SpellChecker.h</a> (<a href="SpellChecker.h">Text</a>)
+This is the C interface to the C++ code that will be called by C code.
+<p>
+<a href="SpellChecker.cpp.html">SpellChecker.cpp</a> (<a href="SpellChecker.cpp">Text</a>)
+This is the C++ implementation of the C interface.
+<p>
+<a href="spellcheck.c.html">spellcheck.c</a> (<a href="spellcheck.c">Text</a>)
+This is the C code that will call the C++ code via the C interface.
+<p>
+
+Compiling the C and C++ files, then linking: (You have to provide <tt>FileStrings.cpp</tt>)
+<blockquote><pre>
+gcc -c spellcheck.c -Wall -Wextra -ansi -pedantic -O2 -g
+g++ -c FileStrings.cpp -Wall -Wextra -ansi -pedantic -O2 -g
+g++ -c SpellChecker.cpp -Wall -Wextra -ansi -pedantic -O2 -g
+g++ spellcheck.o SpellChecker.o FileStrings.o -o spell
+</pre></blockquote>
+
+The output from running the executable should look like this:
+<blockquote><pre>
+Four is correct.
+SCORE is correct.
+and is correct.
+sevn is incorrect.
+years is correct.
+ago is correct.
+ar is correct.
+fawthers is incorrect.
+brought is correct.
+foarth is incorrect.
+on is correct.
+this is correct.
+contnent is incorrect.
+a is correct.
+gnu is correct.
+nashun is incorrect.
+</pre></blockquote>
+
+If you don't have FileStrings.cpp, you can just use one of these object files that was compiled for
+the appropriate platform. You'll want to rename it to simply <tt>FileStrings.o</tt> to use with the 
+command lines above.
+<p>
+<blockquote>
+<a href="FileStrings.o-linux64.html">FileStrings.o-linux64</a> - Compiled with 64-bit g++ (v. 5.3.0) on Linux.<br>
+<a href="FileStrings.o-cygwin64.html">FileStrings.o-cygwin64</a> - Compiled with 64-bit Cygwin g++ (v. 5.4.0) on Windows.<br>
+<a href="FileStrings.o-vc64.html">FileStrings.o-vc64</a> - Compiled with Microsoft's 64-bit compiler (v. 19.0, VS 14.0) on Windows.<br>
+<a href="FileStrings.o-macos64.html">FileStrings.o-macos64</a> - Compiled with 64-bit clang++ (Apple LLVM v. 8.0.0) on MacOS.<br>
+</blockquote>
+<p>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<p class="sectionheader">
+Example to Try on Your Own
+</p>
+
+
+<p>
+
+The goal is to "fix" this existing code so that it compiles (without warnings) and produces
+this output:
+
+<blockquote><pre>
+In C: i = 5, d = 5
+In CPP: i = 5, d = 5
+</pre></blockquote>
+
+The output indicates that after the C code prints its information, it calls the <b>cpp_stuff</b> function to do its work.
+
+<ul>
+<li>The program must compile and link without any warnings, and to produce the correct results when run. 
+<li>There are two files in the project, <i>CFile.c</i> and <i>CPPFile.cpp</i>. 
+<li>The .c file will be compiled with a C compiler and the .cpp file will be compiled with a C++ compiler. 
+<li>The .obj files will be linked by the linker to form an .exe (i.e. linked when you <i>make</i> the project.)
+<li>Each implementation file is separate and <b>cannot</b> be <b>#included</b> in each file. (Hint: you will
+	probably want to <b>#include</b> some header files.)
+</ul>
+
+<p>
+
+This is the start of <tt>CFile.c</tt>:
+<!--
+ (Currently, using MSC++ 6.0, it compiles/links/runs and outputs: In C: i = 1245823, d = 1.24582e+006.
+Your results may be different, but they will certainly not be correct.)
+-->
+
+<pre class="sourcecode"><code><b>int</b> main()
+{
+  <b>int</b> i = sqrt(25.0);
+  <b>double</b> d = sqrt(25.0);
+  printf(<font color="#9933CC">&quot;In C: i = %i, d = %g\n&quot;</font>, i, d);
+  <b>return</b> 0;
+}</code></pre>
+
+This is the start of <tt>CPPFile.cpp</tt>:
+
+<pre class="sourcecode"><code><b>void</b> cpp_stuff()
+{
+  <b>int</b> i = sqrt(25.0);
+  <b>double</b> d = sqrt(25.0);
+  printf(<font color="#9933CC">&quot;In CPP: i = %i, d = %g\n&quot;</font>, i, d);
+}</code></pre>
+
+Commands to compile and link:
+<blockquote><pre>
+gcc -c CFile.c -Wall -Wextra -ansi -pedantic -O2
+g++ -c CPPFile.cpp -Wall -Wextra -ansi -pedantic -O2
+gcc CFile.o CPPFile.o -o mix
+</pre></blockquote>
+
+
+
+<a href="CvsCPP.html">Solutions</a>
+
+</body>
+</html>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+

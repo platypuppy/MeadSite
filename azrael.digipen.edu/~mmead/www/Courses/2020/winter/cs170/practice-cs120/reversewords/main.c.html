@@ -1,0 +1,131 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>main.c.html</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="990099">#include &lt;stdio.h&gt;</font>
+
+<font color="#003399"><i>/* Prototypes */</i></font>
+<b>void</b> reverse_words1(<b>const</b> <b>char</b> input[], <b>char</b> output[]);
+<b>void</b> reverse_words2(<b>char</b> input[]);
+
+<b>void</b> test1(<b>void</b>)
+{
+  {
+  <b>char</b> words1[] = <font color="#9933CC">&quot;This&quot;</font>;
+  <b>char</b> rev1[<b>sizeof</b>(words1) + 1];
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words1);
+  reverse_words1(words1, rev1);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, rev1);
+  }
+
+  {
+  <b>char</b> words1[] = <font color="#9933CC">&quot;This is&quot;</font>;
+  <b>char</b> rev1[<b>sizeof</b>(words1) + 1];
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words1);
+  reverse_words1(words1, rev1);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, rev1);
+  }
+
+<font color="990099">#if 0</font>
+  {
+  <b>char</b> words1[] = <font color="#9933CC">&quot;This is a&quot;</font>;
+  <b>char</b> rev1[<b>sizeof</b>(words1) + 1];
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words1);
+  reverse_words1(words1, rev1);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, rev1);
+  }
+
+  {
+  <b>char</b> words1[] = <font color="#9933CC">&quot;This is a string&quot;</font>;
+  <b>char</b> rev1[<b>sizeof</b>(words1) + 1];
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words1);
+  reverse_words1(words1, rev1);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, rev1);
+  }
+
+  {
+  <b>char</b> words1[] = <font color="#9933CC">&quot;forth brought fathers our ago years seven and score Four&quot;</font>;
+  <b>char</b> rev1[<b>sizeof</b>(words1) + 1];
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words1);
+  reverse_words1(words1, rev1);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, rev1);
+  }
+
+  <font color="#003399"><i>/* Bonus */</i></font>
+  {
+  <b>char</b> words1[] = <font color="#9933CC">&quot;   This  is another   string &quot;</font>;
+  <b>char</b> rev1[<b>sizeof</b>(words1) + 1];
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words1);
+  reverse_words1(words1, rev1);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, rev1);
+  }
+<font color="990099">#endif</font>
+}
+
+<b>void</b> test2(<b>void</b>)
+{
+  {
+  <b>char</b> words[] = <font color="#9933CC">&quot;This&quot;</font>;
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words);
+  reverse_words2(words);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, words);
+  }
+
+  {
+  <b>char</b> words[] = <font color="#9933CC">&quot;This is&quot;</font>;
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words);
+  reverse_words2(words);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, words);
+  }
+
+<font color="990099">#if 0</font>
+  {
+  <b>char</b> words[] = <font color="#9933CC">&quot;This is a&quot;</font>;
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words);
+  reverse_words2(words);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, words);
+  }
+
+  {
+  <b>char</b> words[] = <font color="#9933CC">&quot;This is a string&quot;</font>;
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words);
+  reverse_words2(words);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, words);
+  }
+
+  {
+  <b>char</b> words[] = <font color="#9933CC">&quot;forth brought fathers our ago years seven and score Four&quot;</font>;
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words);
+  reverse_words2(words);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, words);
+  }
+
+  <font color="#003399"><i>/* Bonus */</i></font>
+  {
+  <b>char</b> words[] = <font color="#9933CC">&quot;   This  is another   string &quot;</font>;
+  printf(<font color="#9933CC">&quot; Input string: |%s|&#92;n&quot;</font>, words);
+  reverse_words2(words);
+  printf(<font color="#9933CC">&quot;Output string: |%s|&#92;n&quot;</font>, words);
+  }
+<font color="990099">#endif</font>
+}
+
+<b>int</b> main(<b>void</b>)
+{
+  printf(<font color="#9933CC">&quot;&#92;n============== Test 1 ================&#92;n&quot;</font>);
+  test1();  
+
+<font color="990099">#if 0</font>
+  printf(<font color="#9933CC">&quot;&#92;n============== Test 2 ================&#92;n&quot;</font>);
+  test2();  
+
+<font color="990099">#endif</font>
+
+  <b>return</b> 0;
+}
+</code></pre>

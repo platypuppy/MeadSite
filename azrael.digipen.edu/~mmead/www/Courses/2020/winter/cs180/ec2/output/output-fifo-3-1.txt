@@ -1,0 +1,13 @@
+7   fault [7    ]
+0   fault [7 0  ]
+1   fault [7 0 1]
+2   fault [0 1 2]
+0    ok   [0 1 2]
+3   fault [1 2 3]
+0   fault [2 3 0]
+2    ok   [2 3 0]
+0    ok   [2 3 0]
+4   fault [3 0 4]
+0    ok   [3 0 4]
+2   fault [0 4 2]
+Faults: 8

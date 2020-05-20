@@ -1,0 +1,520 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS180 Extra Credit Lab #2</title>
+</head>
+
+<style>
+body {
+   background : #ffffff; 
+   margin-left : 50;
+   margin-right : 20;
+   background : url("../../../../../images/notebook.jpg");
+   #background : url("https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/notebook.jpg");
+   }
+
+pre.console {
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 16px;
+  color: #000000;
+  background-color: #ffffdd;
+  padding: 8px 8px 8px 8px; # top,right,bottom,left
+  margin-left: 20px;
+  border: #000000;
+  border-style: dashed;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+pre.bconsole {
+  #font-family: Courier, "Courier New", mono;
+  #font-size: 16px;
+  color: #FFFFFF;
+  background-color: #000000;
+  padding: 8px 8px 8px 8px; # top,right,bottom,left
+  margin-left: 20px;
+  border: #000000;
+  border-style: dashed;
+  border-width: 1px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+</style>
+
+
+<body>  
+<center>
+<h1>CS180 Extra Credit Lab #2</h1>
+(prp)
+</center>
+
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<p class="SectionHeader">
+Information
+</p>
+
+<!--
+(Showing <span id=wpurl><a class=wplabel>Bélády anomaly</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Bélády's_anomaly">Bélády's anomaly</a>)</li>
+-->
+
+This lab has you implementing 3 page replacement algorithms: FIFO, Clock, and LRU.
+You'll also be handling command line options via <tt>getopt</tt>. References for getopt are
+<a href="../../../../CS180/getopt.html">here</a> and references for page replacement algorithms is
+<a href="../../../../CS180/Memory-1.html#PAGEREPLACE">here</a>.
+ You can earn up to 50 points of extra credit. Also, because this is <b>extra credit</b>,
+ very little (if any) partial credit will be given.
+
+
+  <p>
+  The help screen that will be displayed when you run
+  the program with the <tt>--help</tt> or <tt>-h</tt> option (or without any options):</li>
+<p>
+<blockquote><pre class="console">
+<b>./prp --help</b>
+Usage: prp {options}
+
+Options:
+ -p X  --policy=X      Which page-replacement policy to use: lru, fifo, or clock (required)
+ -n X  --numframes=X   Number of physical frames to simulate (required)
+ -r X  --requests=X    Comma separated list of logical page requests without spaces (required)
+                       If the first character is '@', then a filename follows
+                       that contains the comma separated values.
+ -s    --summary       Display only the number of faults.
+ -u    --underscores   Use underscores instead of ANSI graphics for clock algorithm.
+ -v    --version       Display the version and quit
+ -h    --help          Display this information
+
+Examples:
+  ./prp -n3 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2
+  ./prp --numframes=4 --policy=lru --requests=@pages.txt
+
+</pre></blockquote>  
+<p>
+
+
+Here are examples of each page replacement algorithm:
+
+<p>
+<ol>
+  <li><b>FIFO</b> - Implements the <b>F</b>irst-<b>I</b>n-<b>F</b>irst-<b>O</b>ut algorithm.
+    <p>
+  3 frames:
+<blockquote><pre class="console">
+<b>./prp -n3 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [7    ]
+0   fault [7 0  ]
+1   fault [7 0 1]
+2   fault [0 1 2]
+0    ok   [0 1 2]
+3   fault [1 2 3]
+0   fault [2 3 0]
+2    ok   [2 3 0]
+0    ok   [2 3 0]
+4   fault [3 0 4]
+0    ok   [3 0 4]
+2   fault [0 4 2]
+Faults: 8
+</pre></blockquote>
+
+4 frames (same page requests):
+
+<blockquote><pre class="console">
+<b>./prp -n4 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [7      ]
+0   fault [7 0    ]
+1   fault [7 0 1  ]
+2   fault [7 0 1 2]
+0    ok   [7 0 1 2]
+3   fault [0 1 2 3]
+0    ok   [0 1 2 3]
+2    ok   [0 1 2 3]
+0    ok   [0 1 2 3]
+4   fault [1 2 3 4]
+0   fault [2 3 4 0]
+2    ok   [2 3 4 0]
+Faults: 7
+</pre></blockquote>
+
+  3 frames (different page requests)
+<blockquote><pre class="console">
+<b>./prp -n3 -pfifo -r3,2,1,0,3,2,4,3,2,1,0,4</b>
+3   fault [3    ]
+2   fault [3 2  ]
+1   fault [3 2 1]
+0   fault [2 1 0]
+3   fault [1 0 3]
+2   fault [0 3 2]
+4   fault [3 2 4]
+3    ok   [3 2 4]
+2    ok   [3 2 4]
+1   fault [2 4 1]
+0   fault [4 1 0]
+4    ok   [4 1 0]
+Faults: 9
+</pre></blockquote>
+
+4 frames (same page requests): 
+        (<span id=wpurl><a class=wplabel>Béládys anomaly</a></span><a class=wplink href="http://en.wikipedia.org/wiki/Belady's_anomaly">B&eacute;l&aacute;dy's anomaly</a>)</li>
+                                       
+<blockquote><pre class="console">
+<b>./prp -n4 -pfifo -r3,2,1,0,3,2,4,3,2,1,0,4</b>
+3   fault [3      ]
+2   fault [3 2    ]
+1   fault [3 2 1  ]
+0   fault [3 2 1 0]
+3    ok   [3 2 1 0]
+2    ok   [3 2 1 0]
+4   fault [2 1 0 4]
+3   fault [1 0 4 3]
+2   fault [0 4 3 2]
+1   fault [4 3 2 1]
+0   fault [3 2 1 0]
+4   fault [2 1 0 4]
+Faults: 10
+</pre></blockquote>
+
+  <li><b>Clock</b> - Implements the Clock algorithm (a.k.a. Second chance)
+    <p>
+  3 frames:
+<blockquote><pre class="console">
+<b>./prp -n3 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [<u>7+</u>      ]
+0   fault [<u>7+</u> 0+   ]
+1   fault [<u>7+</u> 0+ 1+]
+2   fault [2+ <u>0-</u> 1-]
+0    ok   [2+ <u>0+</u> 1-]
+3   fault [<u>2+</u> 0- 3+]
+0    ok   [<u>2+</u> 0+ 3+]
+2    ok   [<u>2+</u> 0+ 3+]
+0    ok   [<u>2+</u> 0+ 3+]
+4   fault [4+ <u>0-</u> 3-]
+0    ok   [4+ <u>0+</u> 3-]
+2   fault [<u>4+</u> 0- 2+]
+Faults: 7
+</pre></blockquote>
+
+  4 frames (same page requests):
+<blockquote><pre class="console">
+<b>./prp -n4 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [<u>7+</u>         ]
+0   fault [<u>7+</u> 0+      ]
+1   fault [<u>7+</u> 0+ 1+   ]
+2   fault [<u>7+</u> 0+ 1+ 2+]
+0    ok   [<u>7+</u> 0+ 1+ 2+]
+3   fault [3+ <u>0-</u> 1- 2-]
+0    ok   [3+ <u>0+</u> 1- 2-]
+2    ok   [3+ <u>0+</u> 1- 2+]
+0    ok   [3+ <u>0+</u> 1- 2+]
+4   fault [3+ 0- 4+ <u>2+</u>]
+0    ok   [3+ 0+ 4+ <u>2+</u>]
+2    ok   [3+ 0+ 4+ <u>2+</u>]
+Faults: 6
+</pre></blockquote>
+
+Shown using underscores instead of ANSI graphics:
+<blockquote><pre class="console">
+<b>./prp -u -n4 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [_7+_         ]
+0   fault [_7+_ 0+      ]
+1   fault [_7+_ 0+ 1+   ]
+2   fault [_7+_ 0+ 1+ 2+]
+0    ok   [_7+_ 0+ 1+ 2+]
+3   fault [3+ _0-_ 1- 2-]
+0    ok   [3+ _0+_ 1- 2-]
+2    ok   [3+ _0+_ 1- 2+]
+0    ok   [3+ _0+_ 1- 2+]
+4   fault [3+ 0- 4+ _2+_]
+0    ok   [3+ 0+ 4+ _2+_]
+2    ok   [3+ 0+ 4+ _2+_]
+Faults: 6
+</pre></blockquote>
+
+
+
+  <li><b>LRU</b> - Implements the <b>L</b>east <b>R</b>ecently <b>U</b>sed algorithm.
+    <p>
+      2 frames:
+<blockquote><pre class="console">
+<b>./prp -n2 -plru -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [7  ]   0
+0   fault [7 0]   1
+1   fault [0 1]   2
+2   fault [1 2]   3
+0   fault [2 0]   4
+3   fault [0 3]   5
+0    ok   [3 0]   6
+2   fault [0 2]   7
+0    ok   [2 0]   8
+4   fault [0 4]   9
+0    ok   [4 0]  10
+2   fault [0 2]  11
+Faults: 9
+</pre></blockquote>
+
+      3 frames (same page requests):
+<blockquote><pre class="console">
+<b>./prp -n3 -plru -r7,0,1,2,0,3,0,2,0,4,0,2</b>
+7   fault [7    ]   0
+0   fault [7 0  ]   1
+1   fault [7 0 1]   2
+2   fault [0 1 2]   3
+0    ok   [1 2 0]   4
+3   fault [2 0 3]   5
+0    ok   [2 3 0]   6
+2    ok   [3 0 2]   7
+0    ok   [3 2 0]   8
+4   fault [2 0 4]   9
+0    ok   [2 4 0]  10
+2    ok   [4 0 2]  11
+Faults: 6
+</pre></blockquote>
+
+
+</ol>
+
+Displaying the version:
+<blockquote><pre class="console">
+<b>./prp --version</b>
+prp version 1.0
+</pre></blockquote>
+
+Showing just the summary:
+<blockquote><pre class="console">
+<b>./prp -n3 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2 -s</b>
+Faults: 8
+
+<b>./prp -n3 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2 -s</b>
+Faults: 7
+
+<b>./prp -n3 -plru -r7,0,1,2,0,3,0,2,0,4,0,2 -s</b>
+Faults: 6
+</pre></blockquote>
+
+
+
+<p>
+  <hr width="95%">
+</p>
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+<!--*************************************************************************************************-->
+Notes:
+<p>
+<ol>
+<li>I'm going to allow you to choose which language to implement this in. 
+  Unfortunately, the choices are limited to C and C++. However, with
+  C++, I am not going to be using the <tt>-ansi</tt> option. This option limits you to either C89 or C++03. I'm going
+  to use the <tt>-std=C++17</tt> option, which enables C++17 support. 
+  <p>
+<li>You will have to create a <tt>driver.cpp</tt> file to support the program. Don't put any of the
+  page replacement code here. All of the command line processing should be done in <tt>driver.cpp</tt>,
+and the actual page replacement algorithms should be done in the appropriate file. 
+<p>
+<li>You must have one file per algorithm. This means you'll need 5 files: <tt>driver.cpp</tt>,
+  <tt>fifo.cpp</tt>, <tt>clock.cpp</tt>, <tt>lru.cpp</tt> and <tt>prp.h</tt>. The
+header file should be used for the prototypes and anything else you think that the files 
+should share.</li>
+<p>
+<li>Even if you choose to implement the lab in C, you still need to use a .cpp extension so that
+  the server can build your code. It's perfectly OK to have straight C code in a .cpp file. It will
+  still be compiled with a C++ compiler, but that should have no effect on anything. I'm doing it
+  this way so that one makefile will work for either C or C++. Note that if you choose C++,
+you can use the STL for anything that you need. There are no limitations with what you 
+can include. This fact alone should make your decision to use C++ easy!</li>
+<p>
+<li>The output of the LRU algorithm differs slightly from the output that is shown by the LRU algorithm
+  <a href="../../../../CS180/Memory-1.html#PAGEREPLACE">here</a>. The output displayed from that link
+  has an explicit timestamp included, but the output for this lab doesn't:
+
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=10>
+<tr><th>This lab's output</th><th></th><th>Output from the notes</th></tr>
+<tr>
+<td>
+<pre>
+7   fault [7    ]   0
+0   fault [7 0  ]   1
+1   fault [7 0 1]   2
+2   fault [0 1 2]   3
+0    ok   [1 2 0]   4
+3   fault [2 0 3]   5
+0    ok   [2 3 0]   6
+2    ok   [3 0 2]   7
+0    ok   [3 2 0]   8
+4   fault [2 0 4]   9
+0    ok   [2 4 0]  10
+2    ok   [4 0 2]  11
+Faults: 6</pre>
+</td>
+<td width="20"></td>
+<td><pre>                               Time
+7    fault [7(0)            ]   0
+0    fault [7(0)  0(1)      ]   1
+1    fault [7(0)  0(1)  1(2)]   2
+2    fault [0(1)  1(2)  2(3)]   3
+0     ok   [1(2)  2(3)  0(4)]   4
+3    fault [2(3)  0(4)  3(5)]   5
+0     ok   [2(3)  3(5)  0(6)]   6
+2     ok   [3(5)  0(6)  2(7)]   7
+0     ok   [3(5)  2(7)  0(8)]   8
+4    fault [2(7)  0(8)  4(9)]   9
+0     ok   [2(7)  4(9) 0(10)]  10
+2     ok   [4(9) 0(10) 2(11)]  11</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+The timestamp is implied by the position in the queue. The oldest page is the one at the front, and the
+newest page is the one at the back. The output from the notes is somewhat redundant because we are not
+really interested in <i>how</i> old one page is compared to another. We simply want to order
+of the pages by age without regard to the exact age.
+
+</li>
+<p>
+<li>There's a slight caveat to the output from the <i>clock</i> algorithm: it uses ANSI escape sequences
+  to display the underline representing the clock's hand. For example:
+
+<blockquote><pre>
+7   fault [<u>7+</u>      ]
+0   fault [<u>7+</u> 0+   ]
+1   fault [<u>7+</u> 0+ 1+]
+2   fault [2+ <u>0-</u> 1-]
+0    ok   [2+ <u>0+</u> 1-]
+</pre></blockquote>
+
+   I wrote a short tutorial on how to
+  do that <a href="../../../../../mg/ansicolors/index.html">here</a>. For a quick intro,
+  this is how you would print underlined text, using either <i>printf</i> or <i>cout</i>:
+
+<blockquote><pre>
+printf(<font color="#9933CC">&quot;&#92;033[4mUnderline text&#92;033[m&#92;n&quot;</font>);
+std::cout &lt;&lt; <font color="#9933CC">&quot;&#92;033[4mUnderline text&#92;033[m&#92;n&quot;</font>; 
+</pre></blockquote>
+
+<blockquote><pre class="bconsole">
+<span style="color:lightgray"><u>Underlined text</u></span>
+</pre></blockquote>
+
+Essentially, anything between the <tt><b>&#92;033[4m</b></tt> and <tt><b>&#92;033[m</b></tt> 
+will be underlined. The <tt><b>&#92;033</b></tt> is octal for the escape character (decimal 27)
+that triggers the ANSI graphics. Depending on what you're using to view the output (e.g. a text editor),
+you may see some weird characters. However, your output should still diff properly.
+<p>
+This potential "problem" with ANSI graphics motivated the <tt>--underscores</tt> option which will
+print underscores around the text, rather than print the ANSI underscore below the text. This will
+allow it to work and appear visually correct on any system, albeit, at a lower quality.
+Note that the ANSI graphics may not work on Windows, but works perfectly on Linux (or Mac).
+
+
+
+
+</ol>
+
+<p>
+  <hr width="95%">
+</p>
+
+Additional files and information.
+<p>
+Command line to compile the program:
+<blockquote><pre>
+clang++ -Wall -Wextra -std=c++17 -pedantic -O2 -g <b>-o prp</b> driver.cpp fifo.cpp clock.cpp lru.cpp  
+</pre></blockquote>
+
+The output file, <tt>prp</tt>, stands for <b>p</b>age <b>r</b>eplacement <b>p</b>olicy.
+<p>
+My advice is to create a <tt>makefile</tt>, as that will make your life easier. But, if you're doing
+this lab, I probably don't need to tell you that.
+<p>
+To run the program, type this at the command line:
+<blockquote><pre>
+./prp <font color="red"><b>{options}</b></font>
+</pre></blockquote>
+<p>
+
+A few sample tests:
+<ul>
+  <li><tt>./prp -n3 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-fifo-3-1.txt">output-fifo-3-1.txt</a>)</li>
+  <li><tt>./prp -n4 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-fifo-4-1.txt">output-fifo-4-1.txt</a>)</li>
+  <li><tt>./prp -n5 -pfifo -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-fifo-5-1.txt">output-fifo-5-1.txt</a>)</li>
+<p>
+  <li><tt>./prp -n3 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-clock-3-1.txt">output-clock-3-1.txt</a>)</li>
+  <li><tt>./prp -n4 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-clock-4-1.txt">output-clock-4-1.txt</a>)</li>
+  <li><tt>./prp -n5 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-clock-5-1.txt">output-clock-5-1.txt</a>)</li>
+  <li><tt>./prp -u -n3 -pclock -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-clock-5-1u.txt">output-clock-5-1u.txt</a>)</li>
+<p>
+  <li><tt>./prp -n3 -plru -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-lru-3-1.txt">output-lru-3-1.txt</a>)</li>
+  <li><tt>./prp -n4 -plru -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-lru-4-1.txt">output-lru-4-1.txt</a>)</li>
+  <li><tt>./prp -n5 -plru -r7,0,1,2,0,3,0,2,0,4,0,2</tt> (<a href="output/output-lru-5-1.txt">output-lru-5-1.txt</a>)</li>
+<p>
+
+</ul>
+
+Here are a couple of files that contain page requests: 
+<a href="pages.txt">pages.txt</a>&nbsp;&nbsp;<a href="pages2.txt">pages2.txt</a>&nbsp;&nbsp;
+<p>
+All files (input/output) in a <a href="https://azrael.digipen.edu/~mmead/www/courses/2020/winter/cs180/ec2/output.zip">zip file</a>.
+<p>
+Here's a <a href="mkoutput.sh">bash script</a> to run all of the tests. You may need to make it executable
+after downloading it:
+
+<blockquote><pre>
+chmod +x mkoutput.sh
+</pre></blockquote>
+
+Then just run it:
+
+<blockquote><pre>
+./mkoutput.sh
+</pre></blockquote>
+
+You can change the destination of the output files so you don't overwrite the ones you've downloaded. Then,
+use <tt>kdiff3</tt> to diff the entire directory contents at once. Assume that you have the sample
+output files in <tt>output/</tt> and you have your output in <tt>myoutput/</tt>, this is how you would
+compare all of the files at once:
+
+<blockquote><pre>
+kdiff3 output/ myoutput/
+</pre></blockquote>
+
+If you don't have <tt>kdiff3</tt> installed, you can just install it with <tt>apt</tt>.
+<p>
+Individual files to view in your browser:
+<a href="output/index.html">output/</a>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<br><br><br><br>
+
+  
+<hr>
+
+</body>
+</html>
+
+<blockquote><pre>
+</pre></blockquote>
+

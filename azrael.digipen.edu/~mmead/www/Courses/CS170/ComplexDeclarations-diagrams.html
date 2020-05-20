@@ -1,0 +1,277 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>Diagrams - Complex Declarations</title>
+</head>
+
+<body>  
+<center><h1>Complex Declaration Diagrams</h1></center>
+
+<blockquote>
+</blockquote>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<a name="BASICS"></a>
+<p class="SectionHeader">
+Arrays and Pointers Declaration Basics
+</p>
+
+
+<p>
+
+What is the English equivalent of each declaration? In other words, what is the type of <i>f1</i>,
+<i>f2</i>, etc?
+
+
+<ol>
+Pointers/Arrays
+
+<blockquote><pre>
+<li><b>int</b> f1;
+<li><b>int</b> *f2;
+<li><b>int</b> f3[3];
+<li><b>int</b> *f4[3];
+<li><b>int</b> (*f5)[3];
+<li><b>int</b> *(*f6)[3];
+<li><b>int</b> f7[3][4];
+<li><b>int</b> *f8[3][4];
+<li><b>int</b> (*f9)[3][4];
+<li><b>int</b> *(*f10)[3][4];
+<li><b>int</b> (*f11[3])[4];
+<li><b>int</b> *(*f12[3])[4];
+</pre></blockquote>
+
+This is how to interpret the shapes used below. The diagrams assume 4-byte integers and 8-byte
+pointers.
+<p>
+<blockquote>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr align="left"><th>pointer</th><th>int</th></tr>
+<tr valign="top">
+<td>
+<img src="pointer.png">
+</td>
+<td>
+<img src="int.png">
+</td>
+</tr></table>
+</blockquote>
+
+The shaded shape is the variable itself, i.e., not what's being pointed to. This should
+help you answer the <i>sizeof</i> questions. Also, the thick black lines indicate what is
+being pointed at, e.g. a single int/pointer or an array on ints/pointers.
+<p>
+<br>
+
+<ol>
+<li><big><tt><b>int</b> f1;</tt></big></li>
+<p>
+<img src="f1.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> *f2;</tt></big></li>
+<p>
+<img src="f2a.png">
+<p>
+
+Oftentimes, the pointer is actually pointing at an integer inside of an array. So this code:
+
+<blockquote><pre>
+<b>int</b> a[3];
+<b>int</b> *f2 = a; <font color="#003399"><i>/* same as &amp;a[0] */</i></font></tt></li>
+</pre></blockquote>
+
+would look like this, with the pointer pointing at the first element of the array and 
+NOT the entire array:
+
+<p>
+<img src="f2b.png">
+<p>
+
+and this code:
+
+<blockquote><pre>
+f2 = &amp;a[1];
+</pre></blockquote>
+
+would look like this:
+
+<p>
+<img src="f2c.png">
+<p>
+
+This is simply because f2 is a pointer to an int, NOT a pointer to an array of ints.
+
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> f3[3];</tt></big></li>
+<p>
+<img src="f3.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> *f4[3];</tt></big></li>
+<p>
+<img src="f4.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> (*f5)[3]; <font color="#003399"><i>/* f5 points to the entire array */</i></font></tt></big></li>
+<p>
+<img src="f5.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> *(*f6)[3]; <font color="#003399"><i>/* f6 points to the entire array */</i></font></tt></big></li>
+<p>
+<img src="f6.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> f7[3][4];</tt></big></li>
+<p>
+<img src="f7.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> *f8[3][4];</tt></big></li>
+<p>
+<img src="f8.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> (*f9)[3][4]; <font color="#003399"><i>/* f9 points to the entire array */</i></font></tt></big></li>
+<p>
+<img src="f9.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> *(*f10)[3][4]; <font color="#003399"><i>/* f10 points to the entire array */</i></font></tt></big></li>
+<p>
+<img src="f10a.png">
+<p>
+Showing it with all of the pointers:
+<p>
+<img src="f10b.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> (*f11[3])[4]; <font color="#003399"><i>/* each element of f11 points to an entire array */</i></font></tt></big></li>
+<p>
+The blue box is <big><tt>f11</tt></big>:
+
+<p>
+<img src="f11a.png">
+<p>
+
+The blue box is <big><tt>*f11</tt></big>:
+
+<p>
+<img src="f11b.png">
+<p>
+
+The blue box is <big><tt>**f11</tt></big>:
+
+<p>
+<img src="f11c.png">
+<p>
+
+The blue box is <big><tt>***f11</tt></big>:
+
+<p>
+<img src="f11d.png">
+<p>
+
+<p><hr width="100%"><p>
+
+<li><big><tt><b>int</b> *(*f12[3])[4]; <font color="#003399"><i>/* each element of f12 points to an entire array */</i></font></tt></big></li>
+<p>
+<img src="f12a.png">
+<p>
+Showing another view with all of the pointers. Following the arrow from <big><tt>f12</tt></big>
+<ol>
+  <li>The <font color="blue"><b>BLUE</b></font> box is <big><tt>*f12</tt></big></li>
+  <li>The <font color="red"><b>next</b></font> box is <big><tt>**f12</tt></big></li>
+  <li>The <font color="green"><b>next</b></font> box is <big><tt>***f12</tt></big></li>
+  <li>The <font color="grey"><b>next</b></font> box is <big><tt>****f12</tt></big></li>
+
+<p>
+<img src="f12b.png">
+<p>
+</ol>
+
+It doesn't matter how you draw the arrays, either vertically or horizontally, as long as you 
+understand the diagrams.
+
+<p>
+  <hr width="95%">
+<p>
+
+</ol>
+
+Here's a bonus. Specify the type in English. Then, write the declaration for f13 in C.
+
+<p>
+<img src="f13.png">
+<p>
+
+
+
+<!--
+<li><big><tt><b>int</b> *(*f11[3])[4];</tt></big></li>
+
+f11 with 8-byte pointers: 24, 8, 16, 4
+f12 with 8-byte pointers: 24, 8, 32, 8
+
+f13 is a pointer to an array of 3 pointers to an array of 4 ints
+
+int (*(*f13)[3])[4]
+
+-->
+
+
+<br><br><br>
+
+<blockquote><pre>
+</pre></blockquote>
+<blockquote><pre>
+</pre></blockquote>
+
+
+</body>
+</html>
+
+<table border=0 cellspacing=5 cellpadding=0>
+<tr><th></th><th></th><th></th></tr>
+<tr valign="top">
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+<td>
+<blockquote><pre>
+</pre></blockquote>
+</td>
+</tr></table>
+
+
+<blockquote><pre>
+</pre></blockquote>
+

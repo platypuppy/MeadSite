@@ -1,0 +1,505 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="new.css">
+<title>stdio.h</title>
+</head>
+
+<body>  
+
+<pre class="sourcecode"><code>
+<font color="#003399"><i>/*
+ * Copyright (c) 1990 The Regents of the University of California.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms are permitted
+ * provided that the above copyright notice and this paragraph are
+ * duplicated in all such forms and that any documentation,
+ * advertising materials, and other materials related to such
+ * distribution and use acknowledge that the software was developed
+ * by the University of California, Berkeley.  The name of the
+ * University may not be used to endorse or promote products derived
+ * from this software without specific prior written permission.
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *	@(#)stdio.h	5.3 (Berkeley) 3/15/86
+ */</i></font>
+
+<font color="#003399"><i>/*
+ * NB: to fit things in six character monocase externals, the
+ * stdio code uses the prefix `__s' for stdio objects, typically
+ * followed by a three-character attempt at a mnemonic.
+ */</i></font>
+
+<font color="990099">#ifndef _STDIO_H_</font>
+<font color="990099">#define	_STDIO_H_</font>
+
+<font color="990099">#include &quot;_ansi.h&quot;</font>
+
+<font color="990099">#define	_FSTDIO			/* ``function stdio'' */</font>
+
+<font color="990099">#define __need_size_t</font>
+<font color="990099">#include &lt;stddef.h&gt;</font>
+
+<font color="990099">#define __need___va_list</font>
+<font color="990099">#include &lt;stdarg.h&gt;</font>
+
+<font color="#003399"><i>/*
+ * &lt;sys/reent.h&gt; defines __FILE, _fpos_t.
+ * They must be defined there because struct _reent needs them (and we don't
+ * want reent.h to include this file.
+ */</i></font>
+
+<font color="990099">#include &lt;sys/reent.h&gt;</font>
+<font color="990099">#include &lt;sys/types.h&gt;</font>
+
+_BEGIN_STD_C
+
+<b>typedef</b> __FILE FILE;
+
+<font color="990099">#ifdef __CYGWIN__</font>
+<font color="990099">#ifdef __CYGWIN_USE_BIG_TYPES__</font>
+<b>typedef</b> _fpos64_t fpos_t;
+<font color="990099">#else</font>
+<b>typedef</b> _fpos_t fpos_t;
+<font color="990099">#endif</font>
+<font color="990099">#else</font>
+<b>typedef</b> _fpos_t fpos_t;
+<font color="990099">#ifdef __LARGE64_FILES</font>
+<b>typedef</b> _fpos64_t fpos64_t;
+<font color="990099">#endif</font>
+<font color="990099">#endif /* !__CYGWIN__ */</font>
+
+<font color="990099">#include &lt;sys/stdio.h&gt;</font>
+
+<font color="990099">#define	__SLBF	0x0001		/* line buffered */</font>
+<font color="990099">#define	__SNBF	0x0002		/* unbuffered */</font>
+<font color="990099">#define	__SRD	0x0004		/* OK to read */</font>
+<font color="990099">#define	__SWR	0x0008		/* OK to write */</font>
+	<font color="#003399"><i>/* RD and WR are never simultaneously asserted */</i></font>
+<font color="990099">#define	__SRW	0x0010		/* open for reading &amp; writing */</font>
+<font color="990099">#define	__SEOF	0x0020		/* found EOF */</font>
+<font color="990099">#define	__SERR	0x0040		/* found error */</font>
+<font color="990099">#define	__SMBF	0x0080		/* _buf is from malloc */</font>
+<font color="990099">#define	__SAPP	0x0100		/* fdopen()ed in append mode - so must  write to end */</font>
+<font color="990099">#define	__SSTR	0x0200		/* this is an sprintf/snprintf string */</font>
+<font color="990099">#define	__SOPT	0x0400		/* do fseek() optimisation */</font>
+<font color="990099">#define	__SNPT	0x0800		/* do not do fseek() optimisation */</font>
+<font color="990099">#define	__SOFF	0x1000		/* set iff _offset is in fact correct */</font>
+<font color="990099">#define	__SMOD	0x2000		/* true =&gt; fgetline modified _p text */</font>
+<font color="990099">#if defined(__CYGWIN__)</font>
+<font color="990099">#  define __SCLE  0x4000        /* convert line endings CR/LF &lt;-&gt; NL */</font>
+<font color="990099">#endif</font>
+<font color="990099">#define	__SL64	0x8000		/* is 64-bit offset large file */</font>
+
+<font color="#003399"><i>/*
+ * The following three definitions are for ANSI C, which took them
+ * from System V, which stupidly took internal interface macros and
+ * made them official arguments to setvbuf(), without renaming them.
+ * Hence, these ugly _IOxxx names are *supposed* to appear in user code.
+ *
+ * Although these happen to match their counterparts above, the
+ * implementation does not rely on that (so these could be renumbered).
+ */</i></font>
+<font color="990099">#define	_IOFBF	0		/* setvbuf should set fully buffered */</font>
+<font color="990099">#define	_IOLBF	1		/* setvbuf should set line buffered */</font>
+<font color="990099">#define	_IONBF	2		/* setvbuf should set unbuffered */</font>
+
+<font color="990099">#ifndef NULL</font>
+<font color="990099">#define	NULL	0</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#define	EOF	(-1)</font>
+
+<font color="990099">#ifdef __BUFSIZ__</font>
+<font color="990099">#define	BUFSIZ		__BUFSIZ__</font>
+<font color="990099">#else</font>
+<font color="990099">#define	BUFSIZ		1024</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef __FOPEN_MAX__</font>
+<font color="990099">#define FOPEN_MAX	__FOPEN_MAX__</font>
+<font color="990099">#else</font>
+<font color="990099">#define	FOPEN_MAX	20</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef __FILENAME_MAX__</font>
+<font color="990099">#define FILENAME_MAX    __FILENAME_MAX__</font>
+<font color="990099">#else</font>
+<font color="990099">#define	FILENAME_MAX	1024</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef __L_tmpnam__</font>
+<font color="990099">#define L_tmpnam	__L_tmpnam__</font>
+<font color="990099">#else</font>
+<font color="990099">#define	L_tmpnam	FILENAME_MAX</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifndef __STRICT_ANSI__</font>
+<font color="990099">#define P_tmpdir        &quot;/tmp&quot;</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifndef SEEK_SET</font>
+<font color="990099">#define	SEEK_SET	0	/* set file offset to offset */</font>
+<font color="990099">#endif</font>
+<font color="990099">#ifndef SEEK_CUR</font>
+<font color="990099">#define	SEEK_CUR	1	/* set file offset to current plus offset */</font>
+<font color="990099">#endif</font>
+<font color="990099">#ifndef SEEK_END</font>
+<font color="990099">#define	SEEK_END	2	/* set file offset to EOF plus offset */</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#define	TMP_MAX		26</font>
+
+<font color="990099">#ifndef _REENT_ONLY</font>
+<font color="990099">#define	stdin	(_REENT-&gt;_stdin)</font>
+<font color="990099">#define	stdout	(_REENT-&gt;_stdout)</font>
+<font color="990099">#define	stderr	(_REENT-&gt;_stderr)</font>
+<font color="990099">#else /* _REENT_ONLY */</font>
+<font color="990099">#define	stdin	(_impure_ptr-&gt;_stdin)</font>
+<font color="990099">#define	stdout	(_impure_ptr-&gt;_stdout)</font>
+<font color="990099">#define	stderr	(_impure_ptr-&gt;_stderr)</font>
+<font color="990099">#endif /* _REENT_ONLY */</font>
+
+<font color="990099">#define _stdin_r(x)	((x)-&gt;_stdin)</font>
+<font color="990099">#define _stdout_r(x)	((x)-&gt;_stdout)</font>
+<font color="990099">#define _stderr_r(x)	((x)-&gt;_stderr)</font>
+
+<font color="#003399"><i>/*
+ * Functions defined in ANSI C standard.
+ */</i></font>
+
+<font color="990099">#ifdef __GNUC__</font>
+<font color="990099">#define __VALIST __gnuc_va_list</font>
+<font color="990099">#else</font>
+<font color="990099">#define __VALIST char*</font>
+<font color="990099">#endif</font>
+
+<a name="FUNCTIONS">
+FILE *	_EXFUN(tmpfile, (<b>void</b>));
+<b>char</b> *	_EXFUN(tmpnam, (<b>char</b> *));
+<b>int</b>	_EXFUN(fclose, (FILE *));
+<b>int</b>	_EXFUN(fflush, (FILE *));
+FILE *	_EXFUN(freopen, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, FILE *));
+<b>void</b>	_EXFUN(setbuf, (FILE *, <b>char</b> *));
+<b>int</b>	_EXFUN(setvbuf, (FILE *, <b>char</b> *, <b>int</b>, size_t));
+<b>int</b>	_EXFUN(fprintf, (FILE *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(fscanf, (FILE *, <b>const</b> <b>char</b> *, ...));
+<font color="blue"><b>int</b>	_EXFUN(printf, (<b>const</b> <b>char</b> *, ...));</font>
+<b>int</b>	_EXFUN(scanf, (<b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(sscanf, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(vfprintf, (FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vprintf, (<b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vsprintf, (<b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(fgetc, (FILE *));
+<b>char</b> *  _EXFUN(fgets, (<b>char</b> *, <b>int</b>, FILE *));
+<b>int</b>	_EXFUN(fputc, (<b>int</b>, FILE *));
+<b>int</b>	_EXFUN(fputs, (<b>const</b> <b>char</b> *, FILE *));
+<b>int</b>	_EXFUN(getc, (FILE *));
+<b>int</b>	_EXFUN(getchar, (<b>void</b>));
+<b>char</b> *  _EXFUN(gets, (<b>char</b> *));
+<b>int</b>	_EXFUN(putc, (<b>int</b>, FILE *));
+<b>int</b>	_EXFUN(putchar, (<b>int</b>));
+<b>int</b>	_EXFUN(puts, (<b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(ungetc, (<b>int</b>, FILE *));
+size_t	_EXFUN(fread, (_PTR, size_t _size, size_t _n, FILE *));
+size_t	_EXFUN(fwrite, (<b>const</b> _PTR , size_t _size, size_t _n, FILE *));
+<font color="990099">#ifdef _COMPILING_NEWLIB</font>
+<b>int</b>	_EXFUN(fgetpos, (FILE *, _fpos_t *));
+<font color="990099">#else</font>
+<b>int</b>	_EXFUN(fgetpos, (FILE *, fpos_t *));
+<font color="990099">#endif</font>
+<b>int</b>	_EXFUN(fseek, (FILE *, <b>long</b>, <b>int</b>));
+<font color="990099">#ifdef _COMPILING_NEWLIB</font>
+<b>int</b>	_EXFUN(fsetpos, (FILE *, <b>const</b> _fpos_t *));
+<font color="990099">#else</font>
+<b>int</b>	_EXFUN(fsetpos, (FILE *, <b>const</b> fpos_t *));
+<font color="990099">#endif</font>
+<b>long</b>	_EXFUN(ftell, ( FILE *));
+<b>void</b>	_EXFUN(rewind, (FILE *));
+<b>void</b>	_EXFUN(clearerr, (FILE *));
+<b>int</b>	_EXFUN(feof, (FILE *));
+<b>int</b>	_EXFUN(ferror, (FILE *));
+<b>void</b>    _EXFUN(perror, (<b>const</b> <b>char</b> *));
+<font color="990099">#ifndef _REENT_ONLY</font>
+FILE *	_EXFUN(fopen, (<b>const</b> <b>char</b> *_name, <b>const</b> <b>char</b> *_type));
+<b>int</b>	_EXFUN(sprintf, (<b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(remove, (<b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(rename, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+<font color="990099">#endif</font>
+<font color="990099">#ifndef __STRICT_ANSI__</font>
+<font color="990099">#ifdef _COMPILING_NEWLIB</font>
+<b>int</b>	_EXFUN(fseeko, (FILE *, _off_t, <b>int</b>));
+_off_t	_EXFUN(ftello, ( FILE *));
+<font color="990099">#else</font>
+<b>int</b>	_EXFUN(fseeko, (FILE *, off_t, <b>int</b>));
+off_t	_EXFUN(ftello, ( FILE *));
+<font color="990099">#endif</font>
+<font color="990099">#ifndef _REENT_ONLY</font>
+<b>int</b>	_EXFUN(asiprintf, (<b>char</b> **, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(asprintf, (<b>char</b> **, <b>const</b> <b>char</b> *, ...));
+<font color="990099">#ifndef dprintf</font>
+<b>int</b>	_EXFUN(dprintf, (<b>int</b>, <b>const</b> <b>char</b> *, ...));
+<font color="990099">#endif</font>
+<b>int</b>	_EXFUN(fcloseall, (_VOID));
+<b>int</b>	_EXFUN(fiprintf, (FILE *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(fiscanf, (FILE *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(iprintf, (<b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(iscanf, (<b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(siprintf, (<b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(siscanf, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(snprintf, (<b>char</b> *, size_t, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(sniprintf, (<b>char</b> *, size_t, <b>const</b> <b>char</b> *, ...));
+<b>char</b> *	_EXFUN(tempnam, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(vasiprintf, (<b>char</b> **, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vasprintf, (<b>char</b> **, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vdprintf, (<b>int</b>, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vsniprintf, (<b>char</b> *, size_t, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vsnprintf, (<b>char</b> *, size_t, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vfiprintf, (FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vfiscanf, (FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vfscanf, (FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(viprintf, (<b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(viscanf, (<b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vscanf, (<b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vsiscanf, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(vsscanf, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+<font color="990099">#endif</font>
+<font color="990099">#endif</font>
+</a>
+<font color="#003399"><i>/*
+ * Routines in POSIX 1003.1.
+ */</i></font>
+
+<font color="990099">#ifndef __STRICT_ANSI__</font>
+<font color="990099">#ifndef _REENT_ONLY</font>
+FILE *	_EXFUN(fdopen, (<b>int</b>, <b>const</b> <b>char</b> *));
+<font color="990099">#endif</font>
+<b>int</b>	_EXFUN(fileno, (FILE *));
+<b>int</b>	_EXFUN(getw, (FILE *));
+<b>int</b>	_EXFUN(pclose, (FILE *));
+FILE *  _EXFUN(popen, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(putw, (<b>int</b>, FILE *));
+<b>void</b>    _EXFUN(setbuffer, (FILE *, <b>char</b> *, <b>int</b>));
+<b>int</b>	_EXFUN(setlinebuf, (FILE *));
+<b>int</b>	_EXFUN(getc_unlocked, (FILE *));
+<b>int</b>	_EXFUN(getchar_unlocked, (<b>void</b>));
+<b>void</b>	_EXFUN(flockfile, (FILE *));
+<b>int</b>	_EXFUN(ftrylockfile, (FILE *));
+<b>void</b>	_EXFUN(funlockfile, (FILE *));
+<b>int</b>	_EXFUN(putc_unlocked, (<b>int</b>, FILE *));
+<b>int</b>	_EXFUN(putchar_unlocked, (<b>int</b>));
+<font color="990099">#endif</font>
+
+<font color="#003399"><i>/*
+ * Recursive versions of the above.
+ */</i></font>
+
+<b>int</b>	_EXFUN(_asiprintf_r, (<b>struct</b> _reent *, <b>char</b> **, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_asprintf_r, (<b>struct</b> _reent *, <b>char</b> **, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_dprintf_r, (<b>struct</b> _reent *, <b>int</b>, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_fcloseall_r, (<b>struct</b> _reent *));
+FILE *	_EXFUN(_fdopen_r, (<b>struct</b> _reent *, <b>int</b>, <b>const</b> <b>char</b> *));
+FILE *	_EXFUN(_fopen_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(_fclose_r, (<b>struct</b> _reent *, FILE *));
+<b>char</b> *  _EXFUN(_fgets_r, (<b>struct</b> _reent *, <b>char</b> *, <b>int</b>, FILE *));
+<b>int</b>	_EXFUN(_fiscanf_r, (<b>struct</b> _reent *, FILE *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_fputc_r, (<b>struct</b> _reent *, <b>int</b>, FILE *));
+<b>int</b>	_EXFUN(_fputs_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, FILE *));
+size_t	_EXFUN(_fread_r, (<b>struct</b> _reent *, _PTR, size_t _size, size_t _n, FILE *));
+<b>int</b>	_EXFUN(_fscanf_r, (<b>struct</b> _reent *, FILE *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_fseek_r, (<b>struct</b> _reent *, FILE *, <b>long</b>, <b>int</b>));
+<b>long</b>	_EXFUN(_ftell_r, (<b>struct</b> _reent *, FILE *));
+size_t	_EXFUN(_fwrite_r, (<b>struct</b> _reent *, <b>const</b> _PTR , size_t _size, size_t _n, FILE *));
+<b>int</b>	_EXFUN(_getc_r, (<b>struct</b> _reent *, FILE *));
+<b>int</b>	_EXFUN(_getc_unlocked_r, (<b>struct</b> _reent *, FILE *));
+<b>int</b>	_EXFUN(_getchar_r, (<b>struct</b> _reent *));
+<b>int</b>	_EXFUN(_getchar_unlocked_r, (<b>struct</b> _reent *));
+<b>char</b> *	_EXFUN(_gets_r, (<b>struct</b> _reent *, <b>char</b> *));
+<b>int</b>	_EXFUN(_iprintf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_iscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_mkstemp_r, (<b>struct</b> _reent *, <b>char</b> *));
+<b>char</b> *	_EXFUN(_mktemp_r, (<b>struct</b> _reent *, <b>char</b> *));
+<b>void</b>	_EXFUN(_perror_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(_printf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_putc_r, (<b>struct</b> _reent *, <b>int</b>, FILE *));
+<b>int</b>	_EXFUN(_putc_unlocked_r, (<b>struct</b> _reent *, <b>int</b>, FILE *));
+<b>int</b>	_EXFUN(_putchar_unlocked_r, (<b>struct</b> _reent *, <b>int</b>));
+<b>int</b>	_EXFUN(_putchar_r, (<b>struct</b> _reent *, <b>int</b>));
+<b>int</b>	_EXFUN(_puts_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(_remove_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *));
+<b>int</b>	_EXFUN(_rename_r, (<b>struct</b> _reent *,
+			   <b>const</b> <b>char</b> *_old, <b>const</b> <b>char</b> *_new));
+<b>int</b>	_EXFUN(_scanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_siprintf_r, (<b>struct</b> _reent *, <b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_siscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_sniprintf_r, (<b>struct</b> _reent *, <b>char</b> *, size_t, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_snprintf_r, (<b>struct</b> _reent *, <b>char</b> *, size_t, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_sprintf_r, (<b>struct</b> _reent *, <b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>int</b>	_EXFUN(_sscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, ...));
+<b>char</b> *	_EXFUN(_tempnam_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+FILE *	_EXFUN(_tmpfile_r, (<b>struct</b> _reent *));
+<b>char</b> *	_EXFUN(_tmpnam_r, (<b>struct</b> _reent *, <b>char</b> *));
+<b>int</b>	_EXFUN(_ungetc_r, (<b>struct</b> _reent *, <b>int</b>, FILE *));
+<b>int</b>	_EXFUN(_vasiprintf_r, (<b>struct</b> _reent *, <b>char</b> **, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vasprintf_r, (<b>struct</b> _reent *, <b>char</b> **, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vdprintf_r, (<b>struct</b> _reent *, <b>int</b>, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vfiprintf_r, (<b>struct</b> _reent *, FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vfprintf_r, (<b>struct</b> _reent *, FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_viprintf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vprintf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vsiprintf_r, (<b>struct</b> _reent *, <b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vsprintf_r, (<b>struct</b> _reent *, <b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vsniprintf_r, (<b>struct</b> _reent *, <b>char</b> *, size_t, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vsnprintf_r, (<b>struct</b> _reent *, <b>char</b> *, size_t, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vfiscanf_r, (<b>struct</b> _reent *, FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vfscanf_r, (<b>struct</b> _reent *, FILE *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_viscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vsscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+<b>int</b>	_EXFUN(_vsiscanf_r, (<b>struct</b> _reent *, <b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *, __VALIST));
+
+ssize_t _EXFUN(__getdelim, (<b>char</b> **, size_t *, <b>int</b>, FILE *));
+ssize_t _EXFUN(__getline, (<b>char</b> **, size_t *, FILE *));
+
+<font color="990099">#ifdef __LARGE64_FILES</font>
+<font color="990099">#if !defined(__CYGWIN__) || defined(_COMPILING_NEWLIB)</font>
+FILE *	_EXFUN(fdopen64, (<b>int</b>, <b>const</b> <b>char</b> *));
+FILE *  _EXFUN(fopen64, (<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+_off64_t _EXFUN(ftello64, (FILE *));
+_off64_t _EXFUN(fseeko64, (FILE *, _off64_t, <b>int</b>));
+<b>int</b>     _EXFUN(fgetpos64, (FILE *, _fpos64_t *));
+<b>int</b>     _EXFUN(fsetpos64, (FILE *, <b>const</b> _fpos64_t *));
+FILE *  _EXFUN(tmpfile64, (<b>void</b>));
+
+FILE *	_EXFUN(_fdopen64_r, (<b>struct</b> _reent *, <b>int</b>, <b>const</b> <b>char</b> *));
+FILE *  _EXFUN(_fopen64_r, (<b>struct</b> _reent *,<b>const</b> <b>char</b> *, <b>const</b> <b>char</b> *));
+_off64_t _EXFUN(_ftello64_r, (<b>struct</b> _reent *, FILE *));
+_off64_t _EXFUN(_fseeko64_r, (<b>struct</b> _reent *, FILE *, _off64_t, <b>int</b>));
+<b>int</b>     _EXFUN(_fgetpos64_r, (<b>struct</b> _reent *, FILE *, _fpos64_t *));
+<b>int</b>     _EXFUN(_fsetpos64_r, (<b>struct</b> _reent *, FILE *, <b>const</b> _fpos64_t *));
+FILE *  _EXFUN(_tmpfile64_r, (<b>struct</b> _reent *));
+<font color="990099">#endif /* !__CYGWIN__ */</font>
+<font color="990099">#endif /* __LARGE64_FILES */</font>
+ 
+<font color="#003399"><i>/*
+ * Routines internal to the implementation.
+ */</i></font>
+
+<b>int</b>	_EXFUN(__srget_r, (<b>struct</b> _reent *, FILE *));
+<b>int</b>	_EXFUN(__swbuf_r, (<b>struct</b> _reent *, <b>int</b>, FILE *));
+
+<font color="#003399"><i>/*
+ * Stdio function-access interface.
+ */</i></font>
+
+<font color="990099">#ifndef __STRICT_ANSI__</font>
+FILE	*_EXFUN(funopen,(<b>const</b> _PTR _cookie,
+		<b>int</b> (*readfn)(_PTR _cookie, <b>char</b> *_buf, <b>int</b> _n),
+		<b>int</b> (*writefn)(_PTR _cookie, <b>const</b> <b>char</b> *_buf, <b>int</b> _n),
+		fpos_t (*seekfn)(_PTR _cookie, fpos_t _off, <b>int</b> _whence),
+		<b>int</b> (*closefn)(_PTR _cookie)));
+
+<font color="990099">#define	fropen(cookie, fn) funopen(cookie, fn, (int (*)())0, (fpos_t (*)())0, (int (*)())0)</font>
+<font color="990099">#define	fwopen(cookie, fn) funopen(cookie, (int (*)())0, fn, (fpos_t (*)())0, (int (*)())0)</font>
+<font color="990099">#endif</font>
+
+<font color="#003399"><i>/*
+ * The __sfoo macros are here so that we can 
+ * define function versions in the C library.
+ */</i></font>
+<font color="990099">#define       __sgetc_raw_r(__ptr, __f) (--(__f)-&gt;_r &lt; 0 ? __srget_r(__ptr, __f) : (int)(*(__f)-&gt;_p++))</font>
+
+<font color="990099">#ifdef __SCLE</font>
+<b>static</b> __inline__ <b>int</b> __sgetc_r(<b>struct</b> _reent *__ptr, FILE *__p)
+  {
+    <b>int</b> __c = __sgetc_raw_r(__ptr, __p);
+    <b>if</b> ((__p-&gt;_flags &amp; __SCLE) &amp;&amp; (__c == <font color="#9933CC">'\r'</font>))
+      {
+      <b>int</b> __c2 = __sgetc_raw_r(__ptr, __p);
+      <b>if</b> (__c2 == <font color="#9933CC">'\n'</font>)
+        __c = __c2;
+      <b>else</b>
+        ungetc(__c2, __p);
+      }
+    <b>return</b> __c;
+  }
+<font color="990099">#else</font>
+<font color="990099">#define __sgetc_r(__ptr, __p) __sgetc_raw_r(__ptr, __p)</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifdef _never /* __GNUC__ */</font>
+<font color="#003399"><i>/* If this inline is actually used, then systems using coff debugging
+   info get hopelessly confused.  21sept93 rich@cygnus.com.  */</i></font>
+<b>static</b> <b>__inline</b> <b>int</b> __sputc_r(<b>struct</b> _reent *_ptr, <b>int</b> _c, FILE *_p) {
+	<b>if</b> (--_p-&gt;_w &gt;= 0 || (_p-&gt;_w &gt;= _p-&gt;_lbfsize &amp;&amp; (<b>char</b>)_c != <font color="#9933CC">'\n'</font>))
+		<b>return</b> (*_p-&gt;_p++ = _c);
+	<b>else</b>
+		<b>return</b> (__swbuf_r(_ptr, _c, _p));
+}
+<font color="990099">#else</font>
+<font color="#003399"><i>/*
+ * This has been tuned to generate reasonable code on the vax using pcc
+ */</i></font>
+<font color="990099">#define       __sputc_raw_r(__ptr, __c, __p) \</font>
+	(--(__p)-&gt;_w &lt; 0 ? \
+		(__p)-&gt;_w &gt;= (__p)-&gt;_lbfsize ? \
+			(*(__p)-&gt;_p = (__c)), *(__p)-&gt;_p != <font color="#9933CC">'\n'</font> ? \
+				(<b>int</b>)*(__p)-&gt;_p++ : \
+				__swbuf_r(__ptr, <font color="#9933CC">'\n'</font>, __p) : \
+			__swbuf_r(__ptr, (<b>int</b>)(__c), __p) : \
+		(*(__p)-&gt;_p = (__c), (<b>int</b>)*(__p)-&gt;_p++))
+<font color="990099">#ifdef __SCLE</font>
+<font color="990099">#define __sputc_r(__ptr, __c, __p) \</font>
+        ((((__p)-&gt;_flags &amp; __SCLE) &amp;&amp; ((__c) == <font color="#9933CC">'\n'</font>)) \
+          ? __sputc_raw_r(__ptr, <font color="#9933CC">'\r'</font>, (__p)) : 0 , \
+        __sputc_raw_r((__ptr), (__c), (__p)))
+<font color="990099">#else</font>
+<font color="990099">#define __sputc_r(__ptr, __c, __p) __sputc_raw_r(__ptr, __c, __p)</font>
+<font color="990099">#endif</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#define	__sfeof(p)	(((p)-&gt;_flags &amp; __SEOF) != 0)</font>
+<font color="990099">#define	__sferror(p)	(((p)-&gt;_flags &amp; __SERR) != 0)</font>
+<font color="990099">#define	__sclearerr(p)	((void)((p)-&gt;_flags &amp;= ~(__SERR|__SEOF)))</font>
+<font color="990099">#define	__sfileno(p)	((p)-&gt;_file)</font>
+
+<font color="990099">#define	feof(p)		__sfeof(p)</font>
+<font color="990099">#define	ferror(p)	__sferror(p)</font>
+<font color="990099">#define	clearerr(p)	__sclearerr(p)</font>
+
+<font color="990099">#if 0 /*ndef __STRICT_ANSI__ - FIXME: must initialize stdio first, use fn */</font>
+<font color="990099">#define	fileno(p)	__sfileno(p)</font>
+<font color="990099">#endif</font>
+
+<font color="990099">#ifndef __CYGWIN__</font>
+<font color="990099">#ifndef lint</font>
+<font color="990099">#define	getc(fp)	__sgetc_r(_REENT, fp)</font>
+<font color="990099">#define putc(x, fp)	__sputc_r(_REENT, x, fp)</font>
+<font color="990099">#endif /* lint */</font>
+<font color="990099">#endif /* __CYGWIN__ */</font>
+
+<font color="990099">#define	getchar()	getc(stdin)</font>
+<font color="990099">#define	putchar(x)	putc(x, stdout)</font>
+
+<font color="990099">#ifndef __STRICT_ANSI__</font>
+<font color="#003399"><i>/* fast always-buffered version, true iff error */</i></font>
+<font color="990099">#define	fast_putc(x,p) (--(p)-&gt;_w &lt; 0 ? \</font>
+	__swbuf_r(_REENT, (<b>int</b>)(x), p) == EOF : (*(p)-&gt;_p = (x), (p)-&gt;_p++, 0))
+
+<font color="990099">#define	L_cuserid	9		/* posix says it goes in stdio.h :( */</font>
+<font color="990099">#ifdef __CYGWIN__</font>
+<font color="990099">#define L_ctermid       16</font>
+<font color="990099">#endif</font>
+<font color="990099">#endif</font>
+
+_END_STD_C
+
+<font color="990099">#endif /* _STDIO_H_ */</font>
+
+</code></pre>
+
+
+</body>
+</html>

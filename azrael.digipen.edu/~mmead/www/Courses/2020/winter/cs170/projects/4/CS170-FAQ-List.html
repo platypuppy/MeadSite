@@ -1,0 +1,153 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../new.css">
+<title>CS 170 - FAQ for the List Assignment</title>
+</head>
+
+<body>  
+
+<center><H1>
+<A HREF="cs170-programming-assignment-list.pdf">Programming Assignment #4</A> FAQ
+<p>
+<h2>(Frequently Asked Questions)</h2>
+</H1>
+</center>
+
+<br>
+
+<p>
+
+Here are some popular Questions and Answers for the List assignment.<BR>
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+<ol>
+
+<li><b>Question:<br>
+What should the <tt>pop_front()</tt> method do if the list is empty?</b>
+</b>
+<p>
+
+<b>Answer:</b><br>
+Nothing. You should check to make sure it isn't empty before trying to remove the
+first node.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+What should the <tt>front()</tt> method return if the list is empty?</b>
+</b>
+<p>
+
+<b>Answer:</b><br>
+It should return the value in the first node. If there is no first node, then your program
+should crash. <b>DO NOT</b> check to see if the list is empty. You should simply return the value
+that the head pointer is pointing to. If head points to NULL (which it will when the list is
+empty), then you should dereference the NULL pointer causing your program to crash. One reason for
+this seemingly odd behavior is this method must return a value. If you detect that the list is
+empty, you're still going to have to return something, so just let it crash.
+<p>
+<b>THAT IS THE CORRECT BEHAVIOR WHEN THE USER DOES STUPID THINGS.</b>
+<br>
+(Moral of the story: Don't do stupid things.)
+<p>
+In the future, we will learn about exception handling. That is the proper way to deal
+with this "exceptional" situation (if you actually <i>want</i> to deal with it).
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+What should we do if the index provided to the overloaded subscript operators is invalid?
+</b>
+<p>
+
+<b>Answer:</b><br>
+You should do nothing. That's right, just <i>"walk off the end of the list..."</i> trashing
+everything and anything along the way! That's what
+happens in the Real World<sup>&trade;</sup>.
+When we talk about exception handling, we'll see a better way to handle this "exceptional" case.
+<!--
+Since you have a function called <tt><b>check_bounds</b></tt>, you will call that. If the index
+is out of bounds, that function will abort the program. This is sort of the way the <tt><b>at</b></tt> 
+method works on the STL vectors. (When we talk about exceptions, we'll see a better way to handle 
+this "exceptional" case.) 
+-->
+
+<tt><b></b></tt>
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+How does the clear method work? The sample driver isn't calling it.
+</b>
+<p>
+
+<b>Answer:</b><br>
+The handout describes what the clear method should do. You should be able to figure out what
+the prototype of the function will be. (Note, it doesn't return anything.) Even though
+the provided <i>sample</i> driver doesn't call it, your code should. (Hint: The destructor
+should call it. That's code re-use.)
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+The programs that I compiled with g++ and clang++ give me the same value for the total number of 
+lists created, but Microsoft's compiler gives me a different number. Am I doing something wrong?
+</b>
+<p>
+
+<b>Answer:</b><br>
+No. You <i>may</i> get different answers. Bonus to those students that know why. (This is
+an advanced topic covered in the CS 225 course, although I may have mentioned it during class.)
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+I'm getting a linker error regarding the <tt><b>static</b></tt> members. How do I fix that?
+</b>
+<p>
+
+<b>Answer:</b><br>
+The answer is in the notes. You can also
+find the answer in the required reading from the textbook.
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+<li><b>Question:<br>
+Why do we need two subscript operators (<tt><b>operator[]</b></tt>)?
+</b>
+<p>
+
+<b>Answer:</b><br>
+Because the driver won't compile with just one. You can find the answers in the required reading and
+in the notes.
+
+
+
+
+<blockquote><pre>
+</pre></blockquote>
+
+
+<p>
+
+</ol>
+
+
+
+<!-- ************************************************************************************************ -->
+<!-- ************************************************************************************************ -->
+<hr>
+
+
+</body>
+</html>
